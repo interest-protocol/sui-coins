@@ -1,6 +1,7 @@
-import { Box } from 'elements';
 import { FC } from 'react';
 
-const CreateToken: FC = () => <Box minHeight="100vh">Create Token</Box>;
+import Layout from '@/components/layout';
+
+const CreateToken: FC = () => <Layout>Create Token</Layout>;
 
 export default CreateToken;

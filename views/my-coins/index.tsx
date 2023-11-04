@@ -1,5 +1,7 @@
 import { FC } from 'react';
 
-const MyCoins: FC = () => <>MyCoins</>;
+import Layout from '@/components/layout';
+
+const MyCoins: FC = () => <Layout>MyCoins</Layout>;
 
 export default MyCoins;
