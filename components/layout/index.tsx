@@ -6,14 +6,15 @@ import Footer from './footer';
 const Layout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <Box
-      minHeight="100vh"
       display="flex"
+      minHeight="100vh"
       flexDirection="column"
-      background={`url('gradient.svg'), url('noice.svg')`}
       backgroundSize="cover"
       mixBlendMode="color-burn"
+      justifyContent="space-between"
+      background={`url('gradient.svg'), url('noice.svg')`}
     >
-      {children}
+      <Box>{children}</Box>
       <Footer />
     </Box>
   );

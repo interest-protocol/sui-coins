@@ -5,12 +5,12 @@ import { HeartSVG, LogoSVG } from '@/svg';
 
 const Footer: FC = () => (
   <Box
-    pt="4rem"
-    px="0.75rem"
-    pb="1.5rem"
-    textTransform="uppercase"
     mx="auto"
+    pt="4rem"
     width="95%"
+    pb="1.5rem"
+    px="0.75rem"
+    textTransform="uppercase"
   >
     <Box textAlign="center" mb="3rem" fontSize="0.875rem">
       <Typography>The website is maineted &</Typography>
@@ -21,11 +21,11 @@ const Footer: FC = () => (
       </Typography>
     </Box>
     <Box
-      display="flex"
-      justifyContent="center"
       py="1rem"
+      display="flex"
       borderTop="1px solid"
       borderColor="#C6C6CA"
+      justifyContent="center"
     >
       <Box>
         <LogoSVG maxHeight="2.5rem" maxWidth="2.5rem" width="100%" />
