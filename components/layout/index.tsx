@@ -9,10 +9,10 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
       display="flex"
       minHeight="100vh"
       flexDirection="column"
-      backgroundSize="cover"
       mixBlendMode="color-burn"
       justifyContent="space-between"
       background={`url('gradient.svg'), url('noice.svg')`}
+      backgroundSize="cover"
     >
       <Box>{children}</Box>
       <Footer />
