@@ -1,7 +1,3 @@
-import { SUI_TYPE_ARG } from '@mysten/sui.js';
-
-import { CreateVectorParameterArgs } from './coin.types';
-
 export const isSymbol = (text: string): boolean =>
   new RegExp(/^[A-Z-]+$/g).test(text);
 
@@ -34,20 +30,4 @@ export const safeSymbol = (symbol: string, type: string): string => {
     type.slice(-4);
 
   return newSymbol;
-};
-
-export const createObjectsParameter = ({
-  txb,
-  type,
-  coinsMap,
-  amount,
-}: CreateVectorParameterArgs) => {
-  if (type === SUI_TYPE_ARG) {
-    const [coin] = txb.splitCoins(txb.gas, [txb.pure(amount.toString())]);
-    return [coin];
-  }
-
-  return coinsMap[type]
-    ? coinsMap[type].objects.map((x) => txb.object(x.coinObjectId))
-    : [];
 };

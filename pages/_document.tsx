@@ -4,24 +4,8 @@ import { ReactNode } from 'react';
 const Document = (): ReactNode => (
   <Html lang="en">
     <Head>
-      <link href="https://fonts.googleapis.com" />
-      <link href="https://fonts.gstatic.com" crossOrigin="" />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap"
-        rel="stylesheet"
-      />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap"
-        rel="stylesheet"
-      />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap"
-        rel="stylesheet"
-      />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
-        rel="stylesheet"
-      />
+      <link rel="stylesheet" href="../styles/css/satoshi.css" />
+      <link rel="stylesheet" href="../styles/css/proto.css" />
     </Head>
     <body id="body">
       <Main />

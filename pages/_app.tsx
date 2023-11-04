@@ -1,5 +1,6 @@
-/* eslint-disable react/display-name */
 import 'react-loading-skeleton/dist/skeleton.css';
+import '../styles/css/satoshi.css';
+import '../styles/css/proto.css';
 
 import { Analytics as VercelAnalytics } from '@vercel/analytics/react';
 import { NextPage } from 'next';

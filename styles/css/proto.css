@@ -1,0 +1,27 @@
+@font-face {
+  font-family: 'Proto Mono';
+  src: url('../fonts/proto/ProtoMono-SemiBold.eot');
+  src: local('Proto Mono Semi Bold'), local('ProtoMono-SemiBold'),
+    url('../fonts/proto/ProtoMono-SemiBold.eot?#iefix')
+      format('embedded-opentype'),
+    url('../fonts/proto/ProtoMono-SemiBold.woff2') format('woff2'),
+    url('../fonts/proto/ProtoMono-SemiBold.woff') format('woff'),
+    url('../fonts/proto/ProtoMono-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Proto Mono';
+  src: url('../fonts/proto/ProtoMono-Medium.eot');
+  src: local('Proto Mono Medium'), local('ProtoMono-Medium'),
+    url('../fonts/proto/ProtoMono-Medium.eot?#iefix')
+      format('embedded-opentype'),
+    url('../fonts/proto/ProtoMono-Medium.woff2') format('woff2'),
+    url('../fonts/proto/ProtoMono-Medium.woff') format('woff'),
+    url('../fonts/proto/ProtoMono-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
