@@ -1,13 +1,11 @@
 import BigNumber from 'bignumber.js';
 
-import { TOKEN_SYMBOL } from '@/constants';
-
 export type BigNumberish = BigNumber | bigint | string | number;
 
 export interface CoinData {
   type: string;
   decimals: number;
-  symbol: TOKEN_SYMBOL | string;
+  symbol: string;
 }
 
 export type LocalTokenMetadataRecord = Record<string, CoinData>;
