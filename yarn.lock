@@ -624,10 +624,10 @@
   resolved "https://registry.npmjs.org/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
-"@interest-protocol/ui-kit@^0.1.34-beta":
-  version "0.1.34-beta"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/ui-kit/-/ui-kit-0.1.34-beta.tgz#d436ce29d120c0dd370a00ff09900b5575c387de"
-  integrity sha512-2sA5hI3pVrwlAcTHU9dPq/Zi46GtVqKpNYOkVxUxLTQahGW553vJriW7SW5mzE+JhekaMmAAlfnpJ97VrEllVw==
+"@interest-protocol/ui-kit@^0.2.0-alpha":
+  version "0.2.0-alpha"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/ui-kit/-/ui-kit-0.2.0-alpha.tgz#fa980719d89131c162a81d5c63f491cb87568792"
+  integrity sha512-zwRlFi5NP2mU/MrX12YDXqnXY8A6xrEJ59uS40AGPIiuDUQe1UXVbukGIe+uXvgoagFxVshKEIcAq3UvR3vG/g==
   dependencies:
     "@emotion/react" "^11.10.6"
     "@stylin.js/react" "^1.0.1"
