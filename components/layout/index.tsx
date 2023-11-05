@@ -6,17 +6,19 @@ import Header from './header';
 
 const Layout: FC<PropsWithChildren> = ({ children }) => (
   <Box
-    m="0 auto"
     display="flex"
     minHeight="100vh"
-    variant="container"
-    flexDirection="column"
+    mixBlendMode="color-burn"
+    background="url('/images/gradient.webp'), url('/images/noice.webp')"
+    backgroundSize="cover"
   >
-    <Header />
-    <Box as="main" flex="1">
-      {children}
+    <Box width="100%" display="flex" variant="container" flexDirection="column">
+      <Header />
+      <Box as="main" flex="1">
+        {children}
+      </Box>
+      <Footer />
     </Box>
-    <Footer />
   </Box>
 );
 

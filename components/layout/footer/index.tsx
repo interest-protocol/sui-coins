@@ -1,17 +1,10 @@
 import { Box, Typography } from 'elements';
 import { FC } from 'react';
 
-import { HeartSVG, LogoSVG } from '@/svg';
+import { HeartSVG, IPXSVG } from '@/svg';
 
 const Footer: FC = () => (
-  <Box
-    pt="4rem"
-    px="0.75rem"
-    pb="1.5rem"
-    textTransform="uppercase"
-    mx="auto"
-    width="95%"
-  >
+  <Box textTransform="uppercase">
     <Box textAlign="center" mb="3rem" fontSize="0.875rem" fontFamily="Proto">
       <Typography fontFamily="inherit">The website is maintained &</Typography>
       <Typography
@@ -26,15 +19,13 @@ const Footer: FC = () => (
       </Typography>
     </Box>
     <Box
-      display="flex"
-      justifyContent="center"
       py="1rem"
+      display="flex"
       borderTop="1px solid"
       borderColor="#C6C6CA"
+      justifyContent="center"
     >
-      <Box>
-        <LogoSVG maxHeight="2.5rem" maxWidth="2.5rem" width="100%" />
-      </Box>
+      <IPXSVG maxHeight="2.5rem" maxWidth="2.5rem" width="100%" />
     </Box>
   </Box>
 );

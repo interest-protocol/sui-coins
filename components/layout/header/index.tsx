@@ -8,13 +8,16 @@ import NavBar from './nav-bar';
 
 const Header: FC = () => (
   <Box
-    px="l"
     py="m"
+    px="xl"
+    bg="white"
     display="flex"
     alignItems="center"
+    borderRadius="full"
     justifyContent="space-between"
+    boxShadow="0px 24px 46px -10px rgba(13, 16, 23, 0.16)"
   >
-    <Box display="flex" alignItems="center" height="2rem">
+    <Box display="flex" alignItems="center" height="1.5rem">
       <LogoSVG maxHeight="100%" maxWidth="100%" width="100%" />
     </Box>
     <NavBar />
