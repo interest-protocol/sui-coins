@@ -8,6 +8,7 @@ const Wallet: FC = () => (
   <ConnectWalletButton
     bg="#B4C5FF !important"
     color="#00174B !important"
+    fontFamily="Proto !important"
     borderRadius="99rem !important"
   />
 );
