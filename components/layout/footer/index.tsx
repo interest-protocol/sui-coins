@@ -12,9 +12,14 @@ const Footer: FC = () => (
     mx="auto"
     width="95%"
   >
-    <Box textAlign="center" mb="3rem" fontSize="0.875rem">
-      <Typography>The website is maineted &</Typography>
-      <Typography display="flex" justifyContent="center" gap="0.25rem">
+    <Box textAlign="center" mb="3rem" fontSize="0.875rem" fontFamily="Proto">
+      <Typography fontFamily="inherit">The website is maintained &</Typography>
+      <Typography
+        gap="0.25rem"
+        display="flex"
+        fontFamily="inherit"
+        justifyContent="center"
+      >
         Made with
         <HeartSVG maxHeight="1.125rem" maxWidth="1.125rem" width="100%" />
         By Interest Protocol
