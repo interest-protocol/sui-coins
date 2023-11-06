@@ -1,9 +1,17 @@
-import { Box } from '@interest-protocol/ui-kit';
+import { Box, Button } from '@interest-protocol/ui-kit';
+import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { useWalletKit } from '@mysten/wallet-kit';
 import { TextField } from 'elements';
 import { FC } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { SuiNetwork, useSuiClient } from '@/hooks/use-sui-client';
+import { showTXSuccessToast } from '@/utils';
+import { throwTXIfNotSuccessful } from '@/utils';
+
 import { ICreateTokenForm } from '../create-token.types';
+import { getTokenByteCode } from './api';
 import FixedSupplyToggle from './fixed-supply-toggle';
 
 const CreateTokenForm: FC = () => {
@@ -13,9 +21,80 @@ const CreateTokenForm: FC = () => {
     },
   });
 
-  const onSubmit = () => {
-    const data = getValues();
-    console.log('>> values :: ', data);
+  const [loading, setLoading] = useState(false);
+
+  const { currentAccount, signTransactionBlock } = useWalletKit();
+  const suiClient = useSuiClient(
+    (currentAccount?.chains?.[0] as SuiNetwork) || 'sui:mainnet'
+  );
+
+  const onSubmit = async () => {
+    try {
+      setLoading(true);
+
+      if (!currentAccount) return;
+
+      const {
+        decimals,
+        name,
+        fixedSupply,
+        totalSupply,
+        symbol,
+        imageUrl,
+        description,
+      } = getValues();
+
+      console.log({
+        decimals,
+        name,
+        fixedSupply,
+        totalSupply,
+        symbol,
+        imageUrl,
+        description,
+      });
+
+      const { dependencies, modules } = await getTokenByteCode({
+        decimals: decimals ?? 9,
+        name,
+        fixedSupply,
+        mintAmount: (
+          BigInt(totalSupply) *
+          10n ** BigInt(decimals ?? 9n)
+        ).toString(),
+        symbol,
+        url: imageUrl ?? '',
+        description: description ?? '',
+      });
+
+      const txb = new TransactionBlock();
+
+      const [upgradeCap] = txb.publish({ modules, dependencies });
+
+      txb.transferObjects([upgradeCap], txb.pure(currentAccount.address));
+
+      const { signature, transactionBlockBytes } = await signTransactionBlock({
+        transactionBlock: txb,
+        account: currentAccount,
+      });
+
+      const tx = await suiClient.executeTransactionBlock({
+        signature,
+        transactionBlock: transactionBlockBytes,
+        requestType: 'WaitForEffectsCert',
+      });
+
+      throwTXIfNotSuccessful(tx);
+
+      await showTXSuccessToast(
+        tx,
+        currentAccount.chains[0] as `${string}::${string}`
+      );
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -57,6 +136,7 @@ const CreateTokenForm: FC = () => {
         />
         <TextField
           label="Total Supply"
+          {...register('totalSupply')}
           placeholder="Your total coin supply"
           supportingText="Insert the maximum number of tokens available"
         />
@@ -86,8 +166,12 @@ const CreateTokenForm: FC = () => {
             color="onPrimary"
             fontFamily="Proto"
             borderRadius="full"
-            onClick={onSubmit}
           >
+            <Button
+              variant="filled"
+              disabled={!currentAccount}
+              onClick={onSubmit}
+            ></Button>
             Create coin
           </Box>
         </Box>

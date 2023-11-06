@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { FC } from 'react';
 
 const SEO: FC<{ pageTitle: string }> = ({ pageTitle }) => {
-  const title = `${pageTitle} | Sui Mint`;
+  const title = `${pageTitle} | Sui Coins`;
 
   return (
     <Head>
@@ -15,7 +15,7 @@ const SEO: FC<{ pageTitle: string }> = ({ pageTitle }) => {
       />
       <meta property="og:locale" content="en_US" />
       <meta property="og:title" content={title} />
-      <meta property="og:site_name" content="Sui Mint" />
+      <meta property="og:site_name" content="Sui Coins" />
       <meta
         property="og:description"
         content="Learn to build on 10+ blockchains in a supportive community of 130K+ future blockchain developers. Try our courses and expand your web3 stack today."

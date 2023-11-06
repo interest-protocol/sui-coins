@@ -8,7 +8,6 @@ import CreateTokenForm from './create-token-form';
 const CreateToken: FC = () => (
   <Layout>
     <Box my="3xl" display="flex" justifyContent="space-around">
-      <Box />
       <CreateTokenForm />
     </Box>
   </Layout>
