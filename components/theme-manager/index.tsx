@@ -34,7 +34,7 @@ const ThemeManager: FC<Omit<ThemeProviderProps, 'theme'>> = ({ children }) => {
                 borderRadius: darkTheme.radii.m,
                 color: darkTheme.colors.onSurface,
                 background: darkTheme.colors.surface,
-                borderColor: darkTheme.colors.onPrimaryContainer,
+                borderColor: darkTheme.colors['primary.onPrimaryContainer'],
               },
               duration: TOAST_DURATION,
             }}
