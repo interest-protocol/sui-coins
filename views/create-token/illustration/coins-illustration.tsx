@@ -17,8 +17,7 @@ const CoinsIllustration: FC = () => {
       height="28rem"
       left="5.875rem"
       width="15.875rem"
-      position="relative"
-      scale={[0.7, 0.7, 0.7, 1]}
+      position="absolute"
     >
       <Motion
         top="22.4375rem"

@@ -11,11 +11,15 @@ import {
 
 const Illustration: FC = () => {
   return (
-    <Box scale={[0.7, 0.7, 0.7, 1]} position="relative">
+    <Box
+      display="flex"
+      width="31.75rem"
+      position="relative"
+      scale={[0.7, 0.7, 0.7, 1]}
+    >
       <Motion
-        pt="12.5rem"
         width="100%"
-        display="flex"
+        top="12.5rem"
         initial="initial"
         animate="animate"
         position="absolute"
