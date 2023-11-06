@@ -2,6 +2,12 @@ import { FC } from 'react';
 
 import Layout from '@/components/layout';
 
-const CreateToken: FC = () => <Layout>Create Token</Layout>;
+import Illustration from './illustration';
+
+const CreateToken: FC = () => (
+  <Layout>
+    <Illustration />
+  </Layout>
+);
 
 export default CreateToken;
