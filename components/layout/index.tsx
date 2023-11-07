@@ -17,8 +17,8 @@ const Layout: FC<PropsWithChildren> = ({ children }) => (
       width="100%"
       display="flex"
       variant="container"
-      position="relative"
       flexDirection="column"
+      pt={['4rem', 'unset']}
     >
       <Header />
       <Box as="main" flex="1">
