@@ -35,12 +35,14 @@ const MyCoinsItem: FC<TCoinWithMetadata> = ({
     <Box
       py="m"
       px="l"
-      rowGap={['xs', 'm']}
       display="grid"
       cursor="pointer"
       alignItems="center"
+      rowGap={['xs', 'm']}
+      borderTop="1px solid"
       fontSize={['xs', 's']}
       columnGap={['m', 'xl']}
+      borderColor="outlineVariant"
       onClick={() => setIsOpen(not)}
       gridTemplateColumns={['1fr 1fr 1fr 2rem', '2rem 1fr 1fr 1fr 2rem']}
     >

@@ -5,8 +5,8 @@ export interface ICreateTokenForm {
   symbol: string;
   imageUrl?: string;
   description?: string;
-  decimals?: number;
-  totalSupply: number;
+  decimals?: string;
+  totalSupply: string;
   fixedSupply: boolean;
 }
 

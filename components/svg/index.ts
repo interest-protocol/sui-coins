@@ -16,3 +16,4 @@ export { default as SignOutSVG } from './sign-out';
 export { default as SuiLogoSVG } from './sui-logo';
 export { default as TickSVG } from './tick';
 export { default as UserSVG } from './user';
+export { default as XCirlceSVG } from './x-circle';

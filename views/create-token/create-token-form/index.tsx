@@ -1,10 +1,12 @@
 import { Box, Button } from '@interest-protocol/ui-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { useWalletKit } from '@mysten/wallet-kit';
+import BigNumber from 'bignumber.js';
 import { TextField } from 'elements';
 import { FC } from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
 import { SuiNetwork, useSuiClient } from '@/hooks/use-sui-client';
 import { showTXSuccessToast } from '@/utils';
@@ -15,13 +17,12 @@ import { getTokenByteCode } from './api';
 import FixedSupplyToggle from './fixed-supply-toggle';
 
 const CreateTokenForm: FC = () => {
+  const [loading, setLoading] = useState(false);
   const { register, control, getValues, setValue } = useForm<ICreateTokenForm>({
     defaultValues: {
       fixedSupply: true,
     },
   });
-
-  const [, setLoading] = useState(false);
 
   const { currentAccount, signTransactionBlock } = useWalletKit();
   const suiClient = useSuiClient(
@@ -55,16 +56,15 @@ const CreateTokenForm: FC = () => {
       });
 
       const { dependencies, modules } = await getTokenByteCode({
-        decimals: decimals ?? 9,
         name,
-        fixedSupply,
-        mintAmount: (
-          BigInt(totalSupply) *
-          10n ** BigInt(decimals ?? 9n)
-        ).toString(),
         symbol,
+        fixedSupply,
         url: imageUrl ?? '',
+        decimals: decimals ? +decimals : 9,
         description: description ?? '',
+        mintAmount: BigNumber(totalSupply)
+          .multipliedBy(BigNumber(10).pow(decimals ? decimals : 9))
+          .toString(),
       });
 
       const txb = new TransactionBlock();
@@ -90,12 +90,17 @@ const CreateTokenForm: FC = () => {
         tx,
         currentAccount.chains[0] as `${string}::${string}`
       );
-    } catch (e) {
-      console.log(e);
     } finally {
       setLoading(false);
     }
   };
+
+  const handleSubmit = () =>
+    toast.promise(onSubmit(), {
+      loading: 'Generating new coin...',
+      success: 'Coin Generated',
+      error: (e) => e.message || 'Something went wrong',
+    });
 
   return (
     <Box
@@ -120,6 +125,11 @@ const CreateTokenForm: FC = () => {
           label="Coin Symbol"
           placeholder="Eg. SUI"
           {...register('symbol')}
+        />
+        <TextField
+          label="Description"
+          {...register('description')}
+          placeholder="Eg. Some description about the coin"
         />
         <TextField
           label="Coin Image URL"
@@ -165,12 +175,12 @@ const CreateTokenForm: FC = () => {
             px="xl"
             fontSize="s"
             bg="primary"
+            variant="filled"
             color="onPrimary"
             fontFamily="Proto"
             borderRadius="full"
-            variant="filled"
-            disabled={!currentAccount}
-            onClick={onSubmit}
+            onClick={handleSubmit}
+            disabled={!currentAccount || loading}
           >
             Create coin
           </Button>

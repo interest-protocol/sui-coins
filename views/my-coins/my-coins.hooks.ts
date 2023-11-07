@@ -66,15 +66,15 @@ const getAllCoins: TGetAllCoins = async (provider, account, cursor = null) => {
 
 export const useGetAllCoinsWithMetadata: TUseGetAllCoinsWithMetadata = () => {
   const { currentAccount } = useWalletKit();
-  const suiClient = useSuiClient(
-    (currentAccount?.chains?.[0] as SuiNetwork) ?? 'sui:mainnet'
-  );
   const [error, setError] = useState<any>(null);
   const [isLoading, setLoading] = useState<boolean>(true);
   const [data, setData] = useState<ReadonlyArray<TCoinWithMetadata>>([]);
+  const suiClient = useSuiClient(
+    (currentAccount?.chains?.[0] as SuiNetwork) ?? 'sui:mainnet'
+  );
 
   useEffect(() => {
-    if (currentAccount)
+    if (currentAccount) {
       (async () => {
         try {
           const coinsRaw = await getAllCoins(suiClient, currentAccount.address);
@@ -83,8 +83,6 @@ export const useGetAllCoinsWithMetadata: TUseGetAllCoinsWithMetadata = () => {
             suiClient,
             currentAccount.address
           );
-
-          console.log('>> ownedTypes :: ', ownedTypes);
 
           const coinsRawMap = coinsRaw.reduce(
             (acc, coinRaw) => ({
@@ -125,11 +123,15 @@ export const useGetAllCoinsWithMetadata: TUseGetAllCoinsWithMetadata = () => {
           setLoading(false);
         }
       })();
-  }, []);
+      return;
+    }
+
+    setLoading(false);
+  }, [currentAccount, suiClient]);
 
   return {
-    coins: (data ?? []) as ReadonlyArray<TCoinWithMetadata>,
-    isLoading,
     error,
+    isLoading,
+    coins: (data ?? []) as ReadonlyArray<TCoinWithMetadata>,
   };
 };
