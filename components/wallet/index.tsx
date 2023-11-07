@@ -5,7 +5,7 @@ import { FC } from 'react';
 
 const ConnectWalletButton = stylin(ConnectButton as never)();
 
-const Wallet: FC = () => {
+const WalletConnect: FC = () => {
   const { colors, radii } = useTheme() as Theme;
 
   return (
@@ -23,4 +23,4 @@ const Wallet: FC = () => {
   );
 };
 
-export default Wallet;
+export default WalletConnect;

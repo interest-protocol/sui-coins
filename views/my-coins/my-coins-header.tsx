@@ -8,8 +8,6 @@ const MyCoinsHeader: FC = () => (
     py={['s', 'm']}
     px={['s', 'l']}
     fontSize={['xs', 's']}
-    borderBottom="1px solid"
-    borderColor="outlineVariant"
     gridTemplateColumns={['1fr 1fr 1fr 2rem', '2rem 1fr 1fr 1fr 2rem']}
   >
     <Box display={['none', 'block']} />

@@ -11,3 +11,4 @@ export { default as IPXSVG } from './ipx';
 export { default as LogoSVG } from './logo';
 export { default as SuiLogoSVG } from './sui-logo';
 export { default as TickSVG } from './tick';
+export { default as XCirlceSVG } from './x-circle';
