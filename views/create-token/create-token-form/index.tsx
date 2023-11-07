@@ -80,8 +80,6 @@ const CreateTokenForm: FC = () => {
         tx,
         currentAccount.chains[0] as `${string}::${string}`
       );
-    } catch (e) {
-      console.log(e);
     } finally {
       setLoading(false);
     }
