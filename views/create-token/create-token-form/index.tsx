@@ -1,6 +1,7 @@
 import { Box, Button } from '@interest-protocol/ui-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { useWalletKit } from '@mysten/wallet-kit';
+import BigNumber from 'bignumber.js';
 import { TextField } from 'elements';
 import { FC } from 'react';
 import { useState } from 'react';
@@ -61,10 +62,9 @@ const CreateTokenForm: FC = () => {
         url: imageUrl ?? '',
         decimals: decimals ? +decimals : 9,
         description: description ?? '',
-        mintAmount: (
-          BigInt(totalSupply) *
-          10n ** BigInt(decimals ? +decimals : 9n)
-        ).toString(),
+        mintAmount: BigNumber(totalSupply)
+          .multipliedBy(BigNumber(10).pow(decimals ? decimals : 9))
+          .toString(),
       });
 
       const txb = new TransactionBlock();
