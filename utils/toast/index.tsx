@@ -1,16 +1,16 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui.js';
+import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { propOr } from 'ramda';
 import toast from 'react-hot-toast';
 
-import { EXPLORER_URL, Network } from '@/constants';
+import { EXPLORER_URL } from '@/constants';
 import { tryCatch } from '@/utils/promise';
 
 import { ToastMsgs, ToastOpts } from './toast.types';
 
 export const showTXSuccessToast = async (
   tx: SuiTransactionBlockResponse,
-  network: Network
+  network: `${string}::${string}`
 ): Promise<void> => {
   const explorerLink = `${EXPLORER_URL[network]}/txblock/${tx.digest}`;
 

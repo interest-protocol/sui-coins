@@ -10,10 +10,11 @@ const Header: FC = () => (
   <Box
     py="m"
     px="xl"
-    display="grid"
     alignItems="center"
     borderRadius="full"
     bg="lowestContainer"
+    display={['flex', 'grid']}
+    justifyContent="space-between"
     gridTemplateColumns="1fr 1fr 1fr"
     boxShadow="0px 24px 46px -10px rgba(13, 16, 23, 0.16)"
   >

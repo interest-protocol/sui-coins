@@ -1,21 +1,100 @@
-import { Box } from '@interest-protocol/ui-kit';
+import { Box, Button } from '@interest-protocol/ui-kit';
+import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { useWalletKit } from '@mysten/wallet-kit';
 import { TextField } from 'elements';
 import { FC } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { SuiNetwork, useSuiClient } from '@/hooks/use-sui-client';
+import { showTXSuccessToast } from '@/utils';
+import { throwTXIfNotSuccessful } from '@/utils';
+
 import { ICreateTokenForm } from '../create-token.types';
+import { getTokenByteCode } from './api';
 import FixedSupplyToggle from './fixed-supply-toggle';
 
 const CreateTokenForm: FC = () => {
-  const { register, control, getValues } = useForm<ICreateTokenForm>({
+  const { register, control, getValues, setValue } = useForm<ICreateTokenForm>({
     defaultValues: {
       fixedSupply: true,
     },
   });
 
-  const onSubmit = () => {
-    const data = getValues();
-    console.log('>> values :: ', data);
+  const [, setLoading] = useState(false);
+
+  const { currentAccount, signTransactionBlock } = useWalletKit();
+  const suiClient = useSuiClient(
+    (currentAccount?.chains?.[0] as SuiNetwork) || 'sui:mainnet'
+  );
+
+  const onSubmit = async () => {
+    try {
+      setLoading(true);
+
+      if (!currentAccount) return;
+
+      const {
+        decimals,
+        name,
+        fixedSupply,
+        totalSupply,
+        symbol,
+        imageUrl,
+        description,
+      } = getValues();
+
+      console.log({
+        decimals,
+        name,
+        fixedSupply,
+        totalSupply,
+        symbol,
+        imageUrl,
+        description,
+      });
+
+      const { dependencies, modules } = await getTokenByteCode({
+        decimals: decimals ?? 9,
+        name,
+        fixedSupply,
+        mintAmount: (
+          BigInt(totalSupply) *
+          10n ** BigInt(decimals ?? 9n)
+        ).toString(),
+        symbol,
+        url: imageUrl ?? '',
+        description: description ?? '',
+      });
+
+      const txb = new TransactionBlock();
+
+      const [upgradeCap] = txb.publish({ modules, dependencies });
+
+      txb.transferObjects([upgradeCap], txb.pure(currentAccount.address));
+
+      const { signature, transactionBlockBytes } = await signTransactionBlock({
+        transactionBlock: txb,
+        account: currentAccount,
+      });
+
+      const tx = await suiClient.executeTransactionBlock({
+        signature,
+        transactionBlock: transactionBlockBytes,
+        requestType: 'WaitForEffectsCert',
+      });
+
+      throwTXIfNotSuccessful(tx);
+
+      await showTXSuccessToast(
+        tx,
+        currentAccount.chains[0] as `${string}::${string}`
+      );
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -24,6 +103,7 @@ const CreateTokenForm: FC = () => {
       overflow="hidden"
       bg="lowestContainer"
       width={['100%', '100%', '100%', '26rem']}
+      boxShadow="0px 24px 46px -10px rgba(13, 16, 23, 0.16)"
     >
       <Box
         p="xl"
@@ -35,20 +115,16 @@ const CreateTokenForm: FC = () => {
       </Box>
       <Box p="xl" display="flex" flexDirection="column" gap="m">
         <Box>1. Coin Details</Box>
-        <TextField
-          label="Name"
-          {...register('name')}
-          placeholder="Eg. Leo's Coin"
-        />
+        <TextField label="Name" {...register('name')} placeholder="Eg. Sui" />
         <TextField
           label="Coin Symbol"
-          placeholder="Eg. LC"
+          placeholder="Eg. SUI"
           {...register('symbol')}
         />
         <TextField
           label="Coin Image URL"
           {...register('imageUrl')}
-          placeholder="Eg. https://lc.com/images/logo.png"
+          placeholder="Eg. https://sui.com/images/logo.png"
         />
       </Box>
       <Box p="xl" display="flex" flexDirection="column" gap="m">
@@ -62,6 +138,7 @@ const CreateTokenForm: FC = () => {
         />
         <TextField
           label="Total Supply"
+          {...register('totalSupply')}
           placeholder="Your total coin supply"
           supportingText="Insert the maximum number of tokens available"
         />
@@ -76,14 +153,14 @@ const CreateTokenForm: FC = () => {
         >
           <Box display="flex" justifyContent="space-between" color="onSurface">
             <Box>Fixed Supply</Box>
-            <FixedSupplyToggle control={control} />
+            <FixedSupplyToggle control={control} setValue={setValue} />
           </Box>
           <Box color="#0000007A" fontSize="xs">
             The Treasury Cap will be sent to the @0x0 address
           </Box>
         </Box>
         <Box display="flex" justifyContent="center">
-          <Box
+          <Button
             py="s"
             px="xl"
             fontSize="s"
@@ -91,13 +168,16 @@ const CreateTokenForm: FC = () => {
             color="onPrimary"
             fontFamily="Proto"
             borderRadius="full"
+            variant="filled"
+            disabled={!currentAccount}
             onClick={onSubmit}
           >
             Create coin
-          </Box>
+          </Button>
         </Box>
       </Box>
     </Box>
   );
 };
+
 export default CreateTokenForm;

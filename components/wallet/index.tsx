@@ -3,18 +3,21 @@ import { ConnectButton } from '@mysten/wallet-kit';
 import stylin from '@stylin.js/react';
 import { FC } from 'react';
 
-const ConnectWalletButton = stylin(ConnectButton as any)();
+const ConnectWalletButton = stylin(ConnectButton as never)();
 
 const Wallet: FC = () => {
-  const { colors } = useTheme() as Theme;
+  const { colors, radii } = useTheme() as Theme;
 
   return (
-    <Box display="flex" justifyContent="flex-end">
+    <Box display={['none', 'flex']} justifyContent="flex-end">
       <ConnectWalletButton
+        py="m"
+        px="xl"
+        fontSize="s"
         fontFamily="Proto !important"
-        borderRadius="99rem !important"
         bg={`${colors.primary} !important`}
         color={`${colors.onPrimary} !important`}
+        borderRadius={`${radii.full} !important`}
       />
     </Box>
   );

@@ -1,8 +1,10 @@
 import Head from 'next/head';
 import { FC } from 'react';
 
-const SEO: FC<{ pageTitle: string }> = ({ pageTitle }) => {
-  const title = `${pageTitle} | Sui Mint`;
+import { SEOProps } from './seo.types';
+
+const SEO: FC<SEOProps> = ({ pageTitle }) => {
+  const title = `${pageTitle} | SUI Coins`;
 
   return (
     <Head>
@@ -11,14 +13,14 @@ const SEO: FC<{ pageTitle: string }> = ({ pageTitle }) => {
       <meta name="title" content={title} />
       <meta
         name="description"
-        content="Learn to build on 10+ blockchains in a supportive community of 130K+ future blockchain developers. Try our courses and expand your web3 stack today."
+        content="Generate custom coins and list all your tokens."
       />
       <meta property="og:locale" content="en_US" />
       <meta property="og:title" content={title} />
-      <meta property="og:site_name" content="Sui Mint" />
+      <meta property="og:site_name" content="SUI Coins" />
       <meta
         property="og:description"
-        content="Learn to build on 10+ blockchains in a supportive community of 130K+ future blockchain developers. Try our courses and expand your web3 stack today."
+        content="Generate custom coins and list all your tokens."
       />
       <meta
         property="og:image"
@@ -33,15 +35,12 @@ const SEO: FC<{ pageTitle: string }> = ({ pageTitle }) => {
       <meta property="og:image:height" content="256" />
       <meta property="og:image:alt" content={title} />
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content="Interest Protocol" />
-      <meta name="twitter:site" content="https://metaschool.so/" />
-      <meta
-        name="twitter:image"
-        content="https://metaschool.so/assets/landing-page.webp"
-      />
+      <meta name="twitter:title" content="SUI Coins" />
+      <meta name="twitter:site" content="https://suicoins.com/" />
+      <meta name="twitter:image" content="/ms-icon-310x310.png" />
       <meta
         name="twitter:description"
-        content="Learn to build on 10+ blockchains in a supportive community of 130K+ future blockchain developers. Try our courses and expand your web3 stack today."
+        content="Generate custom coins and list all your tokens."
       />
       <title>{title}</title>
     </Head>
