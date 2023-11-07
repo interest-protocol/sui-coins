@@ -44,16 +44,26 @@ const CreateTokenForm: FC = () => {
         description,
       } = getValues();
 
+      console.log({
+        decimals,
+        name,
+        fixedSupply,
+        totalSupply,
+        symbol,
+        imageUrl,
+        description,
+      });
+
       const { dependencies, modules } = await getTokenByteCode({
         name,
         symbol,
         fixedSupply,
         url: imageUrl ?? '',
-        decimals: decimals ?? 9,
+        decimals: decimals ? +decimals : 9,
         description: description ?? '',
         mintAmount: (
           BigInt(totalSupply) *
-          10n ** BigInt(decimals ?? 9n)
+          10n ** BigInt(decimals ? +decimals : 9n)
         ).toString(),
       });
 
