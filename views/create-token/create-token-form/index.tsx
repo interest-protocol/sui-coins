@@ -5,6 +5,7 @@ import { TextField } from 'elements';
 import { FC } from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
 import { SuiNetwork, useSuiClient } from '@/hooks/use-sui-client';
 import { showTXSuccessToast } from '@/utils';
@@ -15,13 +16,12 @@ import { getTokenByteCode } from './api';
 import FixedSupplyToggle from './fixed-supply-toggle';
 
 const CreateTokenForm: FC = () => {
+  const [loading, setLoading] = useState(false);
   const { register, control, getValues, setValue } = useForm<ICreateTokenForm>({
     defaultValues: {
       fixedSupply: true,
     },
   });
-
-  const [, setLoading] = useState(false);
 
   const { currentAccount, signTransactionBlock } = useWalletKit();
   const suiClient = useSuiClient(
@@ -44,27 +44,17 @@ const CreateTokenForm: FC = () => {
         description,
       } = getValues();
 
-      console.log({
-        decimals,
-        name,
-        fixedSupply,
-        totalSupply,
-        symbol,
-        imageUrl,
-        description,
-      });
-
       const { dependencies, modules } = await getTokenByteCode({
-        decimals: decimals ?? 9,
         name,
+        symbol,
         fixedSupply,
+        url: imageUrl ?? '',
+        decimals: decimals ?? 9,
+        description: description ?? '',
         mintAmount: (
           BigInt(totalSupply) *
           10n ** BigInt(decimals ?? 9n)
         ).toString(),
-        symbol,
-        url: imageUrl ?? '',
-        description: description ?? '',
       });
 
       const txb = new TransactionBlock();
@@ -97,6 +87,13 @@ const CreateTokenForm: FC = () => {
     }
   };
 
+  const handleSubmit = () =>
+    toast.promise(onSubmit(), {
+      loading: 'Generating new coin...',
+      success: 'Coin Generated',
+      error: (e) => e.message || 'Something went wrong',
+    });
+
   return (
     <Box
       borderRadius="m"
@@ -120,6 +117,11 @@ const CreateTokenForm: FC = () => {
           label="Coin Symbol"
           placeholder="Eg. SUI"
           {...register('symbol')}
+        />
+        <TextField
+          label="Description"
+          {...register('description')}
+          placeholder="Eg. Some description about the coin"
         />
         <TextField
           label="Coin Image URL"
@@ -165,12 +167,12 @@ const CreateTokenForm: FC = () => {
             px="xl"
             fontSize="s"
             bg="primary"
+            variant="filled"
             color="onPrimary"
             fontFamily="Proto"
             borderRadius="full"
-            variant="filled"
-            disabled={!currentAccount}
-            onClick={onSubmit}
+            onClick={handleSubmit}
+            disabled={!currentAccount || loading}
           >
             Create coin
           </Button>
