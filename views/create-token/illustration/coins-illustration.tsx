@@ -1,4 +1,4 @@
-import { Box, Motion } from '@interest-protocol/ui-kit';
+import { Motion } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
 import {
@@ -12,16 +12,12 @@ import { CoinsVariants } from './illustration-variants';
 
 const CoinsIllustration: FC = () => {
   return (
-    <Box
-      display="flex"
-      height="28rem"
-      left="5.875rem"
-      width="15.875rem"
-      position="absolute"
-    >
+    <>
       <Motion
-        top="22.4375rem"
-        left="6.5625rem"
+        maxWidth={['3.3125rem', '3.3125rem', '3.3125rem', '4.3125rem']}
+        width="100%"
+        top={['69%', '69%', '69%', '67%']}
+        left={['39%', '39%', '39%', '37%']}
         initial="initial"
         animate="animate"
         position="absolute"
@@ -30,8 +26,10 @@ const CoinsIllustration: FC = () => {
         <FirstCoin maxHeight="5.5625rem" maxWidth="4.3125rem" width="100%" />
       </Motion>
       <Motion
-        left="6.25rem"
-        top="16.625rem"
+        maxWidth={['4.75rem', '4.75rem', '4.75rem', '5.75rem']}
+        width="100%"
+        left="35%"
+        top={['53%', '53%', '53%', '52%']}
         initial="initial"
         animate="animate"
         position="absolute"
@@ -40,8 +38,10 @@ const CoinsIllustration: FC = () => {
         <SecondCoin maxHeight="4.6875rem" maxWidth="5.75rem" width="100%" />
       </Motion>
       <Motion
-        top="9.375rem"
-        left="10.3806rem"
+        maxWidth={['2.0625rem', '2.0625rem', '2.0625rem', '3.0625rem']}
+        width="100%"
+        top="37%"
+        left="49%"
         initial="initial"
         animate="animate"
         position="absolute"
@@ -50,7 +50,10 @@ const CoinsIllustration: FC = () => {
         <ThirdCoin maxHeight="5.375rem" maxWidth="3.0625rem" width="100%" />
       </Motion>
       <Motion
-        top="8.4375rem"
+        maxWidth={['5rem', '5rem', '5rem', '6rem']}
+        width="100%"
+        top="32%"
+        left="15%"
         initial="initial"
         animate="animate"
         position="absolute"
@@ -59,8 +62,10 @@ const CoinsIllustration: FC = () => {
         <FourthCoin maxHeight="6.0625rem" maxWidth="6rem" width="100%" />
       </Motion>
       <Motion
-        top="5.1875rem"
-        left="11.5625rem"
+        maxWidth={['3.3125rem', '3.3125rem', '3.3125rem', '4.3125rem']}
+        width="100%"
+        top="26%"
+        left="53%"
         initial="initial"
         animate="animate"
         position="absolute"
@@ -69,8 +74,10 @@ const CoinsIllustration: FC = () => {
         <FifthCoin maxHeight="3.375rem" maxWidth="4.3125rem" width="100%" />
       </Motion>
       <Motion
-        top="1.25rem"
-        left="4.0338rem"
+        maxWidth={['3.3125rem', '3.3125rem', '3.3125rem', '4.3125rem']}
+        width="100%"
+        top="10%"
+        left="22%"
         initial="initial"
         animate="animate"
         position="absolute"
@@ -78,7 +85,7 @@ const CoinsIllustration: FC = () => {
       >
         <FirstCoin maxHeight="5.5625rem" maxWidth="4.3125rem" width="100%" />
       </Motion>
-    </Box>
+    </>
   );
 };
 

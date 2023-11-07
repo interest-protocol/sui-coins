@@ -14,7 +14,7 @@ const Wallet: FC = () => {
         fontFamily="Proto !important"
         borderRadius="99rem !important"
         bg={`${colors.primary} !important`}
-        color={`${colors['primary.onPrimary']} !important`}
+        color={`${colors.onPrimary} !important`}
       />
     </Box>
   );

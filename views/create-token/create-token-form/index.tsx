@@ -19,7 +19,12 @@ const CreateTokenForm: FC = () => {
   };
 
   return (
-    <Box borderRadius="m" overflow="hidden" bg="lowestContainer" width="26rem">
+    <Box
+      borderRadius="m"
+      overflow="hidden"
+      bg="lowestContainer"
+      width={['100%', '100%', '100%', '26rem']}
+    >
       <Box
         p="xl"
         fontSize="l"

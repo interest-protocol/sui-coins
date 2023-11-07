@@ -12,14 +12,13 @@ import {
 const Illustration: FC = () => {
   return (
     <Box
-      display="flex"
-      width="31.75rem"
+      width="100%"
       position="relative"
-      scale={[0.7, 0.7, 0.7, 1]}
+      height={['30.75rem', '30.75rem', '30.75rem', '41.5rem']}
     >
       <Motion
+        bottom="0"
         width="100%"
-        top="12.5rem"
         initial="initial"
         animate="animate"
         position="absolute"
@@ -29,25 +28,25 @@ const Illustration: FC = () => {
       </Motion>
       <Motion
         zIndex="0"
-        width="100%"
-        top="8.4375rem"
-        left="5.3125rem"
         initial="initial"
         animate="animate"
         position="absolute"
         variants={StarsVariants}
+        top={['30%', '40%', '33%', '33%']}
+        left={['14%', '14%', '19%', '16%']}
+        width={['75%', '75%', '100%', '100%']}
       >
         <Stars maxHeight="14.0625rem" maxWidth="22.125rem" width="100%" />
       </Motion>
       <CoinsIllustration />
       <Motion
-        top="0rem"
-        width="100%"
-        left="4.6875rem"
         animate="animate"
         initial="initial"
         position="absolute"
         variants={SpheresVariants}
+        top={['0%', '15%', '12%', '12%']}
+        left={['9%', '9%', '14%', '14%']}
+        width={['80%', '80%', '100%', '100%']}
       >
         <Spheres maxWidth="21.3125rem" maxHeight="24.6875rem" width="100%" />
       </Motion>

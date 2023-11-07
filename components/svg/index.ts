@@ -8,4 +8,5 @@ export { default as ErrorSVG } from './error';
 export { default as HeartSVG } from './heart';
 export { default as IPXSVG } from './ipx';
 export { default as LogoSVG } from './logo';
+export { default as SuiLogoSVG } from './sui-logo';
 export { default as TickSVG } from './tick';
