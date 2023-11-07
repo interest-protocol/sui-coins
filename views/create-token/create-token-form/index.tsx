@@ -2,13 +2,13 @@ import { Box, Button } from '@interest-protocol/ui-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { useWalletKit } from '@mysten/wallet-kit';
 import { TextField } from 'elements';
-import { FC } from 'react';
+import { ChangeEvent, FC } from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { SuiNetwork, useSuiClient } from '@/hooks/use-sui-client';
-import { showTXSuccessToast } from '@/utils';
+import { parseInputEventToNumberString, showTXSuccessToast } from '@/utils';
 import { throwTXIfNotSuccessful } from '@/utils';
 
 import { ICreateTokenForm } from '../create-token.types';
@@ -130,6 +130,7 @@ const CreateTokenForm: FC = () => {
       <Box p="xl" display="flex" flexDirection="column" gap="m">
         <Box>2. Coin Features</Box>
         <TextField
+          type="number"
           status="success"
           defaultValue="9"
           label="Coin Decimals"
@@ -138,7 +139,11 @@ const CreateTokenForm: FC = () => {
         />
         <TextField
           label="Total Supply"
-          {...register('totalSupply')}
+          {...register('totalSupply', {
+            onChange: (v: ChangeEvent<HTMLInputElement>) => {
+              setValue?.('totalSupply', parseInputEventToNumberString(v));
+            },
+          })}
           placeholder="Your total coin supply"
           supportingText="Insert the maximum number of tokens available"
         />
