@@ -1,6 +1,7 @@
 import { Box, Button } from '@interest-protocol/ui-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { useWalletKit } from '@mysten/wallet-kit';
+import BigNumber from 'bignumber.js';
 import { TextField } from 'elements';
 import { ChangeEvent, FC } from 'react';
 import { useState } from 'react';
@@ -44,17 +45,26 @@ const CreateTokenForm: FC = () => {
         description,
       } = getValues();
 
+      console.log({
+        decimals,
+        name,
+        fixedSupply,
+        totalSupply,
+        symbol,
+        imageUrl,
+        description,
+      });
+
       const { dependencies, modules } = await getTokenByteCode({
         name,
         symbol,
         fixedSupply,
         url: imageUrl ?? '',
-        decimals: decimals ?? 9,
+        decimals: decimals ? +decimals : 9,
         description: description ?? '',
-        mintAmount: (
-          BigInt(totalSupply) *
-          10n ** BigInt(decimals ?? 9n)
-        ).toString(),
+        mintAmount: BigNumber(totalSupply)
+          .multipliedBy(BigNumber(10).pow(decimals ? decimals : 9))
+          .toString(),
       });
 
       const txb = new TransactionBlock();
@@ -112,6 +122,7 @@ const CreateTokenForm: FC = () => {
         <Box>1. Coin Details</Box>
         <TextField label="Name" {...register('name')} placeholder="Eg. Sui" />
         <TextField
+          pattern="A-Za-z"
           label="Coin Symbol"
           placeholder="Eg. SUI"
           {...register('symbol')}
@@ -122,6 +133,7 @@ const CreateTokenForm: FC = () => {
           placeholder="Eg. Some description about the coin"
         />
         <TextField
+          type="link"
           label="Coin Image URL"
           {...register('imageUrl')}
           placeholder="Eg. https://sui.com/images/logo.png"

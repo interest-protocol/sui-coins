@@ -9,15 +9,11 @@ import {
   ICoinResponse,
   TCoinWithMetadata,
   TGetAllCoins,
-  TGetOwnedTypes,
+  TGetOwned,
   TUseGetAllCoinsWithMetadata,
 } from './my-coins.types';
 
-const getOwnedTypes: TGetOwnedTypes = async (
-  provider,
-  account,
-  cursor = null
-) => {
+const getOwned: TGetOwned = async (provider, account, cursor = null) => {
   const { data, nextCursor, hasNextPage } = await provider.getOwnedObjects({
     owner: account,
     cursor,
@@ -32,11 +28,12 @@ const getOwnedTypes: TGetOwnedTypes = async (
         ({ error, data }) =>
           !error && data?.type!.startsWith('0x2::coin::TreasuryCap')
       )
-      .map(({ data }) =>
-        data!.type!.split('0x2::coin::TreasuryCap<')[1].slice(0, -1)
-      );
+      .map(({ data }) => ({
+        type: data!.type!.split('0x2::coin::TreasuryCap<')[1].slice(0, -1),
+        objectId: data!.objectId,
+      }));
 
-  const newData = await getOwnedTypes(provider, account, nextCursor);
+  const newData = await getOwned(provider, account, nextCursor);
 
   return [
     ...data
@@ -44,9 +41,10 @@ const getOwnedTypes: TGetOwnedTypes = async (
         ({ error, data }) =>
           !error && data?.type!.startsWith('0x2::coin::TreasuryCap')
       )
-      .map(({ data }) =>
-        data!.type!.split('0x2::coin::TreasuryCap<')[1].slice(0, -1)
-      ),
+      .map(({ data }) => ({
+        type: data!.type!.split('0x2::coin::TreasuryCap<')[1].slice(0, -1),
+        objectId: data!.objectId,
+      })),
     ...newData,
   ];
 };
@@ -79,10 +77,7 @@ export const useGetAllCoinsWithMetadata: TUseGetAllCoinsWithMetadata = () => {
         try {
           const coinsRaw = await getAllCoins(suiClient, currentAccount.address);
 
-          const ownedTypes = await getOwnedTypes(
-            suiClient,
-            currentAccount.address
-          );
+          const ownedTypes = await getOwned(suiClient, currentAccount.address);
 
           const coinsRawMap = coinsRaw.reduce(
             (acc, coinRaw) => ({
@@ -95,9 +90,10 @@ export const useGetAllCoinsWithMetadata: TUseGetAllCoinsWithMetadata = () => {
                     Number(acc[coinRaw.coinType]?.balance || '0')
                 ),
                 owned:
-                  ownedTypes.includes(coinRaw.coinType) ||
+                  ownedTypes.find(({ type }) => type === coinRaw.coinType)
+                    ?.objectId ||
                   acc[coinRaw.coinType]?.owned ||
-                  false,
+                  null,
                 objects: (acc[coinRaw.coinType]?.objects ?? []).concat(coinRaw),
               },
             }),
