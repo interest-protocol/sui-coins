@@ -22,7 +22,9 @@ const Header: FC = () => (
       <LogoSVG maxHeight="100%" maxWidth="100%" height="100%" />
     </Box>
     <NavBar />
-    <Wallet />
+    <Box display={['none', 'flex']} justifyContent="flex-end">
+      <Wallet />
+    </Box>
   </Box>
 );
 
