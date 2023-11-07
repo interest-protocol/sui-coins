@@ -25,7 +25,9 @@ const Footer: FC = () => (
       borderColor="#C6C6CA"
       justifyContent="center"
     >
-      <IPXSVG maxHeight="2.5rem" maxWidth="2.5rem" width="100%" />
+      <a href="https://interestprotocol.com/" target="_blank" rel="noreferrer">
+        <IPXSVG maxHeight="2.5rem" maxWidth="2.5rem" width="100%" />
+      </a>
     </Box>
   </Box>
 );

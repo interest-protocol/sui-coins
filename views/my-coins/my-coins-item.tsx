@@ -75,7 +75,7 @@ const MyCoinsItem: FC<TCoinWithMetadata> = ({
           bg={owned ? 'successContainer' : 'warningContainer'}
           color={owned ? 'onSuccessContainer' : 'onWarningContainer'}
         >
-          {owned ? 'Owned' : 'Not owned'}
+          {owned ? 'Owned' : 'Burned 🔥'}
           {owned && (
             <ArrowTopRightSVG
               width="100%"
