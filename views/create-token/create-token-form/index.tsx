@@ -99,10 +99,10 @@ const CreateTokenForm: FC = () => {
 
   return (
     <Box
-      width="26rem"
       borderRadius="m"
       overflow="hidden"
       bg="lowestContainer"
+      width={['100%', '100%', '100%', '26rem']}
       boxShadow="0px 24px 46px -10px rgba(13, 16, 23, 0.16)"
     >
       <Box

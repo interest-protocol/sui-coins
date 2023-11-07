@@ -4,7 +4,9 @@ export const GlobalStyles = css`
   @font-face {
     font-family: 'Proto';
     src: url('/fonts/proto/ProtoMono-Regular.eot');
-    src: local('Proto Mono Regular'), local('ProtoMono-Regular'),
+    src:
+      local('Proto Mono Regular'),
+      local('ProtoMono-Regular'),
       url('/fonts/proto/ProtoMono-Regular.eot?#iefix')
         format('embedded-opentype'),
       url('/fonts/proto/ProtoMono-Regular.woff2') format('woff2'),
@@ -18,7 +20,9 @@ export const GlobalStyles = css`
   @font-face {
     font-family: 'Proto';
     src: url('../fonts/proto/ProtoMono-Medium.eot');
-    src: local('Proto Mono Medium'), local('ProtoMono-Medium'),
+    src:
+      local('Proto Mono Medium'),
+      local('ProtoMono-Medium'),
       url('../fonts/proto/ProtoMono-Medium.eot?#iefix')
         format('embedded-opentype'),
       url('../fonts/proto/ProtoMono-Medium.woff2') format('woff2'),
@@ -31,7 +35,8 @@ export const GlobalStyles = css`
 
   @font-face {
     font-family: 'Satoshi';
-    src: url('/fonts/satoshi/Satoshi-Medium.woff2') format('woff2'),
+    src:
+      url('/fonts/satoshi/Satoshi-Medium.woff2') format('woff2'),
       url('/fonts/satoshi/Satoshi-Medium.woff') format('woff'),
       url('/fonts/satoshi/Satoshi-Medium.ttf') format('truetype');
     font-weight: 500;
@@ -41,7 +46,8 @@ export const GlobalStyles = css`
 
   @font-face {
     font-family: 'Satoshi';
-    src: url('/fonts/satoshi/Satoshi-Bold.woff2') format('woff2'),
+    src:
+      url('/fonts/satoshi/Satoshi-Bold.woff2') format('woff2'),
       url('/fonts/satoshi/Satoshi-Bold.woff') format('woff'),
       url('/fonts/satoshi/Satoshi-Bold.ttf') format('truetype');
     font-weight: 700;
