@@ -1,34 +1,26 @@
 import { Box, Theme, useTheme } from '@interest-protocol/ui-kit';
-import { button } from '@interest-protocol/ui-kit/dist/theme/variants';
 import { ConnectButton } from '@mysten/wallet-kit';
 import stylin from '@stylin.js/react';
-import dynamic from 'next/dynamic';
 import { FC } from 'react';
 
+const ConnectWalletButton = stylin(ConnectButton as never)();
+
 const Wallet: FC = () => {
-  const { colors } = useTheme() as Theme;
-  // const { currentWallet } = useCurrentWallet();
-  // const { mutateAsync: disconnect } = useDisconnectWallet();
-  // const account = currentWallet?.accounts.length
-  //   ? currentWallet.accounts[0]
-  //   : null;
+  const { colors, radii } = useTheme() as Theme;
 
-  // return account ? (
-  //   <div>
-  //     address: {account.address} chain: {account.chains[0]}
-  //     <button
-  //       onClick={async () => {
-  //         await disconnect();
-  //       }}
-  //     >
-  //       disconnect
-  //     </button>
-  //   </div>
-  // ) : (
-  //   <ConnectModal trigger={<button>waa</button>} />
-  // );
-
-  return <ConnectButton />;
+  return (
+    <Box display={['none', 'flex']} justifyContent="flex-end">
+      <ConnectWalletButton
+        py="m"
+        px="xl"
+        fontSize="s"
+        fontFamily="Proto !important"
+        bg={`${colors.primary} !important`}
+        color={`${colors.onPrimary} !important`}
+        borderRadius={`${radii.full} !important`}
+      />
+    </Box>
+  );
 };
 
 export default Wallet;

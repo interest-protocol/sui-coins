@@ -1,6 +1,6 @@
 import { Box } from '@interest-protocol/ui-kit';
-import { isEmpty } from 'ramda';
 import { FC } from 'react';
+import Skeleton from 'react-loading-skeleton';
 import { v4 } from 'uuid';
 
 import Layout from '@/components/layout';
@@ -10,20 +10,46 @@ import MyCoinsHeader from './my-coins-header';
 import MyCoinsItem from './my-coins-item';
 
 const MyCoins: FC = () => {
-  const { coins, isLoading, error } = useGetAllCoinsWithMetadata();
+  const { coins, isLoading } = useGetAllCoinsWithMetadata();
 
   return (
     <Layout>
-      <Box fontFamily="Proto" fontSize="8xl" textAlign="center" my="l">
+      <Box
+        my="2xl"
+        fontFamily="Proto"
+        textAlign="center"
+        fontSize={['5xl', '8xl']}
+      >
         My Coins
       </Box>
-      <Box mx="11xl" my="xl" bg="lowestContainer" borderRadius="m">
+      <Box
+        my="2xl"
+        borderRadius="m"
+        mx={[0, '11xl']}
+        bg="lowestContainer"
+        width={['calc(100vw - 3rem)', 'auto']}
+        boxShadow="0px 24px 46px -10px rgba(13, 16, 23, 0.16)"
+      >
         <MyCoinsHeader />
-        {isLoading && 'fetching'}
-        {!isEmpty(error) && JSON.stringify(error)}
-        {coins.map((coin) => (
-          <MyCoinsItem key={v4()} {...coin} />
-        ))}
+        {isLoading ? (
+          <Box
+            py="m"
+            px="l"
+            rowGap="m"
+            columnGap="xl"
+            display="grid"
+            cursor="pointer"
+            alignItems="center"
+            gridTemplateColumns="2rem 1fr 1fr 1fr 2rem"
+          >
+            <Box />
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+          </Box>
+        ) : (
+          coins.map((coin) => <MyCoinsItem key={v4()} {...coin} />)
+        )}
       </Box>
     </Layout>
   );

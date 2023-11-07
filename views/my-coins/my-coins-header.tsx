@@ -3,22 +3,19 @@ import { FC } from 'react';
 
 const MyCoinsHeader: FC = () => (
   <Box
-    py="m"
-    px="l"
     columnGap="xl"
     display="grid"
+    py={['s', 'm']}
+    px={['s', 'l']}
+    fontSize={['xs', 's']}
     borderBottom="1px solid"
     borderColor="outlineVariant"
-    gridTemplateColumns="2rem 1fr 1fr 1fr 2rem"
+    gridTemplateColumns={['1fr 1fr 1fr 2rem', '2rem 1fr 1fr 1fr 2rem']}
   >
-    <Box />
-    <Box fontFamily="Proto" fontSize="s">
-      Name
-    </Box>
-    <Box fontFamily="Proto" fontSize="s">
-      Balance
-    </Box>
-    <Box fontFamily="Proto" fontSize="s" gridColumn="span 2">
+    <Box display={['none', 'block']} />
+    <Box fontFamily="Proto">Name</Box>
+    <Box fontFamily="Proto">Balance</Box>
+    <Box fontFamily="Proto" gridColumn="span 2">
       Treasury Cap
     </Box>
   </Box>

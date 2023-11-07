@@ -1,5 +1,4 @@
-import { JsonRpcProvider } from '@mysten/sui.js';
-import { CoinStruct } from '@mysten/sui.js/src/types/coin';
+import { CoinMetadata, CoinStruct, SuiClient } from '@mysten/sui.js/client';
 
 export interface ICoinResponse {
   version: string;
@@ -8,20 +7,12 @@ export interface ICoinResponse {
   previousTransaction: string;
   coinObjectId: string;
   balance: string;
+  owned: boolean;
   lockedUntilEpoch?: number | null | undefined;
   objects: ReadonlyArray<CoinStruct>;
 }
 
-export interface ICoinMetadata {
-  symbol: string;
-  id: string | null;
-  description: string;
-  name: string;
-  decimals: number;
-  iconUrl: string | null;
-}
-
-export type TCoinWithMetadata = ICoinMetadata & ICoinResponse;
+export type TCoinWithMetadata = CoinMetadata & ICoinResponse;
 
 export type TUseGetAllCoinsWithMetadata = () => {
   coins: ReadonlyArray<TCoinWithMetadata>;
@@ -30,7 +21,13 @@ export type TUseGetAllCoinsWithMetadata = () => {
 };
 
 export type TGetAllCoins = (
-  provider: JsonRpcProvider,
+  provider: SuiClient,
   account: string,
   cursor?: string | null
 ) => Promise<ReadonlyArray<CoinStruct>>;
+
+export type TGetOwnedTypes = (
+  provider: SuiClient,
+  account: string,
+  cursor?: string | null
+) => Promise<ReadonlyArray<string>>;

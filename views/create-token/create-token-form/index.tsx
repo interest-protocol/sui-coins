@@ -15,13 +15,13 @@ import { getTokenByteCode } from './api';
 import FixedSupplyToggle from './fixed-supply-toggle';
 
 const CreateTokenForm: FC = () => {
-  const { register, control, getValues } = useForm<ICreateTokenForm>({
+  const { register, control, getValues, setValue } = useForm<ICreateTokenForm>({
     defaultValues: {
       fixedSupply: true,
     },
   });
 
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
 
   const { currentAccount, signTransactionBlock } = useWalletKit();
   const suiClient = useSuiClient(
@@ -98,7 +98,13 @@ const CreateTokenForm: FC = () => {
   };
 
   return (
-    <Box borderRadius="m" overflow="hidden" bg="lowestContainer" width="26rem">
+    <Box
+      width="26rem"
+      borderRadius="m"
+      overflow="hidden"
+      bg="lowestContainer"
+      boxShadow="0px 24px 46px -10px rgba(13, 16, 23, 0.16)"
+    >
       <Box
         p="xl"
         fontSize="l"
@@ -109,20 +115,16 @@ const CreateTokenForm: FC = () => {
       </Box>
       <Box p="xl" display="flex" flexDirection="column" gap="m">
         <Box>1. Coin Details</Box>
-        <TextField
-          label="Name"
-          {...register('name')}
-          placeholder="Eg. Leo's Coin"
-        />
+        <TextField label="Name" {...register('name')} placeholder="Eg. Sui" />
         <TextField
           label="Coin Symbol"
-          placeholder="Eg. LC"
+          placeholder="Eg. SUI"
           {...register('symbol')}
         />
         <TextField
           label="Coin Image URL"
           {...register('imageUrl')}
-          placeholder="Eg. https://lc.com/images/logo.png"
+          placeholder="Eg. https://sui.com/images/logo.png"
         />
       </Box>
       <Box p="xl" display="flex" flexDirection="column" gap="m">
@@ -151,14 +153,14 @@ const CreateTokenForm: FC = () => {
         >
           <Box display="flex" justifyContent="space-between" color="onSurface">
             <Box>Fixed Supply</Box>
-            <FixedSupplyToggle control={control} />
+            <FixedSupplyToggle control={control} setValue={setValue} />
           </Box>
           <Box color="#0000007A" fontSize="xs">
             The Treasury Cap will be sent to the @0x0 address
           </Box>
         </Box>
         <Box display="flex" justifyContent="center">
-          <Box
+          <Button
             py="s"
             px="xl"
             fontSize="s"
@@ -166,17 +168,16 @@ const CreateTokenForm: FC = () => {
             color="onPrimary"
             fontFamily="Proto"
             borderRadius="full"
+            variant="filled"
+            disabled={!currentAccount}
+            onClick={onSubmit}
           >
-            <Button
-              variant="filled"
-              disabled={!currentAccount}
-              onClick={onSubmit}
-            ></Button>
             Create coin
-          </Box>
+          </Button>
         </Box>
       </Box>
     </Box>
   );
 };
+
 export default CreateTokenForm;
