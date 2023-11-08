@@ -21,14 +21,15 @@ const Hero: FC = () => {
       <Illustration />
       {!isConnected && (
         <Box
-          left="50%"
           bottom="5%"
-          width="max-content"
-          position="absolute"
-          transform="translate(-50%, 0%)"
-          display={['block', 'block', 'block', 'none']}
+          width="100%"
+          position="sticky"
+          justifyContent="center"
+          display={['flex', 'flex', 'flex', 'none']}
         >
-          <ConnectWalletButton />
+          <Box>
+            <ConnectWalletButton />
+          </Box>
         </Box>
       )}
     </Box>

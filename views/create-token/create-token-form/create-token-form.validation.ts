@@ -8,7 +8,10 @@ export const validationSchema = yup.object({
     .matches(/^[aA-zZ\s]+$/, 'Only alphabets are allowed for this field'),
   description: yup.string(),
   imageUrl: yup.string().url('Image URL must to be an URL'),
-  totalSupply: yup.string().required('Total Supply is a required field'),
+  totalSupply: yup
+    .string()
+    .matches(/[^0]+/, 'You cannot add numbers less than 0')
+    .required('Total Supply is a required field'),
   decimals: yup
     .number()
     .min(0, 'You cannot add numbers less than 0')

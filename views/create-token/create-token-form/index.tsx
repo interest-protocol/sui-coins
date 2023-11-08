@@ -176,7 +176,7 @@ const CreateTokenForm: FC = () => {
           <TextField
             label="Total Supply"
             placeholder="Your total coin supply"
-            status={errors.totalSupply?.message ? 'error' : 'success'}
+            status={errors.totalSupply && 'error'}
             supportingText={
               errors.totalSupply?.message ||
               'Insert the maximum number of tokens available'
