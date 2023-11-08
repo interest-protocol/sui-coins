@@ -61,7 +61,7 @@ const Wallet: FC = () => {
         handleCloseMenu={handleCloseMenu}
       />
       {!isConnected && (
-        <Box display={['none', 'none', 'flex', 'flex']}>
+        <Box display={['none', 'none', 'none', 'flex']}>
           <ConnectWalletButton />
         </Box>
       )}

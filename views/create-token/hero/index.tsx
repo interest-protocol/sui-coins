@@ -2,7 +2,7 @@ import { Box } from '@interest-protocol/ui-kit';
 import { useWalletKit } from '@mysten/wallet-kit';
 import { FC } from 'react';
 
-import Wallet from '@/components/wallet';
+import ConnectWalletButton from '@/components/wallet/connect-wallet-button';
 
 import Illustration from '../illustration';
 import Title from './title';
@@ -28,7 +28,7 @@ const Hero: FC = () => {
           transform="translate(-50%, 0%)"
           display={['block', 'block', 'block', 'none']}
         >
-          <Wallet />
+          <ConnectWalletButton />
         </Box>
       )}
     </Box>
