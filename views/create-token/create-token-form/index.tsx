@@ -34,13 +34,12 @@ const CreateTokenForm: FC = () => {
     },
     resolver: yupResolver(validationSchema),
     mode: 'onBlur',
+    reValidateMode: 'onBlur',
   });
 
   const { network } = useNetwork();
   const suiClient = useSuiClient(network);
   const { currentAccount, signTransactionBlock } = useWalletKit();
-
-  console.log('>> errors :: ', errors);
 
   const createToken = async () => {
     try {
