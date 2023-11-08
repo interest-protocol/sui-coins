@@ -41,7 +41,7 @@ const AccountInfo: FC<AccountInfoProps> = ({
             cursor="pointer"
             onClick={handleDisconnect}
           >
-            <SignOutSVG maxWidth="1.2rem" maxHeight="1.2rem" width="100%" />
+            <SignOutSVG maxWidth="1.2rem" maxHeight="1.2rem" width="1.2rem" />
           </Box>
         </Box>
       )}

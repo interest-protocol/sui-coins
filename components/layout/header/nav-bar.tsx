@@ -8,7 +8,7 @@ const NavBar: FC = () => {
   return (
     <Box display={['none', 'flex']} justifyContent="center">
       <Box
-        px="xl"
+        px={['s', 's', 's', 'xl']}
         py="xs"
         fontSize="s"
         cursor="pointer"
@@ -20,11 +20,12 @@ const NavBar: FC = () => {
           borderColor: '#0053DB33',
         }}
         onClick={() => asPath !== '/' && push('/')}
+        textAlign="center"
       >
         Create coin
       </Box>
       <Box
-        px="xl"
+        px={['s', 's', 's', 'xl']}
         py="xs"
         fontSize="s"
         cursor="pointer"
@@ -36,6 +37,7 @@ const NavBar: FC = () => {
         nActive={{
           borderColor: '#0053DB33',
         }}
+        textAlign="center"
       >
         My Coins
       </Box>
