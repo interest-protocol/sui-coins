@@ -43,13 +43,12 @@ const Wallet: FC = () => {
       ref={connectedBoxRef}
       position="relative"
     >
-      {isConnected ? (
-        <AccountInfo
-          menuIsOpen={isOpen}
-          handleOpenMenu={handleOpenMenu}
-          handleCloseMenu={handleCloseMenu}
-        />
-      ) : (
+      <AccountInfo
+        menuIsOpen={isOpen}
+        handleOpenMenu={handleOpenMenu}
+        handleCloseMenu={handleCloseMenu}
+      />
+      {!isConnected && (
         <Box display={['none', 'none', 'none', 'flex']}>
           <ConnectWalletButton />
         </Box>

@@ -34,13 +34,12 @@ const CreateTokenForm: FC = () => {
     },
     resolver: yupResolver(validationSchema),
     mode: 'onBlur',
+    reValidateMode: 'onBlur',
   });
 
   const { network } = useNetwork();
   const suiClient = useSuiClient(network);
   const { currentAccount, signTransactionBlock } = useWalletKit();
-
-  console.log('>> errors :: ', errors);
 
   const createToken = async () => {
     try {
@@ -177,7 +176,7 @@ const CreateTokenForm: FC = () => {
           <TextField
             label="Total Supply"
             placeholder="Your total coin supply"
-            status={errors.totalSupply?.message ? 'error' : 'success'}
+            status={errors.totalSupply && 'error'}
             supportingText={
               errors.totalSupply?.message ||
               'Insert the maximum number of tokens available'
