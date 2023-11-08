@@ -1,4 +1,4 @@
-import { Box } from '@interest-protocol/ui-kit';
+import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
 import { SuiLogoSVG } from '@/svg';
@@ -6,7 +6,7 @@ import { SuiLogoSVG } from '@/svg';
 const Title: FC = () => (
   <Box display="flex" flexDirection="column" rowGap="l" mb="xl">
     <Box>
-      <Box
+      <Typography
         mr="l"
         as="span"
         fontWeight="400"
@@ -14,10 +14,13 @@ const Title: FC = () => (
         fontFamily="Proto"
         fontStyle="normal"
         fontSize={['2.8125rem', '2.8125rem', '2.8125rem', '3.5625rem']}
+        variant="small"
       >
         Create coins on Sui Network
+      </Typography>
+      <Box as="span" display="inline-block" verticalAlign="bottom">
+        <SuiLogoSVG maxWidth="4rem" maxHeight="4rem" width="100%" />
       </Box>
-      <SuiLogoSVG maxWidth="4rem" maxHeight="4rem" width="100%" />
     </Box>
     <Box
       fontWeight="500"
