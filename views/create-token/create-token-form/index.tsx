@@ -196,17 +196,7 @@ const CreateTokenForm: FC = () => {
             borderRadius="xs"
             flexDirection="column"
           >
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              color="onSurface"
-            >
-              <Box>Fixed Supply</Box>
-              <FixedSupplyToggle control={control} setValue={setValue} />
-            </Box>
-            <Box color="#0000007A" fontSize="xs">
-              The Treasury Cap will be sent to the @0x0 address
-            </Box>
+            <FixedSupplyToggle control={control} setValue={setValue} />
           </Box>
           <Box display="flex" justifyContent="center">
             <Button
