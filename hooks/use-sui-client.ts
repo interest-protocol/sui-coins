@@ -2,9 +2,11 @@ import { getFullnodeUrl, SuiClient } from '@mysten/sui.js/client';
 
 import { Network } from '@/constants';
 
-const testnetClient = new SuiClient({ url: getFullnodeUrl('testnet') });
+const testnetClient = new SuiClient({
+  url: process.env.NEXT_PUBLIC_SUI_TESTNET_RPC_URL || getFullnodeUrl('testnet'),
+});
 const mainnetClient = new SuiClient({
-  url: 'https://api.shinami.com/node/v1/sui_mainnet_f8ba2ad72d9ad60899e56d2f9d813e2b',
+  url: process.env.NEXT_PUBLIC_SUI_MAINNET_RPC_URL || getFullnodeUrl('mainnet'),
 });
 
 const map = {
