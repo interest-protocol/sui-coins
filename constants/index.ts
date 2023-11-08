@@ -1,3 +1,4 @@
+export * from './wrapper-variants';
 export const MAX_NUMBER_INPUT_VALUE = 9000000000000000;
 import { SUI_MAINNET_CHAIN, SUI_TESTNET_CHAIN } from '@mysten/wallet-standard';
 

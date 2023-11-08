@@ -11,20 +11,28 @@ const Header: FC = () => (
     py="m"
     px="xl"
     alignItems="center"
-    borderRadius="full"
     bg="lowestContainer"
-    display={['flex', 'grid']}
+    display={['flex', 'flex', 'flex', 'grid']}
     justifyContent="space-between"
+    gap="xs"
+    borderRadius={['unset', 'unset', 'unset', 'full']}
     gridTemplateColumns="1fr 1fr 1fr"
-    boxShadow="0px 24px 46px -10px rgba(13, 16, 23, 0.16)"
+    boxShadow="0 1.5rem 2.875rem -0.625rem rgba(13, 16, 23, 0.16)"
+    width="100%"
+    position={['absolute', 'absolute', 'absolute', 'relative']}
+    top="0"
+    left="0"
   >
     <Box display="flex" alignItems="center" height="1.5rem">
-      <LogoSVG maxHeight="100%" maxWidth="100%" height="100%" />
+      <LogoSVG
+        maxHeight="7.5rem"
+        maxWidth="7.5rem"
+        width="7.5rem"
+        height="7.5rem"
+      />
     </Box>
     <NavBar />
-    <Box display={['none', 'flex']} justifyContent="flex-end">
-      <Wallet />
-    </Box>
+    <Wallet />
   </Box>
 );
 

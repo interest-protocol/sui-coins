@@ -1,10 +1,11 @@
-import { Box, Typography } from 'elements';
+import { Box } from '@interest-protocol/ui-kit';
+import { Typography } from 'elements';
 import { FC } from 'react';
 
 import { HeartSVG, IPXSVG } from '@/svg';
 
 const Footer: FC = () => (
-  <Box textTransform="uppercase">
+  <Box textTransform="uppercase" display="flex" flexDirection="column">
     <Box textAlign="center" mb="3rem" fontSize="0.875rem" fontFamily="Proto">
       <Typography fontFamily="inherit">The website is maintained &</Typography>
       <Typography
