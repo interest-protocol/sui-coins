@@ -179,7 +179,7 @@ const CreateTokenForm: FC = () => {
             status={errors.totalSupply && 'error'}
             supportingText={
               errors.totalSupply?.message ||
-              'Insert the maximum number of tokens available'
+              'Insert the initial token supply to mint'
             }
             {...register('totalSupply', {
               onChange: (v: ChangeEvent<HTMLInputElement>) => {
