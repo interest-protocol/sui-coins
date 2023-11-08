@@ -24,7 +24,11 @@ const AccountInfo: FC<AccountInfoProps> = ({
   return (
     <>
       {isConnected && (
-        <Box display={['none', 'flex']} justifyContent="flex-end" gap="l">
+        <Box
+          display={['none', 'none', 'none', 'flex']}
+          justifyContent="flex-end"
+          gap="l"
+        >
           <SuiBalance />
           <Box display="flex" gap="xs" alignItems="center">
             <Avatar withNameOrAddress />
@@ -47,7 +51,7 @@ const AccountInfo: FC<AccountInfoProps> = ({
       )}
       <Box
         p="0.25rem"
-        display={['flex', 'none']}
+        display={['flex', 'flex', 'flex', 'none']}
         border="0.25rem solid"
         borderColor="rgba(0, 83, 219, 0.16)"
         borderRadius="full"

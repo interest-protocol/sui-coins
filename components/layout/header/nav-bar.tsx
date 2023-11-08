@@ -6,7 +6,7 @@ const NavBar: FC = () => {
   const { asPath, push } = useRouter();
 
   return (
-    <Box display={['none', 'flex']} justifyContent="center">
+    <Box display={['none', 'none', 'none', 'flex']} justifyContent="center">
       <Box
         px={['s', 's', 's', 'xl']}
         py="xs"
