@@ -1,5 +1,8 @@
+export { default as ArrowLeftSVG } from './arrow-left';
 export { default as ArrowTopRightSVG } from './arrow-top-right';
 export { default as CaretRightSVG } from './caret-right';
+export { default as ChevronDownSVG } from './chevron-down';
+export { default as ChevronRightSVG } from './chevron-right';
 export { default as CircleSVG } from './circle';
 export { default as ClipboardSVG } from './clipboard';
 export { default as ComputerEyesSVG } from './computer-eyes';

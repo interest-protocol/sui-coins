@@ -8,36 +8,34 @@ const NavBar: FC = () => {
   return (
     <Box display={['none', 'none', 'none', 'flex']} justifyContent="center">
       <Box
-        px={['s', 's', 's', 'xl']}
-        py="xs"
+        py="s"
         fontSize="s"
         cursor="pointer"
         fontFamily="Proto"
+        textAlign="center"
         borderRadius="full"
         border="0.25rem solid"
-        borderColor={asPath !== '/' ? 'transparent' : '#0053DB33'}
-        nActive={{
-          borderColor: '#0053DB33',
-        }}
+        px={['s', 's', 's', 'xl']}
+        nActive={{ borderColor: '#0053DB33' }}
         onClick={() => asPath !== '/' && push('/')}
-        textAlign="center"
+        color={asPath !== '/' ? 'onSurface' : 'primary'}
+        borderColor={asPath !== '/' ? 'transparent' : '#0053DB33'}
       >
         Create coin
       </Box>
       <Box
-        px={['s', 's', 's', 'xl']}
-        py="xs"
+        py="s"
         fontSize="s"
         cursor="pointer"
         fontFamily="Proto"
+        textAlign="center"
         borderRadius="full"
         border="0.25rem solid"
-        borderColor={asPath !== '/my-coins' ? 'transparent' : '#0053DB33'}
+        px={['s', 's', 's', 'xl']}
+        nActive={{ borderColor: '#0053DB33' }}
+        color={asPath !== '/my-coins' ? 'onSurface' : 'primary'}
         onClick={() => asPath !== '/my-coins' && push('/my-coins')}
-        nActive={{
-          borderColor: '#0053DB33',
-        }}
-        textAlign="center"
+        borderColor={asPath !== '/my-coins' ? 'transparent' : '#0053DB33'}
       >
         My Coins
       </Box>

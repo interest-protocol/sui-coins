@@ -2,12 +2,12 @@ import { Box } from '@interest-protocol/ui-kit';
 import { useWalletKit } from '@mysten/wallet-kit';
 import { FC } from 'react';
 
-import { MenuSVG, SignOutSVG } from '@/svg';
+import { MenuSVG } from '@/svg';
 
 import { AccountInfoProps } from './account-info.types';
 import Avatar from './avatar';
 import MenuOptions from './menu-options';
-import SuiBalance from './sui-balance';
+import SuiNetwork from './sui-network';
 
 const AccountInfo: FC<AccountInfoProps> = ({
   menuIsOpen,
@@ -25,45 +25,36 @@ const AccountInfo: FC<AccountInfoProps> = ({
     <>
       {isConnected && (
         <Box
-          display={['none', 'none', 'none', 'flex']}
-          justifyContent="flex-end"
           gap="l"
+          justifyContent="flex-end"
+          display={['none', 'none', 'none', 'flex']}
         >
-          <SuiBalance />
-          <Box display="flex" gap="xs" alignItems="center">
-            <Avatar withNameOrAddress />
-          </Box>
+          <SuiNetwork />
           <Box
             display="flex"
-            color="error"
+            gap="xs"
             alignItems="center"
-            nHover={{
-              bg: 'accent',
-              transform: 'scale(1.3)',
-            }}
-            transition="all 0.3s ease-in-out"
-            cursor="pointer"
-            onClick={handleDisconnect}
+            onClick={handleOpenMenu}
           >
-            <SignOutSVG maxWidth="1.2rem" maxHeight="1.2rem" width="1.2rem" />
+            <Avatar withNameOrAddress />
           </Box>
         </Box>
       )}
       <Box
-        p="0.25rem"
-        display={['flex', 'flex', 'flex', 'none']}
-        border="0.25rem solid"
-        borderColor="rgba(0, 83, 219, 0.16)"
-        borderRadius="full"
         gap="1rem"
+        p="0.25rem"
+        cursor="pointer"
+        borderRadius="full"
         alignItems="center"
+        border="0.25rem solid"
+        onClick={handleOpenMenu}
+        transition="all 0.3s ease-in-out"
+        borderColor="rgba(0, 83, 219, 0.16)"
+        display={['flex', 'flex', 'flex', 'none']}
         nHover={{
           bg: 'accent',
           transform: 'scale(1.15)',
         }}
-        transition="all 0.3s ease-in-out"
-        cursor="pointer"
-        onClick={handleOpenMenu}
       >
         {isConnected && <Avatar />}
         <Box width={['1.5rem', '1.5rem', '1.5rem', '1.5rem']} display="flex">

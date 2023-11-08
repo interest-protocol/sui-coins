@@ -9,7 +9,8 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { SuiNetwork, useSuiClient } from '@/hooks/use-sui-client';
+import { useNetwork } from '@/context/network';
+import { useSuiClient } from '@/hooks/use-sui-client';
 import { parseInputEventToNumberString, showTXSuccessToast } from '@/utils';
 import { throwTXIfNotSuccessful } from '@/utils';
 
@@ -35,10 +36,9 @@ const CreateTokenForm: FC = () => {
     mode: 'onBlur',
   });
 
+  const { network } = useNetwork();
+  const suiClient = useSuiClient(network);
   const { currentAccount, signTransactionBlock } = useWalletKit();
-  const suiClient = useSuiClient(
-    (currentAccount?.chains?.[0] as SuiNetwork) || 'sui:mainnet'
-  );
 
   console.log('>> errors :: ', errors);
 
@@ -99,10 +99,7 @@ const CreateTokenForm: FC = () => {
 
       throwTXIfNotSuccessful(tx);
 
-      await showTXSuccessToast(
-        tx,
-        currentAccount.chains[0] as `${string}::${string}`
-      );
+      await showTXSuccessToast(tx, network);
     } finally {
       setLoading(false);
     }

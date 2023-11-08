@@ -6,9 +6,9 @@ import { UserSVG } from '@/svg';
 
 import { AvatarProps } from './account-info.types';
 
-const Avatar: FC<AvatarProps> = ({ withNameOrAddress }) => {
+const Avatar: FC<AvatarProps> = ({ withNameOrAddress, account }) => {
   const { currentAccount } = useWalletKit();
-  const address = currentAccount?.address || '';
+  const address = account?.address ?? (currentAccount?.address || '');
 
   return (
     <>
@@ -31,7 +31,7 @@ const Avatar: FC<AvatarProps> = ({ withNameOrAddress }) => {
       </Box>
       {withNameOrAddress && (
         <Box fontFamily="Proto !important">
-          {address.slice(0, 6)}...{address.slice(-4, -1)}
+          {address.slice(0, 6)}...{address.slice(-4)}
         </Box>
       )}
     </>

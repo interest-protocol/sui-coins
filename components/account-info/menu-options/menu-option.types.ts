@@ -1,7 +1,10 @@
 export interface OptionItemProps {
-  onClick?: () => void;
   selected?: boolean;
   disabled?: boolean;
+  onClick?: () => void;
+  mobileOnly?: boolean;
+  withSubmenu?: boolean;
+  withBorderBottom?: boolean;
 }
 
 export interface MenuOptionsProps {

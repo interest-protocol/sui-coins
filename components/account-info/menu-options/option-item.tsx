@@ -1,7 +1,7 @@
 import { Box, Motion } from '@interest-protocol/ui-kit';
 import { FC, PropsWithChildren } from 'react';
 
-import { CircleSVG } from '@/svg';
+import { ChevronRightSVG, CircleSVG } from '@/svg';
 
 import { OptionItemProps } from './menu-option.types';
 
@@ -19,41 +19,48 @@ const OptionItem: FC<PropsWithChildren<OptionItemProps>> = ({
   disabled,
   children,
   selected,
-}) => {
-  return (
-    <Motion
-      p="m"
-      onClick={onClick}
-      variants={itemVariants}
-      initial={itemVariants.closed}
-      nHover={{
-        bg: disabled ? 'unset' : 'rgba(0, 83, 219, 0.08)',
-      }}
+  mobileOnly,
+  withSubmenu,
+  withBorderBottom,
+}) => (
+  <Motion
+    p="m"
+    onClick={onClick}
+    alignItems="center"
+    variants={itemVariants}
+    borderBottom="1px solid"
+    initial={itemVariants.closed}
+    justifyContent="space-between"
+    cursor={disabled ? 'not-allowed' : 'pointer'}
+    bg={selected ? 'rgba(0, 83, 219, 0.08)' : 'unset'}
+    borderColor={withBorderBottom ? 'outlineVariant' : 'transparent'}
+    display={mobileOnly ? ['flex', 'flex', 'flex', 'none'] : 'flex'}
+    nHover={{
+      bg: disabled ? 'unset' : 'rgba(0, 83, 219, 0.08)',
+    }}
+  >
+    <Box
+      gap="m"
+      width="100%"
       display="flex"
-      borderBottom="1px solid"
-      borderColor="#C6C6CA"
-      justifyContent="space-between"
-      cursor={disabled ? 'not-allowed' : 'pointer'}
-      bg={selected ? 'rgba(0, 83, 219, 0.08)' : 'unset'}
+      fontWeight="500"
+      color="onSurface"
+      alignItems="center"
+      fontFamily="Satoshi !important"
     >
-      <Box
-        display="flex"
-        alignItems="center"
-        color="onSurface"
-        fontFamily="Satoshi !important"
-        fontWeight="500"
-        gap="m"
-        width="100%"
-      >
-        {children}
+      {children}
+    </Box>
+    {selected && (
+      <Box color="primary">
+        <CircleSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
       </Box>
-      {selected && (
-        <Box color="primary">
-          <CircleSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
-        </Box>
-      )}
-    </Motion>
-  );
-};
+    )}
+    {withSubmenu && (
+      <Box color="onSurface">
+        <ChevronRightSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+      </Box>
+    )}
+  </Motion>
+);
 
 export default OptionItem;

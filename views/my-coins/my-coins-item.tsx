@@ -5,6 +5,7 @@ import { FC, useState } from 'react';
 import { v4 } from 'uuid';
 
 import { EXPLORER_URL } from '@/constants';
+import { useNetwork } from '@/context/network';
 import { FixedPointMath } from '@/lib';
 import { ArrowTopRightSVG, CaretRightSVG, DefaultTokenSVG } from '@/svg';
 
@@ -19,10 +20,11 @@ const MyCoinsItem: FC<TCoinWithMetadata> = ({
   objects,
   decimals,
 }) => {
+  const { network } = useNetwork();
   const [isOpen, setIsOpen] = useState(false);
 
   const goToExplorer = (objectId: string) =>
-    window.open(`${EXPLORER_URL['sui:mainnet']}/object/${objectId}`);
+    window.open(`${EXPLORER_URL[network]}/object/${objectId}`);
 
   return (
     <Box
@@ -65,12 +67,13 @@ const MyCoinsItem: FC<TCoinWithMetadata> = ({
       <Box fontSize="s" display="flex" justifyContent={['center', 'unset']}>
         <Box
           px="s"
-          gap="m"
           py="2xs"
           fontSize="xs"
           display="flex"
+          gap={['xs', 'm']}
           fontFamily="Proto"
           borderRadius="full"
+          whiteSpace="nowrap"
           onClick={() => owned && goToExplorer(owned)}
           bg={owned ? 'successContainer' : 'warningContainer'}
           color={owned ? 'onSuccessContainer' : 'onWarningContainer'}
@@ -115,7 +118,7 @@ const MyCoinsItem: FC<TCoinWithMetadata> = ({
                   onClick={() => goToExplorer(coinObjectId)}
                 >
                   <Box>
-                    {coinObjectId.slice(0, 6)}...{coinObjectId.slice(-4, -1)}
+                    {coinObjectId.slice(0, 6)}...{coinObjectId.slice(-4)}
                   </Box>
                   <ArrowTopRightSVG
                     width="100%"

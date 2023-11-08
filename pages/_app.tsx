@@ -9,6 +9,7 @@ import NextProgress from 'next-progress';
 import { ReactNode, StrictMode } from 'react';
 
 import { ThemeManager } from '@/components';
+import { NetworkProvider } from '@/context/network';
 
 const Provider = dynamic(() => import('@/components/sui-client-provider'), {
   ssr: false,
@@ -24,14 +25,16 @@ const MyApp = ({ Component, pageProps }: AppProps<NextPage>): ReactNode => (
       />
     </Head>
     <NextProgress options={{ showSpinner: false }} />
-    <Provider>
-      <ThemeManager>
-        <StrictMode>
-          <Component {...pageProps} />
-          <VercelAnalytics />
-        </StrictMode>
-      </ThemeManager>
-    </Provider>
+    <NetworkProvider>
+      <Provider>
+        <ThemeManager>
+          <StrictMode>
+            <Component {...pageProps} />
+            <VercelAnalytics />
+          </StrictMode>
+        </ThemeManager>
+      </Provider>
+    </NetworkProvider>
   </>
 );
 

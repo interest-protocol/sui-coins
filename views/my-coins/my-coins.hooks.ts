@@ -3,7 +3,8 @@ import { useWalletKit } from '@mysten/wallet-kit';
 import { values } from 'ramda';
 import { useEffect, useState } from 'react';
 
-import { SuiNetwork, useSuiClient } from '@/hooks/use-sui-client';
+import { useNetwork } from '@/context/network';
+import { useSuiClient } from '@/hooks/use-sui-client';
 
 import {
   ICoinResponse,
@@ -63,13 +64,12 @@ const getAllCoins: TGetAllCoins = async (provider, account, cursor = null) => {
 };
 
 export const useGetAllCoinsWithMetadata: TUseGetAllCoinsWithMetadata = () => {
+  const { network } = useNetwork();
+  const suiClient = useSuiClient(network);
   const { currentAccount } = useWalletKit();
   const [error, setError] = useState<any>(null);
   const [isLoading, setLoading] = useState<boolean>(true);
   const [data, setData] = useState<ReadonlyArray<TCoinWithMetadata>>([]);
-  const suiClient = useSuiClient(
-    (currentAccount?.chains?.[0] as SuiNetwork) ?? 'sui:mainnet'
-  );
 
   useEffect(() => {
     if (currentAccount) {

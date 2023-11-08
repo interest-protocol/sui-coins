@@ -1,6 +1,5 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { useWalletKit } from '@mysten/wallet-kit';
-import { useRouter } from 'next/router';
 import { FC, useState } from 'react';
 
 import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
@@ -12,9 +11,8 @@ import ConnectWalletButton from './connect-wallet-button';
 const BOX_ID = 'Account-Menu';
 
 const Wallet: FC = () => {
-  const { query } = useRouter();
   const { isConnected } = useWalletKit();
-  const [isOpen, setIsOpen] = useState(Boolean(query.menu));
+  const [isOpen, setIsOpen] = useState(false);
 
   const closeDropdown = (event: any) => {
     if (
@@ -29,19 +27,9 @@ const Wallet: FC = () => {
   const connectedBoxRef =
     useClickOutsideListenerRef<HTMLDivElement>(closeDropdown);
 
-  const handleOpenMenu = () => {
-    const url = new URL(window.location.href);
-    url.searchParams.set('menu', 'true');
-    window.history.pushState('', '', url.toString());
-    setIsOpen(true);
-  };
+  const handleOpenMenu = () => setIsOpen(true);
 
-  const handleCloseMenu = () => {
-    const url = new URL(window.location.href);
-    url.searchParams.delete('menu');
-    window.history.pushState('', '', url.toString());
-    setIsOpen(false);
-  };
+  const handleCloseMenu = () => setIsOpen(false);
 
   useEventListener('resize', handleCloseMenu, true);
 
@@ -55,12 +43,13 @@ const Wallet: FC = () => {
       ref={connectedBoxRef}
       position="relative"
     >
-      <AccountInfo
-        menuIsOpen={isOpen}
-        handleOpenMenu={handleOpenMenu}
-        handleCloseMenu={handleCloseMenu}
-      />
-      {!isConnected && (
+      {isConnected ? (
+        <AccountInfo
+          menuIsOpen={isOpen}
+          handleOpenMenu={handleOpenMenu}
+          handleCloseMenu={handleCloseMenu}
+        />
+      ) : (
         <Box display={['none', 'none', 'none', 'flex']}>
           <ConnectWalletButton />
         </Box>
