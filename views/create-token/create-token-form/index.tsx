@@ -1,3 +1,4 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button } from '@interest-protocol/ui-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { useWalletKit } from '@mysten/wallet-kit';
@@ -14,14 +15,24 @@ import { throwTXIfNotSuccessful } from '@/utils';
 
 import { ICreateTokenForm } from '../create-token.types';
 import { getTokenByteCode } from './api';
+import { validationSchema } from './create-token-form.validation';
 import FixedSupplyToggle from './fixed-supply-toggle';
 
 const CreateTokenForm: FC = () => {
   const [loading, setLoading] = useState(false);
-  const { register, control, getValues, setValue } = useForm<ICreateTokenForm>({
+  const {
+    register,
+    control,
+    getValues,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ICreateTokenForm>({
     defaultValues: {
       fixedSupply: true,
     },
+    resolver: yupResolver(validationSchema),
+    mode: 'onBlur',
   });
 
   const { currentAccount, signTransactionBlock } = useWalletKit();
@@ -29,7 +40,9 @@ const CreateTokenForm: FC = () => {
     (currentAccount?.chains?.[0] as SuiNetwork) || 'sui:mainnet'
   );
 
-  const onSubmit = async () => {
+  console.log('>> errors :: ', errors);
+
+  const createToken = async () => {
     try {
       setLoading(true);
 
@@ -60,7 +73,7 @@ const CreateTokenForm: FC = () => {
         symbol,
         fixedSupply,
         url: imageUrl ?? '',
-        decimals: decimals ? +decimals : 9,
+        decimals: decimals ?? 9,
         description: description ?? '',
         mintAmount: BigNumber(totalSupply)
           .multipliedBy(BigNumber(10).pow(decimals ? decimals : 9))
@@ -95,8 +108,8 @@ const CreateTokenForm: FC = () => {
     }
   };
 
-  const handleSubmit = () =>
-    toast.promise(onSubmit(), {
+  const onSubmit = () =>
+    toast.promise(createToken(), {
       loading: 'Generating new coin...',
       success: 'Coin Generated',
       error: (e) => e.message || 'Something went wrong',
@@ -110,89 +123,113 @@ const CreateTokenForm: FC = () => {
       width={['100%', '100%', '100%', '26rem']}
       boxShadow="0px 24px 46px -10px rgba(13, 16, 23, 0.16)"
     >
-      <Box
-        p="xl"
-        fontSize="l"
-        borderBottom="1px solid"
-        borderColor="outlineVariant"
-      >
-        Coin Generator
-      </Box>
-      <Box p="xl" display="flex" flexDirection="column" gap="m">
-        <Box>1. Coin Details</Box>
-        <TextField label="Name" {...register('name')} placeholder="Eg. Sui" />
-        <TextField
-          pattern="A-Za-z"
-          label="Coin Symbol"
-          placeholder="Eg. SUI"
-          {...register('symbol')}
-        />
-        <TextField
-          label="Description"
-          {...register('description')}
-          placeholder="Eg. Some description about the coin"
-        />
-        <TextField
-          type="link"
-          label="Coin Image URL"
-          {...register('imageUrl')}
-          placeholder="Eg. https://sui.com/images/logo.png"
-        />
-      </Box>
-      <Box p="xl" display="flex" flexDirection="column" gap="m">
-        <Box>2. Coin Features</Box>
-        <TextField
-          type="number"
-          status="success"
-          defaultValue="9"
-          label="Coin Decimals"
-          {...register('decimals')}
-          supportingText="Insert the decimal precision of your token. If you don't know what to insert, use 9"
-        />
-        <TextField
-          label="Total Supply"
-          {...register('totalSupply', {
-            onChange: (v: ChangeEvent<HTMLInputElement>) => {
-              setValue?.('totalSupply', parseInputEventToNumberString(v));
-            },
-          })}
-          placeholder="Your total coin supply"
-          supportingText="Insert the maximum number of tokens available"
-        />
+      <form onSubmit={handleSubmit(onSubmit)}>
         <Box
-          p="m"
-          my="xl"
-          gap="m"
-          bg="surface"
-          display="flex"
-          borderRadius="xs"
-          flexDirection="column"
+          p="xl"
+          fontSize="l"
+          borderBottom="1px solid"
+          borderColor="outlineVariant"
         >
-          <Box display="flex" justifyContent="space-between" color="onSurface">
-            <Box>Fixed Supply</Box>
-            <FixedSupplyToggle control={control} setValue={setValue} />
-          </Box>
-          <Box color="#0000007A" fontSize="xs">
-            The Treasury Cap will be sent to the @0x0 address
-          </Box>
+          Coin Generator
         </Box>
-        <Box display="flex" justifyContent="center">
-          <Button
-            py="s"
-            px="xl"
-            fontSize="s"
-            bg="primary"
-            variant="filled"
-            color="onPrimary"
-            fontFamily="Proto"
-            borderRadius="full"
-            onClick={handleSubmit}
-            disabled={!currentAccount || loading}
+        <Box p="xl" display="flex" flexDirection="column" gap="m">
+          <Box>1. Coin Details</Box>
+          <TextField
+            label="Name"
+            {...register('name')}
+            placeholder="Eg. Sui"
+            status={errors.name && 'error'}
+            supportingText={errors.name?.message}
+          />
+          <TextField
+            label="Coin Symbol"
+            placeholder="Eg. SUI"
+            {...register('symbol')}
+            status={errors.symbol && 'error'}
+            supportingText={errors.symbol?.message}
+          />
+          <TextField
+            label="Description"
+            {...register('description')}
+            status={errors.description && 'error'}
+            placeholder="Eg. Some description about the coin"
+            supportingText={errors.description?.message}
+          />
+          <TextField
+            type="link"
+            label="Coin Image URL"
+            {...register('imageUrl')}
+            status={errors.imageUrl && 'error'}
+            supportingText={errors.imageUrl?.message}
+            placeholder="Eg. https://sui.com/images/logo.png"
+          />
+        </Box>
+        <Box p="xl" display="flex" flexDirection="column" gap="m">
+          <Box>2. Coin Features</Box>
+          <TextField
+            type="number"
+            defaultValue="9"
+            label="Coin Decimals"
+            {...register('decimals')}
+            status={errors.decimals?.message ? 'error' : 'success'}
+            supportingText={
+              errors.decimals?.message ||
+              "Insert the decimal precision of your token. If you don't know what to insert, use 9"
+            }
+          />
+          <TextField
+            label="Total Supply"
+            placeholder="Your total coin supply"
+            status={errors.totalSupply?.message ? 'error' : 'success'}
+            supportingText={
+              errors.totalSupply?.message ||
+              'Insert the maximum number of tokens available'
+            }
+            {...register('totalSupply', {
+              onChange: (v: ChangeEvent<HTMLInputElement>) => {
+                setValue('totalSupply', parseInputEventToNumberString(v));
+              },
+            })}
+          />
+          <Box
+            p="m"
+            my="xl"
+            gap="m"
+            bg="surface"
+            display="flex"
+            borderRadius="xs"
+            flexDirection="column"
           >
-            Create coin
-          </Button>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              color="onSurface"
+            >
+              <Box>Fixed Supply</Box>
+              <FixedSupplyToggle control={control} setValue={setValue} />
+            </Box>
+            <Box color="#0000007A" fontSize="xs">
+              The Treasury Cap will be sent to the @0x0 address
+            </Box>
+          </Box>
+          <Box display="flex" justifyContent="center">
+            <Button
+              py="s"
+              px="xl"
+              fontSize="s"
+              bg="primary"
+              type="submit"
+              variant="filled"
+              color="onPrimary"
+              fontFamily="Proto"
+              borderRadius="full"
+              disabled={!currentAccount || loading}
+            >
+              Create coin
+            </Button>
+          </Box>
         </Box>
-      </Box>
+      </form>
     </Box>
   );
 };
