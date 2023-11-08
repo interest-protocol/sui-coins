@@ -5,7 +5,7 @@ import Skeleton from 'react-loading-skeleton';
 import { v4 } from 'uuid';
 
 import Layout from '@/components/layout';
-import WalletConnect from '@/components/wallet';
+import ConnectWalletButton from '@/components/wallet/connect-wallet-button';
 import { XCirlceSVG } from '@/svg';
 
 import { useGetAllCoinsWithMetadata } from './my-coins.hooks';
@@ -39,12 +39,16 @@ const MyCoins: FC = () => {
           justifyContent="center"
         >
           <XCirlceSVG maxWidth="4rem" maxHeight="4rem" width="100%" />
-          <Box>
+          <Box textAlign="center">
             {!currentAccount
               ? 'You are disconnect, please connect to your wallet.'
               : 'Oops! Something went wrong.'}
           </Box>
-          {!currentAccount && <WalletConnect />}
+          {!currentAccount && (
+            <Box>
+              <ConnectWalletButton />
+            </Box>
+          )}
         </Box>
       ) : (
         <Box
