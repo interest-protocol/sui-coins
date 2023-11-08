@@ -32,9 +32,7 @@ const Header: FC = () => (
       />
     </Box>
     <NavBar />
-    <Box display={['none', 'flex']} justifyContent="flex-end">
-      <Wallet />
-    </Box>
+    <Wallet />
   </Box>
 );
 
