@@ -2,16 +2,11 @@ import { Box } from '@interest-protocol/ui-kit';
 import BigNumber from 'bignumber.js';
 import { not } from 'ramda';
 import { FC, useState } from 'react';
-import toast from 'react-hot-toast';
 import { v4 } from 'uuid';
 
+import { EXPLORER_URL } from '@/constants';
 import { FixedPointMath } from '@/lib';
-import {
-  ArrowTopRightSVG,
-  CaretRightSVG,
-  ClipboardSVG,
-  DefaultTokenSVG,
-} from '@/svg';
+import { ArrowTopRightSVG, CaretRightSVG, DefaultTokenSVG } from '@/svg';
 
 import { TCoinWithMetadata } from './my-coins.types';
 
@@ -26,10 +21,8 @@ const MyCoinsItem: FC<TCoinWithMetadata> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const copyToClipboard = (coinObjectId: string) => {
-    window.navigator.clipboard.writeText(coinObjectId);
-    toast.success('Copied to clipboard');
-  };
+  const goToExplorer = (objectId: string) =>
+    window.open(`${EXPLORER_URL['sui:mainnet']}/object/${objectId}`);
 
   return (
     <Box
@@ -44,7 +37,7 @@ const MyCoinsItem: FC<TCoinWithMetadata> = ({
       columnGap={['m', 'xl']}
       borderColor="outlineVariant"
       onClick={() => setIsOpen(not)}
-      gridTemplateColumns={['1fr 1fr 1fr 2rem', '2rem 1fr 1fr 1fr 2rem']}
+      gridTemplateColumns={['1fr 1fr 1fr', '2rem 1fr 1fr 1fr']}
     >
       <Box
         alignItems="center"
@@ -69,22 +62,27 @@ const MyCoinsItem: FC<TCoinWithMetadata> = ({
       <Box fontSize="s" textAlign={['center', 'unset']}>
         {FixedPointMath.from(BigNumber(balance)).toNumber(decimals)}
       </Box>
-      <Box
-        fontSize="s"
-        display="flex"
-        gridColumn="span 2"
-        justifyContent={['center', 'unset']}
-      >
+      <Box fontSize="s" display="flex" justifyContent={['center', 'unset']}>
         <Box
           px="s"
+          gap="m"
           py="2xs"
           fontSize="xs"
+          display="flex"
           fontFamily="Proto"
           borderRadius="full"
+          onClick={() => owned && goToExplorer(owned)}
           bg={owned ? 'successContainer' : 'warningContainer'}
           color={owned ? 'onSuccessContainer' : 'onWarningContainer'}
         >
-          {owned ? 'Owned' : 'Not owned'}
+          {owned ? 'Owned' : 'Burned 🔥'}
+          {owned && (
+            <ArrowTopRightSVG
+              width="100%"
+              maxWidth="0.8rem"
+              maxHeight="0.8rem"
+            />
+          )}
         </Box>
       </Box>
       {isOpen && (
@@ -97,7 +95,7 @@ const MyCoinsItem: FC<TCoinWithMetadata> = ({
             bg="surface"
             display="flex"
             borderRadius="xs"
-            gridColumn="span 4"
+            gridColumn="span 3"
             fontSize={['xs', 's']}
             flexDirection="column"
           >
@@ -105,22 +103,25 @@ const MyCoinsItem: FC<TCoinWithMetadata> = ({
               <Box
                 key={v4()}
                 display="grid"
-                gridTemplateColumns="1fr 1fr 1fr 2rem"
+                gridTemplateColumns="1fr 1fr 1fr"
                 onClick={(e) => {
                   e.stopPropagation();
                 }}
               >
-                <Box display="flex" gap="xs" alignItems="center">
+                <Box
+                  gap="xs"
+                  display="flex"
+                  alignItems="center"
+                  onClick={() => goToExplorer(coinObjectId)}
+                >
                   <Box>
                     {coinObjectId.slice(0, 6)}...{coinObjectId.slice(-4, -1)}
                   </Box>
-                  <Box onClick={() => copyToClipboard(coinObjectId)}>
-                    <ClipboardSVG
-                      maxHeight="1rem"
-                      maxWidth="1rem"
-                      width="100%"
-                    />
-                  </Box>
+                  <ArrowTopRightSVG
+                    width="100%"
+                    maxWidth="1rem"
+                    maxHeight="1rem"
+                  />
                 </Box>
                 <Box textAlign={['center', 'unset']}>
                   {FixedPointMath.from(BigNumber(balance)).toNumber(decimals)}
@@ -138,13 +139,6 @@ const MyCoinsItem: FC<TCoinWithMetadata> = ({
                     height="0.25rem"
                     borderRadius="full"
                     bg={owned ? 'success' : 'warning'}
-                  />
-                </Box>
-                <Box>
-                  <ArrowTopRightSVG
-                    maxWidth="1rem"
-                    maxHeight="1rem"
-                    width="100%"
                   />
                 </Box>
               </Box>

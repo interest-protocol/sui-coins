@@ -3,11 +3,11 @@ import { Control, UseFormSetValue } from 'react-hook-form';
 export interface ICreateTokenForm {
   name: string;
   symbol: string;
-  imageUrl?: string;
-  description?: string;
-  decimals?: string;
   totalSupply: string;
-  fixedSupply: boolean;
+  decimals?: number | undefined;
+  imageUrl?: string | undefined;
+  description?: string | undefined;
+  fixedSupply: NonNullable<boolean | undefined>;
 }
 
 export interface FixedSupplyToggleProps {
