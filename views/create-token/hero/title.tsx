@@ -9,12 +9,12 @@ const Title: FC = () => (
       <Typography
         mr="l"
         as="span"
+        variant="small"
         fontWeight="400"
         lineHeight="4rem"
         fontFamily="Proto"
         fontStyle="normal"
-        fontSize={['2.8125rem', '2.8125rem', '2.8125rem', '3.5625rem']}
-        variant="small"
+        fontSize={['7xl', '7xl', '7xl', '9xl']}
       >
         Create coins on Sui Network
       </Typography>

@@ -2,15 +2,31 @@ import { Box } from '@interest-protocol/ui-kit';
 import { Typography } from 'elements';
 import { FC } from 'react';
 
-import { HeartSVG, IPXSVG } from '@/svg';
+import {
+  DiscordSVG,
+  GithubSVG,
+  HeartSVG,
+  IPXSVG,
+  TelegramSVG,
+  XSVG,
+} from '@/svg';
 
 const Footer: FC = () => (
-  <Box textTransform="uppercase" display="flex" flexDirection="column">
-    <Box textAlign="center" mb="3rem" fontSize="0.875rem" fontFamily="Proto">
-      <Typography fontFamily="inherit">The website is maintained &</Typography>
+  <Box
+    fontSize="s"
+    display="flex"
+    fontFamily="Proto"
+    flexDirection="column"
+    textTransform="uppercase"
+  >
+    <Box textAlign="center" mb="l" fontFamily="inherit" fontSize="inherit">
+      <Typography fontFamily="inherit" fontSize="inherit">
+        The website is maintained &
+      </Typography>
       <Typography
         gap="0.25rem"
         display="flex"
+        fontSize="inherit"
         fontFamily="inherit"
         justifyContent="center"
       >
@@ -19,8 +35,77 @@ const Footer: FC = () => (
         By Interest Protocol
       </Typography>
     </Box>
+    <Box textAlign="center" my="2xl" fontSize="inherit" fontFamily="inherit">
+      <Box fontFamily="Proto">Follow us</Box>
+      <Box display="flex" gap="xs" justifyContent="center" mt="s">
+        <a
+          href="https://discord.gg/interestprotocol"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <Box
+            p="xs"
+            width="2.5rem"
+            height="2.5rem"
+            border="1px solid"
+            borderRadius="full"
+            borderColor="outline"
+          >
+            <DiscordSVG maxHeight="100%" maxWidth="100%" width="100%" />
+          </Box>
+        </a>
+        <a
+          href="https://github.com/interest-protocol/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <Box
+            p="xs"
+            width="2.5rem"
+            height="2.5rem"
+            border="1px solid"
+            borderRadius="full"
+            borderColor="outline"
+          >
+            <GithubSVG maxHeight="100%" maxWidth="100%" width="100%" />
+          </Box>
+        </a>
+        <a
+          href="https://t.me/interestprotocol"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <Box
+            p="xs"
+            width="2.5rem"
+            height="2.5rem"
+            border="1px solid"
+            borderRadius="full"
+            borderColor="outline"
+          >
+            <TelegramSVG maxHeight="100%" maxWidth="100%" width="100%" />
+          </Box>
+        </a>
+        <a
+          href="https://x.com/interest_dinero"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <Box
+            p="xs"
+            width="2.5rem"
+            height="2.5rem"
+            border="1px solid"
+            borderRadius="full"
+            borderColor="outline"
+          >
+            <XSVG maxHeight="100%" maxWidth="100%" height="100%" />
+          </Box>
+        </a>
+      </Box>
+    </Box>
     <Box
-      py="1rem"
+      py="m"
       display="flex"
       borderTop="1px solid"
       borderColor="#C6C6CA"
