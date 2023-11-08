@@ -68,10 +68,7 @@ const MyCoins: FC = () => {
               alignItems="center"
               borderTop="1px solid"
               borderColor="outlineVariant"
-              gridTemplateColumns={[
-                '1fr 1fr 1fr 2rem',
-                '2rem 1fr 1fr 1fr 2rem',
-              ]}
+              gridTemplateColumns={['1fr 1fr 1fr', '2rem 1fr 1fr 1fr']}
             >
               <Box display={['none', 'block']} />
               <Skeleton />

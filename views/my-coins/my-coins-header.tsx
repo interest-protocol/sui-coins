@@ -8,14 +8,12 @@ const MyCoinsHeader: FC = () => (
     py={['s', 'm']}
     px={['s', 'l']}
     fontSize={['xs', 's']}
-    gridTemplateColumns={['1fr 1fr 1fr 2rem', '2rem 1fr 1fr 1fr 2rem']}
+    gridTemplateColumns={['1fr 1fr 1fr', '2rem 1fr 1fr 1fr']}
   >
     <Box display={['none', 'block']} />
     <Box fontFamily="Proto">Name</Box>
     <Box fontFamily="Proto">Balance</Box>
-    <Box fontFamily="Proto" gridColumn="span 2">
-      Treasury Cap
-    </Box>
+    <Box fontFamily="Proto">Treasury Cap</Box>
   </Box>
 );
 

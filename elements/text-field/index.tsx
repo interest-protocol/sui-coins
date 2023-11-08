@@ -1,3 +1,4 @@
+import { Box } from '@interest-protocol/ui-kit';
 import stylin from '@stylin.js/react';
 import {
   ChangeEvent,
@@ -11,7 +12,6 @@ import {
 
 import { ErrorSVG, TickSVG } from '@/svg';
 
-import { Box, Typography } from '../../elements';
 import { TextFieldElementProps, TextFieldProps } from './text-field.types';
 
 const TextFieldElement = stylin<TextFieldElementProps & RefAttributes<unknown>>(
@@ -45,20 +45,21 @@ export const TextField: FC<PropsWithRef<TextFieldProps>> = forwardRef(
       changeValue(e.target.value);
 
     return (
-      <Box color={statusColor}>
-        <Typography
-          mb="0.5rem"
-          fontSize="0.75rem"
+      <Box>
+        <Box
+          mb="xs"
+          as="label"
+          display="block"
+          color="#1B1B1F"
           fontWeight="500"
           lineHeight="1rem"
-          color="#1B1B1F"
+          fontSize="0.75rem"
         >
           {label}
-        </Typography>
+        </Box>
         <Box
-          p="xs"
           display="flex"
-          borderRadius="0.5rem"
+          borderRadius="xs"
           alignItems="center"
           borderStyle="solid"
           borderWidth="1px"
@@ -66,9 +67,7 @@ export const TextField: FC<PropsWithRef<TextFieldProps>> = forwardRef(
           {...fieldProps}
         >
           <Box
-            m="xs"
             px="1rem"
-            mr={status ? '0.5rem' : 'unset'}
             flex="1"
             width="100%"
             height="2.5rem"
@@ -76,6 +75,7 @@ export const TextField: FC<PropsWithRef<TextFieldProps>> = forwardRef(
             alignItems="stretch"
             flexDirection="column"
             justifyContent="center"
+            mr={status ? '0.5rem' : 'unset'}
           >
             <TextFieldElement
               ref={ref}
@@ -120,9 +120,13 @@ export const TextField: FC<PropsWithRef<TextFieldProps>> = forwardRef(
             ))}
         </Box>
         {supportingText && (
-          <Typography pt="0.5rem" fontSize="0.75rem" color="#0000007A">
+          <Box
+            pt="2xs"
+            fontSize="0.75rem"
+            color={status === 'error' ? 'error' : '#0000007A'}
+          >
             {supportingText}
-          </Typography>
+          </Box>
         )}
       </Box>
     );
