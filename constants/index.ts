@@ -1,15 +1,22 @@
+import { SUI_MAINNET_CHAIN, SUI_TESTNET_CHAIN } from '@mysten/wallet-standard';
+
 export const MAX_NUMBER_INPUT_VALUE = 9000000000000000;
 
 export enum Network {
-  DEVNET = 'sui:devnet',
-  TESTNET = 'sui:testnet',
   MAINNET = 'sui:mainnet',
+  TESTNET = 'sui:testnet',
 }
 
-export const EXPLORER_URL = {
-  [Network.MAINNET]: 'https://suivision.xyz',
-  [Network.TESTNET]: 'https://testnet.suivision.xyz',
-  [Network.DEVNET]: '',
+export const DISPLAY_NETWORK = {
+  [Network.MAINNET]: 'Mainnet',
+  [Network.TESTNET]: 'Testnet',
 };
 
+export const EXPLORER_URL = {
+  [SUI_MAINNET_CHAIN]: 'https://suivision.xyz',
+  [SUI_TESTNET_CHAIN]: 'https://testnet.suivision.xyz',
+} as Record<Network, string>;
+
 export const TOAST_DURATION = 10000;
+
+export * from './wrapper-variants';
