@@ -16,6 +16,7 @@ import { throwTXIfNotSuccessful } from '@/utils';
 
 import { ICreateTokenForm } from '../create-token.types';
 import { getTokenByteCode } from './api';
+import { Blacklist } from './blacklist';
 import { validationSchema } from './create-token-form.validation';
 import FixedSupplyToggle from './fixed-supply-toggle';
 
@@ -57,15 +58,12 @@ const CreateTokenForm: FC = () => {
         description,
       } = getValues();
 
-      console.log({
-        decimals,
-        name,
-        fixedSupply,
-        totalSupply,
-        symbol,
-        imageUrl,
-        description,
-      });
+      if (
+        Blacklist.includes(name.toUpperCase()) ||
+        Blacklist.includes(symbol.toUpperCase())
+      ) {
+        throw new Error('Nice try :)');
+      }
 
       const { dependencies, modules } = await getTokenByteCode({
         name,
@@ -104,12 +102,15 @@ const CreateTokenForm: FC = () => {
     }
   };
 
-  const onSubmit = () =>
-    toast.promise(createToken(), {
-      loading: 'Generating new coin...',
-      success: 'Coin Generated',
-      error: (e) => e.message || 'Something went wrong',
-    });
+  const onSubmit = async () => {
+    await toast
+      .promise(createToken(), {
+        loading: 'Generating new coin...',
+        success: 'Coin Generated',
+        error: (e) => e.message || 'Something went wrong',
+      })
+      .catch(console.log);
+  };
 
   return (
     <Box
