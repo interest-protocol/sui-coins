@@ -59,8 +59,8 @@ const CreateTokenForm: FC = () => {
       } = getValues();
 
       if (
-        Blacklist.includes(name.toUpperCase()) ||
-        Blacklist.includes(symbol.toUpperCase())
+        Blacklist.includes(name.toUpperCase().trim()) ||
+        Blacklist.includes(symbol.toUpperCase().trim())
       ) {
         throw new Error('Nice try :)');
       }
