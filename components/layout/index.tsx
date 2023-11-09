@@ -11,7 +11,6 @@ const Layout: FC<PropsWithChildren> = ({ children }) => (
     overflow="hidden"
     position="relative"
     flexDirection="column"
-    mixBlendMode="color-burn"
     background="0% 100% url('/images/gradient.webp'), linear-gradient(0deg, #FFFB, #FFFB), url('/images/noise.webp')"
     backgroundSize="cover"
   >
