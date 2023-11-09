@@ -124,22 +124,28 @@ const MenuOptions: FC<MenuOptionsProps> = ({
           >
             My Coins
           </OptionItem>
-          <OptionItem
-            mobileOnly
-            withSubmenu
-            withBorderBottom
-            onClick={openNetworkSubmenu}
-          >
-            <SuiLogoSVG maxWidth="2rem" maxHeight="2rem" />
-            <Box>{DISPLAY_NETWORK[network]}</Box>
-          </OptionItem>
           {isConnected ? (
-            <OptionItem onClick={handleDisconnect}>
-              <Box display="flex" color="error">
-                <SignOutSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
-              </Box>
-              <Box color="error">Sign Out</Box>
-            </OptionItem>
+            <>
+              <OptionItem
+                mobileOnly
+                withSubmenu
+                withBorderBottom
+                onClick={openNetworkSubmenu}
+              >
+                <SuiLogoSVG maxWidth="2rem" maxHeight="2rem" />
+                <Box>{DISPLAY_NETWORK[network]}</Box>
+              </OptionItem>
+              <OptionItem onClick={handleDisconnect}>
+                <Box display="flex" color="error">
+                  <SignOutSVG
+                    maxWidth="1.5rem"
+                    maxHeight="1.5rem"
+                    width="100%"
+                  />
+                </Box>
+                <Box color="error">Sign Out</Box>
+              </OptionItem>
+            </>
           ) : (
             <OptionItem>
               <ConnectWalletButton />
