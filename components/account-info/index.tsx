@@ -31,10 +31,10 @@ const AccountInfo: FC<AccountInfoProps> = ({
         >
           <SuiNetwork />
           <Box
-            display="flex"
             gap="xs"
+            display="flex"
             alignItems="center"
-            onClick={handleOpenMenu}
+            onClick={menuIsOpen ? handleCloseMenu : handleOpenMenu}
           >
             <Avatar withNameOrAddress />
           </Box>
@@ -47,10 +47,10 @@ const AccountInfo: FC<AccountInfoProps> = ({
         borderRadius="full"
         alignItems="center"
         border="0.25rem solid"
-        onClick={handleOpenMenu}
         transition="all 0.3s ease-in-out"
         borderColor="rgba(0, 83, 219, 0.16)"
         display={['flex', 'flex', 'flex', 'none']}
+        onClick={menuIsOpen ? handleCloseMenu : handleOpenMenu}
         nHover={{
           bg: 'accent',
           transform: 'scale(1.15)',
