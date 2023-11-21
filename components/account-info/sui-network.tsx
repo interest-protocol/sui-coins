@@ -74,7 +74,7 @@ const SuiNetwork: FC = () => {
       {isOpen && (
         <Motion
           right="0"
-          top="3rem"
+          top="5rem"
           zIndex={4}
           width="14.5rem"
           initial="closed"

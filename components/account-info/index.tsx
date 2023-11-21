@@ -32,8 +32,13 @@ const AccountInfo: FC<AccountInfoProps> = ({
           <SuiNetwork />
           <Box
             gap="xs"
+            px={menuIsOpen ? 's' : 'unset'}
             display="flex"
             alignItems="center"
+            cursor="pointer"
+            borderRadius="full"
+            border="0.25rem solid"
+            borderColor={menuIsOpen ? '#0053DB33' : 'transparent'}
             onClick={menuIsOpen ? handleCloseMenu : handleOpenMenu}
           >
             <Avatar withNameOrAddress />

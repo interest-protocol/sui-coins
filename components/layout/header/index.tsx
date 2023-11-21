@@ -9,10 +9,11 @@ import NavBar from './nav-bar';
 const Header: FC = () => (
   <>
     <Box
-      mb="0!important"
+      mb="0 !important"
       variant="container"
       display={['none', 'none', 'none', 'grid']}
       width={['auto', 'auto', 'auto', 'auto', '100%']}
+      pt="2rem !important"
     >
       <Box
         py="m"

@@ -19,4 +19,5 @@ export const EXPLORER_URL = {
 
 export const TOAST_DURATION = 10000;
 
+export * from './routes';
 export * from './wrapper-variants';
