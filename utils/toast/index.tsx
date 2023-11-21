@@ -18,7 +18,8 @@ export const showTXSuccessToast = async (
     <a target="__black" rel="noreferrer nofollow" href={explorerLink}>
       <Box display="flex" alignItems="center">
         <Typography
-          variant="medium"
+          variant="body"
+          size="medium"
           color="accent"
           textDecoration="underline"
           fontWeight="700"

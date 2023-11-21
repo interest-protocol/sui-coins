@@ -9,7 +9,8 @@ const Title: FC = () => (
       <Typography
         mr="l"
         as="span"
-        variant="small"
+        variant="body"
+        size="small"
         fontWeight="400"
         lineHeight="4rem"
         fontFamily="Proto"
