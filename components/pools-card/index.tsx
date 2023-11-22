@@ -1,4 +1,4 @@
-import { Box, Typography } from 'elements';
+import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC, useState } from 'react';
 
 import ArrowObliqueSVG from '../svg/arrow-oblique';
@@ -65,6 +65,8 @@ const PoolsCard: FC<PoolCardProps> = ({
               fontSize="0.75rem"
               textDecoration="upper-case"
               marginLeft="0.3rem"
+              size={'small'}
+              variant={'body'}
             >
               {dexName}
             </Typography>
@@ -124,6 +126,8 @@ const PoolsCard: FC<PoolCardProps> = ({
                 textTransform="uppercase"
                 fontFamily="Satoshi"
                 textIndent="0.5rem"
+                size={'small'}
+                variant={'body'}
               >
                 {/* SUI • USDC */ coins}
               </Typography>
@@ -134,6 +138,8 @@ const PoolsCard: FC<PoolCardProps> = ({
                 fontSize="0.875rem"
                 lineHeight="1.25rem"
                 color="#0053DB"
+                size={'small'}
+                variant={'body'}
               >
                 {/* 304.66% APR */ value}%APR
               </Typography>
@@ -156,13 +162,23 @@ const PoolsCard: FC<PoolCardProps> = ({
               lineHeight="1.25rem"
               color="#585858"
               textTransform="capitalize"
+              size={'small'}
+              variant={'body'}
             >
               Fee
             </Typography>
-            <Typography whiteSpace="nowrap" px="0.8rem">
-              ${fee}{' '}
-              <QuestionCircleSVG maxWidth="0.875rem" maxHeight="0.875rem" />
-            </Typography>
+            <Box
+              minWidth="10rem"
+              display="flex"
+              justifyContent="flex-end"
+              alignItems="center"
+              gap="0.5rem"
+            >
+              <Typography textAlign="right" size={'small'} variant={'body'}>
+                ${fee}
+              </Typography>
+              <QuestionCircleSVG maxWidth="0.875rem" maxHeight="1rem" />
+            </Box>
           </Box>
           <Box
             display="flex"
@@ -179,13 +195,23 @@ const PoolsCard: FC<PoolCardProps> = ({
               lineHeight="1.25rem"
               color="#585858"
               textTransform="capitalize"
+              size={'small'}
+              variant={'body'}
             >
               Liquidity
             </Typography>
-            <Typography whiteSpace="nowrap" px="0.8rem">
-              ${liquidity}{' '}
-              <QuestionCircleSVG maxWidth="0.875rem" maxHeight="0.875rem" />
-            </Typography>
+            <Box
+              minWidth="10rem"
+              display="flex"
+              justifyContent="flex-end"
+              alignItems="center"
+              gap="0.5rem"
+            >
+              <Typography textAlign="right" size={'small'} variant={'body'}>
+                ${liquidity}
+              </Typography>
+              <QuestionCircleSVG maxWidth="0.875rem" maxHeight="1rem" />
+            </Box>
           </Box>
           <Box
             display="flex"
@@ -200,13 +226,23 @@ const PoolsCard: FC<PoolCardProps> = ({
               lineHeight="1.25rem"
               color="#585858"
               textTransform="capitalize"
+              size={'small'}
+              variant={'body'}
             >
               Volume (24h)
             </Typography>
-            <Typography whiteSpace="nowrap" px="0.8rem">
-              ${volume}{' '}
-              <QuestionCircleSVG maxWidth="0.875rem" maxHeight="0.875rem" />
-            </Typography>
+            <Box
+              minWidth="10rem"
+              display="flex"
+              justifyContent="flex-end"
+              alignItems="center"
+              gap="0.5rem"
+            >
+              <Typography textAlign="right" size={'small'} variant={'body'}>
+                ${volume}
+              </Typography>
+              <QuestionCircleSVG maxWidth="0.875rem" maxHeight="1rem" />
+            </Box>
           </Box>
         </Box>
       </Box>
