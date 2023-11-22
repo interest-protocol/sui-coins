@@ -9,8 +9,8 @@ import ConnectWalletButton from '@/components/wallet/connect-wallet-button';
 import { XCirlceSVG } from '@/svg';
 
 import { useGetAllCoinsWithMetadata } from './my-coins.hooks';
-import MyCoinsHeader from './my-coins-header';
 import MyCoinsItem from './my-coins-item';
+import TableWrapper from './table-wrapper';
 
 const MyCoins: FC = () => {
   const { currentAccount } = useWalletKit();
@@ -51,37 +51,41 @@ const MyCoins: FC = () => {
           )}
         </Box>
       ) : (
-        <Box
-          my="2xl"
-          borderRadius="m"
-          mx={[0, '11xl']}
-          overflow="hidden"
-          bg="lowestContainer"
-          width={['calc(100vw - 3rem)', 'auto']}
-          boxShadow="0px 24px 46px -10px rgba(13, 16, 23, 0.16)"
-        >
-          <MyCoinsHeader />
-          {isLoading ? (
-            <Box
-              rowGap="m"
-              columnGap="xl"
-              display="grid"
-              py={['s', 'm']}
-              px={['s', 'l']}
-              cursor="pointer"
-              alignItems="center"
-              borderTop="1px solid"
-              borderColor="outlineVariant"
-              gridTemplateColumns={['1fr 1fr 1fr', '2rem 1fr 1fr 1fr']}
-            >
-              <Box display={['none', 'block']} />
-              <Skeleton />
-              <Skeleton />
-              <Skeleton />
-            </Box>
-          ) : (
-            coins.map((coin) => <MyCoinsItem key={v4()} {...coin} />)
-          )}
+        <Box my="2xl">
+          <TableWrapper
+            title="Sui Coins"
+            options={['Name', 'Balance', 'Treasury Cap']}
+          >
+            {isLoading ? (
+              <Box
+                rowGap="m"
+                columnGap="xl"
+                display="grid"
+                py={['s', 'm']}
+                px={['s', 'l']}
+                cursor="pointer"
+                alignItems="center"
+                borderTop="1px solid"
+                borderColor="outlineVariant"
+                gridTemplateColumns={['1fr 1fr 1fr', '2rem 1fr 1fr 1fr']}
+              >
+                <Box display={['none', 'block']} />
+                <Skeleton />
+                <Skeleton />
+                <Skeleton />
+              </Box>
+            ) : (
+              coins.map((coin) => <MyCoinsItem key={v4()} {...coin} />)
+            )}
+          </TableWrapper>
+          <TableWrapper
+            title="LPs Coins"
+            options={['Name', 'Balance', 'Provider', 'Treasury Cap']}
+          />
+          <TableWrapper
+            title="Official Coins"
+            options={['Name', 'Balance', 'Provider', 'Treasury Cap']}
+          />
         </Box>
       )}
     </Layout>
