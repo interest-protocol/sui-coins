@@ -1,4 +1,4 @@
-import { Box, Button } from '@interest-protocol/ui-kit';
+import { Box } from '@interest-protocol/ui-kit';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { v4 } from 'uuid';
