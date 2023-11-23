@@ -15,10 +15,12 @@ const NavBar: FC = () => {
           key={v4()}
           py="s"
           fontSize="s"
+          display="flex"
           cursor="pointer"
           fontFamily="Proto"
           textAlign="center"
           borderRadius="full"
+          alignItems="center"
           border="0.25rem solid"
           px={['s', 's', 's', 'xl']}
           onClick={() => push(path)}
