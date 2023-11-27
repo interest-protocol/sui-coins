@@ -1,5 +1,5 @@
 export interface PoolCardProps {
-  dexName?: string;
+  protocol?: string;
   coins?: string;
   value?: number;
   fee?: number;

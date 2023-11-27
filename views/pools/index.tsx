@@ -15,9 +15,9 @@ const Pools: FC = () => {
       >
         Pools
         <PoolsCard
-          dexName="Dex name"
+          protocol="interest"
           coins="SUI • USDC"
-          value={36.6}
+          value={306.66}
           fee={100}
           liquidity={123.09}
           volume={839.34}

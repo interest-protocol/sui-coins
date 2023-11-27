@@ -1,29 +1,25 @@
-import { Box, Typography } from '@interest-protocol/ui-kit';
-import { FC, useState } from 'react';
+import {
+  Box,
+  Tag,
+  TooltipWrapper,
+  Typography,
+} from '@interest-protocol/ui-kit';
+import { FC } from 'react';
 
 import ArrowObliqueSVG from '../svg/arrow-oblique';
 import DefaultToken from '../svg/default-token';
+import IPX from '../svg/ipx';
 import QuestionCircleSVG from '../svg/question.circle';
-import SuiLogo from '../svg/sui-logo';
 import { PoolCardProps } from './pools-card.types';
 
 const PoolsCard: FC<PoolCardProps> = ({
-  dexName,
+  protocol,
   coins,
   value,
   fee,
   liquidity,
   volume,
 }) => {
-  const [isHovered, setHovered] = useState(false);
-
-  const handleMouseEnter = () => {
-    setHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    setHovered(false);
-  };
   return (
     <Box
       display="flex"
@@ -41,81 +37,71 @@ const PoolsCard: FC<PoolCardProps> = ({
       nHover={{
         border: 'none',
         boxShadow: '0px 24px 46px -10px rgba(13, 16, 23, 0.16)',
+        '.arrow-wrapper': {
+          opacity: 1,
+        },
       }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
     >
       <Box width="100%" height="100%">
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Box
-            as="button"
-            bg="transparent"
-            display="flex"
-            justifyContent="flex-start"
-            alignItems="center"
-            borderRadius="1rem"
-            border="0.063rem solid #C6C6CA"
-            p="0.2rem"
-            width="6rem"
-            cursor="pointer"
+          <Tag
+            PrefixIcon={() => <IPX maxHeight="1rem" maxWidth="1rem" />}
+            size="small"
+            variant="outline"
           >
-            <SuiLogo maxHeight="1rem" maxWidth="1rem" />
             <Typography
+              display="flex"
+              flexDirection="row"
               fontFamily="Proto"
+              lineHeight="1rem"
               fontSize="0.75rem"
               textDecoration="upper-case"
               marginLeft="0.3rem"
               size={'small'}
               variant={'body'}
             >
-              {dexName}
+              {protocol}
             </Typography>
-          </Box>
+          </Tag>
           <Box
             as="button"
             display="flex"
-            justifyContent="space-between"
             alignItems="center"
             width="1.5rem"
             height="1.5rem"
             bg="transparent"
             border="none"
             cursor="pointer"
+            opacity="0"
+            className="arrow-wrapper"
           >
-            {isHovered && (
-              <ArrowObliqueSVG maxHeight="1.5rem" maxWidth="1.5rem" />
-            )}
+            <ArrowObliqueSVG maxHeight="1.5rem" maxWidth="1.5rem" />
           </Box>
         </Box>
-        <Box marginTop="1.5rem" marginBottom="1.5rem">
+        <Box>
           <Box
             display="flex"
             justifyContent="center"
             alignItems="center"
             flexDirection="column"
+            mt="1.5rem"
+            mb="1.5rem"
           >
             <Box
-              width="100%"
-              height="100%"
+              minWidth="19rem"
+              height="2.5rem"
               display="flex"
               justifyContent="center"
-              marginBottom="1rem"
+              alignItems="center"
+              alignSelf="stretch"
+              gap="1rem"
+              mb="1rem"
             >
-              <Box
-                borderRadius="1rem"
-                marginRight="0.5rem"
-                width="3rem"
-                height="3rem"
-              >
-                <DefaultToken maxHeight="3rem" maxWidth="3rem" />
+              <Box borderRadius="1rem" minHeight="2.5rem" minWidth="2.5rem">
+                <DefaultToken maxHeight="100%" maxWidth="100%" />
               </Box>
-              <Box
-                borderRadius="1rem"
-                marginLeft="0.5rem"
-                width="3rem"
-                height="3rem"
-              >
-                <DefaultToken maxHeight="3rem" maxWidth="3rem" />
+              <Box borderRadius="1rem" minHeight="2.5rem" minWidth="2.5rem">
+                <DefaultToken maxHeight="100%" maxWidth="100%" />
               </Box>
             </Box>
             <Box display="flex" flexDirection="column">
@@ -124,8 +110,6 @@ const PoolsCard: FC<PoolCardProps> = ({
                 fontWeight="700"
                 fontSize="1rem"
                 textTransform="uppercase"
-                fontFamily="Satoshi"
-                textIndent="0.5rem"
                 size={'small'}
                 variant={'body'}
               >
@@ -134,14 +118,13 @@ const PoolsCard: FC<PoolCardProps> = ({
               <Typography
                 textTransform="uppercase"
                 fontFamily="Proto"
-                fontWeight="500"
                 fontSize="0.875rem"
                 lineHeight="1.25rem"
                 color="#0053DB"
-                size={'small'}
+                size={'large'}
                 variant={'body'}
               >
-                {/* 304.66% APR */ value}%APR
+                {/* 304.66% APR */ value}% APR
               </Typography>
             </Box>
           </Box>
@@ -156,9 +139,7 @@ const PoolsCard: FC<PoolCardProps> = ({
             borderColor="#C6C6CA"
           >
             <Typography
-              fontFamily="Satoshi"
               fontSize="0.875rem"
-              fontWeight="500"
               lineHeight="1.25rem"
               color="#585858"
               textTransform="capitalize"
@@ -167,18 +148,31 @@ const PoolsCard: FC<PoolCardProps> = ({
             >
               Fee
             </Typography>
-            <Box
-              minWidth="10rem"
-              display="flex"
-              justifyContent="flex-end"
-              alignItems="center"
-              gap="0.5rem"
+            <TooltipWrapper
+              tooltipContent={
+                <Typography variant="body" size={'medium'}>
+                  Fee for each transation
+                </Typography>
+              }
+              tooltipPosition="right"
             >
-              <Typography textAlign="right" size={'small'} variant={'body'}>
-                ${fee}
-              </Typography>
-              <QuestionCircleSVG maxWidth="0.875rem" maxHeight="1rem" />
-            </Box>
+              <Box
+                minWidth="10rem"
+                display="flex"
+                justifyContent="flex-end"
+                alignItems="center"
+              >
+                <Typography
+                  color="onSurface"
+                  size={'small'}
+                  variant={'body'}
+                  pr="0.5rem"
+                >
+                  ${fee}
+                </Typography>
+                <QuestionCircleSVG maxWidth="0.875rem" maxHeight="1rem" />
+              </Box>
+            </TooltipWrapper>
           </Box>
           <Box
             display="flex"
@@ -189,9 +183,7 @@ const PoolsCard: FC<PoolCardProps> = ({
             borderColor="#C6C6CA"
           >
             <Typography
-              fontFamily="Satoshi"
               fontSize="0.875rem"
-              fontWeight="500"
               lineHeight="1.25rem"
               color="#585858"
               textTransform="capitalize"
@@ -200,18 +192,31 @@ const PoolsCard: FC<PoolCardProps> = ({
             >
               Liquidity
             </Typography>
-            <Box
-              minWidth="10rem"
-              display="flex"
-              justifyContent="flex-end"
-              alignItems="center"
-              gap="0.5rem"
+            <TooltipWrapper
+              tooltipContent={
+                <Typography variant="body" size={'medium'}>
+                  Liquidity
+                </Typography>
+              }
+              tooltipPosition="right"
             >
-              <Typography textAlign="right" size={'small'} variant={'body'}>
-                ${liquidity}
-              </Typography>
-              <QuestionCircleSVG maxWidth="0.875rem" maxHeight="1rem" />
-            </Box>
+              <Box
+                minWidth="10rem"
+                display="flex"
+                justifyContent="flex-end"
+                alignItems="center"
+              >
+                <Typography
+                  color="onSurface"
+                  size={'small'}
+                  variant={'body'}
+                  pr="0.5rem"
+                >
+                  ${liquidity}
+                </Typography>
+                <QuestionCircleSVG maxWidth="0.875rem" maxHeight="1rem" />
+              </Box>
+            </TooltipWrapper>
           </Box>
           <Box
             display="flex"
@@ -220,9 +225,7 @@ const PoolsCard: FC<PoolCardProps> = ({
             py="0.5rem"
           >
             <Typography
-              fontFamily="Satoshi"
               fontSize="0.875rem"
-              fontWeight="500"
               lineHeight="1.25rem"
               color="#585858"
               textTransform="capitalize"
@@ -231,18 +234,31 @@ const PoolsCard: FC<PoolCardProps> = ({
             >
               Volume (24h)
             </Typography>
-            <Box
-              minWidth="10rem"
-              display="flex"
-              justifyContent="flex-end"
-              alignItems="center"
-              gap="0.5rem"
+            <TooltipWrapper
+              tooltipContent={
+                <Typography variant="body" size={'medium'}>
+                  Volume
+                </Typography>
+              }
+              tooltipPosition="right"
             >
-              <Typography textAlign="right" size={'small'} variant={'body'}>
-                ${volume}
-              </Typography>
-              <QuestionCircleSVG maxWidth="0.875rem" maxHeight="1rem" />
-            </Box>
+              <Box
+                minWidth="10rem"
+                display="flex"
+                justifyContent="flex-end"
+                alignItems="center"
+              >
+                <Typography
+                  color="onSurface"
+                  size={'small'}
+                  variant={'body'}
+                  pr="0.5rem"
+                >
+                  ${volume}
+                </Typography>
+                <QuestionCircleSVG maxWidth="0.875rem" maxHeight="1rem" />
+              </Box>
+            </TooltipWrapper>
           </Box>
         </Box>
       </Box>

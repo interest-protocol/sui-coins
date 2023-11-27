@@ -24,3 +24,4 @@ export { default as TickSVG } from './tick';
 export { default as UserSVG } from './user';
 export { default as XSVG } from './x';
 export { default as XCirlceSVG } from './x-circle';
+export { default as IPXRoundedSVG } from './x-circle';
