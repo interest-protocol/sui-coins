@@ -1,12 +1,16 @@
-import { Box, Button, Typography } from '@interest-protocol/ui-kit';
-import { TextField } from 'elements';
-import { ChangeEvent, FC } from 'react';
+import { Box, Button, TextField, Typography } from '@interest-protocol/ui-kit';
+import { ChangeEvent, FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { v4 } from 'uuid';
 
+import { ClockSVG, PercentageSVG } from '@/svg';
 import { parseInputEventToNumberString } from '@/utils';
 
 import { ISwapSettingsForm } from '../../swap.types';
 import { ManageSlippageProps } from '../manage-slippage-form.types';
+
+const SLIPPAGE_BUTTONS = ['0.1', '0.5', '1'];
+const TRANSACTION_SPEED_BUTTONS = ['normal', 'fast', 'instant'];
 
 const ManageSlippageForm: FC<ManageSlippageProps> = ({
   formSettings,
@@ -15,12 +19,15 @@ const ManageSlippageForm: FC<ManageSlippageProps> = ({
   const formTmpSettings = useForm<ISwapSettingsForm>({
     defaultValues: formSettings.getValues(),
   });
+  const [tmpSpeed, setTmpSpeed] = useState(formTmpSettings.getValues('speed'));
 
   const setTolerance = (value: string) =>
     formTmpSettings.setValue('slippage', value);
 
-  const setSpeed = (value: 'normal' | 'fast' | 'instant') =>
+  const setSpeed = (value: 'normal' | 'fast' | 'instant') => {
     formTmpSettings.setValue('speed', value);
+    setTmpSpeed(value);
+  };
 
   const onConfirm = () => {
     formSettings.setValue('speed', formTmpSettings.getValues('speed'));
@@ -54,34 +61,28 @@ const ManageSlippageForm: FC<ManageSlippageProps> = ({
               },
             })}
             fieldProps={{ borderRadius: 'full', width: '100%' }}
+            Suffix={
+              <Box display="flex">
+                <PercentageSVG
+                  maxHeight="1.25rem"
+                  maxWidth="1.25rem"
+                  width="100%"
+                />
+              </Box>
+            }
           />
-          <Button
-            variant="outline"
-            textAlign="center"
-            onClick={() => setTolerance('0.1')}
-          >
-            <Typography variant="label" size="large" width="100%">
-              0.1 %
-            </Typography>
-          </Button>
-          <Button
-            variant="outline"
-            textAlign="center"
-            onClick={() => setTolerance('0.5')}
-          >
-            <Typography variant="label" size="large" width="100%">
-              0.5 %
-            </Typography>
-          </Button>
-          <Button
-            variant="outline"
-            textAlign="center"
-            onClick={() => setTolerance('1')}
-          >
-            <Typography variant="label" size="large" width="100%">
-              1 %
-            </Typography>
-          </Button>
+          {SLIPPAGE_BUTTONS.map((item) => (
+            <Button
+              key={v4()}
+              variant="outline"
+              textAlign="center"
+              onClick={() => setTolerance(item)}
+            >
+              <Typography variant="label" size="large" width="100%">
+                {item} %
+              </Typography>
+            </Button>
+          ))}
         </Box>
       </Box>
       <Box>
@@ -94,33 +95,19 @@ const ManageSlippageForm: FC<ManageSlippageProps> = ({
           gridTemplateColumns="repeat(3, 1fr)"
           display={['flex', 'flex', 'flex', 'grid']}
         >
-          <Button
-            variant="outline"
-            textAlign="center"
-            onClick={() => setSpeed('normal')}
-          >
-            <Typography variant="label" size="large" width="100%">
-              Normal
-            </Typography>
-          </Button>
-          <Button
-            variant="outline"
-            textAlign="center"
-            onClick={() => setSpeed('fast')}
-          >
-            <Typography variant="label" size="large" width="100%">
-              Fast
-            </Typography>
-          </Button>
-          <Button
-            variant="outline"
-            textAlign="center"
-            onClick={() => setSpeed('instant')}
-          >
-            <Typography variant="label" size="large" width="100%">
-              Instant
-            </Typography>
-          </Button>
+          {TRANSACTION_SPEED_BUTTONS.map((item) => (
+            <Button
+              key={v4()}
+              variant="outline"
+              textAlign="center"
+              onClick={() => setSpeed(item as 'normal' | 'fast' | 'instant')}
+              selected={item == tmpSpeed}
+            >
+              <Typography variant="label" size="large" width="100%">
+                {item}
+              </Typography>
+            </Button>
+          ))}
         </Box>
       </Box>
       <Box>
@@ -145,6 +132,11 @@ const ManageSlippageForm: FC<ManageSlippageProps> = ({
               borderRadius: 'full',
               width: ['100%', '100%', '100%', '10rem'],
             }}
+            Suffix={
+              <Box display="flex">
+                <ClockSVG maxHeight="1.25rem" maxWidth="1.25rem" width="100%" />
+              </Box>
+            }
           />
         </Box>
       </Box>
