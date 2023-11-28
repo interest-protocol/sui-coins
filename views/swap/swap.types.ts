@@ -1,5 +1,3 @@
-import { UseFormReturn } from 'react-hook-form';
-
 import { TOKEN_SYMBOL } from '@/lib';
 
 export interface CoinData {
