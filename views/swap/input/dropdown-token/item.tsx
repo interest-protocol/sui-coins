@@ -45,6 +45,7 @@ const DropdownTokenItem: FC = () => {
             <BNBSVG maxWidth="1.125rem" maxHeight="1.125rem" width="100%" />
           </Box>
         }
+        cursor="pointer"
       />
     </Motion>
   );
