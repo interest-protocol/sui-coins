@@ -1,13 +1,13 @@
 import { NextPage } from 'next';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { SEO } from '@/components';
 import { TOKEN_SYMBOL } from '@/lib';
 import Swap from '@/views/swap';
-import { ISwapSettingsForm, SwapForm } from '@/views/swap/swap.types';
+import { SwapForm } from '@/views/swap/swap.types';
 
 const SwapPage: NextPage = () => {
-  const formSwap = useForm<SwapForm>({
+  const form = useForm<SwapForm>({
     defaultValues: {
       to: {
         value: '0.3',
@@ -23,22 +23,19 @@ const SwapPage: NextPage = () => {
         symbol: TOKEN_SYMBOL.BTC,
         type: '',
       },
-    },
-  });
-
-  const formSettings = useForm<ISwapSettingsForm>({
-    defaultValues: {
-      slippage: '0.1',
-      speed: 'instant',
-      deadline: '3',
+      settings: {
+        slippage: '0.1',
+        speed: 'instant',
+        deadline: '3',
+      },
     },
   });
 
   return (
-    <>
+    <FormProvider {...form}>
       <SEO pageTitle="Swap" />
-      <Swap formSwap={formSwap} formSettings={formSettings} />
-    </>
+      <Swap />
+    </FormProvider>
   );
 };
 

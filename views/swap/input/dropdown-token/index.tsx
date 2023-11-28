@@ -1,7 +1,7 @@
 import { Box, Button, Motion } from '@interest-protocol/ui-kit';
 import { not } from 'ramda';
 import { FC, useState } from 'react';
-import { useWatch } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import { wrapperVariants } from '@/constants';
 import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
@@ -12,11 +12,13 @@ import DropdownTokenItem from './item';
 
 const BOX_ID = 'dropdown-box-id';
 
-const DropdownToken: FC<DropdownTokenProps> = ({ label, formSwap }) => {
+const DropdownToken: FC<DropdownTokenProps> = ({ label }) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const { control } = useFormContext();
+
   const token = useWatch({
-    control: formSwap.control,
+    control,
     name: label,
   });
 

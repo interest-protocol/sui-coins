@@ -1,19 +1,15 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
-import { useWatch } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import { MinusSVG, PlusSVG } from '@/svg';
 
 import { SlippageInfoProps } from './manage-slippage-form.types';
 
-const SlippageInfo: FC<SlippageInfoProps> = ({
-  isOpen,
-  formSettings,
-  handleManageView,
-}) => {
-  const Settings = useWatch({
-    control: formSettings.control,
-  });
+const SlippageInfo: FC<SlippageInfoProps> = ({ isOpen, handleManageView }) => {
+  const { control } = useFormContext();
+
+  const settings = useWatch({ control, name: 'settings' });
 
   const ManageIcon = isOpen ? MinusSVG : PlusSVG;
 
@@ -34,7 +30,7 @@ const SlippageInfo: FC<SlippageInfoProps> = ({
           color="primary"
           variant="label"
         >
-          {Settings.slippage}%
+          {settings.slippage}%
         </Typography>
       </Typography>
       <Button isIcon variant="text" onClick={handleManageView}>

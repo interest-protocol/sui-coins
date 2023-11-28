@@ -3,12 +3,9 @@ import { not } from 'ramda';
 import { FC, useState } from 'react';
 
 import ManageSlippageForm from './manage-slippage-form';
-import { ManageSlippageProps } from './manage-slippage-form.types';
 import SlippageInfo from './slippage';
 
-const ManageSlippage: FC<Omit<ManageSlippageProps, 'handleManageView'>> = ({
-  formSettings,
-}) => {
+const ManageSlippage: FC = () => {
   const [openManage, setOpenManage] = useState(false);
 
   const handleManageView = () => setOpenManage(not);
@@ -24,16 +21,9 @@ const ManageSlippage: FC<Omit<ManageSlippageProps, 'handleManageView'>> = ({
         flexDirection="column"
         borderRadius="0.5rem"
       >
-        <SlippageInfo
-          isOpen={openManage}
-          formSettings={formSettings}
-          handleManageView={handleManageView}
-        />
+        <SlippageInfo isOpen={openManage} handleManageView={handleManageView} />
         {openManage && (
-          <ManageSlippageForm
-            formSettings={formSettings}
-            handleManageView={handleManageView}
-          />
+          <ManageSlippageForm handleManageView={handleManageView} />
         )}
       </Box>
     </Box>

@@ -8,7 +8,7 @@ export interface CoinData {
   type: string;
 }
 
-export interface ISwapSettingsForm {
+export interface ISwapSettings {
   slippage: string;
   deadline: string;
   speed: 'normal' | 'fast' | 'instant';
@@ -22,9 +22,5 @@ export interface SwapToken extends CoinData {
 export interface SwapForm {
   to: SwapToken;
   from: SwapToken;
-}
-
-export interface SwapProps {
-  formSettings: UseFormReturn<ISwapSettingsForm>;
-  formSwap: UseFormReturn<SwapForm>;
+  settings: ISwapSettings;
 }

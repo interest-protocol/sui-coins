@@ -1,23 +1,22 @@
 import { Box, Button, TextField, Typography } from '@interest-protocol/ui-kit';
 import { ChangeEvent, FC, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useFormContext } from 'react-hook-form';
 import { v4 } from 'uuid';
 
 import { ClockSVG, PercentageSVG } from '@/svg';
 import { parseInputEventToNumberString } from '@/utils';
 
-import { ISwapSettingsForm } from '../../swap.types';
+import { ISwapSettings } from '../../swap.types';
 import { ManageSlippageProps } from '../manage-slippage-form.types';
 
 const SLIPPAGE_BUTTONS = ['0.1', '0.5', '1'];
 const TRANSACTION_SPEED_BUTTONS = ['normal', 'fast', 'instant'];
 
-const ManageSlippageForm: FC<ManageSlippageProps> = ({
-  formSettings,
-  handleManageView,
-}) => {
-  const formTmpSettings = useForm<ISwapSettingsForm>({
-    defaultValues: formSettings.getValues(),
+const ManageSlippageForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
+  const { getValues, setValue } = useFormContext();
+
+  const formTmpSettings = useForm<ISwapSettings>({
+    defaultValues: getValues('settings'),
   });
   const [tmpSpeed, setTmpSpeed] = useState(formTmpSettings.getValues('speed'));
 
@@ -30,9 +29,9 @@ const ManageSlippageForm: FC<ManageSlippageProps> = ({
   };
 
   const onConfirm = () => {
-    formSettings.setValue('speed', formTmpSettings.getValues('speed'));
-    formSettings.setValue('slippage', formTmpSettings.getValues('slippage'));
-    formSettings.setValue('deadline', formTmpSettings.getValues('deadline'));
+    setValue('settings.speed', formTmpSettings.getValues('speed'));
+    setValue('settings.slippage', formTmpSettings.getValues('slippage'));
+    setValue('settings.deadline', formTmpSettings.getValues('deadline'));
     handleManageView();
   };
 

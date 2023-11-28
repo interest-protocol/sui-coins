@@ -1,18 +1,20 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
+import { useFormContext } from 'react-hook-form';
 
 import Layout from '@/components/layout';
 import { SwapSVG } from '@/svg';
 
 import Input from './input';
 import ManageSlippage from './manage-slippage';
-import { SwapProps } from './swap.types';
 
-const Swap: FC<SwapProps> = ({ formSwap, formSettings }) => {
+const Swap: FC = () => {
+  const { getValues, setValue } = useFormContext();
+
   const flipToken = () => {
-    const tmp = formSwap.getValues('to');
-    formSwap.setValue('to', formSwap.getValues('from'));
-    formSwap.setValue('from', tmp);
+    const tmp = getValues('to');
+    setValue('to', getValues('from'));
+    setValue('from', tmp);
   };
 
   return (
@@ -34,7 +36,7 @@ const Swap: FC<SwapProps> = ({ formSwap, formSettings }) => {
         p={['xl', 'xl', 'xl', '7xl']}
         width={['100%', '100%', '100%', '39.75rem']}
       >
-        <Input label="to" formSwap={formSwap} />
+        <Input label="to" />
         <Box my="0.25rem" position="relative">
           <Box
             left="45%"
@@ -53,8 +55,8 @@ const Swap: FC<SwapProps> = ({ formSwap, formSettings }) => {
             </Button>
           </Box>
         </Box>
-        <Input label="from" formSwap={formSwap} />
-        <ManageSlippage formSettings={formSettings} />
+        <Input label="from" />
+        <ManageSlippage />
         <Box mt="7xl" mx="auto">
           <Button variant="filled">
             <Typography variant="label" size="large">
