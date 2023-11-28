@@ -5,6 +5,7 @@ import { toPairs } from 'ramda';
 import { FC, ReactNode, useState } from 'react';
 import { v4 } from 'uuid';
 
+import { MENU_ITEMS } from '@/components/layout/header/nav-bar.data';
 import ConnectWalletButton from '@/components/wallet/connect-wallet-button';
 import { DISPLAY_NETWORK, wrapperVariants } from '@/constants';
 import { useNetwork } from '@/context/network';
@@ -83,7 +84,7 @@ const MenuOptions: FC<MenuOptionsProps> = ({
   return (
     <Motion
       right="0"
-      top="4rem"
+      top="5rem"
       zIndex={4}
       width="14.5rem"
       initial="closed"
@@ -101,35 +102,26 @@ const MenuOptions: FC<MenuOptionsProps> = ({
       {submenu ?? (
         <>
           {isConnected && (
-            <OptionItem
-              withBorderBottom
-              withSubmenu
-              onClick={openAccountSubmenu}
-            >
+            <OptionItem withSubmenu onClick={openAccountSubmenu}>
               <Avatar withNameOrAddress />
             </OptionItem>
           )}
-          <OptionItem
-            mobileOnly
-            selected={asPath == '/'}
-            onClick={() => asPath !== '/' && push('/')}
-          >
-            Create Coin
-          </OptionItem>
-          <OptionItem
-            mobileOnly
-            withBorderBottom
-            selected={asPath == '/my-coins'}
-            onClick={() => asPath !== '/my-coins' && push('/my-coins')}
-          >
-            My Coins
-          </OptionItem>
+          {MENU_ITEMS.map(({ path, name }) => (
+            <OptionItem
+              key={v4()}
+              mobileOnly
+              selected={asPath == path}
+              onClick={() => push(path)}
+            >
+              {name}
+            </OptionItem>
+          ))}
           {isConnected ? (
             <>
               <OptionItem
                 mobileOnly
                 withSubmenu
-                withBorderBottom
+                withBorderTop
                 onClick={openNetworkSubmenu}
               >
                 <SuiLogoSVG maxWidth="2rem" maxHeight="2rem" />

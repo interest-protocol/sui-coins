@@ -1,4 +1,4 @@
-import { Box, SwitchButton } from '@interest-protocol/ui-kit';
+import { Box, ToggleButton, Typography } from '@interest-protocol/ui-kit';
 import { not } from 'ramda';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
@@ -14,17 +14,18 @@ const FixedSupplyToggle: FC<FixedSupplyToggleProps> = ({
   return (
     <>
       <Box display="flex" justifyContent="space-between" color="onSurface">
-        <Box>Fixed Supply</Box>
-        <SwitchButton
-          activation
+        <Typography variant="body" size="large">
+          Fixed Supply
+        </Typography>
+        <ToggleButton
           name="Fixed Supply"
           defaultValue={!!value}
           onClick={() => setValue('fixedSupply', not(value))}
         />
       </Box>
-      <Box color="#0000007A" fontSize="xs">
+      <Typography variant="body" size="small" color="#0000007A">
         The Treasury Cap will be sent to {value ? 'the @0x0 address' : 'you'}
-      </Box>
+      </Typography>
     </>
   );
 };

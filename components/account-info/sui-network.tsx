@@ -16,7 +16,7 @@ const SuiNetwork: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { network, changeNetwork } = useNetwork();
 
-  const closeDropdown = (event: any) => {
+  const closeNetworkDropdown = (event: any) => {
     if (
       event?.path?.some((node: any) => node?.id == BOX_ID) ||
       event?.composedPath()?.some((node: any) => node?.id == BOX_ID)
@@ -26,8 +26,12 @@ const SuiNetwork: FC = () => {
     setIsOpen(false);
   };
 
+  const handleOpenMenu = () => {
+    setIsOpen(not);
+  };
+
   const networkBoxRef =
-    useClickOutsideListenerRef<HTMLDivElement>(closeDropdown);
+    useClickOutsideListenerRef<HTMLDivElement>(closeNetworkDropdown);
 
   return (
     <Box
@@ -47,7 +51,7 @@ const SuiNetwork: FC = () => {
         borderRadius="full"
         alignItems="center"
         border="0.25rem solid"
-        onClick={() => setIsOpen(not)}
+        onClick={handleOpenMenu}
         borderColor={isOpen ? '#0053DB33' : 'transparent'}
       >
         <Box
@@ -64,8 +68,8 @@ const SuiNetwork: FC = () => {
         </Box>
         <Box fontFamily="Proto">{DISPLAY_NETWORK[network]}</Box>
         <Box
-          transform={`rotate(${isOpen ? '180deg' : '0deg'})`}
           display="flex"
+          transform={`rotate(${isOpen ? '180deg' : '0deg'})`}
           alignItems="center"
         >
           <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
@@ -74,7 +78,7 @@ const SuiNetwork: FC = () => {
       {isOpen && (
         <Motion
           right="0"
-          top="3rem"
+          top="5rem"
           zIndex={4}
           width="14.5rem"
           initial="closed"
