@@ -1,5 +1,4 @@
-import { Box } from '@interest-protocol/ui-kit';
-import { TextField } from 'elements';
+import { Box, TextField } from '@interest-protocol/ui-kit';
 import { ChangeEvent, FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 

@@ -3,7 +3,7 @@ import { useWalletKit } from '@mysten/wallet-kit';
 import { FC } from 'react';
 
 import AccountInfo from '../account-info';
-import SuiNetwork from '../account-info/sui-network';
+import MovementNetwork from '../account-info/movement-network';
 import ConnectWalletButton from './connect-wallet-button';
 
 const Wallet: FC = () => {
@@ -18,7 +18,7 @@ const Wallet: FC = () => {
             justifyContent="flex-end"
             display={['none', 'none', 'none', 'flex']}
           >
-            <SuiNetwork />
+            <MovementNetwork />
           </Box>
         )}
         <AccountInfo />

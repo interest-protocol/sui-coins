@@ -9,7 +9,7 @@ import { MENU_ITEMS } from '@/components/layout/header/nav-bar.data';
 import ConnectWalletButton from '@/components/wallet/connect-wallet-button';
 import { DISPLAY_NETWORK, wrapperVariants } from '@/constants';
 import { useNetwork } from '@/context/network';
-import { ArrowLeftSVG, SignOutSVG, SuiLogoSVG } from '@/svg';
+import { ArrowLeftSVG, MovementLogoSVG, SignOutSVG } from '@/svg';
 
 import Avatar from '../avatar';
 import { MenuOptionsProps } from './menu-option.types';
@@ -56,8 +56,8 @@ const NetworkSubMenu: FC<{ closeSubmenu: () => void }> = ({ closeSubmenu }) => {
           selected={network === networkKey}
           onClick={() => changeNetwork(networkKey)}
         >
-          <SuiLogoSVG maxWidth="2rem" maxHeight="2rem" />
-          <Box>Sui {networkDisplay}</Box>
+          <MovementLogoSVG maxWidth="2rem" maxHeight="2rem" />
+          <Box>{networkDisplay}</Box>
         </OptionItem>
       ))}
     </>
@@ -124,7 +124,7 @@ const MenuOptions: FC<MenuOptionsProps> = ({
                 withBorderTop
                 onClick={openNetworkSubmenu}
               >
-                <SuiLogoSVG maxWidth="2rem" maxHeight="2rem" />
+                <MovementLogoSVG maxWidth="2rem" maxHeight="2rem" />
                 <Box>{DISPLAY_NETWORK[network]}</Box>
               </OptionItem>
               <OptionItem onClick={handleDisconnect}>

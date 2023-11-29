@@ -4,9 +4,7 @@
  */
 export enum RoutesEnum {
   Swap = 'swap',
-  Pools = 'pools',
-  MyCoins = 'my-coins',
-  CreateCoin = 'create-coin',
+  Faucet = 'faucet',
 }
 
 /**
@@ -14,8 +12,6 @@ export enum RoutesEnum {
  * @description this constant will help us to create standard routes
  */
 export const Routes: Record<RoutesEnum, string> = {
-  [RoutesEnum.CreateCoin]: '/',
-  [RoutesEnum.Swap]: '/swap',
-  [RoutesEnum.Pools]: '/pools',
-  [RoutesEnum.MyCoins]: '/my-coins',
+  [RoutesEnum.Swap]: '/',
+  [RoutesEnum.Faucet]: '/faucet',
 };

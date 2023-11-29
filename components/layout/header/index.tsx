@@ -34,8 +34,8 @@ const Header: FC = () => (
         boxShadow="0 1.5rem 2.875rem -0.625rem rgba(13, 16, 23, 0.16)"
       >
         <Box display="flex" alignItems="center" gap="8xl">
-          <Box display="flex" alignItems="center" height="1.5rem">
-            <LogoSVG maxHeight="1.5rem" maxWidth="7.5rem" width="100%" />
+          <Box display="flex" alignItems="center" height="2.5rem">
+            <LogoSVG maxHeight="2.5rem" maxWidth="15rem" height="100%" />
           </Box>
           <NavBar />
         </Box>

@@ -7,7 +7,7 @@ const Pools: FC = () => {
   return (
     <Layout>
       <Typography my="2xl" size="large" variant="display" textAlign="center">
-        Pools
+        Faucet
       </Typography>
     </Layout>
   );

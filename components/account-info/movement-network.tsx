@@ -6,13 +6,13 @@ import { v4 } from 'uuid';
 import { DISPLAY_NETWORK, wrapperVariants } from '@/constants';
 import { useNetwork } from '@/context/network';
 import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
-import { ChevronDownSVG, SuiLogoSVG } from '@/svg';
+import { ChevronDownSVG, MovementLogoSVG } from '@/svg';
 
 import OptionItem from './menu-options/option-item';
 
 const BOX_ID = 'network-box-id';
 
-const SuiNetwork: FC = () => {
+const MovementNetwork: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { network, changeNetwork } = useNetwork();
 
@@ -64,7 +64,7 @@ const SuiNetwork: FC = () => {
           borderRadius="full"
           justifyContent="center"
         >
-          <SuiLogoSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+          <MovementLogoSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
         </Box>
         <Box fontFamily="Proto">{DISPLAY_NETWORK[network]}</Box>
         <Box
@@ -99,8 +99,8 @@ const SuiNetwork: FC = () => {
               selected={networkKey === network}
               onClick={() => changeNetwork(networkKey)}
             >
-              <SuiLogoSVG maxWidth="2rem" maxHeight="2rem" />
-              <Box>Sui {displayNetwork}</Box>
+              <MovementLogoSVG maxWidth="2rem" maxHeight="2rem" />
+              <Box>Movement {displayNetwork}</Box>
             </OptionItem>
           ))}
         </Motion>
@@ -109,4 +109,4 @@ const SuiNetwork: FC = () => {
   );
 };
 
-export default SuiNetwork;
+export default MovementNetwork;

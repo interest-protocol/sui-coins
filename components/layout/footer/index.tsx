@@ -1,5 +1,4 @@
-import { Box } from '@interest-protocol/ui-kit';
-import { Typography } from 'elements';
+import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
 import {
@@ -12,22 +11,16 @@ import {
 } from '@/svg';
 
 const Footer: FC = () => (
-  <Box
-    fontSize="s"
-    display="flex"
-    fontFamily="Proto"
-    flexDirection="column"
-    textTransform="uppercase"
-  >
-    <Box textAlign="center" mb="l" fontFamily="inherit" fontSize="inherit">
-      <Typography fontFamily="inherit" fontSize="inherit">
+  <Box display="flex" flexDirection="column" textTransform="uppercase">
+    <Box textAlign="center" mb="l">
+      <Typography variant="label" size="small">
         The website is maintained &
       </Typography>
       <Typography
+        size="small"
         gap="0.25rem"
         display="flex"
-        fontSize="inherit"
-        fontFamily="inherit"
+        variant="label"
         justifyContent="center"
       >
         Made with

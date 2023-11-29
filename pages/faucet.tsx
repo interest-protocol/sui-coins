@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 
 import { SEO } from '@/components';
-import Pools from '@/views/pools';
+import Pools from '@/views/faucet';
 
 const PoolsPage: NextPage = () => (
   <>
