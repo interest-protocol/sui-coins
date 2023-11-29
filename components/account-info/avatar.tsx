@@ -15,12 +15,12 @@ const Avatar: FC<AvatarProps> = ({ withNameOrAddress, account }) => {
       <Box
         bg="primary"
         width="1.5rem"
-        height="1.5rem"
-        borderRadius="full"
         display="flex"
-        justifyContent="center"
+        height="1.5rem"
+        color="onPrimary"
         alignItems="center"
-        color="white"
+        borderRadius="full"
+        justifyContent="center"
       >
         <UserSVG
           maxWidth="1.5rem"

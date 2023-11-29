@@ -2,7 +2,7 @@ import { TOKEN_SYMBOL } from '@/lib';
 
 export interface CoinData {
   decimals: number;
-  symbol: TOKEN_SYMBOL | string;
+  symbol: TOKEN_SYMBOL;
   type: string;
 }
 
