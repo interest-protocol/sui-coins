@@ -34,20 +34,24 @@ const Error: FC<ErrorProps> = ({ message, linkGoTo }) => {
           </Motion>
           <DiedComputerSVG maxHeight="100%" maxWidth="100%" width="100%" />
         </Box>
-        <Typography variant="displayLarge" mb=".5rem" textAlign="center">
+        <Typography
+          mb=".5rem"
+          size="large"
+          variant="display"
+          textAlign="center"
+        >
           OOPS!
         </Typography>
         <Typography
           mb="1rem"
+          size="large"
           textAlign="center"
-          variant="title2"
-          fontFamily="Share Tech Mono"
+          variant="headline"
         >
           {message || 'Something went wrong'}
         </Typography>
         <Button
           mx="auto"
-          size="small"
           bg="onSurface"
           variant="filled"
           color="inverseOnSurface"

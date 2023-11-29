@@ -8,10 +8,11 @@ const Layout: FC<PropsWithChildren> = ({ children }) => (
   <Box
     display="flex"
     height="100vh"
+    color="onSurface"
     overflow="hidden"
     position="relative"
     flexDirection="column"
-    background="0% 100% url('/images/gradient.webp'), linear-gradient(0deg, #FFFB, #FFFB), url('/images/noise.webp')"
+    background="0% 100% url('/images/gradient.webp'), linear-gradient(0deg, #111D, #111D), url('/images/noise.webp')"
     backgroundSize="cover"
   >
     <Header />

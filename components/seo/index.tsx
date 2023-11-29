@@ -4,7 +4,7 @@ import { FC } from 'react';
 import { SEOProps } from './seo.types';
 
 const SEO: FC<SEOProps> = ({ pageTitle }) => {
-  const title = `${pageTitle} | SUI Coins`;
+  const title = `${pageTitle} | Movement`;
 
   return (
     <Head>
@@ -17,7 +17,7 @@ const SEO: FC<SEOProps> = ({ pageTitle }) => {
       />
       <meta property="og:locale" content="en_US" />
       <meta property="og:title" content={title} />
-      <meta property="og:site_name" content="SUI Coins" />
+      <meta property="og:site_name" content="Movement" />
       <meta
         property="og:description"
         content="Generate custom coins and list all your tokens."
@@ -35,7 +35,7 @@ const SEO: FC<SEOProps> = ({ pageTitle }) => {
       <meta property="og:image:height" content="256" />
       <meta property="og:image:alt" content={title} />
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content="SUI Coins" />
+      <meta name="twitter:title" content="Movement" />
       <meta name="twitter:site" content="https://suicoins.com/" />
       <meta name="twitter:image" content="/ms-icon-310x310.png" />
       <meta

@@ -20,12 +20,11 @@ const networkContext = createContext<INetworkContext>({} as INetworkContext);
 
 export const NetworkProvider: FC<PropsWithChildren> = ({ children }) => {
   const { Provider } = networkContext;
-  const [network, setNetwork] = useState<Network>(Network.MAINNET);
+  const [network, setNetwork] = useState<Network>(Network.M2);
 
   useEffect(() => {
     setNetwork(
-      (window.localStorage.getItem(LOCAL_NETWORK_KEY) as Network) ??
-        Network.MAINNET
+      (window.localStorage.getItem(LOCAL_NETWORK_KEY) as Network) ?? Network.M2
     );
   }, []);
 
