@@ -21,8 +21,9 @@ export const USDC_CONTROLLER =
   '0x58c1a9fbb1eeed1b613295b632c1a75e6fda2e2d54bdcfd5889c0537b1c9e600';
 
 export const EXPLORER_URL = {
-  [Network.M2]: 'https://explorer.movementlabs.xyz/',
-} as Record<Network, string>;
+  [Network.M2]: (path: string) =>
+    `https://suiexplorer.com/${path}?network=https%3A%2F%2Fsui.movementlabs.xyz%2F`,
+} as Record<Network, (path: string) => string>;
 
 export const TOAST_DURATION = 10000;
 

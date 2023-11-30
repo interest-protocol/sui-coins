@@ -11,6 +11,7 @@ export { default as DefaultTokenSVG } from './default-token';
 export { default as DiedComputerSVG } from './died-computer';
 export { default as DiscordSVG } from './discord';
 export { default as ErrorSVG } from './error';
+export { default as ETHSVG } from './eth';
 export { default as GithubSVG } from './github';
 export { default as HamburgerSVG } from './hamburger';
 export { default as HeartSVG } from './heart';

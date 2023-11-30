@@ -1,7 +1,6 @@
 import { Box, Button, ListItem, Typography } from '@interest-protocol/ui-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
-import { SUI_CLOCK_OBJECT_ID } from '@mysten/sui.js/utils';
 import { useWalletKit } from '@mysten/wallet-kit';
 import { not } from 'ramda';
 import { FC, useState } from 'react';
@@ -48,13 +47,11 @@ const Pools: FC = () => {
 
   const { data } = useSuiSystemState();
 
-  const { lastUSDCEpoch, lastETHEpoch } = useUserMintEpoch();
+  const lastMintEpoch = useUserMintEpoch();
 
-  console.log({
-    lastUSDCEpoch,
-    lastETHEpoch,
-    data,
-  });
+  const isSameEpoch =
+    (lastMintEpoch as Record<TOKEN_SYMBOL, string>)[selected.symbol] ===
+    data?.epoch;
 
   const handleMint = async () => {
     try {
@@ -96,8 +93,6 @@ const Pools: FC = () => {
 
       throwTXIfNotSuccessful(tx);
       await showTXSuccessToast(tx, Network.M2);
-    } catch (e) {
-      console.log(e);
     } finally {
       await mutate();
     }
@@ -181,6 +176,11 @@ const Pools: FC = () => {
                 {selected.symbol}
               </Typography>
             </Button>
+            {isSameEpoch && (
+              <Typography variant="body" size="small" color="error" mt="xs">
+                You cannot mint more {selected.symbol}
+              </Typography>
+            )}
             {isOpen && (
               <Box
                 top="4rem"
@@ -224,12 +224,7 @@ const Pools: FC = () => {
           </Box>
         </Box>
         <Box display="flex" justifyContent="center">
-          <Button
-            variant="filled"
-            onClick={() => {
-              onMint();
-            }}
-          >
+          <Button disabled={isSameEpoch} variant="filled" onClick={onMint}>
             Mint
           </Button>
         </Box>

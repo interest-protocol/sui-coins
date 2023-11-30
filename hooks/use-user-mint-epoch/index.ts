@@ -6,6 +6,7 @@ import useSWR from 'swr';
 import { ETH_CONTROLLER, USDC_CONTROLLER } from '@/constants';
 import { ETH_TYPE, USDC_TYPE } from '@/constants/coins';
 import { PACKAGES } from '@/constants/packages';
+import { TOKEN_SYMBOL } from '@/lib';
 import { makeSWRKey } from '@/utils';
 import { getReturnValuesFromInspectResults } from '@/utils';
 
@@ -47,8 +48,6 @@ const getLastMintEpoch = async (
 
   const result = data[0];
 
-  console.log('RESULT', result);
-
   return bcs.de(result[1], Uint8Array.from(result[0])) as string;
 };
 
@@ -56,14 +55,10 @@ export const useUserMintEpoch = () => {
   const { account } = useWeb3();
   const client = useMovementClient();
 
-  const { data, error } = useSWR(
+  const { data } = useSWR(
     makeSWRKey([account], ''),
     async () => {
-      if (!account)
-        return {
-          lastETHEpoch: '0',
-          lastUSDCEpoch: '0',
-        };
+      if (!account) return;
 
       const [ethLastMintResponse, usdcLastMintEpoch] = await Promise.all([
         getLastMintEpoch(client, ETH_TYPE, account),
@@ -71,8 +66,8 @@ export const useUserMintEpoch = () => {
       ]);
 
       return {
-        lastETHEpoch: ethLastMintResponse,
-        lastUSDCEpoch: usdcLastMintEpoch,
+        [TOKEN_SYMBOL.ETH]: ethLastMintResponse,
+        [TOKEN_SYMBOL.USDC]: usdcLastMintEpoch,
       };
     },
     {
@@ -83,12 +78,10 @@ export const useUserMintEpoch = () => {
     }
   );
 
-  console.log('ERROR', error);
-
-  return data
-    ? data
-    : {
-        lastETHEpoch: '0',
-        lastUSDCEpoch: '0',
-      };
+  return (
+    data ?? {
+      [TOKEN_SYMBOL.ETH]: '0',
+      [TOKEN_SYMBOL.USDC]: '0',
+    }
+  );
 };

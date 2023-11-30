@@ -1,4 +1,4 @@
-import { MovSVG, USDCSVG } from '@/svg';
+import { ETHSVG, MovSVG, USDCSVG } from '@/svg';
 
 /* eslint-disable @typescript-eslint/no-duplicate-enum-values */
 export enum Rounding {
@@ -16,5 +16,5 @@ export enum TOKEN_SYMBOL {
 export const TOKEN_ICONS = {
   [TOKEN_SYMBOL.USDC]: USDCSVG,
   [TOKEN_SYMBOL.MOV]: MovSVG,
-  [TOKEN_SYMBOL.ETH]: MovSVG,
+  [TOKEN_SYMBOL.ETH]: ETHSVG,
 };
