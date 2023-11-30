@@ -12,7 +12,8 @@ import Layout from '@/components/layout';
 import { ETH_CONTROLLER, Network, USDC_CONTROLLER } from '@/constants';
 import { ETH_TYPE, USDC_TYPE } from '@/constants/coins';
 import { PACKAGES } from '@/constants/packages';
-import { useMovementClient, useWeb3 } from '@/hooks';
+import { useMovementClient, useUserMintEpoch, useWeb3 } from '@/hooks';
+import { useSuiSystemState } from '@/hooks/use-sui-system-state';
 import { FixedPointMath, TOKEN_ICONS, TOKEN_SYMBOL } from '@/lib';
 import { ChevronDownSVG } from '@/svg';
 import {
@@ -45,6 +46,16 @@ const Pools: FC = () => {
   const { account, coinsMap, mutate } = useWeb3();
   const { signTransactionBlock } = useWalletKit();
 
+  const { data } = useSuiSystemState();
+
+  const { lastUSDCEpoch, lastETHEpoch } = useUserMintEpoch();
+
+  console.log({
+    lastUSDCEpoch,
+    lastETHEpoch,
+    data,
+  });
+
   const handleMint = async () => {
     try {
       if (!selected) throw new Error('Token not found');
@@ -62,7 +73,6 @@ const Pools: FC = () => {
         target: `${PACKAGES.COINS}::${moduleName}::mint`,
         arguments: [
           transactionBlock.object(isEth ? ETH_CONTROLLER : USDC_CONTROLLER),
-          transactionBlock.object(SUI_CLOCK_OBJECT_ID),
         ],
       });
 

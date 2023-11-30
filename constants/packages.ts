@@ -1,3 +1,3 @@
 export const PACKAGES = {
-  COINS: '0x9f29ed374b212333ccbc7b25ef6edd8121b26c3ed658b5107cd3c13985e6ecb4',
+  COINS: '0x7a737fa2643f953d0adb669ab4274ac250c597c47fae6d1af878f38c3b92b370',
 };
