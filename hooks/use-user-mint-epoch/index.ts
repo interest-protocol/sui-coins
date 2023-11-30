@@ -3,26 +3,15 @@ import { SuiClient } from '@mysten/sui.js/client';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import useSWR from 'swr';
 
-import { ETH_CONTROLLER, USDC_CONTROLLER } from '@/constants';
+import { CONTROLLERS_MAP } from '@/constants';
 import { ETH_TYPE, USDC_TYPE } from '@/constants/coins';
-import { PACKAGES } from '@/constants/packages';
+import { MINT_MODULE_NAME_MAP, PACKAGES } from '@/constants/packages';
 import { TOKEN_SYMBOL } from '@/lib';
 import { makeSWRKey } from '@/utils';
 import { getReturnValuesFromInspectResults } from '@/utils';
 
 import { useMovementClient } from '../use-movement-client';
 import { useWeb3 } from '../use-web3';
-
-const CONTROLLER_MAP = {
-  [USDC_TYPE]: USDC_CONTROLLER,
-  [ETH_TYPE]: ETH_CONTROLLER,
-} as Record<string, string>;
-
-const MODULE = {
-  [USDC_TYPE]: 'usdc',
-  [ETH_TYPE]: 'eth',
-} as Record<string, string>;
-
 const getLastMintEpoch = async (
   suiClient: SuiClient,
   coinType: string,
@@ -31,8 +20,8 @@ const getLastMintEpoch = async (
   const txb = new TransactionBlock();
 
   txb.moveCall({
-    target: `${PACKAGES.COINS}::${MODULE[coinType]}::user_last_epoch`,
-    arguments: [txb.object(CONTROLLER_MAP[coinType]), txb.pure(account)],
+    target: `${PACKAGES.COINS}::${MINT_MODULE_NAME_MAP[coinType]}::user_last_epoch`,
+    arguments: [txb.object(CONTROLLERS_MAP[coinType]), txb.pure(account)],
   });
 
   const response = await suiClient.devInspectTransactionBlock({
