@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { SVGProps } from './svg.types';
 
-const MVMT: FC<SVGProps> = ({ maxWidth, maxHeight, ...props }) => (
+const Mov: FC<SVGProps> = ({ maxWidth, maxHeight, ...props }) => (
   <svg
     style={{ maxWidth, maxHeight }}
     viewBox="0 0 32 25"
@@ -16,4 +16,4 @@ const MVMT: FC<SVGProps> = ({ maxWidth, maxHeight, ...props }) => (
   </svg>
 );
 
-export default MVMT;
+export default Mov;

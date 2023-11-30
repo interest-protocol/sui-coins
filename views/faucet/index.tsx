@@ -10,12 +10,12 @@ import { TOKEN_ICONS, TOKEN_SYMBOL } from '@/lib';
 import { ChevronDownSVG } from '@/svg';
 
 const Pools: FC = () => {
-  const [selected, setSelected] = useState(TOKEN_SYMBOL.MVMT);
+  const [selected, setSelected] = useState(TOKEN_SYMBOL.MOV);
   const [isOpen, setIsOpen] = useState(false);
   const SelectedIcon = TOKEN_ICONS[selected];
 
   const mintedCoins = [
-    { symbol: TOKEN_SYMBOL.MVMT, balance: 1000 },
+    { symbol: TOKEN_SYMBOL.MOV, balance: 1000 },
     { symbol: TOKEN_SYMBOL.USDC, balance: 1000 },
   ];
 

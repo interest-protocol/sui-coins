@@ -20,7 +20,7 @@ const SwapPage: NextPage = () => {
         value: '0.05',
         balance: 0.1756,
         decimals: 0,
-        symbol: TOKEN_SYMBOL.MVMT,
+        symbol: TOKEN_SYMBOL.MOV,
         type: '',
       },
       settings: {
