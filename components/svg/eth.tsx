@@ -11,7 +11,7 @@ const ETH: FC<SVGProps> = ({ maxWidth, maxHeight, ...props }) => (
   >
     <path
       d="M6.78269 0L6.65234 0.443039V13.299L6.78269 13.4291L12.7503 9.90169L6.78269 0Z"
-      fill="currentColo"
+      fill="currentColor"
     />
     <path
       d="M6.78205 0L0.814453 9.90169L6.78205 13.4292V7.18927V0Z"

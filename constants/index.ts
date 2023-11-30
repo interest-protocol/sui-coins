@@ -1,3 +1,5 @@
+import { ETH_TYPE, USDC_TYPE } from './coins';
+
 export const MAX_NUMBER_INPUT_VALUE = 9000000000000000;
 
 export enum Network {
@@ -14,11 +16,12 @@ export const RPC_URL = 'https://sui.movementlabs.xyz:443';
 
 export const FAUCET_URL = 'https://sui.movementlabs.xyz/faucet';
 
-export const ETH_CONTROLLER =
-  '0x53c8f4ed74e72f0049c7a0d1eac57d48f7d1e7aa21d1bafbc9ae71b3b5607eb5';
-
-export const USDC_CONTROLLER =
-  '0x58c1a9fbb1eeed1b613295b632c1a75e6fda2e2d54bdcfd5889c0537b1c9e600';
+export const CONTROLLERS_MAP: Record<string, string> = {
+  [ETH_TYPE]:
+    '0x53c8f4ed74e72f0049c7a0d1eac57d48f7d1e7aa21d1bafbc9ae71b3b5607eb5',
+  [USDC_TYPE]:
+    '0x58c1a9fbb1eeed1b613295b632c1a75e6fda2e2d54bdcfd5889c0537b1c9e600',
+};
 
 export const EXPLORER_URL = {
   [Network.M2]: (path: string) =>

@@ -8,9 +8,9 @@ import toast from 'react-hot-toast';
 import { v4 } from 'uuid';
 
 import Layout from '@/components/layout';
-import { ETH_CONTROLLER, Network, USDC_CONTROLLER } from '@/constants';
-import { ETH_TYPE, USDC_TYPE } from '@/constants/coins';
-import { PACKAGES } from '@/constants/packages';
+import { CONTROLLERS_MAP, Network } from '@/constants';
+import { COINS } from '@/constants/coins';
+import { MINT_MODULE_NAME_MAP, PACKAGES } from '@/constants/packages';
 import { useMovementClient, useUserMintEpoch, useWeb3 } from '@/hooks';
 import { useSuiSystemState } from '@/hooks/use-sui-system-state';
 import { FixedPointMath, TOKEN_ICONS, TOKEN_SYMBOL } from '@/lib';
@@ -22,25 +22,10 @@ import {
 } from '@/utils';
 import { requestMov } from '@/views/faucet/faucet.utils';
 
-const MINT_COINS = [
-  {
-    symbol: TOKEN_SYMBOL.MOV,
-    type: SUI_TYPE_ARG,
-  },
-  {
-    symbol: TOKEN_SYMBOL.ETH,
-    type: ETH_TYPE,
-  },
-  {
-    symbol: TOKEN_SYMBOL.USDC,
-    type: USDC_TYPE,
-  },
-];
-
 const Pools: FC = () => {
-  const [selected, setSelected] = useState(MINT_COINS[0]);
+  const [selected, setSelected] = useState(COINS[0]);
   const [isOpen, setIsOpen] = useState(false);
-  const SelectedIcon = TOKEN_ICONS[MINT_COINS[0].symbol];
+  const SelectedIcon = TOKEN_ICONS[COINS[0].symbol];
   const client = useMovementClient();
   const { account, coinsMap, mutate } = useWeb3();
   const { signTransactionBlock } = useWalletKit();
@@ -62,15 +47,11 @@ const Pools: FC = () => {
 
       if (selected.type === SUI_TYPE_ARG) return requestMov(account);
 
-      const isEth = selected.type === ETH_TYPE;
-
-      const moduleName = selected.type === ETH_TYPE ? 'eth' : 'usdc';
-
       const minted_coin = transactionBlock.moveCall({
-        target: `${PACKAGES.COINS}::${moduleName}::mint`,
-        arguments: [
-          transactionBlock.object(isEth ? ETH_CONTROLLER : USDC_CONTROLLER),
-        ],
+        target: `${PACKAGES.COINS}::${
+          MINT_MODULE_NAME_MAP[selected.type]
+        }::mint`,
+        arguments: [transactionBlock.object(CONTROLLERS_MAP[selected.type])],
       });
 
       transactionBlock.transferObjects([minted_coin], account);
@@ -192,7 +173,7 @@ const Pools: FC = () => {
                 border="2px solid"
                 borderColor="outline"
               >
-                {MINT_COINS.map(({ symbol, type }) => {
+                {COINS.map(({ symbol, type }) => {
                   const Icon = TOKEN_ICONS[symbol];
                   return (
                     <ListItem
@@ -251,7 +232,7 @@ const Pools: FC = () => {
           borderRadius="s"
           flexDirection="column"
         >
-          {MINT_COINS.map(({ symbol, type }) => {
+          {COINS.map(({ symbol, type }) => {
             const Icon = TOKEN_ICONS[symbol];
             return (
               <Box key={v4()} display="flex" justifyContent="space-between">

@@ -1,35 +1,54 @@
 import { NextPage } from 'next';
+import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { SEO } from '@/components';
-import { TOKEN_SYMBOL } from '@/lib';
+import { ETH_TYPE, USDC_TYPE } from '@/constants/coins';
+import { useWeb3 } from '@/hooks';
+import { FixedPointMath, TOKEN_SYMBOL } from '@/lib';
+import { ZERO_BIG_NUMBER } from '@/utils';
 import Swap from '@/views/swap';
 import { SwapForm } from '@/views/swap/swap.types';
 
 const SwapPage: NextPage = () => {
+  const { coinsMap } = useWeb3();
+
   const form = useForm<SwapForm>({
     defaultValues: {
       to: {
-        value: '0.3',
-        balance: 0.0456,
-        decimals: 0,
+        balance: 0,
+        value: '0.0',
+        type: USDC_TYPE,
         symbol: TOKEN_SYMBOL.USDC,
-        type: '',
       },
       from: {
-        value: '0.05',
-        balance: 0.1756,
-        decimals: 0,
-        symbol: TOKEN_SYMBOL.MOV,
-        type: '',
+        balance: 0,
+        value: '0.0',
+        type: ETH_TYPE,
+        symbol: TOKEN_SYMBOL.ETH,
       },
       settings: {
+        deadline: '3',
         slippage: '0.1',
         speed: 'instant',
-        deadline: '3',
       },
     },
   });
+
+  useEffect(() => {
+    form.setValue(
+      'from.balance',
+      FixedPointMath.toNumber(
+        coinsMap[form.getValues('from.type')]?.totalBalance ?? ZERO_BIG_NUMBER
+      )
+    );
+    form.setValue(
+      'to.balance',
+      FixedPointMath.toNumber(
+        coinsMap[form.getValues('to.type')]?.totalBalance ?? ZERO_BIG_NUMBER
+      )
+    );
+  }, [coinsMap]);
 
   return (
     <FormProvider {...form}>
