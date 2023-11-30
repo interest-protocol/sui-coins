@@ -5,9 +5,9 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 import { parseInputEventToNumberString } from '@/utils';
 
-import DropdownToken from './dropdown-token';
 import HeaderInfo from './header-info';
 import { InputProps } from './input.types';
+import SelectToken from './select-token';
 
 const Input: FC<InputProps> = ({ label }) => {
   const { control, register, setValue } = useFormContext();
@@ -26,7 +26,7 @@ const Input: FC<InputProps> = ({ label }) => {
     >
       <HeaderInfo label={label} balance={balance} />
       <Box pl="l" pt="1rem" display="flex" justifyContent="space-between">
-        <DropdownToken label={label} />
+        <SelectToken label={label} />
         <TextField
           pl="-1rem"
           placeholder="000"
