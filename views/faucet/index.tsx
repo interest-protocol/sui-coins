@@ -1,42 +1,105 @@
 import { Box, Button, ListItem, Typography } from '@interest-protocol/ui-kit';
+import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import { SUI_CLOCK_OBJECT_ID } from '@mysten/sui.js/utils';
+import { useWalletKit } from '@mysten/wallet-kit';
 import { not } from 'ramda';
 import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
-import { clearTimeout } from 'timers';
 import { v4 } from 'uuid';
 
 import Layout from '@/components/layout';
-import { TOKEN_ICONS, TOKEN_SYMBOL } from '@/lib';
+import { ETH_CONTROLLER, Network, USDC_CONTROLLER } from '@/constants';
+import { ETH_TYPE, USDC_TYPE } from '@/constants/coins';
+import { PACKAGES } from '@/constants/packages';
+import { useMovementClient, useWeb3 } from '@/hooks';
+import { FixedPointMath, TOKEN_ICONS, TOKEN_SYMBOL } from '@/lib';
 import { ChevronDownSVG } from '@/svg';
+import {
+  showTXSuccessToast,
+  throwTXIfNotSuccessful,
+  ZERO_BIG_NUMBER,
+} from '@/utils';
+import { requestMov } from '@/views/faucet/faucet.utils';
+
+const MINT_COINS = [
+  {
+    symbol: TOKEN_SYMBOL.MOV,
+    type: SUI_TYPE_ARG,
+  },
+  {
+    symbol: TOKEN_SYMBOL.ETH,
+    type: ETH_TYPE,
+  },
+  {
+    symbol: TOKEN_SYMBOL.USDC,
+    type: USDC_TYPE,
+  },
+];
 
 const Pools: FC = () => {
-  const [selected, setSelected] = useState(TOKEN_SYMBOL.MOV);
+  const [selected, setSelected] = useState(MINT_COINS[0]);
   const [isOpen, setIsOpen] = useState(false);
-  const SelectedIcon = TOKEN_ICONS[selected];
+  const SelectedIcon = TOKEN_ICONS[MINT_COINS[0].symbol];
+  const client = useMovementClient();
+  const { account, coinsMap, mutate } = useWeb3();
+  const { signTransactionBlock } = useWalletKit();
 
-  const mintedCoins = [
-    { symbol: TOKEN_SYMBOL.MOV, balance: 1000 },
-    { symbol: TOKEN_SYMBOL.USDC, balance: 1000 },
-  ];
+  const handleMint = async () => {
+    try {
+      if (!selected) throw new Error('Token not found');
+      if (!account) throw new Error('Not account found');
 
-  const handleMint = () =>
-    new Promise((resolve) => {
-      const timeout = setTimeout(
-        () => {
-          console.log('>> selected :: ', selected);
-          resolve(undefined);
+      const transactionBlock = new TransactionBlock();
+
+      if (selected.type === SUI_TYPE_ARG) return requestMov(account);
+
+      const isEth = selected.type === ETH_TYPE;
+
+      const moduleName = selected.type === ETH_TYPE ? 'eth' : 'usdc';
+
+      const minted_coin = transactionBlock.moveCall({
+        target: `${PACKAGES.COINS}::${moduleName}::mint`,
+        arguments: [
+          transactionBlock.object(isEth ? ETH_CONTROLLER : USDC_CONTROLLER),
+          transactionBlock.object(SUI_CLOCK_OBJECT_ID),
+        ],
+      });
+
+      transactionBlock.transferObjects([minted_coin], account);
+
+      const { transactionBlockBytes, signature } = await signTransactionBlock({
+        transactionBlock,
+      });
+
+      const tx = await client.executeTransactionBlock({
+        transactionBlock: transactionBlockBytes,
+        signature,
+        options: {
+          showEffects: true,
+          showEvents: false,
+          showInput: false,
+          showBalanceChanges: false,
+          showObjectChanges: false,
         },
-        3000 * Math.random() + 2000
-      );
-      clearTimeout(timeout);
-    });
+      });
 
-  const onMint = () =>
-    toast.promise(handleMint(), {
+      throwTXIfNotSuccessful(tx);
+      await showTXSuccessToast(tx, Network.M2);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      await mutate();
+    }
+  };
+
+  const onMint = async () => {
+    await toast.promise(handleMint(), {
       loading: 'Loading',
-      success: `${selected} minted successfully`,
-      error: 'Something went wrong',
+      success: `${selected.symbol} minted successfully`,
+      error: 'You can only mint once every 24 hours',
     });
+  };
 
   return (
     <Layout>
@@ -105,7 +168,7 @@ const Pools: FC = () => {
               }
             >
               <Typography variant="body" size="large" width="100%">
-                {selected}
+                {selected.symbol}
               </Typography>
             </Button>
             {isOpen && (
@@ -119,14 +182,14 @@ const Pools: FC = () => {
                 border="2px solid"
                 borderColor="outline"
               >
-                {mintedCoins.map(({ symbol }) => {
+                {MINT_COINS.map(({ symbol, type }) => {
                   const Icon = TOKEN_ICONS[symbol];
                   return (
                     <ListItem
                       key={v4()}
                       title={symbol}
                       onClick={() => {
-                        setSelected(symbol);
+                        setSelected({ symbol, type });
                         setIsOpen(false);
                       }}
                       PrefixIcon={
@@ -151,7 +214,12 @@ const Pools: FC = () => {
           </Box>
         </Box>
         <Box display="flex" justifyContent="center">
-          <Button variant="filled" onClick={onMint}>
+          <Button
+            variant="filled"
+            onClick={() => {
+              onMint();
+            }}
+          >
             Mint
           </Button>
         </Box>
@@ -178,7 +246,7 @@ const Pools: FC = () => {
           borderRadius="s"
           flexDirection="column"
         >
-          {mintedCoins.map(({ symbol, balance }) => {
+          {MINT_COINS.map(({ symbol, type }) => {
             const Icon = TOKEN_ICONS[symbol];
             return (
               <Box key={v4()} display="flex" justifyContent="space-between">
@@ -200,7 +268,10 @@ const Pools: FC = () => {
                   </Typography>
                 </Box>
                 <Typography variant="body" size="large">
-                  {balance}
+                  {FixedPointMath.toNumber(
+                    coinsMap[type]?.totalBalance || ZERO_BIG_NUMBER,
+                    coinsMap[type]?.decimals || 0
+                  )}
                 </Typography>
               </Box>
             );
