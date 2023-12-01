@@ -1,30 +1,48 @@
 import { Box, Button, ListItem, Typography } from '@interest-protocol/ui-kit';
 import BigNumber from 'bignumber.js';
+import { useRouter } from 'next/router';
 import { not, pathOr } from 'ramda';
 import { FC, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
-import { COIN_METADATA, COINS } from '@/constants/coins';
+import { COINS } from '@/constants/coins';
 import { useWeb3 } from '@/hooks';
-import { FixedPointMath, TOKEN_ICONS } from '@/lib';
+import { FixedPointMath, TOKEN_ICONS, TOKEN_SYMBOL } from '@/lib';
 import { ChevronDownSVG } from '@/svg';
+import { updateURL } from '@/utils';
 
 import { SwapForm } from '../../swap.types';
 import { InputProps as DropdownTokenProps } from '../input.types';
 
 const Token: FC<DropdownTokenProps> = ({ label }) => {
+  const { coinsMap } = useWeb3();
+  const { pathname } = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const { control, setValue } = useFormContext<SwapForm>();
 
-  const { symbol } = useWatch({
+  const changeURL = (type: string) => {
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set(label, type);
+
+    updateURL(
+      `${pathname}?from=${searchParams.get('from')}&to=${searchParams.get(
+        'to'
+      )}`
+    );
+  };
+
+  const { symbol, type: currentType } = useWatch({
     control,
     name: label,
   });
 
-  const { coinsMap } = useWeb3();
+  const oppositeType = useWatch({
+    control,
+    name: `${label === 'to' ? 'from' : 'to'}.type`,
+  });
 
-  const Icon = TOKEN_ICONS[symbol];
+  const Icon = TOKEN_ICONS[symbol as TOKEN_SYMBOL];
 
   return (
     <Box position="relative">
@@ -74,24 +92,26 @@ const Token: FC<DropdownTokenProps> = ({ label }) => {
           border="2px solid"
           borderColor="outline"
         >
-          {COINS.map(({ symbol, type }) => {
+          {COINS.map(({ symbol, type, decimals }) => {
             const Icon = TOKEN_ICONS[symbol];
             return (
               <ListItem
                 key={v4()}
                 title={symbol}
+                disabled={type === oppositeType || type === currentType}
                 onClick={() => {
                   setValue(label, {
                     type,
                     symbol,
+                    decimals,
                     value: '0',
                     balance: FixedPointMath.toNumber(
                       pathOr(BigNumber(0), [type, 'totalBalance'], coinsMap)
                     ),
-                    decimals: COIN_METADATA[type].decimals,
                     locked: false,
                   });
 
+                  changeURL(type);
                   setIsOpen(false);
                 }}
                 PrefixIcon={

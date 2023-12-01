@@ -17,18 +17,39 @@ export const SC_V_ETH_USDC =
 
 export const COINS = [
   {
+    decimals: 9,
     symbol: TOKEN_SYMBOL.MOV,
     type: SUI_TYPE_ARG,
   },
   {
+    decimals: 9,
     symbol: TOKEN_SYMBOL.ETH,
     type: ETH_TYPE,
   },
   {
+    decimals: 9,
     symbol: TOKEN_SYMBOL.USDC,
     type: USDC_TYPE,
   },
 ];
+
+export const COINS_MAP = {
+  [SUI_TYPE_ARG]: {
+    decimals: 9,
+    symbol: TOKEN_SYMBOL.MOV,
+    type: SUI_TYPE_ARG,
+  },
+  [ETH_TYPE]: {
+    decimals: 9,
+    symbol: TOKEN_SYMBOL.ETH,
+    type: ETH_TYPE,
+  },
+  [USDC_TYPE]: {
+    decimals: 9,
+    symbol: TOKEN_SYMBOL.USDC,
+    type: USDC_TYPE,
+  },
+};
 
 export const COIN_METADATA = {
   [ETH_TYPE]: {

@@ -1,9 +1,4 @@
-import { TOKEN_SYMBOL } from '@/lib';
-
-export interface CoinData {
-  symbol: TOKEN_SYMBOL;
-  type: string;
-}
+import { CoinData } from '@/interface';
 
 export interface ISwapSettings {
   slippage: string;
@@ -13,9 +8,8 @@ export interface ISwapSettings {
 
 export interface SwapToken extends CoinData {
   value: string;
-  balance: number | null;
-  decimals: number;
   locked: boolean;
+  balance: number | null;
 }
 
 export interface SwapForm {
