@@ -173,14 +173,14 @@ const Pools: FC = () => {
                 border="2px solid"
                 borderColor="outline"
               >
-                {COINS.map(({ symbol, type }) => {
+                {COINS.map(({ symbol, type, decimals }) => {
                   const Icon = TOKEN_ICONS[symbol];
                   return (
                     <ListItem
                       key={v4()}
                       title={symbol}
                       onClick={() => {
-                        setSelected({ symbol, type });
+                        setSelected({ symbol, type, decimals });
                         setIsOpen(false);
                       }}
                       PrefixIcon={

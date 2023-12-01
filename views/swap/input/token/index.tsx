@@ -104,12 +104,13 @@ const Token: FC<DropdownTokenProps> = ({ label }) => {
                     type,
                     symbol,
                     decimals,
-                    value: '0',
+                    value: '',
                     balance: FixedPointMath.toNumber(
                       pathOr(BigNumber(0), [type, 'totalBalance'], coinsMap)
                     ),
                     locked: false,
                   });
+                  setValue(`${label === 'from' ? 'to' : 'from'}.value`, '');
 
                   changeURL(type);
                   setIsOpen(false);

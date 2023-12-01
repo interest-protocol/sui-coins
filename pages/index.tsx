@@ -20,13 +20,13 @@ const SwapPage: NextPage = () => {
     defaultValues: {
       to: {
         balance: 0,
-        value: '0.0',
+        value: '',
         locked: false,
         ...(COINS_MAP[query.to as string] ?? COINS_MAP[USDC_TYPE]),
       },
       from: {
         balance: 0,
-        value: '0.0',
+        value: '',
         locked: false,
         ...(COINS_MAP[query.from as string] ?? COINS_MAP[ETH_TYPE]),
       },

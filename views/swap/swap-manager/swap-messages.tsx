@@ -1,12 +1,10 @@
-import { Box } from '@interest-protocol/ui-kit';
 import { pathOr, propOr } from 'ramda';
 import { FC, useState } from 'react';
 import { useEffect } from 'react';
-import { useWatch } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { SwapMessagesProps } from './swap-manager.types';
-import SwapPath from './swap-path';
 
 export const SwapMessages: FC<SwapMessagesProps> = ({
   error,
@@ -19,6 +17,7 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
   isFetchingSwapAmountIn,
   isFetchingSwapAmountOut,
 }) => {
+  const { setValue } = useFormContext();
   const tokenIn = useWatch({ control: control, name: 'from' });
   const tokenOut = useWatch({ control: control, name: 'to' });
   const [toastState, setToastState] = useState<boolean>(false);
@@ -26,15 +25,29 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
   const tokenInValue = +(propOr('0', 'value', tokenIn) as string);
   const tokenOutValue = +(propOr('0', 'value', tokenOut) as string);
 
-  const readyToSwap =
-    !(error && tokenInValue > 0) &&
-    !(error && tokenOutValue > 0) &&
-    !isFetchingSwapAmountOut &&
-    !(isZeroSwapAmountOut && !!tokenInValue && !isFetchingSwapAmountOut) &&
-    !isFetchingSwapAmountIn &&
-    !(isZeroSwapAmountIn && !!tokenOutValue && !isFetchingSwapAmountIn) &&
-    !(propOr('', 'type', tokenIn) === propOr('', 'type', tokenOut)) &&
-    !hasNoMarket;
+  useEffect(() => {
+    setValue(
+      'readyToSwap',
+      !(error && tokenInValue > 0) &&
+        !(error && tokenOutValue > 0) &&
+        !isFetchingSwapAmountOut &&
+        !(isZeroSwapAmountOut && !!tokenInValue && !isFetchingSwapAmountOut) &&
+        !isFetchingSwapAmountIn &&
+        !(isZeroSwapAmountIn && !!tokenOutValue && !isFetchingSwapAmountIn) &&
+        !(propOr('', 'type', tokenIn) === propOr('', 'type', tokenOut)) &&
+        !hasNoMarket
+    );
+  }, [
+    error,
+    tokenInValue,
+    tokenOutValue,
+    isFetchingSwapAmountOut,
+    isFetchingSwapAmountIn,
+    isZeroSwapAmountIn,
+    tokenIn,
+    tokenOut,
+    hasNoMarket,
+  ]);
 
   const amountNotEnough =
     (isZeroSwapAmountIn && !!tokenInValue && !isFetchingSwapAmountIn) ||
@@ -116,11 +129,5 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
     errorMessage,
   ]);
 
-  if (errorMessage) return null;
-
-  return (
-    <Box gridColumn="1/-1" textAlign="center">
-      {readyToSwap && <SwapPath />}
-    </Box>
-  );
+  return null;
 };

@@ -3,14 +3,19 @@ import { FC } from 'react';
 import { useFormContext, UseFormReturn, useWatch } from 'react-hook-form';
 
 import { COINS_SVG_MAP_V2 } from '@/constants/coins';
+import { SwapArrowSVG } from '@/svg';
 import { SwapForm } from '@/views/swap/swap.types';
 
-const SwapPathComponent: FC = () => {
+const SwapPath: FC = () => {
   const formSwap: UseFormReturn<SwapForm> = useFormContext();
 
+  const readyToSwap = useWatch({
+    control: formSwap.control,
+    name: 'readyToSwap',
+  });
   const swapPath = useWatch({ control: formSwap.control, name: 'swapPath' });
 
-  if (!swapPath || !swapPath.length) return null;
+  if (!readyToSwap || !swapPath || !swapPath.length) return null;
 
   const coinIn = swapPath[0].coinIn;
   const baseToken = swapPath.length == 2 ? swapPath[0].coinOut : '';
@@ -26,40 +31,42 @@ const SwapPathComponent: FC = () => {
   return (
     <Box
       p="l"
+      my="xl"
       gap="xl"
+      mx="auto"
+      bg="surface"
       borderRadius="m"
       color="onSurface"
       alignItems="center"
       display="inline-flex"
-      bg="surface.container"
       justifyContent="center"
     >
       <CoinInIcon
         width="100%"
         height="100%"
-        maxWidth="2.5rem"
-        maxHeight="2.5rem"
+        maxWidth="1.5rem"
+        maxHeight="1.5rem"
       />
-      {/*<SwapArrowSVG width="100%" maxWidth="5rem" maxHeight="0.75rem" />*/}
+      <SwapArrowSVG width="100%" maxWidth="5rem" maxHeight="0.75rem" />
       {baseToken && (
         <>
           <BaseTokenIcon
             width="100%"
             height="100%"
-            maxWidth="2.5rem"
-            maxHeight="2.5rem"
+            maxWidth="1.5rem"
+            maxHeight="1.5rem"
           />
-          {/*<SwapArrowSVG width="100%" maxWidth="5rem" maxHeight="0.75rem" />*/}
+          <SwapArrowSVG width="100%" maxWidth="5rem" maxHeight="0.75rem" />
         </>
       )}
       <CoinOutIcon
         width="100%"
         height="100%"
-        maxWidth="2rem"
-        maxHeight="2rem"
+        maxWidth="1.5rem"
+        maxHeight="1.5rem"
       />
     </Box>
   );
 };
 
-export default SwapPathComponent;
+export default SwapPath;

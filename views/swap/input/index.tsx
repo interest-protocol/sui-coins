@@ -6,6 +6,7 @@ import { parseInputEventToNumberString } from '@/utils';
 
 import HeaderInfo from './header-info';
 import { InputProps } from './input.types';
+import InputErrorMessage from './input-error-message';
 import Token from './token';
 
 const Input: FC<InputProps> = ({ label }) => {
@@ -22,33 +23,44 @@ const Input: FC<InputProps> = ({ label }) => {
   });
 
   return (
-    <Box
-      border="1px solid"
-      borderColor="outlineVariant"
-      borderRadius="xs"
-      py="l"
-    >
-      <HeaderInfo label={label} balance={balance} />
-      <Box pl="l" pt="1rem" display="flex" justifyContent="space-between">
-        <Token label={label} />
-        <TextField
-          disabled={locked}
-          pl="-1rem"
-          placeholder="000"
-          textAlign="right"
-          fontSize="1.375rem"
-          lineHeight="1.75rem"
-          fontFamily="Satoshi"
-          {...register(`${label}.value`, {
-            onChange: (v: ChangeEvent<HTMLInputElement>) => {
-              setValue?.(`${label}.value`, parseInputEventToNumberString(v));
-              setValue('lock', false);
-            },
-          })}
-          fieldProps={{ borderColor: 'transparent', width: '100%' }}
-        />
+    <>
+      <Box
+        py="l"
+        border="1px solid"
+        borderColor="outlineVariant"
+        borderRadius="xs"
+      >
+        <HeaderInfo label={label} balance={balance} />
+        <Box pl="l" pt="1rem" display="flex" justifyContent="space-between">
+          <Token label={label} />
+          <Box display="flex" flexDirection="column" alignItems="flex-end">
+            <TextField
+              pr="0rem"
+              pl="-1rem"
+              disabled={locked}
+              placeholder="0.0"
+              textAlign="right"
+              fontSize="1.375rem"
+              lineHeight="1.75rem"
+              {...register(`${label}.value`, {
+                onChange: (v: ChangeEvent<HTMLInputElement>) => {
+                  setValue?.(
+                    `${label}.value`,
+                    parseInputEventToNumberString(v)
+                  );
+                  setValue('lock', false);
+                },
+              })}
+              fieldProps={{
+                width: '100%',
+                border: 'none !important',
+              }}
+            />
+            <InputErrorMessage label={label} />
+          </Box>
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 

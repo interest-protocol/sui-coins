@@ -11,6 +11,7 @@ import Input from './input';
 import ManageSlippage from './manage-slippage';
 import SwapButton from './swap-button';
 import SwapManager from './swap-manager';
+import SwapPath from './swap-manager/swap-path';
 
 const Swap: FC = () => {
   const { pathname } = useRouter();
@@ -19,8 +20,8 @@ const Swap: FC = () => {
   const flipToken = () => {
     const tmpTo = getValues('to');
     const tmpFrom = getValues('from');
-    setValue('to', tmpFrom);
-    setValue('from', tmpTo);
+    setValue('to', { ...tmpFrom, value: '' });
+    setValue('from', { ...tmpTo, value: '' });
 
     updateURL(`${pathname}?from=${tmpTo.type}&to=${tmpFrom.type}`);
   };
@@ -66,7 +67,8 @@ const Swap: FC = () => {
           </Box>
           <Input label="to" />
           <ManageSlippage />
-          <Box mt="7xl" mx="auto">
+          <SwapPath />
+          <Box mx="auto" my="xl">
             <SwapButton />
           </Box>
         </Box>

@@ -20,6 +20,7 @@ export interface SwapForm {
   maxValue: boolean;
   disabled: boolean;
   swapPath: SwapPath;
+  readyToSwap: boolean;
 }
 
 export interface SwapTypeArgs {
