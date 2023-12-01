@@ -20,18 +20,20 @@ import { requestMov } from '@/views/faucet/faucet.utils';
 const MintForm: FC = () => {
   const [selected, setSelected] = useState(COINS[0]);
   const [isOpen, setIsOpen] = useState(false);
-  const SelectedIcon = TOKEN_ICONS[COINS[0].symbol];
   const client = useMovementClient();
   const { account, mutate } = useWeb3();
   const { signTransactionBlock } = useWalletKit();
+
+  const SelectedIcon = TOKEN_ICONS[selected.symbol];
 
   const { data } = useSuiSystemState();
 
   const lastMintEpoch = useUserMintEpoch();
 
   const isSameEpoch =
+    !!Number(data?.epoch) &&
     (lastMintEpoch as Record<TOKEN_SYMBOL, string>)[selected.symbol] ===
-    data?.epoch;
+      data?.epoch;
 
   const handleMint = async () => {
     try {
@@ -81,6 +83,7 @@ const MintForm: FC = () => {
       error: 'You can only mint once every 24 hours',
     });
   };
+
   return (
     <Box
       mb="s"
