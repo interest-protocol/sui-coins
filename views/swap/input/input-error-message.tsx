@@ -21,7 +21,8 @@ const InputErrorMessage: FC<InputProps> = ({ label }) => {
     if (label === 'to' && oppositeType === type)
       return 'You cannot swap same token';
 
-    if (Number(value) > balance) return 'You have not enough';
+    if (label === 'from' && Number(value) > balance)
+      return 'You have not enough';
 
     return '';
   };

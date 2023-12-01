@@ -15,7 +15,22 @@ const SwapPath: FC = () => {
   });
   const swapPath = useWatch({ control: formSwap.control, name: 'swapPath' });
 
-  if (!readyToSwap || !swapPath || !swapPath.length) return null;
+  if (!readyToSwap || !swapPath || !swapPath.length)
+    return (
+      <Box
+        p="l"
+        mt="xl"
+        gap="xl"
+        mx="auto"
+        height="4rem"
+        borderRadius="m"
+        color="onSurface"
+        alignItems="center"
+        bg="lowestContainer"
+        display="inline-flex"
+        justifyContent="center"
+      />
+    );
 
   const coinIn = swapPath[0].coinIn;
   const baseToken = swapPath.length == 2 ? swapPath[0].coinOut : '';
@@ -31,7 +46,7 @@ const SwapPath: FC = () => {
   return (
     <Box
       p="l"
-      my="xl"
+      mt="xl"
       gap="xl"
       mx="auto"
       bg="surface"

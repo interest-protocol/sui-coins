@@ -68,7 +68,7 @@ const Swap: FC = () => {
           <Input label="to" />
           <ManageSlippage />
           <SwapPath />
-          <Box mx="auto" my="xl">
+          <Box mx="auto" mt="xl">
             <SwapButton />
           </Box>
         </Box>
