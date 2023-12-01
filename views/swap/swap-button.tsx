@@ -75,11 +75,6 @@ const SwapButton = () => {
 
       const minAmountOut = getAmountMinusSlippage(amountOut, settings.slippage);
 
-      console.log({
-        amountOut: amountOut.toString(),
-        minAmountOut: minAmountOut.toString(),
-      });
-
       const txb = new TransactionBlock();
 
       const coinInList = createObjectsParameter({
@@ -153,8 +148,6 @@ const SwapButton = () => {
       throwTXIfNotSuccessful(tx);
 
       await showTXSuccessToast(tx, Network.M2);
-    } catch (e) {
-      console.log(e);
     } finally {
       resetInput();
       setLoading(false);
@@ -162,8 +155,8 @@ const SwapButton = () => {
     }
   };
 
-  const swap = async () => {
-    await toast.promise(handleSwap(), {
+  const swap = () => {
+    toast.promise(handleSwap(), {
       loading: 'Loading',
       success: `Swapped successfully`,
       error: 'Failed to swap',
@@ -174,8 +167,8 @@ const SwapButton = () => {
     <Button
       disabled={notEnoughBalance}
       variant="filled"
-      onClick={() => {
-        swap();
+      onClick={async () => {
+        await swap();
       }}
     >
       <Typography variant="label" size="large">

@@ -79,8 +79,8 @@ const Pools: FC = () => {
     }
   };
 
-  const onMint = async () => {
-    await toast.promise(handleMint(), {
+  const onMint = () => {
+    toast.promise(handleMint(), {
       loading: 'Loading',
       success: `${selected.symbol} minted successfully`,
       error: 'You can only mint once every 24 hours',
