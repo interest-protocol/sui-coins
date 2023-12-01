@@ -7,7 +7,7 @@ import { v4 } from 'uuid';
 
 import { MENU_ITEMS } from '@/components/layout/header/nav-bar.data';
 import ConnectWalletButton from '@/components/wallet/connect-wallet-button';
-import { DISPLAY_NETWORK, wrapperVariants } from '@/constants';
+import { DISPLAY_NETWORK, Network, wrapperVariants } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { ArrowLeftSVG, MovementLogoSVG, SignOutSVG } from '@/svg';
 
@@ -54,7 +54,7 @@ const NetworkSubMenu: FC<{ closeSubmenu: () => void }> = ({ closeSubmenu }) => {
         <OptionItem
           key={v4()}
           selected={network === networkKey}
-          onClick={() => changeNetwork(networkKey)}
+          onClick={() => changeNetwork(networkKey as Network)}
         >
           <MovementLogoSVG maxWidth="2rem" maxHeight="2rem" />
           <Box>{networkDisplay}</Box>
