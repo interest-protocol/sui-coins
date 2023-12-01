@@ -5,7 +5,7 @@ import Pools from '@/views/faucet';
 
 const PoolsPage: NextPage = () => (
   <>
-    <SEO pageTitle="Pools" />
+    <SEO pageTitle="Faucet" />
     <Pools />
   </>
 );
