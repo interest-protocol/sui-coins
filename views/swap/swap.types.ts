@@ -14,10 +14,23 @@ export interface ISwapSettings {
 export interface SwapToken extends CoinData {
   value: string;
   balance: number | null;
+  decimals: number;
+  locked: boolean;
 }
 
 export interface SwapForm {
   to: SwapToken;
   from: SwapToken;
   settings: ISwapSettings;
+  lock: boolean;
+  maxValue: boolean;
+  disabled: boolean;
+  swapPath: SwapPath;
 }
+
+export interface SwapTypeArgs {
+  coinIn: string;
+  coinOut: string;
+  lpCoin: string;
+}
+export type SwapPath = ReadonlyArray<SwapTypeArgs>;

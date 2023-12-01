@@ -1,76 +1,72 @@
 import { FC, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, UseFormReturn, useWatch } from 'react-hook-form';
 
-import { COINS } from '@/constants/coins';
 import { useWeb3 } from '@/hooks';
+import { SwapForm } from '@/views/swap/swap.types';
+import { findSwapPaths } from '@/views/swap/swap-manager/swap-manager.utils';
 
-import { SwapManagerWrapperProps } from './swap-manager.types';
 import SwapManagerField from './swap-manager-field';
 import { SwapMessages } from './swap-messages';
 
-const SwapManager: FC<SwapManagerWrapperProps> = ({
-  dexMarket,
-  tokenInType,
-  tokenOutType,
-}) => {
-  const formSwap = useFormContext();
+const SwapManager: FC = () => {
+  const formSwap: UseFormReturn<SwapForm> = useFormContext();
   const { account } = useWeb3();
 
   const [error, setError] = useState(false);
   const [isZeroSwapAmountIn, setIsZeroSwapAmountIn] = useState(false);
   const [isZeroSwapAmountOut, setIsZeroSwapAmountOut] = useState(false);
-  const [swapPath, setSwapPath] = useState<SwapPathObject | null>(null);
   const [isFetchingSwapAmountIn, setIsFetchingSwapAmountIn] = useState(false);
   const [isFetchingSwapAmountOut, setIsFetchingSwapAmountOut] = useState(false);
 
-  const markets = findAllMarkets({
-    baseTokens: COINS,
-    markets: dexMarket,
-    coinInType: tokenInType,
-    coinOutType: tokenOutType,
+  const coinInType = useWatch({
+    control: formSwap.control,
+    name: 'from.type',
   });
 
-  const hasNoMarket = !markets.length;
+  const coinOutType = useWatch({
+    control: formSwap.control,
+    name: 'to.type',
+  });
+
+  const swapPaths = findSwapPaths({
+    coinInType,
+    coinOutType,
+  });
+
+  const hasNoMarket = !swapPaths.length;
 
   return (
     <>
-      {autoFetch && (
-        <>
-          <SwapManagerField
-            name="from"
-            setValueName="to"
-            account={account}
-            setError={setError}
-            type={tokenOutType}
-            dexMarket={dexMarket}
-            setSwapPath={setSwapPath}
-            hasNoMarket={hasNoMarket}
-            control={formSwap.control}
-            setValue={formSwap.setValue}
-            setIsZeroSwapAmount={setIsZeroSwapAmountOut}
-            isFetchingSwapAmount={isFetchingSwapAmountOut}
-            setIsFetchingSwapAmount={setIsFetchingSwapAmountOut}
-          />
-          <SwapManagerField
-            name="to"
-            setValueName="from"
-            account={account}
-            type={tokenInType}
-            setError={setError}
-            dexMarket={dexMarket}
-            hasNoMarket={hasNoMarket}
-            setSwapPath={setSwapPath}
-            control={formSwap.control}
-            setValue={formSwap.setValue}
-            setIsZeroSwapAmount={setIsZeroSwapAmountIn}
-            isFetchingSwapAmount={isFetchingSwapAmountIn}
-            setIsFetchingSwapAmount={setIsFetchingSwapAmountIn}
-          />
-        </>
-      )}
+      <SwapManagerField
+        name="from"
+        setValueName="to"
+        account={account}
+        setError={setError}
+        type={coinOutType}
+        swapPaths={swapPaths}
+        hasNoMarket={hasNoMarket}
+        control={formSwap.control}
+        setValue={formSwap.setValue}
+        setIsZeroSwapAmount={setIsZeroSwapAmountOut}
+        isFetchingSwapAmount={isFetchingSwapAmountOut}
+        setIsFetchingSwapAmount={setIsFetchingSwapAmountOut}
+      />
+      <SwapManagerField
+        name="to"
+        setValueName="from"
+        account={account}
+        type={coinInType}
+        setError={setError}
+        swapPaths={swapPaths}
+        hasNoMarket={hasNoMarket}
+        control={formSwap.control}
+        setValue={formSwap.setValue}
+        setIsZeroSwapAmount={setIsZeroSwapAmountIn}
+        isFetchingSwapAmount={isFetchingSwapAmountIn}
+        setIsFetchingSwapAmount={setIsFetchingSwapAmountIn}
+      />
       <SwapMessages
         error={error}
-        swapPath={swapPath}
         hasNoMarket={hasNoMarket}
         control={formSwap.control}
         setError={formSwap.setError}

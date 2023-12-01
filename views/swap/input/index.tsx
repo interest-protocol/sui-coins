@@ -16,6 +16,11 @@ const Input: FC<InputProps> = ({ label }) => {
     name: `${label}.balance`,
   });
 
+  const locked = useWatch({
+    control: control,
+    name: `${label}.locked`,
+  });
+
   return (
     <Box
       border="1px solid"
@@ -27,6 +32,7 @@ const Input: FC<InputProps> = ({ label }) => {
       <Box pl="l" pt="1rem" display="flex" justifyContent="space-between">
         <Token label={label} />
         <TextField
+          disabled={locked}
           pl="-1rem"
           placeholder="000"
           textAlign="right"
@@ -36,6 +42,7 @@ const Input: FC<InputProps> = ({ label }) => {
           {...register(`${label}.value`, {
             onChange: (v: ChangeEvent<HTMLInputElement>) => {
               setValue?.(`${label}.value`, parseInputEventToNumberString(v));
+              setValue('lock', false);
             },
           })}
           fieldProps={{ borderColor: 'transparent', width: '100%' }}

@@ -1,10 +1,11 @@
 import { Box, Button, ListItem, Typography } from '@interest-protocol/ui-kit';
-import { not } from 'ramda';
+import BigNumber from 'bignumber.js';
+import { not, pathOr } from 'ramda';
 import { FC, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
-import { COINS } from '@/constants/coins';
+import { COIN_METADATA, COINS } from '@/constants/coins';
 import { useWeb3 } from '@/hooks';
 import { FixedPointMath, TOKEN_ICONS } from '@/lib';
 import { ChevronDownSVG } from '@/svg';
@@ -85,8 +86,10 @@ const Token: FC<DropdownTokenProps> = ({ label }) => {
                     symbol,
                     value: '0',
                     balance: FixedPointMath.toNumber(
-                      coinsMap[type].totalBalance
+                      pathOr(BigNumber(0), [type, 'totalBalance'], coinsMap)
                     ),
+                    decimals: COIN_METADATA[type].decimals,
+                    locked: false,
                   });
 
                   setIsOpen(false);
@@ -107,7 +110,11 @@ const Token: FC<DropdownTokenProps> = ({ label }) => {
                 }
                 SuffixIcon={
                   <Typography variant="body" size="medium">
-                    {FixedPointMath.toNumber(coinsMap[type].totalBalance)}
+                    {type
+                      ? FixedPointMath.toNumber(
+                          pathOr(BigNumber(0), [type, 'totalBalance'], coinsMap)
+                        )
+                      : 0}
                   </Typography>
                 }
               />

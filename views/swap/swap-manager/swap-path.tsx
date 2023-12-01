@@ -1,20 +1,27 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
+import { useFormContext, UseFormReturn, useWatch } from 'react-hook-form';
 
-import { TOKENS_SVG_MAP_V2 } from '@/constants';
-import { SwapArrowSVG } from '@/svg';
+import { COINS_SVG_MAP_V2 } from '@/constants/coins';
+import { SwapForm } from '@/views/swap/swap.types';
 
-import { SwapPathProps } from '../swap.types';
+const SwapPathComponent: FC = () => {
+  const formSwap: UseFormReturn<SwapForm> = useFormContext();
 
-const SwapPath: FC<SwapPathProps> = ({ swapPath }) => {
-  const TokenInIcon =
-    TOKENS_SVG_MAP_V2[swapPath.coinInType] ?? TOKENS_SVG_MAP_V2.default;
+  const swapPath = useWatch({ control: formSwap.control, name: 'swapPath' });
 
-  const NextTokenIcon =
-    TOKENS_SVG_MAP_V2[swapPath.coinOutType] ?? TOKENS_SVG_MAP_V2.default;
+  if (!swapPath || !swapPath.length) return null;
 
-  const BaseTokenIcon =
-    TOKENS_SVG_MAP_V2[swapPath.baseTokens[0]] ?? TOKENS_SVG_MAP_V2.default;
+  const coinIn = swapPath[0].coinIn;
+  const baseToken = swapPath.length == 2 ? swapPath[0].coinOut : '';
+  const coinOut =
+    swapPath.length == 1 ? swapPath[0].coinOut : swapPath[1].coinOut;
+
+  const CoinInIcon = COINS_SVG_MAP_V2[coinIn] ?? COINS_SVG_MAP_V2.default;
+
+  const CoinOutIcon = COINS_SVG_MAP_V2[coinOut] ?? COINS_SVG_MAP_V2.default;
+
+  const BaseTokenIcon = COINS_SVG_MAP_V2[baseToken] ?? COINS_SVG_MAP_V2.default;
 
   return (
     <Box
@@ -27,28 +34,25 @@ const SwapPath: FC<SwapPathProps> = ({ swapPath }) => {
       bg="surface.container"
       justifyContent="center"
     >
-      <TokenInIcon
-        filled
+      <CoinInIcon
         width="100%"
         height="100%"
         maxWidth="2.5rem"
         maxHeight="2.5rem"
       />
-      <SwapArrowSVG width="100%" maxWidth="5rem" maxHeight="0.75rem" />
-      {swapPath.baseTokens[0] && (
+      {/*<SwapArrowSVG width="100%" maxWidth="5rem" maxHeight="0.75rem" />*/}
+      {baseToken && (
         <>
           <BaseTokenIcon
-            filled
             width="100%"
             height="100%"
             maxWidth="2.5rem"
             maxHeight="2.5rem"
           />
-          <SwapArrowSVG width="100%" maxWidth="5rem" maxHeight="0.75rem" />
+          {/*<SwapArrowSVG width="100%" maxWidth="5rem" maxHeight="0.75rem" />*/}
         </>
       )}
-      <NextTokenIcon
-        filled
+      <CoinOutIcon
         width="100%"
         height="100%"
         maxWidth="2rem"
@@ -58,4 +62,4 @@ const SwapPath: FC<SwapPathProps> = ({ swapPath }) => {
   );
 };
 
-export default SwapPath;
+export default SwapPathComponent;

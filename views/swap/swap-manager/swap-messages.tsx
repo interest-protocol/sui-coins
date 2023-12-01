@@ -1,5 +1,4 @@
 import { Box } from '@interest-protocol/ui-kit';
-import { useTranslations } from 'next-intl';
 import { pathOr, propOr } from 'ramda';
 import { FC, useState } from 'react';
 import { useEffect } from 'react';
@@ -13,7 +12,6 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
   error,
   errors,
   control,
-  swapPath,
   setError,
   hasNoMarket,
   isZeroSwapAmountIn,
@@ -21,7 +19,6 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
   isFetchingSwapAmountIn,
   isFetchingSwapAmountOut,
 }) => {
-  const t = useTranslations();
   const tokenIn = useWatch({ control: control, name: 'from' });
   const tokenOut = useWatch({ control: control, name: 'to' });
   const [toastState, setToastState] = useState<boolean>(false);
@@ -76,7 +73,7 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
   }, [isFetchingSwapAmountIn, isFetchingSwapAmountOut]);
 
   useEffect(() => {
-    if (toastState) toast.loading(t('swap.form.fetchMarkets'));
+    if (toastState) toast.loading(' fetching prices');
   }, [toastState]);
 
   useEffect(() => {
@@ -123,7 +120,7 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
 
   return (
     <Box gridColumn="1/-1" textAlign="center">
-      {readyToSwap && swapPath && <SwapPath swapPath={swapPath} />}
+      {readyToSwap && <SwapPath />}
     </Box>
   );
 };

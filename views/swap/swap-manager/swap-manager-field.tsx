@@ -5,9 +5,13 @@ import { useWatch } from 'react-hook-form';
 import useSWR from 'swr';
 import { useDebounce } from 'use-debounce';
 
-import { useAmmSdk, useNetwork, useProvider } from '@/hooks';
+import { useMovementClient } from '@/hooks';
 import { FixedPointMath } from '@/lib';
 import { makeSWRKey } from '@/utils';
+import {
+  quoteAmountIn,
+  quoteAmountOut,
+} from '@/views/swap/swap-manager/swap-manager.utils';
 
 import { SwapManagerProps } from './swap-manager.types';
 
@@ -17,27 +21,24 @@ const SwapManagerField: FC<SwapManagerProps> = ({
   control,
   account,
   setError,
-  decimals,
   setValue,
-  dexMarket,
+  swapPaths,
   hasNoMarket,
-  setSwapPath,
   setIsZeroSwapAmount,
   isFetchingSwapAmount,
   setIsFetchingSwapAmount,
   setValueName,
 }) => {
-  const { provider } = useProvider();
-  const { network } = useNetwork();
-  const sdk = useAmmSdk();
+  const client = useMovementClient();
   const [tokenIn] = useDebounce(useWatch({ control, name }), 900);
 
   const lock = useWatch({ control, name: 'lock' });
+  const decimals = useWatch({ control, name: 'to.decimals' });
 
   const { error } = useSWR(
     makeSWRKey(
-      [account, type, prop('value', tokenIn), prop('type', tokenIn), network],
-      provider.devInspectTransactionBlock.name
+      [account, type, prop('value', tokenIn), prop('type', tokenIn)],
+      client.devInspectTransactionBlock.name
     ),
     async () => {
       setValue(`${name}.locked`, true);
@@ -53,12 +54,36 @@ const SwapManagerField: FC<SwapManagerProps> = ({
 
       setIsFetchingSwapAmount(true);
 
-      return sdk.quoteSwap({
-        coinInType: tokenIn.type,
-        coinOutType: type,
-        coinInAmount: safeAmount.toString(),
-        markets: dexMarket,
-      });
+      const promises = swapPaths.map((swapPath) =>
+        setValueName === 'to'
+          ? quoteAmountOut({
+              client,
+              swapPath,
+              amount: safeAmount.toString(),
+            })
+          : quoteAmountIn({
+              client,
+              swapPath,
+              amount: safeAmount.toString(),
+            })
+      );
+
+      const amounts = await Promise.all(promises);
+
+      return amounts.reduce(
+        (acc, amount, index) => {
+          const accAmount = BigNumber(acc.amount);
+          const nextAmount = BigNumber(amount);
+
+          if (accAmount.gte(nextAmount)) return acc;
+
+          return {
+            amount,
+            swapPathIndex: index,
+          };
+        },
+        { amount: '0', swapPathIndex: 0 }
+      );
     },
     {
       onError: () => {
@@ -66,7 +91,7 @@ const SwapManagerField: FC<SwapManagerProps> = ({
         setIsFetchingSwapAmount(false);
         setValue(`${name}.locked`, false);
         setValue('lock', true);
-        setSwapPath(null);
+        setValue('swapPath', []);
       },
       onSuccess: (response) => {
         if (!response) {
@@ -86,8 +111,7 @@ const SwapManagerField: FC<SwapManagerProps> = ({
             decimals
           ).toString()
         );
-
-        setSwapPath(response.swapObject);
+        setValue('swapPath', swapPaths[response.swapPathIndex]);
 
         setError(false);
         setValue(`${name}.locked`, false);
