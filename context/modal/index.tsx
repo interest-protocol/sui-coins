@@ -37,18 +37,14 @@ export const ModalProvider: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <Provider value={value}>
-      {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        <Modal
-          {...modalProps}
-          isOpen={!!component}
-          onClose={handleClose}
-          appElement={document.getElementById('__next') as HTMLElement}
-        >
-          {component}
-        </Modal>
-      }
+      <Modal
+        {...(modalProps as ModalProps)}
+        isOpen={!!component}
+        onClose={handleClose}
+        appElement={document.getElementById('__next') as HTMLElement}
+      >
+        {component}
+      </Modal>
       {children}
     </Provider>
   );
