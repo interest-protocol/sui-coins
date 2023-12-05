@@ -11,7 +11,7 @@ const Header: FC = () => (
     <Box
       variant="container"
       display={['none', 'none', 'none', 'grid']}
-      width={['auto', 'auto', 'auto', 'auto', '100%']}
+      width={['auto', 'auto', 'auto', '100%']}
       pt="2rem !important"
     >
       <Box

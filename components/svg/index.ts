@@ -11,6 +11,8 @@ export { default as ComputerEyesSVG } from './computer-eyes';
 export { default as DefaultTokenSVG } from './default-token';
 export { default as DiedComputerSVG } from './died-computer';
 export { default as DiscordSVG } from './discord';
+export { default as DotErrorSVG } from './dot-error';
+export { default as DotSuccessSVG } from './dot-success';
 export { default as ErrorSVG } from './error';
 export { default as GithubSVG } from './github';
 export { default as HamburgerSVG } from './hamburger';
