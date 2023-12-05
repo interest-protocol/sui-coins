@@ -21,8 +21,7 @@ const PoolTitleBar: FC<PoolTitleBarProps> = ({
       alignItems="center"
       borderRadius="2rem"
       bg="lowestContainer"
-      my={['xs', 'xs', 'xs', '8xl']}
-      mb={['5xl', '5xl', '5xl', '8xl']}
+      my={['5xl', '5xl', '5xl', '8xl']}
       width={['100%', '100%', '100%', '85%']}
     >
       <Button isIcon variant="text" mr="0.5rem" onClick={onBack}>
@@ -32,7 +31,7 @@ const PoolTitleBar: FC<PoolTitleBarProps> = ({
         size="large"
         variant="headline"
         textAlign="center"
-        fontSize={['1.5rem', '1.5rem', '1.5rem', '2rem']}
+        fontSize={['1.5rem', '1.5rem', '2rem', '2rem']}
       >
         {name}
       </Typography>
@@ -40,7 +39,7 @@ const PoolTitleBar: FC<PoolTitleBarProps> = ({
         ml="auto"
         gap="1rem"
         alignItems="center"
-        display={['none', 'none', 'none', 'flex']}
+        display={['none', 'none', 'flex', 'flex']}
       >
         {iconTokenList.map((Icon) => (
           <Box
