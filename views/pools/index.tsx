@@ -3,6 +3,7 @@ import { FC } from 'react';
 
 import Layout from '@/components/layout';
 
+import PoolForm from './pool-form';
 import PoolTransaction from './pool-transaction';
 
 const Pools: FC = () => {
@@ -19,9 +20,7 @@ const Pools: FC = () => {
         display={['flex', 'flex', 'flex', 'grid']}
         width={['100%', '100%', '100%', '85%']}
       >
-        <Box bg="lowestContainer" borderRadius="2rem" p="xl">
-          Deposit Cards
-        </Box>
+        <PoolForm />
         <PoolTransaction />
       </Box>
     </Layout>
