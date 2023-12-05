@@ -1,9 +1,10 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
+import { v4 } from 'uuid';
 
-import DefaultToken from '../svg/default-token';
+import { PoolCardTokenInfoProps } from './pools-card.types';
 
-const TokenInfo: FC = () => {
+const TokenInfo: FC<PoolCardTokenInfoProps> = ({ tokenList, apr }) => {
   return (
     <Box>
       <Box
@@ -24,12 +25,16 @@ const TokenInfo: FC = () => {
           gap="1rem"
           mb="1rem"
         >
-          <Box borderRadius="1rem" minHeight="2.5rem" minWidth="2.5rem">
-            <DefaultToken maxHeight="100%" maxWidth="100%" />
-          </Box>
-          <Box borderRadius="1rem" minHeight="2.5rem" minWidth="2.5rem">
-            <DefaultToken maxHeight="100%" maxWidth="100%" />
-          </Box>
+          {tokenList.map((token) => (
+            <Box
+              key={v4()}
+              borderRadius="1rem"
+              minHeight="2.5rem"
+              minWidth="2.5rem"
+            >
+              <token.Icon maxHeight="100%" maxWidth="100%" />
+            </Box>
+          ))}
         </Box>
         <Box display="flex" flexDirection="column">
           <Typography
@@ -40,18 +45,20 @@ const TokenInfo: FC = () => {
             size={'small'}
             variant={'body'}
           >
-            USD • BTC
+            {tokenList.map(
+              (token, index) =>
+                `${token.symbol} ${tokenList.length - 1 > index ? '• ' : ''}`
+            )}
           </Typography>
           <Typography
             textTransform="uppercase"
             fontFamily="Proto"
             fontSize="0.875rem"
             lineHeight="1.25rem"
-            color="#0053DB"
             size={'large'}
             variant={'body'}
           >
-            {333},{506}% APR
+            {apr}% APR
           </Typography>
         </Box>
       </Box>

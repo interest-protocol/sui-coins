@@ -2,21 +2,20 @@ import { FC, ReactNode } from 'react';
 
 import { SVGProps } from '../svg/svg.types';
 
-export interface TMPCoinProps {
-  decimals: number;
+export interface TokenProps {
+  Icon: FC<SVGProps>;
   symbol: string;
-  type: string;
 }
 
-export interface PoolOwnerProps {
+export interface PoolCardHeaderProps {
   Logo: FC<SVGProps>;
   name: string;
   url: string;
 }
 
-export interface PoolTokenInfoProps {
-  token: ReadonlyArray<TMPCoinProps>;
-  percentage: string;
+export interface PoolCardTokenInfoProps {
+  tokenList: ReadonlyArray<TokenProps>;
+  apr: string;
 }
 
 export interface PoolLineProps {
@@ -27,11 +26,4 @@ export interface PoolLineProps {
 
 export interface PoolTradeInfoProps {
   lines: PoolLineProps;
-}
-
-export interface PoolCardProps {
-  owner: PoolOwnerProps;
-  coins: string;
-  price: number;
-  trade: ReadonlyArray<PoolLineProps>;
 }

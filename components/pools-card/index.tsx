@@ -1,6 +1,8 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
+import { DefaultTokenSVG, IPXRoundedSVG } from '@/svg';
+
 import CardTradeInfo from './card-trade-info';
 import PoolCardHeader from './pool-card-header';
 import TokenInfo from './token-info';
@@ -9,10 +11,10 @@ const PoolsCard: FC = () => {
   return (
     <Box
       display="flex"
-      bg="#FFF"
+      bg="#FFF" /**On UI-Kit has one color white */
       borderRadius="1rem"
       border="0.063rem solid #C6C6CA"
-      width={['21rem', 'NONE']}
+      width={'21rem'}
       height="auto"
       p="1rem"
       flexDirection="column"
@@ -28,8 +30,28 @@ const PoolsCard: FC = () => {
         },
       }}
     >
-      <PoolCardHeader />
-      <TokenInfo />
+      <PoolCardHeader name="Interest" url="/" Logo={IPXRoundedSVG} />
+      <TokenInfo
+        apr="333.45"
+        tokenList={[
+          {
+            symbol: 'USDT',
+            Icon: DefaultTokenSVG,
+          },
+          {
+            symbol: 'USDT',
+            Icon: DefaultTokenSVG,
+          },
+          {
+            symbol: 'USDT',
+            Icon: DefaultTokenSVG,
+          },
+          {
+            symbol: 'USDT',
+            Icon: DefaultTokenSVG,
+          },
+        ]}
+      />
       <CardTradeInfo />
     </Box>
   );

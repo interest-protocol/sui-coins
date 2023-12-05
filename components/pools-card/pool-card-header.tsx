@@ -1,49 +1,34 @@
-import { Box, Tag, Typography } from '@interest-protocol/ui-kit';
+import { Box, Button, Tag, Typography } from '@interest-protocol/ui-kit';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 
-import IPXRoundedSVG from '../svg/ipx-rounded';
-import Telegram from '../svg/Telegram';
+import ArrowObliqueSVG from '../svg/arrow-oblique';
+import { PoolCardHeaderProps } from './pools-card.types';
 
-const PoolCardHeader: FC = () => {
+const PoolCardHeader: FC<PoolCardHeaderProps> = ({ name, url, Logo }) => {
   const { push } = useRouter();
-  const handlePoolCardDetails = () => push('/');
+  const handlePoolCardDetails = () => push(url);
   return (
-    <Box>
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        whiteSpace="nowrap"
-        bg="blue"
-      >
-        <Tag PrefixIcon={IPXRoundedSVG} size="small" variant="outline">
-          <Typography
-            display="flex"
-            flexDirection="row"
-            fontFamily="Proto"
-            lineHeight="1rem"
-            fontSize="0.75rem"
-            textDecoration="upper-case"
-            marginLeft="0.3rem"
-            size={'small'}
-            variant={'body'}
-          >
-            Interest
-          </Typography>
-        </Tag>
-        <Box
-          onClick={handlePoolCardDetails}
-          className="arrow-wrapper"
-          height="1.5rem"
-          width="1.5rem"
-          textDecoration="none"
-          cursor="pointer"
-          opacity="0"
-          bg="green"
+    <Box
+      display="flex"
+      justifyContent="space-between"
+      alignItems="center"
+      width="100%"
+    >
+      <Tag PrefixIcon={Logo} size="small" variant="outline" height="1.5rem">
+        <Typography
+          display="flex"
+          flexDirection="row"
+          fontFamily="Proto"
+          size="small"
+          variant={'body'}
         >
-          <Telegram maxHeight="1.5rem" maxWidth="1.5rem" />
-        </Box>
-      </Box>
+          {name}
+        </Typography>
+      </Tag>
+      <Button variant="text" isIcon onClick={handlePoolCardDetails}>
+        <ArrowObliqueSVG maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
+      </Button>
     </Box>
   );
 };
