@@ -1,7 +1,9 @@
-import { ReactNode } from 'react';
+import { FC } from 'react';
+
+import { SVGProps } from '@/components/svg/svg.types';
 
 export interface PoolTitleBarProps {
-  poolName: string;
-  poolEnterCoin: ReactNode;
-  poolExitCoin: ReactNode;
+  name: string;
+  onBack: () => void;
+  iconTokenList: ReadonlyArray<FC<SVGProps>>;
 }
