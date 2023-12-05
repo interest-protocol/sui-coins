@@ -3,17 +3,9 @@ import { FC } from 'react';
 
 import CardTradeInfo from './card-trade-info';
 import PoolCardHeader from './pool-card-header';
-import { PoolCardProps } from './pools-card.types';
 import TokenInfo from './token-info';
 
-const PoolsCard: FC<PoolCardProps> = ({
-  protocol,
-  coins,
-  value,
-  fee,
-  liquidity,
-  volume,
-}) => {
+const PoolsCard: FC = () => {
   return (
     <Box
       display="flex"
@@ -36,9 +28,9 @@ const PoolsCard: FC<PoolCardProps> = ({
         },
       }}
     >
-      <PoolCardHeader protocol={protocol} />
-      <TokenInfo coins={coins} value={value} />
-      <CardTradeInfo fee={fee} liquidity={liquidity} volume={volume} />
+      <PoolCardHeader />
+      <TokenInfo />
+      <CardTradeInfo />
     </Box>
   );
 };

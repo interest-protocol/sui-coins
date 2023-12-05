@@ -1,19 +1,22 @@
 import { Box, Tag, Typography } from '@interest-protocol/ui-kit';
+import { useRouter } from 'next/router';
 import { FC } from 'react';
 
-import ArrowObliqueSVG from '../svg/arrow-oblique';
-import IPX from '../svg/ipx';
-import { PoolCardProps } from './pools-card.types';
+import IPXRoundedSVG from '../svg/ipx-rounded';
+import Telegram from '../svg/Telegram';
 
-const PoolCardHeader: FC<PoolCardProps> = ({ protocol }) => {
+const PoolCardHeader: FC = () => {
+  const { push } = useRouter();
+  const handlePoolCardDetails = () => push('/');
   return (
-    <Box width="100%" height="100%">
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Tag
-          PrefixIcon={() => <IPX maxHeight="1rem" maxWidth="1rem" />}
-          size="small"
-          variant="outline"
-        >
+    <Box>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        whiteSpace="nowrap"
+        bg="blue"
+      >
+        <Tag PrefixIcon={IPXRoundedSVG} size="small" variant="outline">
           <Typography
             display="flex"
             flexDirection="row"
@@ -25,22 +28,20 @@ const PoolCardHeader: FC<PoolCardProps> = ({ protocol }) => {
             size={'small'}
             variant={'body'}
           >
-            {protocol}
+            Interest
           </Typography>
         </Tag>
         <Box
-          as="button"
-          display="flex"
-          alignItems="center"
-          width="1.5rem"
+          onClick={handlePoolCardDetails}
+          className="arrow-wrapper"
           height="1.5rem"
-          bg="transparent"
-          border="none"
+          width="1.5rem"
+          textDecoration="none"
           cursor="pointer"
           opacity="0"
-          className="arrow-wrapper"
+          bg="green"
         >
-          <ArrowObliqueSVG maxHeight="1.5rem" maxWidth="1.5rem" />
+          <Telegram maxHeight="1.5rem" maxWidth="1.5rem" />
         </Box>
       </Box>
     </Box>

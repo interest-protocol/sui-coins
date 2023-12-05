@@ -2,9 +2,8 @@ import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
 import DefaultToken from '../svg/default-token';
-import { PoolCardProps } from './pools-card.types';
 
-const TokenInfo: FC<PoolCardProps> = ({ coins, value }) => {
+const TokenInfo: FC = () => {
   return (
     <Box>
       <Box
@@ -41,7 +40,7 @@ const TokenInfo: FC<PoolCardProps> = ({ coins, value }) => {
             size={'small'}
             variant={'body'}
           >
-            {coins}
+            USD • BTC
           </Typography>
           <Typography
             textTransform="uppercase"
@@ -52,7 +51,7 @@ const TokenInfo: FC<PoolCardProps> = ({ coins, value }) => {
             size={'large'}
             variant={'body'}
           >
-            {value}% APR
+            {333},{506}% APR
           </Typography>
         </Box>
       </Box>

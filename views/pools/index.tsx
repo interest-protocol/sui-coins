@@ -14,14 +14,7 @@ const Pools: FC = () => {
         fontSize={['5xl', '8xl']}
       >
         Pools
-        <PoolsCard
-          protocol="interest"
-          coins="SUI • USDC"
-          value={306.66}
-          fee={100}
-          liquidity={123.09}
-          volume={839.34}
-        />
+        <PoolsCard />
       </Box>
     </Layout>
   );
