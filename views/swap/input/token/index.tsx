@@ -6,7 +6,7 @@ import { FC, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
-import { COINS } from '@/constants/coins';
+import { COINS, COINS_MAP } from '@/constants/coins';
 import { useWeb3 } from '@/hooks';
 import { FixedPointMath, TOKEN_ICONS, TOKEN_SYMBOL } from '@/lib';
 import { ChevronDownSVG } from '@/svg';
@@ -98,8 +98,26 @@ const Token: FC<DropdownTokenProps> = ({ label }) => {
               <ListItem
                 key={v4()}
                 title={symbol}
-                disabled={type === oppositeType || type === currentType}
                 onClick={() => {
+                  if (type === oppositeType) {
+                    const currentToken = COINS_MAP[currentType];
+
+                    setValue(label === 'to' ? 'from' : 'to', {
+                      type: currentToken.type,
+                      symbol: currentToken.symbol,
+                      decimals: currentToken.decimals,
+                      value: '',
+                      balance: FixedPointMath.toNumber(
+                        pathOr(
+                          BigNumber(0),
+                          [currentToken.type, 'totalBalance'],
+                          coinsMap
+                        )
+                      ),
+                      locked: false,
+                    });
+                  }
+
                   setValue(label, {
                     type,
                     symbol,
