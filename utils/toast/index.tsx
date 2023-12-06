@@ -18,12 +18,11 @@ export const showTXSuccessToast = async (
     <a target="__black" rel="noreferrer nofollow" href={explorerLink}>
       <Box display="flex" alignItems="center">
         <Typography
-          variant="body"
           size="medium"
           color="accent"
-          textDecoration="underline"
-          fontWeight="700"
+          variant="body"
           cursor="pointer"
+          textDecoration="underline"
         >
           Sui Explorer
         </Typography>

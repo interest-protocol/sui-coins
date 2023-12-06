@@ -44,10 +44,9 @@ const Error: FC<ErrorProps> = ({ message, linkGoTo }) => {
         </Typography>
         <Typography
           mb="1rem"
+          size="large"
           textAlign="center"
           variant="headline"
-          size="large"
-          fontFamily="Share Tech Mono"
         >
           {message || 'Something went wrong'}
         </Typography>

@@ -11,16 +11,28 @@ const NavBar: FC = () => {
   return (
     <Box display={['none', 'none', 'none', 'flex']} justifyContent="center">
       {MENU_ITEMS.map(({ path, name }) => (
-        <Button
+        <Box
           key={v4()}
-          variant="text"
+          py="s"
+          fontSize="s"
+          display="flex"
+          cursor="pointer"
+          fontFamily="Proto"
+          textAlign="center"
+          borderRadius="full"
+          alignItems="center"
           border="0.25rem solid"
+          px={['s', 's', 's', 'xl']}
           onClick={() => push(path)}
+          nHover={{ color: 'primary' }}
+          transition="all 0.3s ease-in-out"
+          nActive={{ borderColor: '#0053DB33' }}
+
           color={asPath !== path ? 'onSurface' : 'primary'}
           borderColor={asPath !== path ? 'transparent' : '#0053DB33'}
         >
           {name}
-        </Button>
+        </Box>
       ))}
     </Box>
   );

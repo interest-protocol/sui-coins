@@ -1,21 +1,14 @@
-import { Box } from '@interest-protocol/ui-kit';
+import { Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
 import Layout from '@/components/layout';
-import PoolsCard from '@/views/pools/pools-card';
 
 const Pools: FC = () => {
   return (
     <Layout>
-      <Box
-        my="2xl"
-        fontFamily="Proto"
-        textAlign="center"
-        fontSize={['5xl', '8xl']}
-      >
+      <Typography my="2xl" size="large" variant="display" textAlign="center">
         Pools
-        <PoolsCard />
-      </Box>
+      </Typography>
     </Layout>
   );
 };
