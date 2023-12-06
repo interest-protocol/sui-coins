@@ -1,6 +1,6 @@
-import { FC, ReactNode } from 'react';
+import { FC } from 'react';
 
-import { SVGProps } from '../svg/svg.types';
+import { SVGProps } from '../../../components/svg/svg.types';
 
 export interface TokenProps {
   Icon: FC<SVGProps>;
@@ -18,12 +18,12 @@ export interface PoolCardTokenInfoProps {
   apr: string;
 }
 
-export interface PoolLineProps {
+export interface PoolCardLineProps {
   description: string;
-  value: string;
-  tip: ReactNode;
+  amount: string;
+  tooltipInfo: string;
 }
 
 export interface PoolTradeInfoProps {
-  lines: PoolLineProps;
+  lines: ReadonlyArray<PoolCardLineProps>;
 }

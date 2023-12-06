@@ -57,6 +57,7 @@ const TokenInfo: FC<PoolCardTokenInfoProps> = ({ tokenList, apr }) => {
             lineHeight="1.25rem"
             size={'large'}
             variant={'body'}
+            color="primary"
           >
             {apr}% APR
           </Typography>

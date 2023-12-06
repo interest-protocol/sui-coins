@@ -2,7 +2,7 @@ import { Box } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
 import Layout from '@/components/layout';
-import PoolsCard from '@/components/pools-card';
+import PoolsCard from '@/views/pools/pools-card';
 
 const Pools: FC = () => {
   return (

@@ -11,7 +11,7 @@ const PoolsCard: FC = () => {
   return (
     <Box
       display="flex"
-      bg="#FFF" /**On UI-Kit has one color white */
+      bg="surface"
       borderRadius="1rem"
       border="0.063rem solid #C6C6CA"
       width={'21rem'}
@@ -52,7 +52,25 @@ const PoolsCard: FC = () => {
           },
         ]}
       />
-      <CardTradeInfo />
+      <CardTradeInfo
+        lines={[
+          {
+            description: 'Fee',
+            amount: '000',
+            tooltipInfo: 'Fee per transaction',
+          },
+          {
+            description: 'Liquidity',
+            amount: '234.566',
+            tooltipInfo: 'Liquidity',
+          },
+          {
+            description: 'Volume (24)',
+            amount: '234.88',
+            tooltipInfo: 'Volume',
+          },
+        ]}
+      />
     </Box>
   );
 };
