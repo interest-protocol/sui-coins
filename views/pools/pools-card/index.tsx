@@ -7,11 +7,11 @@ import CardTradeInfo from './card-trade-info';
 import PoolCardHeader from './pool-card-header';
 import TokenInfo from './token-info';
 
-const PoolsCard: FC = () => {
+const PoolCard: FC = () => {
   return (
     <Box
       display="flex"
-      bg="surface"
+      bg="white"
       borderRadius="1rem"
       border="0.063rem solid #C6C6CA"
       width={'21rem'}
@@ -75,4 +75,4 @@ const PoolsCard: FC = () => {
   );
 };
 
-export default PoolsCard;
+export default PoolCard;

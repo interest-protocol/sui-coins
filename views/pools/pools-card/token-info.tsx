@@ -2,7 +2,7 @@ import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
-import { PoolCardTokenInfoProps } from './pools-card.types';
+import { PoolCardTokenInfoProps } from './pool-card.types';
 
 const TokenInfo: FC<PoolCardTokenInfoProps> = ({ tokenList, apr }) => {
   return (
@@ -51,6 +51,7 @@ const TokenInfo: FC<PoolCardTokenInfoProps> = ({ tokenList, apr }) => {
             )}
           </Typography>
           <Typography
+            textAlign="center"
             textTransform="uppercase"
             fontFamily="Proto"
             fontSize="0.875rem"

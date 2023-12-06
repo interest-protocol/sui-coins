@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { v4 } from 'uuid';
 
 import QuestionCircleSVG from '../../../components/svg/question.circle';
-import { PoolTradeInfoProps } from './pools-card.types';
+import { PoolTradeInfoProps } from './pool-card.types';
 
 const CardTradeInfo: FC<PoolTradeInfoProps> = ({ lines }) => {
   return (

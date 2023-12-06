@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { FC } from 'react';
 
 import ArrowObliqueSVG from '../../../components/svg/arrow-oblique';
-import { PoolCardHeaderProps } from './pools-card.types';
+import { PoolCardHeaderProps } from './pool-card.types';
 
 const PoolCardHeader: FC<PoolCardHeaderProps> = ({ name, url, Logo }) => {
   const { push } = useRouter();

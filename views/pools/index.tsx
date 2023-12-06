@@ -1,10 +1,10 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
-
 import { FC } from 'react';
 
 import Layout from '@/components/layout';
 
 import PoolTransaction from './pool-transaction';
+import PoolCard from './pools-card';
 
 const Pools: FC = () => (
   <Layout>
@@ -20,7 +20,7 @@ const Pools: FC = () => (
       width={['100%', '100%', '100%', '85%']}
     >
       <Box bg="lowestContainer" borderRadius="2rem" p="xl">
-        Deposit Cards
+        <PoolCard />
       </Box>
       <PoolTransaction />
     </Box>
