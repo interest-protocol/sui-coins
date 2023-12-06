@@ -26,7 +26,13 @@ const PoolCardHeader: FC<PoolCardHeaderProps> = ({ name, url, Logo }) => {
           {name}
         </Typography>
       </Tag>
-      <Button variant="text" isIcon onClick={handlePoolCardDetails}>
+      <Button
+        variant="text"
+        isIcon
+        onClick={handlePoolCardDetails}
+        opacity="0"
+        className="arrow-wrapper"
+      >
         <ArrowObliqueSVG maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
       </Button>
     </Box>
