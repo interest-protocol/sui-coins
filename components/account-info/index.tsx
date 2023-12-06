@@ -52,7 +52,6 @@ const AccountInfo: FC = () => {
         <Box position="relative" display={['none', 'none', 'none', 'flex']}>
           <Box
             gap="xs"
-
             display="flex"
             cursor="pointer"
             borderRadius="full"
