@@ -1,29 +1,63 @@
-import { Box, Tabs, Typography } from '@interest-protocol/ui-kit';
+import { Box, Tabs } from '@interest-protocol/ui-kit';
 import { FC, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 
-import { SuiBlackSVG } from '@/svg';
+import { TOKEN_SYMBOL } from '@/lib';
 
-enum PoolOption {
-  Deposit,
-  Withdraw,
-}
+import PoolDeposit from './deposit';
+import {
+  PoolDepositForm,
+  PoolOption,
+  PoolWithdrawForm,
+} from './pool-form.types';
+import PoolWithDraw from './withdraw';
 
 const PoolForm: FC = () => {
   const [poolOptionView, setPoolOptionView] = useState<PoolOption>(
     PoolOption.Deposit
   );
 
+  const formDeposit = useForm<PoolDepositForm>({
+    defaultValues: {
+      firstToken: {
+        value: '',
+        balance: 0.0456,
+        decimals: 0,
+        symbol: TOKEN_SYMBOL.BNB,
+        type: '',
+      },
+      secondToken: {
+        value: '',
+        balance: 0.0456,
+        decimals: 0,
+        symbol: TOKEN_SYMBOL.BNB,
+        type: '',
+      },
+    },
+  });
+
+  const formWithdraw = useForm<PoolWithdrawForm>({
+    defaultValues: {
+      tokenLP: {
+        value: '',
+        balance: 0.0456,
+        decimals: 0,
+        symbol: 'LPs Coin',
+        type: '',
+      },
+    },
+  });
+
   const handleOptionTab = (index: PoolOption) => {
     setPoolOptionView(index);
   };
-
   return (
     <Box
+      p={['xl', 'xl', 'xl', '4xl']}
       display="flex"
       flexDirection="column"
       bg="lowestContainer"
       borderRadius="2rem"
-      p="4xl"
       gap="1.5rem"
     >
       <Box>
@@ -34,17 +68,15 @@ const PoolForm: FC = () => {
           onChangeTab={handleOptionTab}
         />
       </Box>
-      <Typography
-        size="large"
-        variant="title"
-        fontSize={['1.375rem', '1.375rem', '1.375rem', '2rem']}
-      >
-        I would like to{' '}
-        {poolOptionView == PoolOption.Deposit ? 'Deposit' : 'Withdraw'}...
-      </Typography>
-      <Box>
-        <TokenField tokenName="teste" TokenIcon={SuiBlackSVG} />
-      </Box>
+      {poolOptionView == PoolOption.Deposit ? (
+        <FormProvider {...formDeposit}>
+          <PoolDeposit />
+        </FormProvider>
+      ) : (
+        <FormProvider {...formWithdraw}>
+          <PoolWithDraw />
+        </FormProvider>
+      )}
     </Box>
   );
 };
