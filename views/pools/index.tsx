@@ -19,10 +19,9 @@ const Pools: FC = () => (
       display={['flex', 'flex', 'flex', 'grid']}
       width={['100%', '100%', '100%', '85%']}
     >
-      <Box bg="lowestContainer" borderRadius="2rem" p="xl">
-        <PoolCard />
-      </Box>
+      <Box bg="lowestContainer" borderRadius="2rem" p="xl"></Box>
       <PoolTransaction />
+      <PoolCard />
     </Box>
   </Layout>
 );
