@@ -11,15 +11,15 @@ const PoolCard: FC = () => {
   return (
     <Box
       display="flex"
+      flexDirection="column"
+      justifyContent="center"
+      alignItems="center"
       gap="0.5rem"
       bg="lowestContainer"
       borderRadius="1rem"
       border="0.063rem solid #C6C6CA"
       width={['100%', '100%', '100%', '21rem']}
       p="1rem"
-      flexDirection="column"
-      justifyContent="flex-start"
-      alignItems="flex-start"
       transition="all 300ms ease-in-out"
       nHover={{
         border: 'none',

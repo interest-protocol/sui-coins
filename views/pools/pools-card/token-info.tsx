@@ -12,8 +12,7 @@ const TokenInfo: FC<PoolCardTokenInfoProps> = ({ tokenList, apr }) => {
         justifyContent="center"
         alignItems="center"
         flexDirection="column"
-        mt="1.5rem"
-        mb="1.5rem"
+        my="1.5rem"
       >
         <Box
           minWidth="19rem"
