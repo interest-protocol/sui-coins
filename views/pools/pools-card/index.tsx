@@ -15,7 +15,7 @@ const PoolCard: FC = () => {
       bg="lowestContainer"
       borderRadius="1rem"
       border="0.063rem solid #C6C6CA"
-      width={'21rem'}
+      width={['100%', '100%', '100%', '21rem']}
       p="1rem"
       flexDirection="column"
       justifyContent="flex-start"
