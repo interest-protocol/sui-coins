@@ -1,4 +1,5 @@
 export { default as ArrowLeftSVG } from './arrow-left';
+export { default as ArrowObliqueSVG } from './arrow-oblique';
 export { default as ArrowTopRightSVG } from './arrow-top-right';
 export { default as BNBSVG } from './bnb-logo';
 export { default as CaretRightSVG } from './caret-right';

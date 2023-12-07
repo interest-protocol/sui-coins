@@ -11,7 +11,7 @@ const PoolCard: FC = () => {
   return (
     <Box
       display="flex"
-      bg="white"
+      bg="lowestContainer"
       borderRadius="1rem"
       border="0.063rem solid #C6C6CA"
       width={'21rem'}

@@ -11,7 +11,7 @@ const ArrowObliqueSVG: FC<SVGProps> = ({ maxWidth, maxHeight, ...props }) => (
   >
     <path
       d="M7.00015 6H18.0002V17H16.0002V9.41421L7.00015 18.4142L5.58594 17L14.5859 8H7.00015V6Z"
-      fill="black"
+      fill="currentColor"
     />
   </svg>
 );

@@ -6,7 +6,7 @@ const IPXRoundedSVG: FC<SVGProps> = ({ maxWidth, maxHeight, ...props }) => (
   <svg
     style={{ maxWidth, maxHeight }}
     viewBox="0 0 16 16"
-    fill="none"
+    fill="currentColor"
     {...props}
   >
     <rect width="16" height="16" rx="8" fill="url(#pattern0)" />

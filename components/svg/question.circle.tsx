@@ -6,7 +6,7 @@ const QuestionCircleSVG: FC<SVGProps> = ({ maxWidth, maxHeight, ...props }) => (
   <svg
     style={{ maxWidth, maxHeight }}
     viewBox="0 0 14 14"
-    fill="none"
+    fill="currentColor"
     {...props}
   >
     <g clipPath="url(#clip0_1767_4513)">
