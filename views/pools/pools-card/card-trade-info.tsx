@@ -8,7 +8,7 @@ import { PoolTradeInfoProps } from './pool-card.types';
 const CardTradeInfo: FC<PoolTradeInfoProps> = ({ lines }) => {
   return (
     <Box bg="surf" borderRadius="1rem" px="1rem" py="0.5rem" width="19rem">
-      {lines.map((line) => (
+      {lines.map((line, index) => (
         <Box
           key={v4()}
           display="flex"
@@ -17,7 +17,7 @@ const CardTradeInfo: FC<PoolTradeInfoProps> = ({ lines }) => {
           alignSelf="stretch"
           py="0.5rem"
           borderBottom="1px solid"
-          borderColor="#C6C6CA"
+          borderColor={lines.length - 1 > index ? '#C6C6CA' : 'transparent'}
         >
           <Typography
             fontSize="0.875rem"
