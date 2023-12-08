@@ -29,6 +29,7 @@ export { default as MinusSVG } from './minus';
 export { default as NoSearchSVG } from './no-search';
 export { default as PercentageSVG } from './percentage';
 export { default as PlusSVG } from './plus';
+export { default as QuestionCircleSVG } from './question-circle';
 export { default as SearchSVG } from './search';
 export { default as SignOutSVG } from './sign-out';
 export { default as SuiLogoSVG } from './sui-logo';

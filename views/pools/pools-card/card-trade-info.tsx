@@ -2,7 +2,8 @@ import { Box, TooltipWrapper, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
-import QuestionCircleSVG from '../../../components/svg/question.circle';
+import { QuestionCircleSVG } from '@/svg';
+
 import { PoolTradeInfoProps } from './pool-card.types';
 
 const CardTradeInfo: FC<PoolTradeInfoProps> = ({ lines }) => {
@@ -26,11 +27,9 @@ const CardTradeInfo: FC<PoolTradeInfoProps> = ({ lines }) => {
           borderColor={lines.length - 1 > index ? '#C6C6CA' : 'transparent'}
         >
           <Typography
-            fontSize="0.875rem"
-            lineHeight="1.25rem"
             textTransform="capitalize"
             color="outline"
-            size={'small'}
+            size={'medium'}
             variant={'body'}
           >
             {line.description}
@@ -44,7 +43,7 @@ const CardTradeInfo: FC<PoolTradeInfoProps> = ({ lines }) => {
           >
             <Typography
               color="onSurface"
-              size={'small'}
+              size={'medium'}
               variant={'body'}
               pr="0.5rem"
             >
