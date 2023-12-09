@@ -1,8 +1,8 @@
-import { TokenField, Typography } from '@interest-protocol/ui-kit';
+import { Box, TokenField, Typography } from '@interest-protocol/ui-kit';
 import { ChangeEvent, FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { SuiBlackSVG } from '@/svg';
+import { BNBSVG } from '@/svg';
 import { parseInputEventToNumberString } from '@/utils';
 
 import { PoolFieldsProps } from './field.types';
@@ -28,7 +28,22 @@ const PoolField: FC<PoolFieldsProps> = ({ name, withoutIcon }) => {
         </Typography>
       }
       placeholder="0"
-      TokenIcon={withoutIcon ? undefined : SuiBlackSVG}
+      TokenIcon={
+        withoutIcon ? undefined : (
+          <Box
+            color="lowestContainer"
+            bg="#000"
+            width="2.5rem"
+            height="2.5rem"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            borderRadius="0.5rem"
+          >
+            <BNBSVG maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
+          </Box>
+        )
+      }
       textAlign="right"
       tokenName={getValues(`${name}.symbol`)}
       labelPosition="right"

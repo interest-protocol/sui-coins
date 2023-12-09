@@ -17,7 +17,20 @@ const ReceiveSectionLine: FC<ReceiveSectionLineProps> = ({
       justifyContent="space-between"
     >
       <Box display="flex" alignItems="center">
-        {Icon && <Icon maxWidth="2.5rem" maxHeight="2.5rem" width="100%" />}
+        {Icon && (
+          <Box
+            color="lowestContainer"
+            bg="#000"
+            width="2.5rem"
+            height="2.5rem"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            borderRadius="0.5rem"
+          >
+            <Icon maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
+          </Box>
+        )}
         <Typography variant="body" ml="l" size="large">
           {symbol}
         </Typography>

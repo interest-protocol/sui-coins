@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import { SuiBlackSVG } from '@/svg';
+import { BNBSVG } from '@/svg';
 
 import PoolField from './component/field';
 import PoolReceiveSection from './component/receive-section';
@@ -24,12 +24,12 @@ const PoolWithDraw: FC = () => {
           {
             symbol: 'SUI',
             balance: '0000',
-            Icon: SuiBlackSVG,
+            Icon: BNBSVG,
           },
           {
             symbol: 'USDT',
             balance: '0.234',
-            Icon: SuiBlackSVG,
+            Icon: BNBSVG,
           },
         ]}
       />
