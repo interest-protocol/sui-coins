@@ -78,6 +78,7 @@ const MyCoins: FC = () => {
               coins.map((coin) => <MyCoinsItem key={v4()} {...coin} />)
             )}
           </TableWrapper>
+          {/* TODO: Don't remove the comments
           <TableWrapper
             title="LPs Coins"
             options={['Name', 'Balance', 'Provider', 'Treasury Cap']}
@@ -85,7 +86,7 @@ const MyCoins: FC = () => {
           <TableWrapper
             title="Official Coins"
             options={['Name', 'Balance', 'Provider', 'Treasury Cap']}
-          />
+          /> */}
         </Box>
       )}
     </Layout>
