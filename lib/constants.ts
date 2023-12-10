@@ -8,5 +8,7 @@ export enum Rounding {
 export enum TOKEN_SYMBOL {
   ETH = 'ETH',
   USDC = 'USDC',
+  BTC = 'BTC',
+  BNB = 'BNB',
   SUI = 'SUI',
 }
