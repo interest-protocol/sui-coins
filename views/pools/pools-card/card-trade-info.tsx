@@ -68,6 +68,7 @@ const CardTradeInfo: FC<PoolTradeInfoProps> = ({ lines }) => {
                 alignItems="center"
                 width="0.875rem"
                 height="1.27rem"
+                color="onSurface"
               >
                 <QuestionCircleSVG maxWidth="100%" maxHeight="100%" />
               </Box>
