@@ -4,7 +4,8 @@ import useSWR from 'swr';
 import { useReadLocalStorage } from 'usehooks-ts';
 
 import { LOCAL_STORAGE_VERSION } from '@/constants';
-import { useMovementClient } from '@/hooks';
+import { useNetwork } from '@/context/network';
+import { useSuiClient } from '@/hooks/use-sui-client';
 import { LocalTokenMetadataRecord } from '@/interface';
 import { makeSWRKey, noop } from '@/utils';
 
@@ -27,7 +28,9 @@ export const Web3ManagerContext = createContext<Web3ManagerState>(
 );
 
 const Web3Manager: FC<Web3ManagerProps> = ({ children }) => {
-  const client = useMovementClient();
+  const { Provider } = Web3ManagerContext;
+  const { network } = useNetwork();
+  const client = useSuiClient(network);
   const { isError, currentAccount, isConnected } = useWalletKit();
 
   const { data, error, mutate, isLoading } = useSWR(
@@ -57,7 +60,7 @@ const Web3Manager: FC<Web3ManagerProps> = ({ children }) => {
   );
 
   return (
-    <Web3ManagerContext.Provider
+    <Provider
       value={{
         account: currentAccount?.address || null,
         walletAccount: currentAccount || null,
@@ -70,7 +73,7 @@ const Web3Manager: FC<Web3ManagerProps> = ({ children }) => {
       }}
     >
       {children}
-    </Web3ManagerContext.Provider>
+    </Provider>
   );
 };
 

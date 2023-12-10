@@ -8,7 +8,6 @@ import { FixedPointMath } from '@/lib';
 import { BNBSVG } from '@/svg';
 
 import FetchingToken from './fetching-token';
-import LinearLoader from './linear-loader';
 import NotFound from './not-found';
 import {
   ModalTokenBodyProps,
@@ -82,9 +81,6 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
 
   return (
     <>
-      <Box position="absolute" width="100%" mt="-0.95rem">
-        <LinearLoader loading={false} />
-      </Box>
       <Box
         flex="1"
         display="flex"

@@ -33,14 +33,9 @@
       "@/utils": ["./utils"],
       "@/utils/*": ["./utils/*"],
       "@/views/*": ["./views/*"],
-      "@/styles": ["./styles"],
+      "@/styles": ["./styles"]
     }
   },
   "exclude": ["node_modules"],
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "interface/declaration.d.ts"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }
