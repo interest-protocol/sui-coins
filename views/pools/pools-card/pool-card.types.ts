@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
 import { SVGProps } from '../../../components/svg/svg.types';
 
@@ -8,7 +8,7 @@ export interface TokenProps {
 }
 
 export interface PoolCardHeaderProps {
-  Logo: FC<SVGProps>;
+  Logo: ReactNode;
   name: string;
   url: string;
 }

@@ -29,7 +29,29 @@ const PoolCard: FC = () => {
         },
       }}
     >
-      <PoolCardHeader name="Interest" url="/" Logo={IPXRoundedSVG} />
+      <PoolCardHeader
+        name="Interest"
+        url="/"
+        Logo={
+          <Box
+            p="S"
+            width="1.3rem"
+            height="1.3rem"
+            display="flex"
+            color="lowestContainer"
+            alignItems="center"
+            borderRadius="full"
+            justifyContent="center"
+            bg="transparent"
+          >
+            <IPXRoundedSVG
+              maxWidth="1.125rem"
+              maxHeight="1.125rem"
+              width="100%"
+            />
+          </Box>
+        }
+      />
       <TokenInfo
         apr="333.45"
         tokenList={[
