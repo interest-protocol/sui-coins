@@ -24,7 +24,10 @@ const CardTradeInfo: FC<PoolTradeInfoProps> = ({ lines }) => {
           alignSelf="stretch"
           py="0.5rem"
           borderBottom="1px solid"
-          borderColor={lines.length - 1 > index ? '#C6C6CA' : 'transparent'}
+          //borderColor={'outlineVariant'}
+          borderColor={
+            lines.length - 1 > index ? 'outlineVariant' : 'transparent'
+          }
         >
           <Typography
             textTransform="capitalize"
@@ -64,7 +67,7 @@ const CardTradeInfo: FC<PoolTradeInfoProps> = ({ lines }) => {
                 justifyContent="center"
                 alignItems="center"
                 width="0.875rem"
-                height="1rem"
+                height="1.27rem"
               >
                 <QuestionCircleSVG maxWidth="100%" maxHeight="100%" />
               </Box>
