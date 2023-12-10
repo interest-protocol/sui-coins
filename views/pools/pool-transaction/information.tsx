@@ -1,4 +1,4 @@
-import { Button, Tag } from '@interest-protocol/ui-kit';
+import { Box, Button, Tag } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
 import { ClipboardSVG, DotSuccessSVG } from '@/svg';
@@ -11,7 +11,29 @@ const PoolTransactionInformation: FC = () => {
     <PoolTransactionCardWrapper
       title="Pool Information"
       Suffix={
-        <Tag PrefixIcon={DotSuccessSVG} variant="outline" size="small">
+        <Tag
+          PrefixIcon={
+            <Box
+              p=".1875rem"
+              width="1.3rem"
+              height="1.3rem"
+              display="flex"
+              color="lowestContainer"
+              alignItems="center"
+              borderRadius="full"
+              justifyContent="center"
+              bg="#000"
+            >
+              <DotSuccessSVG
+                maxWidth="1.125rem"
+                maxHeight="1.125rem"
+                width="100%"
+              />
+            </Box>
+          }
+          variant="outline"
+          size="small"
+        >
           Stable Pair
         </Tag>
       }
