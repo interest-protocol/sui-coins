@@ -23,7 +23,7 @@ const SelectTokenBaseTokens: FC<SelectTokenBaseTokensProps> = ({
           key={v4()}
           PrefixIcon={
             <Box
-              p=".1875rem"
+              p="0.1875rem"
               width="1.3rem"
               height="1.3rem"
               display="flex"
