@@ -72,7 +72,7 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
           <TimesSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
         </Button>
       </Box>
-      <Box mx="0.5rem" mt="0.65rem">
+      <Box mx="xs" mt="0.65rem">
         <TextField
           fontSize="medium"
           placeholder="Sui"
