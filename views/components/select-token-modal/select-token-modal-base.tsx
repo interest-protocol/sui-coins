@@ -21,7 +21,21 @@ const SelectTokenBaseTokens: FC<SelectTokenBaseTokensProps> = ({
       {['BNB', 'BTC', 'USDT', 'SUI'].map((item) => (
         <Tag
           key={v4()}
-          PrefixIcon={BNBSVG}
+          PrefixIcon={
+            <Box
+              p=".1875rem"
+              width="1.3rem"
+              height="1.3rem"
+              display="flex"
+              color="lowestContainer"
+              alignItems="center"
+              borderRadius="full"
+              justifyContent="center"
+              bg="#000"
+            >
+              <BNBSVG maxWidth="1.125rem" maxHeight="1.125rem" width="100%" />
+            </Box>
+          }
           size="small"
           display="flex"
           variant="outline"
