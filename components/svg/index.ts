@@ -19,7 +19,6 @@ export { default as GithubSVG } from './github';
 export { default as HamburgerSVG } from './hamburger';
 export { default as HeartSVG } from './heart';
 export { default as IPXSVG } from './ipx';
-export { default as LineLoaderSVG } from './line-loader';
 export { default as LoadingSVG } from './loading';
 export { default as LogoSVG } from './logo';
 export { default as MenuSVG } from './menu';
