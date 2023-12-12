@@ -8,7 +8,7 @@ import {
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { ArrowLeftSVG, SearchSVG, TimesSVG } from '@/svg';
+import { SearchSVG, TimesSVG } from '@/svg';
 
 import {
   SearchTokenForm,
@@ -64,9 +64,7 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
         alignItems="center"
         justifyContent="space-between"
       >
-        <Button variant="text" isIcon onClick={closeModal} ml="-0.5rem">
-          <ArrowLeftSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
-        </Button>
+        <Box />
         <Typography variant="label" size="large" color="text">
           Select Token
         </Typography>
@@ -74,7 +72,7 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
           <TimesSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
         </Button>
       </Box>
-      <Box my="xl" mx="m">
+      <Box mx="xs" mt="0.65rem">
         <TextField
           fontSize="medium"
           placeholder="Sui"
@@ -83,6 +81,9 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
           Prefix={
             <SearchSVG maxWidth="1.2rem" maxHeight="1.2rem" width="100%" />
           }
+          fieldProps={{
+            mb: '1.5rem',
+          }}
         />
       </Box>
       {!simple && (
