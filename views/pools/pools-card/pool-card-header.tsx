@@ -21,7 +21,7 @@ const PoolCardHeader: FC<PoolCardHeaderProps> = ({ name, url, Logo }) => {
           flexDirection="row"
           fontFamily="Proto"
           size="small"
-          variant={'body'}
+          variant="body"
         >
           {name}
         </Typography>

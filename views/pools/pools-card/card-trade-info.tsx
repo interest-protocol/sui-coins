@@ -24,7 +24,6 @@ const CardTradeInfo: FC<PoolTradeInfoProps> = ({ lines }) => {
           alignSelf="stretch"
           py="0.5rem"
           borderBottom="1px solid"
-          //borderColor={'outlineVariant'}
           borderColor={
             lines.length - 1 > index ? 'outlineVariant' : 'transparent'
           }
@@ -32,8 +31,8 @@ const CardTradeInfo: FC<PoolTradeInfoProps> = ({ lines }) => {
           <Typography
             textTransform="capitalize"
             color="outline"
-            size={'medium'}
-            variant={'body'}
+            size="medium"
+            variant="body"
           >
             {line.description}
           </Typography>
@@ -46,8 +45,8 @@ const CardTradeInfo: FC<PoolTradeInfoProps> = ({ lines }) => {
           >
             <Typography
               color="onSurface"
-              size={'medium'}
-              variant={'body'}
+              size="medium"
+              variant="body"
               pr="0.5rem"
             >
               {index >= 1 ? '$' : ''}
@@ -56,7 +55,7 @@ const CardTradeInfo: FC<PoolTradeInfoProps> = ({ lines }) => {
             <TooltipWrapper
               bg="onSurface"
               tooltipContent={
-                <Typography variant="body" size={'medium'} color="surface">
+                <Typography variant="body" size="medium" color="surface">
                   {line.tooltipInfo}
                 </Typography>
               }
@@ -70,7 +69,12 @@ const CardTradeInfo: FC<PoolTradeInfoProps> = ({ lines }) => {
                 height="1.27rem"
                 color="onSurface"
               >
-                <QuestionCircleSVG maxWidth="100%" maxHeight="100%" />
+                <QuestionCircleSVG
+                  maxWidth="100%"
+                  maxHeight="100%"
+                  width="1.5rem"
+                  height="1.5rem"
+                />
               </Box>
             </TooltipWrapper>
           </Box>

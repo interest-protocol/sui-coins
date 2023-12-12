@@ -31,7 +31,7 @@ const PoolCard: FC = () => {
     >
       <PoolCardHeader
         name="Interest"
-        url="/"
+        url="#"
         Logo={
           <Box
             p="S"

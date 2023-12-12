@@ -22,7 +22,6 @@ const PoolTransactionInformation: FC = () => {
               alignItems="center"
               borderRadius="full"
               justifyContent="center"
-              bg="#000"
             >
               <DotSuccessSVG
                 maxWidth="1.125rem"
