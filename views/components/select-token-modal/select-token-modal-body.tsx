@@ -1,11 +1,22 @@
 import { Box } from '@interest-protocol/ui-kit';
-import BigNumber from 'bignumber.js';
+import { values } from 'ramda';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
+import { useReadLocalStorage } from 'usehooks-ts';
 import { v4 } from 'uuid';
 
+import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
+import {
+  COIN_TYPE_TO_COIN,
+  MAINNET_BASE_COINS,
+  TESTNET_BASE_COINS,
+} from '@/constants/coins';
+import { TOKEN_SVG_MAP } from '@/constants/token';
+import { useNetwork } from '@/context/network';
+import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import { BNBSVG } from '@/svg';
+import { ZERO_BIG_NUMBER } from '@/utils';
 
 import FetchingToken from './fetching-token';
 import NotFound from './not-found';
@@ -19,65 +30,54 @@ import TokenModalItem from './token-modal-item';
 
 const ModalTokenBody: FC<ModalTokenBodyProps> = ({
   tokens,
-  isFavorite,
   tokenOrigin,
   handleSelectToken,
-}) => {
-  return (
-    <>
-      {tokens.map(({ symbol, symbol2, decimals, totalBalance }) => (
+}) => (
+  <>
+    {tokens?.map(({ symbol, origin, decimals, totalBalance, type }) => {
+      const Icon = TOKEN_SVG_MAP[type] ?? BNBSVG;
+
+      return (
         <TokenModalItem
           key={v4()}
-          Icon={BNBSVG}
+          type={type}
+          Icon={Icon}
+          origin={origin}
           symbol={symbol}
           selected={false}
-          symbol2={symbol2 || ''}
-          isFavorite={isFavorite}
-          onClick={handleSelectToken}
-          favorite={tokenOrigin === TokenOrigin.Favorites}
-          balance={FixedPointMath.toNumber(totalBalance, decimals).toString()}
+          onClick={() =>
+            handleSelectToken({
+              symbol,
+              decimals,
+              type,
+              balance: FixedPointMath.toNumber(
+                totalBalance ?? ZERO_BIG_NUMBER,
+                decimals || 9
+              ),
+            })
+          }
+          isSuggested={tokenOrigin === TokenOrigin.Suggested}
+          balance={FixedPointMath.toNumber(
+            totalBalance ?? ZERO_BIG_NUMBER,
+            decimals || 9
+          ).toString()}
         />
-      ))}
-    </>
-  );
-};
+      );
+    })}
+  </>
+);
 
 const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
+  control,
   loading,
   handleSelectToken,
-  formSearchToken: { control },
 }) => {
-  const filterSeleted = useWatch({ control, name: 'filter' });
-  const TOKENS: ReadonlyArray<TokenProps> = [
-    {
-      type: '',
-      decimals: 9,
-      symbol: 'SUI',
-      totalBalance: BigNumber(0),
-    },
-    {
-      type: '',
-      decimals: 9,
-      symbol: 'USDC',
-      symbol2: 'ETH',
-      totalBalance: BigNumber(0),
-    },
-    {
-      type: '',
-      decimals: 9,
-      symbol: 'BTC',
-      totalBalance: BigNumber(0),
-    },
-  ];
-
-  const TOKENS_FAVORITE: ReadonlyArray<TokenProps> = [
-    {
-      type: '',
-      decimals: 9,
-      symbol: 'ETH',
-      totalBalance: BigNumber(0),
-    },
-  ];
+  const { network } = useNetwork();
+  const { coins, coinsMap } = useWeb3();
+  const favoriteTokens = useReadLocalStorage<ReadonlyArray<string>>(
+    `${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-tokens`
+  );
+  const filterSelected = useWatch({ control, name: 'filter' });
 
   return (
     <>
@@ -90,30 +90,40 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
       >
         {loading ? (
           <FetchingToken />
-        ) : !(TOKENS.length || TOKENS_FAVORITE.length) ? (
+        ) : !(coins.length || favoriteTokens?.length) ? (
           <NotFound />
-        ) : filterSeleted == TokenOrigin.All ? (
+        ) : filterSelected == TokenOrigin.All ? (
           <>
             <ModalTokenBody
-              tokens={TOKENS}
-              tokenOrigin={TokenOrigin.Suggested}
+              tokens={coins ?? []}
+              tokenOrigin={TokenOrigin.All}
               handleSelectToken={handleSelectToken}
             />
             <ModalTokenBody
-              tokens={TOKENS_FAVORITE}
               tokenOrigin={TokenOrigin.Favorites}
               handleSelectToken={handleSelectToken}
+              tokens={
+                (favoriteTokens?.map((token) => coinsMap[token]) ??
+                  []) as ReadonlyArray<TokenProps>
+              }
             />
           </>
-        ) : filterSeleted == TokenOrigin.Favorites && TOKENS_FAVORITE.length ? (
+        ) : filterSelected == TokenOrigin.Favorites &&
+          favoriteTokens?.length ? (
           <ModalTokenBody
-            tokens={TOKENS_FAVORITE}
+            tokens={coins ?? []}
             tokenOrigin={TokenOrigin.Favorites}
             handleSelectToken={handleSelectToken}
           />
-        ) : filterSeleted == TokenOrigin.Suggested && TOKENS.length ? (
+        ) : filterSelected == TokenOrigin.Suggested && coins.length ? (
           <ModalTokenBody
-            tokens={TOKENS}
+            tokens={
+              values(
+                network === Network.MAINNET
+                  ? MAINNET_BASE_COINS
+                  : TESTNET_BASE_COINS
+              ).map((type) => COIN_TYPE_TO_COIN[network][type]) ?? []
+            }
             tokenOrigin={TokenOrigin.Suggested}
             handleSelectToken={handleSelectToken}
           />

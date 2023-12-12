@@ -28,6 +28,7 @@ export { default as PercentageSVG } from './percentage';
 export { default as PlusSVG } from './plus';
 export { default as SearchSVG } from './search';
 export { default as SignOutSVG } from './sign-out';
+export { default as SUISVG } from './sui';
 export { default as SuiLogoSVG } from './sui-logo';
 export { default as SwapSVG } from './swap';
 export { default as TelegramSVG } from './telegram';

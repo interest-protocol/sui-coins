@@ -7,6 +7,7 @@ import { SwapSVG } from '@/svg';
 
 import Input from './input';
 import ManageSlippage from './manage-slippage';
+import SwapManager from './swap-manager';
 
 const Swap: FC = () => {
   const { getValues, setValue } = useFormContext();
@@ -36,7 +37,7 @@ const Swap: FC = () => {
         p={['xl', 'xl', 'xl', '7xl']}
         width={['100%', '100%', '100%', '39.75rem']}
       >
-        <Input label="to" />
+        <Input label="from" />
         <Box my="0.25rem" position="relative">
           <Box
             left="45%"
@@ -55,7 +56,7 @@ const Swap: FC = () => {
             </Button>
           </Box>
         </Box>
-        <Input label="from" />
+        <Input label="to" />
         <ManageSlippage />
         <Box mt="7xl" mx="auto">
           <Button variant="filled">
@@ -65,6 +66,7 @@ const Swap: FC = () => {
           </Button>
         </Box>
       </Box>
+      <SwapManager />
     </Layout>
   );
 };

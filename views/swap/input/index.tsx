@@ -5,12 +5,13 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 import { parseInputEventToNumberString } from '@/utils';
 
+import { SwapForm } from '../swap.types';
 import HeaderInfo from './header-info';
 import { InputProps } from './input.types';
 import SelectToken from './select-token';
 
 const Input: FC<InputProps> = ({ label }) => {
-  const { control, register, setValue } = useFormContext();
+  const { control, register, setValue } = useFormContext<SwapForm>();
 
   const balance = useWatch({
     control,
@@ -19,14 +20,14 @@ const Input: FC<InputProps> = ({ label }) => {
 
   return (
     <Box
+      py="l"
+      borderRadius="xs"
       border="1px solid"
       borderColor="outlineVariant"
-      borderRadius="xs"
-      py="l"
     >
-      <HeaderInfo label={label} balance={balance} />
+      <HeaderInfo label={label} balance={balance} setValue={setValue} />
       <Box pl="l" pt="1rem" display="flex" justifyContent="space-between">
-        <SelectToken label={label} />
+        <SelectToken label={label} balance={balance} />
         <TextField
           pl="-1rem"
           placeholder="000"

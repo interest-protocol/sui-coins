@@ -12,10 +12,11 @@ import { v4 } from 'uuid';
 import { SelectTokenFilterProps } from './select-token-modal.types';
 
 const SelectTokenFilter: FC<SelectTokenFilterProps> = ({
-  formSearchToken: { control, setValue },
+  control,
+  setValue,
 }) => {
   const { colors } = useTheme() as Theme;
-  const filterSeleted = useWatch({ control, name: 'filter' });
+  const filterSelected = useWatch({ control, name: 'filter' });
 
   return (
     <Box
@@ -32,9 +33,9 @@ const SelectTokenFilter: FC<SelectTokenFilterProps> = ({
           variant="outline"
           justifyContent="center"
           onClick={() => setValue('filter', index)}
-          color={filterSeleted == index ? 'primary' : ''}
-          borderColor={filterSeleted == index ? 'primary' : ''}
-          bg={filterSeleted == index ? `${colors.primary}14` : ''}
+          color={filterSelected == index ? 'primary' : ''}
+          borderColor={filterSelected == index ? 'primary' : ''}
+          bg={filterSelected == index ? `${colors.primary}14` : ''}
           nFocus={{
             color: 'surface',
           }}
