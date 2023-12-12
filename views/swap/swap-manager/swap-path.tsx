@@ -2,7 +2,7 @@ import { Box } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFormContext, UseFormReturn, useWatch } from 'react-hook-form';
 
-import { COINS_SVG_MAP_V2 } from '@/constants/coins';
+import { TOKEN_SVG_MAP } from '@/constants/token';
 import { SwapArrowSVG } from '@/svg';
 import { SwapForm } from '@/views/swap/swap.types';
 
@@ -37,11 +37,11 @@ const SwapPath: FC = () => {
   const coinOut =
     swapPath.length == 1 ? swapPath[0].coinOut : swapPath[1].coinOut;
 
-  const CoinInIcon = COINS_SVG_MAP_V2[coinIn] ?? COINS_SVG_MAP_V2.default;
+  const CoinInIcon = TOKEN_SVG_MAP[coinIn] ?? TOKEN_SVG_MAP.default;
 
-  const CoinOutIcon = COINS_SVG_MAP_V2[coinOut] ?? COINS_SVG_MAP_V2.default;
+  const CoinOutIcon = TOKEN_SVG_MAP[coinOut] ?? TOKEN_SVG_MAP.default;
 
-  const BaseTokenIcon = COINS_SVG_MAP_V2[baseToken] ?? COINS_SVG_MAP_V2.default;
+  const BaseTokenIcon = TOKEN_SVG_MAP[baseToken] ?? TOKEN_SVG_MAP.default;
 
   return (
     <Box
