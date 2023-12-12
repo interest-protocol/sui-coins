@@ -33,7 +33,7 @@
       "@/utils": ["./utils"],
       "@/utils/*": ["./utils/*"],
       "@/views/*": ["./views/*"],
-      "@/styles": ["./styles"],
+      "@/styles": ["./styles"]
     }
   },
   "exclude": ["node_modules"],
