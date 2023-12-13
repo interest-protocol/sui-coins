@@ -8,3 +8,8 @@ export interface IAirdropForm {
   token: IToken;
   file: File | null;
 }
+
+export interface AirdropUploadStatusCardProps {
+  index: number;
+  status: 'pending' | 'complete' | 'failed';
+}

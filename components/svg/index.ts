@@ -11,6 +11,7 @@ export { default as DiedComputerSVG } from './died-computer';
 export { default as DiscordSVG } from './discord';
 export { default as ErrorSVG } from './error';
 export { default as ETHSVG } from './eth';
+export { default as FileSVG } from './file';
 export { default as FolderSVG } from './folder';
 export { default as GithubSVG } from './github';
 export { default as HamburgerSVG } from './hamburger';
