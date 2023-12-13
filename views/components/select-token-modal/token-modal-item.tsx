@@ -1,20 +1,37 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
+import { useLocalStorage } from 'usehooks-ts';
 
+import { LOCAL_STORAGE_VERSION } from '@/constants';
+import { useNetwork } from '@/context/network';
 import { FavoriteSVG } from '@/svg';
 
 import { TokenModalItemProps } from './select-token-modal.types';
 
 const TokenModalItem: FC<TokenModalItemProps> = ({
+  type,
   Icon,
   symbol,
-  symbol2,
+  origin,
   balance,
   onClick,
   selected,
-  isFavorite,
-  favorite,
+  isSuggested,
 }) => {
+  const { network } = useNetwork();
+  const [favoriteTokens, setFavoriteTokens] = useLocalStorage<
+    ReadonlyArray<string>
+  >(`${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-tokens`, []);
+
+  const isFavorite = favoriteTokens.includes(type);
+
+  const handleFavoriteTokens = () =>
+    setFavoriteTokens(
+      isFavorite
+        ? favoriteTokens.filter((favType) => favType !== type)
+        : [...favoriteTokens, type]
+    );
+
   return (
     <Box
       p="1rem"
@@ -30,14 +47,14 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
     >
       <Box display="flex" alignItems="center">
         <Box
-          color="surface"
-          bg="#000"
+          bg="black"
+          color="white"
           display="flex"
-          alignItems="center"
-          justifyContent="center"
-          borderRadius="0.5rem"
           width="2.5rem"
           height="2.5rem"
+          alignItems="center"
+          borderRadius="0.5rem"
+          justifyContent="center"
         >
           <Icon filled width="100%" maxWidth="1.6rem" maxHeight="1.6rem" />
         </Box>
@@ -50,25 +67,32 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
           <Typography variant="title" size="medium">
             {symbol}
           </Typography>
-          <Typography variant="body" size="small">
-            {symbol2}
-          </Typography>
+          {origin && (
+            <Typography variant="body" size="small">
+              {origin}
+            </Typography>
+          )}
         </Box>
       </Box>
       <Box display="flex" alignItems="center" gap="xs">
-        <Typography variant="body" size="large">
-          {balance}
-        </Typography>
-        {favorite && (
-          <Button zIndex="10" variant="text" isIcon>
-            <FavoriteSVG
-              width="100%"
-              maxWidth="1rem"
-              maxHeight="1rem"
-              filled={isFavorite}
-            />
-          </Button>
+        {!isSuggested && (
+          <Typography variant="body" size="large">
+            {balance}
+          </Typography>
         )}
+        <Button
+          isIcon
+          zIndex="10"
+          variant="text"
+          onClick={handleFavoriteTokens}
+        >
+          <FavoriteSVG
+            width="100%"
+            maxWidth="1rem"
+            maxHeight="1rem"
+            filled={isFavorite}
+          />
+        </Button>
       </Box>
     </Box>
   );

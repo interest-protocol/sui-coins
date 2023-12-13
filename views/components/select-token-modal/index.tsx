@@ -11,6 +11,7 @@ import { useForm } from 'react-hook-form';
 import { SearchSVG, TimesSVG } from '@/svg';
 
 import {
+  CoinDataWithBalance,
   SearchTokenForm,
   SelectTokenModalProps,
   TokenOrigin,
@@ -21,10 +22,11 @@ import SelectTokenFilter from './select-token-modal-filter';
 
 const SelectTokenModal: FC<SelectTokenModalProps> = ({
   simple,
+  onSelect,
   closeModal,
 }) => {
   const [loading, setLoading] = useState(true);
-  const formSearchToken = useForm<SearchTokenForm>({
+  const { control, register, setValue } = useForm<SearchTokenForm>({
     defaultValues: {
       search: '',
       filter: TokenOrigin.All,
@@ -33,12 +35,14 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
 
   useEffect(() => {
     setLoading(true);
+    // TODO: Fetch token meta data
     setTimeout(() => {
       setLoading(false);
     }, Math.random() * 5000);
-  }, [formSearchToken]);
+  }, []);
 
-  const handleSelectToken = () => {
+  const handleSelectToken = (coin: CoinDataWithBalance) => {
+    onSelect(coin);
     closeModal();
   };
 
@@ -47,12 +51,12 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
       layout
       width="100%"
       display="flex"
+      bg="onPrimary"
       maxHeight="90vh"
       maxWidth="25rem"
       overflow="hidden"
       color="onSurface"
       borderRadius="1rem"
-      bg="onPrimary"
       flexDirection="column"
       boxShadow="0 0 5px #3334"
       transition={{ duration: 0.3 }}
@@ -77,7 +81,7 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
           fontSize="medium"
           placeholder="Sui"
           label="Search token"
-          {...formSearchToken.register('search')}
+          {...register('search')}
           Prefix={
             <SearchSVG maxWidth="1.2rem" maxHeight="1.2rem" width="100%" />
           }
@@ -88,7 +92,7 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
       </Box>
       {!simple && (
         <>
-          <SelectTokenFilter formSearchToken={formSearchToken} />
+          <SelectTokenFilter control={control} setValue={setValue} />
           <SelectTokenBaseTokens handleSelectToken={handleSelectToken} />
         </>
       )}
@@ -100,7 +104,7 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
       >
         <SelectTokenModalBody
           loading={loading}
-          formSearchToken={formSearchToken}
+          control={control}
           handleSelectToken={handleSelectToken}
         />
       </Motion>

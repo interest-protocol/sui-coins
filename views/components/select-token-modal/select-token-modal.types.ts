@@ -1,8 +1,13 @@
 import BigNumber from 'bignumber.js';
 import { FC } from 'react';
-import { UseFormReturn } from 'react-hook-form';
+import { Control, UseFormSetValue } from 'react-hook-form';
 
 import { SVGProps } from '@/components/svg/svg.types';
+import { CoinData } from '@/interface';
+
+export interface CoinDataWithBalance extends CoinData {
+  balance: number;
+}
 
 export interface LinearLoaderProps {
   loading: boolean;
@@ -16,23 +21,25 @@ export interface TokenModalMetadata {
 }
 
 export interface TokenModalItemProps {
+  type: string;
   symbol: string;
-  symbol2: string;
+  origin?: string;
   balance: string;
   selected: boolean;
-  favorite?: boolean;
+  isSuggested: boolean;
   onClick: () => void;
-  isFavorite?: boolean;
   Icon: FC<SVGProps & { filled?: boolean }>;
 }
 
 export interface SelectTokenModalProps {
   simple?: boolean;
   closeModal: () => void;
+  onSelect: (coin: CoinDataWithBalance) => void;
 }
 
 export interface SelectTokenFilterProps {
-  formSearchToken: UseFormReturn<SearchTokenForm>;
+  control: Control<SearchTokenForm>;
+  setValue: UseFormSetValue<SearchTokenForm>;
 }
 
 export enum TokenOrigin {
@@ -48,26 +55,30 @@ export interface SearchTokenForm {
 
 export interface SelectTokenModalBodyProps {
   loading: boolean;
-  handleSelectToken: () => void;
-  formSearchToken: UseFormReturn<SearchTokenForm>;
+  handleSelectToken: (coin: CoinDataWithBalance) => void;
+  control: Control<SearchTokenForm>;
 }
 
 export interface SelectTokenBaseTokensProps {
+  handleSelectToken: (coin: CoinDataWithBalance) => void;
+}
+
+export interface SelectTokenBaseTokenItemProps
+  extends Omit<CoinData, 'decimals'> {
   handleSelectToken: () => void;
 }
 
 export interface ModalTokenBodyProps {
-  isFavorite?: boolean;
   tokenOrigin: TokenOrigin;
-  handleSelectToken: () => void;
   tokens: ReadonlyArray<TokenProps>;
+  handleSelectToken: (coin: CoinDataWithBalance) => void;
 }
 
 export interface TokenProps {
   type: string;
   symbol: string;
-  symbol2?: string;
-  totalBalance: BigNumber;
+  origin?: string;
+  totalBalance?: BigNumber;
   objects?: ReadonlyArray<any>;
   decimals: number;
 }

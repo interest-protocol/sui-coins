@@ -1,22 +1,32 @@
-import { Box, Button, Motion } from '@interest-protocol/ui-kit';
+import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { useModal } from '@/hooks/use-modal';
 import { BNBSVG, ChevronRightSVG } from '@/svg';
 import SelectTokenModal from '@/views/components/select-token-modal';
+import { CoinDataWithBalance } from '@/views/components/select-token-modal/select-token-modal.types';
 
-import { InputProps as SelectTokenProps } from './input.types';
+import { SwapForm } from '../swap.types';
+import { SelectTokenProps } from './input.types';
 
-const SelectToken: FC<SelectTokenProps> = ({ label }) => {
+const SelectToken: FC<SelectTokenProps> = ({ label, balance }) => {
   const { setModal, handleClose } = useModal();
 
-  const { control } = useFormContext();
+  const { control, setValue } = useFormContext<SwapForm>();
 
   const token = useWatch({
     control,
     name: label,
   });
+
+  const onSelect = (coin: CoinDataWithBalance) => {
+    setValue(label, {
+      ...coin,
+      value: '',
+      locked: false,
+    });
+  };
 
   const openModal = () =>
     setModal(
@@ -27,7 +37,7 @@ const SelectToken: FC<SelectTokenProps> = ({ label }) => {
           duration: 0.3,
         }}
       >
-        <SelectTokenModal closeModal={handleClose} />
+        <SelectTokenModal closeModal={handleClose} onSelect={onSelect} />
       </Motion>,
       {
         isOpen: true,
@@ -69,6 +79,12 @@ const SelectToken: FC<SelectTokenProps> = ({ label }) => {
       >
         {token.symbol}
       </Button>
+      <Typography variant="label" size="small" mt="l">
+        Balance:
+        <Typography variant="label" size="small" color="primary" as="span">
+          {balance}
+        </Typography>
+      </Typography>
     </Box>
   );
 };
