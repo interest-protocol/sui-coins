@@ -8,21 +8,25 @@ import { PoolCardHeaderProps } from './pool-card.types';
 const PoolCardHeader: FC<PoolCardHeaderProps> = ({ name, url, Logo }) => {
   const { push } = useRouter();
   const handlePoolCardDetails = () => push(url);
+
   return (
-    <Box
-      display="flex"
-      justifyContent="space-between"
-      alignItems="center"
-      width="100%"
-    >
-      <Tag PrefixIcon={Logo} size="small" variant="outline" height="1.5rem">
-        <Typography
-          display="flex"
-          flexDirection="row"
-          fontFamily="Proto"
-          size="small"
-          variant="body"
-        >
+    <Box display="flex" alignItems="center" justifyContent="space-between">
+      <Tag
+        PrefixIcon={
+          <Box
+            display="flex"
+            alignItems="center"
+            borderRadius="full"
+            color="lowestContainer"
+            justifyContent="center"
+          >
+            {Logo}
+          </Box>
+        }
+        size="small"
+        variant="outline"
+      >
+        <Typography size="small" variant="label">
           {name}
         </Typography>
       </Tag>

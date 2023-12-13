@@ -7,74 +7,41 @@ import { QuestionCircleSVG } from '@/svg';
 import { PoolTradeInfoProps } from './pool-card.types';
 
 const CardTradeInfo: FC<PoolTradeInfoProps> = ({ lines }) => (
-  <Box
-    bg="surface"
-    borderRadius="1rem"
-    px="1rem"
-    py="0.5rem"
-    width={['100%', '100%', '100%', '19rem']}
-  >
+  <Box px="m" py="xs" bg="surface" borderRadius="1rem">
     {lines.map((line, index) => (
       <Box
+        py="xs"
         key={v4()}
         display="flex"
-        justifyContent="space-between"
-        alignItems="flex-start"
-        alignSelf="stretch"
-        py="0.5rem"
         borderBottom="1px solid"
+        justifyContent="space-between"
         borderColor={
           lines.length - 1 > index ? 'outlineVariant' : 'transparent'
         }
       >
         <Typography
-          textTransform="capitalize"
-          color="outline"
           size="medium"
+          color="outline"
           variant="body"
+          textTransform="capitalize"
         >
           {line.description}
         </Typography>
-        <Box
-          display="flex"
-          flexDirection="row"
-          justifyContent="flex-end"
-          alignItems="flex-end"
-          minWidth="10rem"
-        >
-          <Typography
-            color="onSurface"
-            size="medium"
-            variant="body"
-            pr="0.5rem"
-          >
+        <Box display="flex" gap="xs" alignItems="center">
+          <Typography color="onSurface" size="medium" variant="body">
             {index >= 1 ? '$' : ''}
             {line.amount}%
           </Typography>
           <TooltipWrapper
             bg="onSurface"
+            tooltipPosition="right"
             tooltipContent={
               <Typography variant="body" size="medium" color="surface">
                 {line.tooltipInfo}
               </Typography>
             }
-            tooltipPosition="right"
           >
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              width="0.875rem"
-              height="1.27rem"
-              color="onSurface"
-            >
-              <QuestionCircleSVG
-                maxWidth="100%"
-                maxHeight="100%"
-                width="1.5rem"
-                height="1.5rem"
-              />
-            </Box>
+            <QuestionCircleSVG width="100%" maxWidth="1rem" maxHeight="1rem" />
           </TooltipWrapper>
         </Box>
       </Box>
