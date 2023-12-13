@@ -28,13 +28,13 @@ export const useDialog = () => {
           setModal(<Dialog isOpen status="success" {...success} />, {
             isOpen: true,
             custom: true,
-            onClose: loading.onClose,
+            onClose: success.onClose,
           });
         } catch {
           setModal(<Dialog isOpen status="error" {...error} />, {
             isOpen: true,
             custom: true,
-            onClose: loading.onClose,
+            onClose: error.onClose,
           });
         }
       },
