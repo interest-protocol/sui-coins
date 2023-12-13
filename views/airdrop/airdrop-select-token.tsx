@@ -65,7 +65,6 @@ const AirdropSelectToken: FC = () => {
                     symbol,
                     decimals,
                     value: '0',
-                    balance: 0,
                   });
                   setIsOpen(false);
                 }}

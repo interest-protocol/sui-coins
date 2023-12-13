@@ -1,14 +1,51 @@
 import { Box, Theme, Typography, useTheme } from '@interest-protocol/ui-kit';
-import { FC, useState } from 'react';
+import { ChangeEventHandler, DragEventHandler, FC, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
 import { FolderSVG } from '@/svg';
 
-import { isFile } from './airdrop.utils';
+import { IAirdropForm } from './airdrop.types';
 
 const AirdropUploadFile: FC = () => {
   const { colors } = useTheme() as Theme;
-
   const [dragging, setDragging] = useState(false);
+  const { setValue } = useFormContext<IAirdropForm>();
+
+  const handleChangeFile: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const file = e.target.files?.[0];
+
+    if (!file) return toast.error('Something went wrong');
+
+    if (file.type !== 'text/csv')
+      return toast.error('Make sure that you are sending a CSV File');
+
+    setValue('file', file);
+  };
+
+  const handleDropFile: DragEventHandler<HTMLDivElement> = (e) => {
+    e.preventDefault();
+
+    if (e.dataTransfer.items) {
+      const item = e.dataTransfer.items[0];
+
+      if (item.kind !== 'file' || item.type !== 'text/csv')
+        return toast.error('Make sure that you are sending a CSV File');
+
+      const file = item.getAsFile();
+
+      if (!file) return toast.error('Something went wrong');
+
+      return setValue('file', file);
+    }
+
+    const file = e.dataTransfer.files[0];
+
+    if (file.type !== 'text/csv')
+      return toast.error('Make sure that you are sending a CSV File');
+
+    setValue('file', file);
+  };
 
   return (
     <Box display="flex" flexDirection="column" gap="s">
@@ -24,39 +61,12 @@ const AirdropUploadFile: FC = () => {
         borderWidth="1px"
         alignItems="center"
         flexDirection="column"
+        onDrop={handleDropFile}
+        onDragEnter={() => setDragging(true)}
+        onDragLeave={() => setDragging(false)}
+        onDragOver={(e) => e.preventDefault()}
         borderStyle={dragging ? 'solid' : 'dashed'}
         borderColor={dragging ? 'primary' : 'outlineVariant'}
-        onDragOver={(e) => {
-          e.preventDefault();
-        }}
-        onDragEnter={(e) => {
-          e.preventDefault();
-          setDragging(true);
-        }}
-        onDragLeave={(e) => {
-          e.preventDefault();
-          setDragging(false);
-        }}
-        onDrop={(e) => {
-          e.preventDefault();
-
-          Array(...(e.dataTransfer.items || e.dataTransfer.files)).reduce(
-            (acc, item) => {
-              if (!isFile(item)) {
-                if (item.kind !== 'file') return acc;
-
-                const file = item.getAsFile();
-
-                if (!file) return acc;
-
-                return [...acc, file];
-              }
-
-              return [...acc, item];
-            },
-            [] as ReadonlyArray<File>
-          );
-        }}
       >
         <Box
           display="flex"
@@ -90,7 +100,12 @@ const AirdropUploadFile: FC = () => {
             upload
           </Typography>
           <Box display="none">
-            <input type="file" id="file" />
+            <input
+              id="file"
+              type="file"
+              accept="text/csv"
+              onChange={handleChangeFile}
+            />
           </Box>
         </Typography>
       </Box>

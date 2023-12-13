@@ -12,8 +12,8 @@ const AirdropPage: NextPage = () => {
       token: {
         ...COINS[0],
         value: '0',
-        balance: 0,
       },
+      file: null,
     },
   });
 
