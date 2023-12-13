@@ -6,10 +6,8 @@ import { PoolStatusLinesProps } from './pool-status.types';
 
 const PoolStatus: FC<PoolStatusLinesProps> = ({ lines }) => (
   <Box
-    p="xl"
     display="flex"
     flexDirection="column"
-    gap="m"
     bg="surface"
     borderRadius="1rem"
     px="1rem"

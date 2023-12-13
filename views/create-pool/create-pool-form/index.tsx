@@ -53,7 +53,7 @@ const CreatePoolForm: FC = () => {
           />
           <Box>3. Coin and Initial deposit</Box>
           <TextField
-            label="Select token and deposit"
+            label="Select token & deposit"
             {...register('coinOwner')}
             placeholder="00"
             status={errors.name && 'error'}
