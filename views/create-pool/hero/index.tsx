@@ -1,23 +1,23 @@
 import { Box } from '@interest-protocol/ui-kit';
-import { useWalletKit } from '@mysten/wallet-kit';
 import { FC } from 'react';
-
-import ConnectWalletButton from '@/components/wallet/connect-wallet-button';
 
 import Illustration from '../illustration';
 
 const Hero: FC = () => {
-  const { isConnected } = useWalletKit();
   return (
     <Box
       mb="3xl"
+      width="25rem"
+      height="30rem"
       display="flex"
+      justifyContent="center"
+      alignItems="center"
       position="relative"
       maxWidth="34.375rem"
       flexDirection="column"
     >
       <Illustration />
-      {!isConnected && (
+      {/* {!isConnected && (
         <Box
           bottom="5%"
           width="100%"
@@ -29,7 +29,7 @@ const Hero: FC = () => {
             <ConnectWalletButton />
           </Box>
         </Box>
-      )}
+      )} */}
     </Box>
   );
 };
