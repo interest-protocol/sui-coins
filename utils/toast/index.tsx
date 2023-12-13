@@ -1,4 +1,4 @@
-import { Box, Typography } from '@interest-protocol/ui-kit';
+import { Typography } from '@interest-protocol/ui-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { propOr } from 'ramda';
 import toast from 'react-hot-toast';
@@ -16,17 +16,14 @@ export const showTXSuccessToast = async (
 
   toast(
     <a target="__black" rel="noreferrer nofollow" href={explorerLink}>
-      <Box display="flex" alignItems="center">
-        <Typography
-          variant="medium"
-          color="accent"
-          textDecoration="underline"
-          fontWeight="700"
-          cursor="pointer"
-        >
-          Sui Explorer
-        </Typography>
-      </Box>
+      <Typography
+        size="medium"
+        variant="label"
+        cursor="pointer"
+        textDecoration="underline"
+      >
+        Sui Explorer
+      </Typography>
     </a>
   );
 };
