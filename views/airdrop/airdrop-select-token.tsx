@@ -33,12 +33,6 @@ const AirdropSelectToken: FC = () => {
 
   const dropdownRef = useClickOutsideListenerRef<HTMLDivElement>(closeDropdown);
 
-  const TokenIcon = token ? (
-    TOKEN_ICONS[token.symbol as TOKEN_SYMBOL] ?? SUISVG
-  ) : (
-    <></>
-  );
-
   const renderToken = () => {
     if (!token) return null;
     const TokenIcon = TOKEN_ICONS[token.symbol as TOKEN_SYMBOL] ?? SUISVG;
