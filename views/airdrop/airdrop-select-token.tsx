@@ -1,16 +1,20 @@
 import { Box, ListItem, Typography } from '@interest-protocol/ui-kit';
+import BigNumber from 'bignumber.js';
 import { not } from 'ramda';
 import { FC, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
-import { COINS, TOKEN_ICONS, TOKEN_SYMBOL } from '@/constants';
+import { TOKEN_ICONS, TOKEN_SYMBOL } from '@/constants';
+import { FixedPointMath } from '@/lib';
 import { ChevronRightSVG, SUISVG } from '@/svg';
 
+import { useGetAllCoinsWithMetadata } from '../my-coins/my-coins.hooks';
 import { IAirdropForm } from './airdrop.types';
 
 const AirdropSelectToken: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { coins, isLoading } = useGetAllCoinsWithMetadata();
   const { control, setValue } = useFormContext<IAirdropForm>();
   const token = useWatch({ control, name: 'token' });
 
@@ -38,20 +42,22 @@ const AirdropSelectToken: FC = () => {
           <ChevronRightSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
         </Box>
       </Box>
-      {isOpen && (
+      {isOpen && !isLoading && (
         <Box
           zIndex={1}
           top="3.5rem"
           width="100%"
+          overflow="auto"
           cursor="pointer"
+          maxHeight="20rem"
           bg="lowContainer"
           borderRadius="xs"
           position="absolute"
           border="2px solid"
           borderColor="outline"
         >
-          {COINS.map(({ symbol, type, decimals }) => {
-            const Icon = TOKEN_ICONS[symbol];
+          {coins.map(({ symbol, coinType, decimals, balance }) => {
+            const Icon = TOKEN_ICONS[symbol as TOKEN_SYMBOL] ?? SUISVG;
 
             return (
               <ListItem
@@ -61,10 +67,10 @@ const AirdropSelectToken: FC = () => {
                 cursor="pointer"
                 onClick={() => {
                   setValue('token', {
-                    type,
                     symbol,
                     decimals,
                     value: '0',
+                    type: coinType,
                   });
                   setIsOpen(false);
                 }}
@@ -81,6 +87,11 @@ const AirdropSelectToken: FC = () => {
                   >
                     <Icon width="100%" maxWidth="1rem" maxHeight="1rem" />
                   </Box>
+                }
+                SuffixIcon={
+                  <Typography variant="body" size="medium">
+                    {FixedPointMath.toNumber(BigNumber(balance), decimals)}
+                  </Typography>
                 }
               />
             );

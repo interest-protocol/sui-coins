@@ -7,6 +7,7 @@ const AirdropSummary = () => {
   const { control } = useFormContext<IAirdropForm>();
 
   const { value, symbol } = useWatch({ control, name: 'token' });
+  const airdropList = useWatch({ control, name: 'airdropList' });
 
   return (
     <Box display="flex" flexDirection="column" gap="s">
@@ -46,10 +47,10 @@ const AirdropSummary = () => {
             opacity="0.80"
             color="onSurface"
           >
-            Addresses sent to
+            Total Addresses
           </Typography>
           <Typography variant="body" size="medium" color="onSurface">
-            --
+            {airdropList ? airdropList.length : '--'}
           </Typography>
         </Box>
         <Box py="xs" display="flex" justifyContent="space-between">

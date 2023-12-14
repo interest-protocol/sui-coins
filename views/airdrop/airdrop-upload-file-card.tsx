@@ -46,11 +46,15 @@ const AirdropUploadFileCard: FC<AirdropUploadFileCardProps> = ({
             {name}
           </Typography>
           <Typography variant="body" size="small" opacity="0.48">
-            {size} bytes
+            {size} address{size !== 1 && 'es'}
           </Typography>
         </Box>
       </Box>
-      <Button isIcon variant="text" onClick={() => setValue('file', null)}>
+      <Button
+        isIcon
+        variant="text"
+        onClick={() => setValue('airdropList', null)}
+      >
         <XCirlceSVG maxHeight="1rem" maxWidth="1rem" width="1rem" />
       </Button>
     </Box>

@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { FolderSVG } from '@/svg';
 
 import { IAirdropForm } from './airdrop.types';
+import { csvToAirdrop } from './airdrop.utils';
 import AirdropUploadFileCard from './airdrop-upload-file-card';
 
 const AirdropUploadFile: FC = () => {
@@ -13,9 +14,9 @@ const AirdropUploadFile: FC = () => {
   const [dragging, setDragging] = useState(false);
   const { setValue, control } = useFormContext<IAirdropForm>();
 
-  const csvFile = useWatch({ control, name: 'file' });
+  const airdropList = useWatch({ control, name: 'airdropList' });
 
-  const handleChangeFile: ChangeEventHandler<HTMLInputElement> = (e) => {
+  const handleChangeFile: ChangeEventHandler<HTMLInputElement> = async (e) => {
     const file = e.target.files?.[0];
 
     if (!file) return toast.error('Something went wrong');
@@ -23,10 +24,10 @@ const AirdropUploadFile: FC = () => {
     if (file.type !== 'text/csv')
       return toast.error('Make sure that you are sending a CSV File');
 
-    setValue('file', file);
+    setValue('airdropList', csvToAirdrop(await file.text()));
   };
 
-  const handleDropFile: DragEventHandler<HTMLDivElement> = (e) => {
+  const handleDropFile: DragEventHandler<HTMLDivElement> = async (e) => {
     e.preventDefault();
 
     if (e.dataTransfer.items) {
@@ -39,15 +40,17 @@ const AirdropUploadFile: FC = () => {
 
       if (!file) return toast.error('Something went wrong');
 
-      return setValue('file', file);
+      return setValue('airdropList', csvToAirdrop(await file.text()));
     }
 
     const file = e.dataTransfer.files[0];
 
+    if (!file) return toast.error('Something went wrong');
+
     if (file.type !== 'text/csv')
       return toast.error('Make sure that you are sending a CSV File');
 
-    setValue('file', file);
+    setValue('airdropList', csvToAirdrop(await file.text()));
   };
 
   return (
@@ -55,10 +58,8 @@ const AirdropUploadFile: FC = () => {
       <Typography variant="body" size="large">
         2. Upload file
       </Typography>
-      {csvFile ? (
-        <Box>
-          <AirdropUploadFileCard name={csvFile.name} size={csvFile.size} />
-        </Box>
+      {airdropList ? (
+        <AirdropUploadFileCard name="Batch" size={airdropList.length} />
       ) : (
         <Box
           p="2xl"
