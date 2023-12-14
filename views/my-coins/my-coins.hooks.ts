@@ -110,7 +110,14 @@ export const useGetAllCoinsWithMetadata: TUseGetAllCoinsWithMetadata = () => {
           setData(
             values(coinsRawMap).map((coin, index) => ({
               ...coin,
-              ...(coinsMetadata[index] as CoinMetadata),
+              ...(coinsMetadata[index]
+                ? (coinsMetadata[index] as CoinMetadata)
+                : {
+                    decimals: 0,
+                    name: '',
+                    description: '',
+                    symbol: '',
+                  }),
             }))
           );
         } catch (e) {
