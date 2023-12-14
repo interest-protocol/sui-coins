@@ -6,7 +6,7 @@ export interface IToken extends CoinData {
 
 export interface IAirdropForm {
   token: IToken;
-  file: File | null;
+  file: string | null;
 }
 
 export interface AirdropUploadStatusCardProps {
