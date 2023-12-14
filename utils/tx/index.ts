@@ -12,9 +12,14 @@ export const makeSWRKey = (
     .concat([methodName])
     .join('|');
 
-export const throwTXIfNotSuccessful = (tx: SuiTransactionBlockResponse) => {
-  if (!!tx.effects?.status && tx.effects.status.status !== 'success')
+export const throwTXIfNotSuccessful = (
+  tx: SuiTransactionBlockResponse,
+  callback?: () => void
+) => {
+  if (!!tx.effects?.status && tx.effects.status.status !== 'success') {
+    callback?.();
     throw new Error();
+  }
 };
 
 export const createObjectsParameter = ({

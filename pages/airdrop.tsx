@@ -6,7 +6,12 @@ import Airdrop from '@/views/airdrop';
 import { IAirdropForm } from '@/views/airdrop/airdrop.types';
 
 const AirdropPage: NextPage = () => {
-  const form = useForm<IAirdropForm>({});
+  const form = useForm<IAirdropForm>({
+    defaultValues: {
+      done: [],
+      failed: [],
+    },
+  });
 
   return (
     <FormProvider {...form}>

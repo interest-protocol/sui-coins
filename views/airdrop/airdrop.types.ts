@@ -11,9 +11,11 @@ export interface AirdropData {
 
 export interface IAirdropForm {
   token: IToken;
-  airdropList: ReadonlyArray<AirdropData> | null;
   error: string;
   decimals: number;
+  done: ReadonlyArray<number>;
+  failed: ReadonlyArray<number>;
+  airdropList: ReadonlyArray<AirdropData> | null;
 }
 
 export interface AirdropUploadStatusCardProps {

@@ -1,9 +1,7 @@
-export function splitArray<T>(list: ReadonlyArray<T>, size: number) {
-  const chunks = [];
-
-  for (let i = 0; i < list.length; i += size) {
-    chunks.push(list.slice(i, i + size));
-  }
-
-  return chunks;
-}
+export const splitArray = <T>(
+  list: ReadonlyArray<T>,
+  size: number
+): ReadonlyArray<ReadonlyArray<T>> => [
+  list.slice(0, size),
+  ...(list.length > size ? splitArray(list.slice(size), size) : []),
+];
