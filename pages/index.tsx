@@ -1,12 +1,12 @@
 import { NextPage } from 'next';
 
 import { SEO } from '@/components';
-import CreatePoolPage from '@/views/create-pool';
+import CreateToken from '@/views/create-token';
 
 const CreateTokenPage: NextPage = () => (
   <>
     <SEO pageTitle="Create pool" />
-    <CreatePoolPage />
+    <CreateToken />
   </>
 );
 

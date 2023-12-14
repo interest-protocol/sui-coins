@@ -17,4 +17,8 @@ export const MENU_ITEMS = [
     name: 'My Coins',
     path: Routes[RoutesEnum.MyCoins],
   },
+  {
+    name: 'Create Pool',
+    path: Routes[RoutesEnum.CreatePool],
+  },
 ];

@@ -6,12 +6,12 @@ import { PoolStatusLinesProps } from './pool-status.types';
 
 const PoolStatus: FC<PoolStatusLinesProps> = ({ lines }) => (
   <Box
-    display="flex"
-    flexDirection="column"
-    bg="surface"
-    borderRadius="1rem"
     px="1rem"
     py="0.5rem"
+    bg="surface"
+    display="flex"
+    borderRadius="1rem"
+    flexDirection="column"
     width={['100%', '100%', '100%', '100%']}
   >
     {lines.map((line, index) => (

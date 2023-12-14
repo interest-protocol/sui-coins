@@ -1,14 +1,13 @@
-import { ReactNode } from 'react';
+import { CoinData } from '@/interface';
 
-export interface TokenInfo {
-  tokenIcon: ReactNode;
-  tokenName: string;
-  value: number;
+export interface TokenInfo extends CoinData {
+  value: `${number}`;
 }
 
-export interface PoolProps {
+export interface IPoolForm {
+  dex: string;
   name: string;
-  coinOwner: string;
-  tradeFee: number;
-  token: TokenInfo;
+  tradeFee: string;
+  tokenA: TokenInfo;
+  tokenB: TokenInfo;
 }
