@@ -6,19 +6,15 @@ import { v4 } from 'uuid';
 
 import { EXPLORER_URL } from '@/constants';
 import { useNetwork } from '@/context/network';
+import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { FixedPointMath } from '@/lib';
 import { ArrowTopRightSVG, CaretRightSVG, DefaultTokenSVG } from '@/svg';
 
-import { TCoinWithMetadata } from './my-coins.types';
-
-const MyCoinsItem: FC<TCoinWithMetadata> = ({
-  name,
-  owned,
-  symbol,
-  iconUrl,
+const MyCoinsItem: FC<CoinObject & { capId: string | null }> = ({
+  capId,
   balance,
   objects,
-  decimals,
+  metadata: { iconUrl, name, symbol, decimals },
 }) => {
   const { network } = useNetwork();
   const [isOpen, setIsOpen] = useState(false);
@@ -74,12 +70,12 @@ const MyCoinsItem: FC<TCoinWithMetadata> = ({
           fontFamily="Proto"
           borderRadius="full"
           whiteSpace="nowrap"
-          onClick={() => owned && goToExplorer(owned)}
-          bg={owned ? 'successContainer' : 'warningContainer'}
-          color={owned ? 'onSuccessContainer' : 'onWarningContainer'}
+          onClick={() => capId && goToExplorer(capId)}
+          bg={capId ? 'successContainer' : 'warningContainer'}
+          color={capId ? 'onSuccessContainer' : 'onWarningContainer'}
         >
-          {owned ? 'Owned' : 'Not Owned'}
-          {owned && (
+          {capId ? 'capId' : 'Not capId'}
+          {capId && (
             <ArrowTopRightSVG
               width="100%"
               maxWidth="0.8rem"
@@ -141,7 +137,7 @@ const MyCoinsItem: FC<TCoinWithMetadata> = ({
                     width="0.25rem"
                     height="0.25rem"
                     borderRadius="full"
-                    bg={owned ? 'success' : 'warning'}
+                    bg={capId ? 'success' : 'warning'}
                   />
                 </Box>
               </Box>

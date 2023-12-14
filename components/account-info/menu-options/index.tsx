@@ -119,8 +119,10 @@ const MenuOptions: FC<MenuOptionsProps> = ({
           <OptionItem
             mobileOnly
             withBorderBottom
-            selected={asPath == '/my-coins'}
-            onClick={() => asPath !== '/my-coins' && push('/my-coins')}
+            selected={asPath == '/use-get-all-coins'}
+            onClick={() =>
+              asPath !== '/use-get-all-coins' && push('/use-get-all-coins')
+            }
           >
             My Coins
           </OptionItem>

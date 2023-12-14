@@ -1,28 +1,30 @@
 import { Box, Button } from '@interest-protocol/ui-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import { useWalletKit } from '@mysten/wallet-kit';
 import BigNumber from 'bignumber.js';
+import { useGetAllCoins } from 'hooks/use-get-all-coins';
 import { FC, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { AIRDROP_SEND_CONTRACT } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useSuiClient } from '@/hooks/use-sui-client';
 import { FixedPointMath } from '@/lib';
-import { splitArray } from '@/utils';
+import { sleep, throwTXIfNotSuccessful } from '@/utils';
+import { createObjectsParameter, splitArray } from '@/utils';
 
+import { BATCH_SIZE, RATE_LIMIT_DELAY } from './airdrop.constants';
 import { IAirdropForm } from './airdrop.types';
-
-const RATE_LIMIT_DELAY = 1000;
-
-const BATCH_SIZE = 500;
 
 const AirdropButton: FC<{ onSend: () => void }> = ({ onSend }) => {
   const { control, getValues } = useFormContext<IAirdropForm>();
   const [progress, setProgress] = useState(0);
 
+  const { data, isLoading, error } = useGetAllCoins();
   const { airdropList, token } = useWatch({ control });
   const { network } = useNetwork();
-  const suiClient = useSuiClient(network);
+  const suiClient = useSuiClient();
   const { signTransactionBlock } = useWalletKit();
   const isDisabled =
     !airdropList ||
@@ -42,15 +44,148 @@ const AirdropButton: FC<{ onSend: () => void }> = ({ onSend }) => {
     try {
       const { airdropList, token } = getValues();
 
-      if (!airdropList) return;
+      if (!airdropList || !data || !data[token.type]) return;
+
+      const contractPackageId = AIRDROP_SEND_CONTRACT[network];
 
       const list = splitArray(airdropList, BATCH_SIZE);
 
-      for (const batch of list) {
-        const txb = new TransactionBlock();
+      if (token.type === SUI_TYPE_ARG) {
+        for await (const batch of list) {
+          const totalAMount = batch
+            .reduce(
+              (acc, data) => acc.plus(BigNumber(data.amount)),
+              BigNumber(0)
+            )
+            .toString();
+
+          const txb = new TransactionBlock();
+
+          const [coinToSend] = txb.splitCoins(txb.gas, [
+            txb.pure(totalAMount.toString()),
+          ]);
+
+          txb.moveCall({
+            target: `${contractPackageId}::airdrop::send`,
+            typeArguments: [token.type],
+            arguments: [
+              coinToSend,
+              txb.pure(batch.map((x) => x.address)),
+              txb.pure(batch.map((x) => x.amount)),
+            ],
+          });
+          const { signature, transactionBlockBytes } =
+            await signTransactionBlock({
+              transactionBlock: txb,
+            });
+
+          const tx = await suiClient.executeTransactionBlock({
+            transactionBlock: transactionBlockBytes,
+            signature,
+            options: { showEffects: true },
+            requestType: 'WaitForEffectsCert',
+          });
+
+          throwTXIfNotSuccessful(tx);
+
+          setProgress((x) => x + 1);
+
+          await sleep(RATE_LIMIT_DELAY);
+        }
+      } else {
+        const firstCoin = data[token.type].objects[0];
+
+        // There are other coins
+        if (data[token.type].objects.length > 1) {
+          const txb = new TransactionBlock();
+
+          const coinInList = createObjectsParameter({
+            coinsMap: data,
+            txb: txb,
+            type: token.type,
+            amount: airdropList
+              .reduce(
+                (acc, data) => acc.plus(BigNumber(data.amount)),
+                BigNumber(0)
+              )
+              .toString(),
+          });
+
+          txb.moveCall({
+            target: '0x2::pay::join_vec',
+            typeArguments: [token.type],
+            arguments: [
+              txb.object(firstCoin.coinObjectId),
+              txb.makeMoveVec({
+                objects: coinInList.slice(1),
+              }),
+            ],
+          });
+
+          const { signature, transactionBlockBytes } =
+            await signTransactionBlock({
+              transactionBlock: txb,
+            });
+
+          const tx = await suiClient.executeTransactionBlock({
+            transactionBlock: transactionBlockBytes,
+            signature,
+            options: { showEffects: true },
+            requestType: 'WaitForEffectsCert',
+          });
+
+          throwTXIfNotSuccessful(tx);
+
+          await sleep(RATE_LIMIT_DELAY);
+
+          for await (const batch of list) {
+            const totalAMount = batch
+              .reduce(
+                (acc, data) => acc.plus(BigNumber(data.amount)),
+                BigNumber(0)
+              )
+              .toString();
+
+            const txb = new TransactionBlock();
+
+            const coinToSend = txb.splitCoins(
+              txb.object(firstCoin.coinObjectId),
+              [totalAMount]
+            );
+
+            txb.moveCall({
+              target: `${contractPackageId}::airdrop::send`,
+              typeArguments: [token.type],
+              arguments: [
+                coinToSend,
+                txb.pure(batch.map((x) => x.address)),
+                txb.pure(batch.map((x) => x.amount)),
+              ],
+            });
+            const { signature, transactionBlockBytes } =
+              await signTransactionBlock({
+                transactionBlock: txb,
+              });
+
+            const tx = await suiClient.executeTransactionBlock({
+              transactionBlock: transactionBlockBytes,
+              signature,
+              options: { showEffects: true },
+              requestType: 'WaitForEffectsCert',
+            });
+
+            throwTXIfNotSuccessful(tx);
+
+            await sleep(RATE_LIMIT_DELAY);
+
+            setProgress((x) => x + 1);
+          }
+        }
       }
-    } catch {
+    } catch (e) {
+      console.log(e);
     } finally {
+      console.log('');
     }
   };
 

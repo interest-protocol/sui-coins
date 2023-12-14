@@ -65,9 +65,9 @@ export const COINS = [
 
 export const AIRDROP_SEND_CONTRACT = {
   [SUI_MAINNET_CHAIN]:
-    '0xa473005c6f8969fbca783d0e4773a2c464abcf7654c4482d7cc4e22b8b62e85e',
+    '0xfaa73f744aac0e67eab8e4b631dfc69430e329a4b28a87296f6f1f2ab9a3012f',
   [SUI_TESTNET_CHAIN]:
-    '0xa473005c6f8969fbca783d0e4773a2c464abcf7654c4482d7cc4e22b8b62e85e',
+    '0xfaa73f744aac0e67eab8e4b631dfc69430e329a4b28a87296f6f1f2ab9a3012f',
 };
 
 export const TOAST_DURATION = 10000;
