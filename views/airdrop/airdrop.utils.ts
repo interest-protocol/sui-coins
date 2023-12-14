@@ -1,19 +1,32 @@
 import { isValidSuiAddress } from '@mysten/sui.js/utils';
+import { propOr } from 'ramda';
 
-export const csvToAirdrop = (csv: string): ReadonlyArray<[string, number]> => {
-  const lines = csv.split('\n');
+import { isBigNumberish } from '@/utils';
 
-  return lines.reduce(
-    (acc, line) => {
-      const lineColumns = line.split(',');
+import { AirdropData } from './airdrop.types';
 
-      const address = lineColumns[0];
-      const amount = Number(lineColumns[1]);
+export const csvToAirdrop = (csv: string): AirdropData[] | string => {
+  try {
+    const lines = csv.split(',');
+    const addresses = lines.filter((x) => isValidSuiAddress(x));
+    const amounts = lines.filter(
+      (x) => !isValidSuiAddress(x) && isBigNumberish(x)
+    );
 
-      if (!isValidSuiAddress(address) || isNaN(amount)) return acc;
+    if (addresses.length !== amounts.length)
+      throw new Error('Numbers of addresses and numbers do not match');
 
-      return [...acc, [address, Number(lineColumns[1])]];
-    },
-    [] as ReadonlyArray<[string, number]>
-  );
+    const data = [] as AirdropData[];
+
+    addresses.forEach((address, i) => {
+      data.push({
+        address,
+        amount: amounts[i],
+      });
+    });
+
+    return data;
+  } catch (error) {
+    return propOr('Something went wrong', 'message', error);
+  }
 };

@@ -87,6 +87,7 @@ const AirdropSelectToken: FC = () => {
                   title={symbol}
                   cursor="pointer"
                   onClick={() => {
+                    setValue('decimals', decimals);
                     setValue('token', {
                       symbol,
                       decimals,

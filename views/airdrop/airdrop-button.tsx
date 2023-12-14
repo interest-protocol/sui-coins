@@ -1,6 +1,9 @@
 import { Box, Button } from '@interest-protocol/ui-kit';
+import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+
+import { FixedPointMath } from '@/lib';
 
 import { IAirdropForm } from './airdrop.types';
 
@@ -12,7 +15,14 @@ const AirdropButton: FC<{ onSend: () => void }> = ({ onSend }) => {
   const isDisabled =
     !airdropList ||
     !token?.balance ||
-    token.balance < airdropList.reduce((acc, [, amount]) => acc + amount, 0);
+    token.balance <
+      FixedPointMath.toNumber(
+        airdropList?.reduce(
+          (acc, { amount }) => acc.plus(BigNumber(amount ?? 0)),
+          BigNumber(0)
+        ),
+        token.decimals
+      );
 
   const handleSend = async () => {
     onSend();

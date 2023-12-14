@@ -1,12 +1,15 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
+import BigNumber from 'bignumber.js';
 import { useFormContext, useWatch } from 'react-hook-form';
+
+import { FixedPointMath } from '@/lib';
 
 import { IAirdropForm } from './airdrop.types';
 
 const AirdropSummary = () => {
   const { control } = useFormContext<IAirdropForm>();
 
-  const { symbol } = useWatch({ control, name: 'token' });
+  const { symbol, decimals } = useWatch({ control, name: 'token' });
   const airdropList = useWatch({ control, name: 'airdropList' });
 
   return (
@@ -31,7 +34,16 @@ const AirdropSummary = () => {
             You will send
           </Typography>
           <Typography variant="body" size="medium" color="onSurface">
-            {airdropList?.reduce((acc, [, amount]) => acc + amount, 0)} {symbol}
+            {airdropList
+              ? FixedPointMath.toNumber(
+                  airdropList?.reduce(
+                    (acc, { amount }) => acc.plus(BigNumber(amount)),
+                    BigNumber(0)
+                  ),
+                  decimals
+                )
+              : 0}{' '}
+            {symbol}
           </Typography>
         </Box>
         <Box
@@ -63,7 +75,7 @@ const AirdropSummary = () => {
             Sent in batches of
           </Typography>
           <Typography variant="body" size="medium" color="onSurface">
-            --
+            {airdropList ? Math.ceil(airdropList.length / 500) : '--'}
           </Typography>
         </Box>
       </Box>

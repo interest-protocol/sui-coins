@@ -4,9 +4,16 @@ export interface IToken extends CoinData {
   balance: number;
 }
 
+export interface AirdropData {
+  address: string;
+  amount: string;
+}
+
 export interface IAirdropForm {
   token: IToken;
-  airdropList: ReadonlyArray<[string, number]> | null;
+  airdropList: ReadonlyArray<AirdropData> | null;
+  error: string;
+  decimals: number;
 }
 
 export interface AirdropUploadStatusCardProps {
@@ -15,6 +22,6 @@ export interface AirdropUploadStatusCardProps {
 }
 
 export interface AirdropUploadFileCardProps {
-  name: string;
   size: number;
+  name: string;
 }

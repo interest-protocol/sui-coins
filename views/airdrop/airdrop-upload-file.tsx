@@ -24,7 +24,9 @@ const AirdropUploadFile: FC = () => {
     if (file.type !== 'text/csv')
       return toast.error('Make sure that you are sending a CSV File');
 
-    setValue('airdropList', csvToAirdrop(await file.text()));
+    const airdrop = csvToAirdrop(await file.text());
+
+    setValue(typeof airdrop === 'string' ? 'error' : 'airdropList', airdrop);
   };
 
   const handleDropFile: DragEventHandler<HTMLDivElement> = async (e) => {
@@ -39,8 +41,8 @@ const AirdropUploadFile: FC = () => {
       const file = item.getAsFile();
 
       if (!file) return toast.error('Something went wrong');
-
-      return setValue('airdropList', csvToAirdrop(await file.text()));
+      const airdrop = csvToAirdrop(await file.text());
+      setValue(typeof airdrop === 'string' ? 'error' : 'airdropList', airdrop);
     }
 
     const file = e.dataTransfer.files[0];
@@ -49,8 +51,8 @@ const AirdropUploadFile: FC = () => {
 
     if (file.type !== 'text/csv')
       return toast.error('Make sure that you are sending a CSV File');
-
-    setValue('airdropList', csvToAirdrop(await file.text()));
+    const airdrop = csvToAirdrop(await file.text());
+    setValue(typeof airdrop === 'string' ? 'error' : 'airdropList', airdrop);
   };
 
   return (
@@ -59,7 +61,7 @@ const AirdropUploadFile: FC = () => {
         2. Upload file
       </Typography>
       {airdropList ? (
-        <AirdropUploadFileCard name="Batch" size={airdropList.length} />
+        <AirdropUploadFileCard name="Airdrop List" size={airdropList.length} />
       ) : (
         <Box
           p="2xl"
