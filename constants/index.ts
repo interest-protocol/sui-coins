@@ -63,6 +63,13 @@ export const COINS = [
   },
 ];
 
+export const AIRDROP_SEND_CONTRACT = {
+  [SUI_MAINNET_CHAIN]:
+    '0xa473005c6f8969fbca783d0e4773a2c464abcf7654c4482d7cc4e22b8b62e85e',
+  [SUI_TESTNET_CHAIN]:
+    '0xa473005c6f8969fbca783d0e4773a2c464abcf7654c4482d7cc4e22b8b62e85e',
+};
+
 export const TOAST_DURATION = 10000;
 
 export * from './wrapper-variants';

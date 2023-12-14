@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { FixedPointMath } from '@/lib';
+import { BATCH_SIZE } from '@/views/airdrop/airdrop.constants';
 
 import { IAirdropForm } from './airdrop.types';
 
@@ -75,7 +76,7 @@ const AirdropSummary = () => {
             Sent in batches of
           </Typography>
           <Typography variant="body" size="medium" color="onSurface">
-            {airdropList ? Math.ceil(airdropList.length / 500) : '--'}
+            {airdropList ? Math.ceil(airdropList.length / BATCH_SIZE) : '--'}
           </Typography>
         </Box>
       </Box>
