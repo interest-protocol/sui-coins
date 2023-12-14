@@ -12,7 +12,7 @@ const AirdropUploadFile: FC = () => {
   const [dragging, setDragging] = useState(false);
   const { setValue } = useFormContext<IAirdropForm>();
 
-  const handleChangeFile: ChangeEventHandler<HTMLInputElement> = (e) => {
+  const handleChangeFile: ChangeEventHandler<HTMLInputElement> = async (e) => {
     const file = e.target.files?.[0];
 
     if (!file) return toast.error('Something went wrong');
@@ -20,10 +20,10 @@ const AirdropUploadFile: FC = () => {
     if (file.type !== 'text/csv')
       return toast.error('Make sure that you are sending a CSV File');
 
-    setValue('file', file);
+    setValue('file', await file.text());
   };
 
-  const handleDropFile: DragEventHandler<HTMLDivElement> = (e) => {
+  const handleDropFile: DragEventHandler<HTMLDivElement> = async (e) => {
     e.preventDefault();
 
     if (e.dataTransfer.items) {
@@ -36,7 +36,7 @@ const AirdropUploadFile: FC = () => {
 
       if (!file) return toast.error('Something went wrong');
 
-      return setValue('file', file);
+      return setValue('file', await file.text());
     }
 
     const file = e.dataTransfer.files[0];
@@ -44,7 +44,7 @@ const AirdropUploadFile: FC = () => {
     if (file.type !== 'text/csv')
       return toast.error('Make sure that you are sending a CSV File');
 
-    setValue('file', file);
+    setValue('file', await file.text());
   };
 
   return (
