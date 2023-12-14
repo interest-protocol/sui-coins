@@ -1,23 +1,26 @@
 import { Box, Button } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import { IAirdropForm } from './airdrop.types';
 
 const AirdropButton: FC<{ onSend: () => void }> = ({ onSend }) => {
-  const { getValues } = useFormContext<IAirdropForm>();
+  const { control } = useFormContext<IAirdropForm>();
+
+  const { airdropList, token } = useWatch({ control });
+
+  const isDisabled =
+    !airdropList ||
+    !token?.balance ||
+    token.balance < airdropList.reduce((acc, [, amount]) => acc + amount, 0);
 
   const handleSend = async () => {
-    const { airdropList } = getValues();
-
-    console.log('>> airdropList :: ', airdropList);
-
     onSend();
   };
 
   return (
     <Box display="flex" justifyContent="center">
-      <Button variant="filled" onClick={handleSend}>
+      <Button disabled={isDisabled} variant="filled" onClick={handleSend}>
         Send
       </Button>
     </Box>

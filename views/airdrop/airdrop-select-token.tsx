@@ -6,11 +6,14 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
 import { TOKEN_ICONS, TOKEN_SYMBOL } from '@/constants';
+import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
 import { FixedPointMath } from '@/lib';
 import { ChevronRightSVG, SUISVG } from '@/svg';
 
 import { useGetAllCoinsWithMetadata } from '../my-coins/my-coins.hooks';
 import { IAirdropForm } from './airdrop.types';
+
+const BOX_ID = 'dropdown-id';
 
 const AirdropSelectToken: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,10 +21,22 @@ const AirdropSelectToken: FC = () => {
   const { control, setValue } = useFormContext<IAirdropForm>();
   const token = useWatch({ control, name: 'token' });
 
+  const closeDropdown = (event: any) => {
+    if (
+      event?.path?.some((node: any) => node?.id == BOX_ID) ||
+      event?.composedPath()?.some((node: any) => node?.id == BOX_ID)
+    )
+      return;
+
+    setIsOpen(false);
+  };
+
+  const dropdownRef = useClickOutsideListenerRef<HTMLDivElement>(closeDropdown);
+
   const TokenIcon = TOKEN_ICONS[token.symbol as TOKEN_SYMBOL] ?? SUISVG;
 
   return (
-    <Box position="relative">
+    <Box position="relative" id={BOX_ID}>
       <Box
         p="s"
         gap="xs"
@@ -42,7 +57,7 @@ const AirdropSelectToken: FC = () => {
           <ChevronRightSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
         </Box>
       </Box>
-      {isOpen && !isLoading && (
+      {isOpen && (
         <Box
           zIndex={1}
           top="3.5rem"
@@ -51,51 +66,61 @@ const AirdropSelectToken: FC = () => {
           cursor="pointer"
           maxHeight="20rem"
           bg="lowContainer"
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          ref={dropdownRef}
           borderRadius="xs"
           position="absolute"
           border="2px solid"
           borderColor="outline"
         >
-          {coins.map(({ symbol, coinType, decimals, balance }) => {
-            const Icon = TOKEN_ICONS[symbol as TOKEN_SYMBOL] ?? SUISVG;
+          {isLoading ? (
+            <ListItem key={v4()} width="100%" title="Loading..." />
+          ) : (
+            coins.map(({ symbol, coinType, decimals, balance }) => {
+              const Icon = TOKEN_ICONS[symbol as TOKEN_SYMBOL] ?? SUISVG;
 
-            return (
-              <ListItem
-                key={v4()}
-                width="100%"
-                title={symbol}
-                cursor="pointer"
-                onClick={() => {
-                  setValue('token', {
-                    symbol,
-                    decimals,
-                    value: '0',
-                    type: coinType,
-                  });
-                  setIsOpen(false);
-                }}
-                PrefixIcon={
-                  <Box
-                    display="flex"
-                    bg="onSurface"
-                    color="surface"
-                    minWidth="1.5rem"
-                    height="1.5rem"
-                    borderRadius="xs"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    <Icon width="100%" maxWidth="1rem" maxHeight="1rem" />
-                  </Box>
-                }
-                SuffixIcon={
-                  <Typography variant="body" size="medium">
-                    {FixedPointMath.toNumber(BigNumber(balance), decimals)}
-                  </Typography>
-                }
-              />
-            );
-          })}
+              return (
+                <ListItem
+                  key={v4()}
+                  width="100%"
+                  title={symbol}
+                  cursor="pointer"
+                  onClick={() => {
+                    setValue('token', {
+                      symbol,
+                      decimals,
+                      type: coinType,
+                      balance: FixedPointMath.toNumber(
+                        BigNumber(balance),
+                        decimals
+                      ),
+                    });
+                    setIsOpen(false);
+                  }}
+                  PrefixIcon={
+                    <Box
+                      display="flex"
+                      bg="onSurface"
+                      color="surface"
+                      minWidth="1.5rem"
+                      height="1.5rem"
+                      borderRadius="xs"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <Icon width="100%" maxWidth="1rem" maxHeight="1rem" />
+                    </Box>
+                  }
+                  SuffixIcon={
+                    <Typography variant="body" size="medium">
+                      {FixedPointMath.toNumber(BigNumber(balance), decimals)}
+                    </Typography>
+                  }
+                />
+              );
+            })
+          )}
         </Box>
       )}
     </Box>

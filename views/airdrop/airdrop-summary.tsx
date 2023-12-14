@@ -6,7 +6,7 @@ import { IAirdropForm } from './airdrop.types';
 const AirdropSummary = () => {
   const { control } = useFormContext<IAirdropForm>();
 
-  const { value, symbol } = useWatch({ control, name: 'token' });
+  const { symbol } = useWatch({ control, name: 'token' });
   const airdropList = useWatch({ control, name: 'airdropList' });
 
   return (
@@ -31,7 +31,7 @@ const AirdropSummary = () => {
             You will send
           </Typography>
           <Typography variant="body" size="medium" color="onSurface">
-            {value} {symbol}
+            {airdropList?.reduce((acc, [, amount]) => acc + amount, 0)} {symbol}
           </Typography>
         </Box>
         <Box
