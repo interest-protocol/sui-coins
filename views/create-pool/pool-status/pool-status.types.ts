@@ -1,5 +1,4 @@
 export interface PoolStatusProps {
-  length: number;
   description: string;
   amount: number;
   type: string;
