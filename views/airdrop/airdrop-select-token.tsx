@@ -85,9 +85,9 @@ const AirdropSelectToken: FC = () => {
           borderColor="outline"
         >
           {isLoading ? (
-            <ListItem key={v4()} width="100%" title="Loading..." />
+            <ListItem width="100%" title="Loading..." />
           ) : !data ? (
-            <div> You have no coins</div>
+            <ListItem width="100%" title="You have no coins" />
           ) : (
             values(data).map(
               ({ metadata: { decimals, symbol }, coinType, balance }) => {
@@ -138,9 +138,7 @@ const AirdropSelectToken: FC = () => {
                         {FixedPointMath.toNumber(BigNumber(balance), decimals)}
                       </Typography>
                     }
-                  >
-                    BTC
-                  </ListItem>
+                  />
                 );
               }
             )
