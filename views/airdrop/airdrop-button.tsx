@@ -142,51 +142,48 @@ const AirdropButton: FC<{ onSend: () => void }> = ({ onSend }) => {
         throwTXIfNotSuccessful(tx);
 
         await sleep(RATE_LIMIT_DELAY);
+      }
 
-        for await (const [index, batch] of Object.entries(list)) {
-          const totalAMount = batch
-            .reduce(
-              (acc, data) => acc.plus(BigNumber(data.amount)),
-              BigNumber(0)
-            )
-            .toString();
+      for await (const [index, batch] of Object.entries(list)) {
+        const totalAMount = batch
+          .reduce((acc, data) => acc.plus(BigNumber(data.amount)), BigNumber(0))
+          .toString();
 
-          const txb = new TransactionBlock();
+        const txb = new TransactionBlock();
 
-          const coinToSend = txb.splitCoins(
-            txb.object(firstCoin.coinObjectId),
-            [totalAMount]
-          );
+        const coinToSend = txb.splitCoins(txb.object(firstCoin.coinObjectId), [
+          totalAMount,
+        ]);
 
-          txb.moveCall({
-            target: `${contractPackageId}::airdrop::send`,
-            typeArguments: [token.type],
-            arguments: [
-              coinToSend,
-              txb.pure(batch.map((x) => x.address)),
-              txb.pure(batch.map((x) => x.amount)),
-            ],
-          });
-          const { signature, transactionBlockBytes } =
-            await signTransactionBlock({
-              transactionBlock: txb,
-            });
+        txb.moveCall({
+          target: `${contractPackageId}::airdrop::send`,
+          typeArguments: [token.type],
+          arguments: [
+            coinToSend,
+            txb.pure(batch.map((x) => x.address)),
+            txb.pure(batch.map((x) => x.amount)),
+          ],
+        });
+        const { signature, transactionBlockBytes } = await signTransactionBlock(
+          {
+            transactionBlock: txb,
+          }
+        );
 
-          const tx = await suiClient.executeTransactionBlock({
-            transactionBlock: transactionBlockBytes,
-            signature,
-            options: { showEffects: true },
-            requestType: 'WaitForEffectsCert',
-          });
+        const tx = await suiClient.executeTransactionBlock({
+          transactionBlock: transactionBlockBytes,
+          signature,
+          options: { showEffects: true },
+          requestType: 'WaitForEffectsCert',
+        });
 
-          throwTXIfNotSuccessful(tx, () =>
-            setValue('failed', [...getValues('failed'), Number(index)])
-          );
+        throwTXIfNotSuccessful(tx, () =>
+          setValue('failed', [...getValues('failed'), Number(index)])
+        );
 
-          await sleep(RATE_LIMIT_DELAY);
+        await sleep(RATE_LIMIT_DELAY);
 
-          setValue('done', [...getValues('done'), Number(index)]);
-        }
+        setValue('done', [...getValues('done'), Number(index)]);
       }
     } catch (e) {
       console.log(e);
