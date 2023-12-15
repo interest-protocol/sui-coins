@@ -13,7 +13,7 @@ import { FixedPointMath } from '@/lib';
 import { ChevronRightSVG, DefaultSVG } from '@/svg';
 
 import { IAirdropForm } from './airdrop.types';
-import { getSymbol } from './airdrop.utils';
+import { convertTypeToShortPackedId, getSymbol } from './airdrop.utils';
 
 const BOX_ID = 'dropdown-id';
 
@@ -101,7 +101,10 @@ const AirdropSelectToken: FC = () => {
                     key={v4()}
                     width="100%"
                     cursor="pointer"
-                    title={getSymbol(symbol, coinType)}
+                    title={`${getSymbol(
+                      symbol,
+                      coinType
+                    )} [${convertTypeToShortPackedId(coinType)}]`}
                     onClick={() => {
                       setValue('decimals', decimals);
                       setValue('token', {

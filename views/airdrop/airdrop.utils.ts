@@ -50,3 +50,11 @@ export const getSymbol = (symbol: string, type: string) => {
       : ''
   }`;
 };
+
+export const convertTypeToShortPackedId = (type: string): string => {
+  const packageId = type.split('::')[0];
+
+  if (packageId.length < 10) return packageId;
+
+  return `${packageId.slice(0, 6)}...${packageId.slice(-4)}`;
+};
