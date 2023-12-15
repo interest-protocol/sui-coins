@@ -6,11 +6,12 @@ import { FixedPointMath } from '@/lib';
 import { BATCH_SIZE } from '@/views/airdrop/airdrop.constants';
 
 import { IAirdropForm } from './airdrop.types';
+import { getSymbol } from './airdrop.utils';
 
 const AirdropSummary = () => {
   const { control } = useFormContext<IAirdropForm>();
 
-  const { symbol, decimals } = useWatch({ control, name: 'token' });
+  const { symbol, decimals, type } = useWatch({ control, name: 'token' });
   const airdropList = useWatch({ control, name: 'airdropList' });
 
   return (
@@ -44,7 +45,7 @@ const AirdropSummary = () => {
                   decimals
                 )
               : 0}{' '}
-            {symbol}
+            {getSymbol(symbol, type)}
           </Typography>
         </Box>
         <Box
