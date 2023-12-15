@@ -1,4 +1,4 @@
-import { Box, Button } from '@interest-protocol/ui-kit';
+import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import { useWalletKit } from '@mysten/wallet-kit';
@@ -8,7 +8,7 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { AIRDROP_SEND_CONTRACT } from '@/constants';
+import { AIRDROP_SEND_CONTRACT, EXPLORER_URL } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useSuiClient } from '@/hooks/use-sui-client';
 import { FixedPointMath } from '@/lib';
@@ -20,7 +20,7 @@ import { IAirdropForm } from './airdrop.types';
 
 const AirdropButton: FC<{ onSend: () => void }> = ({ onSend }) => {
   const { control, getValues, setValue } = useFormContext<IAirdropForm>();
-
+  const { currentAccount } = useWalletKit();
   const { data } = useGetAllCoins();
   const { airdropList, token } = useWatch({ control });
   const { network } = useNetwork();
@@ -194,6 +194,23 @@ const AirdropButton: FC<{ onSend: () => void }> = ({ onSend }) => {
       }
     } catch (e: any) {
       toast.error((e?.message as string) ?? e ?? 'Something went wrong!');
+    } finally {
+      const explorerLink = EXPLORER_URL[network](
+        `address/${currentAccount!.address}`
+      );
+
+      toast(
+        <a target="_blank" rel="noreferrer nofollow" href={explorerLink}>
+          <Typography
+            size="medium"
+            variant="label"
+            cursor="pointer"
+            textDecoration="underline"
+          >
+            Sui Explorer
+          </Typography>
+        </a>
+      );
     }
   };
 

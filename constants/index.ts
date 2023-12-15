@@ -32,9 +32,11 @@ export const DISPLAY_NETWORK = {
 };
 
 export const EXPLORER_URL = {
-  [SUI_MAINNET_CHAIN]: 'https://suivision.xyz',
-  [SUI_TESTNET_CHAIN]: 'https://testnet.suivision.xyz',
-} as Record<Network, string>;
+  [SUI_MAINNET_CHAIN]: (complement: string) =>
+    `https://suiexplorer.com/${complement}`,
+  [SUI_TESTNET_CHAIN]: (complement: string) =>
+    `https://suiexplorer.com/${complement}?network=testnet`,
+} as Record<Network, (complement: string) => string>;
 
 export enum TOKEN_SYMBOL {
   SUI = 'SUI',

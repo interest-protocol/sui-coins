@@ -4,7 +4,6 @@ import {
   ProgressIndicator,
   Typography,
 } from '@interest-protocol/ui-kit';
-import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
@@ -13,8 +12,7 @@ import { CheckSVG, WarningSVG } from '@/svg';
 import { BATCH_SIZE } from './airdrop.constants';
 import { IAirdropForm } from './airdrop.types';
 
-const AirdropProgressIndicator: FC = () => {
-  const { push } = useRouter();
+const AirdropProgressIndicator: FC<{ goBack: () => void }> = ({ goBack }) => {
   const { control } = useFormContext<IAirdropForm>();
   const airdropList = useWatch({ control, name: 'airdropList' });
   const doneItems = useWatch({ control, name: 'done' });
@@ -37,7 +35,7 @@ const AirdropProgressIndicator: FC = () => {
         size="large"
         textAlign="center"
         color={
-          finished === 100
+          finished !== 100
             ? 'onSurface'
             : doneItems.length === allBatches
             ? 'success'
@@ -58,7 +56,7 @@ const AirdropProgressIndicator: FC = () => {
       >
         {finished !== 100 ? (
           <>
-            <ProgressIndicator variant="circle" value={finished} size={200} />
+            <ProgressIndicator variant="loading" size={200} />
             <Typography variant="title" size="large" position="absolute">
               {finished}%
             </Typography>
@@ -68,7 +66,7 @@ const AirdropProgressIndicator: FC = () => {
             display="flex"
             width="8.75rem"
             height="8.75rem"
-            color="onSuccess"
+            color="success"
             borderRadius="full"
             alignItems="center"
             bg="successContainer"
@@ -82,13 +80,13 @@ const AirdropProgressIndicator: FC = () => {
           </Box>
         ) : (
           <Box
+            color="error"
             display="flex"
             width="8.75rem"
             height="8.75rem"
-            color="onSuccess"
             borderRadius="full"
             alignItems="center"
-            bg="successContainer"
+            bg="errorContainer"
             justifyContent="center"
           >
             <WarningSVG
@@ -115,7 +113,8 @@ const AirdropProgressIndicator: FC = () => {
       {finished === 100 && (
         <Button
           variant="filled"
-          onClick={() => push('/airdrop')}
+          onClick={goBack}
+          justifyContent="center"
           bg={failedItems.length ? 'error' : 'primary'}
           color={failedItems.length ? 'onError' : 'onPrimary'}
         >

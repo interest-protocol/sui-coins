@@ -12,10 +12,10 @@ export const showTXSuccessToast = async (
   tx: SuiTransactionBlockResponse,
   network: Network
 ): Promise<void> => {
-  const explorerLink = `${EXPLORER_URL[network]}/txblock/${tx.digest}`;
+  const explorerLink = EXPLORER_URL[network](`txblock/${tx.digest}`);
 
   toast(
-    <a target="__black" rel="noreferrer nofollow" href={explorerLink}>
+    <a target="_blank" rel="noreferrer nofollow" href={explorerLink}>
       <Typography
         size="medium"
         variant="label"

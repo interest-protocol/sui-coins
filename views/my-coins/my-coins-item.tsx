@@ -21,7 +21,7 @@ const MyCoinsItem: FC<CoinObject & { capId: string | null }> = ({
   const [isOpen, setIsOpen] = useState(false);
 
   const goToExplorer = (objectId: string) =>
-    window.open(`${EXPLORER_URL[network]}/object/${objectId}`);
+    window.open(EXPLORER_URL[network](`object/${objectId}`));
 
   const renderToken = () => {
     const TokenIcon =

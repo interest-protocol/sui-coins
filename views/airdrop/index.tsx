@@ -29,6 +29,7 @@ const AirdropBody: FC<AirdropBodyProps> = ({ setIsProgressView }) => {
 };
 
 const Airdrop: FC = () => {
+  const { reset } = useFormContext();
   const [isProgressView, setIsProgressView] = useState(false);
 
   return (
@@ -52,7 +53,12 @@ const Airdrop: FC = () => {
           maxWidth="39.5rem"
           flexDirection="column"
         >
-          <AirdropProgressIndicator />
+          <AirdropProgressIndicator
+            goBack={() => {
+              setIsProgressView(false);
+              reset();
+            }}
+          />
           <AirdropUploadStatus />
         </Box>
       ) : (
