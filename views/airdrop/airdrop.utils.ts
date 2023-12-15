@@ -1,6 +1,7 @@
 import { isValidSuiAddress } from '@mysten/sui.js/utils';
 import { propOr } from 'ramda';
 
+import { MAINNET_COINS_INFO } from '@/constants';
 import { isBigNumberish } from '@/utils';
 
 import { AirdropData } from './airdrop.types';
@@ -35,4 +36,17 @@ export const getBridgeIdentifier = (bridge: 'celer' | 'wormhole' | null) => {
   if (bridge === 'wormhole') return 'w';
   if (bridge === 'celer') return 'c';
   return '';
+};
+
+export const getSymbol = (symbol: string, type: string) => {
+  const { origin, bridge } = MAINNET_COINS_INFO[type] ?? {
+    origin: null,
+    bridge: null,
+  };
+
+  return `${symbol}${
+    bridge
+      ? `(${getBridgeIdentifier(bridge)}${origin ? `-${origin}` : ''})`
+      : ''
+  }`;
 };

@@ -5,7 +5,7 @@ import { FC, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
-import { MAINNET_COINS_INFO, Network, TOKEN_ICONS } from '@/constants';
+import { Network, TOKEN_ICONS } from '@/constants';
 import { useNetwork } from '@/context/network';
 import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
 import { useGetAllCoins } from '@/hooks/use-get-all-coins';
@@ -13,7 +13,7 @@ import { FixedPointMath } from '@/lib';
 import { ChevronRightSVG, DefaultSVG } from '@/svg';
 
 import { IAirdropForm } from './airdrop.types';
-import { getBridgeIdentifier } from './airdrop.utils';
+import { getSymbol } from './airdrop.utils';
 
 const BOX_ID = 'dropdown-id';
 
@@ -61,7 +61,7 @@ const AirdropSelectToken: FC = () => {
       >
         {renderToken() && renderToken()}
         <Typography variant="label" size="large" flex="1" as="span">
-          {token ? token.symbol : '---'}
+          {token ? getSymbol(token.symbol, token.type) : '---'}
         </Typography>
         <Box rotate="90deg">
           <ChevronRightSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
@@ -96,19 +96,12 @@ const AirdropSelectToken: FC = () => {
                     network === Network.MAINNET ? coinType : symbol
                   ] ?? DefaultSVG;
 
-                const { origin, bridge } = MAINNET_COINS_INFO[coinType] ?? {
-                  origin: null,
-                  bridge: null,
-                };
-
                 return (
                   <ListItem
                     key={v4()}
                     width="100%"
-                    title={`${symbol}${getBridgeIdentifier(bridge)}${
-                      origin ? `(${origin})` : ''
-                    }`}
                     cursor="pointer"
+                    title={getSymbol(symbol, coinType)}
                     onClick={() => {
                       setValue('decimals', decimals);
                       setValue('token', {
