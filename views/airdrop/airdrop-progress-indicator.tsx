@@ -1,13 +1,21 @@
-import { Box, ProgressIndicator, Typography } from '@interest-protocol/ui-kit';
+import {
+  Box,
+  Button,
+  ProgressIndicator,
+  Typography,
+} from '@interest-protocol/ui-kit';
+import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+
+import { CheckSVG, WarningSVG } from '@/svg';
 
 import { BATCH_SIZE } from './airdrop.constants';
 import { IAirdropForm } from './airdrop.types';
 
 const AirdropProgressIndicator: FC = () => {
+  const { push } = useRouter();
   const { control } = useFormContext<IAirdropForm>();
-
   const airdropList = useWatch({ control, name: 'airdropList' });
   const doneItems = useWatch({ control, name: 'done' });
   const failedItems = useWatch({ control, name: 'failed' });
@@ -24,8 +32,23 @@ const AirdropProgressIndicator: FC = () => {
       bg="lowestContainer"
       flexDirection="column"
     >
-      <Typography variant="headline" size="large" textAlign="center">
-        Sending
+      <Typography
+        variant="headline"
+        size="large"
+        textAlign="center"
+        color={
+          finished === 100
+            ? 'onSurface'
+            : doneItems.length === allBatches
+            ? 'success'
+            : 'error'
+        }
+      >
+        {finished !== 100
+          ? 'Sending'
+          : doneItems.length === allBatches
+          ? "You're done"
+          : 'error found'}
       </Typography>
       <Box
         display="flex"
@@ -33,10 +56,48 @@ const AirdropProgressIndicator: FC = () => {
         alignItems="center"
         justifyContent="center"
       >
-        <ProgressIndicator variant="circle" value={finished} size={200} />
-        <Typography variant="title" size="large" position="absolute">
-          {finished}%
-        </Typography>
+        {finished !== 100 ? (
+          <>
+            <ProgressIndicator variant="circle" value={finished} size={200} />
+            <Typography variant="title" size="large" position="absolute">
+              {finished}%
+            </Typography>
+          </>
+        ) : doneItems.length === allBatches ? (
+          <Box
+            display="flex"
+            width="8.75rem"
+            height="8.75rem"
+            color="onSuccess"
+            borderRadius="full"
+            alignItems="center"
+            bg="successContainer"
+            justifyContent="center"
+          >
+            <CheckSVG
+              width="100%"
+              maxWidth="3.43225rem"
+              maxHeight="2.52081rem"
+            />
+          </Box>
+        ) : (
+          <Box
+            display="flex"
+            width="8.75rem"
+            height="8.75rem"
+            color="onSuccess"
+            borderRadius="full"
+            alignItems="center"
+            bg="successContainer"
+            justifyContent="center"
+          >
+            <WarningSVG
+              width="100%"
+              maxWidth="3.96831rem"
+              maxHeight="3.73075rem"
+            />
+          </Box>
+        )}
       </Box>
       <Typography
         mx="auto"
@@ -45,9 +106,22 @@ const AirdropProgressIndicator: FC = () => {
         maxWidth="20rem"
         textAlign="center"
       >
-        This is the loading description. It can be anything you want and as long
-        as you want. But please {"don't"} make it too long.
+        {finished !== 100
+          ? 'Sending batches'
+          : doneItems.length === allBatches
+          ? 'The airdrop has been sent'
+          : `${failedItems.length} batches was not sended`}
       </Typography>
+      {finished === 100 && (
+        <Button
+          variant="filled"
+          onClick={() => push('/airdrop')}
+          bg={failedItems.length ? 'error' : 'primary'}
+          color={failedItems.length ? 'onError' : 'onPrimary'}
+        >
+          Go back
+        </Button>
+      )}
     </Box>
   );
 };

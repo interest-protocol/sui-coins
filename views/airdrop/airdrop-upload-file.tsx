@@ -41,8 +41,11 @@ const AirdropUploadFile: FC = () => {
       const file = item.getAsFile();
 
       if (!file) return toast.error('Something went wrong');
+
       const airdrop = csvToAirdrop(await file.text());
       setValue(typeof airdrop === 'string' ? 'error' : 'airdropList', airdrop);
+
+      return;
     }
 
     const file = e.dataTransfer.files[0];
