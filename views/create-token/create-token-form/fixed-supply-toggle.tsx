@@ -1,4 +1,4 @@
-import { Box, SwitchButton } from '@interest-protocol/ui-kit';
+import { Box, ToggleButton } from '@interest-protocol/ui-kit';
 import { not } from 'ramda';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
@@ -15,8 +15,7 @@ const FixedSupplyToggle: FC<FixedSupplyToggleProps> = ({
     <>
       <Box display="flex" justifyContent="space-between" color="onSurface">
         <Box>Fixed Supply</Box>
-        <SwitchButton
-          activation
+        <ToggleButton
           name="Fixed Supply"
           defaultValue={!!value}
           onClick={() => setValue('fixedSupply', not(value))}

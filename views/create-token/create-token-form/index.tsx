@@ -39,7 +39,7 @@ const CreateTokenForm: FC = () => {
   });
 
   const { network } = useNetwork();
-  const suiClient = useSuiClient(network);
+  const suiClient = useSuiClient();
   const { currentAccount, signTransactionBlock } = useWalletKit();
 
   const createToken = async () => {

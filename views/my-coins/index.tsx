@@ -1,22 +1,29 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { useWalletKit } from '@mysten/wallet-kit';
+import { values } from 'ramda';
 import { FC } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { v4 } from 'uuid';
 
 import Layout from '@/components/layout';
 import ConnectWalletButton from '@/components/wallet/connect-wallet-button';
+import { useGetAllCoins } from '@/hooks/use-get-all-coins';
+import { useGetOwnedTreasuryCap } from '@/hooks/use-get-owned-treasury-cap';
 import { XCirlceSVG } from '@/svg';
 
-import { useGetAllCoinsWithMetadata } from './my-coins.hooks';
 import MyCoinsHeader from './my-coins-header';
 import MyCoinsItem from './my-coins-item';
 
 const MyCoins: FC = () => {
   const { currentAccount } = useWalletKit();
-  const { coins, isLoading, error } = useGetAllCoinsWithMetadata();
+  const { data, isLoading, error } = useGetAllCoins();
+  const {
+    data: capData,
+    isLoading: capIsLoading,
+    error: capError,
+  } = useGetOwnedTreasuryCap();
 
-  const isError = !currentAccount || error;
+  const isError = !currentAccount || error || capError;
 
   return (
     <Layout>
@@ -61,7 +68,7 @@ const MyCoins: FC = () => {
           boxShadow="0px 24px 46px -10px rgba(13, 16, 23, 0.16)"
         >
           <MyCoinsHeader />
-          {isLoading ? (
+          {isLoading || capIsLoading || !data || !capData ? (
             <Box
               rowGap="m"
               columnGap="xl"
@@ -80,7 +87,17 @@ const MyCoins: FC = () => {
               <Skeleton />
             </Box>
           ) : (
-            coins.map((coin) => <MyCoinsItem key={v4()} {...coin} />)
+            values(data).map((coin) => {
+              const capId =
+                (
+                  values(capData) as unknown as ReadonlyArray<
+                    Record<'coinType' | 'coinObjectId', string>
+                  >
+                ).find(({ coinType }) => coinType === coin.coinType)
+                  ?.coinObjectId || null;
+
+              return <MyCoinsItem key={v4()} {...coin} capId={capId} />;
+            })
           )}
         </Box>
       )}
