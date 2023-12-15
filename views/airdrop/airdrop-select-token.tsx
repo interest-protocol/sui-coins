@@ -5,17 +5,20 @@ import { FC, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
-import { TOKEN_ICONS, TOKEN_SYMBOL } from '@/constants';
+import { MAINNET_COINS_INFO, Network, TOKEN_ICONS } from '@/constants';
+import { useNetwork } from '@/context/network';
 import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
 import { useGetAllCoins } from '@/hooks/use-get-all-coins';
 import { FixedPointMath } from '@/lib';
-import { ChevronRightSVG, SUISVG } from '@/svg';
+import { ChevronRightSVG, DefaultSVG } from '@/svg';
 
 import { IAirdropForm } from './airdrop.types';
+import { getBridgeIdentifier } from './airdrop.utils';
 
 const BOX_ID = 'dropdown-id';
 
 const AirdropSelectToken: FC = () => {
+  const { network } = useNetwork();
   const [isOpen, setIsOpen] = useState(false);
   const { data, isLoading } = useGetAllCoins();
   const { control, setValue } = useFormContext<IAirdropForm>();
@@ -35,7 +38,10 @@ const AirdropSelectToken: FC = () => {
 
   const renderToken = () => {
     if (!token) return null;
-    const TokenIcon = TOKEN_ICONS[token.symbol as TOKEN_SYMBOL] ?? SUISVG;
+    const TokenIcon =
+      TOKEN_ICONS[network][
+        (network === Network.MAINNET ? token.type : token.symbol) as string
+      ] ?? DefaultSVG;
     return <TokenIcon maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />;
   };
 
@@ -85,13 +91,23 @@ const AirdropSelectToken: FC = () => {
           ) : (
             values(data).map(
               ({ metadata: { decimals, symbol }, coinType, balance }) => {
-                const Icon = TOKEN_ICONS[symbol as TOKEN_SYMBOL] ?? SUISVG;
+                const Icon =
+                  TOKEN_ICONS[network][
+                    network === Network.MAINNET ? coinType : symbol
+                  ] ?? DefaultSVG;
+
+                const { origin, bridge } = MAINNET_COINS_INFO[coinType] ?? {
+                  origin: null,
+                  bridge: null,
+                };
 
                 return (
                   <ListItem
                     key={v4()}
                     width="100%"
-                    title={symbol}
+                    title={`${symbol}${getBridgeIdentifier(bridge)}${
+                      origin ? `(${origin})` : ''
+                    }`}
                     cursor="pointer"
                     onClick={() => {
                       setValue('decimals', decimals);
@@ -111,13 +127,17 @@ const AirdropSelectToken: FC = () => {
                         display="flex"
                         bg="onSurface"
                         color="surface"
-                        minWidth="1.5rem"
-                        height="1.5rem"
+                        height="1.8rem"
+                        minWidth="1.8rem"
                         borderRadius="xs"
                         alignItems="center"
                         justifyContent="center"
                       >
-                        <Icon width="100%" maxWidth="1rem" maxHeight="1rem" />
+                        <Icon
+                          width="100%"
+                          maxWidth="1.2rem"
+                          maxHeight="1.2rem"
+                        />
                       </Box>
                     }
                     SuffixIcon={
@@ -125,7 +145,9 @@ const AirdropSelectToken: FC = () => {
                         {FixedPointMath.toNumber(BigNumber(balance), decimals)}
                       </Typography>
                     }
-                  />
+                  >
+                    BTC
+                  </ListItem>
                 );
               }
             )

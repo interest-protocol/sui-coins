@@ -30,3 +30,9 @@ export const csvToAirdrop = (csv: string): AirdropData[] | string => {
     return propOr('Something went wrong', 'message', error);
   }
 };
+
+export const getBridgeIdentifier = (bridge: 'celer' | 'wormhole' | null) => {
+  if (bridge === 'wormhole') return 'w';
+  if (bridge === 'celer') return 'c';
+  return '';
+};
