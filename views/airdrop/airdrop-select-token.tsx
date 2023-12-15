@@ -59,7 +59,7 @@ const AirdropSelectToken: FC = () => {
         borderColor="outlineVariant"
         onClick={() => setIsOpen(not)}
       >
-        {renderToken() && renderToken()}
+        {renderToken()}
         <Typography variant="label" size="large" flex="1" as="span">
           {token ? getSymbol(token.symbol, token.type) : '---'}
         </Typography>

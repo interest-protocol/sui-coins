@@ -33,13 +33,9 @@ const NavBar: FC = () => {
         border="0.25rem solid"
         px={['s', 's', 's', 'xl']}
         nActive={{ borderColor: '#0053DB33' }}
-        color={asPath !== '/use-get-all-coins' ? 'onSurface' : 'primary'}
-        onClick={() =>
-          asPath !== '/use-get-all-coins' && push('/use-get-all-coins')
-        }
-        borderColor={
-          asPath !== '/use-get-all-coins' ? 'transparent' : '#0053DB33'
-        }
+        color={asPath !== '/my-coins' ? 'onSurface' : 'primary'}
+        onClick={() => asPath !== '/my-coins' && push('/my-coins')}
+        borderColor={asPath !== '/my-coins' ? 'transparent' : '#0053DB33'}
       >
         My Coins
       </Box>

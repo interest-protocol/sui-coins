@@ -4,16 +4,17 @@ import { not } from 'ramda';
 import { FC, useState } from 'react';
 import { v4 } from 'uuid';
 
-import { EXPLORER_URL } from '@/constants';
+import { EXPLORER_URL, Network, TOKEN_ICONS } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { FixedPointMath } from '@/lib';
-import { ArrowTopRightSVG, CaretRightSVG, DefaultTokenSVG } from '@/svg';
+import { ArrowTopRightSVG, CaretRightSVG, DefaultSVG } from '@/svg';
 
 const MyCoinsItem: FC<CoinObject & { capId: string | null }> = ({
   capId,
   balance,
   objects,
+  coinType,
   metadata: { iconUrl, name, symbol, decimals },
 }) => {
   const { network } = useNetwork();
@@ -21,6 +22,26 @@ const MyCoinsItem: FC<CoinObject & { capId: string | null }> = ({
 
   const goToExplorer = (objectId: string) =>
     window.open(`${EXPLORER_URL[network]}/object/${objectId}`);
+
+  const renderToken = () => {
+    const TokenIcon =
+      TOKEN_ICONS[network][
+        (network === Network.MAINNET ? coinType : symbol) as string
+      ] ?? DefaultSVG;
+
+    return (
+      <Box
+        p="xs"
+        bg="onSurface"
+        color="surface"
+        borderRadius="xs"
+        width={['1.2rem', '2rem']}
+        height={['1.2rem', '2rem']}
+      >
+        <TokenIcon maxWidth="100%" maxHeight="100%" width="100%" />
+      </Box>
+    );
+  };
 
   return (
     <Box
@@ -51,9 +72,7 @@ const MyCoinsItem: FC<CoinObject & { capId: string | null }> = ({
             <img height="100%" width="100%" src={iconUrl} alt={name} />
           </Box>
         ) : (
-          <Box width={['1.2rem', '2rem']} height={['1.2rem', '2rem']}>
-            <DefaultTokenSVG maxHeight="100%" maxWidth="100%" width="100%" />
-          </Box>
+          renderToken()
         )}
         <Box>{symbol}</Box>
       </Box>

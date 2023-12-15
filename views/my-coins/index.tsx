@@ -89,8 +89,13 @@ const MyCoins: FC = () => {
           ) : (
             values(data).map((coin) => {
               const capId =
-                capData.find(({ type }) => type === coin.coinType)?.objectId ||
-                null;
+                (
+                  values(capData) as unknown as ReadonlyArray<
+                    Record<'coinType' | 'coinObjectId', string>
+                  >
+                ).find(({ coinType }) => coinType === coin.coinType)
+                  ?.coinObjectId || null;
+
               return <MyCoinsItem key={v4()} {...coin} capId={capId} />;
             })
           )}
