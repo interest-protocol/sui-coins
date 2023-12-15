@@ -6,12 +6,13 @@ import BigNumber from 'bignumber.js';
 import { useGetAllCoins } from 'hooks/use-get-all-coins';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
 import { AIRDROP_SEND_CONTRACT } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useSuiClient } from '@/hooks/use-sui-client';
 import { FixedPointMath } from '@/lib';
-import { sleep, throwTXIfNotSuccessful } from '@/utils';
+import { showTXSuccessToast, sleep, throwTXIfNotSuccessful } from '@/utils';
 import { createObjectsParameter, splitArray } from '@/utils';
 
 import { BATCH_SIZE, RATE_LIMIT_DELAY } from './airdrop.constants';
@@ -91,6 +92,8 @@ const AirdropButton: FC<{ onSend: () => void }> = ({ onSend }) => {
 
           setValue('done', [...getValues('done'), Number(index)]);
 
+          showTXSuccessToast(tx, network);
+
           await sleep(RATE_LIMIT_DELAY);
         }
 
@@ -141,6 +144,8 @@ const AirdropButton: FC<{ onSend: () => void }> = ({ onSend }) => {
 
         throwTXIfNotSuccessful(tx);
 
+        showTXSuccessToast(tx, network);
+
         await sleep(RATE_LIMIT_DELAY);
       }
 
@@ -183,12 +188,12 @@ const AirdropButton: FC<{ onSend: () => void }> = ({ onSend }) => {
 
         await sleep(RATE_LIMIT_DELAY);
 
+        showTXSuccessToast(tx, network);
+
         setValue('done', [...getValues('done'), Number(index)]);
       }
-    } catch (e) {
-      console.log(e);
-    } finally {
-      console.log('finally');
+    } catch (e: any) {
+      toast.error((e?.message as string) ?? e ?? 'Something went wrong!');
     }
   };
 
