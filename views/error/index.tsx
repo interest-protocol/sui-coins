@@ -42,19 +42,13 @@ const Error: FC<ErrorProps> = ({ message, linkGoTo }) => {
         >
           OOPS!
         </Typography>
-        <Typography
-          mb="1rem"
-          size="large"
-          textAlign="center"
-          variant="headline"
-        >
+        <Typography mb="1rem" size="large" textAlign="center" variant="title">
           {message || 'Something went wrong'}
         </Typography>
         <Button
           mx="auto"
           bg="onSurface"
           variant="filled"
-          color="inverseOnSurface"
           onClick={() => push(linkGoTo || '/')}
         >
           Back home!
