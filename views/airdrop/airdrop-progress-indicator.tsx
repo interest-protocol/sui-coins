@@ -19,7 +19,9 @@ const AirdropProgressIndicator: FC<{ goBack: () => void }> = ({ goBack }) => {
   const failedItems = useWatch({ control, name: 'failed' });
 
   const allBatches = Math.ceil((airdropList?.length ?? 0) / BATCH_SIZE);
-  const finished = ((doneItems.length + failedItems.length) / allBatches) * 100;
+  const finished = Math.round(
+    ((doneItems.length + failedItems.length) / allBatches) * 100
+  );
 
   return (
     <Box

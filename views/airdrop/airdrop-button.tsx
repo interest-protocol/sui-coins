@@ -16,11 +16,12 @@ import { showTXSuccessToast, sleep, throwTXIfNotSuccessful } from '@/utils';
 import { createObjectsParameter, splitArray } from '@/utils';
 
 import { BATCH_SIZE, RATE_LIMIT_DELAY } from './airdrop.constants';
-import { IAirdropForm } from './airdrop.types';
+import { AirdropButtonProps, IAirdropForm } from './airdrop.types';
 
-const AirdropButton: FC<{ onSend: () => void }> = ({ onSend }) => {
+const AirdropButton: FC<AirdropButtonProps> = ({ setIsProgressView }) => {
   const { control, getValues, setValue } = useFormContext<IAirdropForm>();
   const { currentAccount } = useWalletKit();
+  const { reset } = useFormContext();
   const { data } = useGetAllCoins();
   const { airdropList, token } = useWatch({ control });
   const { network } = useNetwork();
@@ -39,7 +40,7 @@ const AirdropButton: FC<{ onSend: () => void }> = ({ onSend }) => {
       );
 
   const handleSend = async () => {
-    onSend();
+    setIsProgressView(true);
 
     try {
       const { airdropList, token } = getValues();
@@ -194,6 +195,8 @@ const AirdropButton: FC<{ onSend: () => void }> = ({ onSend }) => {
       }
     } catch (e: any) {
       toast.error((e?.message as string) ?? e ?? 'Something went wrong!');
+      reset();
+      setIsProgressView(false);
     } finally {
       const explorerLink = EXPLORER_URL[network](
         `address/${currentAccount!.address}`

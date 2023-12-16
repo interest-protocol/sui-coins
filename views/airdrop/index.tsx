@@ -23,7 +23,7 @@ const AirdropBody: FC<AirdropBodyProps> = ({ setIsProgressView }) => {
     <>
       <AirdropUploadFile />
       <AirdropSummary />
-      <AirdropButton onSend={() => setIsProgressView(true)} />
+      <AirdropButton setIsProgressView={setIsProgressView} />
     </>
   ) : null;
 };
