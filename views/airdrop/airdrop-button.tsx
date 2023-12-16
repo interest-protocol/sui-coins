@@ -21,7 +21,6 @@ import { AirdropButtonProps, IAirdropForm } from './airdrop.types';
 const AirdropButton: FC<AirdropButtonProps> = ({ setIsProgressView }) => {
   const { control, getValues, setValue } = useFormContext<IAirdropForm>();
   const { currentAccount } = useWalletKit();
-  const { reset } = useFormContext();
   const { data } = useGetAllCoins();
   const { airdropList, token } = useWatch({ control });
   const { network } = useNetwork();
@@ -195,8 +194,6 @@ const AirdropButton: FC<AirdropButtonProps> = ({ setIsProgressView }) => {
       }
     } catch (e: any) {
       toast.error((e?.message as string) ?? e ?? 'Something went wrong!');
-      reset();
-      setIsProgressView(false);
     } finally {
       const explorerLink = EXPLORER_URL[network](
         `address/${currentAccount!.address}`

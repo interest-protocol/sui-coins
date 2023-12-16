@@ -18,7 +18,7 @@ export const throwTXIfNotSuccessful = (
 ) => {
   if (!!tx.effects?.status && tx.effects.status.status !== 'success') {
     callback?.();
-    throw new Error();
+    throw new Error('Transaction failed');
   }
 };
 

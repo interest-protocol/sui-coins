@@ -10,9 +10,11 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { CheckSVG, WarningSVG } from '@/svg';
 
 import { BATCH_SIZE } from './airdrop.constants';
-import { IAirdropForm } from './airdrop.types';
+import { AirdropProgressIndicatorProps, IAirdropForm } from './airdrop.types';
 
-const AirdropProgressIndicator: FC<{ goBack: () => void }> = ({ goBack }) => {
+const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
+  goBack,
+}) => {
   const { control } = useFormContext<IAirdropForm>();
   const airdropList = useWatch({ control, name: 'airdropList' });
   const doneItems = useWatch({ control, name: 'done' });

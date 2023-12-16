@@ -33,3 +33,7 @@ export interface AirdropUploadFileCardProps {
 export interface AirdropButtonProps {
   setIsProgressView: Dispatch<SetStateAction<boolean>>;
 }
+
+export interface AirdropProgressIndicatorProps {
+  goBack: () => void;
+}
