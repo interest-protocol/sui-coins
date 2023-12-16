@@ -4,7 +4,6 @@ import useSWR from 'swr';
 import { useReadLocalStorage } from 'usehooks-ts';
 
 import { LOCAL_STORAGE_VERSION } from '@/constants';
-import { useNetwork } from '@/context/network';
 import { useSuiClient } from '@/hooks/use-sui-client';
 import { LocalTokenMetadataRecord } from '@/interface';
 import { makeSWRKey, noop } from '@/utils';
@@ -29,8 +28,7 @@ export const Web3ManagerContext = createContext<Web3ManagerState>(
 
 const Web3Manager: FC<Web3ManagerProps> = ({ children }) => {
   const { Provider } = Web3ManagerContext;
-  const { network } = useNetwork();
-  const client = useSuiClient(network);
+  const client = useSuiClient();
   const { isError, currentAccount, isConnected } = useWalletKit();
 
   const { data, error, mutate, isLoading } = useSWR(
