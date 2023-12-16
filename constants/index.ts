@@ -216,7 +216,7 @@ export const TOKEN_ICONS: Record<Network, Record<string, FC<SVGProps>>> = {
 
 export const AIRDROP_SEND_CONTRACT = {
   [SUI_MAINNET_CHAIN]:
-    '0xfaa73f744aac0e67eab8e4b631dfc69430e329a4b28a87296f6f1f2ab9a3012f',
+    '0x8bd272a53ed81d42c0e325546ecaac3a90dbb0c048a0da1ccd99ef2d607a0898',
   [SUI_TESTNET_CHAIN]:
     '0xfaa73f744aac0e67eab8e4b631dfc69430e329a4b28a87296f6f1f2ab9a3012f',
 };

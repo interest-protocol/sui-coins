@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 import { CoinData } from '@/interface';
 
 export interface IToken extends CoinData {
@@ -26,4 +28,12 @@ export interface AirdropUploadStatusCardProps {
 export interface AirdropUploadFileCardProps {
   size: number;
   name: string;
+}
+
+export interface AirdropButtonProps {
+  setIsProgressView: Dispatch<SetStateAction<boolean>>;
+}
+
+export interface AirdropProgressIndicatorProps {
+  goBack: () => void;
 }

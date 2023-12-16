@@ -16,9 +16,9 @@ import { showTXSuccessToast, sleep, throwTXIfNotSuccessful } from '@/utils';
 import { createObjectsParameter, splitArray } from '@/utils';
 
 import { BATCH_SIZE, RATE_LIMIT_DELAY } from './airdrop.constants';
-import { IAirdropForm } from './airdrop.types';
+import { AirdropButtonProps, IAirdropForm } from './airdrop.types';
 
-const AirdropButton: FC<{ onSend: () => void }> = ({ onSend }) => {
+const AirdropButton: FC<AirdropButtonProps> = ({ setIsProgressView }) => {
   const { control, getValues, setValue } = useFormContext<IAirdropForm>();
   const { currentAccount } = useWalletKit();
   const { data } = useGetAllCoins();
@@ -39,7 +39,7 @@ const AirdropButton: FC<{ onSend: () => void }> = ({ onSend }) => {
       );
 
   const handleSend = async () => {
-    onSend();
+    setIsProgressView(true);
 
     try {
       const { airdropList, token } = getValues();
