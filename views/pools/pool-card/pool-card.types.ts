@@ -1,11 +1,6 @@
-import { FC, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
-import { SVGProps } from '../../../components/svg/svg.types';
-
-export interface TokenProps {
-  Icon: FC<SVGProps>;
-  symbol: string;
-}
+import { CoinData } from '@/interface';
 
 export interface PoolCardHeaderProps {
   Logo: ReactNode;
@@ -14,8 +9,8 @@ export interface PoolCardHeaderProps {
 }
 
 export interface PoolCardTokenInfoProps {
-  tokenList: ReadonlyArray<TokenProps>;
   apr: string;
+  coins: ReadonlyArray<CoinData>;
 }
 
 export interface PoolCardLineProps {
@@ -26,4 +21,11 @@ export interface PoolCardLineProps {
 
 export interface PoolTradeInfoProps {
   lines: ReadonlyArray<PoolCardLineProps>;
+}
+export interface PoolCardProps {
+  stable: boolean;
+  token0: CoinData;
+  token1: CoinData;
+  lpCoin: CoinData;
+  poolObjectId: string;
 }

@@ -1,25 +1,15 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import { DefaultTokenSVG, IPXRoundedSVG } from '@/svg';
+import { IPXRoundedSVG } from '@/svg';
 
 import CardTradeInfo from './card-trade-info';
+import { LINES } from './pool-card.data';
+import { PoolCardProps } from './pool-card.types';
 import PoolCardHeader from './pool-card-header';
-import { LINES } from './pools-card.data';
 import TokenInfo from './token-info';
 
-const TOKENS_LIST = [
-  {
-    symbol: 'USDT',
-    Icon: DefaultTokenSVG,
-  },
-  {
-    symbol: 'USDT',
-    Icon: DefaultTokenSVG,
-  },
-];
-
-const PoolCard: FC = () => (
+const PoolCard: FC<PoolCardProps> = ({ token0, token1 }) => (
   <Box
     p="m"
     gap="xs"
@@ -44,7 +34,7 @@ const PoolCard: FC = () => (
       name="Interest"
       Logo={<IPXRoundedSVG width="100%" maxWidth="1.4rem" maxHeight="1.4rem" />}
     />
-    <TokenInfo apr="333.45" tokenList={TOKENS_LIST} />
+    <TokenInfo apr="333.45" coins={[token0, token1]} />
     <CardTradeInfo lines={LINES} />
   </Box>
 );

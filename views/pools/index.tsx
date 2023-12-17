@@ -9,12 +9,15 @@ import { FC, useState } from 'react';
 import { v4 } from 'uuid';
 
 import Layout from '@/components/layout';
+import { IPX_POOLS } from '@/constants/pools';
+import { useNetwork } from '@/context/network';
 import { PlusSVG, SearchSVG } from '@/svg';
 
+import PoolCard from './pool-card';
 import { PoolTabEnum } from './pools.types';
-import PoolCard from './pools-card';
 
 const Pools: FC = () => {
+  const { network } = useNetwork();
   const [tab, setTab] = useState<PoolTabEnum>(PoolTabEnum.Pools);
 
   return (
@@ -72,8 +75,8 @@ const Pools: FC = () => {
           display="grid"
           gridTemplateColumns={['1fr', '1fr', '1fr 1fr', '1fr 1fr 1fr']}
         >
-          {Array.from({ length: 9 }, () => (
-            <PoolCard key={v4()} />
+          {IPX_POOLS[network].map((pool) => (
+            <PoolCard key={v4()} {...pool} />
           ))}
         </Box>
       </Box>
