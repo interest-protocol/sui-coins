@@ -13,7 +13,7 @@ export interface AirdropData {
 
 export interface IAirdropForm {
   token: IToken;
-  error: string;
+  error: boolean;
   decimals: number;
   done: ReadonlyArray<number>;
   failed: ReadonlyArray<number>;

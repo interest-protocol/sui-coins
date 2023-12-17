@@ -19,11 +19,14 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
   const airdropList = useWatch({ control, name: 'airdropList' });
   const doneItems = useWatch({ control, name: 'done' });
   const failedItems = useWatch({ control, name: 'failed' });
+  const error = useWatch({ control, name: 'error' });
 
   const allBatches = Math.ceil((airdropList?.length ?? 0) / BATCH_SIZE);
   const finished = Math.round(
     ((doneItems.length + failedItems.length) / allBatches) * 100
   );
+
+  const isError = error || (finished && failedItems.length);
 
   return (
     <Box
@@ -38,19 +41,13 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
         variant="headline"
         size="large"
         textAlign="center"
-        color={
-          finished !== 100
-            ? 'onSurface'
-            : doneItems.length === allBatches
-            ? 'success'
-            : 'error'
-        }
+        color={isError ? 'error' : finished !== 100 ? 'onSurface' : 'success'}
       >
-        {finished !== 100
+        {isError
+          ? 'error found'
+          : finished !== 100
           ? 'Sending'
-          : doneItems.length === allBatches
-          ? "You're done"
-          : 'error found'}
+          : 'You are done'}
       </Typography>
       <Box
         display="flex"
@@ -58,31 +55,7 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
         alignItems="center"
         justifyContent="center"
       >
-        {finished !== 100 ? (
-          <>
-            <ProgressIndicator variant="loading" size={200} />
-            <Typography variant="title" size="large" position="absolute">
-              {finished}%
-            </Typography>
-          </>
-        ) : doneItems.length === allBatches ? (
-          <Box
-            display="flex"
-            width="8.75rem"
-            height="8.75rem"
-            color="success"
-            borderRadius="full"
-            alignItems="center"
-            bg="successContainer"
-            justifyContent="center"
-          >
-            <CheckSVG
-              width="100%"
-              maxWidth="3.43225rem"
-              maxHeight="2.52081rem"
-            />
-          </Box>
-        ) : (
+        {isError ? (
           <Box
             color="error"
             display="flex"
@@ -99,6 +72,30 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
               maxHeight="3.73075rem"
             />
           </Box>
+        ) : finished !== 100 ? (
+          <>
+            <ProgressIndicator variant="loading" size={200} />
+            <Typography variant="title" size="large" position="absolute">
+              {finished}%
+            </Typography>
+          </>
+        ) : (
+          <Box
+            display="flex"
+            width="8.75rem"
+            height="8.75rem"
+            color="success"
+            borderRadius="full"
+            alignItems="center"
+            bg="successContainer"
+            justifyContent="center"
+          >
+            <CheckSVG
+              width="100%"
+              maxWidth="3.43225rem"
+              maxHeight="2.52081rem"
+            />
+          </Box>
         )}
       </Box>
       <Typography
@@ -108,19 +105,19 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
         maxWidth="20rem"
         textAlign="center"
       >
-        {finished !== 100
+        {error || finished !== 100
           ? 'Sending batches'
           : doneItems.length === allBatches
           ? 'The airdrop has been sent'
-          : `${failedItems.length} batches was not sended`}
+          : `${failedItems.length} batches was not sent`}
       </Typography>
-      {finished === 100 && (
+      {(error || finished === 100) && (
         <Button
           variant="filled"
           onClick={goBack}
           justifyContent="center"
-          bg={failedItems.length ? 'error' : 'primary'}
-          color={failedItems.length ? 'onError' : 'onPrimary'}
+          bg={error || failedItems.length ? 'error' : 'primary'}
+          color={error || failedItems.length ? 'onError' : 'onPrimary'}
         >
           Go back
         </Button>
