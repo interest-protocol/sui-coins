@@ -3,14 +3,22 @@ import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
+import { DeviceMenuType } from './header.types';
+import MoreButton from './more-button';
 import { MENU_ITEMS } from './nav-bar.data';
 
 const NavBar: FC = () => {
   const { asPath, push } = useRouter();
 
   return (
-    <Box display={['none', 'none', 'none', 'flex']} justifyContent="center">
-      {MENU_ITEMS.map(({ path, name }) => (
+    <Box
+      display={['none', 'none', 'none', 'flex']}
+      justifyContent="center"
+      alignItems="center"
+    >
+      {MENU_ITEMS.filter(({ device }) =>
+        [DeviceMenuType.Both, DeviceMenuType.Desktop].includes(device)
+      ).map(({ path, name }) => (
         <Box
           key={v4()}
           py="s"
@@ -21,18 +29,19 @@ const NavBar: FC = () => {
           textAlign="center"
           borderRadius="full"
           alignItems="center"
-          border="0.25rem solid"
+          border={asPath == path ? '0.25rem solid' : 'unset'}
           px={['s', 's', 's', 'xl']}
           onClick={() => push(path)}
           nHover={{ color: 'primary' }}
           transition="all 0.3s ease-in-out"
-          nActive={{ borderColor: '#0053DB33' }}
+          nActive={{ borderColor: '#0053DB33', border: '0.25rem solid' }}
           color={asPath !== path ? 'onSurface' : 'primary'}
           borderColor={asPath !== path ? 'transparent' : '#0053DB33'}
         >
           {name}
         </Box>
       ))}
+      <MoreButton />
     </Box>
   );
 };
