@@ -19,11 +19,18 @@ export interface PoolCardTokenInfoProps {
 }
 
 export interface PoolCardLineProps {
-  description: string;
   amount: string;
+  lastLine?: boolean;
+  description: string;
   tooltipInfo: string;
 }
 
 export interface PoolTradeInfoProps {
   lines: ReadonlyArray<PoolCardLineProps>;
+}
+
+export interface PoolCardProps {
+  dexInfo: PoolCardHeaderProps;
+  pairInfo: PoolCardTokenInfoProps;
+  tradeInfo: PoolTradeInfoProps;
 }
