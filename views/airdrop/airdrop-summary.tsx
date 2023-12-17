@@ -74,7 +74,7 @@ const AirdropSummary = () => {
             opacity="0.80"
             color="onSurface"
           >
-            Sent in batches of
+            Number of batches
           </Typography>
           <Typography variant="body" size="medium" color="onSurface">
             {airdropList ? Math.ceil(airdropList.length / BATCH_SIZE) : '--'}

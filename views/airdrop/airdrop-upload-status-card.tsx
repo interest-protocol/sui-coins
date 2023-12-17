@@ -8,6 +8,7 @@ import {
 import { FC } from 'react';
 
 import { FileSVG } from '@/svg';
+import { BATCH_SIZE } from '@/views/airdrop/airdrop.constants';
 
 import { AirdropUploadStatusCardProps } from './airdrop.types';
 
@@ -50,7 +51,7 @@ const AirdropUploadStatusCard: FC<AirdropUploadStatusCardProps> = ({
             Batch {index}
           </Typography>
           <Typography variant="body" size="small" opacity="0.48">
-            50 addresses
+            {BATCH_SIZE} addresses
           </Typography>
         </Box>
       </Box>
