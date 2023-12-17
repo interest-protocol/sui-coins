@@ -188,7 +188,7 @@ const AirdropButton: FC<AirdropButtonProps> = ({ setIsProgressView }) => {
 
         await sleep(RATE_LIMIT_DELAY);
 
-        showTXSuccessToast(tx, network);
+        await showTXSuccessToast(tx, network);
 
         setValue('done', [...getValues('done'), Number(index)]);
       }
