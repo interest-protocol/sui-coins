@@ -12,6 +12,11 @@ import { MENU_ITEMS } from './nav-bar.data';
 const NavBar: FC = () => {
   const { asPath, push } = useRouter();
 
+  const isPoolPathChild = [
+    Routes[RoutesEnum.PoolDetails],
+    Routes[RoutesEnum.CreatePool],
+  ].includes(asPath);
+
   return (
     <Box
       display={['none', 'none', 'none', 'flex']}
@@ -36,8 +41,7 @@ const NavBar: FC = () => {
           onClick={() => push(path)}
           nHover={{
             color:
-              path == Routes[RoutesEnum.Pools] &&
-              [Routes[RoutesEnum.PoolDetails]].includes(asPath)
+              path == Routes[RoutesEnum.Pools] && isPoolPathChild
                 ? 'lowestContainer'
                 : 'primary',
           }}
@@ -45,22 +49,19 @@ const NavBar: FC = () => {
           nActive={{ borderColor: '#0053DB33', border: '0.25rem solid' }}
           color={
             asPath !== path
-              ? path == Routes[RoutesEnum.Pools] &&
-                [Routes[RoutesEnum.PoolDetails]].includes(asPath)
+              ? path == Routes[RoutesEnum.Pools] && isPoolPathChild
                 ? 'lowestContainer'
                 : 'onSurface'
               : 'primary'
           }
           bg={
-            path == Routes[RoutesEnum.Pools] &&
-            [Routes[RoutesEnum.PoolDetails]].includes(asPath)
+            path == Routes[RoutesEnum.Pools] && isPoolPathChild
               ? 'primary'
               : 'unset'
           }
           borderColor={
             asPath !== path
-              ? path == Routes[RoutesEnum.Pools] &&
-                [Routes[RoutesEnum.PoolDetails]].includes(asPath)
+              ? path == Routes[RoutesEnum.Pools] && isPoolPathChild
                 ? '#0053DB33'
                 : 'transparent'
               : '#0053DB33'
