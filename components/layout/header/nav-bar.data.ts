@@ -28,8 +28,4 @@ export const MENU_ITEMS = [
     path: Routes[RoutesEnum.Airdrop],
     device: DeviceMenuType.Mobile,
   },
-  {
-    name: 'Create Pool',
-    path: Routes[RoutesEnum.CreatePool],
-  },
 ];
