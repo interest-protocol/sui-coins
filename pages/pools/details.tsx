@@ -9,13 +9,11 @@ interface Props {
   objectId: string;
 }
 
-const PoolDetailsPage: NextPage<Props> = ({ objectId }) => {
-  return (
-    <>
-      <SEO pageTitle="Pool Details" />
-      <PoolDetails objectId={objectId} />
-    </>
-  );
-};
+const PoolDetailsPage: NextPage<Props> = ({ objectId }) => (
+  <>
+    <SEO pageTitle="Pool Details" />
+    <PoolDetails objectId={objectId} />
+  </>
+);
 
 export default withObjectIdGuard(Routes[RoutesEnum.Pools])(PoolDetailsPage);
