@@ -23,6 +23,7 @@ export interface IAirdropForm {
 export interface AirdropUploadStatusCardProps {
   index: number;
   status: 'pending' | 'complete' | 'failed';
+  lastBatchSize: number;
 }
 
 export interface AirdropUploadFileCardProps {

@@ -14,6 +14,9 @@ const AirdropUploadStatus: FC = () => {
   const doneItems = useWatch({ control, name: 'done' });
   const failedItems = useWatch({ control, name: 'failed' });
 
+  console.log(airdropList?.length);
+  console.log('WTF', (airdropList?.length || 0) % BATCH_SIZE);
+
   return (
     <Box
       p="xl"
@@ -32,6 +35,11 @@ const AirdropUploadStatus: FC = () => {
           (_, index) => (
             <AirdropUploadStatusCard
               key={v4()}
+              lastBatchSize={
+                Math.ceil((airdropList?.length ?? 0) / BATCH_SIZE) === index + 1
+                  ? (airdropList?.length || 0) % BATCH_SIZE
+                  : 0
+              }
               index={index + 1}
               status={
                 doneItems.includes(index)
