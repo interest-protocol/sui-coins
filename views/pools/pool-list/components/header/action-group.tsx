@@ -5,7 +5,10 @@ import { PlusSVG, SearchSVG } from '@/svg';
 
 import { ActionGroupProps } from './header.types';
 
-const ActionGroup: FC<ActionGroupProps> = ({ gotoPool, showSearchView }) => (
+const ActionGroup: FC<ActionGroupProps> = ({
+  gotoCreatePool,
+  showSearchView,
+}) => (
   <>
     <Box
       display={['none', 'none', 'none', 'flex']}
@@ -27,7 +30,7 @@ const ActionGroup: FC<ActionGroupProps> = ({ gotoPool, showSearchView }) => (
         py="0.725rem"
         variant="tonal"
         bg="rgba(0, 0, 0, 0.08)"
-        onClick={gotoPool}
+        onClick={gotoCreatePool}
         SuffixIcon={
           <Box
             display="flex"
@@ -61,7 +64,7 @@ const ActionGroup: FC<ActionGroupProps> = ({ gotoPool, showSearchView }) => (
         height="1.5rem"
         width="1.5rem"
         bg="rgba(0, 0, 0, 0.08)"
-        onClick={gotoPool}
+        onClick={gotoCreatePool}
       >
         <Box height="1.25rem" width="1.25rem">
           <PlusSVG maxHeight="1.25rem" maxWidth="1.25rem" width="100%" />

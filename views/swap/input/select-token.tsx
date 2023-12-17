@@ -31,11 +31,9 @@ const SelectToken: FC<SelectTokenProps> = ({ label, balance }) => {
   const openModal = () =>
     setModal(
       <Motion
-        initial={{ scale: 0.85 }}
         animate={{ scale: 1 }}
-        transition={{
-          duration: 0.3,
-        }}
+        initial={{ scale: 0.85 }}
+        transition={{ duration: 0.3 }}
       >
         <SelectTokenModal closeModal={handleClose} onSelect={onSelect} />
       </Motion>,
@@ -57,16 +55,15 @@ const SelectToken: FC<SelectTokenProps> = ({ label, balance }) => {
         onClick={openModal}
         PrefixIcon={
           <Box
-            minWidth="1.5rem"
-            width="1.5rem"
-            height="1.5rem"
             bg="#000"
             color="#fff"
             display="flex"
+            width="1.5rem"
+            height="1.5rem"
             alignItems="center"
-            justifyContent="center"
-            borderRadius="full"
             position="relative"
+            borderRadius="full"
+            justifyContent="center"
           >
             <BNBSVG maxWidth="1.125rem" maxHeight="1.125rem" width="100%" />
           </Box>

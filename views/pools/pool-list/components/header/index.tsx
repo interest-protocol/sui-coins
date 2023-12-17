@@ -1,7 +1,9 @@
 import { Box, Tabs } from '@interest-protocol/ui-kit';
+import { useRouter } from 'next/router';
 import { not } from 'ramda';
 import { FC, useCallback, useState } from 'react';
 
+import { Routes, RoutesEnum } from '@/constants';
 import useEventListener from '@/hooks/use-event-listener';
 
 import ActionGroup from './action-group';
@@ -11,9 +13,10 @@ import SearchMobile from './search-mobile';
 const Header: FC<HeaderProps> = ({ handleOptionTab, currentOption }) => {
   const [showSearchField, setShowSearchField] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const { push } = useRouter();
 
   const handleCloseSearch = () => setShowSearchField(not);
-  const gotoPool = () => console.log('>>>Goto Pool');
+  const gotoCreatePool = () => push(Routes[RoutesEnum.CreatePool]);
 
   const handleSetDesktop = useCallback(() => {
     const mediaIsMobile = !window.matchMedia('(min-width: 65em)').matches;
@@ -48,7 +51,10 @@ const Header: FC<HeaderProps> = ({ handleOptionTab, currentOption }) => {
             defaultTabIndex={currentOption}
           />
         </Box>
-        <ActionGroup showSearchView={handleCloseSearch} gotoPool={gotoPool} />
+        <ActionGroup
+          gotoCreatePool={gotoCreatePool}
+          showSearchView={handleCloseSearch}
+        />
       </Box>
       <SearchMobile
         handleClose={handleCloseSearch}

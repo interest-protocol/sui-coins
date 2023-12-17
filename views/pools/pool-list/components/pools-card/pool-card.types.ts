@@ -1,6 +1,6 @@
 import { FC, ReactNode } from 'react';
 
-import { SVGProps } from '../../../components/svg/svg.types';
+import { SVGProps } from '@/components/svg/svg.types';
 
 export interface TokenProps {
   Icon: FC<SVGProps>;

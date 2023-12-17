@@ -1,4 +1,4 @@
-import { PoolTypeEnum } from '../pool-list.types';
+import { PoolTypeEnum } from '../../pool-list.types';
 
 export interface SearchMobileProps {
   handleClose: () => void;
@@ -7,7 +7,7 @@ export interface SearchMobileProps {
 
 export interface ActionGroupProps {
   showSearchView: () => void;
-  gotoPool: () => void;
+  gotoCreatePool: () => void;
 }
 
 export interface HeaderProps {
