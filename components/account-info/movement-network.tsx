@@ -100,7 +100,7 @@ const MovementNetwork: FC = () => {
               onClick={() => changeNetwork(networkKey as Network)}
             >
               <MovementLogoSVG maxWidth="2rem" maxHeight="2rem" />
-              <Box>Movement {displayNetwork}</Box>
+              <Box>M2 {displayNetwork}</Box>
             </OptionItem>
           ))}
         </Motion>

@@ -147,7 +147,7 @@ const SwapButton = () => {
 
       throwTXIfNotSuccessful(tx);
 
-      await showTXSuccessToast(tx, Network.M2);
+      await showTXSuccessToast(tx, Network.DEVNET);
     } finally {
       resetInput();
       setLoading(false);

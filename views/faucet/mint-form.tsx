@@ -7,9 +7,10 @@ import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
 import { v4 } from 'uuid';
 
-import { CONTROLLERS_MAP, Network } from '@/constants';
+import { CONTROLLERS_MAP } from '@/constants';
 import { COINS } from '@/constants/coins';
 import { MINT_MODULE_NAME_MAP, PACKAGES } from '@/constants/packages';
+import { useNetwork } from '@/context/network';
 import { useMovementClient, useUserMintEpoch, useWeb3 } from '@/hooks';
 import { useSuiSystemState } from '@/hooks/use-sui-system-state';
 import { TOKEN_ICONS, TOKEN_SYMBOL } from '@/lib';
@@ -20,6 +21,7 @@ import { requestMov } from '@/views/faucet/faucet.utils';
 const MintForm: FC = () => {
   const [selected, setSelected] = useState(COINS[0]);
   const [isOpen, setIsOpen] = useState(false);
+  const { network } = useNetwork();
   const client = useMovementClient();
   const { account, mutate } = useWeb3();
   const { signTransactionBlock } = useWalletKit();
@@ -42,7 +44,7 @@ const MintForm: FC = () => {
 
       const transactionBlock = new TransactionBlock();
 
-      if (selected.type === SUI_TYPE_ARG) return requestMov(account);
+      if (selected.type === SUI_TYPE_ARG) return requestMov(account, network);
 
       const minted_coin = transactionBlock.moveCall({
         target: `${PACKAGES.COINS}::${
@@ -70,7 +72,7 @@ const MintForm: FC = () => {
       });
 
       throwTXIfNotSuccessful(tx);
-      await showTXSuccessToast(tx, Network.M2);
+      await showTXSuccessToast(tx, network);
     } finally {
       await mutate();
     }
