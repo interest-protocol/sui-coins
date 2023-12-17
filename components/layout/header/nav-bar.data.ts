@@ -28,14 +28,4 @@ export const MENU_ITEMS = [
     path: Routes[RoutesEnum.Airdrop],
     device: DeviceMenuType.Mobile,
   },
-  {
-    name: 'Metrics',
-    path: Routes[RoutesEnum.Metrics],
-    device: DeviceMenuType.Mobile,
-  },
-  {
-    name: 'Faucet',
-    path: Routes[RoutesEnum.Faucet],
-    device: DeviceMenuType.Mobile,
-  },
 ];

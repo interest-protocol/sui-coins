@@ -95,8 +95,9 @@ const MoreButton: FC = () => {
           zIndex={4}
           width="14.5rem"
           initial="closed"
+          overflow="hidden"
+          borderRadius="s"
           border="1px solid"
-          borderRadius="1rem"
           position="absolute"
           bg="lowestContainer"
           variants={wrapperVariants}
@@ -104,7 +105,6 @@ const MoreButton: FC = () => {
           borderColor="outlineVariant"
           animate={isOpen ? 'open' : 'closed'}
           pointerEvents={isOpen ? 'auto' : 'none'}
-          boxShadow="0px 2px 4px -2px rgba(13, 16, 23, 0.04), 0px 4px 8px -2px rgba(13, 16, 23, 0.12);"
         >
           {MENU_ITEMS.filter(
             ({ device }) => DeviceMenuType.Mobile == device
