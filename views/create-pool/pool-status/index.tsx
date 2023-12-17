@@ -12,7 +12,6 @@ const PoolStatus: FC<PoolStatusLinesProps> = ({ lines }) => (
     display="flex"
     borderRadius="1rem"
     flexDirection="column"
-    width={['100%', '100%', '100%', '100%']}
   >
     {lines.map((line, index) => (
       <Box
@@ -28,20 +27,15 @@ const PoolStatus: FC<PoolStatusLinesProps> = ({ lines }) => (
         }
       >
         <Typography
-          textTransform="capitalize"
-          color="outline"
+          flex="1"
           size="medium"
           variant="body"
+          color="outline"
+          textTransform="capitalize"
         >
           {line.description}:
         </Typography>
-        <Box
-          display="flex"
-          flexDirection="row"
-          justifyContent="flex-end"
-          alignItems="flex-end"
-          minWidth="10rem"
-        >
+        <Box display="flex" alignItems="flex-end" justifyContent="flex-end">
           <Typography
             color="onSurface"
             size="medium"

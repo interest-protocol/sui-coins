@@ -2,6 +2,7 @@ import { NextPage } from 'next';
 import { values } from 'ramda';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { SEO } from '@/components';
 import { COINS } from '@/constants/coins';
 import { ModalProvider } from '@/context/modal';
 import { useNetwork } from '@/context/network';
@@ -28,6 +29,7 @@ const CreatePoolPage: NextPage = () => {
   return (
     <FormProvider {...form}>
       <ModalProvider>
+        <SEO pageTitle="Create Pool" />
         <CreatePool />
       </ModalProvider>
     </FormProvider>

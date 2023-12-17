@@ -14,11 +14,7 @@ const Illustration: FC = () => (
     justifyContent="center"
     display={['none', 'none', 'none', 'flex']}
   >
-    <Box
-      width="100%"
-      position="relative"
-      height={['30.75rem', '30.75rem', '30.75rem', '41.5rem']}
-    >
+    <Box width="100%" position="relative" height="41.5rem">
       <CoinsIllustration maxHeight="40rem" maxWidth="35rem" />
     </Box>
   </Box>

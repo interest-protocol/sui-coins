@@ -5,7 +5,7 @@ import CreateToken from '@/views/create-token';
 
 const CreateTokenPage: NextPage = () => (
   <>
-    <SEO pageTitle="Create pool" />
+    <SEO pageTitle="Create Token" />
     <CreateToken />
   </>
 );
