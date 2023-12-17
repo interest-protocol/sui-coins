@@ -5,10 +5,11 @@ import { v4 } from 'uuid';
 import { Network, TOKEN_ICONS } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { DefaultSVG } from '@/svg';
+import { getSymbol } from '@/views/airdrop/airdrop.utils';
 
 import { PoolCardTokenInfoProps } from './pool-card.types';
 
-const TokenInfo: FC<PoolCardTokenInfoProps> = ({ coins, apr }) => {
+const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({ coins, apr }) => {
   const { network } = useNetwork();
 
   const isMainnet = Network.MAINNET === network;
@@ -23,14 +24,13 @@ const TokenInfo: FC<PoolCardTokenInfoProps> = ({ coins, apr }) => {
         flexDirection="column"
       >
         <Box
-          minWidth="19rem"
+          mb="m"
+          gap="m"
           height="2.5rem"
           display="flex"
           justifyContent="center"
           alignItems="center"
           alignSelf="stretch"
-          gap="m"
-          mb="1rem"
         >
           {coins.map(({ symbol, type }) => {
             const Icon =
@@ -53,16 +53,18 @@ const TokenInfo: FC<PoolCardTokenInfoProps> = ({ coins, apr }) => {
             );
           })}
         </Box>
-        <Box display="flex" flexDirection="column">
+        <Box display="flex" flexDirection="column" alignItems="center">
           <Typography
-            lineHeight="1.7rem"
-            fontWeight="700"
-            fontSize="1rem"
-            textTransform="uppercase"
             size="small"
             variant="body"
+            fontSize="1rem"
+            fontWeight="700"
+            lineHeight="1.7rem"
           >
-            {coins.map(({ symbol }, index) => `${index ? ' • ' : ''}${symbol}`)}
+            {coins.map(
+              ({ symbol, type }, index) =>
+                `${index ? ' • ' : ''}${getSymbol(symbol, type)}`
+            )}
           </Typography>
           <Typography
             textAlign="center"
@@ -79,4 +81,4 @@ const TokenInfo: FC<PoolCardTokenInfoProps> = ({ coins, apr }) => {
   );
 };
 
-export default TokenInfo;
+export default PoolCardInfo;

@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { FC } from 'react';
 
 import { Routes, RoutesEnum } from '@/constants';
+import { ArrowObliqueSVG } from '@/svg';
 
-import ArrowObliqueSVG from '../../../components/svg/arrow-oblique';
 import { PoolCardHeaderProps } from './pool-card.types';
 
 const PoolCardHeader: FC<PoolCardHeaderProps> = ({

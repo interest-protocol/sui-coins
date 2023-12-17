@@ -15,15 +15,13 @@ export interface PoolCardTokenInfoProps {
   coins: ReadonlyArray<CoinData>;
 }
 
-export interface PoolCardLineProps {
-  description: string;
+export interface PoolCardTradeProps {
+  index: number;
   amount: string;
+  description: string;
   tooltipInfo: string;
 }
 
-export interface PoolTradeInfoProps {
-  lines: ReadonlyArray<PoolCardLineProps>;
-}
 export interface PoolCardProps {
   stable: boolean;
   dex: TDexSources;

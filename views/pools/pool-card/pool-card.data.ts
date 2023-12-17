@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { SVGProps } from '@/components/svg/svg.types';
 import { TDexSources } from '@/constants/dex';
-import { IPXSVG, LogoSVG } from '@/svg';
+import { IPXRoundedSVG, LogoSVG } from '@/svg';
 
 export const LINES = [
   {
@@ -28,7 +28,7 @@ export const DEX_MAP: Record<
 > = {
   interest: {
     name: 'Interest',
-    Icon: IPXSVG,
+    Icon: IPXRoundedSVG,
     url: 'https://interestprotocol.com',
   },
   suicoins: { name: 'SuiCoins', Icon: LogoSVG, url: 'https://suicoins.com' },
