@@ -30,8 +30,8 @@ const SwapManagerField: FC<SwapManagerProps> = ({
   setIsFetchingSwapAmount,
   setValueName,
 }) => {
+  const client = useSuiClient();
   const { network } = useNetwork();
-  const client = useSuiClient(network);
   const [tokenIn] = useDebounce(useWatch({ control, name }), 900);
 
   const lock = useWatch({ control, name: 'lock' });

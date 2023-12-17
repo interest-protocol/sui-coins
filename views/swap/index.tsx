@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@interest-protocol/ui-kit';
+import { Box, Button } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
@@ -7,6 +7,7 @@ import { SwapSVG } from '@/svg';
 
 import Input from './input';
 import ManageSlippage from './manage-slippage';
+import SwapButton from './swap-button';
 import SwapManager from './swap-manager';
 
 const Swap: FC = () => {
@@ -59,11 +60,7 @@ const Swap: FC = () => {
         <Input label="to" />
         <ManageSlippage />
         <Box mt="7xl" mx="auto">
-          <Button variant="filled">
-            <Typography variant="label" size="large">
-              SWAP
-            </Typography>
-          </Button>
+          <SwapButton />
         </Box>
       </Box>
       <SwapManager />
