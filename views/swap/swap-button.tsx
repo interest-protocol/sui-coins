@@ -25,8 +25,8 @@ import { SwapForm } from '@/views/swap/swap.types';
 import { getAmountMinusSlippage } from './swap.utils';
 
 const SwapButton = () => {
+  const client = useSuiClient();
   const { network } = useNetwork();
-  const client = useSuiClient(network);
   const { dialog, handleClose } = useDialog();
   const formSwap: UseFormReturn<SwapForm> = useFormContext();
   const [loading, setLoading] = useState(false);
