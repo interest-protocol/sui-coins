@@ -5,10 +5,12 @@ import {
   TextField,
   Typography,
 } from '@interest-protocol/ui-kit';
+import { useRouter } from 'next/router';
 import { FC, useState } from 'react';
 import { v4 } from 'uuid';
 
 import Layout from '@/components/layout';
+import { Routes, RoutesEnum } from '@/constants';
 import { RECOMMENDED_POOLS } from '@/constants/pools';
 import { useNetwork } from '@/context/network';
 import { PlusSVG, SearchSVG } from '@/svg';
@@ -17,6 +19,7 @@ import PoolCard from './pool-card';
 import { PoolTabEnum } from './pools.types';
 
 const Pools: FC = () => {
+  const { push } = useRouter();
   const { network } = useNetwork();
   const [tab, setTab] = useState<PoolTabEnum>(PoolTabEnum.Pools);
 
@@ -50,6 +53,7 @@ const Pools: FC = () => {
               variant="filled"
               color="onSurface"
               nHover={{ color: 'onPrimary' }}
+              onClick={() => push(Routes[RoutesEnum.CreatePool])}
               SuffixIcon={
                 <Box as="span" display={['none', 'none', 'none', 'inline']}>
                   <PlusSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
