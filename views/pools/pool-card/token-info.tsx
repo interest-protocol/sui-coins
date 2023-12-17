@@ -29,7 +29,7 @@ const TokenInfo: FC<PoolCardTokenInfoProps> = ({ coins, apr }) => {
           justifyContent="center"
           alignItems="center"
           alignSelf="stretch"
-          gap="1rem"
+          gap="m"
           mb="1rem"
         >
           {coins.map(({ symbol, type }) => {
@@ -37,8 +37,18 @@ const TokenInfo: FC<PoolCardTokenInfoProps> = ({ coins, apr }) => {
               TOKEN_ICONS[network][isMainnet ? type : symbol] ?? DefaultSVG;
 
             return (
-              <Box key={v4()} borderRadius="1rem">
-                <Icon maxWidth="2.5rem" maxHeight="2.5rem" width="100%" />
+              <Box
+                key={v4()}
+                display="flex"
+                width="2.5rem"
+                bg="onSurface"
+                color="surface"
+                height="2.5rem"
+                borderRadius="xs"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Icon maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
               </Box>
             );
           })}

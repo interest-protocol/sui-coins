@@ -9,7 +9,7 @@ import { FC, useState } from 'react';
 import { v4 } from 'uuid';
 
 import Layout from '@/components/layout';
-import { IPX_POOLS } from '@/constants/pools';
+import { RECOMMENDED_POOLS } from '@/constants/pools';
 import { useNetwork } from '@/context/network';
 import { PlusSVG, SearchSVG } from '@/svg';
 
@@ -75,7 +75,7 @@ const Pools: FC = () => {
           display="grid"
           gridTemplateColumns={['1fr', '1fr', '1fr 1fr', '1fr 1fr 1fr']}
         >
-          {IPX_POOLS[network].map((pool) => (
+          {RECOMMENDED_POOLS[network].map((pool) => (
             <PoolCard key={v4()} {...pool} />
           ))}
         </Box>

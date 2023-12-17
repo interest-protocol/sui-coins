@@ -1,3 +1,9 @@
+import { FC } from 'react';
+
+import { SVGProps } from '@/components/svg/svg.types';
+import { TDexSources } from '@/constants/dex';
+import { IPXSVG, LogoSVG } from '@/svg';
+
 export const LINES = [
   {
     description: 'Fee',
@@ -15,3 +21,15 @@ export const LINES = [
     tooltipInfo: 'Volume',
   },
 ];
+
+export const DEX_MAP: Record<
+  TDexSources,
+  { name: string; Icon: FC<SVGProps>; url: string }
+> = {
+  interest: {
+    name: 'Interest',
+    Icon: IPXSVG,
+    url: 'https://interestprotocol.com',
+  },
+  suicoins: { name: 'SuiCoins', Icon: LogoSVG, url: 'https://suicoins.com' },
+};

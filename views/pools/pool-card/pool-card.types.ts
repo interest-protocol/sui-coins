@@ -1,11 +1,13 @@
 import { ReactNode } from 'react';
 
+import { TDexSources } from '@/constants/dex';
 import { CoinData } from '@/interface';
 
 export interface PoolCardHeaderProps {
-  Logo: ReactNode;
   name: string;
-  url: string;
+  dexUrl: string;
+  Logo: ReactNode;
+  objectId: string;
 }
 
 export interface PoolCardTokenInfoProps {
@@ -24,6 +26,7 @@ export interface PoolTradeInfoProps {
 }
 export interface PoolCardProps {
   stable: boolean;
+  dex: TDexSources;
   token0: CoinData;
   token1: CoinData;
   lpCoin: CoinData;

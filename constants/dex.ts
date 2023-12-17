@@ -3,6 +3,8 @@ import { RegistryPool } from '@/interface';
 import { Network } from '.';
 import { COIN_TYPE, COINS, POOL_ID_MAP } from './coins';
 
+export type TDexSources = 'interest' | 'suicoins';
+
 export const DEX_BASE_COINS = {
   [Network.TESTNET]: [COIN_TYPE[Network.TESTNET].ETH],
   [Network.MAINNET]: [

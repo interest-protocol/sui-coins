@@ -1,16 +1,20 @@
 import { Box, Button, Tag, Typography } from '@interest-protocol/ui-kit';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { FC } from 'react';
+
+import { Routes, RoutesEnum } from '@/constants';
 
 import ArrowObliqueSVG from '../../../components/svg/arrow-oblique';
 import { PoolCardHeaderProps } from './pool-card.types';
 
-const PoolCardHeader: FC<PoolCardHeaderProps> = ({ name, url, Logo }) => {
-  const { push } = useRouter();
-  const handlePoolCardDetails = () => push(url);
-
-  return (
-    <Box display="flex" alignItems="center" justifyContent="space-between">
+const PoolCardHeader: FC<PoolCardHeaderProps> = ({
+  name,
+  Logo,
+  dexUrl,
+  objectId,
+}) => (
+  <Box display="flex" alignItems="center" justifyContent="space-between">
+    <a target="_blank" href={dexUrl} rel="noreferrer">
       <Tag
         PrefixIcon={
           <Box
@@ -30,17 +34,13 @@ const PoolCardHeader: FC<PoolCardHeaderProps> = ({ name, url, Logo }) => {
           {name}
         </Typography>
       </Tag>
-      <Button
-        variant="text"
-        isIcon
-        onClick={handlePoolCardDetails}
-        opacity="0"
-        className="arrow-wrapper"
-      >
+    </a>
+    <Link href={`${Routes[RoutesEnum.PoolDetails]}?objectId=${objectId}`}>
+      <Button isIcon opacity="0" variant="text" className="arrow-wrapper">
         <ArrowObliqueSVG maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
       </Button>
-    </Box>
-  );
-};
+    </Link>
+  </Box>
+);
 
 export default PoolCardHeader;
