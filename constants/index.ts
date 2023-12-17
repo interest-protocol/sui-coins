@@ -3,18 +3,22 @@ import { ETH_TYPE, USDC_TYPE } from './coins';
 export const MAX_NUMBER_INPUT_VALUE = 9000000000000000;
 
 export enum Network {
-  M2 = 'movement:m2',
+  DEVNET = 'm2:devnet',
 }
 
 export const DISPLAY_NETWORK = {
-  [Network.M2]: 'M2',
+  [Network.DEVNET]: 'Devnet',
 };
 
 export const LOCAL_STORAGE_VERSION = 'v3';
 
-export const RPC_URL = 'https://sui.movementlabs.xyz:443';
+export const RPC_URL = {
+  [Network.DEVNET]: 'https://devnet.m2.movementlabs.xyz:443',
+};
 
-export const FAUCET_URL = 'https://sui.movementlabs.xyz/faucet';
+export const FAUCET_URL = {
+  [Network.DEVNET]: 'https://devnet.m2.movementlabs.xyz/faucet',
+};
 
 export const CONTROLLERS_MAP: Record<string, string> = {
   [ETH_TYPE]:
@@ -24,7 +28,7 @@ export const CONTROLLERS_MAP: Record<string, string> = {
 };
 
 export const EXPLORER_URL = {
-  [Network.M2]: (path: string) =>
+  [Network.DEVNET]: (path: string) =>
     `https://suiexplorer.com/${path}?network=https%3A%2F%2Fsui.movementlabs.xyz%2F`,
 } as Record<Network, (path: string) => string>;
 

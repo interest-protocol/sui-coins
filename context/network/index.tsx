@@ -14,17 +14,18 @@ interface INetworkContext {
   changeNetwork: (network: Network) => void;
 }
 
-const LOCAL_NETWORK_KEY = 'suicoins:network';
+const LOCAL_NETWORK_KEY = 'movement:network';
 
 const networkContext = createContext<INetworkContext>({} as INetworkContext);
 
 export const NetworkProvider: FC<PropsWithChildren> = ({ children }) => {
   const { Provider } = networkContext;
-  const [network, setNetwork] = useState<Network>(Network.M2);
+  const [network, setNetwork] = useState<Network>(Network.DEVNET);
 
   useEffect(() => {
     setNetwork(
-      (window.localStorage.getItem(LOCAL_NETWORK_KEY) as Network) ?? Network.M2
+      (window.localStorage.getItem(LOCAL_NETWORK_KEY) as Network) ??
+        Network.DEVNET
     );
   }, []);
 
