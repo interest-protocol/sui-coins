@@ -1,13 +1,21 @@
 import { NextPage } from 'next';
 
 import { SEO } from '@/components';
+import { withObjectIdGuard } from '@/components/hoc';
+import { Routes, RoutesEnum } from '@/constants';
 import PoolDetails from '@/views/pool-details';
 
-const PoolsPage: NextPage = () => (
-  <>
-    <SEO pageTitle="Pools" />
-    <PoolDetails />
-  </>
-);
+interface Props {
+  objectId: string;
+}
 
-export default PoolsPage;
+const PoolDetailsPage: NextPage<Props> = ({ objectId }) => {
+  return (
+    <>
+      <SEO pageTitle="Pool Details" />
+      <PoolDetails objectId={objectId} />
+    </>
+  );
+};
+
+export default withObjectIdGuard(Routes[RoutesEnum.Pools])(PoolDetailsPage);
