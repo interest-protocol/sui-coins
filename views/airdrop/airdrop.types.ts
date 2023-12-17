@@ -13,7 +13,7 @@ export interface AirdropData {
 
 export interface IAirdropForm {
   token: IToken;
-  error: string;
+  error: boolean;
   decimals: number;
   done: ReadonlyArray<number>;
   failed: ReadonlyArray<number>;
@@ -23,6 +23,7 @@ export interface IAirdropForm {
 export interface AirdropUploadStatusCardProps {
   index: number;
   status: 'pending' | 'complete' | 'failed';
+  lastBatchSize: number;
 }
 
 export interface AirdropUploadFileCardProps {

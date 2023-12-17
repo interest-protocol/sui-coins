@@ -20,6 +20,7 @@ const COLORS = {
 
 const AirdropUploadStatusCard: FC<AirdropUploadStatusCardProps> = ({
   index,
+  lastBatchSize,
   status,
 }) => {
   const { colors } = useTheme() as Theme;
@@ -51,7 +52,7 @@ const AirdropUploadStatusCard: FC<AirdropUploadStatusCardProps> = ({
             Batch {index}
           </Typography>
           <Typography variant="body" size="small" opacity="0.48">
-            {BATCH_SIZE} addresses
+            {lastBatchSize ? lastBatchSize : BATCH_SIZE} addresses
           </Typography>
         </Box>
       </Box>

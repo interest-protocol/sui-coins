@@ -142,7 +142,9 @@ const AirdropButton: FC<AirdropButtonProps> = ({ setIsProgressView }) => {
           requestType: 'WaitForEffectsCert',
         });
 
-        throwTXIfNotSuccessful(tx);
+        throwTXIfNotSuccessful(tx, () => {
+          setValue('error', true);
+        });
 
         showTXSuccessToast(tx, network);
 
@@ -194,6 +196,9 @@ const AirdropButton: FC<AirdropButtonProps> = ({ setIsProgressView }) => {
       }
     } catch (e: any) {
       toast.error((e?.message as string) ?? e ?? 'Something went wrong!');
+      if (((e?.message as string) ?? e) === 'Rejected from user') {
+        setValue('error', true);
+      }
     } finally {
       const explorerLink = EXPLORER_URL[network](
         `address/${currentAccount!.address}`

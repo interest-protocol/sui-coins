@@ -14,6 +14,10 @@ const AirdropUploadStatus: FC = () => {
   const doneItems = useWatch({ control, name: 'done' });
   const failedItems = useWatch({ control, name: 'failed' });
 
+  const error = useWatch({ control, name: 'error' });
+
+  const allBatches = Math.ceil((airdropList?.length ?? 0) / BATCH_SIZE);
+
   return (
     <Box
       p="xl"
@@ -27,22 +31,24 @@ const AirdropUploadStatus: FC = () => {
         Progress Summary
       </Typography>
       <Box display="flex" gap="m" flexDirection="column-reverse">
-        {Array.from(
-          { length: Math.ceil((airdropList?.length ?? 0) / BATCH_SIZE) },
-          (_, index) => (
-            <AirdropUploadStatusCard
-              key={v4()}
-              index={index + 1}
-              status={
-                doneItems.includes(index)
-                  ? 'complete'
-                  : failedItems.includes(index)
-                  ? 'failed'
-                  : 'pending'
-              }
-            />
-          )
-        )}
+        {Array.from({ length: allBatches }, (_, index) => (
+          <AirdropUploadStatusCard
+            key={v4()}
+            index={index + 1}
+            lastBatchSize={
+              allBatches === index + 1
+                ? (airdropList?.length || 0) % BATCH_SIZE
+                : 0
+            }
+            status={
+              error || failedItems.includes(index)
+                ? 'failed'
+                : doneItems.includes(index)
+                ? 'complete'
+                : 'pending'
+            }
+          />
+        ))}
       </Box>
     </Box>
   );
