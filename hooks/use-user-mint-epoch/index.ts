@@ -3,11 +3,11 @@ import { SuiClient } from '@mysten/sui.js/client';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import useSWR from 'swr';
 
-import { CONTROLLERS_MAP, Network } from '@/constants';
+import { CONTROLLERS_MAP } from '@/constants';
 import { ETH_TYPE, USDC_TYPE } from '@/constants/coins';
 import { MINT_MODULE_NAME_MAP, PACKAGES } from '@/constants/packages';
 import { useNetwork } from '@/context/network';
-import { TOKEN_SYMBOL } from '@/lib';
+import { Network, TOKEN_SYMBOL } from '@/lib';
 import { makeSWRKey } from '@/utils';
 import { getReturnValuesFromInspectResults } from '@/utils';
 
