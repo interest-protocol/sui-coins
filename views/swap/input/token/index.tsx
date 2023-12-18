@@ -6,9 +6,10 @@ import { FC, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
-import { COINS } from '@/constants/coins';
+import { COINS, COINS_MAP } from '@/constants/coins';
+import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks';
-import { FixedPointMath, TOKEN_ICONS, TOKEN_SYMBOL } from '@/lib';
+import { FixedPointMath, TOKEN_ICONS } from '@/lib';
 import { ChevronDownSVG } from '@/svg';
 import { updateURL } from '@/utils';
 
@@ -18,6 +19,7 @@ import { InputProps as DropdownTokenProps } from '../input.types';
 const Token: FC<DropdownTokenProps> = ({ label }) => {
   const { coinsMap } = useWeb3();
   const { pathname } = useRouter();
+  const { network } = useNetwork();
   const [isOpen, setIsOpen] = useState(false);
   const { control, setValue } = useFormContext<SwapForm>();
 
@@ -42,7 +44,7 @@ const Token: FC<DropdownTokenProps> = ({ label }) => {
     name: `${label === 'to' ? 'from' : 'to'}.type`,
   });
 
-  const Icon = TOKEN_ICONS[symbol as TOKEN_SYMBOL];
+  const Icon = TOKEN_ICONS[network][symbol];
 
   return (
     <Box position="relative">
@@ -93,13 +95,31 @@ const Token: FC<DropdownTokenProps> = ({ label }) => {
           borderColor="outline"
         >
           {COINS.map(({ symbol, type, decimals }) => {
-            const Icon = TOKEN_ICONS[symbol];
+            const Icon = TOKEN_ICONS[network][symbol];
             return (
               <ListItem
                 key={v4()}
                 title={symbol}
-                disabled={type === oppositeType || type === currentType}
                 onClick={() => {
+                  if (type === oppositeType) {
+                    const currentToken = COINS_MAP[currentType];
+
+                    setValue(label === 'to' ? 'from' : 'to', {
+                      type: currentToken.type,
+                      symbol: currentToken.symbol,
+                      decimals: currentToken.decimals,
+                      value: '',
+                      balance: FixedPointMath.toNumber(
+                        pathOr(
+                          BigNumber(0),
+                          [currentToken.type, 'totalBalance'],
+                          coinsMap
+                        )
+                      ),
+                      locked: false,
+                    });
+                  }
+
                   setValue(label, {
                     type,
                     symbol,

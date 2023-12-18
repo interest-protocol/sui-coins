@@ -9,9 +9,9 @@ import { useState } from 'react';
 import { useFormContext, UseFormReturn, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { Network } from '@/constants';
 import { REGISTRY_POOLS } from '@/constants/coins';
 import { PACKAGES } from '@/constants/packages';
+import { useNetwork } from '@/context/network';
 import { useMovementClient, useWeb3 } from '@/hooks';
 import { FixedPointMath } from '@/lib';
 import {
@@ -25,6 +25,7 @@ import { SwapForm } from '@/views/swap/swap.types';
 import { getAmountMinusSlippage } from './swap.utils';
 
 const SwapButton = () => {
+  const { network } = useNetwork();
   const formSwap: UseFormReturn<SwapForm> = useFormContext();
   const [loading, setLoading] = useState(false);
   const { signTransactionBlock } = useWalletKit();
@@ -97,7 +98,7 @@ const SwapButton = () => {
           // FirstSwap
           if (index === 0) {
             const coinIn = txb.moveCall({
-              target: `${PACKAGES.UTILS}::utils::handle_coin_vector`,
+              target: `${PACKAGES[network].UTILS}::utils::handle_coin_vector`,
               typeArguments: [from.type],
               arguments: [
                 txb.makeMoveVec({
@@ -108,7 +109,7 @@ const SwapButton = () => {
             });
 
             nextCoin = txb.moveCall({
-              target: `${PACKAGES.DEX}::sui_coins_amm::swap`,
+              target: `${PACKAGES[network].DEX}::sui_coins_amm::swap`,
               typeArguments: [coinInType, coinOutType, lpCoinType],
               arguments: [
                 txb.object(poolId),
@@ -118,7 +119,7 @@ const SwapButton = () => {
             });
           } else {
             nextCoin = txb.moveCall({
-              target: `${PACKAGES.DEX}::sui_coins_amm::swap`,
+              target: `${PACKAGES[network].DEX}::sui_coins_amm::swap`,
               typeArguments: [coinInType, coinOutType, lpCoinType],
               arguments: [
                 txb.object(poolId),
@@ -147,7 +148,7 @@ const SwapButton = () => {
 
       throwTXIfNotSuccessful(tx);
 
-      await showTXSuccessToast(tx, Network.M2);
+      await showTXSuccessToast(tx, network);
     } finally {
       resetInput();
       setLoading(false);

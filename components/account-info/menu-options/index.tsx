@@ -7,8 +7,9 @@ import { v4 } from 'uuid';
 
 import { MENU_ITEMS } from '@/components/layout/header/nav-bar.data';
 import ConnectWalletButton from '@/components/wallet/connect-wallet-button';
-import { DISPLAY_NETWORK, Network, wrapperVariants } from '@/constants';
+import { DISPLAY_NETWORK, wrapperVariants } from '@/constants';
 import { useNetwork } from '@/context/network';
+import { Network } from '@/lib';
 import { ArrowLeftSVG, MovementLogoSVG, SignOutSVG } from '@/svg';
 
 import Avatar from '../avatar';

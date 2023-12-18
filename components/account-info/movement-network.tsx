@@ -3,9 +3,10 @@ import { not, toPairs } from 'ramda';
 import { FC, useState } from 'react';
 import { v4 } from 'uuid';
 
-import { DISPLAY_NETWORK, Network, wrapperVariants } from '@/constants';
+import { DISPLAY_NETWORK, wrapperVariants } from '@/constants';
 import { useNetwork } from '@/context/network';
 import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
+import { Network } from '@/lib';
 import { ChevronDownSVG, MovementLogoSVG } from '@/svg';
 
 import OptionItem from './menu-options/option-item';
@@ -100,7 +101,7 @@ const MovementNetwork: FC = () => {
               onClick={() => changeNetwork(networkKey as Network)}
             >
               <MovementLogoSVG maxWidth="2rem" maxHeight="2rem" />
-              <Box>Movement {displayNetwork}</Box>
+              <Box>M2 {displayNetwork}</Box>
             </OptionItem>
           ))}
         </Motion>
