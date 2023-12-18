@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Box, Button, TextField } from '@interest-protocol/ui-kit';
+import { Box, Button, TextField, Typography } from '@interest-protocol/ui-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { useWalletKit } from '@mysten/wallet-kit';
 import BigNumber from 'bignumber.js';
@@ -18,6 +18,7 @@ import { getTokenByteCode } from './api';
 import { Blacklist } from './blacklist';
 import { validationSchema } from './create-token-form.validation';
 import FixedSupplyToggle from './fixed-supply-toggle';
+import UploadImage from './upload-image';
 
 const CreateTokenForm: FC = () => {
   const [loading, setLoading] = useState(false);
@@ -163,6 +164,18 @@ const CreateTokenForm: FC = () => {
               supportingText={errors.imageUrl?.message}
               placeholder="Eg. https://sui.com/images/logo.png"
             />
+            <TextField
+              type="link"
+              label="Coin Image URL"
+              {...register('imageUrl')}
+              status={errors.imageUrl && 'error'}
+              supportingText={errors.imageUrl?.message}
+              placeholder="Eg. https://sui.com/images/logo.png"
+            />
+            <Typography size="large" variant="body" textAlign="center">
+              or
+            </Typography>
+            <UploadImage setValue={setValue} />
           </Box>
           <Box display="flex" flexDirection="column" gap="m">
             <Box>2. Coin Features</Box>

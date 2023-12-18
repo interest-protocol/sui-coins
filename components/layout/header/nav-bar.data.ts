@@ -2,19 +2,28 @@ import { Routes, RoutesEnum } from '@/constants';
 
 export const MENU_ITEMS = [
   {
-    name: 'Swap',
-    path: Routes[RoutesEnum.Swap],
+    name: 'Create Token',
+    path: Routes[RoutesEnum.CreateToken],
+    mobileOnly: true,
   },
   {
-    name: 'Faucet',
-    path: Routes[RoutesEnum.Faucet],
+    name: 'Swap',
+    path: Routes[RoutesEnum.Swap],
+    mobileOnly: true,
+  },
+  {
+    name: 'My Coins',
+    path: Routes[RoutesEnum.MyCoins],
+    mobileOnly: true,
   },
   {
     name: 'Airdrop',
     path: Routes[RoutesEnum.Airdrop],
+    mobileOnly: false,
   },
   {
-    name: 'Create Token',
-    path: Routes[RoutesEnum.CreateToken],
+    name: 'Faucet',
+    path: Routes[RoutesEnum.Faucet],
+    mobileOnly: false,
   },
 ];
