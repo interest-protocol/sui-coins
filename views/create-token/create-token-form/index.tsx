@@ -91,6 +91,9 @@ const CreateTokenForm: FC = () => {
         signature,
         transactionBlock: transactionBlockBytes,
         requestType: 'WaitForEffectsCert',
+        options: {
+          showEffects: true,
+        },
       });
 
       throwTXIfNotSuccessful(tx);

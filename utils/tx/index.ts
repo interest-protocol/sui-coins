@@ -8,9 +8,10 @@ export const throwTXIfNotSuccessful = (
   tx: SuiTransactionBlockResponse,
   callback?: () => void
 ) => {
-  if (!!tx.effects?.status && tx.effects.status.status !== 'success')
+  if (!!tx.effects?.status && tx.effects.status.status !== 'success') {
     callback?.();
-  throw new Error();
+    throw new Error();
+  }
 };
 
 export const getReturnValuesFromInspectResults = (

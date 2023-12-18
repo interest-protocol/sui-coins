@@ -21,7 +21,7 @@ export const showTXSuccessToast = async (
           cursor="pointer"
           textDecoration="underline"
         >
-          Sui Explorer
+          Explorer
         </Typography>
       </Box>
     </a>

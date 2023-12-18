@@ -216,7 +216,7 @@ const AirdropButton: FC<AirdropButtonProps> = ({ setIsProgressView }) => {
             cursor="pointer"
             textDecoration="underline"
           >
-            Sui Explorer
+            Explorer
           </Typography>
         </a>
       );
