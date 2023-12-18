@@ -1,6 +1,7 @@
-import { Box, Tabs } from '@interest-protocol/ui-kit';
+import { Box, Tabs, Typography } from '@interest-protocol/ui-kit';
 import { not } from 'ramda';
 import { FC, useCallback, useState } from 'react';
+import { v4 } from 'uuid';
 
 import useEventListener from '@/hooks/use-event-listener';
 
@@ -42,7 +43,15 @@ const Header: FC<HeaderProps> = ({ currentTab, setTab }) => {
           type="circle"
           onChangeTab={setTab}
           defaultTabIndex={currentTab}
-          items={['Pools', 'My Position']}
+          items={['Pools', 'My Position'].map((tab) => (
+            <Typography
+              key={v4()}
+              variant="label"
+              size={isMobile ? 'small' : 'medium'}
+            >
+              {tab}
+            </Typography>
+          ))}
         />
         <ActionGroup showSearchView={handleCloseSearch} />
       </Box>

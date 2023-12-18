@@ -20,10 +20,10 @@ const Pools: FC = () => {
         Pools
       </Typography>
       <Box
-        p={['m', 'm', 'm', 'l']}
+        p={['s', 's', 's', 'l']}
         borderRadius="l"
         bg="lowestContainer"
-        mx={['m', 'm', 'm', 'm', '9xl']}
+        mx={['0', '0', '0', '0', '9xl']}
       >
         <Header setTab={setTab} currentTab={tab} />
         <Box
