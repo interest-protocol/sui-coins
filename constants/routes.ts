@@ -5,6 +5,7 @@
 export enum RoutesEnum {
   Swap = 'swap',
   Faucet = 'faucet',
+  Airdrop = 'airdrop',
 }
 
 /**
@@ -14,4 +15,5 @@ export enum RoutesEnum {
 export const Routes: Record<RoutesEnum, string> = {
   [RoutesEnum.Swap]: '/',
   [RoutesEnum.Faucet]: '/faucet',
+  [RoutesEnum.Airdrop]: '/airdrop',
 };

@@ -3,24 +3,27 @@ import { SuiClient } from '@mysten/sui.js/client';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import useSWR from 'swr';
 
-import { CONTROLLERS_MAP } from '@/constants';
+import { CONTROLLERS_MAP, Network } from '@/constants';
 import { ETH_TYPE, USDC_TYPE } from '@/constants/coins';
 import { MINT_MODULE_NAME_MAP, PACKAGES } from '@/constants/packages';
+import { useNetwork } from '@/context/network';
 import { TOKEN_SYMBOL } from '@/lib';
 import { makeSWRKey } from '@/utils';
 import { getReturnValuesFromInspectResults } from '@/utils';
 
 import { useMovementClient } from '../use-movement-client';
 import { useWeb3 } from '../use-web3';
+
 const getLastMintEpoch = async (
   suiClient: SuiClient,
   coinType: string,
-  account: string
+  account: string,
+  network: Network
 ) => {
   const txb = new TransactionBlock();
 
   txb.moveCall({
-    target: `${PACKAGES.COINS}::${MINT_MODULE_NAME_MAP[coinType]}::user_last_epoch`,
+    target: `${PACKAGES[network].COINS}::${MINT_MODULE_NAME_MAP[coinType]}::user_last_epoch`,
     arguments: [txb.object(CONTROLLERS_MAP[coinType]), txb.pure(account)],
   });
 
@@ -43,6 +46,7 @@ const getLastMintEpoch = async (
 export const useUserMintEpoch = () => {
   const { account } = useWeb3();
   const client = useMovementClient();
+  const { network } = useNetwork();
 
   const { data } = useSWR(
     makeSWRKey([account], ''),
@@ -50,8 +54,8 @@ export const useUserMintEpoch = () => {
       if (!account) return;
 
       const [ethLastMintResponse, usdcLastMintEpoch] = await Promise.all([
-        getLastMintEpoch(client, ETH_TYPE, account),
-        getLastMintEpoch(client, USDC_TYPE, account),
+        getLastMintEpoch(client, ETH_TYPE, account, network),
+        getLastMintEpoch(client, USDC_TYPE, account, network),
       ]);
 
       return {

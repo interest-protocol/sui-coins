@@ -3,9 +3,14 @@ import {
   SuiTransactionBlockResponse,
 } from '@mysten/sui.js/client';
 import { head, propOr } from 'ramda';
-export const throwTXIfNotSuccessful = (tx: SuiTransactionBlockResponse) => {
+
+export const throwTXIfNotSuccessful = (
+  tx: SuiTransactionBlockResponse,
+  callback?: () => void
+) => {
   if (!!tx.effects?.status && tx.effects.status.status !== 'success')
-    throw new Error();
+    callback?.();
+  throw new Error();
 };
 
 export const getReturnValuesFromInspectResults = (
