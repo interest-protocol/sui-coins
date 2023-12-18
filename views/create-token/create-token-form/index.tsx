@@ -164,14 +164,6 @@ const CreateTokenForm: FC = () => {
               supportingText={errors.imageUrl?.message}
               placeholder="Eg. https://sui.com/images/logo.png"
             />
-            <TextField
-              type="link"
-              label="Coin Image URL"
-              {...register('imageUrl')}
-              status={errors.imageUrl && 'error'}
-              supportingText={errors.imageUrl?.message}
-              placeholder="Eg. https://sui.com/images/logo.png"
-            />
             <Typography size="large" variant="body" textAlign="center">
               or
             </Typography>
