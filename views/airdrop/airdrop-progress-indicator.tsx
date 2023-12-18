@@ -46,8 +46,8 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
         {isError
           ? 'error found'
           : finished !== 100
-          ? 'Sending'
-          : 'You are done'}
+            ? 'Sending'
+            : 'You are done'}
       </Typography>
       <Box
         display="flex"
@@ -108,8 +108,8 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
         {error || finished !== 100
           ? 'Sending batches'
           : doneItems.length === allBatches
-          ? 'The airdrop has been sent'
-          : `${failedItems.length} batches was not sent`}
+            ? 'The airdrop has been sent'
+            : `${failedItems.length} batches was not sent`}
       </Typography>
       {(error || finished === 100) && (
         <Button

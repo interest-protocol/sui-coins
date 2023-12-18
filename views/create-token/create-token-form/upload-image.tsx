@@ -1,4 +1,5 @@
 import { Box, Theme, Typography, useTheme } from '@interest-protocol/ui-kit';
+import { propOr } from 'ramda';
 import { ChangeEventHandler, DragEventHandler, FC, useState } from 'react';
 import { UseFormSetValue } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -42,8 +43,8 @@ const UploadImage: FC<{ setValue: UseFormSetValue<ICreateTokenForm> }> = ({
 
       if (!file) return toast.error('Something went wrong');
 
-      const imageBase64 = await getBase64(file).catch(() =>
-        toast.error('Something went wrong')
+      const imageBase64 = await getBase64(file).catch((e) =>
+        toast.error(propOr('Something went wrong', 'message', e))
       );
 
       setValue('imageUrl', imageBase64);
