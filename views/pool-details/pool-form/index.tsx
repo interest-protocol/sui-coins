@@ -53,19 +53,19 @@ const PoolForm: FC = () => {
   };
   return (
     <Box
-      p={['xl', 'xl', 'xl', '4xl']}
       display="flex"
+      p={['m', 'm', 'm', '4xl']}
       flexDirection="column"
       bg="lowestContainer"
       borderRadius="2rem"
       gap="1.5rem"
     >
-      <Box>
+      <Box overflowX="auto">
         <Tabs
-          items={['Deposit', 'Withdraw']}
           type="circle"
-          defaultTabIndex={poolOptionView}
           onChangeTab={handleOptionTab}
+          items={['Deposit', 'Withdraw']}
+          defaultTabIndex={poolOptionView}
         />
       </Box>
       {poolOptionView == PoolOption.Deposit ? (

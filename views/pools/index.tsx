@@ -1,29 +1,45 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
-import { FC } from 'react';
+import { FC, useState } from 'react';
+import { v4 } from 'uuid';
 
 import Layout from '@/components/layout';
+import { RECOMMENDED_POOLS } from '@/constants/pools';
+import { useNetwork } from '@/context/network';
 
-import PoolTransaction from './pool-transaction';
-import PoolCard from './pools-card';
+import Header from './header';
+import PoolCard from './pool-card';
+import { PoolTabEnum } from './pools.types';
 
-const Pools: FC = () => (
-  <Layout>
-    <Typography my="2xl" size="large" variant="display" textAlign="center">
-      Pools
-    </Typography>
-    <Box
-      mx="auto"
-      gap="0.5rem"
-      flexDirection="column"
-      gridTemplateColumns="62% 38%"
-      display={['flex', 'flex', 'flex', 'grid']}
-      width={['100%', '100%', '100%', '85%']}
-    >
-      <Box bg="lowestContainer" borderRadius="2rem" p="xl"></Box>
-      <PoolTransaction />
-      <PoolCard />
-    </Box>
-  </Layout>
-);
+const Pools: FC = () => {
+  const { network } = useNetwork();
+  const [tab, setTab] = useState<PoolTabEnum>(PoolTabEnum.Pools);
+
+  return (
+    <Layout>
+      <Typography my="2xl" size="large" variant="display" textAlign="center">
+        Pools
+      </Typography>
+      <Box
+        p={['s', 's', 's', 'l']}
+        borderRadius="l"
+        bg="lowestContainer"
+        mx={['0', '0', '0', '0', '9xl']}
+      >
+        <Header setTab={setTab} currentTab={tab} />
+        <Box
+          gap="m"
+          my="xl"
+          display="grid"
+          px="xs"
+          gridTemplateColumns={['100%', '1fr', '1fr 1fr', '1fr 1fr 1fr']}
+        >
+          {RECOMMENDED_POOLS[network].map((pool) => (
+            <PoolCard key={v4()} {...pool} />
+          ))}
+        </Box>
+      </Box>
+    </Layout>
+  );
+};
 
 export default Pools;

@@ -19,15 +19,15 @@ const Layout: FC<PropsWithChildren> = ({ children }) => (
     <Box width="100%" overflowY="auto">
       <Box
         m="0"
-        p="xl"
+        p={['m', 'l', 'xl']}
+        mt="8xl"
         width="100%"
         height="100vh"
         display="flex"
         variant="container"
         flexDirection="column"
-        mt={['8xl', '8xl', '8xl', '0']}
       >
-        <Box as="main" flex="1">
+        <Box as="main" flex="1" mb="10xl">
           {children}
         </Box>
         <Footer />
