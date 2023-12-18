@@ -2,8 +2,7 @@ import { Box, Button, Tag, Typography } from '@interest-protocol/ui-kit';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 
-import { ArrowObliqueSVG } from '@/svg';
-
+import ArrowObliqueSVG from '../../../components/svg/arrow-oblique';
 import { PoolCardHeaderProps } from './pool-card.types';
 
 const PoolCardHeader: FC<PoolCardHeaderProps> = ({ name, url, Logo }) => {
@@ -15,8 +14,6 @@ const PoolCardHeader: FC<PoolCardHeaderProps> = ({ name, url, Logo }) => {
       justifyContent="space-between"
       alignItems="center"
       width="100%"
-      px="1rem"
-      pt="1rem"
     >
       <Tag PrefixIcon={Logo} size="small" variant="outline" height="1.5rem">
         <Typography

@@ -3,19 +3,12 @@ import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
-import { Routes, RoutesEnum } from '@/constants';
-
 import { DeviceMenuType } from './header.types';
 import MoreButton from './more-button';
 import { MENU_ITEMS } from './nav-bar.data';
 
 const NavBar: FC = () => {
   const { asPath, push } = useRouter();
-
-  const isPoolPathChild = [
-    Routes[RoutesEnum.PoolDetails],
-    Routes[RoutesEnum.CreatePool],
-  ].includes(asPath);
 
   return (
     <Box
@@ -39,33 +32,11 @@ const NavBar: FC = () => {
           border={asPath == path ? '0.25rem solid' : 'unset'}
           px={['s', 's', 's', 'xl']}
           onClick={() => push(path)}
-          nHover={{
-            color:
-              path == Routes[RoutesEnum.Pools] && isPoolPathChild
-                ? 'lowestContainer'
-                : 'primary',
-          }}
+          nHover={{ color: 'primary' }}
           transition="all 0.3s ease-in-out"
           nActive={{ borderColor: '#0053DB33', border: '0.25rem solid' }}
-          color={
-            asPath !== path
-              ? path == Routes[RoutesEnum.Pools] && isPoolPathChild
-                ? 'lowestContainer'
-                : 'onSurface'
-              : 'primary'
-          }
-          bg={
-            path == Routes[RoutesEnum.Pools] && isPoolPathChild
-              ? 'primary'
-              : 'unset'
-          }
-          borderColor={
-            asPath !== path
-              ? path == Routes[RoutesEnum.Pools] && isPoolPathChild
-                ? '#0053DB33'
-                : 'transparent'
-              : '#0053DB33'
-          }
+          color={asPath !== path ? 'onSurface' : 'primary'}
+          borderColor={asPath !== path ? 'transparent' : '#0053DB33'}
         >
           {name}
         </Box>
