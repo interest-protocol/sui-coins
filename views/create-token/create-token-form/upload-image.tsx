@@ -21,7 +21,7 @@ const UploadImage: FC<{ setValue: UseFormSetValue<ICreateTokenForm> }> = ({
     if (!file) return toast.error('Something went wrong');
 
     if (!file.type.includes('image/'))
-      return toast.error('Make sure that you are sending a CSV File');
+      return toast.error('Make sure that you are sending an image');
 
     const imageBase64 = await getBase64(file).catch(() =>
       toast.error('Something went wrong')
@@ -37,7 +37,7 @@ const UploadImage: FC<{ setValue: UseFormSetValue<ICreateTokenForm> }> = ({
       const item = e.dataTransfer.items[0];
 
       if (item.kind !== 'file' || !item.type.includes('image/'))
-        return toast.error('Make sure that you are sending a CSV File');
+        return toast.error('Make sure that you are sending an image');
 
       const file = item.getAsFile();
 
@@ -57,7 +57,7 @@ const UploadImage: FC<{ setValue: UseFormSetValue<ICreateTokenForm> }> = ({
     if (!file) return toast.error('Something went wrong');
 
     if (!file.type.includes('image/'))
-      return toast.error('Make sure that you are sending a CSV File');
+      return toast.error('Make sure that you are sending an image');
 
     const imageBase64 = await getBase64(file).catch(() =>
       toast.error('Something went wrong')
