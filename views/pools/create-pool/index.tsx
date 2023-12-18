@@ -12,7 +12,7 @@ import { IPoolForm } from './create-pool.types';
 import CreateTokenForm from './create-pool-form';
 import Illustration from './illustration';
 
-const CreatePoolPage: FC = () => {
+const CreatePool: FC = () => {
   const { push } = useRouter();
   const { control } = useFormContext<IPoolForm>();
   const tokenAType = useWatch({ control, name: 'tokenA.type' });
@@ -36,4 +36,4 @@ const CreatePoolPage: FC = () => {
   );
 };
 
-export default CreatePoolPage;
+export default CreatePool;

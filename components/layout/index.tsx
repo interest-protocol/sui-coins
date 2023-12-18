@@ -19,7 +19,7 @@ const Layout: FC<PropsWithChildren> = ({ children }) => (
     <Box width="100%" overflowY="auto">
       <Box
         m="0"
-        p="xl"
+        p={['l', 'l', 'l', 'xl']}
         width="100%"
         height="100vh"
         display="flex"
