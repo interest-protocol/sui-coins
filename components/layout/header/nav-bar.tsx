@@ -39,6 +39,22 @@ const NavBar: FC = () => {
       >
         My Coins
       </Box>
+      <Box
+        py="s"
+        fontSize="s"
+        cursor="pointer"
+        fontFamily="Proto"
+        textAlign="center"
+        borderRadius="full"
+        border="0.25rem solid"
+        px={['s', 's', 's', 'xl']}
+        nActive={{ borderColor: '#0053DB33' }}
+        color={asPath !== '/airdrop' ? 'onSurface' : 'primary'}
+        onClick={() => asPath !== '/airdrop' && push('/airdrop')}
+        borderColor={asPath !== '/airdrop' ? 'transparent' : '#0053DB33'}
+      >
+        Airdrop
+      </Box>
     </Box>
   );
 };

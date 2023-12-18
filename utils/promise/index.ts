@@ -11,3 +11,6 @@ export async function tryCatch<T>(
     if (onFinally) onFinally();
   }
 }
+
+export const sleep = (delay: number) =>
+  new Promise((resolve) => setTimeout(resolve, delay));

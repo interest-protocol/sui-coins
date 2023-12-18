@@ -4,27 +4,44 @@ import { not } from 'ramda';
 import { FC, useState } from 'react';
 import { v4 } from 'uuid';
 
-import { EXPLORER_URL } from '@/constants';
+import { EXPLORER_URL, Network, TOKEN_ICONS } from '@/constants';
 import { useNetwork } from '@/context/network';
+import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { FixedPointMath } from '@/lib';
-import { ArrowTopRightSVG, CaretRightSVG, DefaultTokenSVG } from '@/svg';
+import { ArrowTopRightSVG, CaretRightSVG, DefaultSVG } from '@/svg';
 
-import { TCoinWithMetadata } from './my-coins.types';
-
-const MyCoinsItem: FC<TCoinWithMetadata> = ({
-  name,
-  owned,
-  symbol,
-  iconUrl,
+const MyCoinsItem: FC<CoinObject & { capId: string | null }> = ({
+  capId,
   balance,
   objects,
-  decimals,
+  coinType,
+  metadata: { iconUrl, name, symbol, decimals },
 }) => {
   const { network } = useNetwork();
   const [isOpen, setIsOpen] = useState(false);
 
   const goToExplorer = (objectId: string) =>
-    window.open(`${EXPLORER_URL[network]}/object/${objectId}`);
+    window.open(EXPLORER_URL[network](`object/${objectId}`));
+
+  const renderToken = () => {
+    const TokenIcon =
+      TOKEN_ICONS[network][
+        (network === Network.MAINNET ? coinType : symbol) as string
+      ] ?? DefaultSVG;
+
+    return (
+      <Box
+        p="xs"
+        bg="onSurface"
+        color="surface"
+        borderRadius="xs"
+        width={['1.2rem', '2rem']}
+        height={['1.2rem', '2rem']}
+      >
+        <TokenIcon maxWidth="100%" maxHeight="100%" width="100%" />
+      </Box>
+    );
+  };
 
   return (
     <Box
@@ -55,9 +72,7 @@ const MyCoinsItem: FC<TCoinWithMetadata> = ({
             <img height="100%" width="100%" src={iconUrl} alt={name} />
           </Box>
         ) : (
-          <Box width={['1.2rem', '2rem']} height={['1.2rem', '2rem']}>
-            <DefaultTokenSVG maxHeight="100%" maxWidth="100%" width="100%" />
-          </Box>
+          renderToken()
         )}
         <Box>{symbol}</Box>
       </Box>
@@ -74,12 +89,12 @@ const MyCoinsItem: FC<TCoinWithMetadata> = ({
           fontFamily="Proto"
           borderRadius="full"
           whiteSpace="nowrap"
-          onClick={() => owned && goToExplorer(owned)}
-          bg={owned ? 'successContainer' : 'warningContainer'}
-          color={owned ? 'onSuccessContainer' : 'onWarningContainer'}
+          onClick={() => capId && goToExplorer(capId)}
+          bg={capId ? 'successContainer' : 'warningContainer'}
+          color={capId ? 'onSuccessContainer' : 'onWarningContainer'}
         >
-          {owned ? 'Owned' : 'Not Owned'}
-          {owned && (
+          {capId ? 'cap Id' : 'Not cap Id'}
+          {capId && (
             <ArrowTopRightSVG
               width="100%"
               maxWidth="0.8rem"
@@ -141,7 +156,7 @@ const MyCoinsItem: FC<TCoinWithMetadata> = ({
                     width="0.25rem"
                     height="0.25rem"
                     borderRadius="full"
-                    bg={owned ? 'success' : 'warning'}
+                    bg={capId ? 'success' : 'warning'}
                   />
                 </Box>
               </Box>

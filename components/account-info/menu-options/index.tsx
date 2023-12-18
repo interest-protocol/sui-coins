@@ -124,6 +124,14 @@ const MenuOptions: FC<MenuOptionsProps> = ({
           >
             My Coins
           </OptionItem>
+          <OptionItem
+            mobileOnly
+            withBorderBottom
+            selected={asPath == '/airdrop'}
+            onClick={() => asPath !== '/airdrop' && push('/airdrop')}
+          >
+            Airdrop
+          </OptionItem>
           {isConnected ? (
             <>
               <OptionItem
