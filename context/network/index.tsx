@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 
-import { Network } from '@/constants';
+import { Network } from '@/lib';
 
 interface INetworkContext {
   network: Network;

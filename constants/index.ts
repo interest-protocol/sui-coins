@@ -1,10 +1,8 @@
+import { Network } from '@/lib';
+
 import { ETH_TYPE, USDC_TYPE } from './coins';
 
 export const MAX_NUMBER_INPUT_VALUE = 9000000000000000;
-
-export enum Network {
-  DEVNET = 'm2:devnet',
-}
 
 export const DISPLAY_NETWORK = {
   [Network.DEVNET]: 'Devnet',
@@ -34,5 +32,6 @@ export const EXPLORER_URL = {
 
 export const TOAST_DURATION = 10000;
 
+export * from './packages';
 export * from './routes';
 export * from './wrapper-variants';
