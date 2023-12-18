@@ -6,8 +6,8 @@ import { SEO } from '@/components';
 import { COINS } from '@/constants/coins';
 import { ModalProvider } from '@/context/modal';
 import { useNetwork } from '@/context/network';
-import CreatePool from '@/views/pools/create-pool';
-import { IPoolForm } from '@/views/pools/create-pool/create-pool.types';
+import CreatePool from '@/views/create-pool';
+import { IPoolForm } from '@/views/create-pool/create-pool.types';
 
 const CreatePoolPage: NextPage = () => {
   const { network } = useNetwork();
