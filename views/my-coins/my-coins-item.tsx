@@ -93,7 +93,7 @@ const MyCoinsItem: FC<CoinObject & { capId: string | null }> = ({
           bg={capId ? 'successContainer' : 'warningContainer'}
           color={capId ? 'onSuccessContainer' : 'onWarningContainer'}
         >
-          {capId ? 'capId' : 'Not capId'}
+          {capId ? 'cap Id' : 'Not cap Id'}
           {capId && (
             <ArrowTopRightSVG
               width="100%"

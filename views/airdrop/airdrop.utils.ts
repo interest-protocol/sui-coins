@@ -6,7 +6,10 @@ import { isBigNumberish } from '@/utils';
 
 import { AirdropData } from './airdrop.types';
 
-export const csvToAirdrop = (csv: string): AirdropData[] | string => {
+export const csvToAirdrop = (
+  csv: string,
+  onError: (message: string) => void
+): AirdropData[] => {
   try {
     const lines = csv.split(',');
     const addresses = lines.filter((x) => isValidSuiAddress(x));
@@ -28,7 +31,8 @@ export const csvToAirdrop = (csv: string): AirdropData[] | string => {
 
     return data;
   } catch (error) {
-    return propOr('Something went wrong', 'message', error);
+    onError(propOr('Something went wrong', 'message', error));
+    return [];
   }
 };
 
