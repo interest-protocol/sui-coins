@@ -13,4 +13,8 @@ export const MENU_ITEMS = [
     name: 'Airdrop',
     path: Routes[RoutesEnum.Airdrop],
   },
+  {
+    name: 'Create Token',
+    path: Routes[RoutesEnum.CreateToken],
+  },
 ];
