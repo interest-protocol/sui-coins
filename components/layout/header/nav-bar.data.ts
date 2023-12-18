@@ -12,13 +12,13 @@ export const MENU_ITEMS = [
     mobileOnly: true,
   },
   {
-    name: 'My Coins',
-    path: Routes[RoutesEnum.MyCoins],
+    name: 'Airdrop',
+    path: Routes[RoutesEnum.Airdrop],
     mobileOnly: true,
   },
   {
-    name: 'Airdrop',
-    path: Routes[RoutesEnum.Airdrop],
+    name: 'My Coins',
+    path: Routes[RoutesEnum.MyCoins],
     mobileOnly: false,
   },
   {
