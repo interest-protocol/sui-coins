@@ -138,13 +138,13 @@ const CreateTokenForm: FC = () => {
             <TextField
               label="Name"
               {...register('name')}
-              placeholder="Eg. Sui"
+              placeholder="Eg. Mov"
               status={errors.name && 'error'}
               supportingText={errors.name?.message}
             />
             <TextField
               label="Coin Symbol"
-              placeholder="Eg. SUI"
+              placeholder="Eg. MOV"
               {...register('symbol')}
               status={errors.symbol && 'error'}
               supportingText={errors.symbol?.message}
