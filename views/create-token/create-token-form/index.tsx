@@ -162,7 +162,7 @@ const CreateTokenForm: FC = () => {
               {...register('imageUrl')}
               status={errors.imageUrl && 'error'}
               supportingText={errors.imageUrl?.message}
-              placeholder="Eg. https://sui.com/images/logo.png"
+              placeholder="Eg. https://www.interestprotocol.com/logo.png"
             />
             <Typography size="large" variant="body" textAlign="center">
               or
