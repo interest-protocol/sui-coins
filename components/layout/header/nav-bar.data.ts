@@ -2,13 +2,13 @@ import { Routes, RoutesEnum } from '@/constants';
 
 export const MENU_ITEMS = [
   {
-    name: 'Create Token',
-    path: Routes[RoutesEnum.CreateToken],
+    name: 'Swap',
+    path: Routes[RoutesEnum.Swap],
     mobileOnly: true,
   },
   {
-    name: 'Swap',
-    path: Routes[RoutesEnum.Swap],
+    name: 'Create Token',
+    path: Routes[RoutesEnum.CreateToken],
     mobileOnly: true,
   },
   {
