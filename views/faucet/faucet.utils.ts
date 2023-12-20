@@ -1,4 +1,5 @@
-import { FAUCET_URL, Network } from '@/constants';
+import { FAUCET_URL } from '@/constants';
+import { Network } from '@/lib';
 
 export const requestMov = async (account: string, network: Network) => {
   return fetch(FAUCET_URL[network], {

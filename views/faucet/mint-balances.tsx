@@ -3,12 +3,14 @@ import { FC } from 'react';
 import { v4 } from 'uuid';
 
 import { COINS } from '@/constants/coins';
+import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks';
 import { FixedPointMath, TOKEN_ICONS } from '@/lib';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 const MintBalances: FC = () => {
   const { coinsMap } = useWeb3();
+  const { network } = useNetwork();
 
   return (
     <Box
@@ -34,7 +36,7 @@ const MintBalances: FC = () => {
         flexDirection="column"
       >
         {COINS.map(({ symbol, type }) => {
-          const Icon = TOKEN_ICONS[symbol];
+          const Icon = TOKEN_ICONS[network][symbol];
           return (
             <Box key={v4()} display="flex" justifyContent="space-between">
               <Box display="flex" alignItems="center" gap="l">

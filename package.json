@@ -15,7 +15,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@hookform/resolvers": "^3.3.2",
-    "@interest-protocol/ui-kit": "^0.2.6-alpha",
+    "@interest-protocol/ui-kit": "^0.2.10-alpha",
     "@mysten/sui.js": "^0.45.1",
     "@mysten/suins-toolkit": "^0.3.13",
     "@mysten/wallet-kit": "^0.8.2",
@@ -31,6 +31,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.48.2",
     "react-hot-toast": "^2.4.1",
+    "react-image-file-resizer": "^0.4.8",
     "react-loading-skeleton": "^3.3.1",
     "swr": "^2.2.4",
     "toformat": "^2.0.0",

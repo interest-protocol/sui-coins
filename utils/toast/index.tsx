@@ -2,7 +2,8 @@ import { Box, Typography } from '@interest-protocol/ui-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import toast from 'react-hot-toast';
 
-import { EXPLORER_URL, Network } from '@/constants';
+import { EXPLORER_URL } from '@/constants';
+import { Network } from '@/lib';
 
 export const showTXSuccessToast = async (
   tx: SuiTransactionBlockResponse,
@@ -20,7 +21,7 @@ export const showTXSuccessToast = async (
           cursor="pointer"
           textDecoration="underline"
         >
-          Sui Explorer
+          Explorer
         </Typography>
       </Box>
     </a>

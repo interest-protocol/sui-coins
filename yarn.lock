@@ -723,10 +723,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-2.0.1.tgz#e5211452df060fa8522b55c7b3c0c4d1981cb044"
   integrity sha512-dvuCeX5fC9dXgJn9t+X5atfmgQAzUOWqS1254Gh0m6i8wKd10ebXkfNKiRK+1GWi/yTvvLDHpoxLr0xxxeslWw==
 
-"@interest-protocol/ui-kit@^0.2.6-alpha":
-  version "0.2.6-alpha"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/ui-kit/-/ui-kit-0.2.6-alpha.tgz#82ffefb500e2dbff0898df1b33338f8e8fbb4f99"
-  integrity sha512-X9Cm2un8jJuQ29DfR89E9OmpFK6l5EkarmXaJlXgqH134q16EjROUj6bNTdGONjvwzwbkcru+LOImjKk7aSbpg==
+"@interest-protocol/ui-kit@^0.2.10-alpha":
+  version "0.2.10-alpha"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/ui-kit/-/ui-kit-0.2.10-alpha.tgz#ca6276ebf6938ceee7713c546112e915933032cf"
+  integrity sha512-XYsjqYMWYGBg0ICwIfNJbwov24wbgBVVJCJEqiy6845RuF/rLXeyo8xlSt/TxrLEB+c7hgN1qisxLJTABh7yxg==
   dependencies:
     "@emotion/react" "^11.10.6"
     "@stylin.js/react" "^1.0.1"
@@ -5919,6 +5919,11 @@ react-hot-toast@^2.4.1:
   integrity sha512-j8z+cQbWIM5LY37pR6uZR6D4LfseplqnuAO4co4u8917hBUvXlEqyP1ZzqVLcqoyUesZZv/ImreoCeHVDpE5pQ==
   dependencies:
     goober "^2.1.10"
+
+react-image-file-resizer@^0.4.8:
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/react-image-file-resizer/-/react-image-file-resizer-0.4.8.tgz#85f4ae4469fd2867d961568af660ef403d7a79af"
+  integrity sha512-Ue7CfKnSlsfJ//SKzxNMz8avDgDSpWQDOnTKOp/GNRFJv4dO9L5YGHNEnj40peWkXXAK2OK0eRIoXhOYpUzUTQ==
 
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"

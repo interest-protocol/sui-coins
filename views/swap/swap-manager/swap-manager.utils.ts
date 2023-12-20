@@ -17,6 +17,7 @@ export const quoteAmountOut = async ({
   client,
   amount,
   swapPath,
+  network,
 }: QuoteAmountArgs) => {
   const txb = new TransactionBlock();
 
@@ -26,7 +27,7 @@ export const quoteAmountOut = async ({
     const pool = REGISTRY_POOLS[coinIn][coinOut].poolId;
 
     nextAmountIn = txb.moveCall({
-      target: `${PACKAGES.DEX}::quote::amount_out`,
+      target: `${PACKAGES[network].DEX}::quote::amount_out`,
       typeArguments: [coinIn, coinOut, lpCoin],
       arguments: [
         txb.object(pool),
@@ -55,6 +56,7 @@ export const quoteAmountIn = async ({
   client,
   amount,
   swapPath,
+  network,
 }: QuoteAmountArgs) => {
   const txb = new TransactionBlock();
 
@@ -64,7 +66,7 @@ export const quoteAmountIn = async ({
     const pool = REGISTRY_POOLS[coinIn][coinOut].poolId;
 
     nextAmountOut = txb.moveCall({
-      target: `${PACKAGES.DEX}::quote::amount_in`,
+      target: `${PACKAGES[network].DEX}::quote::amount_in`,
       typeArguments: [coinIn, coinOut, lpCoin],
       arguments: [
         txb.object(pool),

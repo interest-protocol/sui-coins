@@ -26,7 +26,7 @@ const MintForm: FC = () => {
   const { account, mutate } = useWeb3();
   const { signTransactionBlock } = useWalletKit();
 
-  const SelectedIcon = TOKEN_ICONS[selected.symbol];
+  const SelectedIcon = TOKEN_ICONS[network][selected.symbol];
 
   const { data } = useSuiSystemState();
 
@@ -47,7 +47,7 @@ const MintForm: FC = () => {
       if (selected.type === SUI_TYPE_ARG) return requestMov(account, network);
 
       const minted_coin = transactionBlock.moveCall({
-        target: `${PACKAGES.COINS}::${
+        target: `${PACKAGES[network].COINS}::${
           MINT_MODULE_NAME_MAP[selected.type]
         }::mint`,
         arguments: [transactionBlock.object(CONTROLLERS_MAP[selected.type])],
@@ -160,7 +160,7 @@ const MintForm: FC = () => {
               borderColor="outline"
             >
               {COINS.map(({ symbol, type, decimals }) => {
-                const Icon = TOKEN_ICONS[symbol];
+                const Icon = TOKEN_ICONS[network][symbol];
                 return (
                   <ListItem
                     key={v4()}

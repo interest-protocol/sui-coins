@@ -7,6 +7,8 @@ import {
   UseFormSetValue,
 } from 'react-hook-form';
 
+import { Network } from '@/lib';
+
 import { SwapForm, SwapPath } from '../swap.types';
 
 export interface SwapMessagesProps {
@@ -45,4 +47,5 @@ export interface QuoteAmountArgs {
   client: SuiClient;
   swapPath: SwapPath;
   amount: string;
+  network: Network;
 }

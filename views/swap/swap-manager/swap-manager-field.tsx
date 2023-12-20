@@ -5,6 +5,7 @@ import { useWatch } from 'react-hook-form';
 import useSWR from 'swr';
 import { useDebounce } from 'use-debounce';
 
+import { useNetwork } from '@/context/network';
 import { useMovementClient } from '@/hooks';
 import { FixedPointMath } from '@/lib';
 import { makeSWRKey } from '@/utils';
@@ -29,6 +30,7 @@ const SwapManagerField: FC<SwapManagerProps> = ({
   setIsFetchingSwapAmount,
   setValueName,
 }) => {
+  const { network } = useNetwork();
   const client = useMovementClient();
   const [tokenIn] = useDebounce(useWatch({ control, name }), 900);
 
@@ -55,17 +57,12 @@ const SwapManagerField: FC<SwapManagerProps> = ({
       setIsFetchingSwapAmount(true);
 
       const promises = swapPaths.map((swapPath) =>
-        setValueName === 'to'
-          ? quoteAmountOut({
-              client,
-              swapPath,
-              amount: safeAmount.toString(),
-            })
-          : quoteAmountIn({
-              client,
-              swapPath,
-              amount: safeAmount.toString(),
-            })
+        (setValueName === 'to' ? quoteAmountOut : quoteAmountIn)({
+          client,
+          swapPath,
+          amount: safeAmount.toString(),
+          network,
+        })
       );
 
       const amounts = await Promise.all(promises);
