@@ -30,17 +30,16 @@ const Sidebar: FC = () => {
     <Motion
       p="xl"
       pb="0"
-      display="flex"
       maxHeight="100vh"
+      position="relative"
       flexDirection="column"
-      bg="surface.container"
       borderRight="1px solid"
       variants={itemVariants}
       borderColor="outlineVariant"
       justifyContent="space-between"
       transition={{ duration: 0.5 }}
+      display={['none', 'none', 'none', 'flex']}
       animate={isOpen || !isCollapsed ? 'open' : 'closed'}
-      position="relative"
       initial={
         itemVariants[
           isOpen || !isCollapsed
