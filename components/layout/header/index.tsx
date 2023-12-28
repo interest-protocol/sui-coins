@@ -4,43 +4,26 @@ import { FC } from 'react';
 import Wallet from '@/components/wallet';
 import { LogoSVG } from '@/svg';
 
-import NavBar from './nav-bar';
-
 const Header: FC = () => (
   <>
     <Box
-      variant="container"
-      display={['none', 'none', 'none', 'grid']}
-      width={['auto', 'auto', 'auto', '100%']}
-      pt="2rem !important"
+      py="m"
+      px="xl"
+      top="0"
+      left="0"
+      right="0"
+      gap="xs"
+      zIndex="1"
+      width="100%"
+      position="relative"
+      alignItems="center"
+      borderBottom="1px solid"
+      justifyContent="flex-end"
+      borderColor="outlineVariant"
+      gridTemplateColumns="1fr 1fr"
+      display={['none', 'none', 'none', 'flex']}
     >
-      <Box
-        py="m"
-        px="xl"
-        top="0"
-        left="0"
-        right="0"
-        gap="xs"
-        zIndex="1"
-        display="flex"
-        width="100%"
-        gridColumn="1/-1"
-        alignItems="center"
-        bg="lowestContainer"
-        position="relative"
-        borderRadius="full"
-        justifyContent="space-between"
-        gridTemplateColumns="1fr 1fr"
-        boxShadow="0 1.5rem 2.875rem -0.625rem rgba(13, 16, 23, 0.16)"
-      >
-        <Box display="flex" alignItems="center" gap="8xl">
-          <Box display="flex" alignItems="center" height="1.5rem">
-            <LogoSVG maxHeight="1.5rem" maxWidth="7.5rem" width="100%" />
-          </Box>
-          <NavBar />
-        </Box>
-        <Wallet />
-      </Box>
+      <Wallet />
     </Box>
     <Box
       py="m"
