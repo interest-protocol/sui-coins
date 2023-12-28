@@ -4,7 +4,7 @@ import { FC } from 'react';
 
 import { AccordionItemProps } from '../sidebar.types';
 
-const AccordionItem: FC<AccordionItemProps> = ({ name, path }) => {
+const AccordionItem: FC<AccordionItemProps> = ({ name, path, disabled }) => {
   const { push, asPath } = useRouter();
 
   const goToPath = () => {
@@ -19,18 +19,19 @@ const AccordionItem: FC<AccordionItemProps> = ({ name, path }) => {
       mx="auto"
       width="100%"
       display="flex"
-      cursor="pointer"
       borderRadius="m"
       onClick={goToPath}
-      nHover={{ color: 'primary' }}
+      opacity={disabled ? 0.3 : 1}
       transition="all 350ms ease-in-out"
+      nHover={disabled ? {} : { color: 'primary' }}
+      cursor={disabled ? 'not-allowed' : 'pointer'}
       color={asPath === path ? 'primary' : 'onSurface'}
     >
       <Typography
         ml="l"
         py="s"
         pl="xl"
-        size="small"
+        size="medium"
         variant="label"
         borderLeft="1px solid"
         textTransform="capitalize"

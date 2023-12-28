@@ -18,10 +18,10 @@ const MenuItemTitleBackground: FC = () => (
     left="50%"
     zIndex="-1"
     height="100%"
-    borderRadius="m"
+    borderRadius="xs"
     position="absolute"
+    bg="highestContainer"
     transform="translate(-50%)"
-    bg="surface.containerHighest"
     variants={{
       rest: { width: '0' },
       hover: { width: '100%', transition: { duration: 0.3 } },
@@ -39,6 +39,9 @@ const MenuItemTitleContent: FC<MenuItemTitleContentProps> = ({
 }) => {
   const { asPath, push } = useRouter();
   const { colors } = useTheme() as Theme;
+
+  const isSelected =
+    asPath === path || accordionList?.some(({ path }) => path === asPath);
 
   const onClick = () => {
     if (accordionList || disabled) return;
@@ -63,13 +66,9 @@ const MenuItemTitleContent: FC<MenuItemTitleContentProps> = ({
       p={isCollapsed ? '0.65rem' : 's'}
       borderRadius={isCollapsed ? 'm' : 'xs'}
       cursor={disabled ? 'not-allowed' : 'pointer'}
-      bg={
-        asPath === path || accordionList?.some(({ path }) => path === asPath)
-          ? `${colors.primary}29`
-          : undefined
-      }
+      bg={isSelected ? `${colors.primary}29` : undefined}
     >
-      <MenuItemTitleBackground />
+      {!disabled && !isSelected && <MenuItemTitleBackground />}
       <Box display="flex" alignItems="center">
         <Box width="1.2rem" height="1.2rem" m="2xs">
           <Icon maxHeight="1.2rem" maxWidth="1.2rem" width="100%" />

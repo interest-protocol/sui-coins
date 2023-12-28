@@ -38,6 +38,7 @@ export interface MenuListItemTextProps {
 export interface AccordionItemProps {
   name: string;
   path: string;
+  disabled: boolean;
   networks: ReadonlyArray<Network>;
 }
 
