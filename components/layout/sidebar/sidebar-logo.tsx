@@ -27,8 +27,6 @@ const SidebarLogo: FC<SidebarLogoProps> = ({ isCollapsed }) => (
         display="flex"
         width="2.5rem"
         height="2.5rem"
-        minWidth="2.5rem"
-        minHeight="2.5rem"
         alignItems="center"
         justifyContent="center"
       >
@@ -36,7 +34,7 @@ const SidebarLogo: FC<SidebarLogoProps> = ({ isCollapsed }) => (
       </Box>
       <Box ml="0.75rem">
         <Typography
-          size="large"
+          size="medium"
           variant="title"
           fontWeight="700"
           color="onSurface"
