@@ -1,15 +1,19 @@
-import { COIN_TYPE, ZERO_ADDRESS } from '@interest-protocol/sui-amm-sdk';
 import { pathOr } from 'ramda';
 import useSWR, { SWRConfiguration } from 'swr';
 
-import { COIN_MARKET_CAP_ID_RECORD } from '@/constants';
-import { fetcher } from '@/utils';
+import { COIN_MARKET_CAP_ID_RECORD } from '@/constants/coin-market-cap';
+import { COIN_TYPE } from '@/constants/coins';
+import { useNetwork } from '@/context/network';
 
-import { useNetwork } from '../use-network';
 interface CoinPricesRecordData {
   type: string;
   price: number;
 }
+
+const ZERO_ADDRESS =
+  '0x0000000000000000000000000000000000000000000000000000000000000000';
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export type CoinPriceRecord = Record<string, CoinPricesRecordData>;
 
