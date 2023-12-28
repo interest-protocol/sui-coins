@@ -58,7 +58,6 @@ const SidebarCollapseButton: FC<SidebarCollapseButtonProps> = ({
       >
         <Motion
           display="flex"
-          color="onSurface"
           transition={{ duration: 0.5, ease: 'easeInOut' }}
           transform={!isCollapsed ? 'rotate(0deg)' : 'rotate(180deg)'}
         >
