@@ -42,24 +42,23 @@ const SidebarCollapseButton: FC<SidebarCollapseButtonProps> = ({
         display="flex"
         width="2.5rem"
         height="2.5rem"
-        minWidth="2.5rem"
-        minHeight="2.5rem"
-        borderRadius="m"
         cursor="pointer"
+        borderRadius="xs"
         color="onSurface"
         border="1px solid"
+        position="relative"
         alignItems="center"
         justifyContent="center"
-        borderColor="outline.outlineVariant"
         onClick={handleCollapse}
+        borderColor="outlineVariant"
         nHover={{
           transition: 'all 300ms ease-in-out',
           backgroundColor: `${colors.primary}14`,
         }}
-        position="relative"
       >
         <Motion
           display="flex"
+          color="onSurface"
           transition={{ duration: 0.5, ease: 'easeInOut' }}
           transform={!isCollapsed ? 'rotate(0deg)' : 'rotate(180deg)'}
         >
