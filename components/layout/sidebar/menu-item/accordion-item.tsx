@@ -34,7 +34,7 @@ const AccordionItem: FC<AccordionItemProps> = ({ name, path }) => {
         variant="label"
         borderLeft="1px solid"
         textTransform="capitalize"
-        borderColor="outline.outlineVariant"
+        borderColor="outlineVariant"
       >
         {name}
       </Typography>
