@@ -16,6 +16,7 @@ export { default as CircleSVG } from './circle';
 export { default as CirclePlusSVG } from './circle-plus';
 export { default as ClipboardSVG } from './clipboard';
 export { default as ClockSVG } from './clock';
+export { default as CoinsSVG } from './coins';
 export { default as ComputerEyesSVG } from './computer-eyes';
 export { default as DefaultSVG } from './default';
 export { default as DefaultTokenSVG } from './default-token';
