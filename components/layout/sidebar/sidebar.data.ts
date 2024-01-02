@@ -2,6 +2,7 @@ import { Network, Routes, RoutesEnum } from '@/constants';
 import {
   AirdropSVG,
   CirclePlusSVG,
+  CircleSVG,
   DoubleChevronSVG,
   PoolSVG,
   StatsArrowUpSVG,
@@ -33,6 +34,13 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     Icon: PoolSVG,
     name: 'pool',
     path: Routes[RoutesEnum.Pools],
+    disabled: false,
+    networks: [Network.MAINNET, Network.TESTNET],
+  },
+  {
+    Icon: CircleSVG,
+    name: 'My coins',
+    path: Routes[RoutesEnum.MyCoins],
     disabled: false,
     networks: [Network.MAINNET, Network.TESTNET],
   },
