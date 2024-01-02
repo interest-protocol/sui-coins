@@ -28,6 +28,7 @@ const MyCoins: FC = () => {
   return (
     <Layout>
       <Box
+        py="l"
         my="2xl"
         fontFamily="Proto"
         textAlign="center"
