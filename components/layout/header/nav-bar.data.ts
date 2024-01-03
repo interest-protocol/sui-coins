@@ -33,10 +33,4 @@ export const MENU_ITEMS = [
     device: DeviceMenuType.Mobile,
     path: Routes[RoutesEnum.Airdrop],
   },
-  {
-    name: 'Settings',
-    mobileOnly: false,
-    device: DeviceMenuType.Mobile,
-    path: Routes[RoutesEnum.Settings],
-  },
 ];
