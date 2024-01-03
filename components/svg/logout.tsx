@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { SVGProps } from '../svg.types';
+import { SVGProps } from './svg.types';
 
 const Logout: FC<SVGProps> = ({ maxWidth, maxHeight, ...props }) => (
   <svg
