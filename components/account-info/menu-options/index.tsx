@@ -1,11 +1,11 @@
-import { Box, Motion } from '@interest-protocol/ui-kit';
+import { Box, Motion, Typography } from '@interest-protocol/ui-kit';
 import { useWalletKit } from '@mysten/wallet-kit';
 import { useRouter } from 'next/router';
 import { toPairs } from 'ramda';
 import { FC, ReactNode, useState } from 'react';
 import { v4 } from 'uuid';
 
-import { MENU_ITEMS } from '@/components/layout/header/nav-bar.data';
+import { SIDEBAR_ITEMS } from '@/components/layout/sidebar/sidebar.data';
 import ConnectWalletButton from '@/components/wallet/connect-wallet-button';
 import { DISPLAY_NETWORK, wrapperVariants } from '@/constants';
 import { useNetwork } from '@/context/network';
@@ -84,7 +84,7 @@ const MenuOptions: FC<MenuOptionsProps> = ({
   return (
     <Motion
       right="0"
-      top="5rem"
+      top="3rem"
       zIndex={4}
       overflowY="auto"
       width="14.5rem"
@@ -104,20 +104,23 @@ const MenuOptions: FC<MenuOptionsProps> = ({
       {submenu ?? (
         <>
           {isConnected && (
-            <OptionItem withSubmenu onClick={openAccountSubmenu}>
-              <Avatar withNameOrAddress />
-            </OptionItem>
+            <>
+              <OptionItem withSubmenu onClick={openAccountSubmenu}>
+                <Avatar withNameOrAddress />
+              </OptionItem>
+            </>
           )}
-          {MENU_ITEMS.map(({ path, name }) => (
-            <OptionItem
-              key={v4()}
-              mobileOnly
-              selected={asPath == path}
-              onClick={() => push(path)}
-            >
-              {name}
-            </OptionItem>
-          ))}
+          {SIDEBAR_ITEMS.filter(({ isSideBarOption }) => !isSideBarOption).map(
+            ({ path, name }) => (
+              <OptionItem
+                key={v4()}
+                selected={asPath == path}
+                onClick={() => push(path)}
+              >
+                {name}
+              </OptionItem>
+            )
+          )}
           {isConnected ? (
             <>
               <OptionItem
@@ -137,7 +140,9 @@ const MenuOptions: FC<MenuOptionsProps> = ({
                     width="100%"
                   />
                 </Box>
-                <Box color="error">Sign Out</Box>
+                <Typography variant="body" size="large" color="error">
+                  Sign Out
+                </Typography>
               </OptionItem>
             </>
           ) : (

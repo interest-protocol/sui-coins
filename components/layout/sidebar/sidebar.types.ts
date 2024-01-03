@@ -17,6 +17,7 @@ export interface MenuItemTitleContentProps extends MenuItemCollapsibleProps {
 
 export interface MenuItemProps extends MenuItemTitleContentProps {
   alpha?: boolean;
+  isSideBarOption?: boolean;
   networks: ReadonlyArray<Network>;
   setIsCollapsed: (value: boolean) => void;
   setTemporarilyOpen: Dispatch<SetStateAction<boolean>>;
