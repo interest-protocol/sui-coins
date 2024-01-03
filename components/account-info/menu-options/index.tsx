@@ -121,6 +121,7 @@ const MenuOptions: FC<MenuOptionsProps> = ({
               </OptionItem>
             )
           )}
+          <OptionItem disabled>Settings</OptionItem>
           {isConnected ? (
             <>
               <OptionItem
