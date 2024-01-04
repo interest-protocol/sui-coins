@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { SVGProps } from '../svg.types';
+import { SVGProps } from './svg.types';
 
 const Activity: FC<SVGProps> = ({ maxWidth, maxHeight, ...props }) => (
   <svg
