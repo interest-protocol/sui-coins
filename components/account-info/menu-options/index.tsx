@@ -108,17 +108,15 @@ const MenuOptions: FC<MenuOptionsProps> = ({
               <Avatar withNameOrAddress />
             </OptionItem>
           )}
-          {SIDEBAR_ITEMS.filter(({ isSideBarOption }) => !isSideBarOption).map(
-            ({ path, name }) => (
-              <OptionItem
-                key={v4()}
-                selected={asPath == path}
-                onClick={() => push(path)}
-              >
-                {name}
-              </OptionItem>
-            )
-          )}
+          {SIDEBAR_ITEMS.map(({ path, name }) => (
+            <OptionItem
+              key={v4()}
+              selected={asPath == path}
+              onClick={() => push(path)}
+            >
+              {name}
+            </OptionItem>
+          ))}
           <OptionItem disabled>Settings</OptionItem>
           {isConnected ? (
             <>
