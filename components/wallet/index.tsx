@@ -31,7 +31,7 @@ const Wallet: FC = () => {
         <AccountInfo />
       </Box>
       {!isConnected && (
-        <Box display={'flex'}>
+        <Box display="flex">
           <ConnectWalletButton />
         </Box>
       )}

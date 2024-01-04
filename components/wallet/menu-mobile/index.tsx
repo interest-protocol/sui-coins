@@ -19,7 +19,7 @@ const MenuMobile: FC = () => {
       <Button
         isIcon
         gap="xs"
-        p="0.25rem"
+        p="2xs"
         variant="text"
         border="1px solid"
         borderRadius="full"

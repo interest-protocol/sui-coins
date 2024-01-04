@@ -24,7 +24,7 @@ const MainMenu: FC<MainMenuMobileProps> = ({ closeMenu }) => (
       >
         <MenuButton handleClose={closeMenu} />
       </Box>
-      <Typography m="xl" variant="title" size="small" color="onSurfaceVariant">
+      <Typography m="xl" variant="title" size="small">
         Menu
       </Typography>
       <MobileMenuList />
