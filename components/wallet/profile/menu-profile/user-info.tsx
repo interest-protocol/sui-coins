@@ -12,20 +12,17 @@ import ItemWrapper from '../../menu-settings/item-wrapper';
 const UserInfo: FC = () => {
   const { currentAccount } = useWalletKit();
 
+  const account = currentAccount?.address || '';
+
   const copyToClipboard = (address: string) => {
     window.navigator.clipboard.writeText(address || '');
-    toast('Address copied');
+    toast('Address copied to the clipboard');
   };
 
   return (
     <>
-      <Box>
-        <Typography
-          m="xl"
-          size="large"
-          variant="title"
-          color="onSurfaceVariant"
-        >
+      <Box p="l">
+        <Typography size="small" variant="title">
           Wallet
         </Typography>
       </Box>
@@ -33,25 +30,26 @@ const UserInfo: FC = () => {
         borderBottom={['unset', 'unset', 'unset', '1px solid']}
         borderColor="outlineVariant"
       >
-        <ItemWrapper isActive>
-          <Box display="flex" alignItems="center" gap="l">
-            <Avatar
-              withNameOrAddress
-              account={currentAccount as WalletAccount}
-            />
+        <ItemWrapper>
+          <Box display="flex" justifyContent="space-between" width="100%">
+            <Box display="flex" alignItems="center" gap="l">
+              <Avatar
+                withNameOrAddress
+                account={currentAccount as WalletAccount}
+              />
+            </Box>
+            <Button
+              isIcon
+              p="0 !important"
+              variant="text"
+              onClick={(e) => {
+                e.stopPropagation();
+                copyToClipboard(account || '');
+              }}
+            >
+              <CopySVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+            </Button>
           </Box>
-          <Button
-            isIcon
-            variant="text"
-            p="0 !important"
-            color="onSurface"
-            onClick={(e) => {
-              e.stopPropagation();
-              copyToClipboard(currentAccount?.address || '');
-            }}
-          >
-            <CopySVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-          </Button>
         </ItemWrapper>
       </Box>
     </>

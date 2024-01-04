@@ -104,11 +104,9 @@ const MenuOptions: FC<MenuOptionsProps> = ({
       {submenu ?? (
         <>
           {isConnected && (
-            <>
-              <OptionItem withSubmenu onClick={openAccountSubmenu}>
-                <Avatar withNameOrAddress />
-              </OptionItem>
-            </>
+            <OptionItem withSubmenu onClick={openAccountSubmenu}>
+              <Avatar withNameOrAddress />
+            </OptionItem>
           )}
           {SIDEBAR_ITEMS.filter(({ isSideBarOption }) => !isSideBarOption).map(
             ({ path, name }) => (

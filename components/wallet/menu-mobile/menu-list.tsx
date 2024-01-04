@@ -6,14 +6,12 @@ import { SIDEBAR_ITEMS } from '@/components/layout/sidebar/sidebar.data';
 
 import SideBarMenuListItem from './menu-list-item';
 
-const MobileMenuList: FC = () => {
-  return (
-    <Box display="flex" flexDirection="column" gap="s">
-      {SIDEBAR_ITEMS.map((item) => (
-        <SideBarMenuListItem key={v4()} {...item} />
-      ))}
-    </Box>
-  );
-};
+const MobileMenuList: FC = () => (
+  <Box display="flex" flexDirection="column" gap="s">
+    {SIDEBAR_ITEMS.map((item) => (
+      <SideBarMenuListItem key={v4()} {...item} />
+    ))}
+  </Box>
+);
 
 export default MobileMenuList;

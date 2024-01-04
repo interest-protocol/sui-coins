@@ -38,7 +38,7 @@ const PoolField: FC<PoolFieldsProps> = ({ name, withoutIcon }) => {
             display="flex"
             alignItems="center"
             justifyContent="center"
-            borderRadius="0.5rem"
+            borderRadius="xs"
           >
             <BNBSVG maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
           </Box>

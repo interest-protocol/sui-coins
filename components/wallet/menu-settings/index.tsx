@@ -11,7 +11,7 @@ import { FC, useState } from 'react';
 import { noop } from '@/utils';
 
 import MenuSettingsListHeaderMobile from './header';
-import MenuItemWrapper from './item-wrapper';
+import ItemWrapper from './item-wrapper';
 
 const MenuSettingsList: FC = () => {
   const { dark } = useTheme() as Theme;
@@ -30,15 +30,15 @@ const MenuSettingsList: FC = () => {
       />
       <Motion
         overflow="hidden"
-        animate={{ height: toggle ? 'auto' : '0' }}
+        animate={toggle ? 'open' : 'closed'}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
       >
-        <MenuItemWrapper isActive={toggle}>
-          <Typography variant="title" size="medium" color="onSurface">
+        <ItemWrapper>
+          <Typography variant="title" size="small" color="onSurface">
             Testnet
           </Typography>
           <ToggleButton name="theme" defaultValue={dark} onChange={noop} />
-        </MenuItemWrapper>
+        </ItemWrapper>
       </Motion>
     </>
   );

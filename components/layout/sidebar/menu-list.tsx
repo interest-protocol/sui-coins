@@ -17,18 +17,17 @@ const SidebarMenuList: FC<MenuListProps> = ({
 
   return (
     <Box display="flex" flexDirection="column" gap="s">
-      {SIDEBAR_ITEMS.filter(
-        ({ networks, isSideBarOption }) =>
-          networks.includes(network) && isSideBarOption
-      ).map((item) => (
-        <SideBarMenuItem
-          {...item}
-          key={v4()}
-          isCollapsed={isCollapsed}
-          setIsCollapsed={setIsCollapsed}
-          setTemporarilyOpen={setTemporarilyOpen}
-        />
-      ))}
+      {SIDEBAR_ITEMS.filter(({ networks }) => networks.includes(network)).map(
+        (item) => (
+          <SideBarMenuItem
+            {...item}
+            key={v4()}
+            isCollapsed={isCollapsed}
+            setIsCollapsed={setIsCollapsed}
+            setTemporarilyOpen={setTemporarilyOpen}
+          />
+        )
+      )}
     </Box>
   );
 };

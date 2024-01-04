@@ -15,19 +15,18 @@ const MenuProfileItem: FC<ProfileMenuItemProps> = ({
   return (
     <Box
       borderTop={['unset', 'unset', 'unset', hasBorder ? '1px solid' : 'unset']}
-      borderColor="outline.outlineVariant"
+      borderColor="outlineVariant"
     >
       <ItemWrapper
         disabled={disabled}
         onClick={() => {
           !disabled && handleAction && handleAction[name]?.();
         }}
-        isActive
       >
         <Box display="flex" alignItems="center" gap="l">
           <Icon maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
           <Typography
-            size="medium"
+            size="small"
             variant="title"
             color="onSurface"
             opacity={disabled ? 0.7 : 1}

@@ -27,8 +27,13 @@ const Avatar: FC<AvatarProps> = ({ withNameOrAddress, account, isLarge }) => {
         <UserSVG width="80%" height="80%" maxWidth={SIZE} maxHeight={SIZE} />
       </Box>
       {withNameOrAddress && (
-        <Typography variant="label" size="large" mr="0.5rem">
-          {address.slice(0, 6)}...{address.slice(-4)}
+        <Typography
+          variant="label"
+          size="large"
+          mr="0.5rem"
+          width="max-content"
+        >
+          {address.slice(0, 6)}…{address.slice(-4)}
         </Typography>
       )}
     </>

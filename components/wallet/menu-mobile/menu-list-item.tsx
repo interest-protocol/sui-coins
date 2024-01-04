@@ -36,10 +36,10 @@ const MobileMenuListItem: FC<MenuMobileItemProps> = ({
         mx="auto"
       >
         <Box display="flex" alignItems="center" justifyContent="center">
-          <Icon maxHeight="1.5rem" maxWidth="1.5rem" width="1.2rem" />
+          <Icon maxHeight="1rem" maxWidth="1rem" width="1.2rem" />
           <Typography
-            ml="l"
-            size="medium"
+            ml="s"
+            size="small"
             variant="title"
             width="max-content"
             textTransform="capitalize"

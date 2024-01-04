@@ -56,7 +56,7 @@ const SuiNetwork: FC = () => {
         display="flex"
         cursor="pointer"
         onClick={handleOpenMenu}
-        borderRadius="0.5rem"
+        borderRadius="xs"
         alignItems="center"
         bg={isOpen ? `${colors.primary}14` : 'container'}
       >

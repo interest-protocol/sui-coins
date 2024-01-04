@@ -20,7 +20,7 @@ const MenuSettingsListHeaderMobile: FC<MenuSettingsListHeaderProps> = ({
       display={['flex', 'flex', 'flex', 'none']}
       justifyContent="space-between"
     >
-      <Typography variant="title" size="medium" color="onSurface">
+      <Typography variant="title" size="small" color="onSurface">
         Global Settings
       </Typography>
       <Box display="flex" justifyContent="flex-end">

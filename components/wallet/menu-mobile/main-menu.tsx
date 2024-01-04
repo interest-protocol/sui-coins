@@ -1,8 +1,7 @@
-import { Box, Button, Typography } from '@interest-protocol/ui-kit';
+import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import { TimesSVG } from '@/svg';
-
+import MenuButton from '../menu-button';
 import MenuSettingsList from '../menu-settings';
 import { MainMenuMobileProps } from './menu.types';
 import MobileMenuList from './menu-list';
@@ -18,23 +17,14 @@ const MainMenu: FC<MainMenuMobileProps> = ({ closeMenu }) => (
     justifyContent="space-between"
   >
     <Box zIndex="2" gridColumn="1/-1">
-      <Box display="flex" justifyContent="flex-end">
-        <Button
-          isIcon
-          variant="text"
-          width="1.5rem"
-          height="1.5rem"
-          onClick={closeMenu}
-        >
-          <TimesSVG
-            width="100%"
-            height="100%"
-            maxWidth="100%"
-            maxHeight="100%"
-          />
-        </Button>
+      <Box
+        display={['flex', 'flex', 'flex', 'none']}
+        flexDirection="row-reverse"
+        pb="l"
+      >
+        <MenuButton handleClose={closeMenu} />
       </Box>
-      <Typography m="xl" variant="title" size="large" color="onSurfaceVariant">
+      <Typography m="xl" variant="title" size="small" color="onSurfaceVariant">
         Menu
       </Typography>
       <MobileMenuList />

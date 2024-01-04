@@ -1,19 +1,14 @@
-import {
-  Box,
-  Button,
-  Motion,
-  Theme,
-  useTheme,
-} from '@interest-protocol/ui-kit';
+import { Box, Motion, Theme, useTheme } from '@interest-protocol/ui-kit';
 import { useWalletKit } from '@mysten/wallet-kit';
+import { useRouter } from 'next/router';
 import { FC, useState } from 'react';
 import { v4 } from 'uuid';
 
-import { EXPLORER_URL, wrapperVariants } from '@/constants';
+import { EXPLORER_URL, Routes, RoutesEnum, wrapperVariants } from '@/constants';
 import { useNetwork } from '@/context/network';
 import useEventListener from '@/hooks/use-event-listener';
-import { TimesSVG } from '@/svg';
 
+import MenuButton from '../../menu-button';
 import { MenuProfileProps } from '../profile.types';
 import { MENU_PROFILE_DATA } from './menu.data';
 import MenuProfileItem from './profile-item';
@@ -24,9 +19,10 @@ const MenuProfile: FC<MenuProfileProps> = ({
   handleOpenSwitch,
   handleCloseProfile,
 }) => {
-  const { currentAccount } = useWalletKit();
   const { network } = useNetwork();
-  const { disconnect } = useWalletKit();
+  const { disconnect, currentAccount } = useWalletKit();
+  const { push } = useRouter();
+  const account = currentAccount?.address || '';
 
   const handleAction: Record<string, () => void | Promise<void>> = {
     disconnect: () => {
@@ -34,11 +30,11 @@ const MenuProfile: FC<MenuProfileProps> = ({
       disconnect();
     },
     switchAccounts: handleOpenSwitch,
+    mycoins: () => {
+      push(Routes[RoutesEnum.MyCoins]);
+    },
     viewInExplorer: () => {
-      window.open(
-        `${EXPLORER_URL[network](`/account/${currentAccount}`)}`,
-        '_blank'
-      );
+      window.open(`${EXPLORER_URL[network](`/account/${account}`)}`, '_blank');
     },
   };
 
@@ -75,23 +71,9 @@ const MenuProfile: FC<MenuProfileProps> = ({
         <Box
           display={['flex', 'flex', 'flex', 'none']}
           flexDirection="row-reverse"
+          pb="l"
         >
-          <Box display="flex" justifyContent="flex-end">
-            <Button
-              isIcon
-              variant="text"
-              width="1.5rem"
-              height="1.5rem"
-              onClick={handleCloseProfile}
-            >
-              <TimesSVG
-                width="100%"
-                height="100%"
-                maxWidth="100%"
-                maxHeight="100%"
-              />
-            </Button>
-          </Box>
+          <MenuButton handleClose={handleCloseProfile} />
         </Box>
         <UserInfo />
         {MENU_PROFILE_DATA.slice(0, !isDesktop ? -1 : undefined).map(

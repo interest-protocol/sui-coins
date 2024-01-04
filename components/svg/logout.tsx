@@ -21,7 +21,7 @@ const Logout: FC<SVGProps> = ({ maxWidth, maxHeight, ...props }) => (
       d="M4 5L5 4H13V6H6V26H13V28H5L4 27V5Z"
       fill="currentColor"
     />
-    <path d="M13 16H27" stroke="black" />
+    <path d="M13 16H27" stroke="currentColor" />
     <path
       fillRule="evenodd"
       clipRule="evenodd"

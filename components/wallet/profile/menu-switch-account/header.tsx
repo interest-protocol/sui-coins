@@ -1,8 +1,9 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import { ArrowLeftSVG, TimesSVG } from '@/svg';
+import { ArrowLeftSVG } from '@/svg';
 
+import MenuButton from '../../menu-button';
 import { MenuSwitchAccountHeaderProps } from '../profile.types';
 
 const MenuSwitchAccountHeader: FC<MenuSwitchAccountHeaderProps> = ({
@@ -13,12 +14,12 @@ const MenuSwitchAccountHeader: FC<MenuSwitchAccountHeaderProps> = ({
   return (
     <>
       <Box
-        py={['l', 'l', 'l', 'xl']}
-        px={['unset', 'unset', 'unset', 'xl']}
-        display="flex"
         gap="xs"
+        display="flex"
         color="onSurface"
         alignItems="center"
+        py={['m', 'm', 'm', 'l']}
+        px={['unset', 'unset', 'unset', 'l']}
         justifyContent={[
           'space-between',
           'space-between',
@@ -45,25 +46,10 @@ const MenuSwitchAccountHeader: FC<MenuSwitchAccountHeaderProps> = ({
           display={['flex', 'flex', 'flex', 'none']}
           flexDirection="row-reverse"
         >
-          <Box display="flex" justifyContent="flex-end">
-            <Button
-              isIcon
-              variant="text"
-              width="1.5rem"
-              height="1.5rem"
-              onClick={handleCloseProfile}
-            >
-              <TimesSVG
-                width="100%"
-                height="100%"
-                maxWidth="100%"
-                maxHeight="100%"
-              />
-            </Button>
-          </Box>
+          <MenuButton handleClose={handleCloseProfile} />
         </Box>
       </Box>
-      <Box p="xl" display={['flex', 'flex', 'flex', 'none']}>
+      <Box p="l" display={['flex', 'flex', 'flex', 'none']}>
         <Typography
           size="small"
           variant="title"

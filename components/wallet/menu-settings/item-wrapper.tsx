@@ -16,7 +16,6 @@ const ItemWrapper: FC<PropsWithChildren<ItemWrapperProps>> = ({
   onClick,
   disabled,
   children,
-  isActive,
 }) => {
   const { dark } = useTheme() as Theme;
 
@@ -24,13 +23,13 @@ const ItemWrapper: FC<PropsWithChildren<ItemWrapperProps>> = ({
     <Motion
       py="m"
       gap="l"
-      px="xl"
+      px="l"
       display="flex"
       minWidth="14rem"
       onClick={onClick}
       alignItems="center"
       variants={itemVariants}
-      animate={isActive ? 'open' : 'closed'}
+      initial={itemVariants.closed}
       justifyContent="space-between"
       nHover={{
         bg: disabled ? 'unset' : dark ? '#FFFFFF1A' : '#86868614',

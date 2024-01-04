@@ -11,7 +11,7 @@ const PoolReceiveSection: FC<ReceiveSectionProps> = ({ items }) => {
       <Typography variant="body" size="large" mb="1rem">
         You will receive
       </Typography>
-      <Box borderRadius="0.5rem" bg="surface" py="0.5rem">
+      <Box borderRadius="xs" bg="surface" py="0.5rem">
         {items.map((item) => (
           <ReceiveSectionLine key={v4()} {...item} />
         ))}

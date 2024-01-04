@@ -1,12 +1,5 @@
 import { Network, Routes, RoutesEnum } from '@/constants';
-import {
-  AirdropSVG,
-  BoxDownSVG,
-  CirclePlusSVG,
-  DoubleChevronSVG,
-  PoolSVG,
-  StatsArrowUpSVG,
-} from '@/svg';
+import { AirdropSVG, CirclePlusSVG, DoubleChevronSVG, PoolSVG } from '@/svg';
 
 import { MenuItemProps } from './sidebar.types';
 
@@ -21,7 +14,6 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     name: 'create token',
     path: Routes[RoutesEnum.CreateCoin],
     disabled: false,
-    isSideBarOption: true,
     networks: [Network.MAINNET, Network.TESTNET],
   },
   {
@@ -29,7 +21,6 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     name: 'swap',
     path: Routes[RoutesEnum.Swap],
     disabled: false,
-    isSideBarOption: true,
     networks: [Network.MAINNET, Network.TESTNET],
   },
   {
@@ -37,29 +28,12 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     name: 'pool',
     path: Routes[RoutesEnum.Pools],
     disabled: false,
-    isSideBarOption: true,
     networks: [Network.MAINNET, Network.TESTNET],
   },
   {
     Icon: AirdropSVG,
     name: 'airdrop',
     path: Routes[RoutesEnum.Airdrop],
-    disabled: false,
-    isSideBarOption: true,
-    networks: [Network.MAINNET, Network.TESTNET],
-  },
-  {
-    Icon: StatsArrowUpSVG,
-    name: 'metrics',
-    path: Routes[RoutesEnum.Metrics],
-    disabled: true,
-    isSideBarOption: true,
-    networks: [Network.MAINNET],
-  },
-  {
-    Icon: BoxDownSVG,
-    name: 'my coins',
-    path: Routes[RoutesEnum.MyCoins],
     disabled: false,
     networks: [Network.MAINNET, Network.TESTNET],
   },

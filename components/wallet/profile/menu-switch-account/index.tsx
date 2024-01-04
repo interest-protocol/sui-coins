@@ -1,5 +1,6 @@
 import { Box, Button, Motion } from '@interest-protocol/ui-kit';
 import { useWalletKit } from '@mysten/wallet-kit';
+import { WalletAccount } from '@wallet-standard/base';
 import { FC } from 'react';
 import { toast } from 'react-hot-toast';
 
@@ -10,18 +11,18 @@ import { wrapperVariants } from '@/constants';
 import ItemWrapper from '../../menu-settings/item-wrapper';
 import { MenuSwitchAccountProps } from '../profile.types';
 import MenuSwitchAccountHeader from './header';
-
 const MenuSwitchAccount: FC<MenuSwitchAccountProps> = ({
   isOpen,
   onBack,
   handleCloseProfile,
 }) => {
-  const { accounts, currentAccount, selectAccount } = useWalletKit();
-  const account = currentAccount ? currentAccount.address : '';
+  const { accounts, selectAccount, currentAccount } = useWalletKit();
+
+  const account = currentAccount?.address || '';
 
   const copyToClipboard = (address: string) => {
     window.navigator.clipboard.writeText(address || '');
-    toast('Address copied');
+    toast('Address copied to the clipboard');
   };
 
   return (
@@ -49,7 +50,6 @@ const MenuSwitchAccount: FC<MenuSwitchAccountProps> = ({
       />
       {accounts.map((walletAccount) => (
         <ItemWrapper
-          isActive
           key={walletAccount.address}
           disabled={walletAccount.address === account}
           onClick={() => {
@@ -59,43 +59,44 @@ const MenuSwitchAccount: FC<MenuSwitchAccountProps> = ({
             }
           }}
         >
-          <Box display="flex" alignItems="center" gap="s">
-            {walletAccount.address === account && (
-              <Box
-                width="1rem"
-                height="1rem"
-                borderRadius="50%"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                border="1px solid"
-                borderColor="success"
-                color="success"
-              >
-                <CheckmarkSVG
-                  maxHeight="0.438rem"
-                  maxWidth="0.438rem"
-                  width="100%"
-                />
-              </Box>
-            )}
-            <Avatar withNameOrAddress account={walletAccount} />
+          <Box width="100%" display="flex" justifyContent="space-between">
+            <Box display="flex" alignItems="center" gap="s">
+              {walletAccount.address === account && (
+                <Box
+                  width="1rem"
+                  height="1rem"
+                  borderRadius="50%"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  border="1px solid"
+                  borderColor="success"
+                  color="success"
+                >
+                  <CheckmarkSVG
+                    maxHeight="0.438rem"
+                    maxWidth="0.438rem"
+                    width="100%"
+                  />
+                </Box>
+              )}
+              <Avatar
+                withNameOrAddress
+                account={currentAccount as WalletAccount}
+              />
+            </Box>
+            <Button
+              isIcon
+              variant="text"
+              p="0 !important"
+              onClick={(e) => {
+                e.stopPropagation();
+                copyToClipboard(walletAccount.address);
+              }}
+            >
+              <CopySVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+            </Button>
           </Box>
-          <Button
-            isIcon
-            variant="text"
-            p="0 !important"
-            nHover={{
-              color: 'primary',
-              bg: 'transparent',
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              copyToClipboard(walletAccount.address);
-            }}
-          >
-            <CopySVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-          </Button>
         </ItemWrapper>
       ))}
     </Motion>

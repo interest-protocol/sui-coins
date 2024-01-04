@@ -1,51 +1,89 @@
-import { Box, Button } from '@interest-protocol/ui-kit';
+import { Box } from '@interest-protocol/ui-kit';
+import { useWalletKit } from '@mysten/wallet-kit';
+import { useRouter } from 'next/router';
 import { FC, useEffect, useState } from 'react';
 
 import Avatar from '@/components/account-info/avatar';
+import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
 
 import MenuProfile from './menu-profile';
 import MenuSwitchAccount from './menu-switch-account';
 
+const BOX_ID = 'wallet-box';
+
 const Profile: FC = () => {
-  const [isOpenProfile, setIsOpenProfile] = useState(false);
-  const [isOpenSwitchAccount, setIsOpenSwitchAccount] = useState(false);
-
-  const handleOpenProfile = () => setIsOpenProfile(true);
-
+  const { query } = useRouter();
+  const [isOpenProfile, setIsOpenProfile] = useState(Boolean(query.profile));
+  const [isOpenAccount, setIsOpenAccount] = useState(Boolean(query.account));
   const [menuIsDropdown, setMenuIsDropdown] = useState(
-    isOpenProfile || isOpenSwitchAccount
+    isOpenProfile || isOpenAccount
   );
+  const { currentAccount } = useWalletKit();
+
+  const account = currentAccount?.address || '';
 
   useEffect(() => {
-    setMenuIsDropdown(isOpenProfile || isOpenSwitchAccount);
-  }, [isOpenSwitchAccount, isOpenProfile]);
+    setMenuIsDropdown(isOpenProfile || isOpenAccount);
+  }, [isOpenAccount, isOpenProfile]);
+
+  const closeDropdown = (event: any) => {
+    if (
+      event?.path?.some((node: any) => node?.id == BOX_ID) ||
+      event?.composedPath()?.some((node: any) => node?.id == BOX_ID)
+    )
+      return;
+
+    handleCloseProfile();
+  };
+
+  const connectedBoxRef =
+    useClickOutsideListenerRef<HTMLDivElement>(closeDropdown);
+
+  const handleOpenProfile = () => {
+    handleCloseAccount();
+    const url = new URL(window.location.href);
+    url.searchParams.set('profile', 'true');
+    window.history.pushState('', '', url.toString());
+    setIsOpenProfile(true);
+  };
 
   const handleCloseProfile = () => {
+    handleCloseAccount();
+    const url = new URL(window.location.href);
+    url.searchParams.delete('profile');
+    window.history.pushState('', '', url.toString());
     setIsOpenProfile(false);
-    setIsOpenSwitchAccount(false);
   };
 
-  const onBack = () => {
-    setIsOpenProfile(true);
-    setIsOpenSwitchAccount(false);
+  const handleOpenAccount = () => {
+    handleCloseProfile();
+    const url = new URL(window.location.href);
+    url.searchParams.set('account', 'true');
+    window.history.pushState('', '', url.toString());
+    setIsOpenAccount(true);
   };
 
-  const handleOpenSwitch = () => {
-    setIsOpenProfile(true);
-    setIsOpenSwitchAccount(true);
+  const handleCloseAccount = () => {
+    const url = new URL(window.location.href);
+    url.searchParams.delete('account');
+    window.history.pushState('', '', url.toString());
+    setIsOpenAccount(false);
   };
 
   return (
     <Box
+      id={BOX_ID}
       display="flex"
       cursor="pointer"
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      ref={connectedBoxRef}
       flexDirection="column"
-      zIndex={4}
-      ml={['0rem', '0rem', '0rem', 'unset']}
-      top={menuIsDropdown ? ['-5vh', '-5vh', '-5vh', 'unset'] : 'unset'}
+      justifyContent="center"
+      top={menuIsDropdown ? ['-2rem', '-2rem', '-2rem', 'unset'] : 'unset'}
       right={menuIsDropdown ? ['-2rem', '-2rem', '-2rem', 'unset'] : 'unset'}
-      width={menuIsDropdown ? ['104vw', '104vw', '104vw', 'unset'] : 'unset'}
-      height={menuIsDropdown ? ['104vh', '104vh', '104vh', 'unset'] : 'unset'}
+      width={menuIsDropdown ? ['110vw', '110vw', '110vw', 'unset'] : 'unset'}
+      height={menuIsDropdown ? ['100vh', '100vh', '100vh', 'unset'] : 'unset'}
       position={
         menuIsDropdown
           ? ['absolute', 'absolute', 'absolute', 'relative']
@@ -57,26 +95,29 @@ const Profile: FC = () => {
           : 'unset'
       }
     >
-      <Box display={['flex', 'flex', 'flex', 'none']} mr="m">
-        <Button
-          gap="xs"
-          p="unset"
-          variant="text"
-          borderRadius="full"
-          borderColor="onSurface"
+      {account && (
+        <Box
+          gap="m"
+          display={[
+            menuIsDropdown ? 'none' : 'flex',
+            menuIsDropdown ? 'none' : 'flex',
+            menuIsDropdown ? 'none' : 'flex',
+            'flex',
+          ]}
+          alignItems="center"
           onClick={handleOpenProfile}
         >
           <Avatar isLarge />
-        </Button>
-      </Box>
+        </Box>
+      )}
       <MenuProfile
         isOpen={isOpenProfile}
-        handleOpenSwitch={handleOpenSwitch}
+        handleOpenSwitch={handleOpenAccount}
         handleCloseProfile={handleCloseProfile}
       />
       <MenuSwitchAccount
-        onBack={onBack}
-        isOpen={isOpenSwitchAccount}
+        isOpen={isOpenAccount}
+        onBack={handleOpenProfile}
         handleCloseProfile={handleCloseProfile}
       />
     </Box>

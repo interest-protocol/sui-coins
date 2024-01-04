@@ -1,8 +1,10 @@
+export { default as ActivitySVG } from './activity';
 export { default as ADASVG } from './ada';
 export { default as AirdropSVG } from './airdrop';
 export { default as ArrowLeftSVG } from './arrow-left';
 export { default as ArrowObliqueSVG } from './arrow-oblique';
 export { default as ArrowTopRightSVG } from './arrow-top-right';
+export { default as AssetsSVG } from './assets';
 export { default as AVAXSVG } from './avax';
 export { default as BNBSVG } from './bnb';
 export { default as BoxDownSVG } from './box-down';
@@ -42,6 +44,7 @@ export { default as HamburgerSVG } from './hamburger';
 export { default as HeartSVG } from './heart';
 export { default as IPXSVG } from './ipx';
 export { default as IPXRoundedSVG } from './ipx-rounded';
+export { default as LinkSVG } from './link';
 export { default as LoadingSVG } from './loading';
 export { default as LogoSVG } from './logo';
 export { default as LogoutSVG } from './logout';
