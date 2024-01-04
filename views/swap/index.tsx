@@ -33,7 +33,6 @@ const Swap: FC = () => {
         mx="auto"
         display="flex"
         borderRadius="2rem"
-        bg="lowestContainer"
         flexDirection="column"
         p={['xl', 'xl', 'xl', '7xl']}
         width={['100%', '100%', '100%', '39.75rem']}
@@ -43,13 +42,15 @@ const Swap: FC = () => {
           <Box
             left="45%"
             top="-1.25rem"
-            borderRadius="full"
             position="absolute"
-            bg="lowestContainer"
+            border="7px solid"
+            borderColor="#F8F9FD"
+            borderRadius="s"
           >
             <Button
               isIcon
-              variant="outline"
+              variant="tonal"
+              bg="onPrimary"
               color="primary"
               onClick={flipToken}
             >
