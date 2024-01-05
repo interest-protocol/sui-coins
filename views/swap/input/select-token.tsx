@@ -49,17 +49,12 @@ const SelectToken: FC<SelectTokenProps> = ({ label }) => {
         variant="tonal"
         fontSize="s"
         onClick={openModal}
-        PrefixIcon={
-          <Typography size="large" variant="label">
-            Select token
-          </Typography>
-        }
-        SuffixIcon={
-          <Box minWidth="1rem">
-            <ChevronRightSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-          </Box>
-        }
-      ></Button>
+      >
+        <Typography size="large" variant="label">
+          Select token
+        </Typography>
+        <ChevronRightSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+      </Button>
     </Box>
   );
 };

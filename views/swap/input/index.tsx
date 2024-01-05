@@ -1,4 +1,4 @@
-import { Box, Button, Slider, TextField } from '@interest-protocol/ui-kit';
+import { Box, Slider, TextField } from '@interest-protocol/ui-kit';
 import { ChangeEvent, FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
@@ -18,7 +18,7 @@ const Input: FC<InputProps> = ({ label }) => {
   });
 
   return (
-    <Box py="xl" px="m" borderRadius="xs" bg="lowestContainer">
+    <Box>
       <HeaderInfo label={label} balance={balance} setValue={setValue} />
       <Box pl="l" pt="m" display="flex" justifyContent="space-between">
         <SelectToken label={label} balance={balance} />
@@ -47,28 +47,6 @@ const Input: FC<InputProps> = ({ label }) => {
               onChange={() => console.log('range')}
             />
           </Box>
-        )}
-      </Box>
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        mt="l"
-        mb="l"
-      >
-        {label === 'to' && (
-          <Button
-            bg="container"
-            opacity="0.4"
-            color="onSurface"
-            px="l"
-            py="s"
-            borderRadius="xs"
-            variant="tonal"
-            fontSize="s"
-          >
-            Preview swap
-          </Button>
         )}
       </Box>
     </Box>
