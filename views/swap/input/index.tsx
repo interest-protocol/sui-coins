@@ -38,7 +38,7 @@ const Input: FC<InputProps> = ({ label }) => {
           fieldProps={{ borderColor: 'transparent', width: '100%' }}
         />
       </Box>
-      <Box height="3rem">
+      <Box height="2rem">
         {label === 'from' && (
           <Box px="xl">
             <Slider
