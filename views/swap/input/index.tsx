@@ -20,15 +20,15 @@ const Input: FC<InputProps> = ({ label }) => {
   return (
     <Box py="xl" px="m" borderRadius="xs" bg="lowestContainer">
       <HeaderInfo label={label} balance={balance} setValue={setValue} />
-      <Box pl="l" pt="1rem" display="flex" justifyContent="space-between">
+      <Box pl="l" pt="m" display="flex" justifyContent="space-between">
         <SelectToken label={label} balance={balance} />
         <TextField
           pl="-1rem"
           placeholder="0"
           color="onSurface"
           textAlign="right"
-          fontSize="1.375rem"
-          lineHeight="1.75rem"
+          fontSize="2xl"
+          lineHeight="l"
           fontFamily="Satoshi"
           {...register(`${label}.value`, {
             onChange: (v: ChangeEvent<HTMLInputElement>) => {
@@ -48,28 +48,28 @@ const Input: FC<InputProps> = ({ label }) => {
             />
           </Box>
         )}
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          mt="8xl"
-          mb="l"
-        >
-          {label === 'to' && (
-            <Button
-              bg="container"
-              opacity="0.4"
-              color="onSurface"
-              px="l"
-              py="s"
-              borderRadius="xs"
-              variant="tonal"
-              fontSize="0.875rem"
-            >
-              Preview swap
-            </Button>
-          )}
-        </Box>
+      </Box>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        mt="l"
+        mb="l"
+      >
+        {label === 'to' && (
+          <Button
+            bg="container"
+            opacity="0.4"
+            color="onSurface"
+            px="l"
+            py="s"
+            borderRadius="xs"
+            variant="tonal"
+            fontSize="s"
+          >
+            Preview swap
+          </Button>
+        )}
       </Box>
     </Box>
   );

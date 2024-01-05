@@ -3,27 +3,25 @@ import { FC } from 'react';
 
 import { HeaderInfoProps } from './input.types';
 
-const HeaderInfo: FC<HeaderInfoProps> = ({ label, balance }) => {
-  return (
-    <Box px="l" display="flex" justifyContent="space-between">
+const HeaderInfo: FC<HeaderInfoProps> = ({ label, balance }) => (
+  <Box px="l" display="flex" justifyContent="space-between">
+    <Typography variant="label" size="small">
+      {label}
+    </Typography>
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      gap="0.2rem"
+    >
       <Typography variant="label" size="small">
-        {label}
+        Balance:
       </Typography>
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        gap="0.2rem"
-      >
-        <Typography variant="label" size="small">
-          Balance:
-        </Typography>
-        <Typography variant="label" size="small" color="primary">
-          {balance}
-        </Typography>
-      </Box>
+      <Typography variant="label" size="small" color="primary">
+        {balance}
+      </Typography>
     </Box>
-  );
-};
+  </Box>
+);
 
 export default HeaderInfo;

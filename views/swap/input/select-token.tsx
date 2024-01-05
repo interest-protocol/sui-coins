@@ -44,11 +44,10 @@ const SelectToken: FC<SelectTokenProps> = ({ label }) => {
     <Box position="relative">
       <Button
         bg="highestContainer"
-        px="m"
-        py="m"
+        p="m"
         borderRadius="xs"
         variant="tonal"
-        fontSize="0.875rem"
+        fontSize="s"
         onClick={openModal}
         PrefixIcon={
           <Typography size="large" variant="label">

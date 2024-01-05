@@ -32,7 +32,7 @@ const Swap: FC = () => {
       <Box
         mx="auto"
         display="flex"
-        borderRadius="2rem"
+        borderRadius="2xl"
         flexDirection="column"
         p={['xl', 'xl', 'xl', '7xl']}
         width={['100%', '100%', '100%', '39.75rem']}
@@ -44,7 +44,7 @@ const Swap: FC = () => {
             top="-1.25rem"
             position="absolute"
             border="7px solid"
-            borderColor="#F8F9FD"
+            borderColor="surface"
             borderRadius="s"
           >
             <Button
