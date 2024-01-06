@@ -23,6 +23,11 @@ const MyCoins: FC = () => {
     error: capError,
   } = useGetOwnedTreasuryCap();
 
+  console.log({
+    capError,
+    error,
+  });
+
   const isError = !currentAccount || error || capError;
 
   return (
