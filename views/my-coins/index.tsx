@@ -17,6 +17,8 @@ import MyCoinsItem from './my-coins-item';
 const MyCoins: FC = () => {
   const { currentAccount } = useWalletKit();
   const { data, isLoading, error } = useGetAllCoins();
+
+  console.log(data);
   const {
     data: capData,
     isLoading: capIsLoading,

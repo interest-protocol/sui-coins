@@ -38,7 +38,7 @@ export const useGetAllCoins = () => {
       const coinsMetadata: Array<CoinMetadata | null> = [];
 
       for await (const coinType of coinTypesArray) {
-        await sleep(RATE_LIMIT_DELAY);
+        await sleep(350);
         coinsMetadata.push(await suiClient.getCoinMetadata({ coinType }));
       }
 
