@@ -3,7 +3,8 @@ import useSWR from 'swr';
 
 import { useNetwork } from '@/context/network';
 import { useSuiClient } from '@/hooks/use-sui-client';
-import { makeSWRKey } from '@/utils';
+import { makeSWRKey, sleep } from '@/utils';
+import { RATE_LIMIT_DELAY } from '@/views/airdrop/airdrop.constants';
 
 import { TGetOwned } from './use-get-owned-treasury-cap.types';
 
@@ -27,6 +28,8 @@ const getOwned: TGetOwned = async (provider, account, cursor = null) => {
         objectId: data!.objectId,
       }));
 
+  await sleep(RATE_LIMIT_DELAY);
+
   const newData = await getOwned(provider, account, nextCursor);
 
   return [
@@ -48,7 +51,7 @@ export const useGetOwnedTreasuryCap = () => {
   const { network } = useNetwork();
   const { currentAccount } = useWalletKit();
   return useSWR(
-    makeSWRKey([network, currentAccount?.address], suiClient.getAllCoins.name),
+    makeSWRKey([network, currentAccount?.address], 'useGetOwnedTreasuryCap '),
     async () => {
       if (!currentAccount) return null;
       return getOwned(suiClient, currentAccount.address);
