@@ -5,7 +5,8 @@ import useSWR from 'swr';
 
 import { useNetwork } from '@/context/network';
 import { useSuiClient } from '@/hooks/use-sui-client';
-import { makeSWRKey } from '@/utils';
+import { makeSWRKey, sleep } from '@/utils';
+import { RATE_LIMIT_DELAY } from '@/views/airdrop/airdrop.constants';
 
 import { CoinsMap, TGetAllCoins } from './use-get-all-coins.types';
 
@@ -32,12 +33,14 @@ export const useGetAllCoins = () => {
       if (!currentAccount) return null;
       const coinsRaw = await getAllCoins(suiClient, currentAccount.address);
 
-      const coinsMetadata: ReadonlyArray<CoinMetadata | null> =
-        await Promise.all(
-          coinsRaw.map(({ coinType }) =>
-            suiClient.getCoinMetadata({ coinType })
-          )
-        );
+      const coinTypesArray = coinsRaw.map(({ coinType }) => coinType);
+
+      const coinsMetadata: Array<CoinMetadata | null> = [];
+
+      for await (const coinType of coinTypesArray) {
+        await sleep(350);
+        coinsMetadata.push(await suiClient.getCoinMetadata({ coinType }));
+      }
 
       return coinsRaw.reduce(
         (acc, coinRaw, i) => ({

@@ -3,8 +3,7 @@ import useSWR from 'swr';
 
 import { useNetwork } from '@/context/network';
 import { useSuiClient } from '@/hooks/use-sui-client';
-import { makeSWRKey, sleep } from '@/utils';
-import { RATE_LIMIT_DELAY } from '@/views/airdrop/airdrop.constants';
+import { makeSWRKey } from '@/utils';
 
 import { TGetOwned } from './use-get-owned-treasury-cap.types';
 
@@ -27,8 +26,6 @@ const getOwned: TGetOwned = async (provider, account, cursor = null) => {
         type: data!.type!.split('0x2::coin::TreasuryCap<')[1].slice(0, -1),
         objectId: data!.objectId,
       }));
-
-  await sleep(RATE_LIMIT_DELAY);
 
   const newData = await getOwned(provider, account, nextCursor);
 
