@@ -3,7 +3,6 @@ import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import { useWalletKit } from '@mysten/wallet-kit';
 import BigNumber from 'bignumber.js';
-import { useGetAllCoins } from 'hooks/use-get-all-coins';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -11,6 +10,7 @@ import toast from 'react-hot-toast';
 import { AIRDROP_SEND_CONTRACT, EXPLORER_URL } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useSuiClient } from '@/hooks/use-sui-client';
+import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import { showTXSuccessToast, sleep, throwTXIfNotSuccessful } from '@/utils';
 import { createObjectsParameter, splitArray } from '@/utils';
@@ -21,7 +21,7 @@ import { AirdropButtonProps, IAirdropForm } from './airdrop.types';
 const AirdropButton: FC<AirdropButtonProps> = ({ setIsProgressView }) => {
   const { control, getValues, setValue } = useFormContext<IAirdropForm>();
   const { currentAccount } = useWalletKit();
-  const { data } = useGetAllCoins();
+  const { coinsMap } = useWeb3();
   const { airdropList, token } = useWatch({ control });
   const { network } = useNetwork();
   const suiClient = useSuiClient();
@@ -44,7 +44,7 @@ const AirdropButton: FC<AirdropButtonProps> = ({ setIsProgressView }) => {
     try {
       const { airdropList, token } = getValues();
 
-      if (!airdropList || !data || !data[token.type]) return;
+      if (!airdropList || !coinsMap || !coinsMap[token.type]) return;
 
       const contractPackageId = AIRDROP_SEND_CONTRACT[network];
 
@@ -100,14 +100,14 @@ const AirdropButton: FC<AirdropButtonProps> = ({ setIsProgressView }) => {
         return;
       }
 
-      const firstCoin = data[token.type].objects[0];
+      const firstCoin = coinsMap[token.type].objects[0];
 
       // There are other coins
-      if (data[token.type].objects.length > 1) {
+      if (coinsMap[token.type].objects.length > 1) {
         const txb = new TransactionBlock();
 
         const coinInList = createObjectsParameter({
-          coinsMap: data,
+          coinsMap,
           txb: txb,
           type: token.type,
           amount: airdropList

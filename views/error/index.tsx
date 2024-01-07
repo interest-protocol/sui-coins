@@ -35,9 +35,9 @@ const Error: FC<ErrorProps> = ({ message, linkGoTo }) => {
           <DiedComputerSVG maxHeight="100%" maxWidth="100%" width="100%" />
         </Box>
         <Typography
-          variant="display"
-          size="large"
           mb=".5rem"
+          size="large"
+          variant="display"
           textAlign="center"
         >
           OOPS!
@@ -47,6 +47,7 @@ const Error: FC<ErrorProps> = ({ message, linkGoTo }) => {
         </Typography>
         <Button
           mx="auto"
+          bg="onSurface"
           variant="filled"
           onClick={() => push(linkGoTo || '/')}
         >

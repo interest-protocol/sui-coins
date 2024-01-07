@@ -27,6 +27,7 @@ export const useGetAllCoins = () => {
   const suiClient = useSuiClient();
   const { network } = useNetwork();
   const { currentAccount } = useWalletKit();
+
   return useSWR(
     makeSWRKey([network, currentAccount?.address], suiClient.getAllCoins.name),
     async () => {

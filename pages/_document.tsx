@@ -1,7 +1,6 @@
 import { Head, Html, Main, NextScript } from 'next/document';
-import { ReactNode } from 'react';
 
-const Document = (): ReactNode => (
+const Document = () => (
   <Html lang="en">
     <Head>
       <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png" />

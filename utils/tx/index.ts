@@ -1,16 +1,8 @@
-import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
-import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
-import { always, ifElse, isNil, toString } from 'ramda';
-
-import { CreateVectorParameterArgs } from './tx.types';
-export const makeSWRKey = (
-  args: ReadonlyArray<unknown>,
-  methodName: string
-): string =>
-  args
-    .map(ifElse(isNil, always(''), toString))
-    .concat([methodName])
-    .join('|');
+import {
+  DevInspectResults,
+  SuiTransactionBlockResponse,
+} from '@mysten/sui.js/client';
+import { head, propOr } from 'ramda';
 
 export const throwTXIfNotSuccessful = (
   tx: SuiTransactionBlockResponse,
@@ -22,18 +14,18 @@ export const throwTXIfNotSuccessful = (
   }
 };
 
-export const createObjectsParameter = ({
-  txb,
-  type,
-  coinsMap,
-  amount,
-}: CreateVectorParameterArgs) => {
-  if (type === SUI_TYPE_ARG) {
-    const [coin] = txb.splitCoins(txb.gas, [txb.pure(amount.toString())]);
-    return [coin];
-  }
+export const getReturnValuesFromInspectResults = (
+  x: DevInspectResults
+): Array<[number[], string]> | null => {
+  const results = propOr([], 'results', x) as DevInspectResults['results'];
 
-  return coinsMap[type]
-    ? coinsMap[type].objects.map((x) => txb.object(x.coinObjectId))
-    : [];
+  if (!results?.length) return null;
+
+  const firstElem = head(results);
+
+  if (!firstElem) return null;
+
+  const returnValues = firstElem?.returnValues;
+
+  return returnValues ? returnValues : null;
 };

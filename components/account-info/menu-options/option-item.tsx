@@ -21,19 +21,19 @@ const OptionItem: FC<PropsWithChildren<OptionItemProps>> = ({
   selected,
   mobileOnly,
   withSubmenu,
-  withBorderBottom,
+  withBorderTop,
 }) => (
   <Motion
     p="m"
     onClick={onClick}
     alignItems="center"
+    borderTop="1px solid"
     variants={itemVariants}
-    borderBottom="1px solid"
     initial={itemVariants.closed}
     justifyContent="space-between"
     cursor={disabled ? 'not-allowed' : 'pointer'}
     bg={selected ? 'rgba(0, 83, 219, 0.08)' : 'unset'}
-    borderColor={withBorderBottom ? 'outlineVariant' : 'transparent'}
+    borderColor={withBorderTop ? 'outlineVariant' : 'transparent'}
     display={mobileOnly ? ['flex', 'flex', 'flex', 'none'] : 'flex'}
     nHover={{
       bg: disabled ? 'unset' : 'rgba(0, 83, 219, 0.08)',

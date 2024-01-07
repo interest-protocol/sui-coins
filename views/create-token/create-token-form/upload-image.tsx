@@ -68,11 +68,11 @@ const UploadImage: FC<{ setValue: UseFormSetValue<ICreateTokenForm> }> = ({
 
   return (
     <Box
-      p="l"
+      p="m"
       gap="m"
       bg="surface"
       display="flex"
-      borderRadius="s"
+      borderRadius="xs"
       borderWidth="1px"
       alignItems="center"
       onDrop={handleDropFile}

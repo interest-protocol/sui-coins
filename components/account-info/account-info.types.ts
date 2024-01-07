@@ -10,3 +10,7 @@ export interface AvatarProps {
   account?: WalletAccount;
   withNameOrAddress?: boolean;
 }
+
+export interface SuiNetworkProps {
+  closeDropdown: () => void;
+}
