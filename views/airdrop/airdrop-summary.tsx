@@ -1,27 +1,27 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
-import BigNumber from 'bignumber.js';
+import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { FixedPointMath } from '@/lib';
+import { QuestionCircleSVG } from '@/svg';
 import { BATCH_SIZE } from '@/views/airdrop/airdrop.constants';
 
 import { IAirdropForm } from './airdrop.types';
-import { getSymbol } from './airdrop.utils';
 
-const AirdropSummary = () => {
+interface AirdropSummmaryProps {
+  method: string;
+}
+
+const AirdropSummary: FC<AirdropSummmaryProps> = ({ method }) => {
   const { control } = useFormContext<IAirdropForm>();
 
-  const { symbol, decimals, type } = useWatch({ control, name: 'token' });
   const airdropList = useWatch({ control, name: 'airdropList' });
+  const suiFee = 0;
 
   return (
-    <Box display="flex" flexDirection="column" gap="s">
-      <Typography variant="body" size="large">
-        Summary
-      </Typography>
-      <Box bg="surface" px="m" py="xs" borderRadius="xs">
+    <Box display="flex" flexDirection="column">
+      <Box bg="container" px="m" py="2xs" borderRadius="xs">
         <Box
-          py="xs"
+          py="m"
           display="flex"
           borderBottom="1px solid"
           borderColor="outlineVariant"
@@ -31,25 +31,28 @@ const AirdropSummary = () => {
             size="medium"
             variant="body"
             opacity="0.80"
-            color="onSurface"
+            color="#000000A3"
           >
-            You will send
+            Delivery Method
           </Typography>
-          <Typography variant="body" size="medium" color="onSurface">
-            {airdropList
-              ? FixedPointMath.toNumber(
-                  airdropList?.reduce(
-                    (acc, { amount }) => acc.plus(BigNumber(amount)),
-                    BigNumber(0)
-                  ),
-                  decimals
-                )
-              : 0}{' '}
-            {getSymbol(symbol, type)}
-          </Typography>
+          <Box display="flex" justifyContent="center" alignItems="center">
+            <Typography
+              variant="body"
+              size="medium"
+              color="onSurface"
+              mr="0.5rem"
+            >
+              {method || '--'}
+            </Typography>
+            <QuestionCircleSVG
+              maxHeight="0.875rem"
+              maxWidth="0.875rem"
+              width="100%"
+            />
+          </Box>
         </Box>
         <Box
-          py="xs"
+          py="m"
           display="flex"
           borderBottom="1px solid"
           borderColor="outlineVariant"
@@ -59,26 +62,75 @@ const AirdropSummary = () => {
             variant="body"
             size="medium"
             opacity="0.80"
-            color="onSurface"
+            color="#000000A3"
           >
-            Total Addresses
+            Addresses sent to
           </Typography>
-          <Typography variant="body" size="medium" color="onSurface">
-            {airdropList ? airdropList.length : '--'}
-          </Typography>
+
+          <Box display="flex" justifyContent="center" alignItems="center">
+            <Typography
+              variant="body"
+              size="medium"
+              color="onSurface"
+              mr="0.5rem"
+            >
+              {airdropList ? airdropList.length : '--'}
+            </Typography>
+            <QuestionCircleSVG
+              maxHeight="0.875rem"
+              maxWidth="0.875rem"
+              width="100%"
+            />
+          </Box>
         </Box>
-        <Box py="xs" display="flex" justifyContent="space-between">
+        <Box py="m" display="flex" justifyContent="space-between">
           <Typography
             variant="body"
             size="medium"
             opacity="0.80"
-            color="onSurface"
+            color="#000000A3"
           >
-            Number of batches
+            Sent in batches of
           </Typography>
-          <Typography variant="body" size="medium" color="onSurface">
-            {airdropList ? Math.ceil(airdropList.length / BATCH_SIZE) : '--'}
+          <Box display="flex" justifyContent="center" alignItems="center">
+            <Typography
+              variant="body"
+              size="medium"
+              color="onSurface"
+              mr="0.5rem"
+            >
+              {airdropList ? Math.ceil(airdropList.length / BATCH_SIZE) : '--'}
+            </Typography>
+            <QuestionCircleSVG
+              maxHeight="0.875rem"
+              maxWidth="0.875rem"
+              width="100%"
+            />
+          </Box>
+        </Box>
+        <Box
+          py="m"
+          display="flex"
+          borderTop="1px solid"
+          borderColor="outlineVariant"
+          justifyContent="space-between"
+        >
+          <Typography
+            variant="body"
+            size="medium"
+            opacity="0.80"
+            color="#000000A3"
+          >
+            SUI Fee
           </Typography>
+          <Box textAlign="right">
+            <Typography size="medium" variant="body">
+              {suiFee || '--'}
+            </Typography>
+            <Typography variant="body" size="small" color="#000000A3">
+              --
+            </Typography>
+          </Box>
         </Box>
       </Box>
     </Box>

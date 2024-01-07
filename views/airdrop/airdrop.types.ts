@@ -15,6 +15,7 @@ export interface IAirdropForm {
   token: IToken;
   error: boolean;
   decimals: number;
+  amount: number;
   done: ReadonlyArray<number>;
   failed: ReadonlyArray<number>;
   airdropList: ReadonlyArray<AirdropData> | null;

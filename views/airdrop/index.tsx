@@ -1,14 +1,18 @@
-import { Box, Typography } from '@interest-protocol/ui-kit';
+import { Box, Button, Typography } from '@interest-protocol/ui-kit';
+import BigNumber from 'bignumber.js';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import Layout from '@/components/layout';
+import { FixedPointMath } from '@/lib';
 import { IAirdropForm } from '@/views/airdrop/airdrop.types';
 
-import AirdropButton from './airdrop-button';
 import AirdropChooseCoin from './airdrop-choose-coin';
+import AirdropChooseMethod from './airdrop-choose-method';
+import AirdropCustomeAmountMethod from './airdrop-custome-amount-method';
+import AirdropNftCoinsMethod from './airdrop-nft-coins-method';
 import AirdropProgressIndicator from './airdrop-progress-indicator';
-import AirdropSummary from './airdrop-summary';
+import AirdropSummaryModal from './airdrop-summary-modal';
 import AirdropUploadFile from './airdrop-upload-file';
 import AirdropUploadStatus from './airdrop-upload-status';
 
@@ -19,11 +23,58 @@ interface AirdropBodyProps {
 const AirdropBody: FC<AirdropBodyProps> = ({ setIsProgressView }) => {
   const { control } = useFormContext<IAirdropForm>();
   const token = useWatch({ control, name: 'token' });
+  const { airdropList } = useWatch({ control });
+  const [method, setMethod] = useState('');
+  const [isSummaryOpen, setIsSummaryOpen] = useState(false);
+
+  let isDisabled =
+    !airdropList ||
+    !token?.balance ||
+    token.balance <
+      FixedPointMath.toNumber(
+        airdropList?.reduce(
+          (acc, { amount }) => acc.plus(BigNumber(amount ?? 0)),
+          BigNumber(0)
+        ),
+        token.decimals
+      );
+
+  const handleCloseSummaryModal = () => {
+    setIsSummaryOpen(false);
+  };
+  const handleOpenSumaryModal = () => {
+    setIsSummaryOpen(true);
+  };
+
+  const onSelectMethod = (el: string) => {
+    setMethod(el);
+    isDisabled = false;
+  };
+
   return token ? (
     <>
-      <AirdropUploadFile />
-      <AirdropSummary />
-      <AirdropButton setIsProgressView={setIsProgressView} />
+      <AirdropChooseMethod onSelectMethod={onSelectMethod} />
+      {method === 'CSV' && <AirdropUploadFile />}
+      {(method === 'NFT' || method === 'Coins') && (
+        <AirdropNftCoinsMethod method={method} />
+      )}
+      {method === 'Costume Amount' && <AirdropCustomeAmountMethod />}
+      <AirdropSummaryModal
+        method={method}
+        isOpen={isSummaryOpen}
+        onClose={handleCloseSummaryModal}
+        setIsProgressView={setIsProgressView}
+      />
+      <Box display="flex" justifyContent="center">
+        <Button
+          disabled={isDisabled}
+          variant="filled"
+          borderRadius="xs"
+          onClick={handleOpenSumaryModal}
+        >
+          Review & Confirm
+        </Button>
+      </Box>
     </>
   ) : null;
 };

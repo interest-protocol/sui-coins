@@ -221,8 +221,18 @@ const AirdropButton: FC<AirdropButtonProps> = ({ setIsProgressView }) => {
 
   return (
     <Box display="flex" justifyContent="center">
-      <Button disabled={isDisabled} variant="filled" onClick={handleSend}>
-        Send
+      <Button
+        width="100%"
+        display="flex"
+        variant="filled"
+        onClick={handleSend}
+        borderRadius="0.5rem"
+        disabled={isDisabled}
+        justifyContent="center"
+      >
+        <Typography variant="label" size="large">
+          CONFIRM AIRDROP
+        </Typography>
       </Button>
     </Box>
   );

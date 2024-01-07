@@ -48,7 +48,7 @@ const AirdropSelectToken: FC = () => {
   return (
     <Box position="relative" id={BOX_ID}>
       <Box
-        p="s"
+        p="xs"
         gap="xs"
         display="flex"
         minWidth="8rem"
@@ -59,7 +59,18 @@ const AirdropSelectToken: FC = () => {
         borderColor="outlineVariant"
         onClick={() => setIsOpen(not)}
       >
-        {renderToken()}
+        <Box
+          bg="#6FBCF0"
+          display="flex"
+          width="2.5rem"
+          height="2.5rem"
+          alignItems="center"
+          borderRadius="0.5rem"
+          color="lowestContainer"
+          justifyContent="center"
+        >
+          {renderToken()}
+        </Box>
         <Typography variant="label" size="large" flex="1" as="span">
           {token ? getSymbol(token.symbol, token.type) : '---'}
         </Typography>
@@ -121,7 +132,7 @@ const AirdropSelectToken: FC = () => {
                     PrefixIcon={
                       <Box
                         display="flex"
-                        bg="onSurface"
+                        bg="#6FBCF0"
                         color="surface"
                         height="1.8rem"
                         minWidth="1.8rem"

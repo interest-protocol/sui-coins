@@ -1,5 +1,11 @@
 import { Box, Theme, Typography, useTheme } from '@interest-protocol/ui-kit';
-import { ChangeEventHandler, DragEventHandler, FC, useState } from 'react';
+import {
+  ChangeEventHandler,
+  DragEventHandler,
+  FC,
+  useEffect,
+  useState,
+} from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
@@ -12,17 +18,25 @@ import AirdropUploadFileCard from './airdrop-upload-file-card';
 const AirdropUploadFile: FC = () => {
   const { colors } = useTheme() as Theme;
   const [dragging, setDragging] = useState(false);
+  const [fileName, setFileName] = useState('');
+  const [fileSize, setFileSize] = useState<number>(0);
   const { setValue, control } = useFormContext<IAirdropForm>();
 
   const airdropList = useWatch({ control, name: 'airdropList' });
+
+  useEffect(() => {
+    return () => {
+      setValue('airdropList', null);
+    };
+  }, [setValue]);
 
   const handleChangeFile: ChangeEventHandler<HTMLInputElement> = async (e) => {
     const file = e.target.files?.[0];
 
     if (!file) return toast.error('Something went wrong');
 
-    if (file.type !== 'text/csv')
-      return toast.error('Make sure that you are sending a CSV File');
+    setFileName(file!.name);
+    setFileSize(Number((file!.size / (1024 * 1024)).toFixed(2)));
 
     const airdrop = csvToAirdrop(await file.text(), toast.error);
 
@@ -62,20 +76,19 @@ const AirdropUploadFile: FC = () => {
   return (
     <Box display="flex" flexDirection="column" gap="s">
       <Typography variant="body" size="large">
-        2. Upload file
+        3. Upload file
       </Typography>
       {airdropList ? (
-        <AirdropUploadFileCard name="Airdrop List" size={airdropList.length} />
+        <AirdropUploadFileCard name={fileName} size={fileSize} />
       ) : (
         <Box
-          p="2xl"
+          p="m"
           gap="m"
           bg="surface"
           display="flex"
           borderRadius="xs"
           borderWidth="1px"
           alignItems="center"
-          flexDirection="column"
           onDrop={handleDropFile}
           onDragEnter={() => setDragging(true)}
           onDragLeave={() => setDragging(false)}
@@ -94,12 +107,7 @@ const AirdropUploadFile: FC = () => {
           >
             <FolderSVG maxWidth="1.4rem" maxHeight="1.4rem" width="100%" />
           </Box>
-          <Typography
-            size="large"
-            variant="body"
-            maxWidth="9rem"
-            textAlign="center"
-          >
+          <Typography size="large" variant="body" textAlign="center">
             Drop your file here or{' '}
             <Typography
               as="label"
