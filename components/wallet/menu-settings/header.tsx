@@ -22,7 +22,7 @@ const MenuSettingsListHeaderMobile: FC<MenuSettingsListHeaderProps> = ({
     <Typography variant="title" size="small" color="onSurface">
       Global Settings
     </Typography>
-    <Box display="flex" justifyContent="flex-end">
+    <Box display="flex" justifyContent="flex-end" bg="Red">
       <Motion
         transform={isOpen ? 'rotate(180deg)' : 'rotate(0deg)'}
         display="flex"
@@ -42,10 +42,10 @@ const MenuSettingsListHeaderMobile: FC<MenuSettingsListHeaderProps> = ({
         transition={{ duration: 0.5 }}
       >
         <CaretUpSVG
-          width="0.469rem"
-          height="0.469rem"
-          maxWidth="1.25rem"
-          maxHeight="1.25rem"
+          width="100%"
+          height="100%"
+          maxWidth="0.469rem"
+          maxHeight="0.469rem"
         />
       </Motion>
     </Box>

@@ -8,11 +8,11 @@ import MobileMenuList from './menu-list';
 
 const MainMenu: FC<MainMenuMobileProps> = ({ closeMenu }) => (
   <Box
-    m="0 1.25rem"
+    mx="l"
+    my="0"
     display="flex"
     minHeight="100%"
     variant="container"
-    justifyItems="unset"
     flexDirection="column"
     justifyContent="space-between"
   >
