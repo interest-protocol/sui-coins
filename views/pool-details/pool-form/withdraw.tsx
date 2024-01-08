@@ -12,11 +12,11 @@ const PoolWithDraw: FC = () => {
       <Typography
         size="large"
         variant="title"
-        fontSize={['1.375rem', '1.375rem', '1.375rem', '2rem']}
+        fontSize={['2xl', '2xl', '2xl', '5xl']}
       >
         I would like to Withdraw...
       </Typography>
-      <Box display="flex" flexDirection="column" gap="1rem">
+      <Box display="flex" flexDirection="column" gap="m">
         <PoolField name="tokenLP" withoutIcon />
       </Box>
       <PoolReceiveSection
@@ -34,11 +34,12 @@ const PoolWithDraw: FC = () => {
         ]}
       />
       <Button
-        variant="filled"
-        mt="1.5rem"
-        width="max-content"
+        py="s"
+        mt="xl"
         mx="auto"
-        py="0.625rem"
+        variant="filled"
+        borderRadius="xs"
+        width="max-content"
       >
         Remove Liquidity
       </Button>

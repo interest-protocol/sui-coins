@@ -44,7 +44,7 @@ const CreatePoolFormSelectDex: FC = () => {
       {isOpen && (
         <Box
           zIndex={1}
-          top="3rem"
+          top="4.5rem"
           width="100%"
           cursor="pointer"
           bg="lowContainer"
