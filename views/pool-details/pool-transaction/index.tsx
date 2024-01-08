@@ -7,7 +7,7 @@ import PoolTransactionStatistics from './statistics';
 
 const PoolTransaction: FC = () => {
   return (
-    <Box display="flex" flexDirection="column" gap="0.5rem">
+    <Box display="flex" flexDirection="column" gap="xs">
       <PoolTransactionInformation />
       <PoolTransactionStatistics />
       <PoolTransactionComposition />

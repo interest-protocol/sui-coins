@@ -43,12 +43,12 @@ const PoolDetails: FC<PoolDetailsProps> = ({ objectId }) => {
         )}`}
       />
       <Box
+        gap="xs"
         mx="auto"
-        gap="0.5rem"
         flexDirection="column"
         gridTemplateColumns="62% 38%"
         display={['flex', 'flex', 'flex', 'grid']}
-        width={['100%', '100%', '100%', '85%']}
+        width={['100%', '100%', '100%', '100%']}
       >
         <PoolForm />
         <PoolTransaction />
