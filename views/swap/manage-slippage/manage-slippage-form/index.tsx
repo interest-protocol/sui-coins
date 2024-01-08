@@ -29,7 +29,14 @@ const ManageSlippageForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
   };
 
   return (
-    <Box py="l" px="l" display="flex" flexDirection="column" gap="1.5rem">
+    <Box
+      py="2xl"
+      px="2xl"
+      display="flex"
+      flexDirection="column"
+      gap="1.5rem"
+      bg="onPrimary"
+    >
       <Box>
         <Typography variant="body" size="small" mb="0.5rem">
           Slippage Tolerance
