@@ -48,8 +48,8 @@ const SelectToken: FC<SelectTokenProps> = ({ label, balance }) => {
   return (
     <Box position="relative">
       <Button
-        pr="1rem"
-        pl="0.5rem"
+        pr="m"
+        pl="xs"
         variant="tonal"
         fontSize="0.875rem"
         onClick={openModal}

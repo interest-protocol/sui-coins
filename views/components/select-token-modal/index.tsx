@@ -62,14 +62,15 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
       transition={{ duration: 0.3 }}
     >
       <Box
-        py="m"
-        px="m"
+        py="xl"
+        px="xl"
+        my="xs"
         display="flex"
         alignItems="center"
         justifyContent="space-between"
       >
         <Box />
-        <Typography variant="label" size="large" color="text">
+        <Typography as="p" color="onSurface" size="large" variant="title">
           Select Token
         </Typography>
         <Button variant="text" isIcon onClick={closeModal} mr="-0.5rem">
@@ -81,12 +82,15 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
           fontSize="medium"
           placeholder="Sui"
           label="Search token"
+          opacity="0.6"
           {...register('search')}
           Prefix={
-            <SearchSVG maxWidth="1.2rem" maxHeight="1.2rem" width="100%" />
+            <SearchSVG maxWidth="1.25rem" maxHeight="1.25rem" width="100%" />
           }
           fieldProps={{
             mb: '1.5rem',
+            py: '1.75rem',
+            borderRadius: '0.5rem',
           }}
         />
       </Box>

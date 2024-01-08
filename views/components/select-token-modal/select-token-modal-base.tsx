@@ -59,8 +59,8 @@ const SelectTokenBaseTokens: FC<SelectTokenBaseTokensProps> = ({
 
   return (
     <Box
-      px="m"
-      py="xs"
+      my="l"
+      mx="m"
       gap={['0.25rem', '0.25rem', '0.25rem', 'xs']}
       display="grid"
       flexWrap="wrap"
