@@ -10,3 +10,7 @@ export type WalletDropdownWrapperProps = WalletDropdownProps;
 export interface WalletItemProps {
   name?: 'disconnect';
 }
+
+export interface MenuButtonProps {
+  handleClose: () => void;
+}

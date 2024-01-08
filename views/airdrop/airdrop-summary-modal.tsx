@@ -4,17 +4,11 @@ import { Dispatch, FC, SetStateAction } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { FixedPointMath } from '@/lib';
-import {
-  ArrowLeftSVG,
-  IPXRoundedSVG,
-  //   QuestionCircleSVG,
-  TimesSVG,
-} from '@/svg';
+import { ArrowLeftSVG, IPXRoundedSVG, TimesSVG } from '@/svg';
 
 import { IAirdropForm } from './airdrop.types';
 import { getSymbol } from './airdrop.utils';
 import AirdropButton from './airdrop-button';
-// import AirdropButton from './airdrop-button';
 import AirdropSummary from './airdrop-summary';
 
 interface SummaryModalProps {
@@ -39,7 +33,7 @@ const AirdropSummaryModal: FC<SummaryModalProps> = ({
     <Modal custom isOpen={isOpen}>
       <Box
         maxWidth="95%"
-        borderRadius="m"
+        borderRadius="xs"
         width="26.875rem"
         minHeight="46rem"
         alignItems="center"
