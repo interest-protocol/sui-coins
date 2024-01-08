@@ -15,12 +15,7 @@ const ManageSlippage: FC = () => {
       <Typography variant="body" size="large" mb="l">
         Manage your slippage
       </Typography>
-      <Box
-        bg="surface"
-        display="flex"
-        flexDirection="column"
-        borderRadius="0.5rem"
-      >
+      <Box bg="surface" display="flex" flexDirection="column" borderRadius="xs">
         <SlippageInfo isOpen={openManage} handleManageView={handleManageView} />
         {openManage && (
           <ManageSlippageForm handleManageView={handleManageView} />

@@ -1,11 +1,5 @@
 import { Network, Routes, RoutesEnum } from '@/constants';
-import {
-  AirdropSVG,
-  CirclePlusSVG,
-  DoubleChevronSVG,
-  PoolSVG,
-  StatsArrowUpSVG,
-} from '@/svg';
+import { AirdropSVG, CirclePlusSVG, DoubleChevronSVG, PoolSVG } from '@/svg';
 
 import { MenuItemProps } from './sidebar.types';
 
@@ -42,12 +36,5 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     path: Routes[RoutesEnum.Airdrop],
     disabled: false,
     networks: [Network.MAINNET, Network.TESTNET],
-  },
-  {
-    Icon: StatsArrowUpSVG,
-    name: 'metrics',
-    path: Routes[RoutesEnum.Metrics],
-    disabled: true,
-    networks: [Network.MAINNET],
   },
 ];
