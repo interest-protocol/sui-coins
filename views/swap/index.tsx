@@ -7,7 +7,6 @@ import { SwapSVG } from '@/svg';
 
 import Input from './input';
 import ManageSlippage from './manage-slippage';
-import SwapButton from './swap-button';
 import SwapManager from './swap-manager';
 
 const Swap: FC = () => {
@@ -84,9 +83,6 @@ const Swap: FC = () => {
         </Box>
         <Box my="xs">
           <ManageSlippage />
-        </Box>
-        <Box mt="7xl" mx="auto">
-          <SwapButton />
         </Box>
       </Box>
       <SwapManager />
