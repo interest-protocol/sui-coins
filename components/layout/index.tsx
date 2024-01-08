@@ -6,7 +6,7 @@ import Header from './header';
 import Sidebar from './sidebar';
 
 const Layout: FC<PropsWithChildren> = ({ children }) => (
-  <Box display="flex" height="100vh" overflow="hidden">
+  <Box display="flex" height="100vh" overflow="hidden" bg="surface">
     <Sidebar />
     <Box as="aside" position="relative" flex="1">
       <Header />
