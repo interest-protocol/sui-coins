@@ -35,7 +35,11 @@ const Input: FC<InputProps> = ({ label }) => {
               setValue?.(`${label}.value`, parseInputEventToNumberString(v));
             },
           })}
-          fieldProps={{ borderColor: 'transparent', width: '100%' }}
+          fieldProps={{
+            borderColor: 'transparent',
+            borderRadius: 'xs',
+            width: '100%',
+          }}
         />
       </Box>
       <Box height="2rem">
