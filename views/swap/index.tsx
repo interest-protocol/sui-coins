@@ -60,22 +60,18 @@ const Swap: FC = () => {
         </Box>
         <Box py="xl" px="m" borderRadius="xs" bg="lowestContainer">
           <Input label="to" />
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            mt="l"
-            mb="l"
-          >
+          <Box display="flex" justifyContent="center">
             <Button
-              bg="container"
-              opacity="0.4"
-              color="onSurface"
-              px="l"
               py="s"
-              borderRadius="xs"
-              variant="tonal"
+              px="xl"
               fontSize="s"
+              bg="container"
+              type="submit"
+              variant="tonal"
+              color="onSurface"
+              opacity="0.4"
+              borderRadius="xs"
+              fontFamily="Proto"
             >
               Preview swap
             </Button>
