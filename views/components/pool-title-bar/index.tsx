@@ -48,7 +48,7 @@ const PoolTitleBar: FC<PoolTitleBarProps> = ({
           width="2.5rem"
           height="2.5rem"
           alignItems="center"
-          borderRadius="0.5rem"
+          borderRadius="xs"
           justifyContent="center"
           color="lowestContainer"
         >
