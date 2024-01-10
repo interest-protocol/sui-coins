@@ -58,7 +58,7 @@ const PoolForm: FC = () => {
       flexDirection="column"
       bg="lowestContainer"
       borderRadius="xs"
-      gap="1.5rem"
+      gap="xl"
     >
       <Box overflowX="auto">
         <Tabs

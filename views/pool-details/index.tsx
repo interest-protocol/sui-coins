@@ -48,7 +48,7 @@ const PoolDetails: FC<PoolDetailsProps> = ({ objectId }) => {
         flexDirection="column"
         gridTemplateColumns="62% 38%"
         display={['flex', 'flex', 'flex', 'grid']}
-        width={['100%', '100%', '100%', '100%']}
+        width="100%"
       >
         <PoolForm />
         <PoolTransaction />

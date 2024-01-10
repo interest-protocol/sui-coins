@@ -26,7 +26,7 @@ const Pools: FC = () => {
           my="xl"
           px="xs"
           display="grid"
-          gridTemplateColumns={['100%', '1fr', '1fr 1fr', '1fr 1fr 1fr']}
+          gridTemplateColumns={['1fr', '1fr', '1fr 1fr', '1fr 1fr 1fr']}
         >
           {RECOMMENDED_POOLS[network].map((pool) => (
             <PoolCard key={v4()} {...pool} />
