@@ -12,7 +12,7 @@ import SelectToken from './select-token';
 
 const Input: FC<InputProps> = ({ label }) => {
   const { control, register, setValue, getValues } = useFormContext<SwapForm>();
-  const currentBalance = 0;
+  const currentBalance = 1;
 
   const balance = useWatch({
     control,
@@ -46,7 +46,7 @@ const Input: FC<InputProps> = ({ label }) => {
       </Box>
       <Box pb={label === 'to' ? '2xl' : 's'}>
         {label === 'from' && (
-          <Box px="xl">
+          <Box px="s">
             <SwapFormFieldSlider
               balance={currentBalance}
               setValue={setValue}
