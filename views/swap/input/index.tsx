@@ -1,16 +1,18 @@
-import { Box, Slider, TextField } from '@interest-protocol/ui-kit';
+import { Box, TextField } from '@interest-protocol/ui-kit';
 import { ChangeEvent, FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { parseInputEventToNumberString } from '@/utils';
 
 import { SwapForm } from '../swap.types';
+import SwapFormFieldSlider from '../swap-manager/swap-manager-slider';
 import HeaderInfo from './header-info';
 import { InputProps } from './input.types';
 import SelectToken from './select-token';
 
 const Input: FC<InputProps> = ({ label }) => {
-  const { control, register, setValue } = useFormContext<SwapForm>();
+  const { control, register, setValue, getValues } = useFormContext<SwapForm>();
+  const currentBalance = 0;
 
   const balance = useWatch({
     control,
@@ -42,13 +44,13 @@ const Input: FC<InputProps> = ({ label }) => {
           }}
         />
       </Box>
-      <Box height="2rem">
+      <Box pb={label === 'to' ? '2xl' : 's'}>
         {label === 'from' && (
           <Box px="xl">
-            <Slider
-              initial={0}
-              max={100}
-              onChange={() => console.log('range')}
+            <SwapFormFieldSlider
+              balance={currentBalance}
+              setValue={setValue}
+              currentValue={+getValues('from.value')}
             />
           </Box>
         )}
