@@ -67,9 +67,8 @@ const Swap: FC = () => {
               fontSize="s"
               bg="container"
               type="submit"
-              variant="tonal"
-              color="onSurface"
-              opacity="0.4"
+              variant={openSwapPreview ? 'tonal' : 'filled'}
+              color={openSwapPreview ? 'surface' : 'onSurface'}
               borderRadius="xs"
               fontFamily="Proto"
             >
