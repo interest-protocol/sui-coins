@@ -6,7 +6,6 @@ import useSWR from 'swr';
 import { useNetwork } from '@/context/network';
 import { useSuiClient } from '@/hooks/use-sui-client';
 import { makeSWRKey, sleep } from '@/utils';
-import { RATE_LIMIT_DELAY } from '@/views/airdrop/airdrop.constants';
 
 import { CoinsMap, TGetAllCoins } from './use-get-all-coins.types';
 
