@@ -5,20 +5,18 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { QuestionCircleSVG } from '@/svg';
 import { BATCH_SIZE } from '@/views/airdrop/airdrop.constants';
 
-import { IAirdropForm } from './airdrop.types';
+import { AirdropSummaryProps, IAirdropForm } from '../airdrop.types';
 
-interface AirdropSummmaryProps {
-  method: string;
-}
-
-const AirdropSummary: FC<AirdropSummmaryProps> = ({ method }) => {
+const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
   const { control } = useFormContext<IAirdropForm>();
 
   const airdropList = useWatch({ control, name: 'airdropList' });
+
+  // TODO: Sui fee
   const suiFee = 0;
 
   return (
-    <Box display="flex" flexDirection="column">
+    <Box display="flex" flexDirection="column" mb="m">
       <Box bg="container" px="m" py="2xs" borderRadius="xs">
         <Box
           py="m"

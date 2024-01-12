@@ -7,25 +7,24 @@ import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { FavoriteSVG } from '@/svg';
 
-import { TokenModalItemProps } from './select-token-modal.types';
+import { NFTModalItemProps } from './select-nft-modal.types';
 
-const TokenModalItem: FC<TokenModalItemProps> = ({
+const NFTModalItem: FC<NFTModalItemProps> = ({
   type,
   symbol,
   origin,
   balance,
   onClick,
   selected,
-  isSuggested,
 }) => {
   const { network } = useNetwork();
   const [favoriteTokens, setFavoriteTokens] = useLocalStorage<
     ReadonlyArray<string>
-  >(`${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-tokens`, []);
+  >(`${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-nft`, []);
 
   const isFavorite = favoriteTokens.includes(type);
 
-  const handleFavoriteTokens = () =>
+  const handleFavoriteNFT = () =>
     setFavoriteTokens(
       isFavorite
         ? favoriteTokens.filter((favType) => favType !== type)
@@ -80,17 +79,10 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
         </Box>
       </Box>
       <Box display="flex" alignItems="center" gap="xs">
-        {!isSuggested && (
-          <Typography variant="body" size="large">
-            {balance}
-          </Typography>
-        )}
-        <Button
-          isIcon
-          zIndex="10"
-          variant="text"
-          onClick={handleFavoriteTokens}
-        >
+        <Typography variant="body" size="large">
+          {balance}
+        </Typography>
+        <Button isIcon zIndex="10" variant="text" onClick={handleFavoriteNFT}>
           <FavoriteSVG
             width="100%"
             maxWidth="1rem"
@@ -103,4 +95,4 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
   );
 };
 
-export default TokenModalItem;
+export default NFTModalItem;

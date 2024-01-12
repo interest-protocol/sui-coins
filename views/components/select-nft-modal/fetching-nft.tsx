@@ -1,7 +1,7 @@
 import { Box, ProgressIndicator, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-const FetchingToken: FC = () => (
+const FetchingNFT: FC = () => (
   <Box
     p="4xl"
     gap="xl"
@@ -20,4 +20,4 @@ const FetchingToken: FC = () => (
   </Box>
 );
 
-export default FetchingToken;
+export default FetchingNFT;

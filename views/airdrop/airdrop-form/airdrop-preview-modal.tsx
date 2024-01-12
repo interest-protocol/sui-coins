@@ -1,29 +1,26 @@
 import { Box, Modal, Typography } from '@interest-protocol/ui-kit';
 import BigNumber from 'bignumber.js';
-import { Dispatch, FC, SetStateAction } from 'react';
+import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { TokenIcon } from '@/components';
+import { Network } from '@/constants';
+import { useNetwork } from '@/context/network';
 import { FixedPointMath } from '@/lib';
-import { ArrowLeftSVG, IPXRoundedSVG, TimesSVG } from '@/svg';
+import { ArrowLeftSVG, TimesSVG } from '@/svg';
 
-import { IAirdropForm } from './airdrop.types';
-import { getSymbol } from './airdrop.utils';
-import AirdropButton from './airdrop-button';
+import { AirdropPreviewModalProps, IAirdropForm } from '../airdrop.types';
+import { getSymbol } from '../airdrop.utils';
+import AirdropButton from './airdrop-preview-button';
 import AirdropSummary from './airdrop-summary';
 
-interface SummaryModalProps {
-  method: string;
-  isOpen: boolean;
-  onClose: () => void;
-  setIsProgressView: Dispatch<SetStateAction<boolean>>;
-}
-
-const AirdropSummaryModal: FC<SummaryModalProps> = ({
+const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
   isOpen,
-  setIsProgressView,
-  onClose,
   method,
+  onClose,
+  setIsProgressView,
 }) => {
+  const { network } = useNetwork();
   const { control } = useFormContext<IAirdropForm>();
 
   const { symbol, decimals, type } = useWatch({ control, name: 'token' });
@@ -48,8 +45,6 @@ const AirdropSummaryModal: FC<SummaryModalProps> = ({
             p="xl"
             display="flex"
             alignItems="center"
-            borderColor="black"
-            borderBottom="1px dashed"
             justifyContent="space-between"
           >
             <ArrowLeftSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
@@ -83,24 +78,24 @@ const AirdropSummaryModal: FC<SummaryModalProps> = ({
               alignItems="center"
               justifyContent="space-between"
             >
-              <Box display="flex" alignItems="center">
+              <Box display="flex" alignItems="center" gap="m">
                 <Box
-                  p="s"
-                  bg="#000"
-                  maxWidth="2.5rem"
+                  bg="black"
+                  color="white"
+                  width="2.5rem"
+                  height="2.5rem"
                   borderRadius="xs"
-                  maxHeight="2.5rem"
-                  marginRight="1rem"
+                  alignItems="center"
                   display="inline-flex"
+                  justifyContent="center"
                 >
-                  <IPXRoundedSVG
-                    width="100%"
-                    maxWidth="1.66669rem"
-                    maxHeight="1.66669rem"
+                  <TokenIcon
+                    network={network}
+                    tokenId={network === Network.MAINNET ? type : symbol}
                   />
                 </Box>
-                <Typography size={'small'} variant={'title'}>
-                  SUI
+                <Typography size="small" variant="title">
+                  {symbol}
                 </Typography>
               </Box>
               <Box textAlign="right">
@@ -124,9 +119,7 @@ const AirdropSummaryModal: FC<SummaryModalProps> = ({
           </Box>
         </Box>
         <Box width="100%" p="xl">
-          <Box mb="m">
-            <AirdropSummary method={method} />
-          </Box>
+          <AirdropSummary method={method} />
           <AirdropButton setIsProgressView={setIsProgressView} />
         </Box>
       </Box>
@@ -134,4 +127,4 @@ const AirdropSummaryModal: FC<SummaryModalProps> = ({
   );
 };
 
-export default AirdropSummaryModal;
+export default AirdropPreviewModal;

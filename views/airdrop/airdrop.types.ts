@@ -1,21 +1,22 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { CoinData } from '@/interface';
-
-export interface IToken extends CoinData {
-  balance: number;
-}
+import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 
 export interface AirdropData {
   address: string;
   amount: string;
 }
 
+export type TMethod = 'csv' | 'nft' | 'coin' | 'customAmount';
+
 export interface IAirdropForm {
-  token: IToken;
   error: boolean;
-  decimals: number;
   amount: number;
+  method: TMethod;
+  decimals: number;
+  token: CoinObject;
+  asset?: CoinObject;
+  commonAmount: string;
   done: ReadonlyArray<number>;
   failed: ReadonlyArray<number>;
   airdropList: ReadonlyArray<AirdropData> | null;
@@ -32,10 +33,29 @@ export interface AirdropUploadFileCardProps {
   name: string;
 }
 
-export interface AirdropButtonProps {
+export interface AirdropPreviewButtonProps {
   setIsProgressView: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface AirdropProgressIndicatorProps {
   goBack: () => void;
+}
+
+export interface AirdropInputProps {
+  setIsProgressView: Dispatch<SetStateAction<boolean>>;
+}
+
+export interface AirdropPreviewModalProps {
+  method: TMethod;
+  isOpen: boolean;
+  onClose: () => void;
+  setIsProgressView: Dispatch<SetStateAction<boolean>>;
+}
+
+export interface AirdropSummaryProps {
+  method: TMethod;
+}
+
+export interface AirdropNftCoinsMethodProps {
+  method: string;
 }

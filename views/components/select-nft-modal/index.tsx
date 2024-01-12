@@ -12,30 +12,19 @@ import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { useWeb3 } from '@/hooks/use-web3';
 import { SearchSVG, TimesSVG } from '@/svg';
 
-import {
-  SearchTokenForm,
-  SelectTokenModalProps,
-  TokenOrigin,
-} from './select-token-modal.types';
-import SelectTokenBaseTokens from './select-token-modal-base';
-import SelectTokenModalBody from './select-token-modal-body';
-import SelectTokenFilter from './select-token-modal-filter';
+import { SearchNFTForm, SelectNFTModalProps } from './select-nft-modal.types';
+import SelectTokenModalBody from './select-nft-modal-body';
 
-const SelectTokenModal: FC<SelectTokenModalProps> = ({
-  simple,
-  onSelect,
-  closeModal,
-}) => {
-  const { isFetchingCoinBalances } = useWeb3();
+const SelectNFTModal: FC<SelectNFTModalProps> = ({ onSelect, closeModal }) => {
+  const { isFetchingCoinBalances } = useWeb3(); // TODO: change the logic to NFT
 
-  const { control, register, setValue } = useForm<SearchTokenForm>({
+  const { register } = useForm<SearchNFTForm>({
     defaultValues: {
       search: '',
-      filter: TokenOrigin.All,
     },
   });
 
-  const handleSelectToken = (coin: CoinObject) => {
+  const handleSelectNFT = (coin: CoinObject) => {
     onSelect(coin);
     closeModal();
   };
@@ -64,7 +53,7 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
       >
         <Box />
         <Typography variant="title" size="large">
-          Select Token
+          Select NFT
         </Typography>
         <Button variant="text" isIcon onClick={closeModal} mr="-0.5rem">
           <TimesSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
@@ -74,19 +63,13 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
         <Box>
           <TextField
             fontSize="medium"
-            placeholder="Sui"
-            label="Search token"
+            label="Search NFT"
+            placeholder="NFT Name"
             {...register('search')}
             fieldProps={{ height: '3.5rem', mb: 'm', borderRadius: 'xs' }}
             Prefix={<SearchSVG maxWidth="1rem" maxHeight="1rem" width="100%" />}
           />
         </Box>
-        {!simple && (
-          <>
-            <SelectTokenFilter control={control} setValue={setValue} />
-            <SelectTokenBaseTokens handleSelectToken={handleSelectToken} />
-          </>
-        )}
       </Box>
       <Motion
         bg="#B6C4FF33"
@@ -96,13 +79,12 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
         animate={{ height: 'auto' }}
       >
         <SelectTokenModalBody
-          control={control}
           loading={isFetchingCoinBalances}
-          handleSelectToken={handleSelectToken}
+          handleSelectNFT={handleSelectNFT}
         />
       </Motion>
     </Motion>
   );
 };
 
-export default SelectTokenModal;
+export default SelectNFTModal;

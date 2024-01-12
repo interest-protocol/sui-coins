@@ -1,42 +1,28 @@
 import { Box, Theme, Typography, useTheme } from '@interest-protocol/ui-kit';
-import {
-  ChangeEventHandler,
-  DragEventHandler,
-  FC,
-  useEffect,
-  useState,
-} from 'react';
+import { ChangeEventHandler, DragEventHandler, FC, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { FolderSVG } from '@/svg';
 
-import { IAirdropForm } from './airdrop.types';
-import { csvToAirdrop } from './airdrop.utils';
+import { IAirdropForm } from '../airdrop.types';
+import { csvToAirdrop } from '../airdrop.utils';
 import AirdropUploadFileCard from './airdrop-upload-file-card';
 
 const AirdropUploadFile: FC = () => {
   const { colors } = useTheme() as Theme;
   const [dragging, setDragging] = useState(false);
-  const [fileName, setFileName] = useState('');
-  const [fileSize, setFileSize] = useState<number>(0);
   const { setValue, control } = useFormContext<IAirdropForm>();
 
   const airdropList = useWatch({ control, name: 'airdropList' });
-
-  useEffect(() => {
-    return () => {
-      setValue('airdropList', null);
-    };
-  }, [setValue]);
 
   const handleChangeFile: ChangeEventHandler<HTMLInputElement> = async (e) => {
     const file = e.target.files?.[0];
 
     if (!file) return toast.error('Something went wrong');
 
-    setFileName(file!.name);
-    setFileSize(Number((file!.size / (1024 * 1024)).toFixed(2)));
+    if (file.type !== 'text/csv')
+      return toast.error('Make sure that you are sending a CSV File');
 
     const airdrop = csvToAirdrop(await file.text(), toast.error);
 
@@ -79,7 +65,7 @@ const AirdropUploadFile: FC = () => {
         3. Upload file
       </Typography>
       {airdropList ? (
-        <AirdropUploadFileCard name={fileName} size={fileSize} />
+        <AirdropUploadFileCard name="Airdrop List" size={airdropList.length} />
       ) : (
         <Box
           p="m"

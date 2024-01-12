@@ -1,23 +1,25 @@
-import { Box, ProgressIndicator, Typography } from '@interest-protocol/ui-kit';
+import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-const FetchingToken: FC = () => (
+import { NoSearchSVG } from '@/svg';
+
+const NotFound: FC = () => (
   <Box
     p="4xl"
     gap="xl"
     flex="1"
     display="flex"
     overflowY="auto"
-    bg="lowContainer"
     color="onSurface"
+    bg="lowContainer"
     alignItems="center"
     flexDirection="column"
   >
-    <ProgressIndicator variant="loading" />
+    <NoSearchSVG maxHeight="4rem" maxWidth="4rem" width="100%" />
     <Typography variant="body" size="medium">
-      Loading...
+      Not Found
     </Typography>
   </Box>
 );
 
-export default FetchingToken;
+export default NotFound;
