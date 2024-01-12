@@ -1,6 +1,10 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import {
+  isValidSuiAddress,
+  normalizeSuiAddress,
+  SUI_TYPE_ARG,
+} from '@mysten/sui.js/utils';
 import { useWalletKit } from '@mysten/wallet-kit';
 import BigNumber from 'bignumber.js';
 import { useGetAllCoins } from 'hooks/use-get-all-coins';
@@ -167,7 +171,7 @@ const AirdropButton: FC<AirdropButtonProps> = ({ setIsProgressView }) => {
           typeArguments: [token.type],
           arguments: [
             coinToSend,
-            txb.pure(batch.map((x) => x.address)),
+            txb.pure(batch.map((x) => normalizeSuiAddress(x.address))),
             txb.pure(batch.map((x) => x.amount)),
           ],
         });
