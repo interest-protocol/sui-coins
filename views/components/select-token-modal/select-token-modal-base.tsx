@@ -65,6 +65,7 @@ const SelectTokenBaseTokens: FC<SelectTokenBaseTokensProps> = ({
       display="grid"
       flexWrap="wrap"
       gridTemplateColumns="1fr 1fr 1fr 1fr"
+      onClick={() => console.log('coin selected')}
     >
       {DEX_MAIN_TOKENS[network].map((token) => (
         <SelectTokenBaseTokenItem
