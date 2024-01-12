@@ -58,7 +58,7 @@ export interface SelectTokenBaseTokensProps {
 }
 
 export interface SelectTokenBaseTokenItemProps
-  extends Omit<CoinObject, 'decimals'> {
+  extends Pick<CoinObject, 'type' | 'symbol'> {
   network: Network;
   handleSelectToken: () => void;
 }

@@ -7,8 +7,6 @@ import { Network } from '@/constants';
 import { DEX_MAIN_TOKENS } from '@/constants/dex';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks/use-web3';
-import { FixedPointMath } from '@/lib';
-import { ZERO_BIG_NUMBER } from '@/utils';
 
 import {
   SelectTokenBaseTokenItemProps,
@@ -70,17 +68,9 @@ const SelectTokenBaseTokens: FC<SelectTokenBaseTokensProps> = ({
       {DEX_MAIN_TOKENS[network].map((token) => (
         <SelectTokenBaseTokenItem
           key={v4()}
-          network={network}
-          handleSelectToken={() =>
-            handleSelectToken({
-              ...token,
-              balance: FixedPointMath.toNumber(
-                coinsMap[token.type]?.totalBalance || ZERO_BIG_NUMBER,
-                token.decimals
-              ),
-            })
-          }
           {...token}
+          network={network}
+          handleSelectToken={() => handleSelectToken(coinsMap[token.type])}
         />
       ))}
     </Box>
