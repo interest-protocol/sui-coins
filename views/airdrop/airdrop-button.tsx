@@ -1,10 +1,6 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-import {
-  isValidSuiAddress,
-  normalizeSuiAddress,
-  SUI_TYPE_ARG,
-} from '@mysten/sui.js/utils';
+import { normalizeSuiAddress, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import { useWalletKit } from '@mysten/wallet-kit';
 import BigNumber from 'bignumber.js';
 import { useGetAllCoins } from 'hooks/use-get-all-coins';
