@@ -15,9 +15,9 @@ const ActionGroup: FC<ActionGroupProps> = ({ showSearchView }) => {
   return (
     <>
       <Box
-        display={['none', 'none', 'none', 'flex']}
         gap="0.25rem"
         alignItems="center"
+        display={['none', 'none', 'none', 'flex']}
       >
         <TextField
           Prefix={
@@ -28,11 +28,13 @@ const ActionGroup: FC<ActionGroupProps> = ({ showSearchView }) => {
           placeholder="Search"
           fieldProps={{
             width: '13rem',
+            borderRadius: 'xs',
           }}
         />
         <Button
           py="0.725rem"
           variant="tonal"
+          borderRadius="xs"
           bg="#00000016"
           onClick={gotoCreatePool}
           SuffixIcon={
