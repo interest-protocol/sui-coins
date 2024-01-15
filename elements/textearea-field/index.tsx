@@ -1,4 +1,4 @@
-import { Box } from '@interest-protocol/ui-kit';
+import { Box, Typography } from '@interest-protocol/ui-kit';
 import stylin from '@stylin.js/react';
 import { FC, forwardRef, PropsWithRef, RefAttributes } from 'react';
 
@@ -11,53 +11,40 @@ const TextFieldElement = stylin<TextAreaElementProps & RefAttributes<unknown>>(
 )();
 
 const TextareaField: FC<PropsWithRef<TextareaFieldProps>> = forwardRef(
-  (
-    {
-      label,
-      // supportingText,
-      fieldProps,
-      status,
-      ...props
-    },
-    ref
-  ) => {
+  ({ label, fieldProps, status, ...props }, ref) => {
     return (
       <Box>
         {label && (
-          <Box
+          <Typography
             mb="xs"
             as="label"
-            display="block"
-            color="#1B1B1F"
-            fontWeight="500"
-            lineHeight="1rem"
-            fontSize="0.75rem"
+            size="large"
+            variant="body"
+            color="onSurface"
           >
             {label}
-          </Box>
+          </Typography>
         )}
         <Box
           display="flex"
           borderRadius="xs"
+          border="1px solid"
           alignItems="center"
-          borderStyle="solid"
-          borderWidth="1px"
-          borderColor="#76767A"
+          borderColor="outlineVariant"
           {...fieldProps}
         >
           <TextFieldElement
             ref={ref}
-            borderRadius="inherit"
-            outline="none"
+            px="m"
+            py="xs"
             rows={5}
-            border="none"
             width="100%"
-            px="1rem"
-            py="0.5rem"
-            // all="unset"
-            fontSize="1rem"
+            fontSize="m"
+            border="none"
+            outline="none"
+            lineHeight="m"
             fontWeight="500"
-            lineHeight="1.5rem"
+            borderRadius="inherit"
             {...props}
           />
         </Box>

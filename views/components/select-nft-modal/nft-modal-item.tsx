@@ -35,8 +35,8 @@ const NFTModalItem: FC<NFTModalItemProps> = ({
     <Box
       p="xl"
       display="flex"
-      color="textSoft"
       cursor="pointer"
+      color="onSurface"
       alignItems="center"
       justifyContent="space-between"
       onClick={selected ? undefined : onClick}
