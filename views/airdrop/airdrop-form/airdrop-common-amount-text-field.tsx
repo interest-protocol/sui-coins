@@ -11,7 +11,8 @@ import { IAirdropForm } from '../airdrop.types';
 
 const AirdropCustomAmountTextField: FC = () => {
   const { network } = useNetwork();
-  const { register, setValue, control } = useFormContext<IAirdropForm>();
+  const { register, setValue, control, getValues } =
+    useFormContext<IAirdropForm>();
 
   const { type, symbol } = useWatch({ control, name: 'token' });
 
@@ -20,7 +21,15 @@ const AirdropCustomAmountTextField: FC = () => {
       placeholder="0"
       {...register('commonAmount', {
         onChange: (v: ChangeEvent<HTMLInputElement>) => {
-          setValue('commonAmount', parseInputEventToNumberString(v));
+          const value = parseInputEventToNumberString(v);
+          setValue('commonAmount', value || '0');
+          setValue(
+            'airdropList',
+            getValues('airdropList')?.map(({ address }) => ({
+              address,
+              amount: value || '0',
+            })) ?? null
+          );
         },
       })}
       fieldProps={{

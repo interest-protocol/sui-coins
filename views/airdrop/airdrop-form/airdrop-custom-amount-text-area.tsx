@@ -13,12 +13,15 @@ const AirdropCustomAmountTextArea: FC = () => {
     <TextareaField
       fieldProps={{ borderColor: 'outlineVariant' }}
       label="Enter Separate wallet addresses on a new line"
-      onChange={(e) =>
-        setValue(
-          'airdropList',
-          textToAirdrop(e.target.value, getValues('commonAmount'), toast.error)
-        )
-      }
+      onChange={(e) => {
+        const airdropValue = textToAirdrop(
+          e.target.value,
+          getValues('commonAmount'),
+          toast.error
+        );
+
+        setValue('airdropList', airdropValue);
+      }}
     />
   );
 };

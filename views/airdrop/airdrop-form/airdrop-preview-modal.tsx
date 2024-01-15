@@ -11,7 +11,7 @@ import { ArrowLeftSVG, TimesSVG } from '@/svg';
 
 import { AirdropPreviewModalProps, IAirdropForm } from '../airdrop.types';
 import { getSymbol } from '../airdrop.utils';
-import AirdropButton from './airdrop-preview-button';
+import AirdropConfirmButton from './airdrop-confirm-button';
 import AirdropSummary from './airdrop-summary';
 
 const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
@@ -120,7 +120,7 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
         </Box>
         <Box width="100%" p="xl">
           <AirdropSummary method={method} />
-          <AirdropButton setIsProgressView={setIsProgressView} />
+          <AirdropConfirmButton setIsProgressView={setIsProgressView} />
         </Box>
       </Box>
     </Modal>

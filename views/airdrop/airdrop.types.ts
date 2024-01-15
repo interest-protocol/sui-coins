@@ -33,7 +33,7 @@ export interface AirdropUploadFileCardProps {
   name: string;
 }
 
-export interface AirdropPreviewButtonProps {
+export interface AirdropConfirmButtonProps {
   setIsProgressView: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -58,4 +58,8 @@ export interface AirdropSummaryProps {
 
 export interface AirdropNftCoinsMethodProps {
   method: string;
+}
+
+export interface AirdropPreviewButtonProps {
+  handleOpenSummaryModal: () => void;
 }
