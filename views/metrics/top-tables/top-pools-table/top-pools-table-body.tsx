@@ -12,12 +12,9 @@ const TopPoolsTableBody: FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(
-      () => {
-        setLoading(false);
-      },
-      Math.random() * 5000 + 1500
-    );
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
   }, []);
 
   return !loading ? (
