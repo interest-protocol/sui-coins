@@ -21,9 +21,9 @@ const SwapFormFieldSlider: FC<SwapSliderProps> = ({
           : 0
       }
       onChange={(value: number) => {
+        setValue('lock', false);
         setValue('maxValue', value === 100);
         setValue('from.value', `${(value / 100) * balance}`);
-        setValue('lock', false);
       }}
     />
   </Box>
