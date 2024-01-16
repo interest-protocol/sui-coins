@@ -51,7 +51,7 @@ const SelectToken: FC<SelectTokenProps> = ({ label }) => {
         onClick={openModal}
       >
         <Typography size="large" variant="label">
-          {!setValue || 'select token'}
+          Select Token
         </Typography>
         <ChevronRightSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
       </Button>
