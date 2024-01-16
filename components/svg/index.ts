@@ -68,6 +68,7 @@ export { default as SwitchSVG } from './switch';
 export { default as TelegramSVG } from './telegram';
 export { default as TickSVG } from './tick';
 export { default as TimesSVG } from './times';
+export { default as TrendUpSVG } from './trend-up';
 export { default as USDCSVG } from './usdc';
 export { default as USDTSVG } from './usdt';
 export { default as UserSVG } from './user';
