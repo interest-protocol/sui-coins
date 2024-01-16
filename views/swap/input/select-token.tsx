@@ -1,9 +1,17 @@
 import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
+import BigNumber from 'bignumber.js';
+import { useRouter } from 'next/router';
+import { pathOr } from 'ramda';
 import { FC } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
+import { Network, TOKEN_ICONS } from '@/constants';
+import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
+import { useWeb3 } from '@/hooks/use-web3';
+import { FixedPointMath } from '@/lib';
 import { ChevronRightSVG } from '@/svg';
+import { updateURL } from '@/utils';
 import SelectTokenModal from '@/views/components/select-token-modal';
 import { CoinDataWithBalance } from '@/views/components/select-token-modal/select-token-modal.types';
 
@@ -11,16 +19,67 @@ import { SwapForm } from '../swap.types';
 import { SelectTokenProps } from './input.types';
 
 const SelectToken: FC<SelectTokenProps> = ({ label }) => {
+  const { coinsMap } = useWeb3();
+  const { network } = useNetwork();
+  const { pathname } = useRouter();
   const { setModal, handleClose } = useModal();
 
-  const { setValue } = useFormContext<SwapForm>();
+  const isMainnet = Network.MAINNET === network;
 
-  const onSelect = (coin: CoinDataWithBalance) => {
+  const { setValue, control } = useFormContext<SwapForm>();
+
+  const currentToken = useWatch({
+    control,
+    name: label,
+  });
+
+  const { symbol: currentSymbol, type: currentType } = currentToken;
+
+  const Icon = TOKEN_ICONS[network][isMainnet ? currentType : currentSymbol];
+
+  const changeURL = (type: string) => {
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set(label, type);
+
+    updateURL(
+      `${pathname}?from=${searchParams.get('from')}&to=${searchParams.get(
+        'to'
+      )}`
+    );
+  };
+
+  const oppositeType = useWatch({
+    control,
+    name: `${label === 'to' ? 'from' : 'to'}.type`,
+  });
+
+  const onSelect = ({ type, decimals, symbol }: CoinDataWithBalance) => {
+    if (type === oppositeType) {
+      setValue(label === 'to' ? 'from' : 'to', {
+        type: currentToken.type,
+        symbol: currentToken.symbol,
+        decimals: currentToken.decimals,
+        value: '',
+        balance: FixedPointMath.toNumber(
+          pathOr(BigNumber(0), [currentToken.type, 'totalBalance'], coinsMap)
+        ),
+        locked: false,
+      });
+    }
+
     setValue(label, {
-      ...coin,
+      type,
+      symbol,
+      decimals,
       value: '',
+      balance: FixedPointMath.toNumber(
+        pathOr(BigNumber(0), [type, 'totalBalance'], coinsMap)
+      ),
       locked: false,
     });
+    setValue(`${label === 'from' ? 'to' : 'from'}.value`, '');
+
+    changeURL(type);
   };
 
   const openModal = () =>
@@ -49,9 +108,21 @@ const SelectToken: FC<SelectTokenProps> = ({ label }) => {
         variant="tonal"
         fontSize="s"
         onClick={openModal}
+        {...(Icon && {
+          PrefixIcon: (
+            <Box as="span" display="inline-block">
+              <Icon
+                width="100%"
+                height="100%"
+                maxWidth="1rem"
+                maxHeight="1rem"
+              />
+            </Box>
+          ),
+        })}
       >
         <Typography size="large" variant="label">
-          Select Token
+          {currentSymbol ?? 'Select Token'}
         </Typography>
         <ChevronRightSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
       </Button>
