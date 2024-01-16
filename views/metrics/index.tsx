@@ -3,9 +3,7 @@ import { FC } from 'react';
 
 import Layout from '@/components/layout';
 
-import CreateTokenForm from './create-token-form';
-
-const CreateToken: FC = () => (
+const Metrics: FC = () => (
   <Layout>
     <Typography
       my="6xl"
@@ -14,12 +12,10 @@ const CreateToken: FC = () => (
       textAlign="center"
       fontSize={['5xl', '8xl']}
     >
-      Create coin
+      Metrics
     </Typography>
-    <Box display="flex" justifyContent="center">
-      <CreateTokenForm />
-    </Box>
+    <Box minHeight="100vh" />
   </Layout>
 );
 
-export default CreateToken;
+export default Metrics;
