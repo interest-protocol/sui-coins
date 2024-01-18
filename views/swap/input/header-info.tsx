@@ -18,7 +18,7 @@ const HeaderInfo: FC<HeaderInfoProps> = ({ label, balance }) => (
         Balance:
       </Typography>
       <Typography variant="label" size="small" color="primary">
-        {balance}
+        {balance || 0}
       </Typography>
     </Box>
   </Box>

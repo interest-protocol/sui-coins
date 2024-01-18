@@ -1,16 +1,17 @@
-import { Box, Slider, TextField } from '@interest-protocol/ui-kit';
+import { Box, TextField } from '@interest-protocol/ui-kit';
 import { ChangeEvent, FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { parseInputEventToNumberString } from '@/utils';
 
 import { SwapForm } from '../swap.types';
+import SwapFormFieldSlider from '../swap-manager/swap-manager-slider';
 import HeaderInfo from './header-info';
 import { InputProps } from './input.types';
 import SelectToken from './select-token';
 
 const Input: FC<InputProps> = ({ label }) => {
-  const { control, register, setValue } = useFormContext<SwapForm>();
+  const { control, register, setValue, getValues } = useFormContext<SwapForm>();
 
   const balance = useWatch({
     control,
@@ -35,16 +36,20 @@ const Input: FC<InputProps> = ({ label }) => {
               setValue?.(`${label}.value`, parseInputEventToNumberString(v));
             },
           })}
-          fieldProps={{ borderColor: 'transparent', width: '100%' }}
+          fieldProps={{
+            borderColor: 'transparent',
+            borderRadius: 'xs',
+            width: '100%',
+          }}
         />
       </Box>
-      <Box height="2rem">
+      <Box pb={label === 'to' ? '2xl' : 's'}>
         {label === 'from' && (
-          <Box px="xl">
-            <Slider
-              initial={0}
-              max={100}
-              onChange={() => console.log('range')}
+          <Box px="s">
+            <SwapFormFieldSlider
+              setValue={setValue}
+              balance={balance ?? 0}
+              currentValue={+getValues('from.value')}
             />
           </Box>
         )}

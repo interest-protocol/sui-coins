@@ -1,3 +1,5 @@
+import { UseFormSetValue } from 'react-hook-form';
+
 import { CoinData } from '@/interface';
 
 export interface ISwapSettings {
@@ -29,4 +31,18 @@ export interface SwapForm {
   disabled: boolean;
   swapPath: SwapPath;
   readyToSwap: boolean;
+}
+
+export interface SwapForm {
+  to: SwapToken;
+  from: SwapToken;
+  lock: boolean;
+  disabled: boolean;
+  maxValue: boolean;
+}
+
+export interface SwapSliderProps {
+  balance: number;
+  setValue: UseFormSetValue<SwapForm>;
+  currentValue: number;
 }
