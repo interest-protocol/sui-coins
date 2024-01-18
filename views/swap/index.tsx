@@ -10,6 +10,7 @@ import ManageSlippage from './manage-slippage';
 import SwapManager from './swap-manager';
 
 const Swap: FC = () => {
+  const openSwapPreview = false;
   const { getValues, setValue } = useFormContext();
 
   const flipToken = () => {
@@ -68,7 +69,8 @@ const Swap: FC = () => {
               bg="container"
               type="submit"
               variant={openSwapPreview ? 'tonal' : 'filled'}
-              color={openSwapPreview ? 'surface' : 'onSurface'}
+              color={openSwapPreview ? 'onSurface' : 'surface'}
+              cursor={openSwapPreview ? 'not-allowed' : 'pointer'}
               borderRadius="xs"
               fontFamily="Proto"
             >
