@@ -6,7 +6,7 @@ import { ErrorSVG, TickSVG } from '@/svg';
 
 import { TextAreaElementProps, TextareaFieldProps } from './textarea.types';
 
-const TextFieldElement = stylin<TextAreaElementProps & RefAttributes<unknown>>(
+const TextareaElement = stylin<TextAreaElementProps & RefAttributes<unknown>>(
   'textarea'
 )();
 
@@ -25,24 +25,27 @@ const TextareaField: FC<PropsWithRef<TextareaFieldProps>> = forwardRef(
         </Typography>
       )}
       <Box
+        px="s"
+        py="xs"
+        fontSize="m"
+        lineHeight="m"
         display="flex"
+        fontWeight="500"
         borderRadius="xs"
         border="1px solid"
         alignItems="center"
         borderColor="outlineVariant"
         {...fieldProps}
       >
-        <TextFieldElement
+        <TextareaElement
           ref={ref}
-          px="m"
-          py="xs"
           rows={5}
           width="100%"
-          fontSize="m"
           border="none"
           outline="none"
-          lineHeight="m"
-          fontWeight="500"
+          fontSize="inherit"
+          fontWeight="inherit"
+          lineHeight="inherit"
           borderRadius="inherit"
           {...props}
         />

@@ -1,4 +1,10 @@
-import { Box, Button, Typography } from '@interest-protocol/ui-kit';
+import {
+  Box,
+  Button,
+  Theme,
+  Typography,
+  useTheme,
+} from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 
@@ -19,6 +25,7 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
   isSuggested,
 }) => {
   const { network } = useNetwork();
+  const { colors } = useTheme() as Theme;
   const [favoriteTokens, setFavoriteTokens] = useLocalStorage<
     ReadonlyArray<string>
   >(`${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-tokens`, []);
@@ -40,10 +47,10 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
       cursor="pointer"
       alignItems="center"
       justifyContent="space-between"
+      nHover={{ bg: `${colors.primary}14` }}
       onClick={selected ? undefined : onClick}
       transition="background 500ms ease-in-out"
-      nHover={{ bg: 'rgba(0, 83, 219, 0.08)' }}
-      bg={selected ? 'rgba(0, 83, 219, 0.08)' : 'unset'}
+      bg={selected ? `${colors.primary}14` : 'unset'}
     >
       <Box display="flex" alignItems="center">
         <Box
