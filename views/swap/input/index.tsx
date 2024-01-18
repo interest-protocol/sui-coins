@@ -1,8 +1,8 @@
 import { Box } from '@interest-protocol/ui-kit';
-import { TextField } from 'elements';
 import { ChangeEvent, FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { TextField } from '@/components';
 import { parseInputEventToNumberString } from '@/utils';
 
 import { SwapForm } from '../swap.types';
