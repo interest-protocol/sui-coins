@@ -1,20 +1,24 @@
-import { Box, Button } from '@interest-protocol/ui-kit';
+import { Box, Button, Motion } from '@interest-protocol/ui-kit';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import Layout from '@/components/layout';
+import { useModal } from '@/hooks/use-modal';
 import { SwapSVG } from '@/svg';
 import { updateURL } from '@/utils';
 
 import Input from './input';
 import ManageSlippage from './manage-slippage';
 import SwapManager from './swap-manager';
+import SwapPreviewModal from './swap-preview-modal';
 
 const Swap: FC = () => {
-  const openSwapPreview = false;
   const { pathname } = useRouter();
   const { getValues, setValue } = useFormContext();
+  const { setModal, handleClose } = useModal();
+
+  const coinsExist = getValues('from') && getValues('to');
 
   const flipToken = () => {
     const tmpTo = getValues('to');
@@ -23,6 +27,27 @@ const Swap: FC = () => {
     setValue('from', { ...tmpTo, value: '' });
 
     updateURL(`${pathname}?from=${tmpTo.type}&to=${tmpFrom.type}`);
+  };
+
+  const openModal = () =>
+    setModal(
+      <Motion
+        animate={{ scale: 1 }}
+        initial={{ scale: 0.85 }}
+        transition={{ duration: 0.3 }}
+      >
+        <SwapPreviewModal closeModal={handleClose} onSelect={onSelect} />
+      </Motion>,
+      {
+        isOpen: true,
+        custom: true,
+        opaque: false,
+        allowClose: true,
+      }
+    );
+
+  const onSelect = () => {
+    console.log('select coin');
   };
 
   return (
@@ -72,13 +97,14 @@ const Swap: FC = () => {
               py="s"
               px="xl"
               fontSize="s"
-              bg="container"
+              bg={coinsExist ? 'filled' : 'container'}
               type="submit"
-              variant={openSwapPreview ? 'tonal' : 'filled'}
-              color={openSwapPreview ? 'onSurface' : 'surface'}
-              cursor={openSwapPreview ? 'not-allowed' : 'pointer'}
+              variant={coinsExist ? 'filled' : 'tonal'}
+              color={coinsExist ? 'surface' : 'outlineVariant'}
+              cursor={coinsExist ? 'pointer' : 'not-allowed'}
               borderRadius="xs"
               fontFamily="Proto"
+              onClick={openModal}
             >
               Preview swap
             </Button>
