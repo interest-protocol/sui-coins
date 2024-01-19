@@ -58,10 +58,10 @@ const Input: FC<InputProps> = ({ label }) => {
           <Typography
             variant="body"
             size="small"
-            color={label ? 'onSurface' : 'outline'}
+            color={dollarValue ? 'onSurface' : 'outline'}
             mr="l"
           >
-            $ {dollarValue ?? 0} USD
+            $ {dollarValue || 0} USD
           </Typography>
         </Box>
       </Box>
