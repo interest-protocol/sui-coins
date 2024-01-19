@@ -1,4 +1,4 @@
-import { Box, TextField } from '@interest-protocol/ui-kit';
+import { Box, TextField, Typography } from '@interest-protocol/ui-kit';
 import { ChangeEvent, FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
@@ -13,6 +13,13 @@ import SelectToken from './select-token';
 const Input: FC<InputProps> = ({ label }) => {
   const { control, register, setValue, getValues } = useFormContext<SwapForm>();
 
+  const currentToken = useWatch({
+    control,
+    name: label,
+  });
+
+  const { value: dollarValue } = currentToken;
+
   const balance = useWatch({
     control,
     name: `${label}.balance`,
@@ -23,25 +30,40 @@ const Input: FC<InputProps> = ({ label }) => {
       <HeaderInfo label={label} balance={balance} setValue={setValue} />
       <Box pl="l" pt="m" display="flex" justifyContent="space-between">
         <SelectToken label={label} balance={balance} />
-        <TextField
-          pl="-1rem"
-          placeholder="0"
-          color="onSurface"
-          textAlign="right"
-          fontSize="2xl"
-          lineHeight="l"
-          fontFamily="Satoshi"
-          {...register(`${label}.value`, {
-            onChange: (v: ChangeEvent<HTMLInputElement>) => {
-              setValue?.(`${label}.value`, parseInputEventToNumberString(v));
-            },
-          })}
-          fieldProps={{
-            borderColor: 'transparent',
-            borderRadius: 'xs',
-            width: '100%',
-          }}
-        />
+        <Box
+          display="flex"
+          justifyContent="flex-end"
+          alignItems="flex-end"
+          flexDirection="column"
+        >
+          <TextField
+            pl="-1rem"
+            placeholder="0"
+            color="onSurface"
+            textAlign="right"
+            fontSize="2xl"
+            lineHeight="l"
+            fontFamily="Satoshi"
+            {...register(`${label}.value`, {
+              onChange: (v: ChangeEvent<HTMLInputElement>) => {
+                setValue?.(`${label}.value`, parseInputEventToNumberString(v));
+              },
+            })}
+            fieldProps={{
+              borderColor: 'transparent',
+              borderRadius: 'xs',
+              width: '100%',
+            }}
+          />
+          <Typography
+            variant="body"
+            size="small"
+            color={label ? 'onSurface' : 'outline'}
+            mr="l"
+          >
+            $ {dollarValue ?? 0} USD
+          </Typography>
+        </Box>
       </Box>
       <Box pb={label === 'to' ? '2xl' : 's'}>
         {label === 'from' && (
