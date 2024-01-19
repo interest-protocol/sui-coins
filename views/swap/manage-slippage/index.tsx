@@ -11,8 +11,11 @@ const ManageSlippage: FC = () => {
   const handleManageView = () => setOpenManage(not);
 
   return (
-    <Box>
-      <Box display="flex" flexDirection="column">
+    <Box mt="2rem">
+      <Typography variant="body" size="large" mb="l">
+        Manage your slippage
+      </Typography>
+      <Box bg="surface" display="flex" flexDirection="column" borderRadius="xs">
         <SlippageInfo isOpen={openManage} handleManageView={handleManageView} />
         {openManage && (
           <ManageSlippageForm handleManageView={handleManageView} />

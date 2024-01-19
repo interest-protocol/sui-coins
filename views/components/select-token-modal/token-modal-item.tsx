@@ -53,7 +53,7 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
           width="2.5rem"
           height="2.5rem"
           alignItems="center"
-          borderRadius="0.5rem"
+          borderRadius="xs"
           justifyContent="center"
         >
           <Icon filled width="100%" maxWidth="1.6rem" maxHeight="1.6rem" />
