@@ -4,39 +4,29 @@ import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import { useWalletKit } from '@mysten/wallet-kit';
 import BigNumber from 'bignumber.js';
 import { FC } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { AIRDROP_SEND_CONTRACT, EXPLORER_URL } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useSuiClient } from '@/hooks/use-sui-client';
 import { useWeb3 } from '@/hooks/use-web3';
-import { FixedPointMath } from '@/lib';
 import { showTXSuccessToast, sleep, throwTXIfNotSuccessful } from '@/utils';
 import { createObjectsParameter, splitArray } from '@/utils';
 
-import { BATCH_SIZE, RATE_LIMIT_DELAY } from './airdrop.constants';
-import { AirdropButtonProps, IAirdropForm } from './airdrop.types';
+import { BATCH_SIZE, RATE_LIMIT_DELAY } from '../airdrop.constants';
+import { AirdropConfirmButtonProps, IAirdropForm } from '../airdrop.types';
 
-const AirdropButton: FC<AirdropButtonProps> = ({ setIsProgressView }) => {
-  const { control, getValues, setValue } = useFormContext<IAirdropForm>();
+const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
+  setIsProgressView,
+}) => {
+  const { getValues, setValue } = useFormContext<IAirdropForm>();
   const { currentAccount } = useWalletKit();
   const { coinsMap } = useWeb3();
-  const { airdropList, token } = useWatch({ control });
+
   const { network } = useNetwork();
   const suiClient = useSuiClient();
   const { signTransactionBlock } = useWalletKit();
-  const isDisabled =
-    !airdropList ||
-    !token?.balance ||
-    token.balance <
-      FixedPointMath.toNumber(
-        airdropList?.reduce(
-          (acc, { amount }) => acc.plus(BigNumber(amount ?? 0)),
-          BigNumber(0)
-        ),
-        token.decimals
-      );
 
   const handleSend = async () => {
     setIsProgressView(true);
@@ -221,11 +211,20 @@ const AirdropButton: FC<AirdropButtonProps> = ({ setIsProgressView }) => {
 
   return (
     <Box display="flex" justifyContent="center">
-      <Button disabled={isDisabled} variant="filled" onClick={handleSend}>
-        Send
+      <Button
+        width="100%"
+        display="flex"
+        variant="filled"
+        onClick={handleSend}
+        borderRadius="0.5rem"
+        justifyContent="center"
+      >
+        <Typography variant="label" size="large">
+          Confirm airdrop
+        </Typography>
       </Button>
     </Box>
   );
 };
 
-export default AirdropButton;
+export default AirdropConfirmButton;

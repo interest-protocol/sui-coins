@@ -1,10 +1,4 @@
-import {
-  Box,
-  Tag,
-  Theme,
-  Typography,
-  useTheme,
-} from '@interest-protocol/ui-kit';
+import { Box, Tag, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
@@ -15,12 +9,10 @@ const SelectTokenFilter: FC<SelectTokenFilterProps> = ({
   control,
   setValue,
 }) => {
-  const { colors } = useTheme() as Theme;
   const filterSelected = useWatch({ control, name: 'filter' });
 
   return (
     <Box
-      px="m"
       gap="s"
       display="grid"
       flexWrap="wrap"
@@ -33,11 +25,18 @@ const SelectTokenFilter: FC<SelectTokenFilterProps> = ({
           variant="outline"
           justifyContent="center"
           onClick={() => setValue('filter', index)}
-          color={filterSelected == index ? 'primary' : ''}
-          borderColor={filterSelected == index ? 'primary' : ''}
-          bg={filterSelected == index ? `${colors.primary}14` : ''}
+          bg={filterSelected === index ? 'primary' : ''}
+          border={filterSelected === index ? 'none' : ''}
+          color={filterSelected === index ? 'onPrimary' : ''}
           nFocus={{
-            color: 'surface',
+            bg: filterSelected === index ? 'primary' : '',
+            border: filterSelected === index ? 'none' : '',
+            color: filterSelected === index ? 'onPrimary' : 'surface',
+          }}
+          nHover={{
+            bg: filterSelected === index ? 'primary' : '',
+            border: filterSelected === index ? 'none' : '',
+            color: filterSelected === index ? 'onPrimary' : '',
           }}
         >
           <Typography variant="label" size="large">

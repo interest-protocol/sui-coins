@@ -1,27 +1,22 @@
 import { SuiClient } from '@mysten/sui.js/client';
-import { CoinStruct, PaginatedCoins } from '@mysten/sui.js/src/client';
+import { PaginatedCoins } from '@mysten/sui.js/src/client';
 import { WalletAccount } from '@wallet-standard/base';
-import BigNumber from 'bignumber.js';
 import { ReactNode } from 'react';
 import { KeyedMutator } from 'swr';
 
+import {
+  CoinObject,
+  CoinsMap,
+} from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { LocalTokenMetadataRecord } from '@/interface';
-
-export interface Web3ManagerSuiObject {
-  type: string;
-  symbol: string;
-  totalBalance: BigNumber;
-  objects: ReadonlyArray<CoinStruct>;
-  decimals: number;
-}
 
 export interface Web3ManagerState {
   account: null | string;
-  coins: ReadonlyArray<Web3ManagerSuiObject>;
-  coinsMap: Record<string, Web3ManagerSuiObject>;
+  coins: ReadonlyArray<CoinObject>;
+  coinsMap: CoinsMap;
   connected: boolean;
   error: boolean;
-  mutate: KeyedMutator<PaginatedCoins['data'] | undefined>;
+  mutate: KeyedMutator<CoinsMap>;
   isFetchingCoinBalances: boolean;
   walletAccount: null | WalletAccount;
 }
@@ -30,10 +25,8 @@ export interface Web3ManagerProps {
   children: ReactNode;
 }
 
-export type CoinsMap = Web3ManagerState['coinsMap'];
-
 export interface ParseCoinsArgs {
-  data: PaginatedCoins['data'] | undefined | never[];
+  data: CoinsMap;
   localTokens: LocalTokenMetadataRecord;
 }
 

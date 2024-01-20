@@ -1,6 +1,6 @@
-import { CoinData } from '@/interface';
+import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 
-export interface TokenInfo extends CoinData {
+export interface TokenInfo extends CoinObject {
   value: `${number}`;
 }
 
