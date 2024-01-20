@@ -1,4 +1,4 @@
-import { CoinData } from '@/interface';
+import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 
 export interface ISwapSettings {
   slippage: string;
@@ -6,10 +6,9 @@ export interface ISwapSettings {
   speed: 'normal' | 'fast' | 'instant';
 }
 
-export interface SwapToken extends CoinData {
+export interface SwapToken extends CoinObject {
   value: string;
   locked: boolean;
-  balance: number | null;
 }
 
 export interface SwapTypeArgs {

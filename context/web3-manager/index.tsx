@@ -1,15 +1,12 @@
 import { useWalletKit } from '@mysten/wallet-kit';
-import { createContext, FC, useMemo } from 'react';
-import useSWR from 'swr';
-import { useReadLocalStorage } from 'usehooks-ts';
+import { values } from 'ramda';
+import { createContext, FC } from 'react';
 
-import { LOCAL_STORAGE_VERSION } from '@/constants';
-import { useSuiClient } from '@/hooks/use-sui-client';
-import { LocalTokenMetadataRecord } from '@/interface';
-import { makeSWRKey, noop } from '@/utils';
+import { useGetAllCoins } from '@/hooks/use-get-all-coins';
+import { CoinsMap } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { noop } from '@/utils';
 
 import { Web3ManagerProps, Web3ManagerState } from './web3-manager.types';
-import { getAllCoins, parseCoins } from './web3-manager.utils';
 
 const CONTEXT_DEFAULT_STATE = {
   account: null,
@@ -28,46 +25,21 @@ export const Web3ManagerContext = createContext<Web3ManagerState>(
 
 const Web3Manager: FC<Web3ManagerProps> = ({ children }) => {
   const { Provider } = Web3ManagerContext;
-  const client = useSuiClient();
   const { isError, currentAccount, isConnected } = useWalletKit();
 
-  const { data, error, mutate, isLoading } = useSWR(
-    makeSWRKey(
-      [currentAccount, currentAccount?.address],
-      client.getAllCoins.name
-    ),
-    async () => {
-      if (!currentAccount?.address) return;
-      return getAllCoins({ client, account: currentAccount.address });
-    },
-    {
-      revalidateOnFocus: false,
-      revalidateOnMount: true,
-      refreshWhenHidden: false,
-      refreshInterval: 10000,
-    }
-  );
-
-  const tokensMetadataRecord = useReadLocalStorage<LocalTokenMetadataRecord>(
-    `${LOCAL_STORAGE_VERSION}-sui-coins-tokens-metadata`
-  );
-
-  const [coins, coinsMap] = useMemo(
-    () => parseCoins({ data, localTokens: tokensMetadataRecord ?? {} }),
-    [data, tokensMetadataRecord, currentAccount?.address]
-  );
+  const { data, error, mutate, isLoading } = useGetAllCoins();
 
   return (
     <Provider
       value={{
-        account: currentAccount?.address || null,
-        walletAccount: currentAccount || null,
-        error: isError || !!error,
-        connected: isConnected,
-        coins,
-        coinsMap,
         mutate,
+        connected: isConnected,
+        error: isError || !!error,
         isFetchingCoinBalances: isLoading,
+        coinsMap: data ?? ({} as CoinsMap),
+        walletAccount: currentAccount || null,
+        coins: values(data ?? ({} as CoinsMap)),
+        account: currentAccount?.address || null,
       }}
     >
       {children}

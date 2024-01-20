@@ -2,10 +2,10 @@ import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { useModal } from '@/hooks/use-modal';
 import { BNBSVG, ChevronRightSVG } from '@/svg';
 import SelectTokenModal from '@/views/components/select-token-modal';
-import { CoinDataWithBalance } from '@/views/components/select-token-modal/select-token-modal.types';
 
 import { SwapForm } from '../swap.types';
 import { SelectTokenProps } from './input.types';
@@ -20,7 +20,7 @@ const SelectToken: FC<SelectTokenProps> = ({ label, balance }) => {
     name: label,
   });
 
-  const onSelect = (coin: CoinDataWithBalance) => {
+  const onSelect = (coin: CoinObject) => {
     setValue(label, {
       ...coin,
       value: '',

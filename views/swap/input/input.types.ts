@@ -7,7 +7,7 @@ export interface InputProps {
 }
 
 export interface SelectTokenProps extends InputProps {
-  balance: number | null;
+  balance: string;
 }
 
 export interface HeaderInfoProps extends SelectTokenProps {
