@@ -103,7 +103,7 @@ const SelectToken: FC<SelectTokenProps> = ({ label }) => {
     <Box position="relative">
       <Button
         bg="highestContainer"
-        p="m"
+        p="s"
         borderRadius="xs"
         variant="tonal"
         fontSize="s"
