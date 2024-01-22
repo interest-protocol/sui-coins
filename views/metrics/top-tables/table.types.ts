@@ -7,4 +7,5 @@ export interface TableRowProps {
 
 export interface TableHeadProps {
   title: string;
+  columns: ReadonlyArray<string>;
 }

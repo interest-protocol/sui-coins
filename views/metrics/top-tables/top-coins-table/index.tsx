@@ -1,8 +1,8 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
+import TableHead from '../table-head';
 import TopPoolsTableBody from './top-pools-table-body';
-import TopPoolsTableHead from './top-pools-table-head';
 
 const TopCoinsTable: FC = () => {
   return (
@@ -18,7 +18,10 @@ const TopCoinsTable: FC = () => {
       bg="lowestContainer"
     >
       <Box minWidth="55em">
-        <TopPoolsTableHead title="Top coins" />
+        <TableHead
+          title="Top coins"
+          columns={['Coins', 'TVL', '1d volume', '30d volume']}
+        />
         <TopPoolsTableBody />
       </Box>
     </Box>
