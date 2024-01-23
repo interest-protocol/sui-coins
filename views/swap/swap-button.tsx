@@ -170,21 +170,61 @@ const SwapButton = () => {
         message: 'We are swapping, and you will let you know when it is done',
       },
       success: {
-        onClose: handleClose,
         title: 'Swap Successfully',
         message:
-          'Your swap was successfully, and you can check it on the Explorer',
-        primaryButton: {
-          label: 'See on Explorer',
-          onClick: gotoExplorer,
-        },
+          'Your swap was successfully, and you can check it on the Explorer.',
+        primaryButton: (
+          <Button
+            width="100%"
+            py="0.62rem"
+            variant="filled"
+            borderRadius="xs"
+            onClick={gotoExplorer}
+          >
+            <Typography
+              size="large"
+              width="100%"
+              variant="label"
+              textAlign="center"
+            >
+              See on Explorer
+            </Typography>
+          </Button>
+        ),
+        secondaryButton: (
+          <Button
+            mr="s"
+            borderRadius="xs"
+            variant="outline"
+            onClick={handleClose}
+          >
+            Close
+          </Button>
+        ),
       },
       error: {
-        onClose: handleClose,
         title: 'Swap Failure',
         message:
           'Your swap failed, please try again or contact the support team',
-        primaryButton: { label: 'Try again', onClick: handleClose },
+        primaryButton: (
+          <Button
+            bg="error"
+            width="100%"
+            py="0.62rem"
+            variant="filled"
+            borderRadius="xs"
+            onClick={handleClose}
+          >
+            <Typography
+              size="large"
+              width="100%"
+              variant="label"
+              textAlign="center"
+            >
+              Try again
+            </Typography>
+          </Button>
+        ),
       },
     });
   };
