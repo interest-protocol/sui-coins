@@ -8,12 +8,7 @@ const HeaderInfo: FC<HeaderInfoProps> = ({ label, balance }) => (
     <Typography variant="label" size="small">
       {label}
     </Typography>
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      gap="0.2rem"
-    >
+    <Box display="flex" justifyContent="center" alignItems="center" gap="2xs">
       <Typography variant="label" size="small">
         Balance:
       </Typography>

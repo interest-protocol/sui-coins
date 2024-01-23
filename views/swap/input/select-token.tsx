@@ -3,7 +3,8 @@ import BigNumber from 'bignumber.js';
 import { useRouter } from 'next/router';
 import { pathOr } from 'ramda';
 import { FC } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
+
 import { Network, TOKEN_ICONS } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';

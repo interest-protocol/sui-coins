@@ -63,7 +63,7 @@ const SelectTokenBaseTokens: FC<SelectTokenBaseTokensProps> = ({
       display="grid"
       flexWrap="wrap"
       gridTemplateColumns="1fr 1fr 1fr 1fr"
-      gap={['0.25rem', '0.25rem', '0.25rem', 'xs'
+      gap={['0.25rem', '0.25rem', '0.25rem', 'xs']}
     >
       {DEX_MAIN_TOKENS[network].map((token) => (
         <SelectTokenBaseTokenItem
