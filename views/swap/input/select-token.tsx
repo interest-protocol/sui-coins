@@ -13,6 +13,7 @@ import { FixedPointMath } from '@/lib';
 import { ChevronRightSVG } from '@/svg';
 import { updateURL } from '@/utils';
 import SelectTokenModal from '@/views/components/select-token-modal';
+import { CoinDataWithBalance } from '@/views/components/select-token-modal/select-token-modal.types';
 
 import { SwapForm } from '../swap.types';
 import { SelectTokenProps } from './input.types';
