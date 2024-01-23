@@ -10,7 +10,7 @@ import { COIN_METADATA } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useSuiClient } from '@/hooks/use-sui-client';
 import { LocalTokenMetadataRecord } from '@/interface';
-import { makeSWRKey, normalizeSuiType, safeSymbol } from '@/utils';
+import { makeSWRKey, normalizeSuiType, safeSymbol, sleep } from '@/utils';
 
 import { CoinsMap, TGetAllCoins } from './use-get-all-coins.types';
 
@@ -42,12 +42,14 @@ export const useGetAllCoins = () => {
       if (!currentAccount) return {} as CoinsMap;
       const coinsRaw = await getAllCoins(suiClient, currentAccount.address);
 
-      const coinsMetadata: ReadonlyArray<CoinMetadata | null> =
-        await Promise.all(
-          coinsRaw.map(({ coinType }) =>
-            suiClient.getCoinMetadata({ coinType })
-          )
-        );
+      const coinTypesArray = coinsRaw.map(({ coinType }) => coinType);
+
+      const coinsMetadata: Array<CoinMetadata | null> = [];
+
+      for await (const coinType of coinTypesArray) {
+        await sleep(350);
+        coinsMetadata.push(await suiClient.getCoinMetadata({ coinType }));
+      }
 
       return coinsRaw.reduce((acc, { coinType, ...coinRaw }, i) => {
         const type = normalizeSuiType(coinType);
