@@ -4,7 +4,7 @@ import { TOKEN_SYMBOL } from '@/lib';
 
 export type BigNumberish = BigNumber | bigint | string | number;
 
-export interface CoinData {
+interface CoinData {
   type: string;
   decimals: number;
   symbol: TOKEN_SYMBOL | string;

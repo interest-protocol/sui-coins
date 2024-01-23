@@ -3,8 +3,7 @@ import BigNumber from 'bignumber.js';
 import { useRouter } from 'next/router';
 import { pathOr } from 'ramda';
 import { FC } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
-
+import { useFormContext } from 'react-hook-form';
 import { Network, TOKEN_ICONS } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
@@ -13,7 +12,6 @@ import { FixedPointMath } from '@/lib';
 import { ChevronRightSVG } from '@/svg';
 import { updateURL } from '@/utils';
 import SelectTokenModal from '@/views/components/select-token-modal';
-import { CoinDataWithBalance } from '@/views/components/select-token-modal/select-token-modal.types';
 
 import { SwapForm } from '../swap.types';
 import { SelectTokenProps } from './input.types';

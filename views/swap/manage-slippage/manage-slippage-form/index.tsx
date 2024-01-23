@@ -62,7 +62,8 @@ const ManageSlippageForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
             fieldProps={{
               borderRadius: 'xs',
               mr: 'xs',
-              width: '113%',
+              width: ['100%', '100%', '100%', '113%'],
+
             }}
             Suffix={
               <Box display="flex">

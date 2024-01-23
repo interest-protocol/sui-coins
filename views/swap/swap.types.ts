@@ -1,5 +1,4 @@
 import { UseFormSetValue } from 'react-hook-form';
-
 import { CoinData } from '@/interface';
 
 export interface ISwapSettings {
@@ -11,7 +10,6 @@ export interface ISwapSettings {
 export interface SwapToken extends CoinData {
   value: string;
   locked: boolean;
-  balance: number | null;
 }
 
 export interface SwapTypeArgs {
