@@ -98,7 +98,7 @@ const Swap: FC = () => {
               px="xl"
               fontSize="s"
               bg={coinsExist ? 'filled' : 'container'}
-              type="submit"
+              type="button"
               variant={coinsExist ? 'filled' : 'tonal'}
               color={coinsExist ? 'surface' : 'outlineVariant'}
               cursor={coinsExist ? 'pointer' : 'not-allowed'}

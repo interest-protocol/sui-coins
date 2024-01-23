@@ -77,12 +77,12 @@ const SwapPage: NextPage = () => {
   }, [coinsMap]);
 
   return (
-    <ModalProvider>
-      <FormProvider {...form}>
+    <FormProvider {...form}>
+      <ModalProvider>
         <SEO pageTitle="Swap" />
         <Swap />
-      </FormProvider>
-    </ModalProvider>
+      </ModalProvider>
+    </FormProvider>
   );
 };
 

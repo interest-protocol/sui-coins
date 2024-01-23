@@ -1,25 +1,40 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 
-import { SUISVG } from '@/svg';
+import { Network, TOKEN_ICONS } from '@/constants';
+import { useNetwork } from '@/context/network';
+import { formatDollars } from '@/utils';
 
+import { SwapForm } from '../swap.types';
 import PreviewModalHeader from './preview-modal-header';
 import { PreviewModalInputProps } from './swap-preview-modal.types';
-//import Token from './token';
 
 const PreviewModalInput: FC<PreviewModalInputProps> = ({
   label,
   alternativeText,
-  value,
 }) => {
-  //const { control, register, setValue, getValues } = useFormContext<SwapForm>();
+  const { network } = useNetwork();
+  const isMainnet = Network.MAINNET === network;
+
+  const { control } = useFormContext<SwapForm>();
+
+  const currentToken = useWatch({
+    control,
+    name: label,
+  });
+
+  const {
+    symbol: currentSymbol,
+    type: currentType,
+    balance: currentBalance,
+    value: currentValue,
+  } = currentToken;
+
+  const Icon = TOKEN_ICONS[network][isMainnet ? currentType : currentSymbol];
   return (
     <Box p="m" pt="2xs">
-      <PreviewModalHeader
-        label={label}
-        alternativeText={alternativeText}
-        value={value}
-      />
+      <PreviewModalHeader label={label} alternativeText={alternativeText} />
       <Box
         p="s"
         display="flex"
@@ -42,7 +57,14 @@ const PreviewModalInput: FC<PreviewModalInputProps> = ({
             display="inline-flex"
             justifyContent="center"
           >
-            <SUISVG maxWidth="2rem" maxHeight="2rem" width="100%" />
+            {Icon && (
+              <Icon
+                width="100%"
+                height="100%"
+                maxWidth="1rem"
+                maxHeight="1rem"
+              />
+            )}
           </Box>
           <Box
             display="flex"
@@ -52,10 +74,10 @@ const PreviewModalInput: FC<PreviewModalInputProps> = ({
             mx="m"
           >
             <Typography variant="body" size="large">
-              SUI
+              {currentSymbol}
             </Typography>
             <Typography variant="body" size="small" color="outline">
-              Symbol
+              {currentSymbol}
             </Typography>
           </Box>
         </Box>
@@ -66,10 +88,10 @@ const PreviewModalInput: FC<PreviewModalInputProps> = ({
           flexDirection="column"
         >
           <Typography variant="title" size="large">
-            0
+            {currentBalance}
           </Typography>
           <Typography variant="body" size="small" color="outline">
-            {`$${value} USD`}
+            {formatDollars(Number(currentValue ?? '0'))} USD
           </Typography>
         </Box>
       </Box>

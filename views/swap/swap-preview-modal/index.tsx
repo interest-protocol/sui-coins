@@ -72,23 +72,29 @@ const SwapPreviewModal: FC<SelectTokenModalProps> = ({
         </Button>
       </Box>
       <Box>
-        <PreviewModalInput label="from" value={390.09} />
-        <PreviewModalInput label="to" alternativeText="Estimated" value={350} />
-      </Box>
-      <PreviewModalSummary exchangeRate={0.7} exchangeFee={3} networkFee={2} />
-      <Box my="m" mx="m">
-        <Typography variant="body" size="medium" color="outline">
-          Network fees are set by “@network name”.
-          <a href="#" target="blank" style={anchorStyle}>
-            {' '}
-            Learn more about fees.{' '}
-          </a>
-          Final amount may change due to market activity. By approving this Swap
-          you agree to Interest protocol Refund Policy.
-        </Typography>
-      </Box>
-      <Box mx="m">
-        <ConfirmSwapButton handleConfirmSwap={handleConfirmSwap} />
+        <Box>
+          <PreviewModalInput label="from" />
+          <PreviewModalInput label="to" alternativeText="Estimated" />
+        </Box>
+        <PreviewModalSummary
+          exchangeRate={0.7}
+          exchangeFee={3}
+          networkFee={2}
+        />
+        <Box my="m" mx="m">
+          <Typography variant="body" size="medium" color="outline">
+            Network fees are set by “@network name”.
+            <a href="#" target="blank" style={anchorStyle}>
+              {' '}
+              Learn more about fees.{' '}
+            </a>
+            Final amount may change due to market activity. By approving this
+            Swap you agree to Interest protocol Refund Policy.
+          </Typography>
+        </Box>
+        <Box mx="m" height="100%">
+          <ConfirmSwapButton handleConfirmSwap={handleConfirmSwap} />
+        </Box>
       </Box>
       {confirmSwap && (
         <Dialog

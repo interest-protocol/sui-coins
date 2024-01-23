@@ -12,7 +12,6 @@ export interface SelectTokenModalProps {
 export interface PreviewModalInputProps {
   label: 'to' | 'from';
   alternativeText?: string;
-  value: number;
 }
 
 export interface TokenProps extends PreviewModalInputProps {
