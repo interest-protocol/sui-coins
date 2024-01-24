@@ -17,7 +17,7 @@ const Footer: FC = () => (
         The website is maintained &
       </Typography>
       <Typography
-        gap="0.25rem"
+        gap="2xs"
         size="medium"
         display="flex"
         variant="label"

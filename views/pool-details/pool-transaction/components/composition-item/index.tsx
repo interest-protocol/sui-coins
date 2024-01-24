@@ -11,11 +11,11 @@ const CompositionItem: FC<CompositionItemProps> = ({
   return (
     <Box
       display="flex"
-      gap="0.75rem"
+      gap="s"
       alignItems="center"
       justifyContent="space-between"
     >
-      <Box display="flex" gap="0.75rem" alignItems="center">
+      <Box display="flex" gap="s" alignItems="center">
         <Box
           color="lowestContainer"
           bg="#000"
