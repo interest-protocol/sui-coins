@@ -11,6 +11,7 @@ export interface ISwapSettings {
 export interface SwapToken extends CoinData {
   value: string;
   locked: boolean;
+  balance: number | null;
 }
 
 export interface SwapTypeArgs {

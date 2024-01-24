@@ -6,7 +6,7 @@ import { SVGProps } from '@/components/svg/svg.types';
 import { CoinData } from '@/interface';
 
 export interface CoinDataWithBalance extends CoinData {
-  balance: number;
+  balance: string;
 }
 
 export interface LinearLoaderProps {
