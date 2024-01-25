@@ -7,7 +7,6 @@ import { SwapSVG } from '@/svg';
 
 import Input from './input';
 import ManageSlippage from './manage-slippage';
-import SwapButton from './swap-button';
 import SwapManager from './swap-manager';
 
 const Swap: FC = () => {
@@ -32,35 +31,58 @@ const Swap: FC = () => {
       <Box
         mx="auto"
         display="flex"
-        borderRadius="2rem"
-        bg="lowestContainer"
+        borderRadius="2xl"
         flexDirection="column"
         p={['xl', 'xl', 'xl', '7xl']}
         width={['100%', '100%', '100%', '39.75rem']}
       >
-        <Input label="from" />
-        <Box my="0.25rem" position="relative">
+        <Box py="xl" px="m" my="xs" borderRadius="xs" bg="lowestContainer">
+          <Input label="from" />
+          <Box my="0.25rem" position="relative">
+            <Box
+              left="45%"
+              position="absolute"
+              border="7px solid"
+              borderColor="surface"
+              borderRadius="s"
+            >
+              <Button
+                isIcon
+                variant="tonal"
+                bg="onPrimary"
+                color="primary"
+                onClick={flipToken}
+              >
+                <SwapSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+              </Button>
+            </Box>
+          </Box>
+        </Box>
+        <Box py="xl" px="m" borderRadius="xs" bg="lowestContainer">
+          <Input label="to" />
           <Box
-            left="45%"
-            top="-1.25rem"
-            borderRadius="full"
-            position="absolute"
-            bg="lowestContainer"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            mt="l"
+            mb="l"
           >
             <Button
-              isIcon
-              variant="outline"
-              color="primary"
-              onClick={flipToken}
+              bg="container"
+              opacity="0.4"
+              color="onSurface"
+              px="l"
+              py="s"
+              borderRadius="xs"
+              variant="tonal"
+              fontSize="s"
             >
-              <SwapSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+              Preview swap
             </Button>
           </Box>
         </Box>
-        <Input label="to" />
-        <ManageSlippage />
-        <Box mt="7xl" mx="auto">
-          <SwapButton />
+        <Box my="xs">
+          <ManageSlippage />
         </Box>
       </Box>
       <SwapManager />
