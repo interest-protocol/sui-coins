@@ -20,14 +20,14 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     Icon: DoubleChevronSVG,
     name: 'swap',
     path: Routes[RoutesEnum.Swap],
-    disabled: false,
+    disabled: true,
     networks: [Network.MAINNET, Network.TESTNET],
   },
   {
     Icon: PoolSVG,
     name: 'pool',
     path: Routes[RoutesEnum.Pools],
-    disabled: false,
+    disabled: true,
     networks: [Network.MAINNET, Network.TESTNET],
   },
   {

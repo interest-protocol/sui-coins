@@ -48,7 +48,7 @@ export const useGetOwnedTreasuryCap = () => {
   const { network } = useNetwork();
   const { currentAccount } = useWalletKit();
   return useSWR(
-    makeSWRKey([network, currentAccount?.address], suiClient.getAllCoins.name),
+    makeSWRKey([network, currentAccount?.address], 'useGetOwnedTreasuryCap '),
     async () => {
       if (!currentAccount) return null;
       return getOwned(suiClient, currentAccount.address);
