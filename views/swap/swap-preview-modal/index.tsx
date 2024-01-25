@@ -81,7 +81,7 @@ const SwapPreviewModal: FC<SelectTokenModalProps> = ({
           exchangeFee={3}
           networkFee={2}
         />
-        <Box my="m" mx="m">
+        <Box mt="xl" mb="2rem" mx="m">
           <Typography variant="body" size="medium" color="outline">
             Network fees are set by “@network name”.
             <a href="#" target="blank" style={anchorStyle}>
@@ -92,7 +92,7 @@ const SwapPreviewModal: FC<SelectTokenModalProps> = ({
             Swap you agree to Interest protocol Refund Policy.
           </Typography>
         </Box>
-        <Box mx="m" height="100%">
+        <Box mx="m" height="100%" py="s">
           <ConfirmSwapButton handleConfirmSwap={handleConfirmSwap} />
         </Box>
       </Box>

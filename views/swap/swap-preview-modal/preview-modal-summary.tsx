@@ -11,7 +11,7 @@ const PreviewModalSummary: FC<PreviewModalSummaryProps> = ({
   networkFee,
 }) => {
   return (
-    <Box display="flex" flexDirection="column" mx="m" mt="2xl" mb="s">
+    <Box display="flex" flexDirection="column" mx="m" my="9xl" mb="s">
       <Box bg="container" px="s" borderRadius="xs">
         <Box
           py="m"

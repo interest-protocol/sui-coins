@@ -36,7 +36,7 @@ const Swap: FC = () => {
         initial={{ scale: 0.85 }}
         transition={{ duration: 0.3 }}
       >
-        <SwapPreviewModal closeModal={handleClose} onSelect={onSelect} />
+        <SwapPreviewModal closeModal={handleClose} />
       </Motion>,
       {
         isOpen: true,
@@ -45,10 +45,6 @@ const Swap: FC = () => {
         allowClose: true,
       }
     );
-
-  const onSelect = () => {
-    console.log('select coin');
-  };
 
   return (
     <Layout>

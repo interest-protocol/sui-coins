@@ -6,7 +6,7 @@ import { SwapForm } from '../swap.types';
 
 export interface SelectTokenModalProps {
   closeModal: () => void;
-  onSelect: (coin: CoinDataWithBalance) => void;
+  onSelect?: (coin: CoinDataWithBalance) => void;
 }
 
 export interface PreviewModalInputProps {
