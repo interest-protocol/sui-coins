@@ -14,7 +14,7 @@ const PoolDeposit: FC = () => {
       >
         I would like to Deposit...
       </Typography>
-      <Box display="flex" flexDirection="column" gap="1rem">
+      <Box display="flex" flexDirection="column" gap="m">
         <PoolField name="firstToken" />
         <PoolField name="secondToken" />
       </Box>

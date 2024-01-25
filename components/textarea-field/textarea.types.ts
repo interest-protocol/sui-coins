@@ -1,15 +1,15 @@
+import { BoxProps } from '@interest-protocol/ui-kit';
 import { StylinComponentProps } from '@stylin.js/react';
-import { BoxProps } from 'elements/box/box.types';
-import { InputHTMLAttributes } from 'react';
+import { TextareaHTMLAttributes } from 'react';
 
-export type TextFieldElementProps = Omit<
-  InputHTMLAttributes<HTMLInputElement>,
+export type TextAreaElementProps = Omit<
+  TextareaHTMLAttributes<HTMLInputElement>,
   'color' | 'translate' | 'height' | 'width' | 'content'
 >;
 
-export interface TextFieldProps
+export interface TextareaFieldProps
   extends StylinComponentProps,
-    TextFieldElementProps {
+    TextAreaElementProps {
   label?: string;
   supportingText?: string;
   status?: 'error' | 'success' | 'none';
