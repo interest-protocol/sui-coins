@@ -81,3 +81,50 @@ const Input: FC<InputProps> = ({ label }) => {
 };
 
 export default Input;
+
+                setValue?.(`${label}.value`, parseInputEventToNumberString(v));
+              },
+            })}
+            fieldProps={{
+              borderColor: 'transparent',
+              borderRadius: 'xs',
+              width: '100%',
+            }}
+          />
+          <Typography
+            variant="body"
+            size="small"
+            color={dollarValue ? 'onSurface' : 'outline'}
+            mr="l"
+          >
+            $ {dollarValue || 0} USD
+          </Typography>
+        </Box>
+      </Box>
+      <Box pb={label === 'to' ? '2xl' : 's'}>
+        {label === 'from' && (
+          <Box px="s">
+            <SwapFormFieldSlider
+              setValue={setValue}
+              balance={balance ?? 0}
+              currentValue={+getValues('from.value')}
+            />
+          </Box>
+        )}
+      </Box>
+      <Box height="2rem">
+        {label === 'from' && (
+          <Box px="xl">
+            <Slider
+              initial={0}
+              max={100}
+              onChange={() => console.log('range')}
+            />
+          </Box>
+        )}
+      </Box>
+    </Box>
+  );
+};
+
+export default Input;

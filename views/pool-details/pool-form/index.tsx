@@ -57,8 +57,8 @@ const PoolForm: FC = () => {
       p={['m', 'm', 'm', '4xl']}
       flexDirection="column"
       bg="lowestContainer"
-      borderRadius="2rem"
-      gap="1.5rem"
+      borderRadius="xs"
+      gap="xl"
     >
       <Box overflowX="auto">
         <Tabs

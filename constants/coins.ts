@@ -1,7 +1,7 @@
 import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 
-import { CoinData } from '@/interface';
 import { TOKEN_SYMBOL } from '@/lib';
+import { CoinData } from '@/views/pool-details/pool-form/pool-form.types';
 
 import { Network, OBJECT_RECORD } from '.';
 

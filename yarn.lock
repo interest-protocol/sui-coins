@@ -727,6 +727,7 @@
   version "0.2.12-alpha"
   resolved "https://registry.yarnpkg.com/@interest-protocol/ui-kit/-/ui-kit-0.2.12-alpha.tgz#c67166e12e51be15ba8993432b84e75ae2b3553f"
   integrity sha512-j6/ZZ/9puchRbN7nYTTxB4AS9g1L1g17QHitNO+5ObYTU4q0SiPXSLxpip8//MHacclp2LlgPX24Nz6PLN/nxQ==
+
   dependencies:
     "@emotion/react" "^11.10.6"
     "@stylin.js/react" "^1.0.1"
