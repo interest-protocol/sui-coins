@@ -10,7 +10,7 @@ import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
-import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
+import { ChevronRightSVG } from '@/svg';
 import { updateURL } from '@/utils';
 import SelectTokenModal from '@/views/components/select-token-modal';
 import { CoinDataWithBalance } from '@/views/components/select-token-modal/select-token-modal.types';
@@ -124,11 +124,7 @@ const SelectToken: FC<SelectTokenProps> = ({ label }) => {
         <Typography size="large" variant="label">
           {currentSymbol ?? 'Select Token'}
         </Typography>
-        {currentSymbol ? (
-          <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-        ) : (
-          <ChevronRightSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-        )}
+        <ChevronRightSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
       </Button>
     </Box>
   );
