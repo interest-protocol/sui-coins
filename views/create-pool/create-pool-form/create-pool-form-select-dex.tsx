@@ -6,7 +6,7 @@ import { v4 } from 'uuid';
 
 import { ChevronRightSVG } from '@/svg';
 
-import { IPoolForm } from '../find-pool.types';
+import { IPoolForm } from '../create-pool.types';
 
 const DEX_LIST = ['Interest Protocol', 'Sui Coins'];
 
