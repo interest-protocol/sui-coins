@@ -1,16 +1,11 @@
 import { CoinMetadata } from '@mysten/sui.js/client';
 import { useWalletKit } from '@mysten/wallet-kit';
 import BigNumber from 'bignumber.js';
-import { pathOr } from 'ramda';
 import useSWR from 'swr';
-import { useReadLocalStorage } from 'usehooks-ts';
 
-import { LOCAL_STORAGE_VERSION } from '@/constants';
-import { COIN_METADATA } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useSuiClient } from '@/hooks/use-sui-client';
-import { LocalTokenMetadataRecord } from '@/interface';
-import { makeSWRKey, normalizeSuiType, safeSymbol } from '@/utils';
+import { makeSWRKey } from '@/utils';
 
 import { CoinsMap, TGetAllCoins } from './use-get-all-coins.types';
 
@@ -32,14 +27,10 @@ export const useGetAllCoins = () => {
   const { network } = useNetwork();
   const { currentAccount } = useWalletKit();
 
-  const tokensMetadataRecord = useReadLocalStorage<LocalTokenMetadataRecord>(
-    `${LOCAL_STORAGE_VERSION}-sui-coins-tokens-metadata`
-  );
-
   return useSWR(
     makeSWRKey([network, currentAccount?.address], suiClient.getAllCoins.name),
     async () => {
-      if (!currentAccount) return {} as CoinsMap;
+      if (!currentAccount) return null;
       const coinsRaw = await getAllCoins(suiClient, currentAccount.address);
 
       const coinsMetadata: ReadonlyArray<CoinMetadata | null> =
@@ -49,44 +40,34 @@ export const useGetAllCoins = () => {
           )
         );
 
-      return coinsRaw.reduce((acc, { coinType, ...coinRaw }, i) => {
-        const type = normalizeSuiType(coinType);
-        const { symbol, decimals, ...metadata } = coinsMetadata[i] ?? {
-          symbol:
-            pathOr(null, ['symbol'], coinsMetadata[i]) ??
-            pathOr(null, [type, 'symbol'], COIN_METADATA) ??
-            pathOr(null, [type, 'symbol'], tokensMetadataRecord) ??
-            safeSymbol(type, type).trim().split(' ').reverse()[0],
-          decimals:
-            pathOr(null, ['decimals'], coinsMetadata[i]) ??
-            pathOr(null, [type, 'decimals'], COIN_METADATA) ??
-            pathOr(-1, [type, 'decimals'], tokensMetadataRecord),
-          name: '',
-          description: '',
-        };
-
-        return {
+      return coinsRaw.reduce(
+        (acc, coinRaw, i) => ({
           ...acc,
-          [type]: {
-            ...acc[type],
+          [coinRaw.coinType]: {
+            ...acc[coinRaw.coinType],
             ...coinRaw,
-            type,
-            symbol,
-            decimals,
-            metadata,
             balance: BigNumber(coinRaw.balance)
-              .plus(BigNumber(acc[type]?.balance || '0'))
+              .plus(BigNumber(acc[coinRaw.coinType]?.balance || '0'))
               .toString(),
-            objects: (acc[type]?.objects ?? []).concat([{ ...coinRaw, type }]),
+            objects: (acc[coinRaw.coinType]?.objects ?? []).concat(coinRaw),
+            metadata: coinsMetadata[i]
+              ? (coinsMetadata[i] as CoinMetadata)
+              : {
+                  decimals: 0,
+                  name: '',
+                  description: '',
+                  symbol: '',
+                },
           },
-        };
-      }, {} as CoinsMap);
+        }),
+        {} as CoinsMap
+      );
     },
     {
-      revalidateOnFocus: false,
       revalidateOnMount: true,
+      revalidateOnFocus: false,
       refreshWhenHidden: false,
-      refreshInterval: 10000,
+      refreshInterval: 15000,
     }
   );
 };

@@ -7,7 +7,7 @@ import { COINS } from '@/constants/coins';
 import { ModalProvider } from '@/context/modal';
 import { useNetwork } from '@/context/network';
 import CreatePool from '@/views/create-pool';
-import { IPoolForm } from '@/views/find-pool/find-pool.types';
+import { IPoolForm } from '@/views/create-pool/create-pool.types';
 
 const CreatePoolPage: NextPage = () => {
   const { network } = useNetwork();

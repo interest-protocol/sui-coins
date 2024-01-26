@@ -36,31 +36,6 @@ export const csvToAirdrop = (
   }
 };
 
-export const textToAirdrop = (
-  text: string,
-  commonAmount: string,
-  onError: (message: string) => void
-): AirdropData[] => {
-  try {
-    const lines = text.split('\n');
-    const addresses = lines.filter((x) => isValidSuiAddress(x));
-
-    const data = [] as AirdropData[];
-
-    addresses.forEach((address) => {
-      data.push({
-        address,
-        amount: commonAmount,
-      });
-    });
-
-    return data;
-  } catch (error) {
-    onError(propOr('Something went wrong', 'message', error));
-    return [];
-  }
-};
-
 export const getBridgeIdentifier = (bridge: 'celer' | 'wormhole' | null) => {
   if (bridge === 'wormhole') return 'w';
   if (bridge === 'celer') return 'c';

@@ -1,4 +1,5 @@
-import { Box, Typography } from '@interest-protocol/ui-kit';
+import { Box } from '@interest-protocol/ui-kit';
+import { Typography } from 'elements';
 import { FC } from 'react';
 
 import {
@@ -11,16 +12,22 @@ import {
 } from '@/svg';
 
 const Footer: FC = () => (
-  <Box display="flex" flexDirection="column" textTransform="uppercase">
-    <Box textAlign="center" mb="l">
-      <Typography variant="label" size="medium">
+  <Box
+    fontSize="s"
+    display="flex"
+    fontFamily="Proto"
+    flexDirection="column"
+    textTransform="uppercase"
+  >
+    <Box textAlign="center" mb="l" fontFamily="inherit" fontSize="inherit">
+      <Typography fontFamily="inherit" fontSize="inherit">
         The website is maintained &
       </Typography>
       <Typography
-        gap="2xs"
-        size="medium"
+        gap="0.25rem"
         display="flex"
-        variant="label"
+        fontSize="inherit"
+        fontFamily="inherit"
         justifyContent="center"
       >
         Made with
@@ -28,10 +35,8 @@ const Footer: FC = () => (
         By Interest Protocol
       </Typography>
     </Box>
-    <Box textAlign="center" my="2xl">
-      <Typography variant="label" size="medium">
-        Follow us
-      </Typography>
+    <Box textAlign="center" my="2xl" fontSize="inherit" fontFamily="inherit">
+      <Box fontFamily="Proto">Follow us</Box>
       <Box display="flex" gap="xs" justifyContent="center" mt="s">
         <a
           href="https://discord.gg/interestprotocol"

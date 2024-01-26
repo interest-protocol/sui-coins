@@ -111,36 +111,17 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
             ? 'The airdrop has been sent'
             : `${failedItems.length} batches was not sent`}
       </Typography>
-      <Box display="flex" gap="s">
-        {error && (
-          <Button
-            variant="outline"
-            onClick={goBack}
-            justifyContent="center"
-            borderRadius="xs"
-            borderColor="outlineVariant"
-            nHover={{
-              borderColor: 'error',
-              color: 'error',
-            }}
-          >
-            Close
-          </Button>
-        )}
-        {(error || finished === 100) && (
-          <Button
-            flex="1"
-            variant="filled"
-            onClick={goBack}
-            justifyContent="center"
-            borderRadius="xs"
-            bg={error || failedItems.length ? 'error' : 'primary'}
-            color={error || failedItems.length ? 'onError' : 'onPrimary'}
-          >
-            {error ? 'Resent Failed batches' : 'Got it'}
-          </Button>
-        )}
-      </Box>
+      {(error || finished === 100) && (
+        <Button
+          variant="filled"
+          onClick={goBack}
+          justifyContent="center"
+          bg={error || failedItems.length ? 'error' : 'primary'}
+          color={error || failedItems.length ? 'onError' : 'onPrimary'}
+        >
+          Go back
+        </Button>
+      )}
     </Box>
   );
 };

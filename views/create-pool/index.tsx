@@ -9,9 +9,10 @@ import { TOKEN_SVG_MAP } from '@/constants/token';
 
 import PoolTitleBar from '../components/pool-title-bar';
 import { IPoolForm } from './create-pool.types';
-import CreatePoolForm from './create-pool-form';
+import CreateTokenForm from './create-pool-form';
+import Illustration from './illustration';
 
-const FindPoolPage: FC = () => {
+const CreatePoolPage: FC = () => {
   const { push } = useRouter();
   const { control } = useFormContext<IPoolForm>();
   const tokenAType = useWatch({ control, name: 'tokenA.type' });
@@ -22,18 +23,17 @@ const FindPoolPage: FC = () => {
 
   return (
     <Layout>
-      <Box width={['100%', '100%', '100%', '100%', '50%']} mx="auto">
-        <PoolTitleBar
-          name="Create pool"
-          onBack={() => push(Routes[RoutesEnum.Pools])}
-          iconTokenList={[IconA, IconB].filter((Icon) => Icon)}
-        />
-        <Box my="xs" mx="auto" display="flex" maxWidth="65rem">
-          <CreatePoolForm />
-        </Box>
+      <PoolTitleBar
+        name="Create pool"
+        onBack={() => push(Routes[RoutesEnum.Pools])}
+        iconTokenList={[IconA, IconB].filter((Icon) => Icon)}
+      />
+      <Box my="3xl" mx="auto" display="flex" maxWidth="65rem">
+        <Illustration />
+        <CreateTokenForm />
       </Box>
     </Layout>
   );
 };
 
-export default FindPoolPage;
+export default CreatePoolPage;
