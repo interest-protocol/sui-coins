@@ -6,7 +6,7 @@ import { SEO } from '@/components';
 import { COINS } from '@/constants/coins';
 import { ModalProvider } from '@/context/modal';
 import { useNetwork } from '@/context/network';
-import CreatePool from '@/views/create-pool';
+import FindPool from '@/views/find-pool';
 import { IPoolForm } from '@/views/find-pool/find-pool.types';
 
 const CreatePoolPage: NextPage = () => {
@@ -29,8 +29,8 @@ const CreatePoolPage: NextPage = () => {
   return (
     <FormProvider {...form}>
       <ModalProvider>
-        <SEO pageTitle="Create Pool" />
-        <CreatePool />
+        <SEO pageTitle="Find Pool" />
+        <FindPool />
       </ModalProvider>
     </FormProvider>
   );

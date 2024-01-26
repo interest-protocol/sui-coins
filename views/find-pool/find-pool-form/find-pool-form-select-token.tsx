@@ -8,9 +8,9 @@ import { useModal } from '@/hooks/use-modal';
 import { ChevronRightSVG, DefaultSVG } from '@/svg';
 import SelectTokenModal from '@/views/components/select-token-modal';
 
-import { IPoolForm } from '../create-pool.types';
+import { IPoolForm } from '../find-pool.types';
 
-const CreatePoolFormSelectToken: FC<{ name: `token${'A' | 'B'}` }> = ({
+const FindPoolFormSelectToken: FC<{ name: `token${'A' | 'B'}` }> = ({
   name,
 }) => {
   const { control, setValue } = useFormContext<IPoolForm>();
@@ -49,7 +49,6 @@ const CreatePoolFormSelectToken: FC<{ name: `token${'A' | 'B'}` }> = ({
       p="xs"
       gap="xs"
       bg="surface"
-      ml="-0.75rem"
       display="flex"
       minWidth="8rem"
       cursor="pointer"
@@ -80,4 +79,4 @@ const CreatePoolFormSelectToken: FC<{ name: `token${'A' | 'B'}` }> = ({
   );
 };
 
-export default CreatePoolFormSelectToken;
+export default FindPoolFormSelectToken;
