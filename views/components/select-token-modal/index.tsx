@@ -84,7 +84,9 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
         {!simple && (
           <>
             <SelectTokenFilter control={control} setValue={setValue} />
-            <SelectTokenBaseTokens handleSelectToken={handleSelectToken} />
+            <SelectTokenBaseTokens
+              handleSelectToken={() => handleSelectToken}
+            />
           </>
         )}
       </Box>
@@ -98,7 +100,7 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
         <SelectTokenModalBody
           control={control}
           loading={isFetchingCoinBalances}
-          handleSelectToken={handleSelectToken}
+          handleSelectToken={() => handleSelectToken}
         />
       </Motion>
     </Motion>

@@ -28,7 +28,7 @@ export interface TokenModalItemProps {
   selected: boolean;
   isSuggested: boolean;
   onClick: () => void;
-  Icon: FC<SVGProps & { filled?: boolean }>;
+  Icon?: FC<SVGProps & { filled?: boolean }>;
 }
 
 export interface SelectTokenModalProps {
