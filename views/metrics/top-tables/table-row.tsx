@@ -18,7 +18,7 @@ const TableRow: FC<PropsWithChildren<TableRowProps>> = ({
     )}
     <Box
       color="onSurfaceVariant"
-      px="2.25rem"
+      px="2xl"
       py="m"
       borderBottom={isTableHead ? '.0625rem solid' : '0'}
       borderColor="outlineVariant"
