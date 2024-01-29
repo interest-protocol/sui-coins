@@ -1,7 +1,10 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
+import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { AIRDROP_SUI_FEE_PER_ADDRESS } from '@/constants/fees';
+import { FixedPointMath } from '@/lib';
 import { QuestionCircleSVG } from '@/svg';
 import { BATCH_SIZE } from '@/views/airdrop/airdrop.constants';
 
@@ -11,9 +14,6 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
   const { control } = useFormContext<IAirdropForm>();
 
   const airdropList = useWatch({ control, name: 'airdropList' });
-
-  // TODO: Sui fee
-  const suiFee = 0;
 
   return (
     <Box display="flex" flexDirection="column" mb="m">
@@ -119,14 +119,17 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
             opacity="0.80"
             color="#000000A3"
           >
-            SUI Fee
+            Total SUI Fee
           </Typography>
           <Box textAlign="right">
             <Typography size="medium" variant="body">
-              {suiFee || '--'}
-            </Typography>
-            <Typography variant="body" size="small" color="#000000A3">
-              --
+              {airdropList
+                ? FixedPointMath.toNumber(
+                    new BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS).times(
+                      airdropList.length
+                    )
+                  ).toString()
+                : '0'}
             </Typography>
           </Box>
         </Box>

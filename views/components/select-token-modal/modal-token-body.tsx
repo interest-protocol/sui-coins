@@ -3,7 +3,6 @@ import { FC } from 'react';
 import { v4 } from 'uuid';
 
 import { FixedPointMath } from '@/lib';
-import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { ModalTokenBodyProps, TokenOrigin } from './select-token-modal.types';
 import TokenModalItem from './token-modal-item';
@@ -22,10 +21,14 @@ const ModalTokenBody: FC<ModalTokenBodyProps> = ({
         symbol={token.symbol}
         onClick={() => handleSelectToken(token)}
         isSuggested={tokenOrigin === TokenOrigin.Suggested}
-        balance={FixedPointMath.toNumber(
-          BigNumber(token.balance) ?? ZERO_BIG_NUMBER,
-          token.decimals || 9
-        ).toString()}
+        balance={
+          token?.balance
+            ? FixedPointMath.toNumber(
+                BigNumber(token.balance),
+                token.decimals || 9
+              ).toString()
+            : '0'
+        }
       />
     ))}
   </>

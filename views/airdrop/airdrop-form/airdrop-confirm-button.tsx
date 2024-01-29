@@ -7,7 +7,8 @@ import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { AIRDROP_SEND_CONTRACT, EXPLORER_URL } from '@/constants';
+import { AIRDROP_SEND_CONTRACT, EXPLORER_URL, TREASURY } from '@/constants';
+import { AIRDROP_SUI_FEE_PER_ADDRESS } from '@/constants/fees';
 import { useNetwork } from '@/context/network';
 import { useSuiClient } from '@/hooks/use-sui-client';
 import { useWeb3 } from '@/hooks/use-web3';
@@ -55,6 +56,16 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
             txb.pure(totalAMount.toString()),
           ]);
 
+          const [fee] = txb.splitCoins(txb.gas, [
+            txb.pure(
+              new BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS)
+                .times(batch.length)
+                .toString()
+            ),
+          ]);
+
+          txb.transferObjects([fee], TREASURY);
+
           txb.moveCall({
             target: `${contractPackageId}::airdrop::send`,
             typeArguments: [token.type],
@@ -92,10 +103,10 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
       const firstCoin = coinsMap[token.type].objects[0];
 
+      const txb = new TransactionBlock();
+
       // There are other coins
       if (coinsMap[token.type].objects.length > 1) {
-        const txb = new TransactionBlock();
-
         const coinInList = createObjectsParameter({
           coinsMap,
           txb: txb,
@@ -118,27 +129,6 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
             }),
           ],
         });
-
-        const { signature, transactionBlockBytes } = await signTransactionBlock(
-          {
-            transactionBlock: txb,
-          }
-        );
-
-        const tx = await suiClient.executeTransactionBlock({
-          transactionBlock: transactionBlockBytes,
-          signature,
-          options: { showEffects: true },
-          requestType: 'WaitForEffectsCert',
-        });
-
-        throwTXIfNotSuccessful(tx, () => {
-          setValue('error', true);
-        });
-
-        showTXSuccessToast(tx, network);
-
-        await sleep(RATE_LIMIT_DELAY);
       }
 
       for await (const [index, batch] of Object.entries(list)) {
@@ -146,11 +136,19 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           .reduce((acc, data) => acc.plus(BigNumber(data.amount)), BigNumber(0))
           .toString();
 
-        const txb = new TransactionBlock();
-
         const coinToSend = txb.splitCoins(txb.object(firstCoin.coinObjectId), [
           totalAMount,
         ]);
+
+        const [fee] = txb.splitCoins(txb.gas, [
+          txb.pure(
+            new BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS)
+              .times(batch.length)
+              .toString()
+          ),
+        ]);
+
+        txb.transferObjects([fee], TREASURY);
 
         txb.moveCall({
           target: `${contractPackageId}::airdrop::send`,

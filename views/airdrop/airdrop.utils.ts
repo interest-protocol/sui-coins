@@ -11,7 +11,8 @@ export const csvToAirdrop = (
   onError: (message: string) => void
 ): AirdropData[] => {
   try {
-    const lines = csv.split(',');
+    const lines = csv.split(',').map((x) => x.replace('\n', ''));
+
     const addresses = lines.filter(
       (x) => x.startsWith('0x') && isValidSuiAddress(normalizeSuiAddress(x))
     );
