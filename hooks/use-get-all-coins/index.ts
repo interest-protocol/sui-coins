@@ -1,4 +1,3 @@
-import { CoinMetadata } from '@mysten/sui.js/client';
 import { useWalletKit } from '@mysten/wallet-kit';
 import BigNumber from 'bignumber.js';
 import { pathOr } from 'ramda';
@@ -9,7 +8,7 @@ import { LOCAL_STORAGE_VERSION } from '@/constants';
 import { COIN_METADATA } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useSuiClient } from '@/hooks/use-sui-client';
-import { LocalTokenMetadataRecord } from '@/interface';
+import { CoinMetadataWithType, LocalTokenMetadataRecord } from '@/interface';
 import { makeSWRKey, normalizeSuiType, safeSymbol, sleep } from '@/utils';
 
 import { CoinsMap, TGetAllCoins } from './use-get-all-coins.types';
@@ -42,25 +41,58 @@ export const useGetAllCoins = () => {
       if (!currentAccount) return {} as CoinsMap;
       const coinsRaw = await getAllCoins(suiClient, currentAccount.address);
 
-      const coinTypesArray = coinsRaw.map(({ coinType }) => coinType);
+      const coinsMetadata: Array<CoinMetadataWithType> = await fetch(
+        `/api/v1/coin-metadata`
+      ).then((res) => res.json());
 
-      const coinsMetadata: Array<CoinMetadata | null> = [];
+      const coinTypesArray = coinsRaw
+        .map(({ coinType }) => coinType)
+        .filter(
+          (type) => !coinsMetadata.some((metadata) => type === metadata.type)
+        );
 
       for await (const coinType of coinTypesArray) {
         await sleep(350);
-        coinsMetadata.push(await suiClient.getCoinMetadata({ coinType }));
+
+        const coinMetadata: CoinMetadataWithType | null = await suiClient
+          .getCoinMetadata({ coinType })
+          .then((data) => {
+            if (!data) return null;
+
+            const coinData = {
+              ...data,
+              type: coinType,
+            };
+
+            fetch(`/api/v1/coin-metadata`, {
+              method: 'POST',
+              body: JSON.stringify(coinData),
+            });
+
+            return coinData;
+          });
+
+        if (coinMetadata) coinsMetadata.push(coinMetadata);
       }
 
-      return coinsRaw.reduce((acc, { coinType, ...coinRaw }, i) => {
+      const coinsMetadataMap: Record<string, CoinMetadataWithType> =
+        coinsMetadata.reduce(
+          (acc, curr) => ({ ...acc, [curr.type]: curr }),
+          {}
+        );
+
+      return coinsRaw.reduce((acc, { coinType, ...coinRaw }) => {
         const type = normalizeSuiType(coinType);
-        const { symbol, decimals, ...metadata } = coinsMetadata[i] ?? {
+        const { symbol, decimals, ...metadata } = coinsMetadataMap[
+          coinType
+        ] ?? {
           symbol:
-            pathOr(null, ['symbol'], coinsMetadata[i]) ??
+            pathOr(null, ['symbol'], coinsMetadataMap[coinType]) ??
             pathOr(null, [type, 'symbol'], COIN_METADATA) ??
             pathOr(null, [type, 'symbol'], tokensMetadataRecord) ??
             safeSymbol(type, type).trim().split(' ').reverse()[0],
           decimals:
-            pathOr(null, ['decimals'], coinsMetadata[i]) ??
+            pathOr(null, ['decimals'], coinsMetadataMap[coinType]) ??
             pathOr(null, [type, 'decimals'], COIN_METADATA) ??
             pathOr(-1, [type, 'decimals'], tokensMetadataRecord),
           name: '',

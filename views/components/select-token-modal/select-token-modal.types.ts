@@ -22,7 +22,6 @@ export interface TokenModalItemProps {
   balance: string;
   selected: boolean;
   onClick: () => void;
-  onHandleFavorite?: () => void;
 }
 
 export interface SelectTokenModalProps {
@@ -71,7 +70,6 @@ export interface ModalTokenBodyProps {
 
 export interface ModalTokenSearchProps {
   search: string;
-  tokensMetadata: Record<string, CoinObject>;
   handleSelectToken: (coin: CoinObject) => void;
 }
 

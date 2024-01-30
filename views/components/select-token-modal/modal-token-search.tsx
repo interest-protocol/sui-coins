@@ -2,8 +2,6 @@ import { FC } from 'react';
 import useSWR from 'swr';
 import { v4 } from 'uuid';
 
-import { LOCAL_STORAGE_VERSION } from '@/constants';
-import { useNetwork } from '@/context/network';
 import { useSuiClient } from '@/hooks/use-sui-client';
 
 import FetchingToken from './fetching-token';
@@ -13,18 +11,21 @@ import TokenModalItem from './token-modal-item';
 
 const ModalTokenSearch: FC<ModalTokenSearchProps> = ({
   search,
-  tokensMetadata,
   handleSelectToken,
 }) => {
-  const { network } = useNetwork();
   const suiClient = useSuiClient();
 
   const {
-    data: tokenMetadata,
     error,
     isLoading,
-  } = useSWR(`get-token-metadata`, () =>
-    suiClient.getCoinMetadata({ coinType: search })
+    data: tokenMetadata,
+  } = useSWR(`get-token-metadata-${search}`, () =>
+    fetch(`/api/v1/coin-metadata?type=${search}`).then((res) => {
+      if (res.status === 204)
+        return suiClient.getCoinMetadata({ coinType: search });
+
+      if (res.status === 200) return res.json();
+    })
   );
 
   if (isLoading) return <FetchingToken />;
@@ -41,14 +42,6 @@ const ModalTokenSearch: FC<ModalTokenSearchProps> = ({
     decimals: tokenMetadata!.decimals,
   };
 
-  const saveMetadata = () => {
-    if (!tokensMetadata[search])
-      window.localStorage.setItem(
-        `${LOCAL_STORAGE_VERSION}-sui-coins-${network}-tokens-metadata`,
-        JSON.stringify({ ...tokensMetadata, [search]: token })
-      );
-  };
-
   return (
     <TokenModalItem
       key={v4()}
@@ -56,11 +49,7 @@ const ModalTokenSearch: FC<ModalTokenSearchProps> = ({
       type={search}
       selected={false}
       symbol={tokenMetadata!.symbol}
-      onHandleFavorite={saveMetadata}
-      onClick={() => {
-        handleSelectToken(token);
-        saveMetadata();
-      }}
+      onClick={() => handleSelectToken(token)}
     />
   );
 };

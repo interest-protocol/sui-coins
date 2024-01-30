@@ -22,7 +22,6 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
   balance,
   onClick,
   selected,
-  onHandleFavorite,
 }) => {
   const { network } = useNetwork();
   const { colors } = useTheme() as Theme;
@@ -38,7 +37,6 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
         ? favoriteTokens.filter((favType) => favType !== type)
         : [...favoriteTokens, type]
     );
-    onHandleFavorite?.();
   };
 
   return (

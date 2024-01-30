@@ -2,6 +2,7 @@ import { isValidSuiAddress } from '@mysten/sui.js/utils';
 import { values } from 'ramda';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
+import useSWR from 'swr';
 import { useReadLocalStorage } from 'usehooks-ts';
 
 import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
@@ -11,8 +12,8 @@ import {
   TESTNET_BASE_COINS,
 } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { useWeb3 } from '@/hooks/use-web3';
+import { CoinMetadataWithType } from '@/interface';
 
 import FetchingToken from './fetching-token';
 import ModalTokenBody from './modal-token-body';
@@ -22,6 +23,7 @@ import {
   SelectTokenModalBodyProps,
   TokenOrigin,
 } from './select-token-modal.types';
+import { metadataToCoin } from './select-token-modal.utils';
 
 const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   control,
@@ -33,9 +35,22 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   const favoriteTokenTypes = useReadLocalStorage<ReadonlyArray<string>>(
     `${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-tokens`
   );
-  const tokensMetadata = useReadLocalStorage<Record<string, CoinObject>>(
-    `${LOCAL_STORAGE_VERSION}-sui-coins-${network}-tokens-metadata`
+
+  const {
+    data: coinsMetadataRaw,
+    isLoading,
+    error,
+  } = useSWR('coins-metadata', async () =>
+    fetch('/api/v1/coin-metadata').then((res) => res.json())
   );
+
+  const coinsMetadata: Record<string, CoinMetadataWithType> =
+    isLoading || error
+      ? {}
+      : (coinsMetadataRaw as ReadonlyArray<CoinMetadataWithType>).reduce(
+          (acc, curr) => ({ ...acc, [curr.type]: curr }),
+          {}
+        );
 
   const filterSelected = useWatch({ control, name: 'filter' });
   const search = useWatch({ control, name: 'search' });
@@ -48,7 +63,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
 
   const noWalletToShow = filterSelected == TokenOrigin.Wallet && !coins?.length;
 
-  if (loading) return <FetchingToken />;
+  if (loading || isLoading) return <FetchingToken />;
 
   if (noTokensToShow || noFavoritesToShow || noWalletToShow)
     return <NotFound />;
@@ -63,7 +78,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
 
   const favoriteTokens =
     favoriteTokenTypes
-      ?.map((type) => coinsMap[type] ?? tokensMetadata?.[type])
+      ?.map((type) => coinsMap[type] ?? metadataToCoin(type, coinsMetadata))
       .filter((token) => token) ?? [];
 
   if (filterSelected === TokenOrigin.Favorites)
@@ -101,11 +116,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
     !allTokens.some(({ type }) => type === search)
   )
     return (
-      <ModalTokenSearch
-        search={search}
-        tokensMetadata={tokensMetadata ?? {}}
-        handleSelectToken={handleSelectToken}
-      />
+      <ModalTokenSearch search={search} handleSelectToken={handleSelectToken} />
     );
 
   return (
