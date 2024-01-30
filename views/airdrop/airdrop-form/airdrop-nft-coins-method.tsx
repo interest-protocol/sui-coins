@@ -40,7 +40,10 @@ const AirdropNftCoinsMethod: FC = () => {
         {method === 'nft' ? (
           <SelectNFTModal closeModal={handleClose} onSelect={onSelect} />
         ) : (
-          <SelectTokenModal closeModal={handleClose} onSelect={onSelect} />
+          <SelectTokenModal
+            closeModal={handleClose}
+            onSelect={() => onSelect}
+          />
         )}
       </Motion>,
       {
