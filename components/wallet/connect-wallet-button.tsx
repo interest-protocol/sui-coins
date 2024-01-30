@@ -16,7 +16,7 @@ const ConnectWalletButton: FC = () => {
       fontFamily="Proto !important"
       bg={`${colors.primary} !important`}
       color={`${colors.onPrimary} !important`}
-      borderRadius={`${radii.full} !important`}
+      borderRadius={`${radii.xs} !important`}
       width="100%"
       nHover={{
         bg: 'accent',

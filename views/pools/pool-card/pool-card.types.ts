@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
 import { TDexSources } from '@/constants/dex';
-import { CoinData } from '@/interface';
+import { CoinData } from '@/views/pool-details/pool-form/pool-form.types';
 
 export interface PoolCardHeaderProps {
   name: string;

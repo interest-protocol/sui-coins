@@ -26,12 +26,10 @@ const CreatePoolForm: FC = () => {
       mx="auto"
       width="100%"
       display="flex"
-      borderRadius="m"
+      borderRadius="xs"
       overflow="hidden"
-      maxWidth="32.75rem"
       bg="lowestContainer"
       flexDirection="column"
-      boxShadow="0px 24px 46px -10px rgba(13, 16, 23, 0.16)"
     >
       <Box display="flex" flexDirection="column" gap="4xl">
         <Box display="flex" flexDirection="column">
@@ -109,7 +107,7 @@ const CreatePoolForm: FC = () => {
         />
       </Box>
       <Box display="flex" justifyContent="center">
-        <Button type="submit" variant="filled">
+        <Button type="submit" variant="filled" borderRadius="xs" py="s">
           Create pool
         </Button>
       </Box>

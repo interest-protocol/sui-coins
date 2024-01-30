@@ -22,14 +22,12 @@ const SwapPage: NextPage = () => {
   const form = useForm<SwapForm>({
     defaultValues: {
       to: {
-        balance: 0,
         value: '',
         locked: false,
         ...(COIN_TYPE_TO_COIN[network][query.to as string] ??
           COIN_TYPE_TO_COIN[network][values(COIN_TYPE[network])[0]]),
       },
       from: {
-        balance: 0,
         value: '',
         locked: false,
         ...(COIN_TYPE_TO_COIN[network][query.from as string] ??
@@ -38,7 +36,6 @@ const SwapPage: NextPage = () => {
       settings: {
         deadline: '3',
         slippage: '0.1',
-        speed: 'instant',
       },
     },
   });
