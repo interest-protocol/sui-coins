@@ -22,7 +22,7 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
   balance,
   onClick,
   selected,
-  isSuggested,
+  onHandleFavorite,
 }) => {
   const { network } = useNetwork();
   const { colors } = useTheme() as Theme;
@@ -32,12 +32,14 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
 
   const isFavorite = favoriteTokens.includes(type);
 
-  const handleFavoriteTokens = () =>
+  const handleFavoriteTokens = () => {
     setFavoriteTokens(
       isFavorite
         ? favoriteTokens.filter((favType) => favType !== type)
         : [...favoriteTokens, type]
     );
+    onHandleFavorite?.();
+  };
 
   return (
     <Box
@@ -87,7 +89,7 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
         </Box>
       </Box>
       <Box display="flex" alignItems="center" gap="xs">
-        {!isSuggested && (
+        {!balance && (
           <Typography variant="body" size="large">
             {balance}
           </Typography>

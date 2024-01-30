@@ -45,7 +45,7 @@ const SelectTokenBaseTokenItem: FC<SelectTokenBaseTokenItemProps> = ({
       </Box>
     }
   >
-    <Typography variant="label" size="large">
+    <Typography size="large" width="3.5rem" variant="label" pl="xs">
       {symbol}
     </Typography>
   </Tag>
@@ -60,9 +60,8 @@ const SelectTokenBaseTokens: FC<SelectTokenBaseTokensProps> = ({
   return (
     <Box
       py="xs"
-      display="grid"
-      flexWrap="wrap"
-      gridTemplateColumns="1fr 1fr 1fr 1fr"
+      display="flex"
+      justifyContent="space-between"
       gap={['0.25rem', '0.25rem', '0.25rem', 'xs']}
     >
       {DEX_MAIN_TOKENS[network].map((token) => (

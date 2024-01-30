@@ -4,12 +4,11 @@ import { v4 } from 'uuid';
 
 import { FixedPointMath } from '@/lib';
 
-import { ModalTokenBodyProps, TokenOrigin } from './select-token-modal.types';
+import { ModalTokenBodyProps } from './select-token-modal.types';
 import TokenModalItem from './token-modal-item';
 
 const ModalTokenBody: FC<ModalTokenBodyProps> = ({
   tokens,
-  tokenOrigin,
   handleSelectToken,
 }) => (
   <>
@@ -20,7 +19,6 @@ const ModalTokenBody: FC<ModalTokenBodyProps> = ({
         type={token.type}
         symbol={token.symbol}
         onClick={() => handleSelectToken(token)}
-        isSuggested={tokenOrigin === TokenOrigin.Suggested}
         balance={
           token?.balance
             ? FixedPointMath.toNumber(

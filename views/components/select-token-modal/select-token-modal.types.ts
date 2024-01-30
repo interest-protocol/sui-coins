@@ -21,8 +21,8 @@ export interface TokenModalItemProps {
   origin?: string;
   balance: string;
   selected: boolean;
-  isSuggested: boolean;
   onClick: () => void;
+  onHandleFavorite?: () => void;
 }
 
 export interface SelectTokenModalProps {
@@ -39,7 +39,7 @@ export interface SelectTokenFilterProps {
 export enum TokenOrigin {
   All,
   Favorites,
-  Suggested,
+  Wallet,
 }
 
 export interface SearchTokenForm {
@@ -64,8 +64,13 @@ export interface SelectTokenBaseTokenItemProps
 }
 
 export interface ModalTokenBodyProps {
-  tokenOrigin: TokenOrigin;
   tokens: ReadonlyArray<CoinObject>;
+  handleSelectToken: (coin: CoinObject) => void;
+}
+
+export interface ModalTokenSearchProps {
+  search: string;
+  tokensMetadata: Record<string, CoinObject>;
   handleSelectToken: (coin: CoinObject) => void;
 }
 

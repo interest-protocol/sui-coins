@@ -77,6 +77,7 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
             placeholder="Sui"
             label="Search token"
             {...register('search')}
+            nPlaceholder={{ opacity: 0.7 }}
             fieldProps={{ height: '3.5rem', mb: 'm', borderRadius: 'xs' }}
             Prefix={<SearchSVG maxWidth="1rem" maxHeight="1rem" width="100%" />}
           />
@@ -95,11 +96,19 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
         initial={{ height: 0 }}
         animate={{ height: 'auto' }}
       >
-        <SelectTokenModalBody
-          control={control}
-          loading={isFetchingCoinBalances}
-          handleSelectToken={handleSelectToken}
-        />
+        <Box
+          flex="1"
+          display="flex"
+          overflowY="auto"
+          bg="lowContainer"
+          flexDirection="column"
+        >
+          <SelectTokenModalBody
+            control={control}
+            loading={isFetchingCoinBalances}
+            handleSelectToken={handleSelectToken}
+          />
+        </Box>
       </Motion>
     </Motion>
   );

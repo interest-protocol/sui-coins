@@ -1,15 +1,34 @@
 import { Box, Tag, Typography } from '@interest-protocol/ui-kit';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
-import { SelectTokenFilterProps } from './select-token-modal.types';
+import {
+  SelectTokenFilterProps,
+  TokenOrigin,
+} from './select-token-modal.types';
 
 const SelectTokenFilter: FC<SelectTokenFilterProps> = ({
   control,
   setValue,
 }) => {
+  const [lastFilter, setLastFilter] = useState<TokenOrigin | null>(null);
   const filterSelected = useWatch({ control, name: 'filter' });
+  const search = useWatch({ control, name: 'search' });
+
+  useEffect(() => {
+    if (!search && lastFilter) {
+      setValue('filter', lastFilter);
+      setLastFilter(null);
+      return;
+    }
+
+    if (search && !lastFilter) {
+      setLastFilter(filterSelected);
+      setValue('filter', TokenOrigin.All);
+      return;
+    }
+  }, [search]);
 
   return (
     <Box
@@ -18,7 +37,7 @@ const SelectTokenFilter: FC<SelectTokenFilterProps> = ({
       flexWrap="wrap"
       gridTemplateColumns="1fr 1fr 1fr"
     >
-      {['All', 'Favorite', 'Suggested'].map((item, index) => (
+      {['All', 'Favorite', 'Wallet'].map((item, index) => (
         <Tag
           key={v4()}
           display="flex"
