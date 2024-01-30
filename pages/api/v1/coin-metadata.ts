@@ -41,7 +41,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         return;
       }
       doc.save();
-      res.status(200).send('Data sent successfully!');
+      res.status(201).send('Data created successfully!');
       return;
     }
     res.status(405).send('Method Not Allowed!');

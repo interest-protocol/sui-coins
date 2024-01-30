@@ -4,7 +4,9 @@ import { CoinMetadataWithType } from '@/interface';
 export const metadataToCoin = (
   coinType: string,
   coinsMetadata: Record<string, CoinMetadataWithType>
-): CoinObject => {
+): CoinObject | null => {
+  if (!coinType || !coinsMetadata[coinType]) return null;
+
   const { type, symbol, decimals, ...metadata } = coinsMetadata[coinType];
 
   return {

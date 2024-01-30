@@ -10,7 +10,7 @@ class CoinMetadata {
   @prop({ required: true })
   public symbol!: string;
 
-  @prop({ required: true })
+  @prop({ required: false })
   public description!: string;
 
   @prop({ required: true })

@@ -11,7 +11,9 @@ const AirdropCustomAmountTextArea: FC = () => {
 
   return (
     <TextareaField
+      fontSize="0.75rem !important"
       fieldProps={{ borderColor: 'outlineVariant' }}
+      placeholder={`0x0000000000000000000000000000000000000000000000000000000000000001\n0x0000000000000000000000000000000000000000000000000000000000000002\n0x0000000000000000000000000000000000000000000000000000000000000003`}
       label="Enter Separate wallet addresses on a new line"
       onChange={(e) => {
         const airdropValue = textToAirdrop(

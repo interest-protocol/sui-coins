@@ -5,7 +5,7 @@ import {
   Typography,
   useTheme,
 } from '@interest-protocol/ui-kit';
-import { FC } from 'react';
+import { FC, MouseEventHandler } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 
 import { TokenIcon } from '@/components';
@@ -31,7 +31,8 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
 
   const isFavorite = favoriteTokens.includes(type);
 
-  const handleFavoriteTokens = () => {
+  const handleFavoriteTokens: MouseEventHandler = (e) => {
+    e.stopPropagation();
     setFavoriteTokens(
       isFavorite
         ? favoriteTokens.filter((favType) => favType !== type)
@@ -87,7 +88,7 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
         </Box>
       </Box>
       <Box display="flex" alignItems="center" gap="xs">
-        {!balance && (
+        {!!balance && (
           <Typography variant="body" size="large">
             {balance}
           </Typography>
