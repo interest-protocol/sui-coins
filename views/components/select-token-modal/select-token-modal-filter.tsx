@@ -25,7 +25,7 @@ const SelectTokenFilter: FC<SelectTokenFilterProps> = ({
 
     if (search && !lastFilter) {
       setLastFilter(filterSelected);
-      setValue('filter', TokenOrigin.All);
+      setValue('filter', TokenOrigin.Search);
       return;
     }
   }, [search]);
@@ -37,7 +37,7 @@ const SelectTokenFilter: FC<SelectTokenFilterProps> = ({
       flexWrap="wrap"
       gridTemplateColumns="1fr 1fr 1fr"
     >
-      {['All', 'Favorite', 'Wallet'].map((item, index) => (
+      {['Official', 'Favorite', 'Wallet'].map((item, index) => (
         <Tag
           key={v4()}
           display="flex"

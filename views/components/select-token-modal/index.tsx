@@ -31,7 +31,7 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
   const { control, register, setValue } = useForm<SearchTokenForm>({
     defaultValues: {
       search: '',
-      filter: TokenOrigin.All,
+      filter: TokenOrigin.Official,
     },
   });
 

@@ -37,9 +37,10 @@ export interface SelectTokenFilterProps {
 }
 
 export enum TokenOrigin {
-  All,
+  Official,
   Favorites,
   Wallet,
+  Search,
 }
 
 export interface SearchTokenForm {

@@ -23,7 +23,7 @@ export const DEX_MAIN_TOKENS = {
   [Network.MAINNET]: [
     COINS[Network.MAINNET].SUI,
     COINS[Network.MAINNET].NATIVE_WORMHOLE_ETH,
-    COINS[Network.MAINNET].NATIVE_WORMHOLE_WAVAX,
+    COINS[Network.MAINNET].ETH_WORMHOLE_USDC,
   ],
 };
 

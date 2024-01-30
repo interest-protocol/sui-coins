@@ -1075,3 +1075,5 @@ export const COIN_TYPE_TO_COIN = {
       COINS[Network.MAINNET].V_LP_SUI_ETH_CELER_USDC,
   },
 };
+
+export const OFFICIAL_TOKENS = [];

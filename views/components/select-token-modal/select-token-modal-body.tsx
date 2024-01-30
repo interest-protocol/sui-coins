@@ -5,7 +5,11 @@ import { useWatch } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
 
 import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
-import { MAINNET_BASE_COINS, TESTNET_BASE_COINS } from '@/constants/coins';
+import {
+  MAINNET_BASE_COINS,
+  OFFICIAL_TOKENS,
+  TESTNET_BASE_COINS,
+} from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { useWeb3 } from '@/hooks/use-web3';
@@ -48,6 +52,14 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
 
   if (noTokensToShow || noFavoritesToShow || noWalletToShow)
     return <NotFound />;
+
+  if (filterSelected === TokenOrigin.Official)
+    return (
+      <ModalTokenBody
+        handleSelectToken={handleSelectToken}
+        tokens={OFFICIAL_TOKENS}
+      />
+    );
 
   const favoriteTokens =
     favoriteTokenTypes
