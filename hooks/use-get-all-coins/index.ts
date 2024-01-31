@@ -1,3 +1,4 @@
+import { formatAddress } from '@mysten/sui.js/utils';
 import { useWalletKit } from '@mysten/wallet-kit';
 import BigNumber from 'bignumber.js';
 import { pathOr } from 'ramda';
@@ -9,9 +10,23 @@ import { COIN_METADATA } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useSuiClient } from '@/hooks/use-sui-client';
 import { CoinMetadataWithType, LocalTokenMetadataRecord } from '@/interface';
-import { makeSWRKey, normalizeSuiType, safeSymbol, sleep } from '@/utils';
+import {
+  chunk,
+  getSymbolByType,
+  makeSWRKey,
+  normalizeSuiType,
+  safeSymbol,
+} from '@/utils';
 
 import { CoinsMap, TGetAllCoins } from './use-get-all-coins.types';
+
+const getBasicCoinMetadata = (type: string) => ({
+  decimals: 0,
+  iconUrl: null,
+  description: '',
+  name: formatAddress(type),
+  symbol: getSymbolByType(type),
+});
 
 const getAllCoins: TGetAllCoins = async (provider, account, cursor = null) => {
   const { data, nextCursor, hasNextPage } = await provider.getAllCoins({
@@ -41,58 +56,54 @@ export const useGetAllCoins = () => {
       if (!currentAccount) return {} as CoinsMap;
       const coinsRaw = await getAllCoins(suiClient, currentAccount.address);
 
-      const coinsMetadata: Array<CoinMetadataWithType> = await fetch(
-        `/api/v1/coin-metadata`
-      ).then((res) => res.json());
+      const coinsType = coinsRaw.map(({ coinType }) => coinType);
 
-      const coinTypesArray = coinsRaw
-        .map(({ coinType }) => coinType)
-        .filter(
-          (type) => !coinsMetadata.some((metadata) => type === metadata.type)
+      const dbCoinsMetadata: Record<string, CoinMetadataWithType> = await fetch(
+        `/api/v1/coin-metadata?type_list=${coinsType.join(',')}`
+      )
+        .then((res) => res.json())
+        .then((data: ReadonlyArray<CoinMetadataWithType>) =>
+          data.reduce((acc, item) => ({ ...acc, [item.type]: item }), {})
         );
 
-      for await (const coinType of coinTypesArray) {
-        await sleep(350);
+      const missingCoinsType = Array.from(
+        new Set(coinsType.filter((type) => !dbCoinsMetadata[type]))
+      );
 
-        const coinMetadata: CoinMetadataWithType | null = await suiClient
-          .getCoinMetadata({ coinType })
-          .then((data) => {
-            if (!data) return null;
+      const missingCoinsTypeBatches = chunk<string>(missingCoinsType, 5);
 
-            const coinData = {
-              ...data,
+      const missingCoinsMetadata = [] as Array<CoinMetadataWithType>;
+
+      for await (const batch of missingCoinsTypeBatches) {
+        const data = await Promise.all(
+          batch.map((coinType) =>
+            suiClient.getCoinMetadata({ coinType }).then((metadata) => ({
+              ...(metadata ?? getBasicCoinMetadata(coinType)),
               type: coinType,
-            };
+            }))
+          )
+        );
 
-            fetch(`/api/v1/coin-metadata`, {
-              method: 'POST',
-              body: JSON.stringify(coinData),
-            });
-
-            return coinData;
-          });
-
-        if (coinMetadata) coinsMetadata.push(coinMetadata);
+        data.map((item) => missingCoinsMetadata.push(item));
       }
 
-      const coinsMetadataMap: Record<string, CoinMetadataWithType> =
-        coinsMetadata.reduce(
-          (acc, curr) => ({ ...acc, [curr.type]: curr }),
-          {}
-        );
+      if (missingCoinsMetadata.length) {
+        fetch(`/api/v1/coin-metadata`, {
+          method: 'POST',
+          body: JSON.stringify(missingCoinsMetadata),
+        });
+      }
 
       return coinsRaw.reduce((acc, { coinType, ...coinRaw }) => {
         const type = normalizeSuiType(coinType);
-        const { symbol, decimals, ...metadata } = coinsMetadataMap[
-          coinType
-        ] ?? {
+        const { symbol, decimals, ...metadata } = dbCoinsMetadata[coinType] ?? {
           symbol:
-            pathOr(null, ['symbol'], coinsMetadataMap[coinType]) ??
+            pathOr(null, ['symbol'], dbCoinsMetadata[coinType]) ??
             pathOr(null, [type, 'symbol'], COIN_METADATA) ??
             pathOr(null, [type, 'symbol'], tokensMetadataRecord) ??
             safeSymbol(type, type).trim().split(' ').reverse()[0],
           decimals:
-            pathOr(null, ['decimals'], coinsMetadataMap[coinType]) ??
+            pathOr(null, ['decimals'], dbCoinsMetadata[coinType]) ??
             pathOr(null, [type, 'decimals'], COIN_METADATA) ??
             pathOr(-1, [type, 'decimals'], tokensMetadataRecord),
           name: '',
