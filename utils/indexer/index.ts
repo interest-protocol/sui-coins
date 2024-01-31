@@ -16,8 +16,8 @@ export async function apiRequestIndexer({
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-api-user': apiKey,
-      'x-api-key': userApiKey,
+      'x-api-user': userApiKey,
+      'x-api-key': apiKey,
     },
     body: JSON.stringify({ query }),
   })
@@ -55,11 +55,16 @@ export const fetchNftHolder = async ({
     }
     `;
 
-  const response = await fetch(`api/indexer?indexerQuery=${query}`);
+  const response = await fetch(`api/v1/indexer?indexerQuery=${query}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
 
   const result = await response.json();
 
-  if (!result?.data?.sui?.nfts) {
+  if (!result?.data?.data?.sui?.nfts) {
     throw new Error(
       `[fetchHolders] unexpected result: ${JSON.stringify(result)}`
     );
