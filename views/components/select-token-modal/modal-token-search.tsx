@@ -2,11 +2,13 @@ import { FC } from 'react';
 import useSWR from 'swr';
 import { v4 } from 'uuid';
 
+import { getBasicCoinMetadata } from '@/hooks/use-get-all-coins';
 import { useSuiClient } from '@/hooks/use-sui-client';
 
 import FetchingToken from './fetching-token';
 import NotFound from './not-found';
 import { ModalTokenSearchProps } from './select-token-modal.types';
+import { metadataToCoin } from './select-token-modal.utils';
 import TokenModalItem from './token-modal-item';
 
 const ModalTokenSearch: FC<ModalTokenSearchProps> = ({
@@ -21,10 +23,22 @@ const ModalTokenSearch: FC<ModalTokenSearchProps> = ({
     data: tokenMetadata,
   } = useSWR(`get-token-metadata-${search}`, () =>
     fetch(`/api/v1/coin-metadata?type=${search}`).then((res) => {
-      if (res.status === 204)
-        return suiClient.getCoinMetadata({ coinType: search });
-
       if (res.status === 200) return res.json();
+
+      if (res.status === 204)
+        return suiClient.getCoinMetadata({ coinType: search }).then((data) => {
+          const metadata = {
+            ...(data ?? getBasicCoinMetadata(search)),
+            type: search,
+          };
+
+          fetch(`/api/v1/coin-metadata`, {
+            method: 'POST',
+            body: JSON.stringify(metadata),
+          });
+
+          return metadata;
+        });
     })
   );
 
@@ -32,15 +46,7 @@ const ModalTokenSearch: FC<ModalTokenSearchProps> = ({
 
   if (error) return <NotFound />;
 
-  const token = {
-    type: search,
-    objects: [],
-    balance: '0',
-    metadata: tokenMetadata!,
-    symbol: tokenMetadata!.symbol,
-    coinObjectId: tokenMetadata!.id!,
-    decimals: tokenMetadata!.decimals,
-  };
+  const token = metadataToCoin(tokenMetadata);
 
   return (
     <TokenModalItem

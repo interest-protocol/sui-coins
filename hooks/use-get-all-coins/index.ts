@@ -20,7 +20,7 @@ import {
 
 import { CoinsMap, TGetAllCoins } from './use-get-all-coins.types';
 
-const getBasicCoinMetadata = (type: string) => ({
+export const getBasicCoinMetadata = (type: string) => ({
   decimals: 0,
   iconUrl: null,
   description: '',

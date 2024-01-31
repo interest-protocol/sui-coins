@@ -23,7 +23,7 @@ import {
   SelectTokenModalBodyProps,
   TokenOrigin,
 } from './select-token-modal.types';
-import { metadataToCoin } from './select-token-modal.utils';
+import { mapMetadataToCoin } from './select-token-modal.utils';
 
 const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   control,
@@ -78,7 +78,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
 
   const favoriteTokens =
     favoriteTokenTypes
-      ?.map((type) => coinsMap[type] ?? metadataToCoin(type, coinsMetadata))
+      ?.map((type) => coinsMap[type] ?? mapMetadataToCoin(type, coinsMetadata))
       .filter((token) => token) ?? [];
 
   if (filterSelected === TokenOrigin.Favorites)
