@@ -33,6 +33,8 @@ export const DISPLAY_NETWORK = {
   [Network.TESTNET]: 'Testnet',
 };
 
+export const INDEXER_URL = 'https://api.indexer.xyz/graphql';
+
 export const EXPLORER_URL = {
   [SUI_MAINNET_CHAIN]: (complement: string) =>
     `https://suiexplorer.com/${complement}`,
