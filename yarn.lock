@@ -723,15 +723,6 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-2.0.1.tgz#e5211452df060fa8522b55c7b3c0c4d1981cb044"
   integrity sha512-dvuCeX5fC9dXgJn9t+X5atfmgQAzUOWqS1254Gh0m6i8wKd10ebXkfNKiRK+1GWi/yTvvLDHpoxLr0xxxeslWw==
 
-"@interest-protocol/sui-amm-sdk@interest-protocol/sui-amm-sdk":
-  version "1.3.0"
-  resolved "https://codeload.github.com/interest-protocol/sui-amm-sdk/tar.gz/58689d7624b9c5d1b3899c87bfa270e3991102a4"
-  dependencies:
-    "@mysten/bcs" "^0.8.1"
-    "@mysten/sui.js" "^0.45.0"
-    ramda "^0.28.0"
-    tiny-invariant "^1.3.1"
-
 "@interest-protocol/ui-kit@^0.2.10-alpha":
   version "0.2.10-alpha"
   resolved "https://registry.yarnpkg.com/@interest-protocol/ui-kit/-/ui-kit-0.2.10-alpha.tgz#ca6276ebf6938ceee7713c546112e915933032cf"
@@ -1023,14 +1014,14 @@
     semver "^7.3.5"
     tar "^6.1.11"
 
-"@mysten/bcs@0.8.1", "@mysten/bcs@^0.8.1":
+"@mysten/bcs@0.8.1":
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/@mysten/bcs/-/bcs-0.8.1.tgz#30d3256a728a4a934ae608d118347289fe0ba1e7"
   integrity sha512-wSEdP7QEfGQdb34g+7R0f3OdRqrv88iIABfJVDVJ6IsGLYVILreh8dZfNpZNUUyzctiyhX7zB9e/lR5qkddFPA==
   dependencies:
     bs58 "^5.0.0"
 
-"@mysten/sui.js@0.45.1", "@mysten/sui.js@^0.45.0", "@mysten/sui.js@^0.45.1":
+"@mysten/sui.js@0.45.1", "@mysten/sui.js@^0.45.1":
   version "0.45.1"
   resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.45.1.tgz#df609856e067060f8fc71d6c8fd8858f8055b329"
   integrity sha512-B6RKfBAR1yr3EvHyQzXgkyOGOXE7jUbgblyitK/25CGp4Uba4VHEZ/N5DCbiuTJdt2k1H42sSXqIGfYqHN+6Cw==
@@ -5899,11 +5890,6 @@ ramda@0.29.1, ramda@^0.29.0:
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.29.1.tgz#408a6165b9555b7ba2fc62555804b6c5a2eca196"
   integrity sha512-OfxIeWzd4xdUNxlWhgFazxsA/nl3mS4/jGZI5n00uWOoSSFRhC1b6gl6xvmzUamgmqELraWp0J/qqVlXYPDPyA==
 
-ramda@^0.28.0:
-  version "0.28.0"
-  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.28.0.tgz#acd785690100337e8b063cab3470019be427cc97"
-  integrity sha512-9QnLuG/kPVgWvMQ4aODhsBUFKOUmnbUnsSXACv+NCQZcHbeb+v8Lodp8OVxtRULN1/xOyYLLaL6npE6dMq5QTA==
-
 raw-body@2.4.1:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/raw-body/-/raw-body-2.4.1.tgz#30ac82f98bb5ae8c152e67149dac8d55153b168c"
@@ -6674,11 +6660,6 @@ tiny-case@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/tiny-case/-/tiny-case-1.0.3.tgz#d980d66bc72b5d5a9ca86fb7c9ffdb9c898ddd03"
   integrity sha512-Eet/eeMhkO6TX8mnUteS9zgPbUMQa4I6Kkp5ORiBD5476/m+PIRiumP5tmh5ioJpH7k51Kehawy2UDfsnxxY8Q==
-
-tiny-invariant@^1.3.1:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/tiny-invariant/-/tiny-invariant-1.3.1.tgz#8560808c916ef02ecfd55e66090df23a4b7aa642"
-  integrity sha512-AD5ih2NlSssTCwsMznbvwMZpJ1cbhkGd2uueNxzv2jDlEeZdU04JQfRnggJQ8DrcVBGjAsCKwFBbDlVNtEMlzw==
 
 titleize@^3.0.0:
   version "3.0.0"
