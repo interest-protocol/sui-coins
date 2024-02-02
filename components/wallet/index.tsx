@@ -26,9 +26,9 @@ const Wallet: FC = () => {
             >
               <SuiNetwork />
             </Box>
+            <AccountInfo />
           </>
         )}
-        <AccountInfo />
       </Box>
       {!isConnected && (
         <Box display="flex">

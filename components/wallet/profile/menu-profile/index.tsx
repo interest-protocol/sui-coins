@@ -2,6 +2,7 @@ import { Box, Motion, Theme, useTheme } from '@interest-protocol/ui-kit';
 import { useWalletKit } from '@mysten/wallet-kit';
 import { useRouter } from 'next/router';
 import { FC, useState } from 'react';
+import { useIsFirstRender } from 'usehooks-ts';
 import { v4 } from 'uuid';
 
 import { EXPLORER_URL, Routes, RoutesEnum, wrapperVariants } from '@/constants';
@@ -21,6 +22,7 @@ const MenuProfile: FC<MenuProfileProps> = ({
 }) => {
   const { push } = useRouter();
   const { network } = useNetwork();
+  const firstRender = useIsFirstRender();
   const { breakpoints } = useTheme() as Theme;
   const [isDesktop, setIsDesktop] = useState(false);
   const { disconnect, currentAccount } = useWalletKit();
@@ -60,13 +62,13 @@ const MenuProfile: FC<MenuProfileProps> = ({
       top={['0', '0', '0', '3rem']}
       justifyContent="space-between"
       p={['xl', 'xl', 'xl', 'unset']}
-      initial={isOpen ? 'closed' : 'open'}
       animate={isOpen ? 'open' : 'closed'}
       pb={['7rem', '7rem', '7rem', 'unset']}
       pointerEvents={isOpen ? 'auto' : 'none'}
-      width={['100vw', '100vw', '100vw', '14.5rem']}
       height={['100vh', '100vh', '100vh', 'unset']}
+      width={['100vw', '100vw', '100vw', '14.5rem']}
       position={['fixed', 'fixed', 'fixed', 'absolute']}
+      initial={isOpen || firstRender ? 'closed' : 'open'}
     >
       <Box display="flex" flexDirection="column" justifyContent="space-between">
         <Box
