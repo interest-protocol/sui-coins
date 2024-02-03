@@ -44,7 +44,7 @@ export const fetchNftHolder = async ({
         sui {
             nfts(
                 where: {
-                    collection: { id: { _eq: "${collectionId}" } }
+                  collection_id: { _eq: "${collectionId}" }
                 },
                 distinct_on: [ owner ]
                 offset: ${offset}

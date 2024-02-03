@@ -12,11 +12,10 @@ import NotFound from './not-found';
 import { SelectNFTModalBodyProps } from './select-nft-modal.types';
 
 const SelectTokenModalBody: FC<SelectNFTModalBodyProps> = ({
-  loading,
   handleSelectNFT,
 }) => {
   const { network } = useNetwork();
-  const { coins, coinsMap } = useWeb3();
+  const { coins, coinsMap, isFetchingCoinBalances } = useWeb3();
   const favoriteTokens = useReadLocalStorage<ReadonlyArray<string>>(
     `${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-nfts`
   );
@@ -30,7 +29,7 @@ const SelectTokenModalBody: FC<SelectNFTModalBodyProps> = ({
         bg="lowContainer"
         flexDirection="column"
       >
-        {loading ? (
+        {isFetchingCoinBalances ? (
           <FetchingToken />
         ) : !(coins.length || favoriteTokens?.length) ? (
           <NotFound />

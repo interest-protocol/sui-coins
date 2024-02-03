@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import db from 'server';
-import CoinMetadataModel from 'server/model';
+import CoinMetadataModel from 'server/model/coin-metadata';
 
 import { CoinMetadataWithType } from '@/interface';
 

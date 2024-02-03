@@ -38,7 +38,6 @@ export interface SelectTokenFilterProps {
 }
 
 export interface SelectNFTModalBodyProps {
-  loading: boolean;
   handleSelectNFT: (coin: CoinObject) => void; // TODO: Change to NFT
 }
 

@@ -1,6 +1,5 @@
+import { apiRequestIndexer } from 'api/indexer';
 import { NextApiRequest, NextApiResponse } from 'next';
-
-import { apiRequestIndexer } from '@/utils/indexer';
 
 export default async function handler(
   req: NextApiRequest,
@@ -20,7 +19,7 @@ export default async function handler(
 
       res.status(200).json({ data: result });
     } catch (e) {
-      res.status(404).json({ error: e });
+      res.status(400).send(e);
     }
   }
 

@@ -9,15 +9,12 @@ import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
-import { useWeb3 } from '@/hooks/use-web3';
 import { SearchSVG, TimesSVG } from '@/svg';
 
 import { SearchNFTForm, SelectNFTModalProps } from './select-nft-modal.types';
 import SelectTokenModalBody from './select-nft-modal-body';
 
 const SelectNFTModal: FC<SelectNFTModalProps> = ({ onSelect, closeModal }) => {
-  const { isFetchingCoinBalances } = useWeb3(); // TODO: change the logic to NFT
-
   const { register } = useForm<SearchNFTForm>({
     defaultValues: {
       search: '',
@@ -32,11 +29,10 @@ const SelectNFTModal: FC<SelectNFTModalProps> = ({ onSelect, closeModal }) => {
   return (
     <Motion
       layout
-      width="100%"
+      width="25rem"
       display="flex"
       bg="onPrimary"
       maxHeight="90vh"
-      maxWidth="25rem"
       overflow="hidden"
       color="onSurface"
       borderRadius="xs"
@@ -78,10 +74,7 @@ const SelectNFTModal: FC<SelectNFTModalProps> = ({ onSelect, closeModal }) => {
         initial={{ height: 0 }}
         animate={{ height: 'auto' }}
       >
-        <SelectTokenModalBody
-          loading={isFetchingCoinBalances}
-          handleSelectNFT={handleSelectNFT}
-        />
+        <SelectTokenModalBody handleSelectNFT={handleSelectNFT} />
       </Motion>
     </Motion>
   );
