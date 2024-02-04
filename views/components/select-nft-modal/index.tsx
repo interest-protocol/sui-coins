@@ -8,7 +8,7 @@ import {
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { NFTCollection } from '@/interface';
 import { SearchSVG, TimesSVG } from '@/svg';
 
 import { SearchNFTForm, SelectNFTModalProps } from './select-nft-modal.types';
@@ -21,8 +21,8 @@ const SelectNFTModal: FC<SelectNFTModalProps> = ({ onSelect, closeModal }) => {
     },
   });
 
-  const handleSelectNFT = (coin: CoinObject) => {
-    onSelect(coin);
+  const handleSelectNFT = (nft: NFTCollection) => {
+    onSelect(nft);
     closeModal();
   };
 
