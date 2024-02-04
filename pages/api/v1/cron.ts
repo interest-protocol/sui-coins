@@ -16,26 +16,23 @@ export default async function handler(_: NextApiRequest, res: NextApiResponse) {
       throw new Error('Nothing found!');
 
     const data = await Promise.all(
-      NFT.map(async ({ id }, index) => {
-        const doc = await NFTCollectionModel.findOne({
-          collectionId: id,
-        });
-
-        if (!doc) {
-          return NFTCollectionModel.create({
+      NFT.map(
+        async ({ id }, index) =>
+          (await NFTCollectionModel.findOneAndUpdate(
+            {
+              collectionId: id,
+            },
+            {
+              updatedAt: Date.now(),
+              holders: holdersList[index],
+            }
+          )) ??
+          (await NFTCollectionModel.create({
             collectionId: id,
             updatedAt: Date.now(),
             holders: holdersList[index],
-          });
-        }
-
-        doc.updateOne({
-          updatedAt: Date.now(),
-          holders: holdersList[index],
-        });
-
-        return doc;
-      })
+          }))
+      )
     );
 
     NFTCollectionModel.bulkSave(data);

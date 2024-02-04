@@ -1,11 +1,16 @@
 import { INDEXER_URL } from '@/constants';
-import { validateAndNormalizeSuiAddress } from '@/utils';
+import { NFT } from '@/constants/nft';
+import { sleep, validateAndNormalizeSuiAddress } from '@/utils';
 
 import {
   ApiRequestIndexer,
   FetchNftHolder,
   IndexerNFTResponse,
 } from './indexer.types';
+
+const ONE_MINUTE_IN_MS = 60000;
+const REQUEST_PER_MINUTE = 100;
+const PARALLEL_REQUESTS = NFT.length;
 
 export const apiRequestIndexer = ({
   query,
@@ -35,7 +40,13 @@ export const fetchNftHolder = async ({
   try {
     const holders = new Set<string>();
 
-    const query = `
+    for await (const offset of Array.from(
+      { length: limit / 25 },
+      (_, index) => index
+    )) {
+      await sleep((ONE_MINUTE_IN_MS * PARALLEL_REQUESTS) / REQUEST_PER_MINUTE);
+
+      const query = `
       query {
           sui {
               nfts(
@@ -43,8 +54,7 @@ export const fetchNftHolder = async ({
                     collection_id: { _eq: "${collectionId}" }
                   },
                   distinct_on: [ owner ]
-                  offset: 0
-                  limit: ${limit}
+                  offset: ${offset}
               ) {
                   owner
               }
@@ -52,30 +62,31 @@ export const fetchNftHolder = async ({
       }
     `;
 
-    const response = await fetch(`${process.env.DOMAIN}/api/v1/indexer`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(query),
-    });
+      const response = await fetch(`${process.env.DOMAIN}/api/v1/indexer`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(query),
+      });
 
-    const result = await response.json();
+      const result = await response.json();
 
-    if (!result?.data?.data?.sui?.nfts) {
-      throw new Error(
-        `[fetchHolders] unexpected result: ${JSON.stringify(result)}`
-      );
+      if (!result?.data?.data?.sui?.nfts) {
+        throw new Error(
+          `[fetchHolders] unexpected result: ${JSON.stringify(result)}`
+        );
+      }
+
+      const nfts = result.data.data.sui.nfts;
+
+      if (nfts.length === 0) return [];
+
+      nfts.forEach((elem: IndexerNFTResponse) => {
+        if (elem.owner && validateAndNormalizeSuiAddress(elem.owner))
+          holders.add(elem.owner);
+      });
     }
-
-    const nfts = result.data.data.sui.nfts;
-
-    if (nfts.length === 0) return [];
-
-    nfts.forEach((elem: IndexerNFTResponse) => {
-      if (elem.owner && validateAndNormalizeSuiAddress(elem.owner))
-        holders.add(elem.owner);
-    });
 
     return Array.from(holders);
   } catch (e) {
