@@ -1,35 +1,18 @@
-import { Box, Button, Typography } from '@interest-protocol/ui-kit';
+import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
-import { useLocalStorage } from 'usehooks-ts';
 
-import { TokenIcon } from '@/components';
-import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
-import { useNetwork } from '@/context/network';
-import { FavoriteSVG } from '@/svg';
+import { NFT_MAP } from '@/constants/nft';
 
 import { NFTModalItemProps } from './select-nft-modal.types';
 
 const NFTModalItem: FC<NFTModalItemProps> = ({
-  type,
-  symbol,
-  origin,
-  balance,
   onClick,
+  holders,
   selected,
+  updatedAt,
+  collectionId,
 }) => {
-  const { network } = useNetwork();
-  const [favoriteTokens, setFavoriteTokens] = useLocalStorage<
-    ReadonlyArray<string>
-  >(`${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-nft`, []);
-
-  const isFavorite = favoriteTokens.includes(type);
-
-  const handleFavoriteNFT = () =>
-    setFavoriteTokens(
-      isFavorite
-        ? favoriteTokens.filter((favType) => favType !== type)
-        : [...favoriteTokens, type]
-    );
+  const metadata = NFT_MAP[collectionId];
 
   return (
     <Box
@@ -46,21 +29,15 @@ const NFTModalItem: FC<NFTModalItemProps> = ({
     >
       <Box display="flex" alignItems="center">
         <Box
-          bg="black"
-          color="white"
           display="flex"
           width="2.5rem"
           height="2.5rem"
+          overflow="hidden"
           borderRadius="xs"
           alignItems="center"
           justifyContent="center"
         >
-          <TokenIcon
-            network={network}
-            maxWidth="1.6rem"
-            maxHeight="1.6rem"
-            tokenId={network === Network.MAINNET ? type : symbol}
-          />
+          <img src={metadata.img} alt={metadata.name} width="100%" />
         </Box>
         <Box
           ml="1rem"
@@ -69,27 +46,22 @@ const NFTModalItem: FC<NFTModalItemProps> = ({
           justifyContent="center"
         >
           <Typography variant="title" size="medium">
-            {symbol}
+            {metadata.name}
           </Typography>
-          {origin && (
-            <Typography variant="body" size="small">
-              {origin}
-            </Typography>
-          )}
         </Box>
       </Box>
-      <Box display="flex" alignItems="center" gap="xs">
-        <Typography variant="body" size="large">
-          {balance}
+      <Box
+        gap="2xs"
+        display="flex"
+        alignItems="flex-end"
+        flexDirection="column"
+      >
+        <Typography variant="body" size="small">
+          {holders.length} addresses
         </Typography>
-        <Button isIcon zIndex="10" variant="text" onClick={handleFavoriteNFT}>
-          <FavoriteSVG
-            width="100%"
-            maxWidth="1rem"
-            maxHeight="1rem"
-            filled={isFavorite}
-          />
-        </Button>
+        <Typography variant="body" size="small">
+          Last update {new Date(updatedAt).toLocaleDateString()}
+        </Typography>
       </Box>
     </Box>
   );

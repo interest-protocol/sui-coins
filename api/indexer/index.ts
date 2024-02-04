@@ -7,12 +7,12 @@ import {
   IndexerNFTResponse,
 } from './indexer.types';
 
-export async function apiRequestIndexer({
+export const apiRequestIndexer = ({
   query,
   apiKey,
   userApiKey,
-}: ApiRequestIndexer): Promise<any> {
-  const result = await fetch(INDEXER_URL, {
+}: ApiRequestIndexer): Promise<any> =>
+  fetch(INDEXER_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -22,62 +22,64 @@ export async function apiRequestIndexer({
     body: JSON.stringify({ query }),
   })
     .then((response: Response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error: ${response.status}`);
-      }
+      if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
       return response.json();
     })
-    .then((result: any) => {
-      return result;
-    });
-  return result;
-}
+    .then((result) => result);
 
 export const fetchNftHolder = async ({
   collectionId,
-  offset,
-}: FetchNftHolder): Promise<Set<string>> => {
-  const holders = new Set<string>();
+  limit,
+}: FetchNftHolder): Promise<Array<string>> => {
+  try {
+    const holders = new Set<string>();
 
-  const query = `
-    query {
-        sui {
-            nfts(
-                where: {
-                  collection_id: { _eq: "${collectionId}" }
-                },
-                distinct_on: [ owner ]
-                offset: ${offset}
-            ) {
-                owner
-            }
-        }
-    }
+    const query = `
+      query {
+          sui {
+              nfts(
+                  where: {
+                    collection_id: { _eq: "${collectionId}" }
+                  },
+                  distinct_on: [ owner ]
+                  offset: 0
+                  limit: ${limit}
+              ) {
+                  owner
+              }
+          }
+      }
     `;
 
-  const response = await fetch(`api/v1/indexer?indexerQuery=${query}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+    const response = await fetch(`${process.env.DOMAIN}/api/v1/indexer`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(query),
+    });
 
-  const result = await response.json();
+    const result = await response.json();
 
-  if (!result?.data?.data?.sui?.nfts) {
-    throw new Error(
-      `[fetchHolders] unexpected result: ${JSON.stringify(result)}`
-    );
+    if (!result?.data?.data?.sui?.nfts) {
+      throw new Error(
+        `[fetchHolders] unexpected result: ${JSON.stringify(result)}`
+      );
+    }
+
+    const nfts = result.data.data.sui.nfts;
+
+    if (nfts.length === 0) return [];
+
+    nfts.forEach((elem: IndexerNFTResponse) => {
+      if (elem.owner && validateAndNormalizeSuiAddress(elem.owner))
+        holders.add(elem.owner);
+    });
+
+    return Array.from(holders);
+  } catch (e) {
+    console.log(e);
+    return [];
   }
-
-  const nfts = result.data.sui.nfts;
-
-  if (nfts.length === 0) return holders;
-
-  nfts.forEach((elem: IndexerNFTResponse) => {
-    if (elem.owner && validateAndNormalizeSuiAddress(elem.owner))
-      holders.add(elem.owner);
-  });
-
-  return holders;
 };

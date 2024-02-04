@@ -1,10 +1,7 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
-import { useReadLocalStorage } from 'usehooks-ts';
 
-import { LOCAL_STORAGE_VERSION } from '@/constants';
-import { useNetwork } from '@/context/network';
-import { useWeb3 } from '@/hooks/use-web3';
+import useNFTCollections from '@/hooks/use-nft-collections';
 
 import FetchingToken from './fetching-nft';
 import ModalTokenBody from './modal-nft-body';
@@ -14,11 +11,7 @@ import { SelectNFTModalBodyProps } from './select-nft-modal.types';
 const SelectTokenModalBody: FC<SelectNFTModalBodyProps> = ({
   handleSelectNFT,
 }) => {
-  const { network } = useNetwork();
-  const { coins, coinsMap, isFetchingCoinBalances } = useWeb3();
-  const favoriteTokens = useReadLocalStorage<ReadonlyArray<string>>(
-    `${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-nfts`
-  );
+  const { data, isLoading, error } = useNFTCollections();
 
   return (
     <>
@@ -29,23 +22,18 @@ const SelectTokenModalBody: FC<SelectNFTModalBodyProps> = ({
         bg="lowContainer"
         flexDirection="column"
       >
-        {isFetchingCoinBalances ? (
+        {isLoading ? (
           <FetchingToken />
-        ) : !(coins.length || favoriteTokens?.length) ? (
+        ) : !data || error ? (
           <NotFound />
         ) : (
           <>
             <ModalTokenBody
-              tokens={coins ?? []}
+              nftList={data ?? []}
               handleSelectNFT={handleSelectNFT}
-            />
-            <ModalTokenBody
-              handleSelectNFT={handleSelectNFT}
-              tokens={favoriteTokens?.map((token) => coinsMap[token]) ?? []}
             />
           </>
         )}
-        {/**Condition needs improve */}
       </Box>
     </>
   );

@@ -7,12 +7,12 @@ export default async function handler(
 ) {
   if (req.method === 'POST') {
     try {
-      const query = req.query.indexerQuery;
+      const query = req.body;
 
       if (!query) throw new Error('Missing an indexerQuery');
 
       const result = await apiRequestIndexer({
-        query: query,
+        query,
         apiKey: process.env.INDEXER_API_KEY || '',
         userApiKey: process.env.INDEXER_API_USER || '',
       });

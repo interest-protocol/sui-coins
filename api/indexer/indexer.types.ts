@@ -1,11 +1,11 @@
 export interface ApiRequestIndexer {
-  query: any;
+  query: string;
   userApiKey: string;
   apiKey: string;
 }
 
 export interface FetchNftHolder {
-  offset: string;
+  limit: number;
   collectionId: string;
 }
 

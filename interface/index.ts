@@ -29,3 +29,9 @@ export interface RegistryPool {
 export interface CoinMetadataWithType extends CoinMetadata {
   type: string;
 }
+
+export interface NFTCollection {
+  updatedAt: number;
+  collectionId: string;
+  holders: ReadonlyArray<string>;
+}

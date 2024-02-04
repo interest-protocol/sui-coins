@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { Control, UseFormSetValue } from 'react-hook-form';
 
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { NFTCollection } from '@/interface';
 
 export interface LinearLoaderProps {
   loading: boolean;
@@ -14,18 +14,14 @@ export interface NDTModalMetadata {
   totalBalance: BigNumber;
 }
 
-export interface NFTModalItemProps {
-  type: string;
-  symbol: string;
-  origin?: string;
-  balance: string;
+export interface NFTModalItemProps extends NFTCollection {
   selected: boolean;
   onClick: () => void;
 }
 
 export interface SelectNFTModalProps {
   closeModal: () => void;
-  onSelect: (coin: CoinObject) => void; // TODO: Change to NFT
+  onSelect: (nft: NFTCollection) => void;
 }
 
 export interface SearchNFTForm {
@@ -38,10 +34,10 @@ export interface SelectTokenFilterProps {
 }
 
 export interface SelectNFTModalBodyProps {
-  handleSelectNFT: (coin: CoinObject) => void; // TODO: Change to NFT
+  handleSelectNFT: (nft: NFTCollection) => void;
 }
 
 export interface ModalNFTBodyProps {
-  tokens: ReadonlyArray<CoinObject>; // TODO: Change to NFT
-  handleSelectNFT: (coin: CoinObject) => void; // TODO: Change to NFT
+  nftList: ReadonlyArray<NFTCollection>;
+  handleSelectNFT: (nft: NFTCollection) => void;
 }

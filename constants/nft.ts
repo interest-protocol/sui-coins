@@ -30,3 +30,11 @@ export const NFT = [
     img: '/images/nft/tail-by-typus.webp',
   },
 ];
+
+export const NFT_MAP = {
+  [NFT[0].id]: NFT[0],
+  [NFT[1].id]: NFT[1],
+  [NFT[2].id]: NFT[2],
+  [NFT[3].id]: NFT[3],
+  [NFT[4].id]: NFT[4],
+};
