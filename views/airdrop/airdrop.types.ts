@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { NFTCollection } from '@/interface';
 
 export interface AirdropData {
   address: string;
@@ -15,10 +16,10 @@ export interface IAirdropForm {
   method: TMethod;
   decimals: number;
   token: CoinObject;
-  asset?: CoinObject;
   commonAmount: string;
   done: ReadonlyArray<number>;
   failed: ReadonlyArray<number>;
+  asset?: CoinObject | NFTCollection;
   airdropList: ReadonlyArray<AirdropData> | null;
 }
 
