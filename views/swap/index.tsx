@@ -9,7 +9,6 @@ import { updateURL } from '@/utils';
 
 import Input from './input';
 import ManageSlippage from './manage-slippage';
-import SwapButton from './swap-button';
 import SwapManager from './swap-manager';
 
 const Swap: FC = () => {
@@ -88,9 +87,8 @@ const Swap: FC = () => {
             </Button>
           </Box>
         </Box>
-        <ManageSlippage />
-        <Box mt="7xl" mx="auto">
-          <SwapButton />
+        <Box my="xs">
+          <ManageSlippage />
         </Box>
       </Box>
       <SwapManager />
