@@ -5,7 +5,7 @@ export interface ApiRequestIndexer {
 }
 
 export interface FetchNftHolder {
-  limit: number;
+  offset: number;
   collectionId: string;
 }
 

@@ -5,6 +5,9 @@ class NFTCollection {
   public collectionId!: string;
 
   @prop({ required: true })
+  public name!: string;
+
+  @prop({ required: true })
   public holders!: ReadonlyArray<string>;
 
   @prop({ required: true })

@@ -17,6 +17,7 @@ export interface IAirdropForm {
   decimals: number;
   token: CoinObject;
   commonAmount: string;
+  tokenUSDPrice?: number;
   done: ReadonlyArray<number>;
   failed: ReadonlyArray<number>;
   asset?: CoinObject | NFTCollection;
