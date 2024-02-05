@@ -12,6 +12,7 @@ export { default as CaretRightSVG } from './caret-right';
 export { default as CaretUpSVG } from './caret-up';
 export { default as CELOSVG } from './celo';
 export { default as CheckSVG } from './check';
+export { default as CheckmarkSVG } from './checkmark';
 export { default as ChevronDownSVG } from './chevron-down';
 export { default as ChevronLeftSVG } from './chevron-left';
 export { default as ChevronRightSVG } from './chevron-right';
