@@ -1,3 +1,4 @@
+export { default as ActivitySVG } from './activity';
 export { default as ADASVG } from './ada';
 export { default as AirdropSVG } from './airdrop';
 export { default as ArrowLeftSVG } from './arrow-left';
