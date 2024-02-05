@@ -3,9 +3,9 @@ import BigNumber from 'bignumber.js';
 import { propOr } from 'ramda';
 
 import {
-  CoinObject,
-  CoinsMap,
-} from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+  Web3ManagerState,
+  Web3ManagerSuiObject,
+} from '@/context/web3-manager/web3-manager.types';
 
 import { CreateVectorParameterArgs } from './coin.types';
 
@@ -44,7 +44,7 @@ export const safeSymbol = (symbol: string, type: string): string => {
 };
 
 export const getSafeTotalBalance = propOr(new BigNumber(0), 'totalBalance') as (
-  x: CoinObject
+  x: Web3ManagerSuiObject
 ) => BigNumber;
 
 export const getCoinTypeFromSupply = (x: string) => {
@@ -61,15 +61,13 @@ export const getCoinTypeFromSupply = (x: string) => {
 export const processSafeAmount = (
   amount: BigNumber,
   type: string,
-  coinsMap: CoinsMap
+  coinsMap: Web3ManagerState['coinsMap']
 ): BigNumber => {
   const object = coinsMap[type];
 
   if (!object) return amount;
 
-  return amount.gt(BigNumber(object.balance))
-    ? BigNumber(object.balance)
-    : amount;
+  return amount.gt(object.totalBalance) ? object.totalBalance : amount;
 };
 
 export const getCoinsFromLpCoinType = (poolType: string) => {

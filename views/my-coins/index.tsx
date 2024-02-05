@@ -93,7 +93,7 @@ const MyCoins: FC = () => {
                   values(capData) as unknown as ReadonlyArray<
                     Record<'coinType' | 'coinObjectId', string>
                   >
-                ).find(({ coinType }) => coinType === coin.type)
+                ).find(({ coinType }) => coinType === coin.coinType)
                   ?.coinObjectId || null;
 
               return <MyCoinsItem key={v4()} {...coin} capId={capId} />;

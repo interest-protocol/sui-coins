@@ -1,4 +1,4 @@
-import { Box, Typography } from '@interest-protocol/ui-kit';
+import { Box } from '@interest-protocol/ui-kit';
 import { useWalletKit } from '@mysten/wallet-kit';
 import { FC } from 'react';
 
@@ -6,35 +6,33 @@ import { UserSVG } from '@/svg';
 
 import { AvatarProps } from './account-info.types';
 
-const Avatar: FC<AvatarProps> = ({ withNameOrAddress, account, isLarge }) => {
+const Avatar: FC<AvatarProps> = ({ withNameOrAddress, account }) => {
   const { currentAccount } = useWalletKit();
   const address = account?.address ?? (currentAccount?.address || '');
-
-  const SIZE = isLarge ? '2.2rem' : '1.5rem';
 
   return (
     <>
       <Box
-        display="flex"
-        width={SIZE}
-        height={SIZE}
-        alignItems="center"
+        bg="primary"
+        width="1.5rem"
+        height="1.5rem"
         borderRadius="full"
-        bg="primaryContainer"
+        display="flex"
         justifyContent="center"
-        color="onPrimaryContainer"
+        alignItems="center"
+        color="white"
       >
-        <UserSVG width="80%" height="80%" maxWidth={SIZE} maxHeight={SIZE} />
+        <UserSVG
+          maxWidth="1.5rem"
+          maxHeight="1.5rem"
+          width="80%"
+          height="80%"
+        />
       </Box>
       {withNameOrAddress && (
-        <Typography
-          variant="label"
-          size="large"
-          mr="0.5rem"
-          width="max-content"
-        >
-          {address.slice(0, 6)}…{address.slice(-4)}
-        </Typography>
+        <Box fontFamily="Proto !important">
+          {address.slice(0, 6)}...{address.slice(-4)}
+        </Box>
       )}
     </>
   );

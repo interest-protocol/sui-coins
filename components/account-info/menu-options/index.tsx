@@ -1,11 +1,11 @@
-import { Box, Motion, Typography } from '@interest-protocol/ui-kit';
+import { Box, Motion } from '@interest-protocol/ui-kit';
 import { useWalletKit } from '@mysten/wallet-kit';
 import { useRouter } from 'next/router';
 import { toPairs } from 'ramda';
 import { FC, ReactNode, useState } from 'react';
 import { v4 } from 'uuid';
 
-import { SIDEBAR_ITEMS } from '@/components/layout/sidebar/sidebar.data';
+import { MENU_ITEMS } from '@/components/layout/header/nav-bar.data';
 import ConnectWalletButton from '@/components/wallet/connect-wallet-button';
 import { DISPLAY_NETWORK, wrapperVariants } from '@/constants';
 import { useNetwork } from '@/context/network';
@@ -84,7 +84,7 @@ const MenuOptions: FC<MenuOptionsProps> = ({
   return (
     <Motion
       right="0"
-      top="3rem"
+      top="5rem"
       zIndex={4}
       overflowY="auto"
       width="14.5rem"
@@ -108,16 +108,16 @@ const MenuOptions: FC<MenuOptionsProps> = ({
               <Avatar withNameOrAddress />
             </OptionItem>
           )}
-          {SIDEBAR_ITEMS.map(({ path, name }) => (
+          {MENU_ITEMS.map(({ path, name }) => (
             <OptionItem
               key={v4()}
+              mobileOnly
               selected={asPath == path}
               onClick={() => push(path)}
             >
               {name}
             </OptionItem>
           ))}
-          <OptionItem disabled>Settings</OptionItem>
           {isConnected ? (
             <>
               <OptionItem
@@ -137,9 +137,7 @@ const MenuOptions: FC<MenuOptionsProps> = ({
                     width="100%"
                   />
                 </Box>
-                <Typography variant="body" size="large" color="error">
-                  Sign Out
-                </Typography>
+                <Box color="error">Sign Out</Box>
               </OptionItem>
             </>
           ) : (

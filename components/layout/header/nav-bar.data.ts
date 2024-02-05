@@ -4,33 +4,28 @@ import { DeviceMenuType } from './header.types';
 
 export const MENU_ITEMS = [
   {
-    mobileOnly: true,
     name: 'Create Coin',
-    device: DeviceMenuType.Both,
     path: Routes[RoutesEnum.CreateCoin],
+    device: DeviceMenuType.Both,
   },
   {
     name: 'Swap',
-    mobileOnly: true,
-    device: DeviceMenuType.Both,
     path: Routes[RoutesEnum.Swap],
+    device: DeviceMenuType.Both,
   },
   {
     name: 'Pools',
-    mobileOnly: true,
-    device: DeviceMenuType.Both,
     path: Routes[RoutesEnum.Pools],
+    device: DeviceMenuType.Both,
   },
   {
     name: 'My Coins',
-    mobileOnly: false,
-    device: DeviceMenuType.Mobile,
     path: Routes[RoutesEnum.MyCoins],
+    device: DeviceMenuType.Mobile,
   },
   {
     name: 'Airdrop',
-    mobileOnly: true,
-    device: DeviceMenuType.Mobile,
     path: Routes[RoutesEnum.Airdrop],
+    device: DeviceMenuType.Mobile,
   },
 ];

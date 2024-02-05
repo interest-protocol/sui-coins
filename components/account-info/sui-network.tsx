@@ -1,10 +1,4 @@
-import {
-  Box,
-  Motion,
-  Theme,
-  Typography,
-  useTheme,
-} from '@interest-protocol/ui-kit';
+import { Box, Motion } from '@interest-protocol/ui-kit';
 import { not, toPairs } from 'ramda';
 import { FC, useState } from 'react';
 import { v4 } from 'uuid';
@@ -19,7 +13,6 @@ import OptionItem from './menu-options/option-item';
 const BOX_ID = 'network-box-id';
 
 const SuiNetwork: FC = () => {
-  const { colors } = useTheme() as Theme;
   const [isOpen, setIsOpen] = useState(false);
   const { network, changeNetwork } = useNetwork();
 
@@ -55,10 +48,11 @@ const SuiNetwork: FC = () => {
         gap="xs"
         display="flex"
         cursor="pointer"
-        onClick={handleOpenMenu}
-        borderRadius="xs"
+        borderRadius="full"
         alignItems="center"
-        bg={isOpen ? `${colors.primary}14` : 'container'}
+        border="0.25rem solid"
+        onClick={handleOpenMenu}
+        borderColor={isOpen ? '#0053DB33' : 'transparent'}
       >
         <Box
           color="white"
@@ -84,7 +78,7 @@ const SuiNetwork: FC = () => {
       {isOpen && (
         <Motion
           right="0"
-          top="3rem"
+          top="5rem"
           zIndex={4}
           width="14.5rem"
           initial="closed"
@@ -106,9 +100,7 @@ const SuiNetwork: FC = () => {
               onClick={() => changeNetwork(networkKey)}
             >
               <SuiLogoSVG maxWidth="2rem" maxHeight="2rem" />
-              <Typography variant="body" size="large">
-                Sui {displayNetwork}
-              </Typography>
+              <Box>Sui {displayNetwork}</Box>
             </OptionItem>
           ))}
         </Motion>

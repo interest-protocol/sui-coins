@@ -10,28 +10,21 @@ const Wallet: FC = () => {
   const { isConnected } = useWalletKit();
 
   return (
-    <Box
-      display="flex"
-      justifyContent="flex-end"
-      flexDirection={['row-reverse', 'row-reverse', 'row-reverse', 'row']}
-      alignItems="center"
-    >
+    <Box display="flex" justifyContent="flex-end">
       <Box display="flex" gap="m">
         {isConnected && (
-          <>
-            <Box
-              gap="l"
-              justifyContent="flex-end"
-              display={['none', 'none', 'none', 'flex']}
-            >
-              <SuiNetwork />
-            </Box>
-          </>
+          <Box
+            gap="l"
+            justifyContent="flex-end"
+            display={['none', 'none', 'none', 'flex']}
+          >
+            <SuiNetwork />
+          </Box>
         )}
         <AccountInfo />
       </Box>
       {!isConnected && (
-        <Box display="flex">
+        <Box display={['none', 'none', 'none', 'flex']}>
           <ConnectWalletButton />
         </Box>
       )}

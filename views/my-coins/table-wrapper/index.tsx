@@ -18,7 +18,11 @@ const TableWrapper: FC<PropsWithChildren<TableWrapperProps>> = ({
     width={['calc(100vw - 3rem)', 'auto']}
     boxShadow="0px 24px 46px -10px rgba(13, 16, 23, 0.16)"
   >
-    <Box p="1.5rem" fontWeight="500" fontSize={['xl', 'xl', 'xl', '4xl']}>
+    <Box
+      p="1.5rem"
+      fontWeight="500"
+      fontSize={['1.375rem', '1.375rem', '1.375rem', '2rem']}
+    >
       {title}
     </Box>
     <TableWrapperHeader options={options} />

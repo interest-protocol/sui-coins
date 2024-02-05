@@ -13,29 +13,30 @@ const PoolTitleBar: FC<PoolTitleBarProps> = ({
 }) => (
   <Box
     mx="auto"
-    py="m"
-    gap="m"
-    px="xl"
+    py="1rem"
+    gap="1rem"
+    px="1.5rem"
     display="flex"
+    maxWidth="65rem"
     alignItems="center"
-    borderRadius="xs"
+    borderRadius="2rem"
     bg="lowestContainer"
-    mb={['5xl', '5xl', '5xl', 'xs']}
+    my={['5xl', '5xl', '5xl', '8xl']}
   >
-    <Button isIcon variant="text" mr="xs" onClick={onBack}>
+    <Button isIcon variant="text" mr="0.5rem" onClick={onBack}>
       <ArrowLeftSVG width="1.5rem" maxWidth="1.5rem" maxHeight="1.5rem" />
     </Button>
     <Typography
       size="large"
       variant="headline"
       textAlign="center"
-      fontSize={['3xl', '3xl', '5xl', '5xl']}
+      fontSize={['1.5rem', '1.5rem', '2rem', '2rem']}
     >
       {name}
     </Typography>
     <Box
       ml="auto"
-      gap="m"
+      gap="1rem"
       alignItems="center"
       display={['none', 'none', 'flex', 'flex']}
     >
@@ -47,7 +48,7 @@ const PoolTitleBar: FC<PoolTitleBarProps> = ({
           width="2.5rem"
           height="2.5rem"
           alignItems="center"
-          borderRadius="xs"
+          borderRadius="0.5rem"
           justifyContent="center"
           color="lowestContainer"
         >

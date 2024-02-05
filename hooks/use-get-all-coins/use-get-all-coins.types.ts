@@ -1,16 +1,15 @@
 import { CoinMetadata, CoinStruct, SuiClient } from '@mysten/sui.js/client';
 
-export interface CoinObject extends Pick<CoinMetadata, 'symbol' | 'decimals'> {
-  totalBalance: any;
+export interface CoinObject {
   digest: string;
   version: string;
-  type: string;
+  coinType: string;
   balance: string;
   coinObjectId: string;
   previousTransaction: string;
+  objects: ReadonlyArray<CoinStruct>;
   lockedUntilEpoch?: number | null | undefined;
-  metadata: Omit<CoinMetadata, 'symbol' | 'decimals'>;
-  objects: ReadonlyArray<Omit<CoinStruct, 'coinType'> & { type: string }>;
+  metadata: CoinMetadata;
 }
 
 export type CoinsMap = Record<string, CoinObject>;
