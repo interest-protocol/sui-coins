@@ -10,6 +10,12 @@ import { BATCH_SIZE } from '@/views/airdrop/airdrop.constants';
 
 import { AirdropSummaryProps, IAirdropForm } from '../airdrop.types';
 
+const METHOD_TITLE = {
+  csv: 'CSV',
+  nft: 'NFT',
+  customAmount: 'Custom',
+};
+
 const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
   const { control } = useFormContext<IAirdropForm>();
 
@@ -40,7 +46,7 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
               color="onSurface"
               mr="0.5rem"
             >
-              {method || '--'}
+              {method ? METHOD_TITLE[method] : '--'}
             </Typography>
             <QuestionCircleSVG
               maxHeight="0.875rem"
