@@ -173,7 +173,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
 
   if (isSearchAddress)
     return (
-      <ModalTokenSearch search={search} handleSelectToken={handleSelectToken} />
+      <ModalTokenSearch search={search} handleSelectToken={onSelectToken} />
     );
 
   return <NotFound />;
