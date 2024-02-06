@@ -79,8 +79,7 @@ export const fetchNftHolder = async ({
         owner && validateAndNormalizeSuiAddress(owner) ? owner : null
       )
       .filter((value: string | null) => !!value);
-  } catch (e) {
-    console.log(e);
+  } catch {
     return [];
   }
 };

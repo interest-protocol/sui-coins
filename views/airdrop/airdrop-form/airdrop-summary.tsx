@@ -31,7 +31,7 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
             opacity="0.80"
             color="#000000A3"
           >
-            Delivery Method
+            Delivery method
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center">
             <Typography
@@ -62,7 +62,7 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
             opacity="0.80"
             color="#000000A3"
           >
-            Addresses sent to
+            Total addresses
           </Typography>
 
           <Box display="flex" justifyContent="center" alignItems="center">
@@ -119,7 +119,7 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
             opacity="0.80"
             color="#000000A3"
           >
-            Total SUI Fee
+            Total SUI fee
           </Typography>
           <Box textAlign="right">
             <Typography size="medium" variant="body">

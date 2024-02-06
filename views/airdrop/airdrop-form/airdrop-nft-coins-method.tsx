@@ -71,7 +71,7 @@ const AirdropNftCoinsMethod: FC = () => {
       </Typography>
       <Box>
         <Typography variant="body" size="small">
-          Choose addresses with this type of {method}
+          Choose an NFT collection
         </Typography>
         <Box py="xs">
           <Box position="relative">
@@ -99,12 +99,6 @@ const AirdropNftCoinsMethod: FC = () => {
                   alignItems="center"
                   justifyContent="center"
                 >
-                  {/* <TokenIcon
-                    network={network}
-                    tokenId={
-                      network === Network.MAINNET ? asset.type : asset.symbol
-                    }
-                  /> */}
                   <img
                     width="100%"
                     src={(asset as NFTCollectionMetadata).img}
@@ -132,14 +126,10 @@ const AirdropNftCoinsMethod: FC = () => {
             </Box>
           </Box>
         </Box>
-        <Typography variant="body" size="small" color="#000000A3">
-          There are {(asset as NFTCollectionMetadata)?.total ?? 0} addresses
-          with this coin
-        </Typography>
       </Box>
       <Box>
         <Typography variant="body" size="small">
-          Enter Amount to Send
+          Enter amount to send per address
         </Typography>
         <AirdropCommonAmountTextField />
       </Box>
