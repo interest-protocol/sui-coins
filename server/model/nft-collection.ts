@@ -1,4 +1,4 @@
-import { getModelForClass, prop } from '@typegoose/typegoose';
+import { getModelForClass, mongoose, prop } from '@typegoose/typegoose';
 
 class NFTCollection {
   @prop({ required: true, index: true })
@@ -14,6 +14,7 @@ class NFTCollection {
   public updatedAt!: number;
 }
 
-const NFTCollectionModel = getModelForClass(NFTCollection);
+const NFTCollectionModel =
+  mongoose.models.NFTCollection || getModelForClass(NFTCollection);
 
 export default NFTCollectionModel;

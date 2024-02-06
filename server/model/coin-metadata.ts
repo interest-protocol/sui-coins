@@ -1,4 +1,4 @@
-import { getModelForClass, prop } from '@typegoose/typegoose';
+import { getModelForClass, mongoose, prop } from '@typegoose/typegoose';
 
 export class CoinMetadata {
   @prop({ required: true, index: true })
@@ -23,6 +23,7 @@ export class CoinMetadata {
   public iconUrl?: string | null;
 }
 
-const CoinMetadataModel = getModelForClass(CoinMetadata);
+const CoinMetadataModel =
+  mongoose.models.CoinMetadata || getModelForClass(CoinMetadata);
 
 export default CoinMetadataModel;

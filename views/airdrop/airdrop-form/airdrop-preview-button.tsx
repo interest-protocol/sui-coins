@@ -16,7 +16,7 @@ const AirdropPreviewButton: FC<AirdropPreviewButtonProps> = ({
     () =>
       !airdropList ||
       !airdropList.length ||
-      !airdropList
+      airdropList
         .reduce((acc, { amount }) => acc.plus(BigNumber(amount)), BigNumber(0))
         .isZero() ||
       !tokenBalance ||
