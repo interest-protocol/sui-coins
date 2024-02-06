@@ -16,9 +16,9 @@ import { updateURL } from '@/utils';
 import SelectTokenModal from '@/views/components/select-token-modal';
 
 import { SwapForm } from '../swap.types';
-import { SelectTokenProps } from './input.types';
+import { InputProps } from './input.types';
 
-const SelectToken: FC<SelectTokenProps> = ({ label }) => {
+const SelectToken: FC<InputProps> = ({ label }) => {
   const { coinsMap } = useWeb3();
   const { network } = useNetwork();
   const { pathname } = useRouter();
