@@ -11,7 +11,9 @@ import {
   WORMHOLE_TOKENS,
 } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
+import { getBasicCoinMetadata } from '@/hooks/use-get-all-coins';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { useSuiClient } from '@/hooks/use-sui-client';
 import { useWeb3 } from '@/hooks/use-web3';
 import { CoinMetadataWithType } from '@/interface';
 
@@ -28,8 +30,9 @@ import { mapMetadataToCoin } from './select-token-modal.utils';
 const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   control,
   loading,
-  handleSelectToken,
+  handleSelectToken: onSelectToken,
 }) => {
+  const suiClient = useSuiClient();
   const { network } = useNetwork();
   const { coins, coinsMap } = useWeb3();
   const favoriteTokenTypes = useReadLocalStorage<ReadonlyArray<string>>(
@@ -56,6 +59,27 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   const search = useWatch({ control, name: 'search' });
 
   const noWalletToShow = filterSelected == TokenOrigin.Wallet && !coins?.length;
+
+  const handleSelectToken = (coin: CoinObject) => {
+    onSelectToken(coin);
+
+    const hasCoinMetadataOnDB = coinsMetadata[coin.type];
+
+    if (!hasCoinMetadataOnDB)
+      suiClient.getCoinMetadata({ coinType: search }).then((data) => {
+        const metadata = {
+          ...(data ?? getBasicCoinMetadata(search)),
+          type: search,
+        };
+
+        fetch(`/api/v1/coin-metadata`, {
+          method: 'POST',
+          body: JSON.stringify(metadata),
+        });
+
+        return metadata;
+      });
+  };
 
   const isSearchAddress =
     isValidSuiAddress(search.split('::')[0]) && search.split('::').length > 2;
