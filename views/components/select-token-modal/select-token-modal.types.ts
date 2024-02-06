@@ -1,8 +1,13 @@
 import BigNumber from 'bignumber.js';
+import { FC } from 'react';
 import { Control, UseFormSetValue } from 'react-hook-form';
 
-import { Network } from '@/constants';
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { SVGProps } from '@/components/svg/svg.types';
+import { CoinData } from '@/interface';
+
+export interface CoinDataWithBalance extends CoinData {
+  balance: number;
+}
 
 export interface LinearLoaderProps {
   loading: boolean;
@@ -23,12 +28,13 @@ export interface TokenModalItemProps {
   selected: boolean;
   isSuggested: boolean;
   onClick: () => void;
+  Icon: FC<SVGProps & { filled?: boolean }>;
 }
 
 export interface SelectTokenModalProps {
   simple?: boolean;
   closeModal: () => void;
-  onSelect: (coin: CoinObject) => void;
+  onSelect: (coin: CoinDataWithBalance) => void;
 }
 
 export interface SelectTokenFilterProps {
@@ -49,24 +55,32 @@ export interface SearchTokenForm {
 
 export interface SelectTokenModalBodyProps {
   loading: boolean;
-  handleSelectToken: (coin: CoinObject) => void;
+  handleSelectToken: (coin: CoinDataWithBalance) => void;
   control: Control<SearchTokenForm>;
 }
 
 export interface SelectTokenBaseTokensProps {
-  handleSelectToken: (coin: CoinObject) => void;
+  handleSelectToken: (coin: CoinDataWithBalance) => void;
 }
 
 export interface SelectTokenBaseTokenItemProps
-  extends Pick<CoinObject, 'type' | 'symbol'> {
-  network: Network;
+  extends Omit<CoinData, 'decimals'> {
   handleSelectToken: () => void;
 }
 
 export interface ModalTokenBodyProps {
   tokenOrigin: TokenOrigin;
-  tokens: ReadonlyArray<CoinObject>;
-  handleSelectToken: (coin: CoinObject) => void;
+  tokens: ReadonlyArray<TokenProps>;
+  handleSelectToken: (coin: CoinDataWithBalance) => void;
+}
+
+export interface TokenProps {
+  type: string;
+  symbol: string;
+  origin?: string;
+  totalBalance?: BigNumber;
+  objects?: ReadonlyArray<any>;
+  decimals: number;
 }
 
 export interface LinearLoaderProps {

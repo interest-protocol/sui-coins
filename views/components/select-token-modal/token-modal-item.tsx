@@ -1,15 +1,8 @@
-import {
-  Box,
-  Button,
-  Theme,
-  Typography,
-  useTheme,
-} from '@interest-protocol/ui-kit';
+import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 
-import { TokenIcon } from '@/components';
-import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
+import { LOCAL_STORAGE_VERSION } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { FavoriteSVG } from '@/svg';
 
@@ -17,6 +10,7 @@ import { TokenModalItemProps } from './select-token-modal.types';
 
 const TokenModalItem: FC<TokenModalItemProps> = ({
   type,
+  Icon,
   symbol,
   origin,
   balance,
@@ -25,7 +19,6 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
   isSuggested,
 }) => {
   const { network } = useNetwork();
-  const { colors } = useTheme() as Theme;
   const [favoriteTokens, setFavoriteTokens] = useLocalStorage<
     ReadonlyArray<string>
   >(`${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-tokens`, []);
@@ -41,16 +34,16 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
 
   return (
     <Box
-      p="xl"
+      p="1rem"
       display="flex"
       color="textSoft"
       cursor="pointer"
       alignItems="center"
+      nHover={{ bg: 'rgba(0, 83, 219, 0.08)' }}
       justifyContent="space-between"
-      nHover={{ bg: `${colors.primary}14` }}
+      bg={selected ? 'rgba(0, 83, 219, 0.08)' : 'unset'}
       onClick={selected ? undefined : onClick}
       transition="background 500ms ease-in-out"
-      bg={selected ? `${colors.primary}14` : 'unset'}
     >
       <Box display="flex" alignItems="center">
         <Box
@@ -59,16 +52,11 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
           display="flex"
           width="2.5rem"
           height="2.5rem"
-          borderRadius="xs"
           alignItems="center"
+          borderRadius="0.5rem"
           justifyContent="center"
         >
-          <TokenIcon
-            network={network}
-            maxWidth="1.6rem"
-            maxHeight="1.6rem"
-            tokenId={network === Network.MAINNET ? type : symbol}
-          />
+          <Icon filled width="100%" maxWidth="1.6rem" maxHeight="1.6rem" />
         </Box>
         <Box
           ml="1rem"
