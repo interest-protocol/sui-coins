@@ -1,4 +1,10 @@
-import { Box, Motion } from '@interest-protocol/ui-kit';
+import {
+  Box,
+  Motion,
+  Theme,
+  Typography,
+  useTheme,
+} from '@interest-protocol/ui-kit';
 import { not, toPairs } from 'ramda';
 import { FC, useState } from 'react';
 import { v4 } from 'uuid';
@@ -13,10 +19,11 @@ import OptionItem from './menu-options/option-item';
 const BOX_ID = 'network-box-id';
 
 const SuiNetwork: FC = () => {
+  const { colors } = useTheme() as Theme;
   const [isOpen, setIsOpen] = useState(false);
   const { network, changeNetwork } = useNetwork();
 
-  const closeDropdown = (event: any) => {
+  const closeNetworkDropdown = (event: any) => {
     if (
       event?.path?.some((node: any) => node?.id == BOX_ID) ||
       event?.composedPath()?.some((node: any) => node?.id == BOX_ID)
@@ -26,8 +33,12 @@ const SuiNetwork: FC = () => {
     setIsOpen(false);
   };
 
+  const handleOpenMenu = () => {
+    setIsOpen(not);
+  };
+
   const networkBoxRef =
-    useClickOutsideListenerRef<HTMLDivElement>(closeDropdown);
+    useClickOutsideListenerRef<HTMLDivElement>(closeNetworkDropdown);
 
   return (
     <Box
@@ -44,11 +55,10 @@ const SuiNetwork: FC = () => {
         gap="xs"
         display="flex"
         cursor="pointer"
-        borderRadius="full"
+        onClick={handleOpenMenu}
+        borderRadius="xs"
         alignItems="center"
-        border="0.25rem solid"
-        onClick={() => setIsOpen(not)}
-        borderColor={isOpen ? '#0053DB33' : 'transparent'}
+        bg={isOpen ? `${colors.primary}14` : 'container'}
       >
         <Box
           color="white"
@@ -64,8 +74,8 @@ const SuiNetwork: FC = () => {
         </Box>
         <Box fontFamily="Proto">{DISPLAY_NETWORK[network]}</Box>
         <Box
-          transform={`rotate(${isOpen ? '180deg' : '0deg'})`}
           display="flex"
+          transform={`rotate(${isOpen ? '180deg' : '0deg'})`}
           alignItems="center"
         >
           <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
@@ -96,7 +106,9 @@ const SuiNetwork: FC = () => {
               onClick={() => changeNetwork(networkKey)}
             >
               <SuiLogoSVG maxWidth="2rem" maxHeight="2rem" />
-              <Box>Sui {displayNetwork}</Box>
+              <Typography variant="body" size="large">
+                Sui {displayNetwork}
+              </Typography>
             </OptionItem>
           ))}
         </Motion>

@@ -1,55 +1,37 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { useWalletKit } from '@mysten/wallet-kit';
-import { FC, useState } from 'react';
-
-import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
-import useEventListener from '@/hooks/use-event-listener';
+import { FC } from 'react';
 
 import AccountInfo from '../account-info';
+import SuiNetwork from '../account-info/sui-network';
 import ConnectWalletButton from './connect-wallet-button';
-
-const BOX_ID = 'Account-Menu';
 
 const Wallet: FC = () => {
   const { isConnected } = useWalletKit();
-  const [isOpen, setIsOpen] = useState(false);
-
-  const closeDropdown = (event: any) => {
-    if (
-      event?.path?.some((node: any) => node?.id == BOX_ID) ||
-      event?.composedPath()?.some((node: any) => node?.id == BOX_ID)
-    )
-      return;
-
-    handleCloseMenu();
-  };
-
-  const connectedBoxRef =
-    useClickOutsideListenerRef<HTMLDivElement>(closeDropdown);
-
-  const handleOpenMenu = () => setIsOpen(true);
-
-  const handleCloseMenu = () => setIsOpen(false);
-
-  useEventListener('resize', handleCloseMenu, true);
 
   return (
     <Box
-      display={'flex'}
+      display="flex"
       justifyContent="flex-end"
-      id={BOX_ID}
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      ref={connectedBoxRef}
-      position="relative"
+      flexDirection={['row-reverse', 'row-reverse', 'row-reverse', 'row']}
+      alignItems="center"
     >
-      <AccountInfo
-        menuIsOpen={isOpen}
-        handleOpenMenu={handleOpenMenu}
-        handleCloseMenu={handleCloseMenu}
-      />
+      <Box display="flex" gap="m">
+        {isConnected && (
+          <>
+            <Box
+              gap="l"
+              justifyContent="flex-end"
+              display={['none', 'none', 'none', 'flex']}
+            >
+              <SuiNetwork />
+            </Box>
+            <AccountInfo />
+          </>
+        )}
+      </Box>
       {!isConnected && (
-        <Box display={['none', 'none', 'none', 'flex']}>
+        <Box display="flex">
           <ConnectWalletButton />
         </Box>
       )}

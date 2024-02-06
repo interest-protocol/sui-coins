@@ -1,10 +1,11 @@
-import { Box, Motion } from '@interest-protocol/ui-kit';
+import { Box, Motion, Typography } from '@interest-protocol/ui-kit';
 import { useWalletKit } from '@mysten/wallet-kit';
 import { useRouter } from 'next/router';
 import { toPairs } from 'ramda';
 import { FC, ReactNode, useState } from 'react';
 import { v4 } from 'uuid';
 
+import { SIDEBAR_ITEMS } from '@/components/layout/sidebar/sidebar.data';
 import ConnectWalletButton from '@/components/wallet/connect-wallet-button';
 import { DISPLAY_NETWORK, wrapperVariants } from '@/constants';
 import { useNetwork } from '@/context/network';
@@ -83,10 +84,12 @@ const MenuOptions: FC<MenuOptionsProps> = ({
   return (
     <Motion
       right="0"
-      top="4rem"
+      top="3rem"
       zIndex={4}
+      overflowY="auto"
       width="14.5rem"
       initial="closed"
+      maxHeight="83vh"
       border="1px solid"
       borderRadius="1rem"
       position="absolute"
@@ -101,43 +104,26 @@ const MenuOptions: FC<MenuOptionsProps> = ({
       {submenu ?? (
         <>
           {isConnected && (
-            <OptionItem
-              withBorderBottom
-              withSubmenu
-              onClick={openAccountSubmenu}
-            >
+            <OptionItem withSubmenu onClick={openAccountSubmenu}>
               <Avatar withNameOrAddress />
             </OptionItem>
           )}
-          <OptionItem
-            mobileOnly
-            selected={asPath == '/'}
-            onClick={() => asPath !== '/' && push('/')}
-          >
-            Create Coin
-          </OptionItem>
-          <OptionItem
-            mobileOnly
-            withBorderBottom
-            selected={asPath == '/my-coins'}
-            onClick={() => asPath !== '/my-coins' && push('/my-coins')}
-          >
-            My Coins
-          </OptionItem>
-          <OptionItem
-            mobileOnly
-            withBorderBottom
-            selected={asPath == '/airdrop'}
-            onClick={() => asPath !== '/airdrop' && push('/airdrop')}
-          >
-            Airdrop
-          </OptionItem>
+          {SIDEBAR_ITEMS.map(({ path, name }) => (
+            <OptionItem
+              key={v4()}
+              selected={asPath == path}
+              onClick={() => push(path)}
+            >
+              {name}
+            </OptionItem>
+          ))}
+          <OptionItem disabled>Settings</OptionItem>
           {isConnected ? (
             <>
               <OptionItem
                 mobileOnly
                 withSubmenu
-                withBorderBottom
+                withBorderTop
                 onClick={openNetworkSubmenu}
               >
                 <SuiLogoSVG maxWidth="2rem" maxHeight="2rem" />
@@ -151,7 +137,9 @@ const MenuOptions: FC<MenuOptionsProps> = ({
                     width="100%"
                   />
                 </Box>
-                <Box color="error">Sign Out</Box>
+                <Typography variant="body" size="large" color="error">
+                  Sign Out
+                </Typography>
               </OptionItem>
             </>
           ) : (

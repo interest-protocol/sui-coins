@@ -10,7 +10,7 @@ export type TextFieldElementProps = Omit<
 export interface TextFieldProps
   extends StylinComponentProps,
     TextFieldElementProps {
-  label: string;
+  label?: string;
   supportingText?: string;
   status?: 'error' | 'success' | 'none';
   fieldProps?: BoxProps;

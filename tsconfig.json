@@ -12,6 +12,8 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
@@ -33,7 +35,7 @@
       "@/utils": ["./utils"],
       "@/utils/*": ["./utils/*"],
       "@/views/*": ["./views/*"],
-      "@/styles": ["./styles"],
+      "@/styles": ["./styles"]
     }
   },
   "exclude": ["node_modules"],
@@ -41,6 +43,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "interface/declaration.d.ts"
+    "interface/declaration.d.ts",
+    "views/create-pool/illustration",
+    "views/airdrop/airdrop-form/airdrop-custom-amount-text-fieldtsx"
   ]
 }

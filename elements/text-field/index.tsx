@@ -18,7 +18,7 @@ const TextFieldElement = stylin<TextFieldElementProps & RefAttributes<unknown>>(
   'input'
 )();
 
-export const TextField: FC<PropsWithRef<TextFieldProps>> = forwardRef(
+const TextField: FC<PropsWithRef<TextFieldProps>> = forwardRef(
   (
     { supportingText, status, onBlur, onFocus, fieldProps, label, ...props },
     ref
@@ -46,17 +46,19 @@ export const TextField: FC<PropsWithRef<TextFieldProps>> = forwardRef(
 
     return (
       <Box>
-        <Box
-          mb="xs"
-          as="label"
-          display="block"
-          color="#1B1B1F"
-          fontWeight="500"
-          lineHeight="1rem"
-          fontSize="0.75rem"
-        >
-          {label}
-        </Box>
+        {label && (
+          <Box
+            mb="xs"
+            as="label"
+            display="block"
+            color="#1B1B1F"
+            fontWeight="500"
+            lineHeight="1rem"
+            fontSize="0.75rem"
+          >
+            {label}
+          </Box>
+        )}
         <Box
           display="flex"
           borderRadius="xs"
@@ -135,3 +137,4 @@ export const TextField: FC<PropsWithRef<TextFieldProps>> = forwardRef(
 
 TextField.displayName = 'TextField';
 export * from './text-field.types';
+export default TextField;

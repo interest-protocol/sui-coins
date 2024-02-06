@@ -1,20 +1,22 @@
-import { Box } from '@interest-protocol/ui-kit';
+import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
 import Layout from '@/components/layout';
 
 import CreateTokenForm from './create-token-form';
-import Hero from './hero';
 
 const CreateToken: FC = () => (
   <Layout>
     <Box
-      my="3xl"
+      mt="10xl"
+      gap="3xl"
       display="flex"
-      justifyContent="space-around"
-      flexDirection={['column', 'column', 'column', 'row']}
+      alignItems="center"
+      flexDirection="column"
     >
-      <Hero />
+      <Typography variant="display" size="large">
+        Create coin
+      </Typography>
       <CreateTokenForm />
     </Box>
   </Layout>
