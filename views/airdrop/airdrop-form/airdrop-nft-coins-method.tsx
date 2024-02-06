@@ -31,8 +31,16 @@ const AirdropNftCoinsMethod: FC = () => {
     setValue('asset', NFT_MAP[collectionId]);
 
     const nft: NFTCollection = await fetch(
-      `/api/v1/nft-collection?id=${collectionId}`
-    ).then((res) => res.json());
+      `/api/v1/nft-collection?id=${collectionId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+      .then((res) => res.json())
+      .catch(console.log);
 
     setValue(
       'airdropList',

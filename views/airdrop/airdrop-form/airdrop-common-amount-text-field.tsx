@@ -1,4 +1,5 @@
 import { Box, TextField } from '@interest-protocol/ui-kit';
+import BigNumber from 'bignumber.js';
 import { ChangeEvent, FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
@@ -27,7 +28,9 @@ const AirdropCustomAmountTextField: FC = () => {
             'airdropList',
             getValues('airdropList')?.map(({ address }) => ({
               address,
-              amount: String((Number(value) ?? 0) * 10 ** decimals),
+              amount: BigNumber(value || '0')
+                .times(BigNumber(10).pow(decimals))
+                .toString(),
             })) ?? null
           );
         },
