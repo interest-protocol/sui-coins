@@ -5,7 +5,6 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 import { AIRDROP_SUI_FEE_PER_ADDRESS } from '@/constants/fees';
 import { FixedPointMath } from '@/lib';
-import { QuestionCircleSVG } from '@/svg';
 import { BATCH_SIZE } from '@/views/airdrop/airdrop.constants';
 
 import { AirdropSummaryProps, IAirdropForm } from '../airdrop.types';
@@ -48,11 +47,6 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
             >
               {method ? METHOD_TITLE[method] : '--'}
             </Typography>
-            <QuestionCircleSVG
-              maxHeight="0.875rem"
-              maxWidth="0.875rem"
-              width="100%"
-            />
           </Box>
         </Box>
         <Box
@@ -80,11 +74,6 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
             >
               {airdropList ? airdropList.length : '--'}
             </Typography>
-            <QuestionCircleSVG
-              maxHeight="0.875rem"
-              maxWidth="0.875rem"
-              width="100%"
-            />
           </Box>
         </Box>
         <Box py="m" display="flex" justifyContent="space-between">
@@ -105,11 +94,6 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
             >
               {airdropList ? Math.ceil(airdropList.length / BATCH_SIZE) : '--'}
             </Typography>
-            <QuestionCircleSVG
-              maxHeight="0.875rem"
-              maxWidth="0.875rem"
-              width="100%"
-            />
           </Box>
         </Box>
         <Box
