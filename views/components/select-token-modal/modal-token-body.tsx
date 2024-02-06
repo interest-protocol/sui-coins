@@ -13,7 +13,9 @@ const ModalTokenBody: FC<ModalTokenBodyProps> = ({
       <TokenModalItem
         key={v4()}
         selected={false}
-        onClick={() => handleSelectToken(token.type)}
+        onClick={async () => {
+          await handleSelectToken(token.type);
+        }}
         {...token}
       />
     ))}

@@ -29,6 +29,8 @@ const AirdropPreviewButton: FC<AirdropPreviewButtonProps> = ({
     [airdropList, tokenBalance]
   );
 
+  console.log(airdropList);
+
   return (
     <Box display="flex" justifyContent="center">
       <Button
