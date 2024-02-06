@@ -32,7 +32,7 @@ export default async function handler(_: NextApiRequest, res: NextApiResponse) {
     );
 
     res.status(200).send('Database updated successfully');
-  } catch {
+  } catch (e) {
     res.status(500).send(e);
   }
 }
