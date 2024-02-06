@@ -5,8 +5,8 @@ import toast from 'react-hot-toast';
 
 import { FolderSVG } from '@/svg';
 
-import { IAirdropForm } from './airdrop.types';
-import { csvToAirdrop } from './airdrop.utils';
+import { IAirdropForm } from '../airdrop.types';
+import { csvToAirdrop } from '../airdrop.utils';
 import AirdropUploadFileCard from './airdrop-upload-file-card';
 
 const AirdropUploadFile: FC = () => {
@@ -62,20 +62,19 @@ const AirdropUploadFile: FC = () => {
   return (
     <Box display="flex" flexDirection="column" gap="s">
       <Typography variant="body" size="large">
-        2. Upload file
+        3. Upload file
       </Typography>
       {airdropList ? (
         <AirdropUploadFileCard name="Airdrop List" size={airdropList.length} />
       ) : (
         <Box
-          p="2xl"
+          p="m"
           gap="m"
           bg="surface"
           display="flex"
           borderRadius="xs"
           borderWidth="1px"
           alignItems="center"
-          flexDirection="column"
           onDrop={handleDropFile}
           onDragEnter={() => setDragging(true)}
           onDragLeave={() => setDragging(false)}
@@ -94,12 +93,7 @@ const AirdropUploadFile: FC = () => {
           >
             <FolderSVG maxWidth="1.4rem" maxHeight="1.4rem" width="100%" />
           </Box>
-          <Typography
-            size="large"
-            variant="body"
-            maxWidth="9rem"
-            textAlign="center"
-          >
+          <Typography size="large" variant="body" textAlign="center">
             Drop your file here or{' '}
             <Typography
               as="label"
