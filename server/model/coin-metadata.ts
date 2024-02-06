@@ -1,29 +1,44 @@
-import { getModelForClass, mongoose, prop } from '@typegoose/typegoose';
+import mongoose, { Document, Schema } from 'mongoose';
 
-export class CoinMetadata {
-  @prop({ required: true, index: true })
-  public type!: string;
-
-  @prop({ required: true })
-  public name!: string;
-
-  @prop({ required: true })
-  public symbol!: string;
-
-  @prop({ required: false })
-  public description!: string;
-
-  @prop({ required: true })
-  public decimals!: number;
-
-  @prop({ required: false })
-  public id?: string | null;
-
-  @prop({ required: false })
-  public iconUrl?: string | null;
+export interface CoinMedataModel extends Document {
+  type: string;
+  name: string;
+  symbol: string;
+  description?: string;
+  decimals: number;
+  id?: string | null;
+  iconUrl?: string | null;
 }
 
-const CoinMetadataModel =
-  mongoose.models.CoinMetadata || getModelForClass(CoinMetadata);
+const CoinMetadataSchema = new Schema({
+  type: {
+    type: String,
+    required: true,
+    index: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  symbol: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+  },
+  decimals: {
+    type: Number,
+  },
+  id: {
+    type: String,
+    default: null,
+  },
+  iconUrl: {
+    type: String,
+    default: null,
+  },
+});
 
-export default CoinMetadataModel;
+export default mongoose.models.CoinMetadata ||
+  mongoose.model<CoinMedataModel>('CoinMetadata', CoinMetadataSchema);
