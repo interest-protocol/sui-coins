@@ -1,4 +1,5 @@
 import { Box, Motion, Typography } from '@interest-protocol/ui-kit';
+import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
@@ -44,9 +45,11 @@ const AirdropNftCoinsMethod: FC = () => {
 
     setValue(
       'airdropList',
-      nft.holders.map((holder) => ({
-        address: holder,
-        amount: getValues('commonAmount'),
+      nft.holders.map((address) => ({
+        address,
+        amount: BigNumber(getValues('commonAmount'))
+          .times(BigNumber(10).pow(getValues('token.decimals')))
+          .toString(),
       }))
     );
   };
