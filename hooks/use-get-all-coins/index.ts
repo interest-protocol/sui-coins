@@ -53,7 +53,7 @@ export const useGetAllCoins = () => {
   return useSWR(
     makeSWRKey([network, currentAccount?.address], suiClient.getAllCoins.name),
     async () => {
-      if (!currentAccount) return null;
+      if (!currentAccount) return {} as CoinsMap;
       const coinsRaw = await getAllCoins(suiClient, currentAccount.address);
 
       const coinsType = coinsRaw.map(({ coinType }) => coinType);

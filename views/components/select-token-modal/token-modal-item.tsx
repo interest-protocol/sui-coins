@@ -11,14 +11,19 @@ import { useLocalStorage } from 'usehooks-ts';
 import { TokenIcon } from '@/components';
 import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
 import { useNetwork } from '@/context/network';
-import { FavoriteSVG } from '@/svg';
+import { BSCChainSVG, ETHChainSVG, FavoriteSVG } from '@/svg';
 
 import { TokenModalItemProps } from './select-token-modal.types';
 
+const CHAIN_ICON = {
+  BSC: BSCChainSVG,
+  ETH: ETHChainSVG,
+};
+
 const TokenModalItem: FC<TokenModalItemProps> = ({
   type,
+  chain,
   symbol,
-  origin,
   onClick,
   selected,
 }) => {
@@ -38,6 +43,8 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
         : [...favoriteTokens, type]
     );
   };
+
+  const ChainIcon = CHAIN_ICON[chain!];
 
   return (
     <Box
@@ -60,6 +67,7 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
           width="2.5rem"
           height="2.5rem"
           borderRadius="xs"
+          position="relative"
           alignItems="center"
           justifyContent="center"
         >
@@ -69,6 +77,11 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
             maxHeight="1.6rem"
             tokenId={network === Network.MAINNET ? type : symbol}
           />
+          {chain && (
+            <Box position="absolute" bottom="-0.3rem" right="-0.5rem">
+              <ChainIcon maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
+            </Box>
+          )}
         </Box>
         <Box
           ml="1rem"
@@ -79,9 +92,9 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
           <Typography variant="title" size="medium">
             {symbol}
           </Typography>
-          {origin && (
-            <Typography variant="body" size="small">
-              {origin}
+          {chain && (
+            <Typography variant="body" size="small" opacity="0.6">
+              {chain}
             </Typography>
           )}
         </Box>
