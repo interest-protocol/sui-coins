@@ -32,6 +32,7 @@ const SelectNFTModal: FC<SelectNFTModalProps> = ({ onSelect, closeModal }) => {
         width="25rem"
         display="flex"
         bg="onPrimary"
+        height="41rem"
         maxHeight="90vh"
         overflow="hidden"
         color="onSurface"

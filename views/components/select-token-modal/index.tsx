@@ -45,6 +45,7 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
       minWidth="22rem"
       display="flex"
       bg="onPrimary"
+      height="41rem"
       maxHeight="90vh"
       maxWidth="25rem"
       overflow="hidden"
