@@ -70,7 +70,7 @@ const Input: FC<InputProps> = ({ label }) => {
           <Box px="s">
             <SwapFormFieldSlider
               setValue={setValue}
-              balance={balance ?? 0}
+              balance={Number(balance ?? 0)}
               currentValue={+getValues('from.value')}
             />
           </Box>

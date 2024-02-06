@@ -43,6 +43,6 @@ export interface SwapForm {
 
 export interface SwapSliderProps {
   balance: number;
-  setValue: UseFormSetValue<SwapForm>;
   currentValue: number;
+  setValue: UseFormSetValue<SwapForm>;
 }
