@@ -12,30 +12,13 @@ const AirdropPreviewButton: FC<AirdropPreviewButtonProps> = ({
   const airdropList = useWatch({ control, name: 'airdropList' });
   const tokenBalance = useWatch({ control, name: 'token.balance' });
 
-  console.log({
-    airdropList,
-    airdropListTotalAmount: airdropList?.reduce(
-      (acc, { amount }) => acc + Number(amount),
-      0
-    ),
-    predicate: airdropList
-      ? BigNumber(tokenBalance).lt(
-          airdropList.reduce(
-            (acc, { amount }) => acc.plus(BigNumber(amount ?? 0)),
-            BigNumber(0)
-          )
-        )
-      : false,
-  });
-
   const isDisabled = useMemo(
     () =>
       !airdropList ||
       !airdropList.length ||
-      !airdropList.reduce(
-        (acc, { amount }) => acc.plus(BigNumber(amount)),
-        BigNumber(0)
-      ) ||
+      !airdropList
+        .reduce((acc, { amount }) => acc.plus(BigNumber(amount)), BigNumber(0))
+        .isZero() ||
       !tokenBalance ||
       BigNumber(tokenBalance).lt(
         airdropList.reduce(
