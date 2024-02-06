@@ -5,6 +5,8 @@ export interface CoinObject {
   version: string;
   coinType: string;
   balance: string;
+  type?: string;
+  symbol?: string;
   coinObjectId: string;
   previousTransaction: string;
   objects: ReadonlyArray<CoinStruct>;
