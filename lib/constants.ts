@@ -54,4 +54,5 @@ export enum TOKEN_SYMBOL {
   ETH_CELER_WETH = 'cWETH',
   ETH_CELER_WBTC = 'cWBTC',
   ETH_CELER_USDC = 'cUSDC',
+  ETH_CELER_USDT = 'cUSDT',
 }

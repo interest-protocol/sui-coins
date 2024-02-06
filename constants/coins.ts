@@ -1,7 +1,10 @@
 import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 
 import { TOKEN_SYMBOL } from '@/lib';
-import { CoinData } from '@/views/pool-details/pool-form/pool-form.types';
+import {
+  CoinData,
+  CoinDataWithChainInfo,
+} from '@/views/pool-details/pool-form/pool-form.types';
 
 import { Network, OBJECT_RECORD } from '.';
 
@@ -954,6 +957,14 @@ export const COINS: Record<Network, Record<string, CoinData>> = {
       symbol: TOKEN_SYMBOL.ETH_CELER_USDC,
       type: COIN_TYPE[Network.MAINNET].ETH_CELER_USDC,
     },
+    ETH_CELER_USDT: {
+      decimals:
+        COIN_DECIMALS[Network.MAINNET][
+          COIN_TYPE[Network.MAINNET].ETH_CELER_USDT
+        ],
+      symbol: TOKEN_SYMBOL.ETH_CELER_USDT,
+      type: COIN_TYPE[Network.MAINNET].ETH_CELER_USDT,
+    },
     V_LP_SUI_ETH_CELER_WBTC: {
       decimals:
         COIN_DECIMALS[Network.MAINNET][
@@ -1076,7 +1087,7 @@ export const COIN_TYPE_TO_COIN = {
   },
 };
 
-export const STRICT_TOKENS: Record<Network, ReadonlyArray<string>> = {
+export const STRICT_TOKENS_TYPE: Record<Network, ReadonlyArray<string>> = {
   [Network.TESTNET]: [
     TESTNET_BASE_COINS.SUI,
     TESTNET_BASE_COINS.BNB,
@@ -1088,7 +1099,7 @@ export const STRICT_TOKENS: Record<Network, ReadonlyArray<string>> = {
   [Network.MAINNET]: [MAINNET_BASE_COINS.SUI],
 };
 
-export const WORMHOLE_TOKENS: Record<Network, ReadonlyArray<string>> = {
+export const WORMHOLE_TOKENS_TYPE: Record<Network, ReadonlyArray<string>> = {
   [Network.TESTNET]: [],
   [Network.MAINNET]: [
     MAINNET_BASE_COINS.BSC_WORMHOLE_ADA,
@@ -1110,7 +1121,7 @@ export const WORMHOLE_TOKENS: Record<Network, ReadonlyArray<string>> = {
   ],
 };
 
-export const CELER_TOKENS: Record<Network, ReadonlyArray<string>> = {
+export const CELER_TOKENS_TYPE: Record<Network, ReadonlyArray<string>> = {
   [Network.TESTNET]: [],
   [Network.MAINNET]: [
     MAINNET_BASE_COINS.ETH_CELER_USDC,
@@ -1120,46 +1131,46 @@ export const CELER_TOKENS: Record<Network, ReadonlyArray<string>> = {
   ],
 };
 
-export const COINS_ADDITIONAL_INFO = {
-  [SUI_TYPE_ARG]: {},
-  ETH_WORMHOLE_USDC:
-    '0x5d4b302506645c37ff133b98c4b50a5ae14841659738d6d733d59d0d217a93bf::coin::COIN',
-  NATIVE_WORMHOLE_ETH:
-    '0xaf8cd5edc19c4512f4259f0bee101a40d41ebed738ade5874359610ef8eeced5::coin::COIN',
-  ETH_WORMHOLE_USDT:
-    '0xc060006111016b8a020ad5b33834984a437aaa7d3c74c18e09a95d48aceab08c::coin::COIN',
-  NATIVE_WORMHOLE_WBNB:
-    '0xb848cce11ef3a8f62eccea6eb5b35a12c4c2b1ee1af7755d02d7bd6218e8226f::coin::COIN',
-  NATIVE_WORMHOLE_WAVAX:
-    '0x1e8b532cca6569cab9f9b9ebc73f8c13885012ade714729aa3b450e0339ac766::coin::COIN',
-  NATIVE_WORMHOLE_WFTM:
-    '0x6081300950a4f1e2081580e919c210436a1bed49080502834950d31ee55a2396::coin::COIN',
-  NATIVE_WORMHOLE_CELO:
-    '0xa198f3be41cda8c07b3bf3fee02263526e535d682499806979a111e88a5a8d0f::coin::COIN',
-  NATIVE_WORMHOLE_WMATIC:
-    '0xdbe380b13a6d0f5cdedd58de8f04625263f113b3f9db32b3e1983f49e2841676::coin::COIN',
-  NATIVE_WORMHOLE_SOL:
-    '0xb7844e289a8410e50fb3ca48d69eb9cf29e27d223ef90353fe1bd8e27ff8f3f8::coin::COIN',
-  BSC_WORMHOLE_ADA:
-    '0x4eac6573f65e7db5aea5a23e1335993a57e088dcd4aff7934059d9a6311d8655::coin::COIN',
-  BSC_WORMHOLE_BTCB:
-    '0x5cc7b6ed0ce0d43d08667793f6efe7a34d678a780755dc37ea8bfa8805f63327::coin::COIN',
-  BSC_WORMHOLE_USDT:
-    '0x603b488c87e0d1df64560a61418c87238d440a29ee39bbd757b0c92d38a35c7c::coin::COIN',
-  BSC_WORMHOLE_USDC:
-    '0x909cba62ce96d54de25bec9502de5ca7b4f28901747bbf96b76c2e63ec5f1cba::coin::COIN',
-  BSC_WORMHOLE_ETH:
-    '0x5029d5a94429a73b8036cd67192d9c5e09bbc2c0fee942d50075a9edba66744f::coin::COIN',
-  BSC_WORMHOLE_FLOKI:
-    '0xbcbbd5c23edf35fc279e21ebc129a1187dbfa5b086c63a8e7ff202865888b27b::coin::COIN',
-  BSC_WORMHOLE_DOGE:
-    '0xd399b358bd0e835000f6caa8c771a7d186499b6e62d413c2fd6cfed709689f28::coin::COIN',
-  ETH_CELER_WETH:
-    '0x94e7a8e71830d2b34b3edaa195dc24c45d142584f06fa257b73af753d766e690::celer_weth_coin::CELER_WETH_COIN',
-  ETH_CELER_WBTC:
-    '0x94e7a8e71830d2b34b3edaa195dc24c45d142584f06fa257b73af753d766e690::celer_wbtc_coin::CELER_WBTC_COIN',
-  ETH_CELER_USDC:
-    '0x94e7a8e71830d2b34b3edaa195dc24c45d142584f06fa257b73af753d766e690::celer_usdc_coin::CELER_USDC_COIN',
-  ETH_CELER_USDT:
-    '0x94e7a8e71830d2b34b3edaa195dc24c45d142584f06fa257b73af753d766e690::celer_usdt_coin::CELER_USDT_COIN',
+export const STRICT_TOKENS: Record<Network, Array<CoinData>> = {
+  [Network.TESTNET]: [
+    COINS[Network.TESTNET].SUI,
+    COINS[Network.TESTNET].BNB,
+    COINS[Network.TESTNET].BTC,
+    COINS[Network.TESTNET].ETH,
+    COINS[Network.TESTNET].USDC,
+    COINS[Network.TESTNET].USDT,
+  ],
+  [Network.MAINNET]: [COINS[Network.MAINNET].SUI],
+};
+
+export const WORMHOLE_TOKENS: Record<Network, Array<CoinDataWithChainInfo>> = {
+  [Network.TESTNET]: [],
+  [Network.MAINNET]: [
+    { ...COINS[Network.MAINNET].BSC_WORMHOLE_ADA, chain: 'BSC' },
+    { ...COINS[Network.MAINNET].BSC_WORMHOLE_BTCB, chain: 'BSC' },
+    COINS[Network.MAINNET].NATIVE_WORMHOLE_CELO,
+    { ...COINS[Network.MAINNET].BSC_WORMHOLE_DOGE, chain: 'BSC' },
+    COINS[Network.MAINNET].NATIVE_WORMHOLE_ETH,
+    { ...COINS[Network.MAINNET].BSC_WORMHOLE_ETH, chain: 'BSC' },
+    { ...COINS[Network.MAINNET].BSC_WORMHOLE_FLOKI, chain: 'BSC' },
+    COINS[Network.MAINNET].NATIVE_WORMHOLE_SOL,
+    { ...COINS[Network.MAINNET].BSC_WORMHOLE_USDC, chain: 'BSC' },
+    { ...COINS[Network.MAINNET].BSC_WORMHOLE_USDT, chain: 'BSC' },
+    { ...COINS[Network.MAINNET].ETH_WORMHOLE_USDC, chain: 'ETH' },
+    { ...COINS[Network.MAINNET].ETH_WORMHOLE_USDT, chain: 'ETH' },
+    COINS[Network.MAINNET].NATIVE_WORMHOLE_WAVAX,
+    COINS[Network.MAINNET].NATIVE_WORMHOLE_WBNB,
+    COINS[Network.MAINNET].NATIVE_WORMHOLE_WFTM,
+    COINS[Network.MAINNET].NATIVE_WORMHOLE_WMATIC,
+  ],
+};
+
+export const CELER_TOKENS: Record<Network, Array<CoinDataWithChainInfo>> = {
+  [Network.TESTNET]: [],
+  [Network.MAINNET]: [
+    { ...COINS[Network.MAINNET].ETH_CELER_USDC, chain: 'ETH' },
+    { ...COINS[Network.MAINNET].ETH_CELER_USDT, chain: 'ETH' },
+    { ...COINS[Network.MAINNET].ETH_CELER_WBTC, chain: 'ETH' },
+    { ...COINS[Network.MAINNET].ETH_CELER_WETH, chain: 'ETH' },
+  ],
 };

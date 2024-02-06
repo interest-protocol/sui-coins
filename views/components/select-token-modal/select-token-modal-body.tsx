@@ -7,8 +7,11 @@ import { useReadLocalStorage } from 'usehooks-ts';
 import { LOCAL_STORAGE_VERSION } from '@/constants';
 import {
   CELER_TOKENS,
+  CELER_TOKENS_TYPE,
   STRICT_TOKENS,
+  STRICT_TOKENS_TYPE,
   WORMHOLE_TOKENS,
+  WORMHOLE_TOKENS_TYPE,
 } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { getBasicCoinMetadata } from '@/hooks/use-get-all-coins';
@@ -25,7 +28,7 @@ import {
   SelectTokenModalBodyProps,
   TokenOrigin,
 } from './select-token-modal.types';
-import { mapMetadataToCoin } from './select-token-modal.utils';
+import { metadataToCoin } from './select-token-modal.utils';
 
 const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   control,
@@ -34,73 +37,54 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
 }) => {
   const suiClient = useSuiClient();
   const { network } = useNetwork();
-  const { coins, coinsMap } = useWeb3();
+  const { coins, coinsMap, isFetchingCoinBalances } = useWeb3();
   const favoriteTokenTypes = useReadLocalStorage<ReadonlyArray<string>>(
     `${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-tokens`
   );
 
-  const {
-    data: coinsMetadataRaw,
-    isLoading,
-    error,
-  } = useSWR('coins-metadata', async () =>
-    fetch('/api/v1/coin-metadata').then((res) => res.json())
+  const { data } = useSWR<ReadonlyArray<CoinMetadataWithType>>(
+    'coin-metadata',
+    async () => fetch('/api/v1/coin-metadata').then((res) => res.json())
   );
-
-  const coinsMetadata: Record<string, CoinMetadataWithType> =
-    isLoading || error
-      ? {}
-      : (coinsMetadataRaw as ReadonlyArray<CoinMetadataWithType>).reduce(
-          (acc, curr) => ({ ...acc, [curr.type]: curr }),
-          {}
-        );
 
   const filterSelected = useWatch({ control, name: 'filter' });
   const search = useWatch({ control, name: 'search' });
 
-  const noWalletToShow = filterSelected == TokenOrigin.Wallet && !coins?.length;
+  const handleSelectToken = async (type: string) => {
+    if (coinsMap[type]) return onSelectToken(coinsMap[type]);
 
-  const handleSelectToken = (coin: CoinObject) => {
-    onSelectToken(coin);
+    const dbCoinMetadata = data?.find((metadata) => type === metadata.type);
 
-    const hasCoinMetadataOnDB = coinsMetadata[coin.type];
+    if (dbCoinMetadata) return onSelectToken(metadataToCoin(dbCoinMetadata));
 
-    if (!hasCoinMetadataOnDB)
-      suiClient.getCoinMetadata({ coinType: search }).then((data) => {
-        const metadata = {
-          ...(data ?? getBasicCoinMetadata(search)),
-          type: search,
-        };
+    const bcCoinMetadata = await suiClient.getCoinMetadata({ coinType: type });
 
-        fetch(`/api/v1/coin-metadata`, {
-          method: 'POST',
-          body: JSON.stringify(metadata),
-        });
+    const metadata = {
+      ...(bcCoinMetadata ?? getBasicCoinMetadata(type)),
+      type,
+    };
 
-        return metadata;
-      });
+    fetch(`/api/v1/coin-metadata`, {
+      method: 'POST',
+      body: JSON.stringify(metadata),
+    });
+
+    return onSelectToken(metadataToCoin(metadata));
   };
 
   const isSearchAddress =
     isValidSuiAddress(search.split('::')[0]) && search.split('::').length > 2;
 
-  if (loading || isLoading) return <FetchingToken />;
-
-  if (noWalletToShow) return <NotFound />;
-
   if (
     (!isSearchAddress && filterSelected === TokenOrigin.Strict) ||
     (filterSelected === TokenOrigin.Strict &&
       isSearchAddress &&
-      STRICT_TOKENS[network].includes(search))
+      STRICT_TOKENS_TYPE[network].includes(search))
   )
     return (
       <ModalTokenBody
         handleSelectToken={handleSelectToken}
         tokens={STRICT_TOKENS[network]
-          .map(
-            (type) => coinsMap[type] ?? mapMetadataToCoin(type, coinsMetadata)
-          )
           .sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
           .filter(
             ({ symbol, type }) =>
@@ -108,6 +92,48 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
           )}
       />
     );
+
+  if (
+    (!isSearchAddress && filterSelected === TokenOrigin.Wormhole) ||
+    (filterSelected === TokenOrigin.Wormhole &&
+      isSearchAddress &&
+      WORMHOLE_TOKENS_TYPE[network].includes(search))
+  )
+    return (
+      <ModalTokenBody
+        handleSelectToken={handleSelectToken}
+        tokens={WORMHOLE_TOKENS[network]
+          .sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
+          .filter(
+            ({ symbol, type }) =>
+              !search || symbol.includes(search) || type.includes(search)
+          )}
+      />
+    );
+
+  if (
+    (!isSearchAddress && filterSelected === TokenOrigin.Celer) ||
+    (filterSelected === TokenOrigin.Celer &&
+      isSearchAddress &&
+      CELER_TOKENS_TYPE[network].includes(search))
+  )
+    return (
+      <ModalTokenBody
+        handleSelectToken={handleSelectToken}
+        tokens={CELER_TOKENS[network]
+          .sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
+          .filter(
+            ({ symbol, type }) =>
+              !search || symbol.includes(search) || type.includes(search)
+          )}
+      />
+    );
+
+  if (loading || isFetchingCoinBalances) return <FetchingToken />;
+
+  const noWalletToShow = filterSelected == TokenOrigin.Wallet && !coins?.length;
+
+  if (noWalletToShow) return <NotFound />;
 
   if (
     (!noWalletToShow &&
@@ -129,51 +155,9 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
       />
     );
 
-  if (
-    (!isSearchAddress && filterSelected === TokenOrigin.Wormhole) ||
-    (filterSelected === TokenOrigin.Wormhole &&
-      isSearchAddress &&
-      WORMHOLE_TOKENS[network].includes(search))
-  )
-    return (
-      <ModalTokenBody
-        handleSelectToken={handleSelectToken}
-        tokens={WORMHOLE_TOKENS[network]
-          .map(
-            (type) => coinsMap[type] ?? mapMetadataToCoin(type, coinsMetadata)
-          )
-          .sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
-          .filter(
-            ({ symbol, type }) =>
-              !search || symbol.includes(search) || type.includes(search)
-          )}
-      />
-    );
-
-  if (
-    (!isSearchAddress && filterSelected === TokenOrigin.Celer) ||
-    (filterSelected === TokenOrigin.Celer &&
-      isSearchAddress &&
-      CELER_TOKENS[network].includes(search))
-  )
-    return (
-      <ModalTokenBody
-        handleSelectToken={handleSelectToken}
-        tokens={CELER_TOKENS[network]
-          .map(
-            (type) => coinsMap[type] ?? mapMetadataToCoin(type, coinsMetadata)
-          )
-          .sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
-          .filter(
-            ({ symbol, type }) =>
-              !search || symbol.includes(search) || type.includes(search)
-          )}
-      />
-    );
-
   if (isSearchAddress)
     return (
-      <ModalTokenSearch search={search} handleSelectToken={onSelectToken} />
+      <ModalTokenSearch search={search} handleSelectToken={handleSelectToken} />
     );
 
   return <NotFound />;

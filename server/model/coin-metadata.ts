@@ -1,6 +1,6 @@
 import { getModelForClass, prop } from '@typegoose/typegoose';
 
-class CoinMetadata {
+export class CoinMetadata {
   @prop({ required: true, index: true })
   public type!: string;
 

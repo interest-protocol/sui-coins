@@ -3,6 +3,7 @@ import { Control, UseFormSetValue } from 'react-hook-form';
 
 import { Network } from '@/constants';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { CoinDataWithChainInfo } from '@/views/pool-details/pool-form/pool-form.types';
 
 export interface LinearLoaderProps {
   loading: boolean;
@@ -15,10 +16,8 @@ export interface TokenModalMetadata {
   totalBalance: BigNumber;
 }
 
-export interface TokenModalItemProps {
-  type: string;
-  symbol: string;
-  origin?: string;
+export interface TokenModalItemProps
+  extends Omit<CoinDataWithChainInfo, 'decimals'> {
   selected: boolean;
   onClick: () => void;
 }
@@ -63,13 +62,13 @@ export interface SelectTokenBaseTokenItemProps
 }
 
 export interface ModalTokenBodyProps {
-  tokens: ReadonlyArray<CoinObject>;
-  handleSelectToken: (coin: CoinObject) => void;
+  tokens: ReadonlyArray<CoinDataWithChainInfo>;
+  handleSelectToken: (type: string) => void;
 }
 
 export interface ModalTokenSearchProps {
   search: string;
-  handleSelectToken: (coin: CoinObject) => void;
+  handleSelectToken: (type: string) => void;
 }
 
 export interface LinearLoaderProps {
