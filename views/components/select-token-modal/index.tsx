@@ -42,10 +42,10 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
   return (
     <Motion
       layout
-      minWidth="22rem"
       display="flex"
       bg="onPrimary"
       height="41rem"
+      minWidth="22rem"
       maxHeight="90vh"
       maxWidth="25rem"
       overflow="hidden"
@@ -84,27 +84,19 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
         </Box>
         {!simple && <SelectTokenFilter control={control} setValue={setValue} />}
       </Box>
-      <Motion
-        bg="#B6C4FF33"
+      <Box
+        flex="1"
+        display="flex"
         overflowY="auto"
-        position="relative"
-        initial={{ height: 0 }}
-        animate={{ height: 'auto' }}
+        bg="lowContainer"
+        flexDirection="column"
       >
-        <Box
-          flex="1"
-          display="flex"
-          overflowY="auto"
-          bg="lowContainer"
-          flexDirection="column"
-        >
-          <SelectTokenModalBody
-            control={control}
-            loading={isFetchingCoinBalances}
-            handleSelectToken={handleSelectToken}
-          />
-        </Box>
-      </Motion>
+        <SelectTokenModalBody
+          control={control}
+          loading={isFetchingCoinBalances}
+          handleSelectToken={handleSelectToken}
+        />
+      </Box>
     </Motion>
   );
 };
