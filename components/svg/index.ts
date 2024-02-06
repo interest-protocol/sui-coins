@@ -7,6 +7,7 @@ export { default as ArrowTopRightSVG } from './arrow-top-right';
 export { default as AssetsSVG } from './assets';
 export { default as AVAXSVG } from './avax';
 export { default as BNBSVG } from './bnb';
+export { default as BoxDownSVG } from './box-down';
 export { default as BTCSVG } from './btc';
 export { default as CaretRightSVG } from './caret-right';
 export { default as CaretUpSVG } from './caret-up';
