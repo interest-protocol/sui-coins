@@ -6,6 +6,7 @@ const FetchingToken: FC = () => (
     p="4xl"
     gap="xl"
     flex="1"
+    height="100%"
     display="flex"
     overflowY="auto"
     bg="lowContainer"
