@@ -1,13 +1,32 @@
-import { CoinMetadata } from '@mysten/sui.js/client';
+import { formatAddress } from '@mysten/sui.js/utils';
 import { useWalletKit } from '@mysten/wallet-kit';
 import BigNumber from 'bignumber.js';
+import { pathOr } from 'ramda';
 import useSWR from 'swr';
+import { useReadLocalStorage } from 'usehooks-ts';
 
+import { LOCAL_STORAGE_VERSION } from '@/constants';
+import { COIN_METADATA } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useSuiClient } from '@/hooks/use-sui-client';
-import { makeSWRKey } from '@/utils';
+import { CoinMetadataWithType, LocalTokenMetadataRecord } from '@/interface';
+import {
+  chunk,
+  getSymbolByType,
+  makeSWRKey,
+  normalizeSuiType,
+  safeSymbol,
+} from '@/utils';
 
 import { CoinsMap, TGetAllCoins } from './use-get-all-coins.types';
+
+export const getBasicCoinMetadata = (type: string) => ({
+  decimals: 0,
+  iconUrl: null,
+  description: '',
+  name: formatAddress(type),
+  symbol: getSymbolByType(type),
+});
 
 const getAllCoins: TGetAllCoins = async (provider, account, cursor = null) => {
   const { data, nextCursor, hasNextPage } = await provider.getAllCoins({
@@ -27,47 +46,92 @@ export const useGetAllCoins = () => {
   const { network } = useNetwork();
   const { currentAccount } = useWalletKit();
 
+  const tokensMetadataRecord = useReadLocalStorage<LocalTokenMetadataRecord>(
+    `${LOCAL_STORAGE_VERSION}-sui-coins-tokens-metadata`
+  );
+
   return useSWR(
     makeSWRKey([network, currentAccount?.address], suiClient.getAllCoins.name),
     async () => {
       if (!currentAccount) return null;
       const coinsRaw = await getAllCoins(suiClient, currentAccount.address);
 
-      const coinsMetadata: ReadonlyArray<CoinMetadata | null> =
-        await Promise.all(
-          coinsRaw.map(({ coinType }) =>
-            suiClient.getCoinMetadata({ coinType })
+      const coinsType = coinsRaw.map(({ coinType }) => coinType);
+
+      const dbCoinsMetadata: Record<string, CoinMetadataWithType> = await fetch(
+        `/api/v1/coin-metadata?type_list=${coinsType.join(',')}`
+      )
+        .then((res) => res.json())
+        .then((data: ReadonlyArray<CoinMetadataWithType>) =>
+          data.reduce((acc, item) => ({ ...acc, [item.type]: item }), {})
+        );
+
+      const missingCoinsType = Array.from(
+        new Set(coinsType.filter((type) => !dbCoinsMetadata[type]))
+      );
+
+      const missingCoinsTypeBatches = chunk<string>(missingCoinsType, 5);
+
+      const missingCoinsMetadata = [] as Array<CoinMetadataWithType>;
+
+      for await (const batch of missingCoinsTypeBatches) {
+        const data = await Promise.all(
+          batch.map((coinType) =>
+            suiClient.getCoinMetadata({ coinType }).then((metadata) => ({
+              ...(metadata ?? getBasicCoinMetadata(coinType)),
+              type: coinType,
+            }))
           )
         );
 
-      return coinsRaw.reduce(
-        (acc, coinRaw, i) => ({
+        data.map((item) => missingCoinsMetadata.push(item));
+      }
+
+      if (missingCoinsMetadata.length) {
+        fetch(`/api/v1/coin-metadata`, {
+          method: 'POST',
+          body: JSON.stringify(missingCoinsMetadata),
+        });
+      }
+
+      return coinsRaw.reduce((acc, { coinType, ...coinRaw }) => {
+        const type = normalizeSuiType(coinType);
+        const { symbol, decimals, ...metadata } = dbCoinsMetadata[coinType] ?? {
+          symbol:
+            pathOr(null, ['symbol'], dbCoinsMetadata[coinType]) ??
+            pathOr(null, [type, 'symbol'], COIN_METADATA) ??
+            pathOr(null, [type, 'symbol'], tokensMetadataRecord) ??
+            safeSymbol(type, type).trim().split(' ').reverse()[0],
+          decimals:
+            pathOr(null, ['decimals'], dbCoinsMetadata[coinType]) ??
+            pathOr(null, [type, 'decimals'], COIN_METADATA) ??
+            pathOr(-1, [type, 'decimals'], tokensMetadataRecord),
+          name: '',
+          description: '',
+        };
+
+        return {
           ...acc,
-          [coinRaw.coinType]: {
-            ...acc[coinRaw.coinType],
+          [type]: {
+            ...acc[type],
             ...coinRaw,
+            type,
+            symbol,
+            decimals,
+            metadata,
             balance: BigNumber(coinRaw.balance)
-              .plus(BigNumber(acc[coinRaw.coinType]?.balance || '0'))
+              .plus(BigNumber(acc[type]?.balance || '0'))
               .toString(),
-            objects: (acc[coinRaw.coinType]?.objects ?? []).concat(coinRaw),
-            metadata: coinsMetadata[i]
-              ? (coinsMetadata[i] as CoinMetadata)
-              : {
-                  decimals: 0,
-                  name: '',
-                  description: '',
-                  symbol: '',
-                },
+            objects: (acc[type]?.objects ?? []).concat([{ ...coinRaw, type }]),
           },
-        }),
-        {} as CoinsMap
-      );
+        };
+      }, {} as CoinsMap);
     },
     {
-      revalidateOnMount: true,
       revalidateOnFocus: false,
+      revalidateOnMount: true,
       refreshWhenHidden: false,
-      refreshInterval: 15000,
+      refreshInterval: 10000,
     }
   );
 };

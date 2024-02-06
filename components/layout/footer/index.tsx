@@ -33,11 +33,7 @@ const Footer: FC = () => (
         Follow us
       </Typography>
       <Box display="flex" gap="xs" justifyContent="center" mt="s">
-        <a
-          href="https://discord.gg/interestprotocol"
-          target="_blank"
-          rel="noreferrer"
-        >
+        <a href="https://discord.gg/interest" target="_blank" rel="noreferrer">
           <Box
             p="xs"
             width="2.5rem"
