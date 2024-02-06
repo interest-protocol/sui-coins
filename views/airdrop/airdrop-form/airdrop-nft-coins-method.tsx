@@ -34,8 +34,6 @@ const AirdropNftCoinsMethod: FC = () => {
       `/api/v1/nft-collection?id=${collectionId}`
     ).then((res) => res.json());
 
-    console.log({ asset });
-
     setValue(
       'airdropList',
       nft.holders.map((holder) => ({
@@ -135,8 +133,8 @@ const AirdropNftCoinsMethod: FC = () => {
           </Box>
         </Box>
         <Typography variant="body" size="small" color="#000000A3">
-          There are {(asset as NFTCollectionMetadata).total} addresses with this
-          coin
+          There are {(asset as NFTCollectionMetadata)?.total ?? 0} addresses
+          with this coin
         </Typography>
       </Box>
       <Box>

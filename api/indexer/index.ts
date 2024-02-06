@@ -85,16 +85,21 @@ export const fetchNftHolder = async ({
   }
 };
 
-export const fetchAllHolders = async (collectionId: string, limit: number) => {
+export const fetchAllHolders = async (
+  collectionId: string,
+  limit: number,
+  uniqueCall = false
+) => {
   let allHolders: Array<string> = [];
 
   for await (const offset of Array.from(
     { length: ~~(limit / 25) + 1 },
     (_, index) => index
   )) {
-    const parallelRequest =
-      TOTAL_REQUESTS -
-      NFT.reduce((acc, { total }) => acc + (offset * 25 > total ? 1 : 0), 0);
+    const parallelRequest = uniqueCall
+      ? 1
+      : TOTAL_REQUESTS -
+        NFT.reduce((acc, { total }) => acc + (offset * 25 > total ? 1 : 0), 0);
 
     await sleep((ONE_MINUTE_IN_MS * parallelRequest) / REQUEST_PER_MINUTE);
 

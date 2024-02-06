@@ -31,12 +31,15 @@ export const NFT: ReadonlyArray<NFTCollectionMetadata> = [
     total: 2_219,
     img: '/images/nft/tail-by-typus.webp',
   },
+  {
+    id: '09d26434-4449-45eb-b848-89c30bec2e12',
+    name: 'Unchained Esports',
+    total: 4_314,
+    img: '/images/nft/unchained-esports.webp',
+  },
 ];
 
-export const NFT_MAP: Record<string, NFTCollectionMetadata> = {
-  [NFT[0].id]: NFT[0],
-  [NFT[1].id]: NFT[1],
-  [NFT[2].id]: NFT[2],
-  [NFT[3].id]: NFT[3],
-  [NFT[4].id]: NFT[4],
-};
+export const NFT_MAP: Record<string, NFTCollectionMetadata> = NFT.reduce(
+  (acc, curr) => ({ ...acc, [curr.id]: curr }),
+  {}
+);
