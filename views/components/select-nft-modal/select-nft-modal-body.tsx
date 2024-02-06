@@ -1,25 +1,23 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
-import { useReadLocalStorage } from 'usehooks-ts';
+import { useFormContext, useWatch } from 'react-hook-form';
 
-import { LOCAL_STORAGE_VERSION } from '@/constants';
-import { useNetwork } from '@/context/network';
-import { useWeb3 } from '@/hooks/use-web3';
+import { NFT } from '@/constants/nft';
 
-import FetchingToken from './fetching-nft';
 import ModalTokenBody from './modal-nft-body';
 import NotFound from './not-found';
-import { SelectNFTModalBodyProps } from './select-nft-modal.types';
+import {
+  SearchNFTForm,
+  SelectNFTModalBodyProps,
+} from './select-nft-modal.types';
 
 const SelectTokenModalBody: FC<SelectNFTModalBodyProps> = ({
-  loading,
   handleSelectNFT,
 }) => {
-  const { network } = useNetwork();
-  const { coins, coinsMap } = useWeb3();
-  const favoriteTokens = useReadLocalStorage<ReadonlyArray<string>>(
-    `${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-nfts`
-  );
+  const { control } = useFormContext<SearchNFTForm>();
+  const search = useWatch({ control, name: 'search' });
+
+  const nfts = NFT.filter(({ name }) => !search || name.includes(search));
 
   return (
     <>
@@ -30,23 +28,11 @@ const SelectTokenModalBody: FC<SelectNFTModalBodyProps> = ({
         bg="lowContainer"
         flexDirection="column"
       >
-        {loading ? (
-          <FetchingToken />
-        ) : !(coins.length || favoriteTokens?.length) ? (
+        {!nfts.length ? (
           <NotFound />
         ) : (
-          <>
-            <ModalTokenBody
-              tokens={coins ?? []}
-              handleSelectNFT={handleSelectNFT}
-            />
-            <ModalTokenBody
-              handleSelectNFT={handleSelectNFT}
-              tokens={favoriteTokens?.map((token) => coinsMap[token]) ?? []}
-            />
-          </>
+          <ModalTokenBody handleSelectNFT={handleSelectNFT} nftList={nfts} />
         )}
-        {/**Condition needs improve */}
       </Box>
     </>
   );

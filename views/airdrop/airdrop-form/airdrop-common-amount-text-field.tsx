@@ -14,7 +14,7 @@ const AirdropCustomAmountTextField: FC = () => {
   const { register, setValue, control, getValues } =
     useFormContext<IAirdropForm>();
 
-  const { type, symbol } = useWatch({ control, name: 'token' });
+  const { type, symbol, decimals } = useWatch({ control, name: 'token' });
 
   return (
     <TextField
@@ -27,7 +27,7 @@ const AirdropCustomAmountTextField: FC = () => {
             'airdropList',
             getValues('airdropList')?.map(({ address }) => ({
               address,
-              amount: value || '0',
+              amount: String((Number(value) ?? 0) * 10 ** decimals),
             })) ?? null
           );
         },

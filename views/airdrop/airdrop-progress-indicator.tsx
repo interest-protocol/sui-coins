@@ -137,7 +137,7 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
             bg={error || failedItems.length ? 'error' : 'primary'}
             color={error || failedItems.length ? 'onError' : 'onPrimary'}
           >
-            {error ? 'Resent Failed batches' : 'Got it'}
+            {error ? 'Resend Failed batches' : 'Got it'}
           </Button>
         )}
       </Box>

@@ -18,14 +18,12 @@ export const DEX_MAIN_TOKENS = {
   [Network.TESTNET]: [
     COINS[Network.TESTNET].SUI,
     COINS[Network.TESTNET].ETH,
-    COINS[Network.TESTNET].BNB,
     COINS[Network.TESTNET].USDC,
   ],
   [Network.MAINNET]: [
     COINS[Network.MAINNET].SUI,
     COINS[Network.MAINNET].NATIVE_WORMHOLE_ETH,
-    COINS[Network.MAINNET].NATIVE_WORMHOLE_WBNB,
-    COINS[Network.MAINNET].NATIVE_WORMHOLE_WAVAX,
+    COINS[Network.MAINNET].ETH_WORMHOLE_USDC,
   ],
 };
 

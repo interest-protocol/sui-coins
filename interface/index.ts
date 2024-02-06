@@ -1,3 +1,4 @@
+import { CoinMetadata } from '@mysten/sui.js/client';
 import BigNumber from 'bignumber.js';
 
 import { TOKEN_SYMBOL } from '@/lib';
@@ -23,4 +24,22 @@ export interface FormattedNumber {
 export interface RegistryPool {
   poolId: string;
   lpCoinType: string;
+}
+
+export interface CoinMetadataWithType extends CoinMetadata {
+  type: string;
+}
+
+export interface NFTCollection {
+  name: string;
+  updatedAt: number;
+  collectionId: string;
+  holders: ReadonlyArray<string>;
+}
+
+export interface NFTCollectionMetadata {
+  id: string;
+  img: string;
+  name: string;
+  total: number;
 }

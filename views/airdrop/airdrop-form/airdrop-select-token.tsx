@@ -1,5 +1,5 @@
 import { Box, Motion, Typography } from '@interest-protocol/ui-kit';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { TokenIcon } from '@/components';
@@ -7,6 +7,7 @@ import { Network } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { useModal } from '@/hooks/use-modal';
+import useTokenPriceBySymbol from '@/hooks/use-token-price';
 import { ChevronRightSVG } from '@/svg';
 
 import SelectTokenModal from '../../components/select-token-modal';
@@ -20,8 +21,20 @@ const AirdropSelectToken: FC = () => {
   const { setModal, handleClose } = useModal();
   const { control, setValue } = useFormContext<IAirdropForm>();
   const token = useWatch({ control, name: 'token' });
+  const {
+    isLoading,
+    error,
+    data: usdPrice,
+  } = useTokenPriceBySymbol(token?.symbol);
 
-  const onSelect = (coin: CoinObject) => setValue('token', coin);
+  useEffect(() => {
+    if (!isLoading && !error) setValue('tokenUSDPrice', usdPrice);
+  }, [usdPrice, isLoading, error]);
+
+  const onSelect = (coin: CoinObject) => {
+    setValue('token', coin);
+    setValue('tokenUSDPrice', undefined);
+  };
 
   const openModal = () =>
     setModal(

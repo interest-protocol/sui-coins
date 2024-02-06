@@ -1,13 +1,14 @@
 import { Dispatch, SetStateAction } from 'react';
 
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { NFTCollectionMetadata } from '@/interface';
 
 export interface AirdropData {
   address: string;
   amount: string;
 }
 
-export type TMethod = 'csv' | 'nft' | 'coin' | 'customAmount';
+export type TMethod = 'csv' | 'nft' | 'customAmount';
 
 export interface IAirdropForm {
   error: boolean;
@@ -15,10 +16,11 @@ export interface IAirdropForm {
   method: TMethod;
   decimals: number;
   token: CoinObject;
-  asset?: CoinObject;
   commonAmount: string;
+  tokenUSDPrice?: number;
   done: ReadonlyArray<number>;
   failed: ReadonlyArray<number>;
+  asset?: CoinObject | NFTCollectionMetadata;
   airdropList: ReadonlyArray<AirdropData> | null;
 }
 

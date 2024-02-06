@@ -12,17 +12,14 @@ const ConnectWalletButton: FC = () => {
     <CustomConnectWalletButton
       py="m"
       px="xl"
+      width="100%"
       fontSize="s"
       fontFamily="Proto !important"
+      transition="all 0.3s ease-in-out"
       bg={`${colors.primary} !important`}
       color={`${colors.onPrimary} !important`}
       borderRadius={`${radii.xs} !important`}
-      width="100%"
-      nHover={{
-        bg: 'accent',
-        transform: 'scale(1.03)',
-      }}
-      transition="all 0.3s ease-in-out"
+      nHover={{ bg: 'accent', transform: 'scale(1.03)' }}
     />
   );
 };

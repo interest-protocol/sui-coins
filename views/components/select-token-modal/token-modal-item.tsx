@@ -5,7 +5,7 @@ import {
   Typography,
   useTheme,
 } from '@interest-protocol/ui-kit';
-import { FC } from 'react';
+import { FC, MouseEventHandler } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 
 import { TokenIcon } from '@/components';
@@ -19,10 +19,8 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
   type,
   symbol,
   origin,
-  balance,
   onClick,
   selected,
-  isSuggested,
 }) => {
   const { network } = useNetwork();
   const { colors } = useTheme() as Theme;
@@ -32,12 +30,14 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
 
   const isFavorite = favoriteTokens.includes(type);
 
-  const handleFavoriteTokens = () =>
+  const handleFavoriteTokens: MouseEventHandler = (e) => {
+    e.stopPropagation();
     setFavoriteTokens(
       isFavorite
         ? favoriteTokens.filter((favType) => favType !== type)
         : [...favoriteTokens, type]
     );
+  };
 
   return (
     <Box
@@ -87,11 +87,6 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
         </Box>
       </Box>
       <Box display="flex" alignItems="center" gap="xs">
-        {!isSuggested && (
-          <Typography variant="body" size="large">
-            {balance}
-          </Typography>
-        )}
         <Button
           isIcon
           zIndex="10"
@@ -100,8 +95,8 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
         >
           <FavoriteSVG
             width="100%"
-            maxWidth="1rem"
-            maxHeight="1rem"
+            maxWidth="1.2rem"
+            maxHeight="1.2rem"
             filled={isFavorite}
           />
         </Button>
