@@ -12,8 +12,7 @@ export const METHODS_ICONS: Record<
   csv: {
     title: 'CSV',
     Icon: FileSVG,
-    description:
-      'Upload a CSV file with wallet addresses and corresponding amounts.',
+    description: 'Upload a CSV file with wallet addresses and amounts.',
   },
   nft: {
     title: 'NFT',
