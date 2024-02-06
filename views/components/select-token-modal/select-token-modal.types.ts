@@ -19,7 +19,6 @@ export interface TokenModalItemProps {
   type: string;
   symbol: string;
   origin?: string;
-  balance: string;
   selected: boolean;
   onClick: () => void;
 }
@@ -36,10 +35,10 @@ export interface SelectTokenFilterProps {
 }
 
 export enum TokenOrigin {
-  Official,
-  Favorites,
+  Strict,
   Wallet,
-  Search,
+  Wormhole,
+  Celer,
 }
 
 export interface SearchTokenForm {

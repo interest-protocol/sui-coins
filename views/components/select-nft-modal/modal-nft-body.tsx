@@ -10,7 +10,7 @@ const ModalNFTBody: FC<ModalNFTBodyProps> = ({ nftList, handleSelectNFT }) => (
       <NFTModalItem
         selected={false}
         key={v4()}
-        onClick={() => handleSelectNFT(nft)}
+        onClick={() => handleSelectNFT(nft.id)}
         {...nft}
       />
     ))}

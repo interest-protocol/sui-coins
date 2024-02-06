@@ -1,4 +1,6 @@
-export const NFT = [
+import { NFTCollectionMetadata } from '@/interface';
+
+export const NFT: ReadonlyArray<NFTCollectionMetadata> = [
   {
     id: '4827d37b-5574-404f-b030-d26912ad7461',
     name: 'Fuddies',
@@ -31,7 +33,7 @@ export const NFT = [
   },
 ];
 
-export const NFT_MAP = {
+export const NFT_MAP: Record<string, NFTCollectionMetadata> = {
   [NFT[0].id]: NFT[0],
   [NFT[1].id]: NFT[1],
   [NFT[2].id]: NFT[2],

@@ -51,7 +51,6 @@ const ModalTokenSearch: FC<ModalTokenSearchProps> = ({
   return (
     <TokenModalItem
       key={v4()}
-      balance=""
       type={search}
       selected={false}
       symbol={tokenMetadata!.symbol}

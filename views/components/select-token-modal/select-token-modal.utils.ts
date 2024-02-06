@@ -1,5 +1,6 @@
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { CoinMetadataWithType } from '@/interface';
+import { getSymbolByType } from '@/utils';
 
 export const metadataToCoin = (coinMetadata: CoinMetadataWithType) => {
   const { type, symbol, decimals, ...metadata } = coinMetadata;
@@ -18,8 +19,20 @@ export const metadataToCoin = (coinMetadata: CoinMetadataWithType) => {
 export const mapMetadataToCoin = (
   coinType: string,
   coinsMetadata: Record<string, CoinMetadataWithType>
-): CoinObject | null => {
-  if (!coinType || !coinsMetadata[coinType]) return null;
+): CoinObject => {
+  if (!coinType || !coinsMetadata[coinType])
+    return {
+      decimals: 0,
+      balance: '',
+      objects: [],
+      coinObjectId: '',
+      type: coinType,
+      symbol: getSymbolByType(coinType),
+      metadata: {
+        description: '',
+        name: getSymbolByType(coinType),
+      },
+    };
 
   return metadataToCoin(coinsMetadata[coinType]);
 };

@@ -19,7 +19,6 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
   type,
   symbol,
   origin,
-  balance,
   onClick,
   selected,
 }) => {
@@ -88,11 +87,6 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
         </Box>
       </Box>
       <Box display="flex" alignItems="center" gap="xs">
-        {!!balance && (
-          <Typography variant="body" size="large">
-            {balance}
-          </Typography>
-        )}
         <Button
           isIcon
           zIndex="10"
@@ -101,8 +95,8 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
         >
           <FavoriteSVG
             width="100%"
-            maxWidth="1rem"
-            maxHeight="1rem"
+            maxWidth="1.2rem"
+            maxHeight="1.2rem"
             filled={isFavorite}
           />
         </Button>

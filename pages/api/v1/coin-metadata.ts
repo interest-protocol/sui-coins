@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import db from 'server';
+import dbConnect from 'server';
 import CoinMetadataModel from 'server/model/coin-metadata';
 
 import { CoinMetadataWithType } from '@/interface';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    await db;
+    await dbConnect();
 
     if (req.method === 'GET') {
       const type = req.query.type;

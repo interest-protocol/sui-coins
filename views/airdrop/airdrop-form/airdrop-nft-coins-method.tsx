@@ -5,7 +5,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { NFT_MAP } from '@/constants/nft';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { useModal } from '@/hooks/use-modal';
-import { NFTCollection } from '@/interface';
+import { NFTCollection, NFTCollectionMetadata } from '@/interface';
 import { ChevronRightSVG } from '@/svg';
 import SelectNFTModal from '@/views/components/select-nft-modal';
 import SelectTokenModal from '@/views/components/select-token-modal';
@@ -20,19 +20,25 @@ const AirdropNftCoinsMethod: FC = () => {
   const { control, setValue, getValues } = useFormContext<IAirdropForm>();
 
   const asset = useWatch({ control, name: 'asset' });
-  const airdropList = useWatch({ control, name: 'airdropList' });
-  const method = useWatch({ control, name: 'method' }) as 'nft' | 'coin';
+  const method = useWatch({ control, name: 'method' }) as 'nft';
 
   const onSelectToken = (asset: CoinObject) => {
     setValue('asset', asset);
     setValue('airdropList', null);
   };
 
-  const onSelectNFT = (asset: NFTCollection) => {
-    setValue('asset', asset);
+  const onSelectNFT = async (collectionId: string) => {
+    setValue('asset', NFT_MAP[collectionId]);
+
+    const nft: NFTCollection = await fetch(
+      `/api/v1/nft-collection?id=${collectionId}`
+    ).then((res) => res.json());
+
+    console.log({ asset });
+
     setValue(
       'airdropList',
-      asset.holders.map((holder) => ({
+      nft.holders.map((holder) => ({
         address: holder,
         amount: getValues('commonAmount'),
       }))
@@ -59,8 +65,6 @@ const AirdropNftCoinsMethod: FC = () => {
         allowClose: true,
       }
     );
-
-  const nftMetadata = NFT_MAP[(asset as NFTCollection)?.collectionId];
 
   return (
     <Box display="flex" flexDirection="column" gap="s">
@@ -105,15 +109,15 @@ const AirdropNftCoinsMethod: FC = () => {
                   /> */}
                   <img
                     width="100%"
-                    src={nftMetadata.img}
-                    alt={nftMetadata.name}
+                    src={(asset as NFTCollectionMetadata).img}
+                    alt={(asset as NFTCollectionMetadata).name}
                   />
                 </Box>
               )}
               <Typography variant="body" size="large" flex="1" as="span">
                 {asset
                   ? method === 'nft'
-                    ? nftMetadata.name
+                    ? (asset as NFTCollectionMetadata).name
                     : getSymbol(
                         (asset as CoinObject).symbol,
                         (asset as CoinObject).type
@@ -131,7 +135,8 @@ const AirdropNftCoinsMethod: FC = () => {
           </Box>
         </Box>
         <Typography variant="body" size="small" color="#000000A3">
-          There are {airdropList?.length} addresses with this coin
+          There are {(asset as NFTCollectionMetadata).total} addresses with this
+          coin
         </Typography>
       </Box>
       <Box>

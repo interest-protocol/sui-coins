@@ -7,6 +7,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     await dbConnect();
 
     if (req.method === 'GET') {
+      const id = req.query.id;
+
+      if (id) {
+        const doc = await NFTCollectionModel.findOne({ collectionId: id });
+
+        if (!doc)
+          return res.status(204).json({ data: { message: 'Nothing found!' } });
+
+        return res.status(200).json(doc);
+      }
+
       const docs = await NFTCollectionModel.find();
 
       if (!docs.length)

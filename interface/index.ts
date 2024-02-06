@@ -31,7 +31,15 @@ export interface CoinMetadataWithType extends CoinMetadata {
 }
 
 export interface NFTCollection {
+  name: string;
   updatedAt: number;
   collectionId: string;
   holders: ReadonlyArray<string>;
+}
+
+export interface NFTCollectionMetadata {
+  id: string;
+  img: string;
+  name: string;
+  total: number;
 }
