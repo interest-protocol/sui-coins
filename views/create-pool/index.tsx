@@ -4,7 +4,8 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import Layout from '@/components/layout';
-import { Routes, RoutesEnum, TOKEN_ICONS } from '@/constants';
+import { Routes, RoutesEnum } from '@/constants';
+import { TOKEN_ICONS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 
 import PoolTitleBar from '../components/pool-title-bar';

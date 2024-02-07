@@ -3,7 +3,8 @@ import { useRouter } from 'next/router';
 import { FC } from 'react';
 
 import Layout from '@/components/layout';
-import { Network, Routes, RoutesEnum, TOKEN_ICONS } from '@/constants';
+import { Network, Routes, RoutesEnum } from '@/constants';
+import { TOKEN_ICONS } from '@/constants/coins';
 import { RECOMMENDED_POOLS } from '@/constants/pools';
 import { useNetwork } from '@/context/network';
 
