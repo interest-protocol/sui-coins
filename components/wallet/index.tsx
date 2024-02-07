@@ -7,7 +7,7 @@ import SuiNetwork from '../account-info/sui-network';
 import ConnectWalletButton from './connect-wallet-button';
 
 const Wallet: FC = () => {
-  const { isConnected } = useWalletKit();
+  const { isConnected, currentAccount } = useWalletKit();
 
   return (
     <Box
@@ -30,11 +30,12 @@ const Wallet: FC = () => {
           </>
         )}
       </Box>
-      {!isConnected && (
-        <Box display="flex">
-          <ConnectWalletButton />
-        </Box>
-      )}
+      {!isConnected ||
+        (isConnected && !currentAccount && (
+          <Box display="flex">
+            <ConnectWalletButton />
+          </Box>
+        ))}
     </Box>
   );
 };
