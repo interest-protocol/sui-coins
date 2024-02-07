@@ -29,8 +29,6 @@ const ModalTokenSearch: FC<ModalTokenSearchProps> = ({
 
   if (error) return <NotFound />;
 
-  console.log({ tokenMetadata });
-
   return (
     <TokenModalItem
       key={v4()}

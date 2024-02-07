@@ -106,7 +106,7 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
         textAlign="center"
       >
         {isError
-          ? `Batches was not sent`
+          ? `Batches were not sent`
           : finished !== 100
             ? 'Sending batches'
             : 'The airdrop has been sent'}
