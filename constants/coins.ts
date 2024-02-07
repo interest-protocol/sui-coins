@@ -462,18 +462,6 @@ export const COIN_TYPE_TO_COIN = {
   },
 };
 
-export const STRICT_TOKENS_TYPE: Record<Network, ReadonlyArray<string>> = {
-  [Network.TESTNET]: [
-    TESTNET_BASE_COINS.SUI,
-    TESTNET_BASE_COINS.BNB,
-    TESTNET_BASE_COINS.BTC,
-    TESTNET_BASE_COINS.ETH,
-    TESTNET_BASE_COINS.USDC,
-    TESTNET_BASE_COINS.USDT,
-  ],
-  [Network.MAINNET]: [MAINNET_BASE_COINS.SUI],
-};
-
 export const WORMHOLE_TOKENS_TYPE: Record<Network, ReadonlyArray<string>> = {
   [Network.TESTNET]: [],
   [Network.MAINNET]: [
@@ -486,13 +474,13 @@ export const WORMHOLE_TOKENS_TYPE: Record<Network, ReadonlyArray<string>> = {
     MAINNET_BASE_COINS.BSC_WORMHOLE_USDT,
     MAINNET_BASE_COINS.ETH_WORMHOLE_USDC,
     MAINNET_BASE_COINS.ETH_WORMHOLE_USDT,
-    MAINNET_BASE_COINS.NATIVE_WORMHOLE_CELO,
+    // MAINNET_BASE_COINS.NATIVE_WORMHOLE_CELO,
     MAINNET_BASE_COINS.NATIVE_WORMHOLE_ETH,
     MAINNET_BASE_COINS.NATIVE_WORMHOLE_SOL,
     MAINNET_BASE_COINS.NATIVE_WORMHOLE_WAVAX,
     MAINNET_BASE_COINS.NATIVE_WORMHOLE_WBNB,
-    MAINNET_BASE_COINS.NATIVE_WORMHOLE_WFTM,
-    MAINNET_BASE_COINS.NATIVE_WORMHOLE_WMATIC,
+    // MAINNET_BASE_COINS.NATIVE_WORMHOLE_WFTM,
+    // MAINNET_BASE_COINS.NATIVE_WORMHOLE_WMATIC,
   ],
 };
 
@@ -506,25 +494,13 @@ export const CELER_TOKENS_TYPE: Record<Network, ReadonlyArray<string>> = {
   ],
 };
 
-export const STRICT_TOKENS: Record<Network, Array<CoinData>> = {
-  [Network.TESTNET]: [
-    COINS[Network.TESTNET].SUI,
-    COINS[Network.TESTNET].BNB,
-    COINS[Network.TESTNET].BTC,
-    COINS[Network.TESTNET].ETH,
-    COINS[Network.TESTNET].USDC,
-    COINS[Network.TESTNET].USDT,
-  ],
-  [Network.MAINNET]: [COINS[Network.MAINNET].SUI],
-};
-
 export const WORMHOLE_TOKENS: Record<Network, Array<CoinDataWithChainInfo>> = {
   [Network.TESTNET]: [],
   [Network.MAINNET]: [
-    COINS[Network.MAINNET].NATIVE_WORMHOLE_ETH,
     { ...COINS[Network.MAINNET].ETH_WORMHOLE_USDC, chain: 'ETH' },
     { ...COINS[Network.MAINNET].ETH_WORMHOLE_USDT, chain: 'ETH' },
-    COINS[Network.MAINNET].NATIVE_WORMHOLE_WBNB,
+    { ...COINS[Network.MAINNET].NATIVE_WORMHOLE_ETH, chain: 'ETH' },
+    { ...COINS[Network.MAINNET].NATIVE_WORMHOLE_WBNB, chain: 'BSC' },
     { ...COINS[Network.MAINNET].BSC_WORMHOLE_USDC, chain: 'BSC' },
     { ...COINS[Network.MAINNET].BSC_WORMHOLE_USDT, chain: 'BSC' },
     { ...COINS[Network.MAINNET].BSC_WORMHOLE_ETH, chain: 'BSC' },
@@ -532,11 +508,11 @@ export const WORMHOLE_TOKENS: Record<Network, Array<CoinDataWithChainInfo>> = {
     { ...COINS[Network.MAINNET].BSC_WORMHOLE_BTCB, chain: 'BSC' },
     { ...COINS[Network.MAINNET].BSC_WORMHOLE_DOGE, chain: 'BSC' },
     { ...COINS[Network.MAINNET].BSC_WORMHOLE_FLOKI, chain: 'BSC' },
-    COINS[Network.MAINNET].NATIVE_WORMHOLE_SOL,
-    COINS[Network.MAINNET].NATIVE_WORMHOLE_CELO,
-    COINS[Network.MAINNET].NATIVE_WORMHOLE_WAVAX,
-    COINS[Network.MAINNET].NATIVE_WORMHOLE_WFTM,
-    COINS[Network.MAINNET].NATIVE_WORMHOLE_WMATIC,
+    { ...COINS[Network.MAINNET].NATIVE_WORMHOLE_SOL, chain: 'SOL' },
+    // COINS[Network.MAINNET].NATIVE_WORMHOLE_CELO,
+    { ...COINS[Network.MAINNET].NATIVE_WORMHOLE_WAVAX, chain: 'AVA' },
+    // COINS[Network.MAINNET].NATIVE_WORMHOLE_WFTM,
+    // COINS[Network.MAINNET].NATIVE_WORMHOLE_WMATIC,
   ],
 };
 
@@ -550,13 +526,37 @@ export const CELER_TOKENS: Record<Network, Array<CoinDataWithChainInfo>> = {
   ],
 };
 
-export const ALL_TOKENS: Record<
-  Network,
-  ReadonlyArray<CoinDataWithChainInfo>
-> = {
-  [Network.TESTNET]: STRICT_TOKENS[Network.TESTNET],
+export const STRICT_TOKENS_TYPE: Record<Network, ReadonlyArray<string>> = {
+  [Network.TESTNET]: [
+    TESTNET_BASE_COINS.SUI,
+    TESTNET_BASE_COINS.BNB,
+    TESTNET_BASE_COINS.BTC,
+    TESTNET_BASE_COINS.ETH,
+    TESTNET_BASE_COINS.USDC,
+    TESTNET_BASE_COINS.USDT,
+    ...WORMHOLE_TOKENS_TYPE[Network.TESTNET],
+    ...CELER_TOKENS_TYPE[Network.TESTNET],
+  ],
   [Network.MAINNET]: [
-    ...STRICT_TOKENS[Network.MAINNET],
+    MAINNET_BASE_COINS.SUI,
+    ...WORMHOLE_TOKENS_TYPE[Network.MAINNET],
+    ...CELER_TOKENS_TYPE[Network.MAINNET],
+  ],
+};
+
+export const STRICT_TOKENS: Record<Network, Array<CoinData>> = {
+  [Network.TESTNET]: [
+    COINS[Network.TESTNET].SUI,
+    COINS[Network.TESTNET].BNB,
+    COINS[Network.TESTNET].BTC,
+    COINS[Network.TESTNET].ETH,
+    COINS[Network.TESTNET].USDC,
+    COINS[Network.TESTNET].USDT,
+    ...WORMHOLE_TOKENS[Network.TESTNET],
+    ...CELER_TOKENS[Network.TESTNET],
+  ],
+  [Network.MAINNET]: [
+    COINS[Network.MAINNET].SUI,
     ...WORMHOLE_TOKENS[Network.MAINNET],
     ...CELER_TOKENS[Network.MAINNET],
   ],

@@ -12,14 +12,9 @@ import { useLocalStorage } from 'usehooks-ts';
 import { TokenIcon } from '@/components';
 import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
 import { useNetwork } from '@/context/network';
-import { BSCChainSVG, ETHChainSVG, FavoriteSVG } from '@/svg';
+import { FavoriteSVG } from '@/svg';
 
 import { TokenModalItemProps } from './select-token-modal.types';
-
-const CHAIN_ICON = {
-  BSC: BSCChainSVG,
-  ETH: ETHChainSVG,
-};
 
 const TokenModalItem: FC<TokenModalItemProps> = ({
   type,
@@ -45,8 +40,6 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
         : [...favoriteTokens, type]
     );
   };
-
-  const ChainIcon = CHAIN_ICON[chain!];
 
   const onSelect = () => {
     if (selected) return;
@@ -74,29 +67,13 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
         </Box>
       )}
       <Box display="flex" alignItems="center">
-        <Box
-          bg="black"
-          color="white"
-          display="flex"
-          width="2.5rem"
-          height="2.5rem"
-          borderRadius="xs"
-          position="relative"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <TokenIcon
-            network={network}
-            maxWidth="1.6rem"
-            maxHeight="1.6rem"
-            tokenId={network === Network.MAINNET ? type : symbol}
-          />
-          {chain && (
-            <Box position="absolute" bottom="-0.3rem" right="-0.5rem">
-              <ChainIcon maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
-            </Box>
-          )}
-        </Box>
+        <TokenIcon
+          chain={chain}
+          network={network}
+          maxWidth="1.6rem"
+          maxHeight="1.6rem"
+          tokenId={network === Network.MAINNET ? type : symbol}
+        />
         <Box
           ml="1rem"
           display="flex"

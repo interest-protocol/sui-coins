@@ -5,7 +5,6 @@ import { useReadLocalStorage } from 'usehooks-ts';
 
 import { LOCAL_STORAGE_VERSION } from '@/constants';
 import {
-  ALL_TOKENS,
   CELER_TOKENS,
   CELER_TOKENS_TYPE,
   STRICT_TOKENS,
@@ -44,7 +43,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   const handleSelectToken = async (type: string) => {
     if (coinsMap[type]) return onSelectToken(coinsMap[type]);
 
-    const token = ALL_TOKENS[network].find((token) => token.type === type);
+    const token = STRICT_TOKENS[network].find((token) => token.type === type);
 
     if (token) return onSelectToken(coinDataToCoinObject(token));
 
@@ -73,7 +72,9 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
           .sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
           .filter(
             ({ symbol, type }) =>
-              !search || symbol.includes(search) || type.includes(search)
+              !search ||
+              symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+              type.includes(search)
           )}
       />
     );
@@ -91,7 +92,9 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
           .sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
           .filter(
             ({ symbol, type }) =>
-              !search || symbol.includes(search) || type.includes(search)
+              !search ||
+              symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+              type.includes(search)
           )}
       />
     );
@@ -109,7 +112,9 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
           .sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
           .filter(
             ({ symbol, type }) =>
-              !search || symbol.includes(search) || type.includes(search)
+              !search ||
+              symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+              type.includes(search)
           )}
       />
     );
