@@ -44,8 +44,8 @@ const AirdropUploadStatus: FC = () => {
               error || failedItems.includes(index)
                 ? 'failed'
                 : doneItems.includes(index)
-                ? 'complete'
-                : 'pending'
+                  ? 'complete'
+                  : 'pending'
             }
           />
         ))}

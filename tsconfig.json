@@ -17,14 +17,16 @@
     "jsx": "preserve",
     "incremental": true,
     "declaration": true,
-    "baseUrl": ".",
     "paths": {
+      "@/api/*": ["./api/*"],
       "@/svg": ["./components/svg"],
       "@/components": ["./components"],
       "@/components/*": ["./components/*"],
       "@/context/*": ["./context/*"],
       "@/constants": ["./constants"],
       "@/constants/*": ["./constants/*"],
+      "@/elements": ["./elements"],
+      "@/elements/*": ["./elements/*"],
       "@/interface": ["./interface"],
       "@/lib": ["./lib"],
       "@/lib/*": ["./lib/*"],
@@ -33,7 +35,9 @@
       "@/utils": ["./utils"],
       "@/utils/*": ["./utils/*"],
       "@/views/*": ["./views/*"],
-      "@/styles": ["./styles"],
+      "@/server": ["./server"],
+      "@/server/*": ["./server/*"],
+      "@/styles": ["./styles"]
     }
   },
   "exclude": ["node_modules"],
@@ -41,6 +45,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "interface/declaration.d.ts"
+    "interface/declaration.d.ts",
+    "views/create-pool/illustration",
+    "views/airdrop/airdrop-form/airdrop-custom-amount-text-fieldtsx"
   ]
 }

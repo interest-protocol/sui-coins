@@ -1,15 +1,15 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Box, Button, Typography } from '@interest-protocol/ui-kit';
+import { Box, Button, Form, Typography } from '@interest-protocol/ui-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { useWalletKit } from '@mysten/wallet-kit';
 import BigNumber from 'bignumber.js';
-import { TextField } from 'elements';
 import { ChangeEvent, FC } from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { useNetwork } from '@/context/network';
+import { TextField } from '@/elements';
 import { useSuiClient } from '@/hooks/use-sui-client';
 import { parseInputEventToNumberString, showTXSuccessToast } from '@/utils';
 import { throwTXIfNotSuccessful } from '@/utils';
@@ -39,8 +39,8 @@ const CreateTokenForm: FC = () => {
     reValidateMode: 'onBlur',
   });
 
-  const { network } = useNetwork();
   const suiClient = useSuiClient();
+  const { network } = useNetwork();
   const { currentAccount, signTransactionBlock } = useWalletKit();
 
   const createToken = async () => {
@@ -114,115 +114,123 @@ const CreateTokenForm: FC = () => {
   };
 
   return (
-    <Box
-      borderRadius="m"
+    <Form
+      as="form"
+      width="100%"
+      maxWidth="37rem"
+      borderRadius="xs"
       overflow="hidden"
       bg="lowestContainer"
-      width={['100%', '100%', '100%', '26rem']}
-      boxShadow="0px 24px 46px -10px rgba(13, 16, 23, 0.16)"
+      onSubmit={handleSubmit(onSubmit)}
     >
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Box
-          p="xl"
-          fontSize="l"
-          borderBottom="1px solid"
-          borderColor="outlineVariant"
+      <Typography variant="title" size="large" p="xl">
+        Coin Generator
+      </Typography>
+      <Box p="xl" display="flex" flexDirection="column" gap="m">
+        <Box>1. Coin Details</Box>
+        <TextField
+          label="Name"
+          {...register('name')}
+          placeholder="Eg. Sui"
+          status={errors.name && 'error'}
+          supportingText={errors.name?.message}
+        />
+        <TextField
+          label="Coin Symbol"
+          placeholder="Eg. SUI"
+          {...register('symbol')}
+          status={errors.symbol && 'error'}
+          supportingText={errors.symbol?.message}
+        />
+        <TextField
+          label="Description"
+          {...register('description')}
+          status={errors.description && 'error'}
+          placeholder="Eg. Some description about the coin"
+          supportingText={errors.description?.message}
+        />
+      </Box>
+      <Box p="xl" display="flex" flexDirection="column" gap="m">
+        <Box>2. Add Coin Image</Box>
+        <TextField
+          type="link"
+          label="Coin Image URL"
+          {...register('imageUrl')}
+          status={errors.imageUrl && 'error'}
+          supportingText={errors.imageUrl?.message}
+          placeholder="Eg. https://sui.com/images/logo.png"
+        />
+        <Typography
+          size="large"
+          variant="body"
+          opacity="0.64"
+          textAlign="center"
         >
-          Coin Generator
-        </Box>
-        <Box p="xl" display="flex" flexDirection="column" gap="m">
-          <Box>1. Coin Details</Box>
-          <TextField
-            label="Name"
-            {...register('name')}
-            placeholder="Eg. Sui"
-            status={errors.name && 'error'}
-            supportingText={errors.name?.message}
-          />
-          <TextField
-            label="Coin Symbol"
-            placeholder="Eg. SUI"
-            {...register('symbol')}
-            status={errors.symbol && 'error'}
-            supportingText={errors.symbol?.message}
-          />
-          <TextField
-            label="Description"
-            {...register('description')}
-            status={errors.description && 'error'}
-            placeholder="Eg. Some description about the coin"
-            supportingText={errors.description?.message}
-          />
-          <TextField
-            type="link"
-            label="Coin Image URL"
-            {...register('imageUrl')}
-            status={errors.imageUrl && 'error'}
-            supportingText={errors.imageUrl?.message}
-            placeholder="Eg. https://sui.com/images/logo.png"
-          />
-          <Typography size="large" variant="body" textAlign="center">
-            or
+          or
+        </Typography>
+        <Box display="flex" flexDirection="column" gap="xs">
+          <Typography as="label" size="small" variant="body">
+            Upload image
           </Typography>
           <UploadImage setValue={setValue} />
         </Box>
-        <Box p="xl" display="flex" flexDirection="column" gap="m">
-          <Box>2. Coin Features</Box>
-          <TextField
-            type="number"
-            defaultValue="9"
-            label="Coin Decimals"
-            {...register('decimals')}
-            status={errors.decimals?.message ? 'error' : 'success'}
-            supportingText={
-              errors.decimals?.message ||
-              "Insert the decimal precision of your token. If you don't know what to insert, use 9"
-            }
-          />
-          <TextField
-            label="Total Supply"
-            placeholder="Your total coin supply"
-            status={errors.totalSupply && 'error'}
-            supportingText={
-              errors.totalSupply?.message ||
-              'Insert the initial token supply to mint'
-            }
-            {...register('totalSupply', {
-              onChange: (v: ChangeEvent<HTMLInputElement>) => {
-                setValue('totalSupply', parseInputEventToNumberString(v));
-              },
-            })}
-          />
-          <Box
-            p="m"
-            my="xl"
-            gap="m"
-            bg="surface"
-            display="flex"
-            borderRadius="xs"
-            flexDirection="column"
-          >
-            <FixedSupplyToggle control={control} setValue={setValue} />
-          </Box>
-          <Box display="flex" justifyContent="center">
-            <Button
-              py="s"
-              px="xl"
-              fontSize="s"
-              bg="primary"
-              type="submit"
-              variant="filled"
-              color="onPrimary"
-              fontFamily="Proto"
-              borderRadius="full"
-              disabled={!currentAccount || loading}
-            >
-              Create coin
-            </Button>
-          </Box>
+      </Box>
+      <Box p="xl" display="flex" flexDirection="column" gap="m">
+        <Box>3. Coin Features</Box>
+        <TextField
+          type="number"
+          defaultValue="9"
+          label="Coin Decimals"
+          {...register('decimals')}
+          status={errors.decimals?.message ? 'error' : 'success'}
+          supportingText={
+            errors.decimals?.message ||
+            "Insert the decimal precision of your token. If you don't know what to insert, use 9"
+          }
+        />
+        <TextField
+          label="Total Supply"
+          placeholder="Your total coin supply"
+          status={errors.totalSupply && 'error'}
+          supportingText={
+            errors.totalSupply?.message ||
+            'Insert the initial token supply to mint'
+          }
+          {...register('totalSupply', {
+            onChange: (v: ChangeEvent<HTMLInputElement>) => {
+              setValue('totalSupply', parseInputEventToNumberString(v));
+            },
+          })}
+        />
+        <Box
+          p="m"
+          my="xl"
+          gap="m"
+          bg="surface"
+          display="flex"
+          borderRadius="xs"
+          flexDirection="column"
+        >
+          <FixedSupplyToggle control={control} setValue={setValue} />
         </Box>
-      </form>
-    </Box>
+        <Box display="flex" justifyContent="center">
+          <Button
+            py="s"
+            px="xl"
+            fontSize="s"
+            bg="primary"
+            type="submit"
+            variant="filled"
+            color="onPrimary"
+            borderRadius="xs"
+            fontFamily="Proto"
+            disabled={!currentAccount || loading}
+          >
+            Create coin
+          </Button>
+        </Box>
+      </Box>
+    </Form>
   );
 };
 

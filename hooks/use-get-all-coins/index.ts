@@ -1,11 +1,11 @@
-import { CoinMetadata } from '@mysten/sui.js/client';
 import { useWalletKit } from '@mysten/wallet-kit';
 import BigNumber from 'bignumber.js';
 import useSWR from 'swr';
 
 import { useNetwork } from '@/context/network';
 import { useSuiClient } from '@/hooks/use-sui-client';
-import { makeSWRKey, sleep } from '@/utils';
+import { CoinMetadataWithType } from '@/interface';
+import { makeSWRKey, normalizeSuiType } from '@/utils';
 
 import { CoinsMap, TGetAllCoins } from './use-get-all-coins.types';
 
@@ -26,49 +26,53 @@ export const useGetAllCoins = () => {
   const suiClient = useSuiClient();
   const { network } = useNetwork();
   const { currentAccount } = useWalletKit();
+
   return useSWR(
     makeSWRKey([network, currentAccount?.address], suiClient.getAllCoins.name),
     async () => {
-      if (!currentAccount) return null;
+      if (!currentAccount) return {} as CoinsMap;
       const coinsRaw = await getAllCoins(suiClient, currentAccount.address);
 
-      const coinTypesArray = coinsRaw.map(({ coinType }) => coinType);
+      const coinsType = coinsRaw.map(({ coinType }) => coinType);
 
-      const coinsMetadata: Array<CoinMetadata | null> = [];
+      const dbCoinsMetadata: Record<string, CoinMetadataWithType> = await fetch(
+        encodeURI(
+          `/api/v1/coin-metadata?network=${network}&type_list=${coinsType.join(
+            ','
+          )}`
+        )
+      )
+        .then((res) => res.json())
+        .then((data: ReadonlyArray<CoinMetadataWithType>) =>
+          data.reduce((acc, item) => ({ ...acc, [item.type]: item }), {})
+        );
 
-      for await (const coinType of coinTypesArray) {
-        await sleep(350);
-        coinsMetadata.push(await suiClient.getCoinMetadata({ coinType }));
-      }
+      return coinsRaw.reduce((acc, { coinType, ...coinRaw }) => {
+        const type = normalizeSuiType(coinType);
+        const { symbol, decimals, ...metadata } = dbCoinsMetadata[coinType];
 
-      return coinsRaw.reduce(
-        (acc, coinRaw, i) => ({
+        return {
           ...acc,
-          [coinRaw.coinType]: {
-            ...acc[coinRaw.coinType],
+          [type]: {
+            ...acc[type],
             ...coinRaw,
+            type,
+            symbol,
+            decimals,
+            metadata,
             balance: BigNumber(coinRaw.balance)
-              .plus(BigNumber(acc[coinRaw.coinType]?.balance || '0'))
+              .plus(BigNumber(acc[type]?.balance || '0'))
               .toString(),
-            objects: (acc[coinRaw.coinType]?.objects ?? []).concat(coinRaw),
-            metadata: coinsMetadata[i]
-              ? (coinsMetadata[i] as CoinMetadata)
-              : {
-                  decimals: 0,
-                  name: '',
-                  description: '',
-                  symbol: '',
-                },
+            objects: (acc[type]?.objects ?? []).concat([{ ...coinRaw, type }]),
           },
-        }),
-        {} as CoinsMap
-      );
+        };
+      }, {} as CoinsMap);
     },
     {
-      revalidateOnMount: true,
       revalidateOnFocus: false,
+      revalidateOnMount: true,
       refreshWhenHidden: false,
-      refreshInterval: 15000,
+      refreshInterval: 10000,
     }
   );
 };

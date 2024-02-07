@@ -46,8 +46,8 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
         {isError
           ? 'error found'
           : finished !== 100
-          ? 'Sending'
-          : 'You are done'}
+            ? 'Sending'
+            : 'You are done'}
       </Typography>
       <Box
         display="flex"
@@ -105,23 +105,42 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
         maxWidth="20rem"
         textAlign="center"
       >
-        {error || finished !== 100
-          ? 'Sending batches'
-          : doneItems.length === allBatches
-          ? 'The airdrop has been sent'
-          : `${failedItems.length} batches was not sent`}
+        {isError
+          ? `Batches were not sent`
+          : finished !== 100
+            ? 'Sending batches'
+            : 'The airdrop has been sent'}
       </Typography>
-      {(error || finished === 100) && (
-        <Button
-          variant="filled"
-          onClick={goBack}
-          justifyContent="center"
-          bg={error || failedItems.length ? 'error' : 'primary'}
-          color={error || failedItems.length ? 'onError' : 'onPrimary'}
-        >
-          Go back
-        </Button>
-      )}
+      <Box display="flex" gap="s">
+        {error && (
+          <Button
+            variant="outline"
+            onClick={goBack}
+            justifyContent="center"
+            borderRadius="xs"
+            borderColor="outlineVariant"
+            nHover={{
+              borderColor: 'error',
+              color: 'error',
+            }}
+          >
+            Close
+          </Button>
+        )}
+        {(error || finished === 100) && (
+          <Button
+            flex="1"
+            variant="filled"
+            onClick={goBack}
+            justifyContent="center"
+            borderRadius="xs"
+            bg={error || failedItems.length ? 'error' : 'primary'}
+            color={error || failedItems.length ? 'onError' : 'onPrimary'}
+          >
+            {error ? 'Resend Failed batches' : 'Got it'}
+          </Button>
+        )}
+      </Box>
     </Box>
   );
 };

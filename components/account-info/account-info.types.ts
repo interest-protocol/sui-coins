@@ -7,6 +7,11 @@ export interface AccountInfoProps {
 }
 
 export interface AvatarProps {
+  isLarge?: boolean;
   account?: WalletAccount;
   withNameOrAddress?: boolean;
+}
+
+export interface SuiNetworkProps {
+  closeDropdown: () => void;
 }
