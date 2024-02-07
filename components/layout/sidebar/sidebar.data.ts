@@ -13,7 +13,7 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     Icon: DoubleChevronSVG,
     name: 'swap',
     path: Routes[RoutesEnum.Swap],
-    disabled: true,
+    disabled: false,
     networks: [Network.MAINNET, Network.TESTNET],
   },
   {

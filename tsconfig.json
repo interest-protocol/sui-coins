@@ -44,7 +44,6 @@
     "**/*.ts",
     "**/*.tsx",
     "interface/declaration.d.ts",
-    "views/create-pool/illustration",
-    "views/airdrop/airdrop-form/airdrop-custom-amount-text-fieldtsx"
+    "views/create-pool/illustration"
   ]
 }

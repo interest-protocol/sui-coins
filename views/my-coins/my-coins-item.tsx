@@ -11,11 +11,11 @@ import { FixedPointMath } from '@/lib';
 import { ArrowTopRightSVG, CaretRightSVG, DefaultSVG } from '@/svg';
 
 const MyCoinsItem: FC<CoinObject & { capId: string | null }> = ({
+  type,
   capId,
+  symbol,
   balance,
   objects,
-  type,
-  symbol,
   decimals,
   metadata: { iconUrl, name },
 }) => {

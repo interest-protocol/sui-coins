@@ -5,10 +5,14 @@ import { TOKEN_SYMBOL } from '@/lib';
 
 export type BigNumberish = BigNumber | bigint | string | number;
 
-interface CoinData {
+export interface CoinData {
   type: string;
   decimals: number;
   symbol: TOKEN_SYMBOL | string;
+}
+
+export interface CoinDataWithChainInfo extends CoinData {
+  chain?: 'ETH' | 'BSC';
 }
 
 export type LocalTokenMetadataRecord = Record<string, CoinData>;
