@@ -1,8 +1,9 @@
 import { getFullnodeUrl, SuiClient } from '@mysten/sui.js/client';
 
 import { Network } from '@/constants';
-import { getBasicCoinMetadata } from '@/hooks/use-get-all-coins';
-import CoinMetadataModel from '@/server/model/coin-metadata';
+import CoinMetadata from '@/server/model/coin-metadata';
+import CoinMetadataTestnet from '@/server/model/coin-metadata-testnet';
+import { getBasicCoinMetadata } from '@/utils';
 
 const testnetClient = new SuiClient({
   url: process.env.NEXT_PUBLIC_SUI_TESTNET_RPC_URL || getFullnodeUrl('testnet'),
@@ -17,24 +18,33 @@ const provider = {
   [Network.TESTNET]: testnetClient,
 } as Record<Network, SuiClient>;
 
-const getCoinMetadata = async (type: string, network = Network.MAINNET) => {
-  const doc = await CoinMetadataModel.findOne({ type });
+const CoinMetadataModel = {
+  [Network.MAINNET]: CoinMetadata,
+  [Network.TESTNET]: CoinMetadataTestnet,
+} as Record<Network, ReturnType<typeof mongoose.model>>;
 
-  if (!doc || !doc.id) {
+const getCoinMetadata = async (type: string, network: Network) => {
+  const Model = CoinMetadataModel[network];
+
+  const doc = await Model.findOne({ type });
+
+  if (!doc) {
     const suiClient = provider[network];
 
-    const coinMetadata = await suiClient
+    const { hasMetadata, ...metadata } = await suiClient
       .getCoinMetadata({ coinType: type })
       .then((metadata) => ({
         ...(metadata ?? getBasicCoinMetadata(type)),
+        hasMetadata: !!metadata,
         type,
       }));
 
-    const newDoc = await CoinMetadataModel.create(coinMetadata);
+    if (hasMetadata) {
+      const newDoc = await Model.create(metadata);
+      newDoc.save();
+    }
 
-    newDoc.save();
-
-    return newDoc;
+    return metadata;
   }
 
   return doc;
