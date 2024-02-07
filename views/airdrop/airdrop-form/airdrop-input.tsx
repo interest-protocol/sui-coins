@@ -31,7 +31,7 @@ const AirdropInput: FC<AirdropInputProps> = ({ setIsProgressView }) => {
     >
       {method === 'csv' && <AirdropUploadFile />}
       {method === 'nft' && <AirdropNftCoinsMethod />}
-      {method === 'customAmount' && <AirdropCustomAmountMethod />}
+      {method === 'addressList' && <AirdropCustomAmountMethod />}
       <AirdropPreviewModal
         method={method}
         isOpen={isSummaryOpen}
