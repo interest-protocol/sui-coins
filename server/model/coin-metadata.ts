@@ -10,7 +10,9 @@ export interface CoinMetadataModel extends Document {
   iconUrl?: string | null;
 }
 
-const CoinMetadataSchema = new Schema({
+const modelName = 'CoinMetadata';
+
+export const CoinMetadataSchema = new Schema({
   type: {
     type: String,
     required: true,
@@ -40,5 +42,5 @@ const CoinMetadataSchema = new Schema({
   },
 });
 
-export default mongoose.models.CoinMetadata ||
-  mongoose.model<CoinMetadataModel>('CoinMetadata', CoinMetadataSchema);
+export default mongoose.models[modelName] ||
+  mongoose.model<CoinMetadataModel>(modelName, CoinMetadataSchema);

@@ -5,7 +5,8 @@ import {
   Typography,
   useTheme,
 } from '@interest-protocol/ui-kit';
-import { FC, MouseEventHandler } from 'react';
+import { FC, MouseEventHandler, useState } from 'react';
+import Skeleton from 'react-loading-skeleton';
 import { useLocalStorage } from 'usehooks-ts';
 
 import { TokenIcon } from '@/components';
@@ -29,6 +30,7 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
 }) => {
   const { network } = useNetwork();
   const { colors } = useTheme() as Theme;
+  const [isLoading, setLoading] = useState(false);
   const [favoriteTokens, setFavoriteTokens] = useLocalStorage<
     ReadonlyArray<string>
   >(`${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-tokens`, []);
@@ -46,19 +48,31 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
 
   const ChainIcon = CHAIN_ICON[chain!];
 
+  const onSelect = () => {
+    if (selected) return;
+    onClick();
+    setLoading(true);
+  };
+
   return (
     <Box
       p="xl"
       display="flex"
       color="textSoft"
       cursor="pointer"
+      onClick={onSelect}
       alignItems="center"
+      position="relative"
       justifyContent="space-between"
       nHover={{ bg: `${colors.primary}14` }}
-      onClick={selected ? undefined : onClick}
       transition="background 500ms ease-in-out"
       bg={selected ? `${colors.primary}14` : 'unset'}
     >
+      {isLoading && (
+        <Box position="absolute" top="0" right="0" left="0" bottom="0">
+          <Skeleton height="100%" />
+        </Box>
+      )}
       <Box display="flex" alignItems="center">
         <Box
           bg="black"

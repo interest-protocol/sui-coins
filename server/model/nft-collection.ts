@@ -7,7 +7,9 @@ export interface NFTCollectionModel extends Document {
   updatedAt: number;
 }
 
-const NFTCollectionSchema = new Schema({
+const modelName = 'NFTCollection';
+
+export const NFTCollectionSchema = new Schema({
   collectionId: {
     type: String,
     required: true,
@@ -27,5 +29,5 @@ const NFTCollectionSchema = new Schema({
   },
 });
 
-export default mongoose.models.NFTCollection ||
-  mongoose.model<NFTCollectionModel>('NFTCollection', NFTCollectionSchema);
+export default mongoose.models[modelName] ||
+  mongoose.model<NFTCollectionModel>(modelName, NFTCollectionSchema);
