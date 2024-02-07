@@ -1,5 +1,6 @@
-import { apiRequestIndexer } from 'api/indexer';
 import { NextApiRequest, NextApiResponse } from 'next';
+
+import { apiRequestIndexer } from '@/api/indexer';
 
 export default async function handler(
   req: NextApiRequest,

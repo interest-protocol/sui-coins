@@ -17,8 +17,8 @@
     "jsx": "preserve",
     "incremental": true,
     "declaration": true,
-    "baseUrl": ".",
     "paths": {
+      "@/api/*": ["./api/*"],
       "@/svg": ["./components/svg"],
       "@/components": ["./components"],
       "@/components/*": ["./components/*"],
@@ -33,6 +33,8 @@
       "@/utils": ["./utils"],
       "@/utils/*": ["./utils/*"],
       "@/views/*": ["./views/*"],
+      "@/server": ["./server"],
+      "@/server/*": ["./server/*"],
       "@/styles": ["./styles"]
     }
   },

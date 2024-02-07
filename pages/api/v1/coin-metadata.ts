@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import dbConnect from 'server';
-import getCoinMetadata from 'server/lib/get-coin-metadata';
-import CoinMetadataModel from 'server/model/coin-metadata';
 
 import { Network } from '@/constants';
 import { CoinMetadataWithType } from '@/interface';
+import dbConnect from '@/server';
+import getCoinMetadata from '@/server/lib/get-coin-metadata';
+import CoinMetadataModel from '@/server/model/coin-metadata';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {

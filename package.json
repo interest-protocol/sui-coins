@@ -68,6 +68,12 @@
       "last 1 safari version"
     ]
   },
+  "findUnusedExports": {
+    "include": [
+      "./**/*.d.ts",
+      "./**/*.@(js|jsx|ts|tsx)"
+    ]
+  },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@babel/plugin-proposal-decorators": "^7.23.9",
