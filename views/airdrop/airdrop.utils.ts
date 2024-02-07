@@ -43,6 +43,7 @@ export const csvToAirdrop = (
 export const textToAirdrop = (
   text: string,
   commonAmount: string,
+  decimals: number,
   onError: (message: string) => void
 ): AirdropData[] => {
   try {
@@ -54,7 +55,7 @@ export const textToAirdrop = (
     addresses.forEach((address) => {
       data.push({
         address,
-        amount: FixedPointMath.toBigNumber(commonAmount).toString(),
+        amount: FixedPointMath.toBigNumber(commonAmount, decimals).toString(),
       });
     });
 
