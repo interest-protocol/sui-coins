@@ -140,7 +140,7 @@ const AirdropNftCoinsMethod: FC = () => {
       </Box>
       <Box>
         <Typography variant="body" size="small">
-          Enter amount to send per address
+          Enter amount to send per {method === 'nft' ? 'NFT' : 'Coin'}
         </Typography>
         <AirdropCommonAmountTextField />
       </Box>
