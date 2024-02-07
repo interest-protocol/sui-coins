@@ -28,8 +28,18 @@ const TokenIcon: FC<TokenIconProps> = ({
 }) => {
   if (!tokenId) return null;
 
-  const ChainIcon = CHAIN_ICON[chain!];
   const TokenIcon = TOKEN_ICONS[network][tokenId] ?? DefaultSVG;
+
+  if (!chain)
+    return (
+      <TokenIcon
+        width="100%"
+        maxWidth={maxWidth ?? '1.5rem'}
+        maxHeight={maxHeight ?? '1.5rem'}
+      />
+    );
+
+  const ChainIcon = CHAIN_ICON[chain!];
 
   return (
     <Box
