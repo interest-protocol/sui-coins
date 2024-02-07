@@ -19,8 +19,8 @@ export const METHODS_ICONS: Record<
     Icon: NftSVG,
     description: 'Airdrops to holders of your favorite NFT collections.',
   },
-  customAmount: {
-    title: 'Custom Amount',
+  addressList: {
+    title: 'List of addresses',
     Icon: WalletSVG,
     description: 'Same airdrop value, different project addresses.',
   },
