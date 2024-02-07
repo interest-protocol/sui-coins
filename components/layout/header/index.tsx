@@ -10,9 +10,9 @@ const Header: FC = () => (
       py="m"
       px="xl"
       top="0"
+      gap="xs"
       left="0"
       right="0"
-      gap="xs"
       zIndex="1"
       width="100%"
       position="relative"
@@ -35,6 +35,7 @@ const Header: FC = () => (
       position="absolute"
       alignItems="center"
       bg="lowestContainer"
+      border="1px solid red"
       justifyContent="space-between"
       gridTemplateColumns="1fr 1fr 1fr"
       display={['flex', 'flex', 'flex', 'none']}
