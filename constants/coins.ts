@@ -1,6 +1,6 @@
 import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 
-import { CoinData } from '@/interface';
+import { CoinData, CoinDataWithChainInfo } from '@/interface';
 import { TOKEN_SYMBOL } from '@/lib';
 
 import { Network, OBJECT_RECORD } from '.';
@@ -1074,4 +1074,92 @@ export const COIN_TYPE_TO_COIN = {
     [COIN_TYPE[Network.MAINNET].V_LP_SUI_ETH_CELER_USDC]:
       COINS[Network.MAINNET].V_LP_SUI_ETH_CELER_USDC,
   },
+};
+
+export const STRICT_TOKENS_TYPE: Record<Network, ReadonlyArray<string>> = {
+  [Network.TESTNET]: [
+    TESTNET_BASE_COINS.SUI,
+    TESTNET_BASE_COINS.BNB,
+    TESTNET_BASE_COINS.BTC,
+    TESTNET_BASE_COINS.ETH,
+    TESTNET_BASE_COINS.USDC,
+    TESTNET_BASE_COINS.USDT,
+  ],
+  [Network.MAINNET]: [MAINNET_BASE_COINS.SUI],
+};
+
+export const WORMHOLE_TOKENS_TYPE: Record<Network, ReadonlyArray<string>> = {
+  [Network.TESTNET]: [],
+  [Network.MAINNET]: [
+    MAINNET_BASE_COINS.BSC_WORMHOLE_ADA,
+    MAINNET_BASE_COINS.BSC_WORMHOLE_BTCB,
+    MAINNET_BASE_COINS.BSC_WORMHOLE_DOGE,
+    MAINNET_BASE_COINS.BSC_WORMHOLE_ETH,
+    MAINNET_BASE_COINS.BSC_WORMHOLE_FLOKI,
+    MAINNET_BASE_COINS.BSC_WORMHOLE_USDC,
+    MAINNET_BASE_COINS.BSC_WORMHOLE_USDT,
+    MAINNET_BASE_COINS.ETH_WORMHOLE_USDC,
+    MAINNET_BASE_COINS.ETH_WORMHOLE_USDT,
+    MAINNET_BASE_COINS.NATIVE_WORMHOLE_CELO,
+    MAINNET_BASE_COINS.NATIVE_WORMHOLE_ETH,
+    MAINNET_BASE_COINS.NATIVE_WORMHOLE_SOL,
+    MAINNET_BASE_COINS.NATIVE_WORMHOLE_WAVAX,
+    MAINNET_BASE_COINS.NATIVE_WORMHOLE_WBNB,
+    MAINNET_BASE_COINS.NATIVE_WORMHOLE_WFTM,
+    MAINNET_BASE_COINS.NATIVE_WORMHOLE_WMATIC,
+  ],
+};
+
+export const CELER_TOKENS_TYPE: Record<Network, ReadonlyArray<string>> = {
+  [Network.TESTNET]: [],
+  [Network.MAINNET]: [
+    MAINNET_BASE_COINS.ETH_CELER_USDC,
+    MAINNET_BASE_COINS.ETH_CELER_USDT,
+    MAINNET_BASE_COINS.ETH_CELER_WBTC,
+    MAINNET_BASE_COINS.ETH_CELER_WETH,
+  ],
+};
+
+export const STRICT_TOKENS: Record<Network, Array<CoinData>> = {
+  [Network.TESTNET]: [
+    COINS[Network.TESTNET].SUI,
+    COINS[Network.TESTNET].BNB,
+    COINS[Network.TESTNET].BTC,
+    COINS[Network.TESTNET].ETH,
+    COINS[Network.TESTNET].USDC,
+    COINS[Network.TESTNET].USDT,
+  ],
+  [Network.MAINNET]: [COINS[Network.MAINNET].SUI],
+};
+
+export const WORMHOLE_TOKENS: Record<Network, Array<CoinDataWithChainInfo>> = {
+  [Network.TESTNET]: [],
+  [Network.MAINNET]: [
+    { ...COINS[Network.MAINNET].BSC_WORMHOLE_ADA, chain: 'BSC' },
+    { ...COINS[Network.MAINNET].BSC_WORMHOLE_BTCB, chain: 'BSC' },
+    COINS[Network.MAINNET].NATIVE_WORMHOLE_CELO,
+    { ...COINS[Network.MAINNET].BSC_WORMHOLE_DOGE, chain: 'BSC' },
+    COINS[Network.MAINNET].NATIVE_WORMHOLE_ETH,
+    { ...COINS[Network.MAINNET].BSC_WORMHOLE_ETH, chain: 'BSC' },
+    { ...COINS[Network.MAINNET].BSC_WORMHOLE_FLOKI, chain: 'BSC' },
+    COINS[Network.MAINNET].NATIVE_WORMHOLE_SOL,
+    { ...COINS[Network.MAINNET].BSC_WORMHOLE_USDC, chain: 'BSC' },
+    { ...COINS[Network.MAINNET].BSC_WORMHOLE_USDT, chain: 'BSC' },
+    { ...COINS[Network.MAINNET].ETH_WORMHOLE_USDC, chain: 'ETH' },
+    { ...COINS[Network.MAINNET].ETH_WORMHOLE_USDT, chain: 'ETH' },
+    COINS[Network.MAINNET].NATIVE_WORMHOLE_WAVAX,
+    COINS[Network.MAINNET].NATIVE_WORMHOLE_WBNB,
+    COINS[Network.MAINNET].NATIVE_WORMHOLE_WFTM,
+    COINS[Network.MAINNET].NATIVE_WORMHOLE_WMATIC,
+  ],
+};
+
+export const CELER_TOKENS: Record<Network, Array<CoinDataWithChainInfo>> = {
+  [Network.TESTNET]: [],
+  [Network.MAINNET]: [
+    { ...COINS[Network.MAINNET].ETH_CELER_USDC, chain: 'ETH' },
+    { ...COINS[Network.MAINNET].ETH_CELER_USDT, chain: 'ETH' },
+    { ...COINS[Network.MAINNET].ETH_CELER_WBTC, chain: 'ETH' },
+    { ...COINS[Network.MAINNET].ETH_CELER_WETH, chain: 'ETH' },
+  ],
 };

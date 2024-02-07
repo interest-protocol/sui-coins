@@ -1,49 +1,63 @@
-import { Box, Button, Typography } from '@interest-protocol/ui-kit';
-import { FC } from 'react';
+import {
+  Box,
+  Button,
+  Theme,
+  Typography,
+  useTheme,
+} from '@interest-protocol/ui-kit';
+import { FC, MouseEventHandler } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 
-import { LOCAL_STORAGE_VERSION } from '@/constants';
+import { TokenIcon } from '@/components';
+import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
 import { useNetwork } from '@/context/network';
-import { FavoriteSVG } from '@/svg';
+import { BSCChainSVG, ETHChainSVG, FavoriteSVG } from '@/svg';
 
 import { TokenModalItemProps } from './select-token-modal.types';
 
+const CHAIN_ICON = {
+  BSC: BSCChainSVG,
+  ETH: ETHChainSVG,
+};
+
 const TokenModalItem: FC<TokenModalItemProps> = ({
   type,
-  Icon,
+  chain,
   symbol,
-  origin,
-  balance,
   onClick,
   selected,
-  isSuggested,
 }) => {
   const { network } = useNetwork();
+  const { colors } = useTheme() as Theme;
   const [favoriteTokens, setFavoriteTokens] = useLocalStorage<
     ReadonlyArray<string>
   >(`${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-tokens`, []);
 
   const isFavorite = favoriteTokens.includes(type);
 
-  const handleFavoriteTokens = () =>
+  const handleFavoriteTokens: MouseEventHandler = (e) => {
+    e.stopPropagation();
     setFavoriteTokens(
       isFavorite
         ? favoriteTokens.filter((favType) => favType !== type)
         : [...favoriteTokens, type]
     );
+  };
+
+  const ChainIcon = CHAIN_ICON[chain!];
 
   return (
     <Box
-      p="1rem"
+      p="xl"
       display="flex"
       color="textSoft"
       cursor="pointer"
       alignItems="center"
-      nHover={{ bg: 'rgba(0, 83, 219, 0.08)' }}
       justifyContent="space-between"
-      bg={selected ? 'rgba(0, 83, 219, 0.08)' : 'unset'}
+      nHover={{ bg: `${colors.primary}14` }}
       onClick={selected ? undefined : onClick}
       transition="background 500ms ease-in-out"
+      bg={selected ? `${colors.primary}14` : 'unset'}
     >
       <Box display="flex" alignItems="center">
         <Box
@@ -52,11 +66,22 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
           display="flex"
           width="2.5rem"
           height="2.5rem"
-          alignItems="center"
           borderRadius="xs"
+          position="relative"
+          alignItems="center"
           justifyContent="center"
         >
-          <Icon filled width="100%" maxWidth="1.6rem" maxHeight="1.6rem" />
+          <TokenIcon
+            network={network}
+            maxWidth="1.6rem"
+            maxHeight="1.6rem"
+            tokenId={network === Network.MAINNET ? type : symbol}
+          />
+          {chain && (
+            <Box position="absolute" bottom="-0.3rem" right="-0.5rem">
+              <ChainIcon maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
+            </Box>
+          )}
         </Box>
         <Box
           ml="1rem"
@@ -67,19 +92,14 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
           <Typography variant="title" size="medium">
             {symbol}
           </Typography>
-          {origin && (
-            <Typography variant="body" size="small">
-              {origin}
+          {chain && (
+            <Typography variant="body" size="small" opacity="0.6">
+              {chain}
             </Typography>
           )}
         </Box>
       </Box>
       <Box display="flex" alignItems="center" gap="xs">
-        {!isSuggested && (
-          <Typography variant="body" size="large">
-            {balance}
-          </Typography>
-        )}
         <Button
           isIcon
           zIndex="10"
@@ -88,8 +108,8 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
         >
           <FavoriteSVG
             width="100%"
-            maxWidth="1rem"
-            maxHeight="1rem"
+            maxWidth="1.2rem"
+            maxHeight="1.2rem"
             filled={isFavorite}
           />
         </Button>

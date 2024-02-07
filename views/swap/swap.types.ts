@@ -30,3 +30,11 @@ export interface SwapForm {
   swapPath: SwapPath;
   readyToSwap: boolean;
 }
+
+export interface SwapForm {
+  to: SwapToken;
+  from: SwapToken;
+  lock: boolean;
+  disabled: boolean;
+  maxValue: boolean;
+}

@@ -1,7 +1,8 @@
-import { isValidSuiAddress } from '@mysten/sui.js/utils';
+import { isValidSuiAddress, normalizeSuiAddress } from '@mysten/sui.js/utils';
 import { propOr } from 'ramda';
 
 import { MAINNET_COINS_INFO } from '@/constants';
+import { FixedPointMath } from '@/lib';
 import { isBigNumberish } from '@/utils';
 
 import { AirdropData } from './airdrop.types';
@@ -11,10 +12,13 @@ export const csvToAirdrop = (
   onError: (message: string) => void
 ): AirdropData[] => {
   try {
-    const lines = csv.split(',');
-    const addresses = lines.filter((x) => isValidSuiAddress(x));
+    const lines = csv.split(',').map((x) => x.replace('\n', ''));
+
+    const addresses = lines.filter(
+      (x) => x.startsWith('0x') && isValidSuiAddress(normalizeSuiAddress(x))
+    );
     const amounts = lines.filter(
-      (x) => !isValidSuiAddress(x) && isBigNumberish(x)
+      (x) => !x.startsWith('0x') && isBigNumberish(x)
     );
 
     if (addresses.length !== amounts.length)
@@ -26,6 +30,31 @@ export const csvToAirdrop = (
       data.push({
         address,
         amount: amounts[i],
+      });
+    });
+
+    return data;
+  } catch (error) {
+    onError(propOr('Something went wrong', 'message', error));
+    return [];
+  }
+};
+
+export const textToAirdrop = (
+  text: string,
+  commonAmount: string,
+  onError: (message: string) => void
+): AirdropData[] => {
+  try {
+    const lines = text.split('\n');
+    const addresses = lines.filter((x) => isValidSuiAddress(x));
+
+    const data = [] as AirdropData[];
+
+    addresses.forEach((address) => {
+      data.push({
+        address,
+        amount: FixedPointMath.toBigNumber(commonAmount).toString(),
       });
     });
 

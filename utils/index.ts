@@ -1,3 +1,4 @@
+export * from './address';
 export * from './array';
 export * from './big-number';
 export * from './coin';
@@ -7,3 +8,4 @@ export * from './promise';
 export * from './string';
 export * from './toast';
 export * from './tx';
+export * from './url';
