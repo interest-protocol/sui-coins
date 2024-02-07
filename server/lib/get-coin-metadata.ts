@@ -20,7 +20,7 @@ const provider = {
 const getCoinMetadata = async (type: string, network = Network.MAINNET) => {
   const doc = await CoinMetadataModel.findOne({ type });
 
-  if (!doc) {
+  if (!doc || !doc.id) {
     const suiClient = provider[network];
 
     const coinMetadata = await suiClient
@@ -30,7 +30,7 @@ const getCoinMetadata = async (type: string, network = Network.MAINNET) => {
         type,
       }));
 
-    const newDoc = await CoinMetadataModel.create({ coinMetadata });
+    const newDoc = await CoinMetadataModel.create(coinMetadata);
 
     newDoc.save();
 

@@ -16,15 +16,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const typeList = (req.query.type_list as string)?.split(',');
 
       if (type && network) {
-        const doc = getCoinMetadata(type, network);
+        const doc = await getCoinMetadata(type, network);
 
-        if (!doc) {
-          res.status(204).send('No data found!');
-          return;
-        }
+        if (!doc) return res.status(204).send('No data found!');
 
-        res.status(200).json(doc);
-        return;
+        return res.status(200).json(doc);
       }
 
       if (typeList && Array.isArray(typeList) && typeList.length) {
@@ -32,24 +28,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           type: typeList.map((type) => type),
         });
 
-        if (!data.length) {
-          res.status(204).send('No data found!');
-          return;
-        }
+        if (!data.length) return res.status(204).send('No data found!');
 
-        res.status(200).json(data);
-        return;
+        return res.status(200).json(data);
       }
 
       const data = await CoinMetadataModel.find({});
 
-      if (!data) {
-        res.status(204).send('No data found!');
-        return;
-      }
+      if (!data) return res.status(204).send('No data found!');
 
-      res.status(200).json(data);
-      return;
+      return res.status(200).json(data);
     }
     if (req.method === 'POST') {
       const data: CoinMetadataWithType | ReadonlyArray<CoinMetadataWithType> =
@@ -60,26 +48,20 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           data.map((item) => CoinMetadataModel.create(item))
         );
 
-        if (!docs.length) {
-          res.status(204).send('Nothing to send!');
-          return;
-        }
+        if (!docs.length) return res.status(204).send('Nothing to send!');
 
-        CoinMetadataModel.bulkSave(docs);
-        res.status(201).send('Data created successfully!');
-        return;
+        await CoinMetadataModel.bulkSave(docs);
+
+        return res.status(201).send('Data created successfully!');
       }
 
       const doc = await CoinMetadataModel.create(data);
 
-      if (!data) {
-        res.status(400).send('Sent data is incompatible!');
-        return;
-      }
+      if (!data) return res.status(400).send('Sent data is incompatible!');
 
-      doc.save();
-      res.status(201).send('Data created successfully!');
-      return;
+      await doc.save();
+
+      return res.status(201).send('Data created successfully!');
     }
 
     res.status(405).send('Method Not Allowed!');
