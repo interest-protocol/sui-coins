@@ -115,6 +115,7 @@ const CreateTokenForm: FC = () => {
 
   return (
     <Form
+      as="form"
       width="100%"
       maxWidth="37rem"
       borderRadius="xs"
