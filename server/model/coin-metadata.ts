@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-export interface CoinMedataModel extends Document {
+export interface CoinMetadataModel extends Document {
   type: string;
   name: string;
   symbol: string;
@@ -41,4 +41,4 @@ const CoinMetadataSchema = new Schema({
 });
 
 export default mongoose.models.CoinMetadata ||
-  mongoose.model<CoinMedataModel>('CoinMetadata', CoinMetadataSchema);
+  mongoose.model<CoinMetadataModel>('CoinMetadata', CoinMetadataSchema);

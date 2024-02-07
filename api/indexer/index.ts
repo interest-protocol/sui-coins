@@ -33,7 +33,7 @@ export const apiRequestIndexer = ({
     })
     .then((result) => result);
 
-export const fetchNftHolder = async ({
+const fetchNftHolder = async ({
   collectionId,
   offset,
 }: FetchNftHolder): Promise<Array<string>> => {

@@ -17,11 +17,11 @@ export const MENU_PROFILE_DATA: ReadonlyArray<ProfileMenuItemProps> = [
     disabled: true,
   },
   {
-    name: 'mycoins',
-    description: 'my coins',
+    name: 'assets',
+    description: 'assets',
     Icon: AssetsSVG,
     hasBorder: false,
-    disabled: false,
+    disabled: true,
   },
   {
     name: 'viewInExplorer',

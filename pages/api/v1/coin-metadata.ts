@@ -1,19 +1,22 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import dbConnect from 'server';
-import CoinMetadataModel from 'server/model/coin-metadata';
 
+import { Network } from '@/constants';
 import { CoinMetadataWithType } from '@/interface';
+import dbConnect from '@/server';
+import getCoinMetadata from '@/server/lib/get-coin-metadata';
+import CoinMetadataModel from '@/server/model/coin-metadata';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     await dbConnect();
 
     if (req.method === 'GET') {
-      const type = req.query.type;
+      const type = req.query.type as string;
+      const network = req.query.network as Network;
       const typeList = (req.query.type_list as string)?.split(',');
 
-      if (type) {
-        const doc = await CoinMetadataModel.findOne({ type });
+      if (type && network) {
+        const doc = getCoinMetadata(type, network);
 
         if (!doc) {
           res.status(204).send('No data found!');

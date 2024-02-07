@@ -22,10 +22,9 @@ export const MENU_ITEMS = [
     path: Routes[RoutesEnum.Pools],
   },
   {
-    name: 'My Coins',
+    name: 'Assets',
     mobileOnly: false,
     device: DeviceMenuType.Mobile,
-    path: Routes[RoutesEnum.MyCoins],
   },
   {
     name: 'Airdrop',

@@ -1,7 +1,7 @@
 import { Box, TextField } from '@interest-protocol/ui-kit';
 import BigNumber from 'bignumber.js';
 import { ChangeEvent, FC } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 import { TokenIcon } from '@/components';
 import { Network } from '@/constants';
@@ -12,27 +12,25 @@ import { IAirdropForm } from '../airdrop.types';
 
 const AirdropCustomAmountTextField: FC = () => {
   const { network } = useNetwork();
-  const { register, setValue, control, getValues } =
-    useFormContext<IAirdropForm>();
-
-  const { type, symbol, decimals } = useWatch({ control, name: 'token' });
+  const { register, setValue, getValues } = useFormContext<IAirdropForm>();
 
   return (
     <TextField
       placeholder="0"
+      nPlaceholder={{ opacity: 0.7 }}
       {...register('commonAmount', {
         onChange: (v: ChangeEvent<HTMLInputElement>) => {
           const value = parseInputEventToNumberString(v);
-          setValue('commonAmount', value || '0');
-          setValue(
-            'airdropList',
-            getValues('airdropList')?.map(({ address }) => ({
-              address,
-              amount: BigNumber(value || '0')
-                .times(BigNumber(10).pow(decimals))
-                .toString(),
-            })) ?? null
-          );
+          setValue('commonAmount', value || '');
+
+          const airdropList = getValues('airdropList')?.map(({ address }) => ({
+            address,
+            amount: BigNumber(value || '0')
+              .times(BigNumber(10).pow(getValues('token.decimals')))
+              .toString(),
+          }));
+
+          setValue('airdropList', airdropList ?? null);
         },
       })}
       fieldProps={{
@@ -57,7 +55,9 @@ const AirdropCustomAmountTextField: FC = () => {
             network={network}
             maxWidth="1.25rem"
             maxHeight="1.25rem"
-            tokenId={network === Network.MAINNET ? type : symbol}
+            tokenId={getValues(
+              `token.${network === Network.MAINNET ? 'type' : 'symbol'}`
+            )}
           />
         </Box>
       }

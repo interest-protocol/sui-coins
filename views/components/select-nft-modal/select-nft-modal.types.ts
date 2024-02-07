@@ -2,10 +2,6 @@ import { Control, UseFormSetValue } from 'react-hook-form';
 
 import { NFTCollectionMetadata } from '@/interface';
 
-export interface LinearLoaderProps {
-  loading: boolean;
-}
-
 export interface NFTModalItemProps extends NFTCollectionMetadata {
   selected: boolean;
   onClick: () => void;

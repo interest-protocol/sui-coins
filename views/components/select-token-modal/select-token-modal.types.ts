@@ -5,10 +5,6 @@ import { Network } from '@/constants';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { CoinDataWithChainInfo } from '@/views/pool-details/pool-form/pool-form.types';
 
-export interface LinearLoaderProps {
-  loading: boolean;
-}
-
 export interface TokenModalMetadata {
   name: string;
   symbol: string;
@@ -46,9 +42,8 @@ export interface SearchTokenForm {
 }
 
 export interface SelectTokenModalBodyProps {
-  loading: boolean;
-  handleSelectToken: (coin: CoinObject) => void;
   control: Control<SearchTokenForm>;
+  handleSelectToken: (coin: CoinObject) => void;
 }
 
 export interface SelectTokenBaseTokensProps {
@@ -69,8 +64,4 @@ export interface ModalTokenBodyProps {
 export interface ModalTokenSearchProps {
   search: string;
   handleSelectToken: (type: string) => void;
-}
-
-export interface LinearLoaderProps {
-  loading: boolean;
 }

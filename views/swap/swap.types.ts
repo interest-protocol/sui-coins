@@ -11,7 +11,7 @@ export interface SwapToken extends CoinObject {
   locked: boolean;
 }
 
-export interface SwapTypeArgs {
+interface SwapTypeArgs {
   coinIn: string;
   coinOut: string;
   lpCoin: string;

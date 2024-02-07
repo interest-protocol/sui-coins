@@ -17,14 +17,16 @@
     "jsx": "preserve",
     "incremental": true,
     "declaration": true,
-    "baseUrl": ".",
     "paths": {
+      "@/api/*": ["./api/*"],
       "@/svg": ["./components/svg"],
       "@/components": ["./components"],
       "@/components/*": ["./components/*"],
       "@/context/*": ["./context/*"],
       "@/constants": ["./constants"],
       "@/constants/*": ["./constants/*"],
+      "@/elements": ["./elements"],
+      "@/elements/*": ["./elements/*"],
       "@/interface": ["./interface"],
       "@/lib": ["./lib"],
       "@/lib/*": ["./lib/*"],
@@ -33,6 +35,8 @@
       "@/utils": ["./utils"],
       "@/utils/*": ["./utils/*"],
       "@/views/*": ["./views/*"],
+      "@/server": ["./server"],
+      "@/server/*": ["./server/*"],
       "@/styles": ["./styles"]
     }
   },
