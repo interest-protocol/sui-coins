@@ -5,6 +5,7 @@ import { useReadLocalStorage } from 'usehooks-ts';
 
 import { LOCAL_STORAGE_VERSION } from '@/constants';
 import {
+  ALL_TOKENS,
   CELER_TOKENS,
   CELER_TOKENS_TYPE,
   STRICT_TOKENS,
@@ -15,6 +16,7 @@ import {
 import { useNetwork } from '@/context/network';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { useWeb3 } from '@/hooks/use-web3';
+import { coinDataToCoinObject } from '@/utils';
 
 import FetchingToken from './fetching-token';
 import ModalTokenBody from './modal-token-body';
@@ -41,6 +43,10 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
 
   const handleSelectToken = async (type: string) => {
     if (coinsMap[type]) return onSelectToken(coinsMap[type]);
+
+    const token = ALL_TOKENS[network].find((token) => token.type === type);
+
+    if (token) return onSelectToken(coinDataToCoinObject(token));
 
     const metadata = await fetch(
       `/api/v1/coin-metadata?type=${type}&network=${network}`

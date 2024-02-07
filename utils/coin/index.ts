@@ -1,4 +1,4 @@
-import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import { formatAddress, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
 import { propOr } from 'ramda';
 
@@ -6,6 +6,7 @@ import {
   CoinObject,
   CoinsMap,
 } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { CoinData } from '@/views/pool-details/pool-form/pool-form.types';
 
 import { CreateVectorParameterArgs } from './coin.types';
 
@@ -114,3 +115,11 @@ export const normalizeSuiType = (x: string) => {
 
   return [paddedType, ...splitType.slice(1)].join('::');
 };
+
+export const coinDataToCoinObject = (coinData: CoinData): CoinObject => ({
+  ...coinData,
+  balance: '0',
+  coinObjectId: '',
+  metadata: { name: formatAddress(coinData.type), description: '' },
+  objects: [],
+});
