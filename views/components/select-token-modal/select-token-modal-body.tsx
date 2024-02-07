@@ -28,7 +28,6 @@ import { metadataToCoin } from './select-token-modal.utils';
 
 const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   control,
-  loading,
   handleSelectToken: onSelectToken,
 }) => {
   const { network } = useNetwork();
@@ -109,7 +108,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
       />
     );
 
-  if (loading || isFetchingCoinBalances) return <FetchingToken />;
+  if (isFetchingCoinBalances) return <FetchingToken />;
 
   const noWalletToShow = filterSelected == TokenOrigin.Wallet && !coins?.length;
 

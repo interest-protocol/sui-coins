@@ -42,9 +42,8 @@ export interface SearchTokenForm {
 }
 
 export interface SelectTokenModalBodyProps {
-  loading: boolean;
-  handleSelectToken: (coin: CoinObject) => void;
   control: Control<SearchTokenForm>;
+  handleSelectToken: (coin: CoinObject) => void;
 }
 
 export interface SelectTokenBaseTokensProps {

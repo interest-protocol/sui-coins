@@ -1,5 +1,6 @@
-import { Rotate } from 'elements';
 import { FC } from 'react';
+
+import { Rotate } from '@/elements';
 
 import { SVGProps } from './svg.types';
 

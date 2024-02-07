@@ -1,7 +1,7 @@
 import { Box } from '@interest-protocol/ui-kit';
-import { Typography } from 'elements';
 import { FC } from 'react';
 
+import { Typography } from '@/elements';
 import {
   DiscordSVG,
   GithubSVG,

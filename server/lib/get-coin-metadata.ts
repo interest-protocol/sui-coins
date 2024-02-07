@@ -1,8 +1,8 @@
 import { getFullnodeUrl, SuiClient } from '@mysten/sui.js/client';
-import CoinMetadataModel from 'server/model/coin-metadata';
 
 import { Network } from '@/constants';
 import { getBasicCoinMetadata } from '@/hooks/use-get-all-coins';
+import CoinMetadataModel from '@/server/model/coin-metadata';
 
 const testnetClient = new SuiClient({
   url: process.env.NEXT_PUBLIC_SUI_TESTNET_RPC_URL || getFullnodeUrl('testnet'),

@@ -105,11 +105,11 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
         maxWidth="20rem"
         textAlign="center"
       >
-        {error || finished !== 100
-          ? 'Sending batches'
+        {!error || finished !== 100
+          ? 'Send batches'
           : doneItems.length === allBatches
             ? 'The airdrop has been sent'
-            : `${failedItems.length} batches was not sent`}
+            : `${allBatches - doneItems.length} batches was not sent`}
       </Typography>
       <Box display="flex" gap="s">
         {error && (

@@ -25,6 +25,8 @@
       "@/context/*": ["./context/*"],
       "@/constants": ["./constants"],
       "@/constants/*": ["./constants/*"],
+      "@/elements": ["./elements"],
+      "@/elements/*": ["./elements/*"],
       "@/interface": ["./interface"],
       "@/lib": ["./lib"],
       "@/lib/*": ["./lib/*"],
