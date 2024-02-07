@@ -15,6 +15,7 @@ import {
 import { useNetwork } from '@/context/network';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { useWeb3 } from '@/hooks/use-web3';
+import { coinDataToCoinObject } from '@/utils';
 
 import FetchingToken from './fetching-token';
 import ModalTokenBody from './modal-token-body';
@@ -42,6 +43,10 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   const handleSelectToken = async (type: string) => {
     if (coinsMap[type]) return onSelectToken(coinsMap[type]);
 
+    const token = STRICT_TOKENS[network].find((token) => token.type === type);
+
+    if (token) return onSelectToken(coinDataToCoinObject(token));
+
     const metadata = await fetch(
       `/api/v1/coin-metadata?type=${type}&network=${network}`
     ).then((response) =>
@@ -67,7 +72,9 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
           .sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
           .filter(
             ({ symbol, type }) =>
-              !search || symbol.includes(search) || type.includes(search)
+              !search ||
+              symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+              type.includes(search)
           )}
       />
     );
@@ -85,7 +92,9 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
           .sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
           .filter(
             ({ symbol, type }) =>
-              !search || symbol.includes(search) || type.includes(search)
+              !search ||
+              symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+              type.includes(search)
           )}
       />
     );
@@ -103,7 +112,9 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
           .sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
           .filter(
             ({ symbol, type }) =>
-              !search || symbol.includes(search) || type.includes(search)
+              !search ||
+              symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+              type.includes(search)
           )}
       />
     );
