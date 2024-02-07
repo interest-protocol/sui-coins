@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useId } from 'react';
 import useSWR from 'swr';
 import { v4 } from 'uuid';
 
@@ -13,12 +13,13 @@ const ModalTokenSearch: FC<ModalTokenSearchProps> = ({
   search,
   handleSelectToken,
 }) => {
+  const id = useId();
   const { network } = useNetwork();
   const {
     error,
     isLoading,
     data: tokenMetadata,
-  } = useSWR(`get-token-metadata-${network}-${search}`, () =>
+  } = useSWR(`get-token-metadata-${network}-${search}-${id}`, () =>
     fetch(`/api/v1/coin-metadata?type=${search}&network=${network}`).then(
       (res) => res.json()
     )

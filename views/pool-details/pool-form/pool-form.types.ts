@@ -11,8 +11,10 @@ export interface CoinData {
   type: string;
 }
 
+export type Chain = 'ETH' | 'BSC' | 'SOL' | 'AVA' | 'SUI';
+
 export interface CoinDataWithChainInfo extends CoinData {
-  chain?: 'ETH' | 'BSC';
+  chain?: Chain;
 }
 
 export interface PoolToken extends CoinData {
