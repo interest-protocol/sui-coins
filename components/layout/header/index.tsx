@@ -35,7 +35,6 @@ const Header: FC = () => (
       position="absolute"
       alignItems="center"
       bg="lowestContainer"
-      border="1px solid red"
       justifyContent="space-between"
       gridTemplateColumns="1fr 1fr 1fr"
       display={['flex', 'flex', 'flex', 'none']}
