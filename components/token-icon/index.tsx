@@ -17,6 +17,7 @@ const CHAIN_ICON = {
   ETH: ETHChainSVG,
   SOL: SOLChainSVG,
   AVA: AVAChainSVG,
+  SUI: null,
 };
 
 const TokenIcon: FC<TokenIconProps> = ({
@@ -58,7 +59,7 @@ const TokenIcon: FC<TokenIconProps> = ({
         maxWidth={maxWidth ?? '1.5rem'}
         maxHeight={maxHeight ?? '1.5rem'}
       />
-      {chain && (
+      {ChainIcon && (
         <Box position="absolute" bottom="-0.3rem" right="-0.5rem">
           <ChainIcon maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
         </Box>

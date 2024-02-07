@@ -68,10 +68,10 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
       )}
       <Box display="flex" alignItems="center">
         <TokenIcon
-          chain={chain}
           network={network}
           maxWidth="1.6rem"
           maxHeight="1.6rem"
+          chain={chain ?? 'SUI'}
           tokenId={network === Network.MAINNET ? type : symbol}
         />
         <Box
