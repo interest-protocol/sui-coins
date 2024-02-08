@@ -3,6 +3,9 @@ import { FC } from 'react';
 
 import Layout from '@/components/layout';
 
+import TopCoinsTable from './top-tables/top-coins-table';
+import TopPoolsTable from './top-tables/top-pools-table';
+
 const Metrics: FC = () => (
   <Layout>
     <Typography
@@ -14,7 +17,10 @@ const Metrics: FC = () => (
     >
       Metrics
     </Typography>
-    <Box minHeight="100vh" />
+    <Box variant="container">
+      <TopPoolsTable />
+      <TopCoinsTable />
+    </Box>
   </Layout>
 );
 
