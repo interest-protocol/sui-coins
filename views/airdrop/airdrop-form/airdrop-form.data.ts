@@ -22,6 +22,6 @@ export const METHODS_ICONS: Record<
   addressList: {
     title: 'List of addresses',
     Icon: WalletSVG,
-    description: 'Same airdrop value, different project addresses.',
+    description: 'Same airdrop value, different addresses.',
   },
 };
