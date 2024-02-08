@@ -12,3 +12,10 @@ export interface FetchNftHolder {
 export interface IndexerNFTResponse {
   owner: string;
 }
+
+export interface IndexerNFTMetadataResponse {
+  id: string;
+  title: string;
+  supply: number;
+  cover_url: string;
+}

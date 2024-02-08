@@ -1,10 +1,12 @@
 import { INDEXER_URL } from '@/constants';
 import { NFT } from '@/constants/nft';
+import { NFTCollectionMetadata } from '@/interface';
 import { sleep, validateAndNormalizeSuiAddress } from '@/utils';
 
 import {
   ApiRequestIndexer,
   FetchNftHolder,
+  IndexerNFTMetadataResponse,
   IndexerNFTResponse,
 } from './indexer.types';
 
@@ -87,7 +89,7 @@ const fetchNftHolder = async ({
 export const fetchAllHolders = async (
   collectionId: string,
   limit: number,
-  uniqueCall = false
+  nftsSizes: ReadonlyArray<number>
 ) => {
   const allHolders: Array<string> = [];
 
@@ -95,10 +97,9 @@ export const fetchAllHolders = async (
     { length: ~~(limit / 25) + 1 },
     (_, index) => index
   )) {
-    const parallelRequest = uniqueCall
-      ? 1
-      : TOTAL_REQUESTS -
-        NFT.reduce((acc, { total }) => acc + (offset * 25 > total ? 1 : 0), 0);
+    const parallelRequest =
+      TOTAL_REQUESTS -
+      nftsSizes.reduce((acc, size) => acc + (offset * 25 > size ? 1 : 0), 0);
 
     await sleep((ONE_MINUTE_IN_MS * parallelRequest) / REQUEST_PER_MINUTE);
 
@@ -107,4 +108,56 @@ export const fetchAllHolders = async (
     allHolders.push(...holders);
   }
   return allHolders;
+};
+
+export const fetchNftMetadata = async (): Promise<
+  ReadonlyArray<NFTCollectionMetadata>
+> => {
+  try {
+    const query = `
+      query{
+        sui {
+          collections(
+            where: {id: {_in: ${JSON.stringify(NFT)}}}
+          ) {
+            id
+            supply
+            title
+            cover_url
+          }
+        }
+      }
+    `;
+
+    const response = await fetch(`${process.env.DOMAIN}/api/v1/indexer`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(query),
+    });
+
+    const result = await response.json();
+
+    if (!result?.data?.data?.sui?.collections) {
+      throw new Error(
+        `[fetchHolders] unexpected result: ${JSON.stringify(result)}`
+      );
+    }
+
+    const metadata = result.data.data.sui.collections;
+
+    if (!metadata.length) return [];
+
+    return metadata.map(
+      ({ id, cover_url, supply, title }: IndexerNFTMetadataResponse) => ({
+        id,
+        name: title,
+        total: supply,
+        img: cover_url,
+      })
+    );
+  } catch {
+    return [];
+  }
 };
