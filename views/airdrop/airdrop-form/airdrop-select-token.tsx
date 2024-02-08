@@ -43,7 +43,7 @@ const AirdropSelectToken: FC = () => {
         initial={{ scale: 0.85 }}
         transition={{ duration: 0.3 }}
       >
-        <SelectTokenModal closeModal={handleClose} onSelect={() => onSelect} />
+        <SelectTokenModal closeModal={handleClose} onSelect={onSelect} />
       </Motion>,
       {
         isOpen: true,
