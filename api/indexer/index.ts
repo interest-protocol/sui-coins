@@ -89,7 +89,7 @@ export const fetchAllHolders = async (
   limit: number,
   uniqueCall = false
 ) => {
-  let allHolders: Array<string> = [];
+  const allHolders: Array<string> = [];
 
   for await (const offset of Array.from(
     { length: ~~(limit / 25) + 1 },
@@ -104,8 +104,7 @@ export const fetchAllHolders = async (
 
     const holders = await fetchNftHolder({ collectionId, offset });
 
-    allHolders = allHolders.concat(holders);
+    allHolders.push(...holders);
   }
-
-  return allHolders.slice(0, limit);
+  return allHolders;
 };
