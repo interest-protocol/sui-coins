@@ -26,7 +26,7 @@ const CreatePoolForm: FC = () => {
       mx="auto"
       width="100%"
       display="flex"
-      borderRadius="0.5rem"
+      borderRadius="xs"
       overflow="hidden"
       maxWidth={['100%', '100%', '100%', '100%', '32.75rem']}
       bg="lowestContainer"

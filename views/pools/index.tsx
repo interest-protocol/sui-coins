@@ -18,7 +18,7 @@ const Pools: FC = () => {
     <Layout title="Pools">
       <Box
         p={['s', 's', 's', 'l']}
-        borderRadius="0.5rem"
+        borderRadius="xs"
         bg="lowestContainer"
         mx={['0', '0', '0', '0', '9xl']}
       >

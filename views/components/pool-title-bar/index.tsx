@@ -13,14 +13,14 @@ const PoolTitleBar: FC<PoolTitleBarProps> = ({
 }) => (
   <Box
     mx="auto"
-    py="1rem"
+    py="m"
     gap="1rem"
-    px="1.5rem"
+    px="xl"
     display="flex"
     maxWidth="65rem"
     alignItems="center"
     bg="lowestContainer"
-    borderRadius="0.5rem"
+    borderRadius="xs"
     mt={['5xl', '5xl', '5xl', 'xl']}
     width={['100%', '100%', '100%', '85%']}
     mb="xs"
@@ -50,7 +50,7 @@ const PoolTitleBar: FC<PoolTitleBarProps> = ({
           width="2.5rem"
           height="2.5rem"
           alignItems="center"
-          borderRadius="0.5rem"
+          borderRadius="xs"
           justifyContent="center"
           color="lowestContainer"
         >
