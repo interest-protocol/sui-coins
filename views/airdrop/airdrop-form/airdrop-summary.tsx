@@ -1,19 +1,24 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
+import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { QuestionCircleSVG } from '@/svg';
+import { AIRDROP_SUI_FEE_PER_ADDRESS } from '@/constants/fees';
+import { FixedPointMath } from '@/lib';
 import { BATCH_SIZE } from '@/views/airdrop/airdrop.constants';
 
 import { AirdropSummaryProps, IAirdropForm } from '../airdrop.types';
+
+const METHOD_TITLE = {
+  csv: 'CSV',
+  nft: 'NFT',
+  customAmount: 'Custom',
+};
 
 const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
   const { control } = useFormContext<IAirdropForm>();
 
   const airdropList = useWatch({ control, name: 'airdropList' });
-
-  // TODO: Sui fee
-  const suiFee = 0;
 
   return (
     <Box display="flex" flexDirection="column" mb="m">
@@ -31,7 +36,7 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
             opacity="0.80"
             color="#000000A3"
           >
-            Delivery Method
+            Delivery method
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center">
             <Typography
@@ -40,13 +45,8 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
               color="onSurface"
               mr="0.5rem"
             >
-              {method || '--'}
+              {method ? METHOD_TITLE[method] : '--'}
             </Typography>
-            <QuestionCircleSVG
-              maxHeight="0.875rem"
-              maxWidth="0.875rem"
-              width="100%"
-            />
           </Box>
         </Box>
         <Box
@@ -62,7 +62,7 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
             opacity="0.80"
             color="#000000A3"
           >
-            Addresses sent to
+            Total addresses
           </Typography>
 
           <Box display="flex" justifyContent="center" alignItems="center">
@@ -74,11 +74,6 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
             >
               {airdropList ? airdropList.length : '--'}
             </Typography>
-            <QuestionCircleSVG
-              maxHeight="0.875rem"
-              maxWidth="0.875rem"
-              width="100%"
-            />
           </Box>
         </Box>
         <Box py="m" display="flex" justifyContent="space-between">
@@ -99,11 +94,6 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
             >
               {airdropList ? Math.ceil(airdropList.length / BATCH_SIZE) : '--'}
             </Typography>
-            <QuestionCircleSVG
-              maxHeight="0.875rem"
-              maxWidth="0.875rem"
-              width="100%"
-            />
           </Box>
         </Box>
         <Box
@@ -119,14 +109,17 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
             opacity="0.80"
             color="#000000A3"
           >
-            SUI Fee
+            Total SUI fee
           </Typography>
           <Box textAlign="right">
             <Typography size="medium" variant="body">
-              {suiFee || '--'}
-            </Typography>
-            <Typography variant="body" size="small" color="#000000A3">
-              --
+              {airdropList
+                ? FixedPointMath.toNumber(
+                    new BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS).times(
+                      airdropList.length
+                    )
+                  ).toString()
+                : '0'}
             </Typography>
           </Box>
         </Box>

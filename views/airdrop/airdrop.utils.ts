@@ -2,6 +2,7 @@ import { isValidSuiAddress, normalizeSuiAddress } from '@mysten/sui.js/utils';
 import { propOr } from 'ramda';
 
 import { MAINNET_COINS_INFO } from '@/constants';
+import { FixedPointMath } from '@/lib';
 import { isBigNumberish } from '@/utils';
 
 import { AirdropData } from './airdrop.types';
@@ -11,7 +12,8 @@ export const csvToAirdrop = (
   onError: (message: string) => void
 ): AirdropData[] => {
   try {
-    const lines = csv.split(',');
+    const lines = csv.split(',').map((x) => x.replace('\n', ''));
+
     const addresses = lines.filter(
       (x) => x.startsWith('0x') && isValidSuiAddress(normalizeSuiAddress(x))
     );
@@ -52,7 +54,7 @@ export const textToAirdrop = (
     addresses.forEach((address) => {
       data.push({
         address,
-        amount: commonAmount,
+        amount: FixedPointMath.toBigNumber(commonAmount).toString(),
       });
     });
 

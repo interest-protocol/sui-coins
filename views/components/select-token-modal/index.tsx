@@ -17,7 +17,6 @@ import {
   SelectTokenModalProps,
   TokenOrigin,
 } from './select-token-modal.types';
-import SelectTokenBaseTokens from './select-token-modal-base';
 import SelectTokenModalBody from './select-token-modal-body';
 import SelectTokenFilter from './select-token-modal-filter';
 
@@ -31,7 +30,7 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
   const { control, register, setValue } = useForm<SearchTokenForm>({
     defaultValues: {
       search: '',
-      filter: TokenOrigin.All,
+      filter: TokenOrigin.Strict,
     },
   });
 
@@ -43,9 +42,10 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
   return (
     <Motion
       layout
-      width="100%"
       display="flex"
       bg="onPrimary"
+      height="41rem"
+      minWidth="22rem"
       maxHeight="90vh"
       maxWidth="25rem"
       overflow="hidden"
@@ -70,39 +70,33 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
           <TimesSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
         </Button>
       </Box>
-      <Box mx="xl" my="l" display="flex" gap="3xs" flexDirection="column">
+      <Box mx="xl" mt="l" display="flex" gap="3xs" flexDirection="column">
         <Box>
           <TextField
             fontSize="medium"
             placeholder="Sui"
             label="Search token"
             {...register('search')}
+            nPlaceholder={{ opacity: 0.7 }}
             fieldProps={{ height: '3.5rem', mb: 'm', borderRadius: 'xs' }}
             Prefix={<SearchSVG maxWidth="1rem" maxHeight="1rem" width="100%" />}
           />
         </Box>
-        {!simple && (
-          <>
-            <SelectTokenFilter control={control} setValue={setValue} />
-            <SelectTokenBaseTokens
-              handleSelectToken={() => handleSelectToken}
-            />
-          </>
-        )}
+        {!simple && <SelectTokenFilter control={control} setValue={setValue} />}
       </Box>
-      <Motion
-        bg="#B6C4FF33"
+      <Box
+        flex="1"
+        display="flex"
         overflowY="auto"
-        position="relative"
-        initial={{ height: 0 }}
-        animate={{ height: 'auto' }}
+        bg="lowContainer"
+        flexDirection="column"
       >
         <SelectTokenModalBody
           control={control}
           loading={isFetchingCoinBalances}
           handleSelectToken={() => handleSelectToken}
         />
-      </Motion>
+      </Box>
     </Motion>
   );
 };

@@ -3,8 +3,8 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { TOKEN_SVG_MAP } from '@/constants/token';
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { useModal } from '@/hooks/use-modal';
+import { CoinData } from '@/interface';
 import { ChevronRightSVG, SUISVG } from '@/svg';
 import SelectTokenModal from '@/views/components/select-token-modal';
 
@@ -20,7 +20,7 @@ const CreatePoolFormSelectToken: FC<{ name: `token${'A' | 'B'}` }> = ({
 
   const { setModal, handleClose } = useModal();
 
-  const onSelect = (coin: CoinObject) => {
+  const onSelect = (coin: CoinData) => {
     setValue(name, {
       ...coin,
       value: '0',

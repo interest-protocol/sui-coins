@@ -2,11 +2,10 @@ import { Box, Motion, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { TokenIcon } from '@/components';
-import { Network } from '@/constants';
-import { useNetwork } from '@/context/network';
+import { NFT_MAP } from '@/constants/nft';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { useModal } from '@/hooks/use-modal';
+import { NFTCollection, NFTCollectionMetadata } from '@/interface';
 import { ChevronRightSVG } from '@/svg';
 import SelectNFTModal from '@/views/components/select-nft-modal';
 import SelectTokenModal from '@/views/components/select-token-modal';
@@ -16,18 +15,32 @@ import { getSymbol } from '../airdrop.utils';
 import AirdropCommonAmountTextField from './airdrop-common-amount-text-field';
 
 const AirdropNftCoinsMethod: FC = () => {
-  const { network } = useNetwork();
   const { setModal, handleClose } = useModal();
 
-  const { control, setValue } = useFormContext<IAirdropForm>();
+  const { control, setValue, getValues } = useFormContext<IAirdropForm>();
 
   const asset = useWatch({ control, name: 'asset' });
-  const airdropList = useWatch({ control, name: 'airdropList' });
-  const method = useWatch({ control, name: 'method' }) as 'nft' | 'coin';
+  const method = useWatch({ control, name: 'method' }) as 'nft';
 
-  const onSelect = (asset: CoinObject) => {
+  const onSelectToken = (asset: CoinObject) => {
     setValue('asset', asset);
-    setValue('airdropList', null); // TODO: get addresses with this asset
+    setValue('airdropList', null);
+  };
+
+  const onSelectNFT = async (collectionId: string) => {
+    setValue('asset', NFT_MAP[collectionId]);
+
+    const nft: NFTCollection = await fetch(
+      `/api/v1/nft-collection?id=${collectionId}`
+    ).then((res) => res.json());
+
+    setValue(
+      'airdropList',
+      nft.holders.map((holder) => ({
+        address: holder,
+        amount: getValues('commonAmount'),
+      }))
+    );
   };
 
   const openModal = () =>
@@ -38,12 +51,9 @@ const AirdropNftCoinsMethod: FC = () => {
         transition={{ duration: 0.3 }}
       >
         {method === 'nft' ? (
-          <SelectNFTModal closeModal={handleClose} onSelect={onSelect} />
+          <SelectNFTModal closeModal={handleClose} onSelect={onSelectNFT} />
         ) : (
-          <SelectTokenModal
-            closeModal={handleClose}
-            onSelect={() => onSelect}
-          />
+          <SelectTokenModal closeModal={handleClose} onSelect={onSelectToken} />
         )}
       </Motion>,
       {
@@ -61,7 +71,7 @@ const AirdropNftCoinsMethod: FC = () => {
       </Typography>
       <Box>
         <Typography variant="body" size="small">
-          Choose addresses with this type of {method}
+          Choose an NFT collection
         </Typography>
         <Box py="xs">
           <Box position="relative">
@@ -84,20 +94,27 @@ const AirdropNftCoinsMethod: FC = () => {
                   display="flex"
                   width="2.5rem"
                   height="2.5rem"
+                  overflow="hidden"
                   borderRadius="xs"
                   alignItems="center"
                   justifyContent="center"
                 >
-                  <TokenIcon
-                    network={network}
-                    tokenId={
-                      network === Network.MAINNET ? asset.type : asset.symbol
-                    }
+                  <img
+                    width="100%"
+                    src={(asset as NFTCollectionMetadata).img}
+                    alt={(asset as NFTCollectionMetadata).name}
                   />
                 </Box>
               )}
               <Typography variant="body" size="large" flex="1" as="span">
-                {asset ? getSymbol(asset.symbol, asset.type) : '---'}
+                {asset
+                  ? method === 'nft'
+                    ? (asset as NFTCollectionMetadata).name
+                    : getSymbol(
+                        (asset as CoinObject).symbol,
+                        (asset as CoinObject).type
+                      )
+                  : '---'}
               </Typography>
               <Box rotate="90deg">
                 <ChevronRightSVG
@@ -109,13 +126,10 @@ const AirdropNftCoinsMethod: FC = () => {
             </Box>
           </Box>
         </Box>
-        <Typography variant="body" size="small" color="#000000A3">
-          There are {airdropList?.length} addresses with this coin
-        </Typography>
       </Box>
       <Box>
         <Typography variant="body" size="small">
-          Enter Amount to Send
+          Enter amount to send per address
         </Typography>
         <AirdropCommonAmountTextField />
       </Box>

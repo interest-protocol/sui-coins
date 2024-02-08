@@ -85,6 +85,8 @@ const CreateTokenForm: FC = () => {
       txb.transferObjects([upgradeCap], txb.pure(currentAccount.address));
 
       const { signature, transactionBlockBytes } = await signTransactionBlock({
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         transactionBlock: txb,
         account: currentAccount,
       });

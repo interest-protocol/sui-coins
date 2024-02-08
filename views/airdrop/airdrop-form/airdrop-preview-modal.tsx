@@ -8,6 +8,7 @@ import { Network } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { FixedPointMath } from '@/lib';
 import { ArrowLeftSVG, TimesSVG } from '@/svg';
+import { formatMoney } from '@/utils';
 
 import { AirdropPreviewModalProps, IAirdropForm } from '../airdrop.types';
 import { getSymbol } from '../airdrop.utils';
@@ -24,7 +25,18 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
   const { control } = useFormContext<IAirdropForm>();
 
   const { symbol, decimals, type } = useWatch({ control, name: 'token' });
+  const usdPrice = useWatch({ control, name: 'tokenUSDPrice' });
   const airdropList = useWatch({ control, name: 'airdropList' });
+
+  const total = airdropList
+    ? FixedPointMath.toNumber(
+        airdropList?.reduce(
+          (acc, { amount }) => acc.plus(BigNumber(amount)),
+          BigNumber(0)
+        ),
+        decimals
+      )
+    : 0;
 
   return (
     <Modal custom isOpen={isOpen}>
@@ -100,19 +112,10 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
               </Box>
               <Box textAlign="right">
                 <Typography size="medium" variant="body">
-                  {airdropList
-                    ? FixedPointMath.toNumber(
-                        airdropList?.reduce(
-                          (acc, { amount }) => acc.plus(BigNumber(amount)),
-                          BigNumber(0)
-                        ),
-                        decimals
-                      )
-                    : 0}{' '}
-                  {getSymbol(symbol, type)}
+                  {formatMoney(total)} {getSymbol(symbol, type)}
                 </Typography>
                 <Typography variant="body" size="small" color="#000000A3">
-                  -- USD
+                  {usdPrice ? formatMoney(usdPrice * total) : '--'} USD
                 </Typography>
               </Box>
             </Box>

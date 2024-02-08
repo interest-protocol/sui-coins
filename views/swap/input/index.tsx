@@ -1,35 +1,24 @@
-import { Box, TextField, Typography } from '@interest-protocol/ui-kit';
+import { Box, TextField } from '@interest-protocol/ui-kit';
 import { ChangeEvent, FC } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 import { parseInputEventToNumberString } from '@/utils';
 
 import { SwapForm } from '../swap.types';
 import SwapFormFieldSlider from '../swap-manager/swap-manager-slider';
+import AmountInDollar from './dollar-value';
 import HeaderInfo from './header-info';
 import { InputProps } from './input.types';
 import SelectToken from './select-token';
 
 const Input: FC<InputProps> = ({ label }) => {
-  const { control, register, setValue, getValues } = useFormContext<SwapForm>();
-
-  const currentToken = useWatch({
-    control,
-    name: label,
-  });
-
-  const { value: dollarValue } = currentToken;
-
-  const balance = useWatch({
-    control,
-    name: `${label}.balance`,
-  });
+  const { register, setValue } = useFormContext<SwapForm>();
 
   return (
     <Box>
-      <HeaderInfo label={label} balance={balance} setValue={setValue} />
+      <HeaderInfo label={label} />
       <Box pl="l" pt="m" display="flex" justifyContent="space-between">
-        <SelectToken label={label} balance={balance} />
+        <SelectToken label={label} />
         <Box
           display="flex"
           justifyContent="flex-end"
@@ -55,24 +44,13 @@ const Input: FC<InputProps> = ({ label }) => {
               width: '100%',
             }}
           />
-          <Typography
-            variant="body"
-            size="small"
-            color={dollarValue ? 'onSurface' : 'outline'}
-            mr="l"
-          >
-            $ {dollarValue || 0} USD
-          </Typography>
+          <AmountInDollar label={label} />
         </Box>
       </Box>
       <Box pb={label === 'to' ? '2xl' : 's'}>
         {label === 'from' && (
           <Box px="s">
-            <SwapFormFieldSlider
-              setValue={setValue}
-              balance={balance ?? 0}
-              currentValue={+getValues('from.value')}
-            />
+            <SwapFormFieldSlider />
           </Box>
         )}
       </Box>

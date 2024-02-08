@@ -20,54 +20,56 @@ const AirdropChooseMethod: FC = () => {
           2. Choose Delivery Method
         </Typography>
       </Box>
-      {toPairs(METHODS_ICONS).map(([key, { title, Icon }], index) => (
-        <Box
-          mb="2xs"
-          padding="m"
-          key={index}
-          borderRadius="xs"
-          nHover={{ bg: '#0053DB14', cursor: 'pointer' }}
-          onClick={() => {
-            setValue('method', key);
-            setValue('asset', undefined);
-            setValue('airdropList', null);
-            setValue('commonAmount', '0');
-          }}
-        >
+      {toPairs(METHODS_ICONS).map(
+        ([key, { title, description, Icon }], index) => (
           <Box
-            display="flex"
+            mb="2xs"
+            padding="m"
+            key={index}
             borderRadius="xs"
-            alignItems="center"
-            justifyContent="space-between"
+            nHover={{ bg: '#0053DB14', cursor: 'pointer' }}
+            onClick={() => {
+              setValue('method', key);
+              setValue('asset', undefined);
+              setValue('airdropList', null);
+              setValue('commonAmount', '0');
+            }}
           >
-            <Box display="flex" gap="m">
-              <Box
-                color="black"
-                display="flex"
-                width="2.5rem"
-                height="2.5rem"
-                bg="#0053DB14"
-                minWidth="2.5rem"
-                minHeight="2.5rem"
-                alignItems="center"
-                borderRadius="full"
-                justifyContent="center"
-              >
-                <Icon width="100%" maxWidth="1.5rem" maxHeight="1.5rem" />
+            <Box
+              display="flex"
+              borderRadius="xs"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Box display="flex" gap="m">
+                <Box
+                  color="black"
+                  display="flex"
+                  width="2.5rem"
+                  height="2.5rem"
+                  bg="#0053DB14"
+                  minWidth="2.5rem"
+                  minHeight="2.5rem"
+                  alignItems="center"
+                  borderRadius="full"
+                  justifyContent="center"
+                >
+                  <Icon width="100%" maxWidth="1.5rem" maxHeight="1.5rem" />
+                </Box>
+                <Box>
+                  <Typography fontWeight="700" variant="body" size="large">
+                    {title}
+                  </Typography>
+                  <Typography variant="body" lineHeight="1.5rem" size="large">
+                    {description}
+                  </Typography>
+                </Box>
               </Box>
-              <Box>
-                <Typography fontWeight="700" variant="body" size="large">
-                  {title}
-                </Typography>
-                <Typography variant="body" lineHeight="1.5rem" size="large">
-                  copy what will happen if selected (1 line max)
-                </Typography>
-              </Box>
+              <RadioButton defaultValue={method === key} />
             </Box>
-            <RadioButton defaultValue={method === key} />
           </Box>
-        </Box>
-      ))}
+        )
+      )}
     </Box>
   );
 };

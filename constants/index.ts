@@ -33,6 +33,8 @@ export const DISPLAY_NETWORK = {
   [Network.TESTNET]: 'Testnet',
 };
 
+export const INDEXER_URL = 'https://api.indexer.xyz/graphql';
+
 export const EXPLORER_URL = {
   [SUI_MAINNET_CHAIN]: (complement: string) =>
     `https://suiexplorer.com/${complement}`,
@@ -40,12 +42,8 @@ export const EXPLORER_URL = {
     `https://suiexplorer.com/${complement}?network=testnet`,
 } as Record<Network, (complement: string) => string>;
 
-export enum TOKEN_SYMBOL {
-  SUI = 'SUI',
-  ETH = 'ETH',
-  USDC = 'USDC',
-}
-
+export const TREASURY =
+  '0xdd224f2287f0b38693555c6077abe85fcb4aa13e355ad54bc167611896b007e6';
 export const MAINNET_BASE_COINS = {
   SUI: SUI_TYPE_ARG,
   ETH_WORMHOLE_USDC:

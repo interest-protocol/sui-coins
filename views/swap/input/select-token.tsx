@@ -9,16 +9,16 @@ import { Network, TOKEN_ICONS } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
+import { CoinData } from '@/interface';
 import { FixedPointMath } from '@/lib';
 import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
 import { updateURL } from '@/utils';
 import SelectTokenModal from '@/views/components/select-token-modal';
-import { CoinDataWithBalance } from '@/views/components/select-token-modal/select-token-modal.types';
 
 import { SwapForm } from '../swap.types';
-import { SelectTokenProps } from './input.types';
+import { InputProps } from './input.types';
 
-const SelectToken: FC<SelectTokenProps> = ({ label }) => {
+const SelectToken: FC<InputProps> = ({ label }) => {
   const { coinsMap } = useWeb3();
   const { network } = useNetwork();
   const { pathname } = useRouter();
@@ -53,7 +53,7 @@ const SelectToken: FC<SelectTokenProps> = ({ label }) => {
     name: `${label === 'to' ? 'from' : 'to'}.type`,
   });
 
-  const onSelect = ({ type, decimals, symbol }: CoinDataWithBalance) => {
+  const onSelect = ({ type, decimals, symbol }: CoinData) => {
     if (type === oppositeType) {
       setValue(label === 'to' ? 'from' : 'to', {
         type: currentToken.type,
@@ -61,7 +61,7 @@ const SelectToken: FC<SelectTokenProps> = ({ label }) => {
         decimals: currentToken.decimals,
         value: '',
         balance: FixedPointMath.toNumber(
-          pathOr(BigNumber(0), [currentToken.type, 'totalBalance'], coinsMap)
+          BigNumber(pathOr(0, [currentToken.type, 'balance'], coinsMap))
         ),
         locked: false,
       });
@@ -73,7 +73,7 @@ const SelectToken: FC<SelectTokenProps> = ({ label }) => {
       decimals,
       value: '',
       balance: FixedPointMath.toNumber(
-        pathOr(BigNumber(0), [type, 'totalBalance'], coinsMap)
+        BigNumber(pathOr(0, [type, 'balance'], coinsMap))
       ),
       locked: false,
     });
