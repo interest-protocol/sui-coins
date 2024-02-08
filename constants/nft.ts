@@ -22,19 +22,19 @@ export const NFT: ReadonlyArray<NFTCollectionMetadata> = [
   {
     id: 'c3d1ce36-6afd-4336-b619-44c745dd7569',
     name: 'Egg',
-    total: 1_138,
+    total: 1_172,
     img: '/images/nft/egg.webp',
   },
   {
     id: 'd5ea5c61-5a91-40f2-9837-a1912a2083a1',
     name: 'Tail by Typus',
-    total: 2_219,
+    total: 2_222,
     img: '/images/nft/tail-by-typus.webp',
   },
   {
     id: '09d26434-4449-45eb-b848-89c30bec2e12',
     name: 'Unchained Esports',
-    total: 4_314,
+    total: 4_444,
     img: '/images/nft/unchained-esports.webp',
   },
 ];

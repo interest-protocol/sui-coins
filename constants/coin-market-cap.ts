@@ -1,5 +1,5 @@
 import { COIN_TYPE } from '../views/pools/coins';
-import { Network } from '.';
+import { Network } from './dapp';
 
 export const COIN_MARKET_CAP_ID_RECORD = {
   [Network.TESTNET]: {

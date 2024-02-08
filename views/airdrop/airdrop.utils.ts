@@ -1,7 +1,7 @@
 import { isValidSuiAddress, normalizeSuiAddress } from '@mysten/sui.js/utils';
 import { propOr } from 'ramda';
 
-import { MAINNET_COINS_INFO } from '@/constants';
+import { MAINNET_COINS_INFO } from '@/constants/coins';
 import { FixedPointMath } from '@/lib';
 import { isBigNumberish } from '@/utils';
 

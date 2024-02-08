@@ -2,7 +2,8 @@ import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
-import { Network, TOKEN_ICONS } from '@/constants';
+import { Network } from '@/constants';
+import { TOKEN_ICONS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { DefaultSVG } from '@/svg';
 import { getSymbol } from '@/views/airdrop/airdrop.utils';
