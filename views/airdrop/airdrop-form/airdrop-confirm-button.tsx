@@ -124,9 +124,13 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           .reduce((acc, data) => acc.plus(BigNumber(data.amount)), BigNumber(0))
           .toString();
 
+        console.log('totalAmount', totalAMount.toString());
+
         const coinToSend = txb.splitCoins(txb.object(firstCoin.coinObjectId), [
           txb.pure(totalAMount),
         ]);
+
+        console.log('Coin to send', coinToSend);
 
         txb.moveCall({
           target: `${contractPackageId}::airdrop::send`,
@@ -143,12 +147,16 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           }
         );
 
+        console.log('signed');
+
         const tx = await suiClient.executeTransactionBlock({
           transactionBlock: transactionBlockBytes,
           signature,
           options: { showEffects: true },
           requestType: 'WaitForEffectsCert',
         });
+
+        console.log('TX', tx);
 
         throwTXIfNotSuccessful(tx, () =>
           setValue('failed', [...getValues('failed'), Number(index)])
@@ -161,6 +169,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         setValue('done', [...getValues('done'), Number(index)]);
       }
     } catch (e: any) {
+      console.log('ERROR', e);
       toast.error((e?.message as string) ?? e ?? 'Something went wrong!');
       if (((e?.message as string) ?? e) === 'Rejected from user') {
         setValue('error', true);
