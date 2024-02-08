@@ -32,13 +32,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
       const body: NFTCollectionMetadata = JSON.parse(req.body);
 
-      const holders = await fetchAllHolders(body.id, body.total);
+      const holders = await fetchAllHolders(body.id, body.total, [body.total]);
 
       const doc = await NFTCollectionModel.create({
         holders,
         name: body.name,
         collectionId: body.id,
-        updatedAt: Date.now(),
       });
 
       doc.save();

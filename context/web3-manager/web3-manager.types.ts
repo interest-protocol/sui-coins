@@ -8,9 +8,11 @@ import {
   CoinObject,
   CoinsMap,
 } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
-import { LocalTokenMetadataRecord } from '@/interface';
+import { LocalTokenMetadataRecord, NFTCollectionMetadata } from '@/interface';
 
 export interface Web3ManagerState {
+  nfts: ReadonlyArray<NFTCollectionMetadata>;
+  nftsMap: Record<string, NFTCollectionMetadata>;
   account: null | string;
   coins: ReadonlyArray<CoinObject>;
   coinsMap: CoinsMap;
