@@ -2,9 +2,9 @@ import { Box } from '@interest-protocol/ui-kit';
 import { useWalletKit } from '@mysten/wallet-kit';
 import { FC } from 'react';
 
-import AccountInfo from '../account-info';
 import SuiNetwork from '../account-info/sui-network';
 import ConnectWalletButton from './connect-wallet-button';
+import Profile from './profile';
 
 const Wallet: FC = () => {
   const { currentAccount } = useWalletKit();
@@ -26,7 +26,7 @@ const Wallet: FC = () => {
             >
               <SuiNetwork />
             </Box>
-            <AccountInfo />
+            <Profile />
           </>
         )}
       </Box>
