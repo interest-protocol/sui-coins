@@ -7,8 +7,7 @@ import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { AIRDROP_SEND_CONTRACT, TREASURY } from '@/constants';
-import { AIRDROP_SUI_FEE_PER_ADDRESS } from '@/constants/fees';
+import { AIRDROP_SEND_CONTRACT } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useSuiClient } from '@/hooks/use-sui-client';
 import { useWeb3 } from '@/hooks/use-web3';
@@ -54,16 +53,6 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           const [coinToSend] = txb.splitCoins(txb.gas, [
             txb.pure(totalAMount.toString()),
           ]);
-
-          const [fee] = txb.splitCoins(txb.gas, [
-            txb.pure(
-              new BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS)
-                .times(batch.length)
-                .toString()
-            ),
-          ]);
-
-          txb.transferObjects([fee], TREASURY);
 
           txb.moveCall({
             target: `${contractPackageId}::airdrop::send`,
@@ -138,16 +127,6 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         const coinToSend = txb.splitCoins(txb.object(firstCoin.coinObjectId), [
           totalAMount,
         ]);
-
-        const [fee] = txb.splitCoins(txb.gas, [
-          txb.pure(
-            new BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS)
-              .times(batch.length)
-              .toString()
-          ),
-        ]);
-
-        txb.transferObjects([fee], TREASURY);
 
         txb.moveCall({
           target: `${contractPackageId}::airdrop::send`,
