@@ -3,14 +3,17 @@ import BigNumber from 'bignumber.js';
 import { FC, useMemo } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { useWeb3 } from '@/hooks/use-web3';
+
 import { AirdropPreviewButtonProps, IAirdropForm } from '../airdrop.types';
 
 const AirdropPreviewButton: FC<AirdropPreviewButtonProps> = ({
   handleOpenSummaryModal,
 }) => {
+  const { coinsMap } = useWeb3();
   const { control } = useFormContext<IAirdropForm>();
   const airdropList = useWatch({ control, name: 'airdropList' });
-  const tokenBalance = useWatch({ control, name: 'token.balance' });
+  const tokenType = useWatch({ control, name: 'token.type' });
 
   const isDisabled = useMemo(
     () =>
@@ -19,14 +22,14 @@ const AirdropPreviewButton: FC<AirdropPreviewButtonProps> = ({
       airdropList
         .reduce((acc, { amount }) => acc.plus(BigNumber(amount)), BigNumber(0))
         .isZero() ||
-      !tokenBalance ||
-      BigNumber(tokenBalance).lt(
+      !coinsMap[tokenType].balance ||
+      BigNumber(coinsMap[tokenType].balance).lt(
         airdropList.reduce(
           (acc, { amount }) => acc.plus(BigNumber(amount ?? 0)),
           BigNumber(0)
         )
       ),
-    [airdropList, tokenBalance]
+    [airdropList, tokenType, coinsMap[tokenType]]
   );
 
   return (
