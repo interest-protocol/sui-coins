@@ -9,6 +9,7 @@ const NFTModalItem: FC<NFTModalItemProps> = ({
   total,
   onClick,
   selected,
+  updatedAt,
 }) => (
   <Box
     p="xl"
@@ -48,6 +49,9 @@ const NFTModalItem: FC<NFTModalItemProps> = ({
     <Box gap="2xs" display="flex" alignItems="flex-end" flexDirection="column">
       <Typography variant="body" size="small">
         {total} addresses
+      </Typography>
+      <Typography variant="body" size="small">
+        Last update: {new Date(updatedAt!).toLocaleDateString()}
       </Typography>
     </Box>
   </Box>
