@@ -13,16 +13,16 @@ const MenuSettingsListHeaderMobile: FC<MenuSettingsListHeaderProps> = ({
   <Box
     p="xl"
     mt="2xs"
+    onClick={handleButton}
+    justifyContent="space-between"
+    display={['flex', 'flex', 'flex', 'none']}
     borderTop={['1px solid', '1px solid', '1px solid', 'unset']}
     borderTopColor="outlineVariant"
-    onClick={handleButton}
-    display={['flex', 'flex', 'flex', 'none']}
-    justifyContent="space-between"
   >
     <Typography variant="title" size="small" color="onSurface">
       Global Settings
     </Typography>
-    <Box display="flex" justifyContent="flex-end" bg="Red">
+    <Box display="flex" justifyContent="flex-end">
       <Motion
         transform={isOpen ? 'rotate(180deg)' : 'rotate(0deg)'}
         display="flex"

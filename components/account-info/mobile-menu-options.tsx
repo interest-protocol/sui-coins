@@ -41,7 +41,6 @@ const AccountInfo: FC<AccountInfoProps> = ({
       <Box width={['1.5rem', '1.5rem', '1.5rem', '1.5rem']} display="flex">
         <MenuSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
       </Box>
-
       <MenuOptions
         isMenuOpen={menuIsOpen}
         handleDisconnect={handleDisconnect}

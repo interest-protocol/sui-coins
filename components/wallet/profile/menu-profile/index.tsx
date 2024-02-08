@@ -1,11 +1,10 @@
 import { Box, Motion, Theme, useTheme } from '@interest-protocol/ui-kit';
 import { useWalletKit } from '@mysten/wallet-kit';
-import { useRouter } from 'next/router';
 import { FC, useState } from 'react';
 import { useIsFirstRender } from 'usehooks-ts';
 import { v4 } from 'uuid';
 
-import { EXPLORER_URL, Routes, RoutesEnum, wrapperVariants } from '@/constants';
+import { EXPLORER_URL, wrapperVariants } from '@/constants';
 import { useNetwork } from '@/context/network';
 import useEventListener from '@/hooks/use-event-listener';
 
@@ -20,7 +19,6 @@ const MenuProfile: FC<MenuProfileProps> = ({
   handleOpenSwitch,
   handleCloseProfile,
 }) => {
-  const { push } = useRouter();
   const { network } = useNetwork();
   const firstRender = useIsFirstRender();
   const { breakpoints } = useTheme() as Theme;
@@ -35,9 +33,6 @@ const MenuProfile: FC<MenuProfileProps> = ({
       disconnect();
     },
     switchAccounts: handleOpenSwitch,
-    mycoins: () => {
-      push(Routes[RoutesEnum.MyCoins]);
-    },
     viewInExplorer: () => {
       window.open(`${EXPLORER_URL[network](`/account/${account}`)}`, '_blank');
     },

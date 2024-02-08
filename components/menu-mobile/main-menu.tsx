@@ -1,10 +1,10 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import MenuButton from '../menu-button';
-import MenuSettingsList from '../menu-settings';
+import MenuButton from '../wallet/menu-button';
 import { MainMenuMobileProps } from './menu.types';
 import MobileMenuList from './menu-list';
+import MenuSettingsList from './menu-settings';
 
 const MainMenu: FC<MainMenuMobileProps> = ({ closeMenu }) => (
   <Box
