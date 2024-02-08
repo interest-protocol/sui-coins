@@ -30,9 +30,9 @@ const Header: FC = () => (
       px="xl"
       top="0"
       gap="xs"
-      zIndex="1"
+      zIndex={3}
       width="100%"
-      position="absolute"
+      position="relative"
       alignItems="center"
       bg="lowestContainer"
       justifyContent="space-between"

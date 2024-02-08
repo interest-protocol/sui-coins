@@ -22,7 +22,7 @@ const MenuSettingsListHeaderMobile: FC<MenuSettingsListHeaderProps> = ({
     <Typography variant="title" size="small" color="onSurface">
       Global Settings
     </Typography>
-    <Box display="flex" justifyContent="flex-end" bg="Red">
+    <Box display="flex" justifyContent="flex-end">
       <Motion
         transform={isOpen ? 'rotate(180deg)' : 'rotate(0deg)'}
         display="flex"

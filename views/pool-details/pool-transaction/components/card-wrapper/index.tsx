@@ -9,7 +9,7 @@ const PoolTransactionCardWrapper: FC<PropsWithChildren<CardWrapperProps>> = ({
   children,
 }) => {
   return (
-    <Box bg="lowestContainer" borderRadius="2rem" p={['m', 'm', 'm', 'xl']}>
+    <Box bg="lowestContainer" borderRadius="0.5rem" p={['m', 'm', 'm', 'xl']}>
       <Box display="flex" justifyContent="space-between" mb="m">
         <Typography variant="label" size="large">
           {title}
