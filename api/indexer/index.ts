@@ -46,8 +46,8 @@ const fetchNftHolder = async ({
                 nfts(
                     where: {
                       collection_id: { _eq: "${collectionId}" }
-                    },
-                    distinct_on: [ owner ]
+                    }
+                    limit: 25
                     offset: ${offset}
                 ) {
                     owner
@@ -95,11 +95,11 @@ export const fetchAllHolders = async (
 
   for await (const offset of Array.from(
     { length: ~~(limit / 25) + 1 },
-    (_, index) => index
+    (_, index) => index * 25
   )) {
     const parallelRequest =
       TOTAL_REQUESTS -
-      nftsSizes.reduce((acc, size) => acc + (offset * 25 > size ? 1 : 0), 0);
+      nftsSizes.reduce((acc, size) => acc + (offset > size ? 1 : 0), 0);
 
     await sleep((ONE_MINUTE_IN_MS * parallelRequest) / REQUEST_PER_MINUTE);
 

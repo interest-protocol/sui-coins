@@ -48,7 +48,7 @@ const NFTModalItem: FC<NFTModalItemProps> = ({
     </Box>
     <Box gap="2xs" display="flex" alignItems="flex-end" flexDirection="column">
       <Typography variant="body" size="small">
-        ~{total} addresses
+        {total} addresses
       </Typography>
       <Typography variant="body" size="small">
         Last update: {new Date(updatedAt!).toLocaleDateString()}

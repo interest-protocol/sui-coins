@@ -32,10 +32,10 @@ const MenuSettingsList: FC = () => {
           <Box mx="auto">
             <Tabs
               type="circle"
-              items={['Testnet', 'Mainnet']}
-              defaultTabIndex={network === Network.MAINNET ? 1 : 0}
+              items={['Mainnet', 'Testnet']}
+              defaultTabIndex={network !== Network.MAINNET ? 1 : 0}
               onChangeTab={(index) =>
-                changeNetwork(index ? Network.MAINNET : Network.TESTNET)
+                changeNetwork(!index ? Network.MAINNET : Network.TESTNET)
               }
             />
           </Box>
