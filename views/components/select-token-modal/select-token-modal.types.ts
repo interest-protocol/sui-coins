@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { Control, UseFormSetValue } from 'react-hook-form';
 
 import { SVGProps } from '@/components/svg/svg.types';
+import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { CoinData } from '@/interface';
 
 export interface CoinDataWithBalance extends CoinData {
@@ -34,7 +35,7 @@ export interface TokenModalItemProps {
 export interface SelectTokenModalProps {
   simple?: boolean;
   closeModal: () => void;
-  onSelect: (coin: CoinDataWithBalance) => void;
+  onSelect: (coin: CoinObject) => void;
 }
 
 export interface SelectTokenFilterProps {
