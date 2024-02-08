@@ -125,7 +125,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           .toString();
 
         const coinToSend = txb.splitCoins(txb.object(firstCoin.coinObjectId), [
-          totalAMount,
+          txb.pure(totalAMount),
         ]);
 
         txb.moveCall({
