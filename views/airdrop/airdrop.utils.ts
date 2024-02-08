@@ -1,7 +1,7 @@
 import { isValidSuiAddress, normalizeSuiAddress } from '@mysten/sui.js/utils';
 import { propOr } from 'ramda';
 
-import { MAINNET_COINS_INFO } from '@/constants';
+import { MAINNET_COINS_INFO } from '@/constants/coins';
 import { FixedPointMath } from '@/lib';
 import { isBigNumberish } from '@/utils';
 
@@ -43,6 +43,7 @@ export const csvToAirdrop = (
 export const textToAirdrop = (
   text: string,
   commonAmount: string,
+  decimals: number,
   onError: (message: string) => void
 ): AirdropData[] => {
   try {
@@ -54,7 +55,7 @@ export const textToAirdrop = (
     addresses.forEach((address) => {
       data.push({
         address,
-        amount: FixedPointMath.toBigNumber(commonAmount).toString(),
+        amount: FixedPointMath.toBigNumber(commonAmount, decimals).toString(),
       });
     });
 

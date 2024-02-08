@@ -1,30 +1,42 @@
-import { fetchAllHolders } from 'api/indexer';
 import { NextApiRequest, NextApiResponse } from 'next';
-import dbConnect from 'server';
-import NFTCollectionModel from 'server/model/nft-collection';
 
-import { NFT } from '@/constants/nft';
+import { fetchAllHolders, fetchNftMetadata } from '@/api/indexer';
+import dbConnect from '@/server';
+import NFTCollectionModel from '@/server/model/nft-collection';
+import NFTCollectionMetadataModel from '@/server/model/nft-collection-metadata';
 
 export default async function handler(_: NextApiRequest, res: NextApiResponse) {
   try {
     await dbConnect();
 
+    const nftsMetadata = await fetchNftMetadata();
+
+    const nftsSizes = nftsMetadata.map(({ total }) => total);
+
     const holdersList = await Promise.all(
-      NFT.map(({ id, total }) => fetchAllHolders(id, total))
+      nftsMetadata.map(({ id, total }) => fetchAllHolders(id, total, nftsSizes))
     );
 
     if (holdersList.every((holders) => !holders.length))
       throw new Error('Nothing found!');
 
     await Promise.all(
-      NFT.map(({ id, name }, index) =>
+      nftsMetadata.map((nft) =>
+        NFTCollectionMetadataModel.findOneAndUpdate(
+          { id: nft.id },
+          { ...nft, updatedAt: Date.now() }
+        )
+      )
+    );
+
+    await Promise.all(
+      nftsMetadata.map(({ id, name }, index) =>
         NFTCollectionModel.findOneAndUpdate(
           {
             collectionId: id,
           },
           {
             name,
-            updatedAt: Date.now(),
             holders: holdersList[index],
           }
         )

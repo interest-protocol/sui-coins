@@ -1,10 +1,12 @@
 import { INDEXER_URL } from '@/constants';
 import { NFT } from '@/constants/nft';
+import { NFTCollectionMetadata } from '@/interface';
 import { sleep, validateAndNormalizeSuiAddress } from '@/utils';
 
 import {
   ApiRequestIndexer,
   FetchNftHolder,
+  IndexerNFTMetadataResponse,
   IndexerNFTResponse,
 } from './indexer.types';
 
@@ -33,7 +35,7 @@ export const apiRequestIndexer = ({
     })
     .then((result) => result);
 
-export const fetchNftHolder = async ({
+const fetchNftHolder = async ({
   collectionId,
   offset,
 }: FetchNftHolder): Promise<Array<string>> => {
@@ -44,8 +46,8 @@ export const fetchNftHolder = async ({
                 nfts(
                     where: {
                       collection_id: { _eq: "${collectionId}" }
-                    },
-                    distinct_on: [ owner ]
+                    }
+                    limit: 25
                     offset: ${offset}
                 ) {
                     owner
@@ -87,25 +89,75 @@ export const fetchNftHolder = async ({
 export const fetchAllHolders = async (
   collectionId: string,
   limit: number,
-  uniqueCall = false
+  nftsSizes: ReadonlyArray<number>
 ) => {
-  let allHolders: Array<string> = [];
+  const allHolders: Array<string> = [];
 
   for await (const offset of Array.from(
     { length: ~~(limit / 25) + 1 },
-    (_, index) => index
+    (_, index) => index * 25
   )) {
-    const parallelRequest = uniqueCall
-      ? 1
-      : TOTAL_REQUESTS -
-        NFT.reduce((acc, { total }) => acc + (offset * 25 > total ? 1 : 0), 0);
+    const parallelRequest =
+      TOTAL_REQUESTS -
+      nftsSizes.reduce((acc, size) => acc + (offset > size ? 1 : 0), 0);
 
     await sleep((ONE_MINUTE_IN_MS * parallelRequest) / REQUEST_PER_MINUTE);
 
     const holders = await fetchNftHolder({ collectionId, offset });
 
-    allHolders = allHolders.concat(holders);
+    allHolders.push(...holders);
   }
+  return allHolders;
+};
 
-  return allHolders.slice(0, limit);
+export const fetchNftMetadata = async (): Promise<
+  ReadonlyArray<NFTCollectionMetadata>
+> => {
+  try {
+    const query = `
+      query{
+        sui {
+          collections(
+            where: {id: {_in: ${JSON.stringify(NFT)}}}
+          ) {
+            id
+            supply
+            title
+            cover_url
+          }
+        }
+      }
+    `;
+
+    const response = await fetch(`${process.env.DOMAIN}/api/v1/indexer`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(query),
+    });
+
+    const result = await response.json();
+
+    if (!result?.data?.data?.sui?.collections) {
+      throw new Error(
+        `[fetchHolders] unexpected result: ${JSON.stringify(result)}`
+      );
+    }
+
+    const metadata = result.data.data.sui.collections;
+
+    if (!metadata.length) return [];
+
+    return metadata.map(
+      ({ id, cover_url, supply, title }: IndexerNFTMetadataResponse) => ({
+        id,
+        name: title,
+        total: supply,
+        img: cover_url,
+      })
+    );
+  } catch {
+    return [];
+  }
 };

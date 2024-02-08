@@ -3,11 +3,11 @@ import { values } from 'ramda';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { SEO } from '@/components';
-import { COINS } from '@/constants/coins';
 import { ModalProvider } from '@/context/modal';
 import { useNetwork } from '@/context/network';
 import CreatePool from '@/views/create-pool';
 import { IPoolForm } from '@/views/create-pool/create-pool.types';
+import { COINS } from '@/views/pools/coins';
 
 const CreatePoolPage: NextPage = () => {
   const { network } = useNetwork();

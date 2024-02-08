@@ -7,7 +7,7 @@ import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { AIRDROP_SEND_CONTRACT, EXPLORER_URL, TREASURY } from '@/constants';
+import { AIRDROP_SEND_CONTRACT, TREASURY } from '@/constants';
 import { AIRDROP_SUI_FEE_PER_ADDRESS } from '@/constants/fees';
 import { useNetwork } from '@/context/network';
 import { useSuiClient } from '@/hooks/use-sui-client';
@@ -21,9 +21,8 @@ import { AirdropConfirmButtonProps, IAirdropForm } from '../airdrop.types';
 const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
   setIsProgressView,
 }) => {
-  const { getValues, setValue } = useFormContext<IAirdropForm>();
-  const { currentAccount } = useWalletKit();
   const { coinsMap } = useWeb3();
+  const { getValues, setValue } = useFormContext<IAirdropForm>();
 
   const { network } = useNetwork();
   const suiClient = useSuiClient();
@@ -191,23 +190,6 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
       if (((e?.message as string) ?? e) === 'Rejected from user') {
         setValue('error', true);
       }
-    } finally {
-      const explorerLink = EXPLORER_URL[network](
-        `address/${currentAccount!.address}`
-      );
-
-      toast(
-        <a target="_blank" rel="noreferrer nofollow" href={explorerLink}>
-          <Typography
-            size="medium"
-            variant="label"
-            cursor="pointer"
-            textDecoration="underline"
-          >
-            Sui Explorer
-          </Typography>
-        </a>
-      );
     }
   };
 

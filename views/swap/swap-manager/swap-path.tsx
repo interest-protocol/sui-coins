@@ -2,11 +2,15 @@ import { Box } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFormContext, UseFormReturn, useWatch } from 'react-hook-form';
 
-import { TOKEN_SVG_MAP } from '@/constants/token';
+import { TokenIcon } from '@/components';
+import { Network } from '@/constants';
+import { COIN_TYPE_TO_SYMBOL } from '@/constants/coins';
+import { useNetwork } from '@/context/network';
 import { SwapArrowSVG } from '@/svg';
 import { SwapForm } from '@/views/swap/swap.types';
 
 const SwapPath: FC = () => {
+  const { network } = useNetwork();
   const formSwap: UseFormReturn<SwapForm> = useFormContext();
 
   const readyToSwap = useWatch({
@@ -37,12 +41,6 @@ const SwapPath: FC = () => {
   const coinOut =
     swapPath.length == 1 ? swapPath[0].coinOut : swapPath[1].coinOut;
 
-  const CoinInIcon = TOKEN_SVG_MAP[coinIn] ?? TOKEN_SVG_MAP.default;
-
-  const CoinOutIcon = TOKEN_SVG_MAP[coinOut] ?? TOKEN_SVG_MAP.default;
-
-  const BaseTokenIcon = TOKEN_SVG_MAP[baseToken] ?? TOKEN_SVG_MAP.default;
-
   return (
     <Box
       p="l"
@@ -56,29 +54,41 @@ const SwapPath: FC = () => {
       display="inline-flex"
       justifyContent="center"
     >
-      <CoinInIcon
-        width="100%"
-        height="100%"
+      <TokenIcon
+        tokenId={
+          network === Network.MAINNET
+            ? coinIn
+            : COIN_TYPE_TO_SYMBOL[network][coinIn]
+        }
         maxWidth="1.5rem"
         maxHeight="1.5rem"
+        network={network}
       />
       <SwapArrowSVG width="100%" maxWidth="5rem" maxHeight="0.75rem" />
       {baseToken && (
         <>
-          <BaseTokenIcon
-            width="100%"
-            height="100%"
+          <TokenIcon
+            tokenId={
+              network === Network.MAINNET
+                ? baseToken
+                : COIN_TYPE_TO_SYMBOL[network][baseToken]
+            }
             maxWidth="1.5rem"
             maxHeight="1.5rem"
+            network={network}
           />
           <SwapArrowSVG width="100%" maxWidth="5rem" maxHeight="0.75rem" />
         </>
       )}
-      <CoinOutIcon
-        width="100%"
-        height="100%"
+      <TokenIcon
+        tokenId={
+          network === Network.MAINNET
+            ? coinOut
+            : COIN_TYPE_TO_SYMBOL[network][coinOut]
+        }
         maxWidth="1.5rem"
         maxHeight="1.5rem"
+        network={network}
       />
     </Box>
   );

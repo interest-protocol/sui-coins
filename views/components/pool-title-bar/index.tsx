@@ -49,12 +49,17 @@ const PoolTitleBar: FC<PoolTitleBarProps> = ({
           display="flex"
           width="2.5rem"
           height="2.5rem"
-          alignItems="center"
           borderRadius="xs"
+          overflow="hidden"
+          alignItems="center"
           justifyContent="center"
           color="lowestContainer"
         >
-          <Icon width="100%" maxWidth="1.6rem" maxHeight="1.6rem" />
+          {typeof Icon === 'string' ? (
+            <img src={Icon} alt="Token Icon" width="100%" />
+          ) : (
+            <Icon width="100%" maxWidth="1.6rem" maxHeight="1.6rem" />
+          )}
         </Box>
       ))}
     </Box>
