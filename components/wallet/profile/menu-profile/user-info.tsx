@@ -7,7 +7,7 @@ import { toast } from 'react-hot-toast';
 import Avatar from '@/components/account-info/avatar';
 import { CopySVG } from '@/components/svg';
 
-import ItemWrapper from '../../menu-settings/item-wrapper';
+import ItemWrapper from '../../../menu-mobile/menu-settings/item-wrapper';
 
 const UserInfo: FC = () => {
   const { currentAccount } = useWalletKit();
