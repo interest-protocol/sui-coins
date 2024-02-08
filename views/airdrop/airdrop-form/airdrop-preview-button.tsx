@@ -22,14 +22,15 @@ const AirdropPreviewButton: FC<AirdropPreviewButtonProps> = ({
       airdropList
         .reduce((acc, { amount }) => acc.plus(BigNumber(amount)), BigNumber(0))
         .isZero() ||
-      !coinsMap[tokenType].balance ||
+      !coinsMap[tokenType] ||
+      BigNumber(coinsMap[tokenType].balance ?? '0').isZero() ||
       BigNumber(coinsMap[tokenType].balance).lt(
         airdropList.reduce(
           (acc, { amount }) => acc.plus(BigNumber(amount ?? 0)),
           BigNumber(0)
         )
       ),
-    [airdropList, tokenType, coinsMap[tokenType]]
+    [airdropList, coinsMap[tokenType]]
   );
 
   return (
