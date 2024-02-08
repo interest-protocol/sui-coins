@@ -16,13 +16,6 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
   >
 > = [
   {
-    Icon: CirclePlusSVG,
-    name: 'create token',
-    path: Routes[RoutesEnum.CreateCoin],
-    disabled: false,
-    networks: [Network.MAINNET, Network.TESTNET],
-  },
-  {
     Icon: DoubleChevronSVG,
     name: 'swap',
     path: Routes[RoutesEnum.Swap],
@@ -33,6 +26,13 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     Icon: PoolSVG,
     name: 'pool',
     path: Routes[RoutesEnum.Pools],
+    disabled: true,
+    networks: [Network.MAINNET, Network.TESTNET],
+  },
+  {
+    Icon: CirclePlusSVG,
+    name: 'create token',
+    path: Routes[RoutesEnum.CreateCoin],
     disabled: false,
     networks: [Network.MAINNET, Network.TESTNET],
   },

@@ -50,7 +50,7 @@ const SwapButton = () => {
     tokenIn.decimals
   )
     .decimalPlaces(0, BigNumber.ROUND_DOWN)
-    .gt(coinsMap[tokenIn.type]?.totalBalance ?? ZERO_BIG_NUMBER);
+    .gt(BigNumber(coinsMap[tokenIn.type]?.balance) ?? ZERO_BIG_NUMBER);
 
   const handleSwap = async () => {
     try {
@@ -69,7 +69,7 @@ const SwapButton = () => {
       const isMaxTrade = formSwap.getValues('maxValue');
 
       const amount = isMaxTrade
-        ? coinsMap[to.type]?.totalBalance ?? ZERO_BIG_NUMBER
+        ? BigNumber(coinsMap[to.type]?.balance) ?? ZERO_BIG_NUMBER
         : FixedPointMath.toBigNumber(from.value, from.decimals).decimalPlaces(
             0,
             BigNumber.ROUND_DOWN
@@ -143,6 +143,8 @@ const SwapButton = () => {
       txb.transferObjects([nextCoin!], account);
 
       const { signature, transactionBlockBytes } = await signTransactionBlock({
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         transactionBlock: txb,
       });
 

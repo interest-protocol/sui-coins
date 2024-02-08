@@ -17,6 +17,7 @@ import MyCoinsItem from './my-coins-item';
 const MyCoins: FC = () => {
   const { currentAccount } = useWalletKit();
   const { data, isLoading, error } = useGetAllCoins();
+
   const {
     data: capData,
     isLoading: capIsLoading,
@@ -93,7 +94,7 @@ const MyCoins: FC = () => {
                   values(capData) as unknown as ReadonlyArray<
                     Record<'coinType' | 'coinObjectId', string>
                   >
-                ).find(({ coinType }) => coinType === coin.coinType)
+                ).find(({ coinType }) => coinType === coin.type)
                   ?.coinObjectId || null;
 
               return <MyCoinsItem key={v4()} {...coin} capId={capId} />;

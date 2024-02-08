@@ -11,11 +11,13 @@ import { FixedPointMath } from '@/lib';
 import { ArrowTopRightSVG, CaretRightSVG, DefaultSVG } from '@/svg';
 
 const MyCoinsItem: FC<CoinObject & { capId: string | null }> = ({
+  type,
   capId,
+  symbol,
   balance,
   objects,
-  coinType,
-  metadata: { iconUrl, name, symbol, decimals },
+  decimals,
+  metadata: { iconUrl, name },
 }) => {
   const { network } = useNetwork();
   const [isOpen, setIsOpen] = useState(false);
@@ -26,7 +28,7 @@ const MyCoinsItem: FC<CoinObject & { capId: string | null }> = ({
   const renderToken = () => {
     const TokenIcon =
       TOKEN_ICONS[network][
-        (network === Network.MAINNET ? coinType : symbol) as string
+        (network === Network.MAINNET ? type : symbol) as string
       ] ?? DefaultSVG;
 
     return (

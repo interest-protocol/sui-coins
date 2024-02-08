@@ -1,31 +1,85 @@
 import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
+import BigNumber from 'bignumber.js';
+import { useRouter } from 'next/router';
+import { pathOr } from 'ramda';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { Network, TOKEN_ICONS } from '@/constants';
+import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
-import { BNBSVG, ChevronRightSVG } from '@/svg';
+import { useWeb3 } from '@/hooks/use-web3';
+import { CoinData } from '@/interface';
+import { FixedPointMath } from '@/lib';
+import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
+import { updateURL } from '@/utils';
 import SelectTokenModal from '@/views/components/select-token-modal';
-import { CoinDataWithBalance } from '@/views/components/select-token-modal/select-token-modal.types';
 
 import { SwapForm } from '../swap.types';
-import { SelectTokenProps } from './input.types';
+import { InputProps } from './input.types';
 
-const SelectToken: FC<SelectTokenProps> = ({ label, balance }) => {
+const SelectToken: FC<InputProps> = ({ label }) => {
+  const { coinsMap } = useWeb3();
+  const { network } = useNetwork();
+  const { pathname } = useRouter();
   const { setModal, handleClose } = useModal();
 
-  const { control, setValue } = useFormContext<SwapForm>();
+  const isMainnet = Network.MAINNET === network;
 
-  const token = useWatch({
+  const { setValue, control } = useFormContext<SwapForm>();
+
+  const currentToken = useWatch({
     control,
     name: label,
   });
 
-  const onSelect = (coin: CoinDataWithBalance) => {
+  const { symbol: currentSymbol, type: currentType } = currentToken;
+
+  const Icon = TOKEN_ICONS[network][isMainnet ? currentType : currentSymbol];
+
+  const changeURL = (type: string) => {
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set(label, type);
+
+    updateURL(
+      `${pathname}?from=${searchParams.get('from')}&to=${searchParams.get(
+        'to'
+      )}`
+    );
+  };
+
+  const oppositeType = useWatch({
+    control,
+    name: `${label === 'to' ? 'from' : 'to'}.type`,
+  });
+
+  const onSelect = ({ type, decimals, symbol }: CoinData) => {
+    if (type === oppositeType) {
+      setValue(label === 'to' ? 'from' : 'to', {
+        type: currentToken.type,
+        symbol: currentToken.symbol,
+        decimals: currentToken.decimals,
+        value: '',
+        balance: FixedPointMath.toNumber(
+          BigNumber(pathOr(0, [currentToken.type, 'balance'], coinsMap))
+        ),
+        locked: false,
+      });
+    }
+
     setValue(label, {
-      ...coin,
+      type,
+      symbol,
+      decimals,
       value: '',
+      balance: FixedPointMath.toNumber(
+        BigNumber(pathOr(0, [type, 'balance'], coinsMap))
+      ),
       locked: false,
     });
+    setValue(`${label === 'from' ? 'to' : 'from'}.value`, '');
+
+    changeURL(type);
   };
 
   const openModal = () =>
@@ -48,40 +102,34 @@ const SelectToken: FC<SelectTokenProps> = ({ label, balance }) => {
   return (
     <Box position="relative">
       <Button
-        pr="1rem"
-        pl="0.5rem"
+        bg="highestContainer"
+        p="s"
+        borderRadius="xs"
         variant="tonal"
-        fontSize="0.875rem"
+        fontSize="s"
         onClick={openModal}
-        PrefixIcon={
-          <Box
-            bg="#000"
-            color="#fff"
-            display="flex"
-            width="1.5rem"
-            height="1.5rem"
-            alignItems="center"
-            position="relative"
-            borderRadius="full"
-            justifyContent="center"
-          >
-            <BNBSVG maxWidth="1.125rem" maxHeight="1.125rem" width="100%" />
-          </Box>
-        }
-        SuffixIcon={
-          <Box minWidth="1rem">
-            <ChevronRightSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-          </Box>
-        }
+        {...(Icon && {
+          PrefixIcon: (
+            <Box as="span" display="inline-block">
+              <Icon
+                width="100%"
+                height="100%"
+                maxWidth="1rem"
+                maxHeight="1rem"
+              />
+            </Box>
+          ),
+        })}
       >
-        {token.symbol}
-      </Button>
-      <Typography variant="label" size="small" mt="l">
-        Balance:
-        <Typography variant="label" size="small" color="primary" as="span">
-          {balance}
+        <Typography size="large" variant="label">
+          {currentSymbol ?? 'Select Token'}
         </Typography>
-      </Typography>
+        {currentSymbol ? (
+          <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+        ) : (
+          <ChevronRightSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+        )}
+      </Button>
     </Box>
   );
 };
