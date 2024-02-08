@@ -19,9 +19,10 @@ const PoolTitleBar: FC<PoolTitleBarProps> = ({
     display="flex"
     maxWidth="65rem"
     alignItems="center"
-    borderRadius="2rem"
+    borderRadius="xs"
     bg="lowestContainer"
-    my={['5xl', '5xl', '5xl', '8xl']}
+    mt={['5xl', '5xl', '5xl', 'xl']}
+    mb="xs"
   >
     <Button isIcon variant="text" mr="0.5rem" onClick={onBack}>
       <ArrowLeftSVG width="1.5rem" maxWidth="1.5rem" maxHeight="1.5rem" />

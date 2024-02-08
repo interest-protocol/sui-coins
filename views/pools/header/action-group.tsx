@@ -46,7 +46,7 @@ const ActionGroup: FC<ActionGroupProps> = ({ showSearchView }) => {
             </Box>
           }
         >
-          Create Pool
+          Find Pool
         </Button>
       </Box>
       <Box display={['flex', 'flex', 'flex', 'none']} gap="0.25rem">
