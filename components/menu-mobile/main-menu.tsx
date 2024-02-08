@@ -1,8 +1,8 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import MenuButton from '../menu-button';
-import MenuSettingsList from '../menu-settings';
+import MenuButton from '../wallet/menu-button';
+import MenuSettingsList from '../wallet/menu-settings';
 import { MainMenuMobileProps } from './menu.types';
 import MobileMenuList from './menu-list';
 

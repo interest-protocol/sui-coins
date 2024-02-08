@@ -16,7 +16,7 @@ import ItemWrapper from './item-wrapper';
 const MenuSettingsList: FC = () => {
   const { dark } = useTheme() as Theme;
 
-  const [toggle, setToggle] = useState(true);
+  const [toggle, setToggle] = useState(false);
 
   const closeDropdownSettingsMenu = () => {
     setToggle(not);
