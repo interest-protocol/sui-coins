@@ -10,43 +10,35 @@ const InfoCards: FC<InfoCardProps> = ({
   amount,
   loading,
 }) => (
-  <InfoCard
-    title={
-      <Box
-        width="100%"
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        gap="m"
-      >
-        <Typography size="small" variant="label">
-          {description}
-        </Typography>
+  <Box borderRadius="xs" bg="onPrimary">
+    <InfoCard
+      title={description}
+      Icon={
         <Box
           color="surface"
           display="flex"
           p="2xs"
-          width="1.3rem"
-          height="1.3rem"
+          width="2.5rem"
+          height="2.5rem"
           borderRadius="50%"
           bg="lowContainer"
           alignItems="center"
           justifyContent="center"
         >
-          <Icon maxWidth="1rem" maxHeight="1rem" width="100%" />
+          <Icon maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
         </Box>
-      </Box>
-    }
-    width={['18rem', '18rem', '18rem', '100%']}
-  >
-    {loading ? (
-      <Skeleton width="40%" />
-    ) : (
-      <Typography size="small" variant="label" color="container">
-        {amount}
-      </Typography>
-    )}
-  </InfoCard>
+      }
+      width={['18rem', '18rem', '18rem', '100%']}
+    >
+      {loading ? (
+        <Skeleton width="40%" />
+      ) : (
+        <Typography size="large" variant="title">
+          {amount}
+        </Typography>
+      )}
+    </InfoCard>
+  </Box>
 );
 
 export default InfoCards;

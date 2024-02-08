@@ -4,16 +4,16 @@ export const TOP_INFO_CARDS_DATA = [
   {
     money: true,
     Icon: USDSVG,
-    description: 'metrics.infoCards.tvl',
+    description: 'TVL',
   },
   {
     money: false,
     Icon: PoolSVG,
-    description: 'metrics.infoCards.pools',
+    description: 'Pools',
   },
   {
     money: true,
     Icon: ChartSVG,
-    description: 'metrics.infoCards.dailyTradingVolume',
+    description: 'Daily Trading Volume',
   },
 ];
