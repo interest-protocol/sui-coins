@@ -63,7 +63,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
             ),
           ]);
 
-          txb.transferObjects([fee], TREASURY);
+          txb.transferObjects([fee], txb.pure(TREASURY));
 
           txb.moveCall({
             target: `${contractPackageId}::airdrop::send`,
@@ -136,7 +136,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           .toString();
 
         const coinToSend = txb.splitCoins(txb.object(firstCoin.coinObjectId), [
-          totalAMount,
+          txb.pure(totalAMount),
         ]);
 
         const [fee] = txb.splitCoins(txb.gas, [
@@ -147,7 +147,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           ),
         ]);
 
-        txb.transferObjects([fee], TREASURY);
+        txb.transferObjects([fee], txb.pure(TREASURY));
 
         txb.moveCall({
           target: `${contractPackageId}::airdrop::send`,
