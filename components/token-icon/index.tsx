@@ -1,7 +1,7 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import { TOKEN_ICONS } from '@/constants';
+import { TOKEN_ICONS } from '@/constants/coins';
 import {
   AVAChainSVG,
   BSCChainSVG,
@@ -33,11 +33,24 @@ const TokenIcon: FC<TokenIconProps> = ({
 
   if (!chain)
     return (
-      <TokenIcon
-        width="100%"
-        maxWidth={maxWidth ?? '1.5rem'}
-        maxHeight={maxHeight ?? '1.5rem'}
-      />
+      <>
+        {typeof TokenIcon === 'string' ? (
+          <Box
+            borderRadius="xs"
+            overflow="hidden"
+            width={maxWidth ?? '2.5rem'}
+            height={maxHeight ?? '2.5rem'}
+          >
+            <img src={TokenIcon} width="100%" alt="Token Icon" />
+          </Box>
+        ) : (
+          <TokenIcon
+            width="100%"
+            maxWidth={maxWidth ?? '1.5rem'}
+            maxHeight={maxHeight ?? '1.5rem'}
+          />
+        )}
+      </>
     );
 
   const ChainIcon = CHAIN_ICON[chain!];
@@ -54,11 +67,17 @@ const TokenIcon: FC<TokenIconProps> = ({
       alignItems="center"
       justifyContent="center"
     >
-      <TokenIcon
-        width="100%"
-        maxWidth={maxWidth ?? '1.5rem'}
-        maxHeight={maxHeight ?? '1.5rem'}
-      />
+      {typeof TokenIcon === 'string' ? (
+        <Box width="2.5rem" height="2.5rem" borderRadius="xs" overflow="hidden">
+          <img src={TokenIcon} width="100%" alt="Token Icon" />
+        </Box>
+      ) : (
+        <TokenIcon
+          width="100%"
+          maxWidth={maxWidth ?? '1.5rem'}
+          maxHeight={maxHeight ?? '1.5rem'}
+        />
+      )}
       {ChainIcon && (
         <Box position="absolute" bottom="-0.3rem" right="-0.5rem">
           <ChainIcon maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />

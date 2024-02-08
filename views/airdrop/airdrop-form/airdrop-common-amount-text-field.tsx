@@ -4,7 +4,7 @@ import { ChangeEvent, FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { TokenIcon } from '@/components';
-import { Network } from '@/constants';
+import { Network } from '@/constants/dapp';
 import { useNetwork } from '@/context/network';
 import { parseInputEventToNumberString } from '@/utils';
 
@@ -47,14 +47,15 @@ const AirdropCustomAmountTextField: FC = () => {
           height="1.5rem"
           minWidth="1.5rem"
           minHeight="1.5rem"
+          overflow="hidden"
           borderRadius="full"
           alignItems="center"
           justifyContent="center"
         >
           <TokenIcon
             network={network}
-            maxWidth="1.25rem"
-            maxHeight="1.25rem"
+            maxWidth="1.5rem"
+            maxHeight="1.5rem"
             tokenId={getValues(
               `token.${network === Network.MAINNET ? 'type' : 'symbol'}`
             )}
