@@ -4,10 +4,11 @@ import {
   A_DAY_IN_MILLISECONDS,
   A_HOUR_IN_MILLISECONDS,
 } from '@/constants/date';
-import { TFilter } from '@/views/metrics/metrics.types';
+
+export type TFilter = 'all' | 'month' | 'halfMonth' | 'daily';
 
 const DEFAULT_LIMIT = 20;
-const DEFAULT_START_TIME = '1683923848';
+const DEFAULT_START_TIME = '-30d';
 const DEFAULT_STEP = A_HOUR_IN_MILLISECONDS / 1000;
 
 type PoolResults = Array<{
@@ -127,7 +128,7 @@ export const getOverview = (TZ: string): Promise<ReadonlyArray<number>> =>
           },
           functions: [
             {
-              name: 'rollup_sum',
+              name: 'sum_over_time',
               arguments: [
                 {
                   durationValue: {
@@ -193,9 +194,9 @@ export const getTotalLiquidity = (
     {
       start:
         from === 'all'
-          ? DEFAULT_START_TIME
+          ? '1683923848'
           : from === 'month'
-            ? '-30d'
+            ? DEFAULT_START_TIME
             : '-14d',
     }
   )
@@ -215,7 +216,7 @@ export const getDailyVolume = (TZ: string): Promise<ValuesInTimestamp> =>
     [
       {
         metricsQuery: {
-          query: 'vol_sum',
+          query: 'vol',
           alias: '24 vol',
           id: 'a',
           labelSelector: {},
@@ -225,7 +226,7 @@ export const getDailyVolume = (TZ: string): Promise<ValuesInTimestamp> =>
           },
           functions: [
             {
-              name: 'rollup_sum',
+              name: 'sum_over_time',
               arguments: [
                 {
                   durationValue: {
@@ -256,66 +257,42 @@ export const getDailyVolume = (TZ: string): Promise<ValuesInTimestamp> =>
       return values;
     });
 
-export const getActiveWallets = (
+export const getTotalActiveWallets = (
   TZ: string,
   daily = false
 ): Promise<Array<{ timestamp: number; value: number }>> =>
   getMetrics(
     [
-      !daily
-        ? {
-            eventsQuery: {
-              resource: {
-                name: '',
-                type: 'EVENTS',
-              },
-              alias: '',
-              id: 'a',
-              aggregation: {
-                countUnique: {
-                  duration: {
-                    value: 0,
-                    unit: 'day',
-                  },
-                },
-              },
-              selectorExpr: null,
-              groupBy: [],
-              limit: 0,
-              functions: [],
-              disabled: false,
-            },
-            dataSource: 'EVENTS',
-            sourceName: '',
-          }
-        : {
-            eventsQuery: {
-              resource: {
-                name: '',
-                type: 'EVENTS',
-              },
-              alias: '',
-              id: 'a',
-              aggregation: {
-                countUnique: {
-                  duration: {
-                    value: 1,
-                    unit: 'day',
-                  },
-                },
-              },
-              selectorExpr: null,
-              groupBy: [],
-              limit: 0,
-              functions: [],
-              disabled: false,
-            },
-            dataSource: 'EVENTS',
-            sourceName: '',
+      {
+        eventsQuery: {
+          resource: {
+            name: '',
+            type: 'EVENTS',
           },
+          alias: '',
+          id: 'a',
+          aggregation: {
+            countUnique: {
+              duration: {
+                value: 0,
+                unit: 'day',
+              },
+            },
+          },
+          selectorExpr: null,
+          groupBy: [],
+          limit: 0,
+          functions: [],
+          disabled: false,
+        },
+        dataSource: 'EVENTS',
+        sourceName: '',
+      },
     ],
     TZ,
-    { step: A_DAY_IN_MILLISECONDS / 1000 }
+    {
+      step: (daily ? A_HOUR_IN_MILLISECONDS : A_DAY_IN_MILLISECONDS) / 1000,
+    }
   )
     .then((res) => res.json())
     .then((data) => {
@@ -362,7 +339,7 @@ export const getTVLByPool = (
     ],
     TZ,
     {
-      start: from === 'all' ? DEFAULT_START_TIME : '-1d',
+      start: from === 'all' ? '1683923848' : '-1d',
     }
   )
     .then((res) => res.json())
@@ -378,6 +355,36 @@ export const getTVLByPool = (
       }));
 
       return values;
+    });
+
+export const getSwaps = (TZ: string): Promise<number> =>
+  getMetrics(
+    [
+      {
+        metricsQuery: {
+          query: 'event_swap',
+          alias: '',
+          id: 'a',
+          labelSelector: {},
+          aggregate: null,
+          functions: [],
+          disabled: false,
+        },
+        dataSource: 'METRICS',
+        sourceName: '',
+      },
+    ],
+    TZ
+  )
+    .then((res) => res.json())
+    .then((data) => {
+      const samples: Array<any> = Array.from(
+        data.results[0].matrix.samples.values()
+      );
+
+      const value = samples[0].values.reverse()[0].value;
+
+      return value;
     });
 
 export const getTopPools = (TZ: string): Promise<PoolReturn> =>
@@ -410,7 +417,7 @@ export const getTopPools = (TZ: string): Promise<PoolReturn> =>
       },
       {
         metricsQuery: {
-          query: 'vol_sum',
+          query: 'vol',
           alias: '24h vol',
           id: 'b',
           labelSelector: {},
@@ -428,7 +435,7 @@ export const getTopPools = (TZ: string): Promise<PoolReturn> =>
               ],
             },
             {
-              name: 'rollup_sum',
+              name: 'sum_over_time',
               arguments: [
                 {
                   durationValue: {
@@ -446,7 +453,7 @@ export const getTopPools = (TZ: string): Promise<PoolReturn> =>
       },
       {
         metricsQuery: {
-          query: 'vol_sum',
+          query: 'vol',
           alias: '7d vol',
           id: 'c',
           labelSelector: {},
@@ -464,7 +471,7 @@ export const getTopPools = (TZ: string): Promise<PoolReturn> =>
               ],
             },
             {
-              name: 'rollup_sum',
+              name: 'sum_over_time',
               arguments: [
                 {
                   durationValue: {
@@ -482,7 +489,7 @@ export const getTopPools = (TZ: string): Promise<PoolReturn> =>
       },
       {
         metricsQuery: {
-          query: 'vol_sum',
+          query: 'vol',
           alias: '30d vol',
           id: 'd',
           labelSelector: {},
@@ -500,7 +507,7 @@ export const getTopPools = (TZ: string): Promise<PoolReturn> =>
               ],
             },
             {
-              name: 'rollup_sum',
+              name: 'sum_over_time',
               arguments: [
                 {
                   durationValue: {
@@ -579,7 +586,7 @@ export const getTopCoins = (TZ: string): Promise<CoinReturn> =>
       },
       {
         metricsQuery: {
-          query: 'vol_by_coin_sum',
+          query: 'vol_by_coin',
           alias: '1d vol',
           id: 'b',
           labelSelector: {},
@@ -597,7 +604,7 @@ export const getTopCoins = (TZ: string): Promise<CoinReturn> =>
               ],
             },
             {
-              name: 'rollup_sum',
+              name: 'sum_over_time',
               arguments: [
                 {
                   durationValue: {
@@ -615,7 +622,7 @@ export const getTopCoins = (TZ: string): Promise<CoinReturn> =>
       },
       {
         metricsQuery: {
-          query: 'vol_by_coin_sum',
+          query: 'vol_by_coin',
           alias: '30d vol',
           id: 'c',
           labelSelector: {},
@@ -633,7 +640,7 @@ export const getTopCoins = (TZ: string): Promise<CoinReturn> =>
               ],
             },
             {
-              name: 'rollup_sum',
+              name: 'sum_over_time',
               arguments: [
                 {
                   durationValue: {
@@ -687,7 +694,7 @@ type TMetricEndpoints =
   | 'get-daily-volume'
   | 'get-top-coins'
   | 'get-top-pools'
-  | 'get-active-wallets'
+  | 'get-total-active-wallets'
   | 'get-total-liquidity'
   | 'get-tvl-by-pool';
 

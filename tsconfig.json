@@ -35,6 +35,8 @@
       "@/utils": ["./utils"],
       "@/utils/*": ["./utils/*"],
       "@/views/*": ["./views/*"],
+      "@/api/*": ["./api/*"],
+      "@/api": ["./api"],
       "@/styles": ["./styles"]
     }
   },
