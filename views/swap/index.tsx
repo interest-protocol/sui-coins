@@ -15,6 +15,8 @@ const Swap: FC = () => {
   const { pathname } = useRouter();
   const { getValues, setValue } = useFormContext();
 
+  const coinsExist = getValues('from') && getValues('to');
+
   const flipToken = () => {
     const tmpTo = getValues('to');
     const tmpFrom = getValues('from');
@@ -74,14 +76,16 @@ const Swap: FC = () => {
             mb="l"
           >
             <Button
-              bg="container"
-              opacity="0.4"
-              color="onSurface"
-              px="l"
               py="s"
-              borderRadius="xs"
-              variant="tonal"
+              px="xl"
               fontSize="s"
+              bg={coinsExist ? 'filled' : 'container'}
+              type="button"
+              variant={coinsExist ? 'filled' : 'tonal'}
+              color={coinsExist ? 'surface' : 'outlineVariant'}
+              cursor={coinsExist ? 'pointer' : 'not-allowed'}
+              borderRadius="xs"
+              fontFamily="Proto"
             >
               Preview swap
             </Button>
