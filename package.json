@@ -21,7 +21,6 @@
     "@mysten/wallet-kit": "^0.8.2",
     "@stylin.js/react": "^1.0.4-alpha.0",
     "@tanstack/react-query": "^5.7.2",
-    "@typegoose/typegoose": "^12.1.0",
     "@vercel/analytics": "^1.1.1",
     "bignumber.js": "^9.1.2",
     "decimal.js-light": "^2.5.1",
@@ -68,6 +67,12 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "findUnusedExports": {
+    "include": [
+      "./**/*.d.ts",
+      "./**/*.@(js|jsx|ts|tsx)"
     ]
   },
   "devDependencies": {

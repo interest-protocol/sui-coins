@@ -4,11 +4,14 @@ import { createContext, FC } from 'react';
 
 import { useGetAllCoins } from '@/hooks/use-get-all-coins';
 import { CoinsMap } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import useNftsMetadata from '@/hooks/use-nfts-metadata';
 import { noop } from '@/utils';
 
 import { Web3ManagerProps, Web3ManagerState } from './web3-manager.types';
 
 const CONTEXT_DEFAULT_STATE = {
+  nfts: [],
+  nftsMap: {},
   account: null,
   walletAccount: null,
   coins: [],
@@ -28,18 +31,28 @@ const Web3Manager: FC<Web3ManagerProps> = ({ children }) => {
   const { isError, currentAccount, isConnected } = useWalletKit();
 
   const { data, error, mutate, isLoading } = useGetAllCoins();
+  const {
+    data: nfts,
+    error: nftsError,
+    isLoading: isLoadingNfts,
+  } = useNftsMetadata();
 
   return (
     <Provider
       value={{
         mutate,
+        nfts: nfts ?? [],
+        nftsMap: (nfts ?? []).reduce(
+          (acc, curr) => ({ ...acc, [curr.id]: curr }),
+          {}
+        ),
         connected: isConnected,
-        error: isError || !!error,
-        isFetchingCoinBalances: isLoading,
         coinsMap: data ?? ({} as CoinsMap),
         walletAccount: currentAccount || null,
+        error: isError || !!error || nftsError,
         coins: values(data ?? ({} as CoinsMap)),
         account: currentAccount?.address || null,
+        isFetchingCoinBalances: isLoading || isLoadingNfts,
       }}
     >
       {children}

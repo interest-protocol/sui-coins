@@ -12,7 +12,7 @@ export interface SwapToken extends CoinData {
   balance: number | null;
 }
 
-export interface SwapTypeArgs {
+interface SwapTypeArgs {
   coinIn: string;
   coinOut: string;
   lpCoin: string;

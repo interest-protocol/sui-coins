@@ -1,8 +1,7 @@
-import { CoinInfo } from 'interface/sentio';
-
 import { Network } from '@/constants';
 import { COINS_MAP } from '@/constants/coins';
 import { RECOMMENDED_POOLS } from '@/constants/pools';
+import { CoinInfo } from '@/interface';
 
 import { PoolCardProps as IPool } from '../pools/pool-card/pool-card.types';
 

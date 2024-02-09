@@ -1,11 +1,11 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
-import { getMetric } from 'api/metrics';
 import { sort, toPairs } from 'ramda';
 import { FC, useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { v4 } from 'uuid';
 
-import { TOKEN_ICONS } from '@/constants';
+import { getMetric } from '@/api/metrics';
+import { TOKEN_ICONS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { DefaultSVG } from '@/svg';
 import { formatDollars } from '@/utils';

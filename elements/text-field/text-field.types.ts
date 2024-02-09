@@ -1,6 +1,7 @@
 import { StylinComponentProps } from '@stylin.js/react';
-import { BoxProps } from 'elements/box/box.types';
 import { InputHTMLAttributes } from 'react';
+
+import { BoxProps } from '@/elements/box/box.types';
 
 export type TextFieldElementProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,

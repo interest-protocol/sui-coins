@@ -11,8 +11,10 @@ export interface CoinData {
   symbol: TOKEN_SYMBOL | string;
 }
 
+export type TChain = 'ETH' | 'BSC' | 'SOL' | 'AVA';
+
 export interface CoinDataWithChainInfo extends CoinData {
-  chain?: 'ETH' | 'BSC';
+  chain?: TChain;
 }
 
 export type LocalTokenMetadataRecord = Record<string, CoinData>;
@@ -36,7 +38,6 @@ export interface CoinMetadataWithType extends CoinMetadata {
 
 export interface NFTCollection {
   name: string;
-  updatedAt: number;
   collectionId: string;
   holders: ReadonlyArray<string>;
 }
@@ -46,4 +47,7 @@ export interface NFTCollectionMetadata {
   img: string;
   name: string;
   total: number;
+  updatedAt?: number;
 }
+
+export * from './sentio';

@@ -8,7 +8,7 @@ export interface AirdropData {
   amount: string;
 }
 
-export type TMethod = 'csv' | 'nft' | 'customAmount';
+export type TMethod = 'csv' | 'nft' | 'addressList';
 
 export interface IAirdropForm {
   error: boolean;

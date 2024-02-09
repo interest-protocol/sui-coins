@@ -5,7 +5,7 @@ import Skeleton from 'react-loading-skeleton';
 import { v4 } from 'uuid';
 
 import { getMetric } from '@/api/metrics';
-import { TOKEN_ICONS } from '@/constants';
+import { TOKEN_ICONS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { DefaultSVG } from '@/svg';
 import { formatDollars } from '@/utils';

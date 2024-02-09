@@ -9,7 +9,6 @@ import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
-import { useWeb3 } from '@/hooks/use-web3';
 import { SearchSVG, TimesSVG } from '@/svg';
 
 import {
@@ -25,8 +24,6 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
   onSelect,
   closeModal,
 }) => {
-  const { isFetchingCoinBalances } = useWeb3();
-
   const { control, register, setValue } = useForm<SearchTokenForm>({
     defaultValues: {
       search: '',
@@ -93,7 +90,6 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
       >
         <SelectTokenModalBody
           control={control}
-          loading={isFetchingCoinBalances}
           handleSelectToken={handleSelectToken}
         />
       </Box>

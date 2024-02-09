@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js';
-import { CoinInfo } from 'interface/sentio';
 
-import { CoinData } from '@/interface';
+import { CoinData, CoinInfo } from '@/interface';
 
 export interface IPool {
   token0: CoinData;
