@@ -12,7 +12,7 @@ import { useNetwork } from '@/context/network';
 import { useSuiClient } from '@/hooks/use-sui-client';
 import { useWeb3 } from '@/hooks/use-web3';
 import { showTXSuccessToast, sleep, throwTXIfNotSuccessful } from '@/utils';
-import { createObjectsParameter, splitArray } from '@/utils';
+import { splitArray } from '@/utils';
 
 import { BATCH_SIZE, RATE_LIMIT_DELAY } from '../airdrop.constants';
 import { AirdropConfirmButtonProps, IAirdropForm } from '../airdrop.types';
@@ -91,35 +91,29 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
       const firstCoin = coinsMap[token.type].objects[0];
 
-      const txb = new TransactionBlock();
-
-      // There are other coins
-      if (coinsMap[token.type].objects.length > 1) {
-        const coinInList = createObjectsParameter({
-          coinsMap,
-          txb: txb,
-          type: token.type,
-          amount: airdropList
-            .reduce(
-              (acc, data) => acc.plus(BigNumber(data.amount)),
-              BigNumber(0)
-            )
-            .toString(),
-        });
-
-        txb.moveCall({
-          target: '0x2::pay::join_vec',
-          typeArguments: [token.type],
-          arguments: [
-            txb.object(firstCoin.coinObjectId),
-            txb.makeMoveVec({
-              objects: coinInList.slice(1),
-            }),
-          ],
-        });
-      }
-
       for await (const [index, batch] of Object.entries(list)) {
+        const txb = new TransactionBlock();
+
+        // There are other coins
+        if (+index === 0 && coinsMap[token.type].objects.length > 1) {
+          const coinInList = coinsMap[token.type]
+            ? coinsMap[token.type].objects
+                .slice(1)
+                .map((x) => txb.object(x.coinObjectId))
+            : [];
+
+          txb.moveCall({
+            target: '0x2::pay::join_vec',
+            typeArguments: [token.type],
+            arguments: [
+              txb.object(firstCoin.coinObjectId),
+              txb.makeMoveVec({
+                objects: coinInList,
+              }),
+            ],
+          });
+        }
+
         const totalAMount = batch
           .reduce((acc, data) => acc.plus(BigNumber(data.amount)), BigNumber(0))
           .toString();
