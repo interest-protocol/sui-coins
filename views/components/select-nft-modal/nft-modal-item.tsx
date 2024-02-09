@@ -1,4 +1,4 @@
-import { Box, Typography } from '@interest-protocol/ui-kit';
+import { Box, ProgressIndicator, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
 import { NFTModalItemProps } from './select-nft-modal.types';
@@ -31,9 +31,18 @@ const NFTModalItem: FC<NFTModalItemProps> = ({
         overflow="hidden"
         borderRadius="xs"
         alignItems="center"
+        position="relative"
         justifyContent="center"
       >
-        <img src={img} alt={name} width="100%" />
+        <Box position="absolute" top="-0.5rem">
+          <ProgressIndicator size={16} variant="loading" />
+        </Box>
+        <img
+          src={img}
+          alt={name}
+          width="100%"
+          style={{ position: 'relative' }}
+        />
       </Box>
       <Box
         ml="1rem"
