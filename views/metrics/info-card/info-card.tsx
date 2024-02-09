@@ -15,7 +15,7 @@ const InfoCards: FC<InfoCardProps> = ({
       title={description}
       Icon={
         <Box
-          color="surface"
+          color="onSurface"
           display="flex"
           p="2xs"
           width="2.5rem"

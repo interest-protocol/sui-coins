@@ -6,6 +6,7 @@ import Layout from '@/components/layout';
 import InfoCardsList from './info-card';
 import TopCoinsTable from './top-tables/top-coins-table';
 import TopPoolsTable from './top-tables/top-pools-table';
+
 const Metrics: FC = () => (
   <Layout>
     <Typography

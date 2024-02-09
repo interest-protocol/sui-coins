@@ -9,7 +9,7 @@ import { TOP_INFO_CARDS_DATA } from '../metrics.data';
 import TopInfoCards from './info-card';
 
 const InfoCardsList: FC = () => {
-  const [data, setData] = useState<any[] | null>(null);
+  const [data, setData] = useState<[]>();
 
   useEffect(() => {
     getMetric('get-overview').then(setData);
