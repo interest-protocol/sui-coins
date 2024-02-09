@@ -1,6 +1,9 @@
 import { Typography } from '@interest-protocol/ui-kit';
+import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+
+import { formatDollars } from '@/utils';
 
 import { SwapForm } from '../swap.types';
 import { InputProps } from './input.types';
@@ -8,9 +11,14 @@ import { InputProps } from './input.types';
 const AmountInDollar: FC<InputProps> = ({ label }) => {
   const { control } = useFormContext<SwapForm>();
 
-  const dollarValue = useWatch({
+  const value = useWatch({
     control,
     name: `${label}.value`,
+  });
+
+  const usdPrice = useWatch({
+    control,
+    name: `${label}.usdPrice`,
   });
 
   return (
@@ -18,9 +26,14 @@ const AmountInDollar: FC<InputProps> = ({ label }) => {
       mr="l"
       size="small"
       variant="body"
-      color={dollarValue ? 'onSurface' : 'outline'}
+      color={value ? 'onSurface' : 'outline'}
     >
-      $ {dollarValue ?? 0} USD
+      {formatDollars(
+        BigNumber(value ?? 0)
+          .times(usdPrice)
+          .toNumber()
+      )}{' '}
+      USD
     </Typography>
   );
 };

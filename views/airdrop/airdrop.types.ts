@@ -49,7 +49,6 @@ export interface AirdropInputProps {
 
 export interface AirdropPreviewModalProps {
   method: TMethod;
-  isOpen: boolean;
   onClose: () => void;
   setIsProgressView: Dispatch<SetStateAction<boolean>>;
 }

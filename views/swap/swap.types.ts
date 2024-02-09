@@ -9,6 +9,7 @@ export interface ISwapSettings {
 export interface SwapToken extends CoinData {
   value: string;
   locked: boolean;
+  usdPrice: number;
   balance: number | null;
 }
 
@@ -33,8 +34,12 @@ export interface SwapForm {
 
 export interface SwapForm {
   to: SwapToken;
-  from: SwapToken;
   lock: boolean;
+  from: SwapToken;
   disabled: boolean;
   maxValue: boolean;
+}
+
+export interface SwapPreviewModalProps {
+  onClose: () => void;
 }
