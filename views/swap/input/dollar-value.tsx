@@ -30,7 +30,7 @@ const AmountInDollar: FC<InputProps> = ({ label }) => {
     >
       {formatDollars(
         BigNumber(value ?? 0)
-          .times(usdPrice ?? 0)
+          .times(BigNumber(usdPrice ?? 0))
           .toNumber()
       )}{' '}
       USD
