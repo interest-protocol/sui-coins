@@ -71,7 +71,8 @@ const SelectToken: FC<InputProps> = ({ label }) => {
 
     const usdPrice = await fetch(`/api/v1/coin-price?symbol=${symbol}`)
       .then((response) => response.json())
-      .then((data) => data[symbol][0].quote.USD.price);
+      .then((data) => data[symbol][0].quote.USD.price)
+      .catch(() => null);
 
     setValue(label, {
       type,
