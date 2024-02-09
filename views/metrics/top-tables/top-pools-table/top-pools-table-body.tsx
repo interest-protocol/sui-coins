@@ -1,7 +1,6 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import { sort, toPairs } from 'ramda';
 import { FC, useEffect, useState } from 'react';
-import Skeleton from 'react-loading-skeleton';
 import { v4 } from 'uuid';
 
 import { getMetric } from '@/api/metrics';
@@ -13,6 +12,7 @@ import { formatDollars } from '@/utils';
 import { TopPoolsTableItem } from '../../metrics.types';
 import { getPoolFromMetricLabel } from '../../metrics.utils';
 import TableRow from '../table-row';
+import TopTableSkeleton from '../top-table-skeleton';
 
 const TopPoolsTableBody: FC = () => {
   const { network } = useNetwork();
@@ -34,13 +34,7 @@ const TopPoolsTableBody: FC = () => {
       .catch((error) => console.log(error, '>>>Look this error'));
   }, []);
 
-  if (!data.length)
-    return (
-      <>
-        <Skeleton height="2rem" width="100%" />
-        <Skeleton height="2rem" width="100%" style={{ marginTop: '1rem' }} />
-      </>
-    );
+  if (!data.length) return <TopTableSkeleton />;
 
   return (
     <>
