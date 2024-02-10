@@ -62,8 +62,8 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
               FROM
             </Typography>
             <Box
-              bg="#EDEDF1"
-              p="0.75rem"
+              bg="surface"
+              p="s"
               borderRadius="xs"
               display="flex"
               alignItems="center"
@@ -119,8 +119,8 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
                 TO (ESTIMATED)
               </Typography>
               <Box
-                bg="#EDEDF1"
-                p="0.75rem"
+                bg="surface"
+                p="s"
                 borderRadius="xs"
                 display="flex"
                 alignItems="center"
