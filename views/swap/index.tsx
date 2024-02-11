@@ -1,18 +1,22 @@
 import { Box, Button } from '@interest-protocol/ui-kit';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { FormProvider, useFormContext } from 'react-hook-form';
 
 import Layout from '@/components/layout';
+import { useModal } from '@/hooks/use-modal';
 import { SwapSVG } from '@/svg';
 import { updateURL } from '@/utils';
 
 import Input from './input';
 import ManageSlippage from './manage-slippage';
+import { SwapForm } from './swap.types';
 import SwapManager from './swap-manager';
 
 const Swap: FC = () => {
   const { pathname } = useRouter();
+  const form = useFormContext<SwapForm>();
+  const { setModal } = useModal();
   const { getValues, setValue } = useFormContext();
 
   const coinsExist = getValues('from') && getValues('to');
@@ -25,6 +29,16 @@ const Swap: FC = () => {
 
     updateURL(`${pathname}?from=${tmpTo.type}&to=${tmpFrom.type}`);
   };
+
+  const handlePreview = () =>
+    setModal(
+      <FormProvider {...form}>
+        {/* <SwapPreviewModal onClose={handleClose} /> */}
+      </FormProvider>,
+      {
+        custom: true,
+      }
+    );
 
   return (
     <Layout>
@@ -86,6 +100,7 @@ const Swap: FC = () => {
               cursor={coinsExist ? 'pointer' : 'not-allowed'}
               borderRadius="xs"
               fontFamily="Proto"
+              onClick={handlePreview}
             >
               Preview swap
             </Button>
