@@ -1,19 +1,25 @@
 import { Box, Button } from '@interest-protocol/ui-kit';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { FormProvider, useFormContext } from 'react-hook-form';
 
 import Layout from '@/components/layout';
+import { useModal } from '@/hooks/use-modal';
 import { SwapSVG } from '@/svg';
 import { updateURL } from '@/utils';
 
 import Input from './input';
 import ManageSlippage from './manage-slippage';
+import { SwapForm } from './swap.types';
 import SwapManager from './swap-manager';
+import SwapPreviewModal from './swap-preview-modal';
 
 const Swap: FC = () => {
   const { pathname } = useRouter();
-  const { getValues, setValue } = useFormContext();
+  const form = useFormContext<SwapForm>();
+  const { setModal, handleClose } = useModal();
+
+  const { getValues, setValue } = form;
 
   const flipToken = () => {
     const tmpTo = getValues('to');
@@ -23,6 +29,16 @@ const Swap: FC = () => {
 
     updateURL(`${pathname}?from=${tmpTo.type}&to=${tmpFrom.type}`);
   };
+
+  const handlePreview = () =>
+    setModal(
+      <FormProvider {...form}>
+        <SwapPreviewModal onClose={handleClose} />
+      </FormProvider>,
+      {
+        custom: true,
+      }
+    );
 
   return (
     <Layout>
@@ -74,14 +90,15 @@ const Swap: FC = () => {
             mb="l"
           >
             <Button
-              bg="container"
-              opacity="0.4"
-              color="onSurface"
               px="l"
               py="s"
-              borderRadius="xs"
-              variant="tonal"
               fontSize="s"
+              opacity="0.4"
+              bg="container"
+              variant="tonal"
+              color="onSurface"
+              borderRadius="xs"
+              onClick={handlePreview}
             >
               Preview swap
             </Button>

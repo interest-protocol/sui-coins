@@ -47,26 +47,30 @@ export const useGetAllCoins = () => {
           data.reduce((acc, item) => ({ ...acc, [item.type]: item }), {})
         );
 
-      return coinsRaw.reduce((acc, { coinType, ...coinRaw }) => {
-        const type = normalizeSuiType(coinType);
-        const { symbol, decimals, ...metadata } = dbCoinsMetadata[coinType];
+      return coinsRaw
+        .filter(({ coinType }) => dbCoinsMetadata[coinType])
+        .reduce((acc, { coinType, ...coinRaw }) => {
+          const type = normalizeSuiType(coinType);
+          const { symbol, decimals, ...metadata } = dbCoinsMetadata[coinType];
 
-        return {
-          ...acc,
-          [type]: {
-            ...acc[type],
-            ...coinRaw,
-            type,
-            symbol,
-            decimals,
-            metadata,
-            balance: BigNumber(coinRaw.balance)
-              .plus(BigNumber(acc[type]?.balance || '0'))
-              .toString(),
-            objects: (acc[type]?.objects ?? []).concat([{ ...coinRaw, type }]),
-          },
-        };
-      }, {} as CoinsMap);
+          return {
+            ...acc,
+            [type]: {
+              ...acc[type],
+              ...coinRaw,
+              type,
+              symbol,
+              decimals,
+              metadata,
+              balance: BigNumber(coinRaw.balance)
+                .plus(BigNumber(acc[type]?.balance || '0'))
+                .toString(),
+              objects: (acc[type]?.objects ?? []).concat([
+                { ...coinRaw, type },
+              ]),
+            },
+          };
+        }, {} as CoinsMap);
     },
     {
       revalidateOnFocus: false,

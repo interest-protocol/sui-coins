@@ -6,7 +6,7 @@ import {
 import { useWalletKit } from '@mysten/wallet-kit';
 import BigNumber from 'bignumber.js';
 import { useState } from 'react';
-import { useFormContext, UseFormReturn, useWatch } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import { EXPLORER_URL, OBJECT_RECORD } from '@/constants';
 import { REGISTRY_POOLS } from '@/constants/dex';
@@ -28,7 +28,7 @@ const SwapButton = () => {
   const client = useSuiClient();
   const { network } = useNetwork();
   const { dialog, handleClose } = useDialog();
-  const formSwap: UseFormReturn<SwapForm> = useFormContext();
+  const formSwap = useFormContext<SwapForm>();
   const [loading, setLoading] = useState(false);
   const { signTransactionBlock } = useWalletKit();
   const { account, coinsMap, mutate } = useWeb3();
@@ -192,7 +192,12 @@ const SwapButton = () => {
   };
 
   return (
-    <Button disabled={notEnoughBalance} variant="filled" onClick={swap}>
+    <Button
+      onClick={swap}
+      variant="filled"
+      justifyContent="center"
+      disabled={notEnoughBalance}
+    >
       <Typography variant="label" size="large">
         {loading ? 'Swapping...' : 'Swap'}
       </Typography>
