@@ -5,7 +5,8 @@ import { pathOr } from 'ramda';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { Network, TOKEN_ICONS } from '@/constants';
+import { Network } from '@/constants';
+import { TOKEN_ICONS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
@@ -53,12 +54,13 @@ const SelectToken: FC<InputProps> = ({ label }) => {
     name: `${label === 'to' ? 'from' : 'to'}.type`,
   });
 
-  const onSelect = ({ type, decimals, symbol }: CoinData) => {
+  const onSelect = async ({ type, decimals, symbol }: CoinData) => {
     if (type === oppositeType) {
       setValue(label === 'to' ? 'from' : 'to', {
         type: currentToken.type,
         symbol: currentToken.symbol,
         decimals: currentToken.decimals,
+        usdPrice: currentToken.usdPrice,
         value: '',
         balance: FixedPointMath.toNumber(
           BigNumber(pathOr(0, [currentToken.type, 'balance'], coinsMap))
@@ -67,9 +69,15 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       });
     }
 
+    const usdPrice = await fetch(`/api/v1/coin-price?symbol=${symbol}`)
+      .then((response) => response.json())
+      .then((data) => data[symbol][0].quote.USD.price)
+      .catch(() => null);
+
     setValue(label, {
       type,
       symbol,
+      usdPrice,
       decimals,
       value: '',
       balance: FixedPointMath.toNumber(

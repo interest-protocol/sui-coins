@@ -5,20 +5,16 @@ import {
   Typography,
   useTheme,
 } from '@interest-protocol/ui-kit';
-import { FC, MouseEventHandler } from 'react';
+import { FC, MouseEventHandler, useState } from 'react';
+import Skeleton from 'react-loading-skeleton';
 import { useLocalStorage } from 'usehooks-ts';
 
 import { TokenIcon } from '@/components';
 import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
 import { useNetwork } from '@/context/network';
-import { BSCChainSVG, ETHChainSVG, FavoriteSVG } from '@/svg';
+import { FavoriteSVG } from '@/svg';
 
 import { TokenModalItemProps } from './select-token-modal.types';
-
-const CHAIN_ICON = {
-  BSC: BSCChainSVG,
-  ETH: ETHChainSVG,
-};
 
 const TokenModalItem: FC<TokenModalItemProps> = ({
   type,
@@ -29,6 +25,7 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
 }) => {
   const { network } = useNetwork();
   const { colors } = useTheme() as Theme;
+  const [isLoading, setLoading] = useState(false);
   const [favoriteTokens, setFavoriteTokens] = useLocalStorage<
     ReadonlyArray<string>
   >(`${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-tokens`, []);
@@ -44,7 +41,11 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
     );
   };
 
-  const ChainIcon = CHAIN_ICON[chain!];
+  const onSelect = () => {
+    if (selected) return;
+    onClick();
+    setLoading(true);
+  };
 
   return (
     <Box
@@ -52,37 +53,27 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
       display="flex"
       color="textSoft"
       cursor="pointer"
+      onClick={onSelect}
       alignItems="center"
+      position="relative"
       justifyContent="space-between"
       nHover={{ bg: `${colors.primary}14` }}
-      onClick={selected ? undefined : onClick}
       transition="background 500ms ease-in-out"
       bg={selected ? `${colors.primary}14` : 'unset'}
     >
-      <Box display="flex" alignItems="center">
-        <Box
-          bg="black"
-          color="white"
-          display="flex"
-          width="2.5rem"
-          height="2.5rem"
-          borderRadius="xs"
-          position="relative"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <TokenIcon
-            network={network}
-            maxWidth="1.6rem"
-            maxHeight="1.6rem"
-            tokenId={network === Network.MAINNET ? type : symbol}
-          />
-          {chain && (
-            <Box position="absolute" bottom="-0.3rem" right="-0.5rem">
-              <ChainIcon maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
-            </Box>
-          )}
+      {isLoading && (
+        <Box position="absolute" top="0" right="0" left="0" bottom="0">
+          <Skeleton height="100%" />
         </Box>
+      )}
+      <Box display="flex" alignItems="center">
+        <TokenIcon
+          network={network}
+          maxWidth="1.6rem"
+          maxHeight="1.6rem"
+          chain={chain ?? 'SUI'}
+          tokenId={network === Network.MAINNET ? type : symbol}
+        />
         <Box
           ml="1rem"
           display="flex"

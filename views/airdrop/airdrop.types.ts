@@ -8,7 +8,7 @@ export interface AirdropData {
   amount: string;
 }
 
-export type TMethod = 'csv' | 'nft' | 'customAmount';
+export type TMethod = 'csv' | 'nft' | 'addressList';
 
 export interface IAirdropForm {
   error: boolean;
@@ -49,7 +49,6 @@ export interface AirdropInputProps {
 
 export interface AirdropPreviewModalProps {
   method: TMethod;
-  isOpen: boolean;
   onClose: () => void;
   setIsProgressView: Dispatch<SetStateAction<boolean>>;
 }

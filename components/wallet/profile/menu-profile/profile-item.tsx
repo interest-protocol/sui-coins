@@ -1,7 +1,7 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import ItemWrapper from '../../menu-settings/item-wrapper';
+import ItemWrapper from '../../../menu-mobile/menu-settings/item-wrapper';
 import { ProfileMenuItemProps } from '../profile.types';
 
 const MenuProfileItem: FC<ProfileMenuItemProps> = ({

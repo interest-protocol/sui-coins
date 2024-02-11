@@ -46,9 +46,7 @@ const AirdropSelectToken: FC = () => {
         <SelectTokenModal closeModal={handleClose} onSelect={onSelect} />
       </Motion>,
       {
-        isOpen: true,
         custom: true,
-        opaque: false,
         allowClose: true,
       }
     );

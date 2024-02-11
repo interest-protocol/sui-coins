@@ -1,10 +1,11 @@
 import { Box, Motion, Typography } from '@interest-protocol/ui-kit';
+import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { NFT_MAP } from '@/constants/nft';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { useModal } from '@/hooks/use-modal';
+import { useWeb3 } from '@/hooks/use-web3';
 import { NFTCollection, NFTCollectionMetadata } from '@/interface';
 import { ChevronRightSVG } from '@/svg';
 import SelectNFTModal from '@/views/components/select-nft-modal';
@@ -15,6 +16,7 @@ import { getSymbol } from '../airdrop.utils';
 import AirdropCommonAmountTextField from './airdrop-common-amount-text-field';
 
 const AirdropNftCoinsMethod: FC = () => {
+  const { nftsMap } = useWeb3();
   const { setModal, handleClose } = useModal();
 
   const { control, setValue, getValues } = useFormContext<IAirdropForm>();
@@ -28,19 +30,28 @@ const AirdropNftCoinsMethod: FC = () => {
   };
 
   const onSelectNFT = async (collectionId: string) => {
-    setValue('asset', NFT_MAP[collectionId]);
+    setValue('asset', nftsMap[collectionId]);
 
     const nft: NFTCollection = await fetch(
-      `/api/v1/nft-collection?id=${collectionId}`
-    ).then((res) => res.json());
+      `/api/v1/nft-collection?id=${collectionId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+      .then((res) => res.json())
+      .catch(console.log);
 
-    setValue(
-      'airdropList',
-      nft.holders.map((holder) => ({
-        address: holder,
-        amount: getValues('commonAmount'),
-      }))
-    );
+    const airdropList = nft.holders.map((address) => ({
+      address,
+      amount: BigNumber(getValues('commonAmount'))
+        .times(BigNumber(10).pow(getValues('token.decimals')))
+        .toString(),
+    }));
+
+    setValue('airdropList', airdropList);
   };
 
   const openModal = () =>
@@ -129,7 +140,7 @@ const AirdropNftCoinsMethod: FC = () => {
       </Box>
       <Box>
         <Typography variant="body" size="small">
-          Enter amount to send per address
+          Enter amount to send per {method === 'nft' ? 'NFT' : 'Coin'}
         </Typography>
         <AirdropCommonAmountTextField />
       </Box>

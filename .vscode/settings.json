@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["Fullnode", "Stylin", "toformat", "transation"]
+  "cSpell.words": ["Fullnode", "Stylin", "toformat", "transation"],
+  "findUnusedExports.detectCircularImports": true
 }

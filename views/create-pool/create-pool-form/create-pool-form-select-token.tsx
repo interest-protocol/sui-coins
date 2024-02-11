@@ -2,7 +2,8 @@ import { Box, Motion, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { TOKEN_SVG_MAP } from '@/constants/token';
+import { TOKEN_ICONS } from '@/constants/coins';
+import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
 import { CoinData } from '@/interface';
 import { ChevronRightSVG, SUISVG } from '@/svg';
@@ -13,10 +14,10 @@ import { IPoolForm } from '../create-pool.types';
 const CreatePoolFormSelectToken: FC<{ name: `token${'A' | 'B'}` }> = ({
   name,
 }) => {
+  const { network } = useNetwork();
   const { control, setValue } = useFormContext<IPoolForm>();
   const token = useWatch({ control, name });
-
-  const TokenIcon = TOKEN_SVG_MAP[token.type] ?? SUISVG;
+  const TokenIcon = TOKEN_ICONS[network][token.type] ?? SUISVG;
 
   const { setModal, handleClose } = useModal();
 
@@ -49,7 +50,7 @@ const CreatePoolFormSelectToken: FC<{ name: `token${'A' | 'B'}` }> = ({
       p="xs"
       gap="xs"
       bg="surface"
-      ml="-0.75rem"
+      ml="-s"
       display="flex"
       minWidth="8rem"
       cursor="pointer"

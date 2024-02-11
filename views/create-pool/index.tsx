@@ -5,7 +5,8 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 import Layout from '@/components/layout';
 import { Routes, RoutesEnum } from '@/constants';
-import { TOKEN_SVG_MAP } from '@/constants/token';
+import { TOKEN_ICONS } from '@/constants/coins';
+import { useNetwork } from '@/context/network';
 
 import PoolTitleBar from '../components/pool-title-bar';
 import { IPoolForm } from './create-pool.types';
@@ -14,12 +15,13 @@ import Illustration from './illustration';
 
 const CreatePoolPage: FC = () => {
   const { push } = useRouter();
+  const { network } = useNetwork();
   const { control } = useFormContext<IPoolForm>();
   const tokenAType = useWatch({ control, name: 'tokenA.type' });
   const tokenBType = useWatch({ control, name: 'tokenB.type' });
 
-  const IconA = TOKEN_SVG_MAP[tokenAType] ?? null;
-  const IconB = TOKEN_SVG_MAP[tokenBType] ?? null;
+  const IconA = TOKEN_ICONS[network][tokenAType] ?? null;
+  const IconB = TOKEN_ICONS[network][tokenBType] ?? null;
 
   return (
     <Layout>

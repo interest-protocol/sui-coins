@@ -12,14 +12,17 @@ import Input from './input';
 import ManageSlippage from './manage-slippage';
 import { SwapForm } from './swap.types';
 import SwapManager from './swap-manager';
+import SwapPreviewModal from './swap-preview-modal';
 
 const Swap: FC = () => {
   const { pathname } = useRouter();
   const form = useFormContext<SwapForm>();
-  const { setModal } = useModal();
-  const { getValues, setValue } = useFormContext();
+  const { setModal, handleClose } = useModal();
 
-  const coinsExist = getValues('from') && getValues('to');
+  const { getValues, setValue } = form;
+
+  const coinsExist =
+    getValues('from.balance') !== 0 && getValues('to.balance') !== 0;
 
   const flipToken = () => {
     const tmpTo = getValues('to');
@@ -33,7 +36,7 @@ const Swap: FC = () => {
   const handlePreview = () =>
     setModal(
       <FormProvider {...form}>
-        {/* <SwapPreviewModal onClose={handleClose} /> */}
+        <SwapPreviewModal onClose={handleClose} />
       </FormProvider>,
       {
         custom: true,
