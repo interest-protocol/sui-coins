@@ -21,8 +21,7 @@ const Swap: FC = () => {
 
   const { getValues, setValue } = form;
 
-  const coinsExist =
-    getValues('from.balance') !== 0 && getValues('to.balance') !== 0;
+  const coinsExist = getValues('from.balance') && getValues('to.balance');
 
   const flipToken = () => {
     const tmpTo = getValues('to');
