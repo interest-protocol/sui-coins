@@ -15,7 +15,7 @@ const PoolTransactionCardWrapper: FC<PropsWithChildren<CardWrapperProps>> = ({
       </Typography>
       {Suffix}
     </Box>
-    <Box display="flex" flexDirection="column" gap="0.5rem">
+    <Box display="flex" flexDirection="column" gap="xs">
       {children}
     </Box>
   </Box>
