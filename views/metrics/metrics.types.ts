@@ -19,3 +19,10 @@ export interface TopPoolsTableItem
 export interface TopCoinTableItem extends Record<'a' | 'b' | 'c', number> {
   coin: CoinInfo | undefined;
 }
+
+export interface DataPoint {
+  date: Date;
+  day: string;
+  amount: number;
+  description: string;
+}

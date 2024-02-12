@@ -15,7 +15,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@hookform/resolvers": "^3.3.2",
-    "@interest-protocol/ui-kit": "^0.2.20-alpha",
+    "@interest-protocol/ui-kit": "^0.2.21-alpha",
     "@mysten/sui.js": "^0.45.1",
     "@mysten/suins-toolkit": "^0.3.13",
     "@mysten/wallet-kit": "^0.8.2",
