@@ -26,3 +26,8 @@ export interface DataPoint {
   amount: number;
   description: string;
 }
+
+export interface DataPie {
+  label: string;
+  amount: number;
+}

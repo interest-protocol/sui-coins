@@ -10,9 +10,9 @@ const ChartWrapper: FC<PropsWithChildren<ChartHeaderProps>> = ({
 }) => (
   <Box
     width="100%"
+    height="100%"
     display="flex"
     borderRadius="xs"
-    overflowY="hidden"
     color="onSurface"
     gridColumn="1/-1"
     flexDirection="column"

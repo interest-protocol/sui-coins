@@ -5,7 +5,7 @@ export interface ChartHeaderProps {
     description: string;
   };
   filters?: ReadonlyArray<ChartFilterHeaderProps>;
-  isLoading: boolean;
+  isLoading?: boolean;
 }
 
 export interface ChartFilterHeaderProps {

@@ -17,7 +17,7 @@ const ChartHeader: FC<ChartHeaderProps> = ({
 
   return (
     <>
-      <Box display="flex" justifyContent="space-between" px="xl">
+      <Box display="flex" justifyContent="space-between" px="xl" mb="xl">
         <Typography
           variant="title"
           size="large"
@@ -51,7 +51,7 @@ const ChartHeader: FC<ChartHeaderProps> = ({
         )}
       </Box>
       {resume && (
-        <Box px="xl" mt="xl">
+        <Box px="xl">
           {isLoading ? (
             <>
               <Skeleton width="20%" height="2rem" />
