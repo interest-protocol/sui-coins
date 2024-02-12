@@ -31,7 +31,7 @@ const TopPoolsTableBody: FC = () => {
           )
         )
       )
-      .catch((error) => console.log(error, '>>>Look this error'));
+      .catch();
   }, []);
 
   if (!data.length) return <TopTableSkeleton />;

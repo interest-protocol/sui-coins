@@ -9,15 +9,13 @@ const ChartWrapper: FC<PropsWithChildren<ChartHeaderProps>> = ({
   ...props
 }) => (
   <Box
+    py="xl"
     width="100%"
-    display="flex"
+    height="100%"
     borderRadius="xs"
-    overflowY="hidden"
     color="onSurface"
     gridColumn="1/-1"
-    flexDirection="column"
     bg="lowestContainer"
-    py="xl"
   >
     <Box display="flex" flexDirection="column">
       <ChartHeader {...props} />
