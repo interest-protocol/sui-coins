@@ -21,6 +21,8 @@ const Swap: FC = () => {
 
   const { getValues, setValue } = form;
 
+  const coinsExist = getValues('from.balance') && getValues('to.balance');
+
   const flipToken = () => {
     const tmpTo = getValues('to');
     const tmpFrom = getValues('from');
@@ -90,14 +92,16 @@ const Swap: FC = () => {
             mb="l"
           >
             <Button
-              px="l"
               py="s"
+              px="xl"
               fontSize="s"
-              opacity="0.4"
-              bg="container"
-              variant="tonal"
-              color="onSurface"
+              bg={coinsExist ? 'filled' : 'container'}
+              type="button"
+              variant={coinsExist ? 'filled' : 'tonal'}
+              color={coinsExist ? 'surface' : 'outlineVariant'}
+              cursor={coinsExist ? 'pointer' : 'not-allowed'}
               borderRadius="xs"
+              fontFamily="Proto"
               onClick={handlePreview}
             >
               Preview swap
