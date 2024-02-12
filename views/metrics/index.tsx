@@ -3,6 +3,7 @@ import { FC } from 'react';
 
 import Layout from '@/components/layout';
 
+import DailyVolume from './daily-volume';
 import TopCoinsTable from './top-tables/top-coins-table';
 import TopPoolsTable from './top-tables/top-pools-table';
 
@@ -18,6 +19,7 @@ const Metrics: FC = () => (
       Metrics
     </Typography>
     <Box variant="container">
+      <DailyVolume />
       <TopPoolsTable />
       <TopCoinsTable />
     </Box>
