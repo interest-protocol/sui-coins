@@ -3,6 +3,7 @@ import { FC } from 'react';
 
 import Layout from '@/components/layout';
 
+import ActiveWallets from './active-wallets';
 import DailyVolume from './daily-volume';
 import TopCoinsTable from './top-tables/top-coins-table';
 import TopPoolsTable from './top-tables/top-pools-table';
@@ -19,7 +20,7 @@ const Metrics: FC = () => (
     >
       Metrics
     </Typography>
-    <Box variant="container">
+    <Box variant="container" gap="0.5rem !important">
       <DailyVolume />
       <Box
         gap="xs"
@@ -29,6 +30,7 @@ const Metrics: FC = () => (
         gridTemplateColumns="1fr 1fr"
         display={['flex', 'flex', 'flex', 'grid']}
       >
+        <ActiveWallets />
         <TVLPools />
       </Box>
       <TopPoolsTable />
