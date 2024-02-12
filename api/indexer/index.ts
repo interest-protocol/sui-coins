@@ -110,7 +110,64 @@ export const fetchAllHolders = async (
   return allHolders;
 };
 
-export const fetchNftMetadata = async (): Promise<
+export const fetchNftMetadata = async (
+  collectionId: string
+): Promise<NFTCollectionMetadata | null> => {
+  try {
+    const query = `
+      query{
+        sui {
+          collections(
+            where: {id: {_eq: "${collectionId}" } }
+          ) {
+            id
+            supply
+            title
+            cover_url
+          }
+        }
+      }
+    `;
+
+    const response = await fetch(`${process.env.DOMAIN}/api/v1/indexer`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(query),
+    });
+
+    const result = await response.json();
+
+    if (!result?.data?.data?.sui?.collections) {
+      throw new Error(
+        `[fetchMetadata] unexpected result: ${JSON.stringify(result)}`
+      );
+    }
+
+    const metadata = result.data.data.sui.collections[0];
+
+    if (!metadata)
+      throw new Error(
+        `[fetchMetadata] nothing found: ${JSON.stringify(result)}`
+      );
+
+    const { id, title, supply, cover_url } =
+      metadata as IndexerNFTMetadataResponse;
+
+    return {
+      id,
+      name: title,
+      total: supply,
+      img: cover_url,
+    };
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const fetchAllNftMetadata = async (): Promise<
   ReadonlyArray<NFTCollectionMetadata>
 > => {
   try {
@@ -141,7 +198,7 @@ export const fetchNftMetadata = async (): Promise<
 
     if (!result?.data?.data?.sui?.collections) {
       throw new Error(
-        `[fetchHolders] unexpected result: ${JSON.stringify(result)}`
+        `[fetchAllMetadata] unexpected result: ${JSON.stringify(result)}`
       );
     }
 
