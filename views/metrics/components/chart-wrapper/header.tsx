@@ -21,7 +21,7 @@ const ChartHeader: FC<ChartHeaderProps> = ({
         <Typography
           variant="title"
           size="large"
-          fontSize={['3xl', '3xl', '3xl', '5xl', '5xl']}
+          fontSize={['3xl', '3xl', '3xl', '4xl', '5xl']}
         >
           {title}
         </Typography>
@@ -44,7 +44,13 @@ const ChartHeader: FC<ChartHeaderProps> = ({
                   onClick();
                 }}
               >
-                {label}
+                <Typography
+                  size="large"
+                  variant="body"
+                  fontSize={['2xs', '2xs', '2xs', '2xs', 'm']}
+                >
+                  {label}
+                </Typography>
               </Tag>
             ))}
           </Box>
