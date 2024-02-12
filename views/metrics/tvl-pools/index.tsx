@@ -8,7 +8,7 @@ import ChartWrapper from '../components/chart-wrapper';
 import { DataPie } from '../metrics.types';
 import { getPoolFromMetricLabel } from '../metrics.utils';
 
-const TVLPools: FC<{ duplicate?: boolean }> = ({ duplicate }) => {
+const TVLPools: FC = () => {
   const [data, setData] = useState<Array<DataPie>>([]);
   const [isLoading, setIsLoading] = useState(!data.length);
 
@@ -80,13 +80,11 @@ const TVLPools: FC<{ duplicate?: boolean }> = ({ duplicate }) => {
             <Chart
               variant="pie"
               label="Pools"
-              data={(duplicate ? data.concat(data).concat(data) : data).map(
-                (item) => ({
-                  date: item.label,
-                  amount: item.amount,
-                  description: item.label,
-                })
-              )}
+              data={data.map((item) => ({
+                date: item.label,
+                amount: item.amount,
+                description: item.label,
+              }))}
               semanticColors={[
                 { dark: '#BBF264', light: '#88CC16' },
                 { dark: '#EEA5A5', light: '#EF4444' },
