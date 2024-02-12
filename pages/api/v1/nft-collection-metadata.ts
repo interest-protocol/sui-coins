@@ -23,12 +23,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       if (!data) return res.status(500).send('Error fetching the data');
 
-      if (!NFTCollectionMetadata.find({ id: collectionId }))
+      const meta = await NFTCollectionMetadata.findOne({ id: collectionId });
+
+      if (!meta)
         await (
           await NFTCollectionMetadata.create({ ...data, updatedAt: Date.now() })
         ).save();
 
-      if (!NFTCollection.find({ collectionId }))
+      const holders = await NFTCollection.findOne({ collectionId });
+
+      if (!holders)
         await (
           await NFTCollection.create({
             holders: [],
