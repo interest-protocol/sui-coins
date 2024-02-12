@@ -10,7 +10,7 @@ import { IPoolForm } from '../find-pool.types';
 
 const DEX_LIST = ['Interest Protocol', 'Sui Coins'];
 
-const CreatePoolFormSelectDex: FC = () => {
+const FindPoolFormSelectDex: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { control, setValue } = useFormContext<IPoolForm>();
 
@@ -71,4 +71,4 @@ const CreatePoolFormSelectDex: FC = () => {
   );
 };
 
-export default CreatePoolFormSelectDex;
+export default FindPoolFormSelectDex;

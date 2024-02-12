@@ -1,7 +1,7 @@
 import { Box, Button, Form, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import CreatePoolFormSelectDex from './find-pool-form-select-dex';
+import FindPoolFormSelectDex from './find-pool-form-select-dex';
 import CreatePoolFormSelectToken from './find-pool-form-select-token';
 
 const FindPoolForm: FC = () => (
@@ -21,7 +21,7 @@ const FindPoolForm: FC = () => (
         <Typography variant="body" size="large" pb="xl">
           1. Choose in which DEX you want your pool
         </Typography>
-        <CreatePoolFormSelectDex />
+        <FindPoolFormSelectDex />
       </Box>
       <Box display="flex" flexDirection="column">
         <Typography variant="body" size="large" pb="xl">
