@@ -6,7 +6,7 @@ import { v4 } from 'uuid';
 import { formatDollars, formatMoney } from '@/utils';
 
 import { TOP_INFO_CARDS_DATA } from '../metrics.data';
-import TopInfoCards from './info-card';
+import InfoCards from './info-card';
 
 const InfoCardsList: FC = () => {
   const [data, setData] = useState<[]>();
@@ -16,15 +16,14 @@ const InfoCardsList: FC = () => {
   }, []);
   return (
     <Box
-      gridColumn="1/-1"
       width="100%"
       gap="s"
       display={['flex', 'flex', 'flex', 'grid']}
-      flexDirection={['column', 'column', 'column', 'row']}
+      flexDirection={['column', 'row', 'row', 'row']}
       gridTemplateColumns="repeat(3, 1fr)"
     >
       {TOP_INFO_CARDS_DATA.map(({ Icon, description, money }, index) => (
-        <TopInfoCards
+        <InfoCards
           key={v4()}
           Icon={Icon}
           description={description}

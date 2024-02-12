@@ -18,7 +18,13 @@ const Metrics: FC = () => (
     >
       Metrics
     </Typography>
-    <Box variant="container">
+    <Box
+      variant="container"
+      display="flex"
+      flexDirection="column"
+      justifyContent="center"
+      alignItems="center"
+    >
       <InfoCardsList />
       <TopPoolsTable />
       <TopCoinsTable />
