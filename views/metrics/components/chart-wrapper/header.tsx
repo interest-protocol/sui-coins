@@ -26,7 +26,7 @@ const ChartHeader: FC<ChartHeaderProps> = ({
           {title}
         </Typography>
         {filters && (
-          <Box display="flex" gap="xs">
+          <Box display="flex" alignItems="center" gap="xs">
             {filters.map(({ label, onClick }, index) => (
               <Tag
                 variant="filled"
@@ -43,6 +43,7 @@ const ChartHeader: FC<ChartHeaderProps> = ({
                   setSelectedTagIndex(index);
                   onClick();
                 }}
+                height="fit-content"
               >
                 <Typography
                   size="large"
