@@ -162,7 +162,6 @@ export const fetchNftMetadata = async (
       img: cover_url,
     };
   } catch (e) {
-    console.log(e);
     return null;
   }
 };
