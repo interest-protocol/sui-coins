@@ -20,7 +20,8 @@ const InfoCardsList: FC = () => {
       gridColumn="1/-1"
       width="100%"
       gap="s"
-      display="grid"
+      display={['flex', 'flex', 'flex', 'grid']}
+      flexDirection={['column', 'column', 'column', 'row']}
       gridTemplateColumns="repeat(3, 1fr)"
     >
       {TOP_INFO_CARDS_DATA.map(({ Icon, description, money }, index) => (
