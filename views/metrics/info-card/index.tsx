@@ -14,7 +14,6 @@ const InfoCardsList: FC = () => {
   useEffect(() => {
     getMetric('get-overview').then(setData);
   }, []);
-
   return (
     <Box
       gridColumn="1/-1"
