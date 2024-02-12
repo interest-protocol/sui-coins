@@ -43,21 +43,13 @@ const Swap: FC = () => {
     );
 
   return (
-    <Layout>
-      <Box
-        my="2xl"
-        fontFamily="Proto"
-        textAlign="center"
-        fontSize={['5xl', '8xl']}
-      >
-        Swap
-      </Box>
+    <Layout title="Swap">
       <Box
         mx="auto"
         display="flex"
         borderRadius="2xl"
         flexDirection="column"
-        p={['xl', 'xl', 'xl', '7xl']}
+        px={['xl', 'xl', 'xl', '7xl']}
         width={['100%', '100%', '100%', '39.75rem']}
       >
         <Box py="xl" px="m" my="xs" borderRadius="xs" bg="lowestContainer">

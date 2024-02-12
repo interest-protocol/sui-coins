@@ -34,7 +34,7 @@ const MenuMobile: FC = () => {
           top="0"
           pt="l"
           left="0"
-          zIndex="4"
+          zIndex={4}
           width="100vw"
           height="100vh"
           overflowY="auto"
