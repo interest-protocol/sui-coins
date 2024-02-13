@@ -1,7 +1,11 @@
 import { Box } from '@interest-protocol/ui-kit';
+import BigNumber from 'bignumber.js';
 import dynamic from 'next/dynamic';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+
+import { useWeb3 } from '@/hooks/use-web3';
+import { FixedPointMath } from '@/lib';
 
 import { SwapForm } from '../../swap.types';
 
@@ -11,10 +15,15 @@ const Slider = dynamic(
 );
 
 const SwapFormFieldSlider: FC = () => {
+  const { coinsMap } = useWeb3();
   const { control, setValue, getValues } = useFormContext<SwapForm>();
 
-  const value = Number(getValues('from.value'));
-  const balance = Number(useWatch({ control, name: 'from.balance' }));
+  const type = useWatch({ control, name: 'from.type' });
+
+  const balance = FixedPointMath.toNumber(
+    BigNumber(coinsMap[type]?.balance || 0),
+    getValues('from.decimals') || 0
+  );
 
   return (
     <Box mx="s">
@@ -23,9 +32,9 @@ const SwapFormFieldSlider: FC = () => {
         max={100}
         disabled={!balance}
         initial={
-          value && balance
-            ? balance >= value
-              ? (value * 100) / balance
+          Number(getValues('from.value')) && balance
+            ? balance >= Number(getValues('from.value'))
+              ? (Number(getValues('from.value')) * 100) / balance
               : 100
             : 0
         }

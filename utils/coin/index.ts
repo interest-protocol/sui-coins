@@ -2,12 +2,16 @@ import { formatAddress, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
 import { propOr } from 'ramda';
 
+import { Network } from '@/constants';
+import { STRICT_TOKENS, STRICT_TOKENS_TYPE } from '@/constants/coins';
 import {
   CoinObject,
   CoinsMap,
 } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { CoinMetadataWithType } from '@/interface';
 import { CoinData } from '@/views/pool-details/pool-form/pool-form.types';
 
+import { getBasicCoinMetadata } from '../fn';
 import { CreateVectorParameterArgs } from './coin.types';
 
 export const isSymbol = (text: string): boolean =>
@@ -123,3 +127,24 @@ export const coinDataToCoinObject = (coinData: CoinData): CoinObject => ({
   metadata: { name: formatAddress(coinData.type), description: '' },
   objects: [],
 });
+
+export const getCoin = async (
+  type: string,
+  network: Network,
+  coinsMap: CoinsMap
+): Promise<CoinMetadataWithType | CoinObject | CoinData> =>
+  new Promise((resolve) => {
+    if (coinsMap[type]) return resolve(coinsMap[formatAddress(type)]);
+
+    if (STRICT_TOKENS_TYPE[network].includes(formatAddress(type)))
+      return resolve(
+        STRICT_TOKENS[network].find(
+          ({ type: strictType }) => type === strictType
+        )!
+      );
+
+    fetch(`/api/v1/coin-metadata?network=${network}&type=${type}`)
+      .then((res) => res.json())
+      .then((metadata) => resolve(metadata))
+      .catch(() => resolve({ type, ...getBasicCoinMetadata(type) }));
+  });
