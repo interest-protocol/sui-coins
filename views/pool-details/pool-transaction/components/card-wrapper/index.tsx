@@ -7,20 +7,18 @@ const PoolTransactionCardWrapper: FC<PropsWithChildren<CardWrapperProps>> = ({
   title,
   Suffix,
   children,
-}) => {
-  return (
-    <Box bg="lowestContainer" borderRadius="2rem" p={['m', 'm', 'm', 'xl']}>
-      <Box display="flex" justifyContent="space-between" mb="m">
-        <Typography variant="label" size="large">
-          {title}
-        </Typography>
-        {Suffix}
-      </Box>
-      <Box display="flex" flexDirection="column" gap="0.5rem">
-        {children}
-      </Box>
+}) => (
+  <Box bg="lowestContainer" borderRadius="xs" p={['m', 'm', 'm', 'xl']}>
+    <Box display="flex" justifyContent="space-between" mb="m">
+      <Typography variant="label" size="large">
+        {title}
+      </Typography>
+      {Suffix}
     </Box>
-  );
-};
+    <Box display="flex" flexDirection="column" gap="xs">
+      {children}
+    </Box>
+  </Box>
+);
 
 export default PoolTransactionCardWrapper;

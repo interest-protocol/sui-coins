@@ -17,7 +17,7 @@ const PoolCard: FC<PoolCardProps> = ({ token0, token1, dex, poolObjectId }) => {
       gap="xs"
       display="flex"
       bg="lowestContainer"
-      borderRadius="1rem"
+      borderRadius="xs"
       flexDirection="column"
       justifyContent="center"
       border="0.063rem solid"

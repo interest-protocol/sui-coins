@@ -30,7 +30,13 @@ const CreatePoolPage: FC = () => {
         onBack={() => push(Routes[RoutesEnum.Pools])}
         iconTokenList={[IconA, IconB].filter((Icon) => Icon)}
       />
-      <Box my="3xl" mx="auto" display="flex" maxWidth="65rem">
+      <Box
+        mb="3xl"
+        mx="auto"
+        display="flex"
+        maxWidth="65rem"
+        width={['100%', '100%', '100%', '85%']}
+      >
         <Illustration />
         <CreateTokenForm />
       </Box>

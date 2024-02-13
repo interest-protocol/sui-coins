@@ -69,7 +69,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
       <ModalTokenBody
         handleSelectToken={handleSelectToken}
         tokens={STRICT_TOKENS[network]
-          .sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
+          ?.sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
           .filter(
             ({ symbol, type }) =>
               !search ||
@@ -89,7 +89,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
       <ModalTokenBody
         handleSelectToken={handleSelectToken}
         tokens={WORMHOLE_TOKENS[network]
-          .sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
+          ?.sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
           .filter(
             ({ symbol, type }) =>
               !search ||
@@ -109,7 +109,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
       <ModalTokenBody
         handleSelectToken={handleSelectToken}
         tokens={CELER_TOKENS[network]
-          .sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
+          ?.sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
           .filter(
             ({ symbol, type }) =>
               !search ||
@@ -137,7 +137,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
       <ModalTokenBody
         handleSelectToken={handleSelectToken}
         tokens={(coins as Array<CoinObject>)
-          .sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
+          ?.sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
           .filter(
             ({ symbol, type }) =>
               !search || symbol.includes(search) || type.includes(search)

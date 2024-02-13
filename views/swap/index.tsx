@@ -1,19 +1,27 @@
 import { Box, Button } from '@interest-protocol/ui-kit';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { FormProvider, useFormContext } from 'react-hook-form';
 
 import Layout from '@/components/layout';
+import { useModal } from '@/hooks/use-modal';
 import { SwapSVG } from '@/svg';
 import { updateURL } from '@/utils';
 
 import Input from './input';
 import ManageSlippage from './manage-slippage';
+import { SwapForm } from './swap.types';
 import SwapManager from './swap-manager';
+import SwapPreviewModal from './swap-preview-modal';
 
 const Swap: FC = () => {
   const { pathname } = useRouter();
-  const { getValues, setValue } = useFormContext();
+  const form = useFormContext<SwapForm>();
+  const { setModal, handleClose } = useModal();
+
+  const { getValues, setValue } = form;
+
+  const coinsExist = getValues('from.balance') && getValues('to.balance');
 
   const flipToken = () => {
     const tmpTo = getValues('to');
@@ -24,22 +32,24 @@ const Swap: FC = () => {
     updateURL(`${pathname}?from=${tmpTo.type}&to=${tmpFrom.type}`);
   };
 
+  const handlePreview = () =>
+    setModal(
+      <FormProvider {...form}>
+        <SwapPreviewModal onClose={handleClose} />
+      </FormProvider>,
+      {
+        custom: true,
+      }
+    );
+
   return (
-    <Layout>
-      <Box
-        my="2xl"
-        fontFamily="Proto"
-        textAlign="center"
-        fontSize={['5xl', '8xl']}
-      >
-        Swap
-      </Box>
+    <Layout title="Swap">
       <Box
         mx="auto"
         display="flex"
         borderRadius="2xl"
         flexDirection="column"
-        p={['xl', 'xl', 'xl', '7xl']}
+        px={['xl', 'xl', 'xl', '7xl']}
         width={['100%', '100%', '100%', '39.75rem']}
       >
         <Box py="xl" px="m" my="xs" borderRadius="xs" bg="lowestContainer">
@@ -74,14 +84,17 @@ const Swap: FC = () => {
             mb="l"
           >
             <Button
-              bg="container"
-              opacity="0.4"
-              color="onSurface"
-              px="l"
               py="s"
-              borderRadius="xs"
-              variant="tonal"
+              px="xl"
               fontSize="s"
+              bg={coinsExist ? 'filled' : 'container'}
+              type="button"
+              variant={coinsExist ? 'filled' : 'tonal'}
+              color={coinsExist ? 'surface' : 'outlineVariant'}
+              cursor={coinsExist ? 'pointer' : 'not-allowed'}
+              borderRadius="xs"
+              fontFamily="Proto"
+              onClick={handlePreview}
             >
               Preview swap
             </Button>

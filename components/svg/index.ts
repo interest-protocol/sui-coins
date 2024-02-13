@@ -51,7 +51,6 @@ export { default as HeartSVG } from './heart';
 export { default as IPXSVG } from './ipx';
 export { default as IPXRoundedSVG } from './ipx-rounded';
 export { default as LinkSVG } from './link';
-export { default as LoadingSVG } from './loading';
 export { default as LogoSVG } from './logo';
 export { default as LogoutSVG } from './logout';
 export { default as MATICSVG } from './matic';

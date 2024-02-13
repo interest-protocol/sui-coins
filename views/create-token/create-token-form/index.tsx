@@ -8,8 +8,8 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
+import { TextField } from '@/components';
 import { useNetwork } from '@/context/network';
-import { TextField } from '@/elements';
 import { useSuiClient } from '@/hooks/use-sui-client';
 import { parseInputEventToNumberString, showTXSuccessToast } from '@/utils';
 import { throwTXIfNotSuccessful } from '@/utils';
@@ -123,6 +123,7 @@ const CreateTokenForm: FC = () => {
       borderRadius="xs"
       overflow="hidden"
       bg="lowestContainer"
+      mx="auto"
       onSubmit={handleSubmit(onSubmit)}
     >
       <Typography variant="title" size="large" p="xl">

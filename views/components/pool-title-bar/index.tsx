@@ -13,15 +13,17 @@ const PoolTitleBar: FC<PoolTitleBarProps> = ({
 }) => (
   <Box
     mx="auto"
-    py="1rem"
+    py="m"
     gap="1rem"
-    px="1.5rem"
+    px="xl"
     display="flex"
     maxWidth="65rem"
     alignItems="center"
-    borderRadius="2rem"
     bg="lowestContainer"
-    my={['5xl', '5xl', '5xl', '8xl']}
+    borderRadius="xs"
+    mt={['5xl', '5xl', '5xl', 'xl']}
+    width={['100%', '100%', '100%', '85%']}
+    mb="xs"
   >
     <Button isIcon variant="text" mr="0.5rem" onClick={onBack}>
       <ArrowLeftSVG width="1.5rem" maxWidth="1.5rem" maxHeight="1.5rem" />
@@ -47,8 +49,9 @@ const PoolTitleBar: FC<PoolTitleBarProps> = ({
           display="flex"
           width="2.5rem"
           height="2.5rem"
+          borderRadius="xs"
+          overflow="hidden"
           alignItems="center"
-          borderRadius="0.5rem"
           justifyContent="center"
           color="lowestContainer"
         >

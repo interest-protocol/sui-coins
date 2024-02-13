@@ -14,7 +14,7 @@ export interface CoinData {
 export type TChain = 'ETH' | 'BSC' | 'SOL' | 'AVA';
 
 export interface CoinDataWithChainInfo extends CoinData {
-  chain?: TChain;
+  chain?: 'ETH' | 'BSC' | 'SOL' | 'AVA';
 }
 
 export type LocalTokenMetadataRecord = Record<string, CoinData>;
