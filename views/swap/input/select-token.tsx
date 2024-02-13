@@ -110,26 +110,36 @@ const SelectToken: FC<InputProps> = ({ label }) => {
   return (
     <Box position="relative">
       <Button
-        bg="highestContainer"
-        p="s"
-        borderRadius="xs"
-        variant="tonal"
+        p="2xs"
         fontSize="s"
+        variant="tonal"
+        borderRadius="xs"
+        bg="highestContainer"
         onClick={openModal}
         {...(Icon && {
           PrefixIcon: (
-            <Box as="span" display="inline-block">
+            <Box
+              as="span"
+              width="2.5rem"
+              height="2.5rem"
+              bg="onSurface"
+              color="onPrimary"
+              borderRadius="xs"
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+            >
               <Icon
                 width="100%"
                 height="100%"
-                maxWidth="1rem"
-                maxHeight="1rem"
+                maxWidth="1.5rem"
+                maxHeight="1.5rem"
               />
             </Box>
           ),
         })}
       >
-        <Typography size="large" variant="label">
+        <Typography size="large" variant="label" p="xs">
           {currentSymbol ?? 'Select Token'}
         </Typography>
         {currentSymbol ? (
