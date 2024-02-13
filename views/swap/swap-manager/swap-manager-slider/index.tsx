@@ -22,7 +22,7 @@ const SwapFormFieldSlider: FC = () => {
 
   const balance = FixedPointMath.toNumber(
     BigNumber(coinsMap[type]?.balance || 0),
-    getValues('from.decimals') || 0
+    coinsMap[type]?.decimals ?? (getValues('from.decimals') || 0)
   );
 
   return (
