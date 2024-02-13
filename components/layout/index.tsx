@@ -1,11 +1,12 @@
-import { Box } from '@interest-protocol/ui-kit';
+import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC, PropsWithChildren } from 'react';
 
 import Footer from './footer';
 import Header from './header';
+import { LayoutProps } from './layout.types';
 import Sidebar from './sidebar';
 
-const Layout: FC<PropsWithChildren> = ({ children }) => (
+const Layout: FC<PropsWithChildren<LayoutProps>> = ({ title, children }) => (
   <Box display="flex" height="100vh" overflow="hidden" bg="surface">
     <Sidebar />
     <Box as="aside" position="relative" flex="1">
@@ -18,11 +19,23 @@ const Layout: FC<PropsWithChildren> = ({ children }) => (
           maxHeight="100vh"
           variant="container"
           flexDirection="column"
-          p={['m', 'l', 'l', 'xl']}
-          mt={[`8xl`, `8xl`, `8xl`, 'unset']}
+          px={['m', 'l', 'l', 'xl']}
+          mt="unset"
         >
           <Box as="main" flex="1" mb="10xl">
-            {children}
+            <Box>
+              {title && (
+                <Typography
+                  textAlign="center"
+                  variant="display"
+                  size="medium"
+                  my="3rem"
+                >
+                  {title}
+                </Typography>
+              )}
+              {children}
+            </Box>
           </Box>
           <Footer />
         </Box>

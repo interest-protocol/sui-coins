@@ -13,15 +13,16 @@ const PoolTitleBar: FC<PoolTitleBarProps> = ({
 }) => (
   <Box
     mx="auto"
-    py="1rem"
+    py="m"
     gap="1rem"
-    px="1.5rem"
+    px="xl"
     display="flex"
     maxWidth="65rem"
     alignItems="center"
-    borderRadius="xs"
     bg="lowestContainer"
+    borderRadius="xs"
     mt={['5xl', '5xl', '5xl', 'xl']}
+    width={['100%', '100%', '100%', '85%']}
     mb="xs"
   >
     <Button isIcon variant="text" mr="0.5rem" onClick={onBack}>

@@ -10,7 +10,7 @@ import {
 
 export interface ModalContext {
   handleClose: () => void;
-  setModal: (node: ReactNode, props?: ModalProps) => void;
+  setModal: (node: ReactNode, props?: Partial<ModalProps>) => void;
 }
 
 const modalContext = createContext({} as ModalContext);
@@ -25,7 +25,7 @@ export const ModalProvider: FC<PropsWithChildren> = ({ children }) => {
     modalProps?.onClose?.();
   };
 
-  const setModal = (node: ReactNode, props = {} as ModalProps) => {
+  const setModal = (node: ReactNode, props = {} as Partial<ModalProps>) => {
     setComponent(node);
     setModalProps(props);
   };
