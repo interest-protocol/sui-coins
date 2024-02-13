@@ -41,7 +41,8 @@ const SwapPage: NextPage = () => {
         COIN_TYPE_TO_COIN[network][SUI_TYPE_ARG];
 
       const usdPrice = await fetch(`/api/v1/coin-price?symbol=${symbol}`)
-        .then((res) => res.json())
+        .then((response) => response.json())
+        .then((data) => data[symbol][0].quote.USD.price)
         .catch(() => null);
 
       const token: SwapToken = {
@@ -69,7 +70,8 @@ const SwapPage: NextPage = () => {
       );
 
       const usdPrice = await fetch(`/api/v1/coin-price?symbol=${symbol}`)
-        .then((res) => res.json())
+        .then((response) => response.json())
+        .then((data) => data[symbol][0].quote.USD.price)
         .catch(() => null);
 
       const token: SwapToken = {
@@ -86,6 +88,7 @@ const SwapPage: NextPage = () => {
       return type;
     }
   };
+
   useEffect(() => {
     (async () => {
       const searchParams = new URLSearchParams(asPath);
