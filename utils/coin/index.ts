@@ -134,9 +134,9 @@ export const getCoin = async (
   coinsMap: CoinsMap
 ): Promise<CoinMetadataWithType | CoinObject | CoinData> =>
   new Promise((resolve) => {
-    if (coinsMap[type]) return resolve(coinsMap[formatAddress(type)]);
+    if (coinsMap[type]) return resolve(coinsMap[type]);
 
-    if (STRICT_TOKENS_TYPE[network].includes(formatAddress(type)))
+    if (STRICT_TOKENS_TYPE[network].includes(type))
       return resolve(
         STRICT_TOKENS[network].find(
           ({ type: strictType }) => type === strictType

@@ -18,7 +18,7 @@ const HeaderInfo: FC<InputProps> = ({ label }) => {
 
   const balance = FixedPointMath.toNumber(
     BigNumber(coinsMap[type]?.balance || '0'),
-    decimals
+    coinsMap[type]?.decimals ?? decimals
   );
 
   return (
