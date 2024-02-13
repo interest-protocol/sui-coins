@@ -8,7 +8,7 @@ import Avatar from '@/components/account-info/avatar';
 import { CheckmarkSVG, CopySVG } from '@/components/svg';
 import { wrapperVariants } from '@/constants';
 
-import ItemWrapper from '../../menu-settings/item-wrapper';
+import ItemWrapper from '../../../menu-mobile/menu-settings/item-wrapper';
 import { MenuSwitchAccountProps } from '../profile.types';
 import MenuSwitchAccountHeader from './header';
 const MenuSwitchAccount: FC<MenuSwitchAccountProps> = ({

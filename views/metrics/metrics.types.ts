@@ -1,8 +1,7 @@
 export type TFilter = 'all' | 'month' | 'halfMonth' | 'daily' | 'total';
 import BigNumber from 'bignumber.js';
-import { CoinInfo } from 'interface/sentio';
 
-import { CoinData } from '@/interface';
+import { CoinData, CoinInfo } from '@/interface';
 
 export interface IPool {
   token0: CoinData;
@@ -20,4 +19,23 @@ export interface TopPoolsTableItem
 
 export interface TopCoinTableItem extends Record<'a' | 'b' | 'c', number> {
   coin: CoinInfo | undefined;
+}
+
+export interface DataPoint {
+  date: Date;
+  day: string;
+  amount: number;
+  description: string;
+}
+
+export interface DataPie {
+  label: string;
+  amount: number;
+}
+
+export interface DataPoint {
+  date: Date;
+  day: string;
+  amount: number;
+  description: string;
 }

@@ -1,7 +1,7 @@
 import { PoolCardProps } from '@/views/pools/pool-card/pool-card.types';
 
-import { Network } from '.';
-import { COIN_POOL, COINS } from './coins';
+import { COIN_POOL, COINS } from '../views/pools/coins';
+import { Network } from './dapp';
 
 const networkTestNetCoins = COINS[Network.TESTNET];
 const networkMainNetCoins = COINS[Network.MAINNET];

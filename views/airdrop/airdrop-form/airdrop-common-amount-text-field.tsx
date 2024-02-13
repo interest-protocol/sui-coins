@@ -1,9 +1,10 @@
 import { Box, TextField } from '@interest-protocol/ui-kit';
+import BigNumber from 'bignumber.js';
 import { ChangeEvent, FC } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 import { TokenIcon } from '@/components';
-import { Network } from '@/constants';
+import { Network } from '@/constants/dapp';
 import { useNetwork } from '@/context/network';
 import { parseInputEventToNumberString } from '@/utils';
 
@@ -11,25 +12,25 @@ import { IAirdropForm } from '../airdrop.types';
 
 const AirdropCustomAmountTextField: FC = () => {
   const { network } = useNetwork();
-  const { register, setValue, control, getValues } =
-    useFormContext<IAirdropForm>();
-
-  const { type, symbol, decimals } = useWatch({ control, name: 'token' });
+  const { register, setValue, getValues } = useFormContext<IAirdropForm>();
 
   return (
     <TextField
       placeholder="0"
+      nPlaceholder={{ opacity: 0.7 }}
       {...register('commonAmount', {
         onChange: (v: ChangeEvent<HTMLInputElement>) => {
           const value = parseInputEventToNumberString(v);
-          setValue('commonAmount', value || '0');
-          setValue(
-            'airdropList',
-            getValues('airdropList')?.map(({ address }) => ({
-              address,
-              amount: String((Number(value) ?? 0) * 10 ** decimals),
-            })) ?? null
-          );
+          setValue('commonAmount', value || '');
+
+          const airdropList = getValues('airdropList')?.map(({ address }) => ({
+            address,
+            amount: BigNumber(value || '0')
+              .times(BigNumber(10).pow(getValues('token.decimals')))
+              .toString(),
+          }));
+
+          setValue('airdropList', airdropList ?? null);
         },
       })}
       fieldProps={{
@@ -46,15 +47,18 @@ const AirdropCustomAmountTextField: FC = () => {
           height="1.5rem"
           minWidth="1.5rem"
           minHeight="1.5rem"
+          overflow="hidden"
           borderRadius="full"
           alignItems="center"
           justifyContent="center"
         >
           <TokenIcon
             network={network}
-            maxWidth="1.25rem"
-            maxHeight="1.25rem"
-            tokenId={network === Network.MAINNET ? type : symbol}
+            maxWidth="1.5rem"
+            maxHeight="1.5rem"
+            tokenId={getValues(
+              `token.${network === Network.MAINNET ? 'type' : 'symbol'}`
+            )}
           />
         </Box>
       }

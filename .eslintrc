@@ -3,7 +3,8 @@
     "import/resolver": {
       "alias": {
         "map": [
-          ["@/HOC", "./components/HOC"],
+          ["@/api", "./api"],
+          ["@/hoc", "./components/hoc"],
           ["@/components", "./components"],
           ["@/context", "./context"],
           ["@/constants", "./constants"],
@@ -14,8 +15,8 @@
           ["@/lib", "./lib"],
           ["@/utils", "./utils"],
           ["@/views", "./views"],
-          ["@/api", "./api"],
-          ["@/state", "./state"]
+          ["@/styles", "./styles"],
+          ["@/server", "./server"]
         ],
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }

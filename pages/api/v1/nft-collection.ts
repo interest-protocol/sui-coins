@@ -1,9 +1,9 @@
-import { fetchAllHolders } from 'api/indexer';
 import { NextApiRequest, NextApiResponse } from 'next';
-import dbConnect from 'server';
-import NFTCollectionModel from 'server/model/nft-collection';
 
+import { fetchAllHolders } from '@/api/indexer';
 import { NFTCollectionMetadata } from '@/interface';
+import dbConnect from '@/server';
+import NFTCollectionModel from '@/server/model/nft-collection';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -32,13 +32,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
       const body: NFTCollectionMetadata = JSON.parse(req.body);
 
-      const holders = await fetchAllHolders(body.id, body.total);
+      const holders = await fetchAllHolders(body.id, body.total, [body.total]);
 
       const doc = await NFTCollectionModel.create({
         holders,
         name: body.name,
         collectionId: body.id,
-        updatedAt: Date.now(),
       });
 
       doc.save();

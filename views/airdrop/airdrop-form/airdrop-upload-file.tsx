@@ -62,7 +62,17 @@ const AirdropUploadFile: FC = () => {
   return (
     <Box display="flex" flexDirection="column" gap="s">
       <Typography variant="body" size="large">
-        3. Upload file
+        3. Upload file{' '}
+        <Typography
+          as="strong"
+          size="small"
+          variant="body"
+          color="primary"
+          cursor="pointer"
+          textDecoration="underline"
+        >
+          (<a href="/airdrop.csv">example file</a>)
+        </Typography>
       </Typography>
       {airdropList ? (
         <AirdropUploadFileCard name="Airdrop List" size={airdropList.length} />

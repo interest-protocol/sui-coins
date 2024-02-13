@@ -20,6 +20,7 @@ const AirdropCustomAmountTextArea: FC = () => {
         const airdropValue = textToAirdrop(
           e.target.value,
           getValues('commonAmount'),
+          getValues('token.decimals'),
           toast.error
         );
 
