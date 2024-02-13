@@ -7,6 +7,7 @@ import ActiveWallets from './active-wallets';
 import DailyVolume from './daily-volume';
 import TopCoinsTable from './top-tables/top-coins-table';
 import TopPoolsTable from './top-tables/top-pools-table';
+import TotalLiquidity from './total-liquidity';
 import TVLPools from './tvl-pools';
 
 const Metrics: FC = () => (
@@ -25,6 +26,7 @@ const Metrics: FC = () => (
       gap={['xs', 'xs', 'xs']}
       gridTemplateColumns={['1fr', '1fr', '1fr', '1fr 1fr']}
     >
+      <TotalLiquidity />
       <DailyVolume />
       <ActiveWallets />
       <TVLPools />
