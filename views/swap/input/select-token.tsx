@@ -1,7 +1,5 @@
 import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
-import BigNumber from 'bignumber.js';
 import { useRouter } from 'next/router';
-import { pathOr } from 'ramda';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
@@ -9,9 +7,7 @@ import { Network } from '@/constants';
 import { TOKEN_ICONS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
-import { useWeb3 } from '@/hooks/use-web3';
 import { CoinData } from '@/interface';
-import { FixedPointMath } from '@/lib';
 import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
 import { updateURL } from '@/utils';
 import SelectTokenModal from '@/views/components/select-token-modal';
@@ -20,7 +16,6 @@ import { SwapForm } from '../swap.types';
 import { InputProps } from './input.types';
 
 const SelectToken: FC<InputProps> = ({ label }) => {
-  const { coinsMap } = useWeb3();
   const { network } = useNetwork();
   const { pathname } = useRouter();
   const { setModal, handleClose } = useModal();
@@ -34,7 +29,10 @@ const SelectToken: FC<InputProps> = ({ label }) => {
     name: label,
   });
 
-  const { symbol: currentSymbol, type: currentType } = currentToken;
+  const { symbol: currentSymbol, type: currentType } = currentToken ?? {
+    symbol: undefined,
+    type: undefined,
+  };
 
   const Icon = TOKEN_ICONS[network][isMainnet ? currentType : currentSymbol];
 
@@ -62,9 +60,6 @@ const SelectToken: FC<InputProps> = ({ label }) => {
         decimals: currentToken.decimals,
         usdPrice: currentToken.usdPrice,
         value: '',
-        balance: FixedPointMath.toNumber(
-          BigNumber(pathOr(0, [currentToken.type, 'balance'], coinsMap))
-        ),
         locked: false,
       });
     }
@@ -80,9 +75,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       usdPrice,
       decimals,
       value: '',
-      balance: FixedPointMath.toNumber(
-        BigNumber(pathOr(0, [type, 'balance'], coinsMap))
-      ),
+
       locked: false,
     });
     setValue(`${label === 'from' ? 'to' : 'from'}.value`, '');
