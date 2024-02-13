@@ -17,7 +17,14 @@ const ChartHeader: FC<ChartHeaderProps> = ({
 
   return (
     <>
-      <Box display="flex" justifyContent="space-between" px="xl" mb="xl">
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        gap="2xs"
+        flexWrap="wrap"
+        px="xl"
+        mb="xl"
+      >
         <Typography
           variant="title"
           size="large"
@@ -26,7 +33,7 @@ const ChartHeader: FC<ChartHeaderProps> = ({
           {title}
         </Typography>
         {filters && (
-          <Box display="flex" alignItems="center" gap="xs">
+          <Box display="flex" alignItems="center" gap="2xs">
             {filters.map(({ label, onClick }, index) => (
               <Tag
                 variant="filled"
