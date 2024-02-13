@@ -1,8 +1,8 @@
 import { Box } from '@interest-protocol/ui-kit';
+import { getMetric } from 'api/metrics';
 import { FC, useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 
-import { getMetric } from '@/api/metrics';
 import { formatDollars, formatMoney } from '@/utils';
 
 import { TOP_INFO_CARDS_DATA } from '../metrics.data';
