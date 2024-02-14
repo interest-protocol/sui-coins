@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { FC, PropsWithChildren } from 'react';
 
 import { NetworkProvider } from '@/context/network';
+import { SuiNsProvider } from '@/context/suins';
 import Web3Manager from '@/context/web3-manager';
 
 import ThemeManager from '../theme-manager';
@@ -16,7 +17,9 @@ const Web3Provider: FC<PropsWithChildren> = ({ children }) => (
     <NetworkProvider>
       <QueryClientProvider client={queryClient}>
         <WalletKitProvider>
-          <Web3Manager>{children}</Web3Manager>
+          <SuiNsProvider>
+            <Web3Manager>{children}</Web3Manager>
+          </SuiNsProvider>
         </WalletKitProvider>
       </QueryClientProvider>
     </NetworkProvider>

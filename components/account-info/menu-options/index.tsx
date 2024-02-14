@@ -32,7 +32,7 @@ const AccountSubMenu: FC<{ closeSubmenu: () => void }> = ({ closeSubmenu }) => {
           onClick={() => selectAccount(account)}
           selected={currentAccount?.address === account.address}
         >
-          <Avatar withNameOrAddress account={account} />
+          <Avatar withNameOrAddress account={account?.address} />
         </OptionItem>
       ))}
     </>

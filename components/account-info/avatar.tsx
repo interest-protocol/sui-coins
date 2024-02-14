@@ -1,15 +1,17 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import { useWalletKit } from '@mysten/wallet-kit';
 import { FC } from 'react';
+import Skeleton from 'react-loading-skeleton';
 
+import { useSuiNs } from '@/context/suins';
 import { UserSVG } from '@/svg';
 
+import { getName } from '../wallet/profile/profile.utils';
 import { AvatarProps } from './account-info.types';
 
-const Avatar: FC<AvatarProps> = ({ withNameOrAddress, account, isLarge }) => {
+const Avatar: FC<AvatarProps> = ({ isLarge, account, withNameOrAddress }) => {
+  const { names, loading } = useSuiNs();
   const { currentAccount } = useWalletKit();
-  const address = account?.address ?? (currentAccount?.address || '');
-
   const SIZE = isLarge ? '2.2rem' : '1.5rem';
 
   return (
@@ -33,7 +35,11 @@ const Avatar: FC<AvatarProps> = ({ withNameOrAddress, account, isLarge }) => {
           mr="0.5rem"
           width="max-content"
         >
-          {address.slice(0, 6)}…{address.slice(-4)}
+          {loading ? (
+            <Skeleton width="100%" />
+          ) : (
+            getName(account ?? currentAccount?.address ?? '', names)
+          )}
         </Typography>
       )}
     </>

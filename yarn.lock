@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@0no-co/graphql.web@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@0no-co/graphql.web/-/graphql.web-1.0.4.tgz#9606eb651955499525d068ce0ad8bea596286ce2"
+  integrity sha512-W3ezhHGfO0MS1PtGloaTpg0PbaT8aZSmmaerL7idtU5F7oCI+uu25k+MsMS31BVFlp4aMkHSrNRxiD72IlK8TA==
+
 "@aashutoshrathi/word-wrap@^1.2.3":
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/@aashutoshrathi/word-wrap/-/word-wrap-1.2.6.tgz#bd9154aec9983f77b3a034ecaa015c2e4201f6cf"
@@ -761,6 +766,11 @@
   dependencies:
     "@gitmoji/gitmoji-regex" "1.0.0"
 
+"@graphql-typed-document-node/core@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@graphql-typed-document-node/core/-/core-3.2.0.tgz#5f3d96ec6b2354ad6d8a28bf216a1d97b5426861"
+  integrity sha512-mB9oAsNCm9aM3/SOv4YtBMqZbYj10R7dkq8byBqxGY/ncFwhf2oQzMV+LCRlWoDSEBJ3COiR1yeDvMtsoOsuFQ==
+
 "@headlessui/react@^1.7.15":
   version "1.7.17"
   resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-1.7.17.tgz#a0ec23af21b527c030967245fd99776aa7352bc6"
@@ -1090,6 +1100,13 @@
   dependencies:
     sparse-bitfield "^3.0.3"
 
+"@mysten/bcs@0.11.1":
+  version "0.11.1"
+  resolved "https://registry.yarnpkg.com/@mysten/bcs/-/bcs-0.11.1.tgz#0cc0b0f5960f60cfe5cf6a8c229affa59cd09b1b"
+  integrity sha512-xP85isNSYUCHd3O/g+TmZYmg4wK6cU8q/n/MebkIGP4CYVJZz2wU/G24xIZ3wI+0iTop4dfgA5kYrg/DQKCUzA==
+  dependencies:
+    bs58 "^5.0.0"
+
 "@mysten/bcs@0.8.1":
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/@mysten/bcs/-/bcs-0.8.1.tgz#30d3256a728a4a934ae608d118347289fe0ba1e7"
@@ -1097,7 +1114,50 @@
   dependencies:
     bs58 "^5.0.0"
 
+<<<<<<< Updated upstream
 "@mysten/sui.js@0.45.1", "@mysten/sui.js@^0.45.1":
+=======
+"@mysten/bcs@0.9.0":
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/@mysten/bcs/-/bcs-0.9.0.tgz#d95c13d822647d0ce5a1ff24b5cb4732e5f95727"
+  integrity sha512-h56essa8oSS4/J0Dby8k8stMoOSt+QZIEIeZNtgTOWh9HeV69yFg2BUg/+Rk7jzfWzvUmw9lFyKNipXcD5QOTw==
+  dependencies:
+    bs58 "^5.0.0"
+
+"@mysten/sui.js@0.48.0":
+  version "0.48.0"
+  resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.48.0.tgz#a119a0b4019082f03168f2bd7bf30b967a97f4ca"
+  integrity sha512-kGeV5F3IYThiliVbIou3YOOGAr8TdNyub4hGY2gevnphFQF8SukwQk8cyzuEEsAVSDUt0rsA9xxpncSgX+RjMA==
+  dependencies:
+    "@mysten/bcs" "0.9.0"
+    "@noble/curves" "^1.1.0"
+    "@noble/hashes" "^1.3.1"
+    "@scure/bip32" "^1.3.1"
+    "@scure/bip39" "^1.2.1"
+    "@suchipi/femver" "^1.0.0"
+    superstruct "^1.0.3"
+    tweetnacl "^1.0.3"
+
+"@mysten/sui.js@0.50.1":
+  version "0.50.1"
+  resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.50.1.tgz#f201d7cad343321f93297d9b14319b2e155d6876"
+  integrity sha512-AY0wb4n6PMTRsDGygzrrTHUK/m5KwKZ4aQcN9cayiwsq2iIhfjGo7uuqMA7Y5UiqvLCoF+z7Ig14Q5qejQ/S/w==
+  dependencies:
+    "@graphql-typed-document-node/core" "^3.2.0"
+    "@mysten/bcs" "0.11.1"
+    "@noble/curves" "^1.1.0"
+    "@noble/hashes" "^1.3.1"
+    "@scure/bip32" "^1.3.1"
+    "@scure/bip39" "^1.2.1"
+    "@suchipi/femver" "^1.0.0"
+    bech32 "^2.0.0"
+    gql.tada "^1.2.0"
+    graphql "^16.8.1"
+    superstruct "^1.0.3"
+    tweetnacl "^1.0.3"
+
+"@mysten/sui.js@^0.45.1":
+>>>>>>> Stashed changes
   version "0.45.1"
   resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.45.1.tgz#df609856e067060f8fc71d6c8fd8858f8055b329"
   integrity sha512-B6RKfBAR1yr3EvHyQzXgkyOGOXE7jUbgblyitK/25CGp4Uba4VHEZ/N5DCbiuTJdt2k1H42sSXqIGfYqHN+6Cw==
@@ -1113,12 +1173,21 @@
     superstruct "^1.0.3"
     tweetnacl "^1.0.3"
 
+<<<<<<< Updated upstream
 "@mysten/suins-toolkit@^0.3.13":
   version "0.3.13"
   resolved "https://registry.yarnpkg.com/@mysten/suins-toolkit/-/suins-toolkit-0.3.13.tgz#ab470de656b0ccb8a73c7f3448e691bb5531c272"
   integrity sha512-6HK/SXgFoSY1OnaMR9SHi+Zcd2mnv9ZV60lgqKjuLM/gBD2MHx8ZYV0ogWpBaV2XUdhogxHe4gx10kNUWJ5b3g==
   dependencies:
     "@mysten/sui.js" "0.45.1"
+=======
+"@mysten/suins-toolkit@^0.4.3":
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/@mysten/suins-toolkit/-/suins-toolkit-0.4.3.tgz#ac03ad0b197d95a309e0380b1570db5f7ab96310"
+  integrity sha512-IaiZwWxt4QM0zJ1EHiMiSX3TWi1Fhb6AH24/J4mQ8v4Mum6RdI5ly6jrG2ssr6/FyaWe9++avJLgyZ9fYBWtzg==
+  dependencies:
+    "@mysten/sui.js" "0.50.1"
+>>>>>>> Stashed changes
 
 "@mysten/wallet-kit-core@0.6.10":
   version "0.6.10"
@@ -2358,10 +2427,17 @@ base-x@^4.0.0:
   resolved "https://registry.yarnpkg.com/base-x/-/base-x-4.0.0.tgz#d0e3b7753450c73f8ad2389b5c018a4af7b2224a"
   integrity sha512-FuwxlW4H5kh37X/oW59pwTzzTKRzfrrQwhmyspRM7swOEZcHtDZSCt45U6oKgtuFE+WYPblePMVIPR4RZrh/hw==
 
+<<<<<<< Updated upstream
 big-integer@^1.6.44:
   version "1.6.52"
   resolved "https://registry.yarnpkg.com/big-integer/-/big-integer-1.6.52.tgz#60a887f3047614a8e1bffe5d7173490a97dc8c85"
   integrity sha512-QxD8cf2eVqJOOz63z6JIN9BzvVs/dlySa5HGSBH5xtR8dPteIRQnBxxKqkNTiT6jbDTF6jAfrd4oMcND9RGbQg==
+=======
+bech32@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/bech32/-/bech32-2.0.0.tgz#078d3686535075c8c79709f054b1b226a133b355"
+  integrity sha512-LcknSilhIGatDAsY1ak2I8VtGaHNhgMSYVxFrGLXv+xLHytaKZKcaUJJUE7qmBr7h33o5YQwP55pMI0xmkpJwg==
+>>>>>>> Stashed changes
 
 bignumber.js@^9.1.2:
   version "9.1.2"
@@ -4021,6 +4097,13 @@ gopd@^1.0.1:
   dependencies:
     get-intrinsic "^1.1.3"
 
+gql.tada@^1.2.0:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/gql.tada/-/gql.tada-1.2.1.tgz#ca2ec06d403c3b68fdfd1d337309ad3ccb0204ff"
+  integrity sha512-Nx8x3g9WLT23eu9aL/4TTFDBwm7CBGVd4F2Jp2H5oOjDpuWv12i1mTLKReQwn2V1ZP+jG8V0ATXzFQZt1pxSgw==
+  dependencies:
+    "@0no-co/graphql.web" "^1.0.4"
+
 graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0, graceful-fs@^4.2.9:
   version "4.2.11"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.11.tgz#4183e4e8bf08bb6e05bbb2f7d2e0c8f712ca40e3"
@@ -4030,6 +4113,11 @@ graphemer@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/graphemer/-/graphemer-1.4.0.tgz#fb2f1d55e0e3a1849aeffc90c4fa0dd53a0e66c6"
   integrity sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==
+
+graphql@^16.8.1:
+  version "16.8.1"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.8.1.tgz#1930a965bef1170603702acdb68aedd3f3cf6f07"
+  integrity sha512-59LZHPdGZVh695Ud9lRzPBVTtlX9ZCV150Er2W43ro37wVof0ctenSaskPPjN7lVTIN8mSZt8PHUNKZuNQUuxw==
 
 hard-rejection@^2.1.0:
   version "2.1.0"
@@ -5197,7 +5285,7 @@ lodash.upperfirst@^4.3.1:
   resolved "https://registry.yarnpkg.com/lodash.upperfirst/-/lodash.upperfirst-4.3.1.tgz#1365edf431480481ef0d1c68957a5ed99d49f7ce"
   integrity sha512-sReKOYJIJf74dhJONhU4e0/shzi1trVbSWDOhKYE5XV2O+H7Sb2Dihwuc7xWxVl+DgFPyTqIN3zMfT9cq5iWDg==
 
-lodash@^4.17.15, lodash@^4.17.21:
+lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.21:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==

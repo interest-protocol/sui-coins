@@ -1,6 +1,5 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { useWalletKit } from '@mysten/wallet-kit';
-import { WalletAccount } from '@wallet-standard/base';
 import { FC } from 'react';
 import { toast } from 'react-hot-toast';
 
@@ -33,10 +32,7 @@ const UserInfo: FC = () => {
         <ItemWrapper>
           <Box display="flex" justifyContent="space-between" width="100%">
             <Box display="flex" alignItems="center" gap="l">
-              <Avatar
-                withNameOrAddress
-                account={currentAccount as WalletAccount}
-              />
+              <Avatar withNameOrAddress />
             </Box>
             <Button
               isIcon
