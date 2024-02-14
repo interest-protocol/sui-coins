@@ -5,6 +5,7 @@ import { pathOr } from 'ramda';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import TokenIcon from '@/components/token-icon';
 import { Network } from '@/constants';
 import { TOKEN_ICONS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
@@ -129,11 +130,11 @@ const SelectToken: FC<InputProps> = ({ label }) => {
               justifyContent="center"
               alignItems="center"
             >
-              <Icon
-                width="100%"
-                height="100%"
-                maxWidth="1.5rem"
-                maxHeight="1.5rem"
+              <TokenIcon
+                network={network}
+                tokenId={
+                  network === Network.MAINNET ? currentType : currentSymbol
+                }
               />
             </Box>
           ),
