@@ -5,11 +5,13 @@ import { v4 } from 'uuid';
 import { getMetric } from '@/api/metrics';
 import { formatDollars, formatMoney } from '@/utils';
 
-import { TOP_INFO_CARDS_DATA } from '../metrics.data';
-import InfoCards from './stats-card';
+import { INFO_CARDS_DATA } from '../metrics.data';
+import Overview from './overview';
 
-const StatsCardsList: FC = () => {
+const InfoCards: FC = () => {
   const [data, setData] = useState<[]>();
+
+  console.log('get overview data', data);
 
   useEffect(() => {
     getMetric('get-overview').then(setData);
@@ -22,8 +24,8 @@ const StatsCardsList: FC = () => {
       flexDirection={['column', 'row', 'row', 'row']}
       gridTemplateColumns="repeat(3, 1fr)"
     >
-      {TOP_INFO_CARDS_DATA.map(({ Icon, description, money }, index) => (
-        <InfoCards
+      {INFO_CARDS_DATA.map(({ Icon, description, money }, index) => (
+        <Overview
           key={v4()}
           Icon={Icon}
           description={description}
@@ -37,4 +39,4 @@ const StatsCardsList: FC = () => {
   );
 };
 
-export default StatsCardsList;
+export default InfoCards;

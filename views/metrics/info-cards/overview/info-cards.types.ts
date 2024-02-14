@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { SVGProps } from '@/components/svg/svg.types';
 
-export interface StatsCardProps {
+export interface InfoCardProps {
   amount: string;
   Icon: FC<SVGProps>;
   description: string;

@@ -1,6 +1,6 @@
 import { ChartSVG, PoolSVG, USDSVG } from '@/svg';
 
-export const TOP_INFO_CARDS_DATA = [
+export const INFO_CARDS_DATA = [
   {
     money: true,
     Icon: USDSVG,
