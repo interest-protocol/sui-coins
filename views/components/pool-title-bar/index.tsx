@@ -12,18 +12,17 @@ const PoolTitleBar: FC<PoolTitleBarProps> = ({
   iconTokenList,
 }) => (
   <Box
-    mx="auto"
     py="m"
-    gap="1rem"
     px="xl"
+    mb="xs"
+    mx="auto"
+    gap="1rem"
     display="flex"
     maxWidth="65rem"
+    borderRadius="xs"
     alignItems="center"
     bg="lowestContainer"
-    borderRadius="xs"
     mt={['5xl', '5xl', '5xl', 'xl']}
-    width={['100%', '100%', '100%', '85%']}
-    mb="xs"
   >
     <Button isIcon variant="text" mr="0.5rem" onClick={onBack}>
       <ArrowLeftSVG width="1.5rem" maxWidth="1.5rem" maxHeight="1.5rem" />
