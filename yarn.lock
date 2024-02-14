@@ -801,10 +801,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-2.0.2.tgz#d9fae00a2d5cb40f92cfe64b47ad749fbc38f917"
   integrity sha512-6EwiSjwWYP7pTckG6I5eyFANjPhmPjUX9JRLUSfNPC7FX7zK9gyZAfUEaECL6ALTpGX5AjnBq3C9XmVWPitNpw==
 
-"@interest-protocol/ui-kit@^0.2.21-alpha":
-  version "0.2.21-alpha"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/ui-kit/-/ui-kit-0.2.21-alpha.tgz#23fed3d1c470fe428cfe8b978755271bcfaea276"
-  integrity sha512-i8NA6Q6L0S4MjaSJReQUjweskXMad+6N+akmKIqkptssXcpd55LX4uaBZvpgL8Y+JZ4olgr1MnXQo4SDD8Qctw==
+"@interest-protocol/ui-kit@^0.2.22-alpha":
+  version "0.2.22-alpha"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/ui-kit/-/ui-kit-0.2.22-alpha.tgz#5590bb3cb9b249295de48fd786cdd60e6b1a25fd"
+  integrity sha512-VmYvuDJsc7ntKzxDPCZIHEfXnIHAGQLV/FDCwjn9KDZmkexqugzZCMKZf/qOdTe1t9AptoPRVCX/J3BWX1okFg==
   dependencies:
     "@emotion/react" "^11.10.6"
     "@stylin.js/react" "^1.0.1"
