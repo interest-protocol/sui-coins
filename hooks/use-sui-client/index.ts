@@ -10,7 +10,7 @@ export const mainnetClient = new SuiClient({
   url: process.env.NEXT_PUBLIC_SUI_MAINNET_RPC_URL || getFullnodeUrl('mainnet'),
 });
 
-const map = {
+export const suiClientRecord = {
   [Network.MAINNET]: mainnetClient,
   [Network.TESTNET]: testnetClient,
 } as Record<Network, SuiClient>;
@@ -18,5 +18,5 @@ const map = {
 export const useSuiClient = (): SuiClient => {
   const { network } = useNetwork();
 
-  return map[network];
+  return suiClientRecord[network];
 };

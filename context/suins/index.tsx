@@ -1,5 +1,6 @@
 import { SuinsClient } from '@mysten/suins-toolkit';
 import { useWalletKit } from '@mysten/wallet-kit';
+import { fromPairs, pathOr, prop } from 'ramda';
 import {
   createContext,
   FC,
@@ -11,19 +12,28 @@ import {
 
 import { Network } from '@/constants';
 import { useNetwork } from '@/context/network';
-import { mainnetClient, testnetClient } from '@/hooks/use-sui-client';
+import {
+  mainnetClient,
+  suiClientRecord,
+  testnetClient,
+} from '@/hooks/use-sui-client';
 import { noop } from '@/utils';
 
 import { ISuiNsContext } from './suins.types';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 const testnetSuiNs = new SuinsClient(testnetClient, {
   networkType: 'testnet',
+  contractObjects: {
+    packageId:
+      '0xfdba31b34a43e058f17c5cf4b12d9b9e0a08c0623d8569092c022e0c77df46d3',
+    registry:
+      '0xac06695279c2a92436068cebe5ea778135ac503337642e27493431603ae6a71d',
+    reverseRegistry:
+      '0x34a36dd204f8351a157d19b87bada9d448ec40229d56f22bff04fa23713a5c31',
+    suins: '0x4acaf19db12fafce1943bbd44c7f794e1d81d00aeb63617096e5caa39499ba88',
+  },
 });
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 export const suiNSMainNetProvider = new SuinsClient(mainnetClient, {
   contractObjects: {
     packageId:
@@ -36,9 +46,9 @@ export const suiNSMainNetProvider = new SuinsClient(mainnetClient, {
   },
 });
 
-const suiNsClientMap = {
-  [Network.MAINNET]: testnetSuiNs,
-  [Network.TESTNET]: suiNSMainNetProvider,
+const suiNsClientRecord = {
+  [Network.MAINNET]: suiNSMainNetProvider,
+  [Network.TESTNET]: testnetSuiNs,
 } as Record<Network, SuinsClient>;
 
 const suiNsContext = createContext<ISuiNsContext>({} as ISuiNsContext);
@@ -49,24 +59,69 @@ export const SuiNsProvider: FC<PropsWithChildren> = ({ children }) => {
   const { accounts } = useWalletKit();
   const [loading, setLoading] = useState<boolean>(false);
   const [names, setNames] = useState<Record<string, string>>({});
+  const [nsImages, setNsImages] = useState<Record<string, string>>({});
 
-  const provider = suiNsClientMap[network];
+  const provider = suiNsClientRecord[network];
 
   useEffect(() => {
     if (accounts.length) {
       setLoading(true);
 
-      const promises = accounts.map((walletAccount) =>
-        provider.getName(walletAccount.address)
+      const promises = accounts.map((account) =>
+        provider.getName(account.address).catch(() => null)
       );
 
       Promise.all(promises)
-        .then(async (names) => {
+        .then(async (namesServer) => {
+          const filteredNS = namesServer?.filter((nameServer) => !!nameServer);
+
+          if (!filteredNS || !filteredNS.length) return {};
+
           setNames(
-            names.reduce(
+            filteredNS.reduce(
               (acc, name, index) =>
                 name ? { ...acc, [accounts[index].address]: name } : acc,
               {} as Record<string, string>
+            )
+          );
+
+          const images: ReadonlyArray<[string | null, string | null]> =
+            await Promise.all(
+              filteredNS.map(async (nameServer) => {
+                if (!nameServer) return [null, null];
+
+                return provider
+                  .getNameObject(nameServer, {
+                    showAvatar: true,
+                  })
+                  .then(async (object) => {
+                    console.log({ object });
+
+                    const nftId = prop('nftId', object as any);
+
+                    if (!nftId) return [nameServer, null];
+
+                    const nft = await suiClientRecord[network].getObject({
+                      id: nftId,
+                      options: { showDisplay: true },
+                    });
+
+                    const imageUrl = pathOr(
+                      null,
+                      ['data', 'display', 'data', 'image_url'],
+                      nft
+                    ) as string | null;
+
+                    return [nameServer, imageUrl];
+                  });
+              })
+            );
+
+          setNsImages(
+            fromPairs(
+              images.filter(
+                (image) => !!image.length && !!image[0] && !!image[1]
+              ) as ReadonlyArray<[string, string]>
             )
           );
         })
@@ -79,6 +134,7 @@ export const SuiNsProvider: FC<PropsWithChildren> = ({ children }) => {
     names,
     loading,
     provider,
+    images: nsImages,
   };
 
   return <Provider value={value}>{children}</Provider>;
