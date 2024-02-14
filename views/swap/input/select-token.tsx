@@ -4,9 +4,7 @@ import { useRouter } from 'next/router';
 import { pathOr } from 'ramda';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { v4 } from 'uuid';
 
-import { TokenIcon } from '@/components';
 import { Network } from '@/constants';
 import { TOKEN_ICONS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
@@ -120,10 +118,24 @@ const SelectToken: FC<InputProps> = ({ label }) => {
         onClick={openModal}
         {...(Icon && {
           PrefixIcon: (
-            <TokenIcon
-              tokenId={v4()}
-              network={'/Users/mariobatalha/www/sui-coins/constants/dapp'}
-            />
+            <Box
+              as="span"
+              width="2.5rem"
+              height="2.5rem"
+              bg="onSurface"
+              color="onPrimary"
+              borderRadius="xs"
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Icon
+                width="100%"
+                height="100%"
+                maxWidth="1.5rem"
+                maxHeight="1.5rem"
+              />
+            </Box>
           ),
         })}
       >
