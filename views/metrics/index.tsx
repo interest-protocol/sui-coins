@@ -4,8 +4,8 @@ import { FC } from 'react';
 import Layout from '@/components/layout';
 
 import ActiveWallets from './active-wallets';
+import StatsCardsList from './cards';
 import DailyVolume from './daily-volume';
-import InfoCardsList from './info-card';
 import TopCoinsTable from './top-tables/top-coins-table';
 import TopPoolsTable from './top-tables/top-pools-table';
 import TotalLiquidity from './total-liquidity';
@@ -30,7 +30,7 @@ const Metrics: FC = () => (
       gap={['xs', 'xs', 'xs']}
       gridTemplateColumns={['1fr', '1fr', '1fr', '1fr 1fr']}
     >
-      <InfoCardsList />
+      <StatsCardsList />
       <TotalLiquidity />
       <DailyVolume />
       <ActiveWallets />

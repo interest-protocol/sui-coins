@@ -6,9 +6,9 @@ import { getMetric } from '@/api/metrics';
 import { formatDollars, formatMoney } from '@/utils';
 
 import { TOP_INFO_CARDS_DATA } from '../metrics.data';
-import InfoCards from './info-card';
+import InfoCards from './stats-card';
 
-const InfoCardsList: FC = () => {
+const StatsCardsList: FC = () => {
   const [data, setData] = useState<[]>();
 
   useEffect(() => {
@@ -37,4 +37,4 @@ const InfoCardsList: FC = () => {
   );
 };
 
-export default InfoCardsList;
+export default StatsCardsList;

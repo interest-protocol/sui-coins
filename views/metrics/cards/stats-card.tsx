@@ -2,9 +2,9 @@ import { InfoCard, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
-import { InfoCardProps } from './info-card.types';
+import { StatsCardProps } from './stats-card.types';
 
-const InfoCards: FC<InfoCardProps> = ({
+const InfoCards: FC<StatsCardProps> = ({
   Icon,
   description,
   amount,
