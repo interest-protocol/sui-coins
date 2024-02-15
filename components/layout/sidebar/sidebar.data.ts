@@ -20,7 +20,7 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     Icon: PoolSVG,
     name: 'pool',
     path: Routes[RoutesEnum.Pools],
-    disabled: true,
+    disabled: false,
     networks: [Network.MAINNET, Network.TESTNET],
   },
   {
