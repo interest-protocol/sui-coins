@@ -1,5 +1,9 @@
 import { Box, Button, Motion } from '@interest-protocol/ui-kit';
-import { useWalletKit } from '@mysten/wallet-kit';
+import {
+  useAccounts,
+  useCurrentAccount,
+  useSwitchAccount,
+} from '@mysten/dapp-kit';
 import { FC } from 'react';
 import { toast } from 'react-hot-toast';
 
@@ -16,7 +20,9 @@ const MenuSwitchAccount: FC<MenuSwitchAccountProps> = ({
   onBack,
   handleCloseProfile,
 }) => {
-  const { accounts, selectAccount, currentAccount } = useWalletKit();
+  const accounts = useAccounts();
+  const currentAccount = useCurrentAccount();
+  const { mutate: selectAccount } = useSwitchAccount();
 
   const account = currentAccount?.address || '';
 
@@ -54,7 +60,7 @@ const MenuSwitchAccount: FC<MenuSwitchAccountProps> = ({
           disabled={walletAccount.address === account}
           onClick={() => {
             if (!(walletAccount.address === account)) {
-              selectAccount(walletAccount);
+              selectAccount({ account: walletAccount });
               onBack();
             }
           }}

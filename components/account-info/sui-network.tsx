@@ -5,6 +5,7 @@ import {
   Typography,
   useTheme,
 } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { not, toPairs } from 'ramda';
 import { FC, useState } from 'react';
 import { v4 } from 'uuid';
@@ -21,7 +22,8 @@ const BOX_ID = 'network-box-id';
 const SuiNetwork: FC = () => {
   const { colors } = useTheme() as Theme;
   const [isOpen, setIsOpen] = useState(false);
-  const { network, changeNetwork } = useNetwork();
+  const network = useNetwork();
+  const { selectNetwork } = useSuiClientContext();
 
   const closeNetworkDropdown = (event: any) => {
     if (
@@ -103,7 +105,7 @@ const SuiNetwork: FC = () => {
             <OptionItem
               key={v4()}
               selected={networkKey === network}
-              onClick={() => changeNetwork(networkKey)}
+              onClick={() => selectNetwork(networkKey)}
             >
               <SuiLogoSVG maxWidth="2rem" maxHeight="2rem" />
               <Typography variant="body" size="large">

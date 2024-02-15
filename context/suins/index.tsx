@@ -1,5 +1,6 @@
+import { useAccounts } from '@mysten/dapp-kit';
+import { getFullnodeUrl, SuiClient } from '@mysten/sui.js/client';
 import { SuinsClient } from '@mysten/suins-toolkit';
-import { useWalletKit } from '@mysten/wallet-kit';
 import { fromPairs, pathOr, prop } from 'ramda';
 import {
   createContext,
@@ -12,14 +13,21 @@ import {
 
 import { Network } from '@/constants';
 import { useNetwork } from '@/context/network';
-import {
-  mainnetClient,
-  suiClientRecord,
-  testnetClient,
-} from '@/hooks/use-sui-client';
 import { noop } from '@/utils';
 
 import { ISuiNsContext } from './suins.types';
+
+export const testnetClient = new SuiClient({
+  url: process.env.NEXT_PUBLIC_SUI_TESTNET_RPC_URL || getFullnodeUrl('testnet'),
+});
+export const mainnetClient = new SuiClient({
+  url: process.env.NEXT_PUBLIC_SUI_MAINNET_RPC_URL || getFullnodeUrl('mainnet'),
+});
+
+export const suiClientRecord = {
+  [Network.MAINNET]: mainnetClient,
+  [Network.TESTNET]: testnetClient,
+} as Record<Network, SuiClient>;
 
 const testnetSuiNs = new SuinsClient(testnetClient, {
   networkType: 'testnet',
@@ -55,8 +63,8 @@ const suiNsContext = createContext<ISuiNsContext>({} as ISuiNsContext);
 
 export const SuiNsProvider: FC<PropsWithChildren> = ({ children }) => {
   const { Provider } = suiNsContext;
-  const { network } = useNetwork();
-  const { accounts } = useWalletKit();
+  const network = useNetwork();
+  const accounts = useAccounts();
   const [loading, setLoading] = useState<boolean>(false);
   const [names, setNames] = useState<Record<string, string>>({});
   const [nsImages, setNsImages] = useState<Record<string, string>>({});

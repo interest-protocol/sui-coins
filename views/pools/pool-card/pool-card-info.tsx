@@ -11,7 +11,7 @@ import { getSymbol } from '@/views/airdrop/airdrop.utils';
 import { PoolCardTokenInfoProps } from './pool-card.types';
 
 const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({ coins, apr }) => {
-  const { network } = useNetwork();
+  const network = useNetwork();
 
   const isMainnet = Network.MAINNET === network;
 

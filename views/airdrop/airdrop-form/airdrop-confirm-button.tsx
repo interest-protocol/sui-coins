@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
+import { useSuiClient } from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { normalizeSuiAddress, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
-import { useWalletKit } from '@mysten/wallet-kit';
 import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 import { AIRDROP_SEND_CONTRACT, TREASURY } from '@/constants';
 import { AIRDROP_SUI_FEE_PER_ADDRESS } from '@/constants/fees';
 import { useNetwork } from '@/context/network';
-import { useSuiClient } from '@/hooks/use-sui-client';
+import useSignTxb from '@/hooks/use-sign-txb';
 import { useWeb3 } from '@/hooks/use-web3';
 import { showTXSuccessToast, sleep, throwTXIfNotSuccessful } from '@/utils';
 import { splitArray } from '@/utils';
@@ -24,9 +24,10 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
   const { coinsMap } = useWeb3();
   const { getValues, setValue } = useFormContext<IAirdropForm>();
 
-  const { network } = useNetwork();
+  const network = useNetwork();
   const suiClient = useSuiClient();
-  const { signTransactionBlock } = useWalletKit();
+
+  const signTransactionBlock = useSignTxb();
 
   const handleSend = async () => {
     setIsProgressView(true);
@@ -75,9 +76,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
             ],
           });
           const { signature, transactionBlockBytes } =
-            await signTransactionBlock({
-              transactionBlock: txb,
-            });
+            await signTransactionBlock({ transactionBlock: txb });
 
           const tx = await suiClient.executeTransactionBlock({
             transactionBlock: transactionBlockBytes,

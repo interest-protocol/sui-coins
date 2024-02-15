@@ -1,5 +1,5 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
-import { useWalletKit } from '@mysten/wallet-kit';
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import { FC, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
@@ -11,7 +11,7 @@ import { AvatarProps } from './account-info.types';
 
 const Avatar: FC<AvatarProps> = ({ isLarge, account, withNameOrAddress }) => {
   const { names, images, loading } = useSuiNs();
-  const { currentAccount } = useWalletKit();
+  const currentAccount = useCurrentAccount();
   const SIZE = isLarge ? '2.2rem' : '1.5rem';
   const [imgLoading, setImgLoading] = useState(true);
 

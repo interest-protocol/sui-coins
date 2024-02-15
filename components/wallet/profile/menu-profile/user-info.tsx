@@ -1,5 +1,5 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
-import { useWalletKit } from '@mysten/wallet-kit';
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import { FC } from 'react';
 import { toast } from 'react-hot-toast';
 
@@ -9,7 +9,7 @@ import { CopySVG } from '@/components/svg';
 import ItemWrapper from '../../../menu-mobile/menu-settings/item-wrapper';
 
 const UserInfo: FC = () => {
-  const { currentAccount } = useWalletKit();
+  const currentAccount = useCurrentAccount();
 
   const account = currentAccount?.address || '';
 
