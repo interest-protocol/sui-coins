@@ -1,6 +1,7 @@
 import { CoinMetadata } from '@mysten/sui.js/client';
 import BigNumber from 'bignumber.js';
 
+import { CHAIN } from '@/constants';
 import { TOKEN_SYMBOL } from '@/lib';
 
 export type BigNumberish = BigNumber | bigint | string | number;
@@ -12,7 +13,7 @@ export interface CoinData {
 }
 
 export interface CoinDataWithChainInfo extends CoinData {
-  chain?: 'ETH' | 'BSC' | 'SOL' | 'AVA';
+  chain?: CHAIN;
 }
 
 export type LocalTokenMetadataRecord = Record<string, CoinData>;

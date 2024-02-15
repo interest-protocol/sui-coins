@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
 
-import { LOCAL_STORAGE_VERSION } from '@/constants';
+import { CHAIN, LOCAL_STORAGE_VERSION } from '@/constants';
 import {
   CELER_TOKENS,
   CELER_TOKENS_TYPE,
@@ -40,7 +40,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   const filterSelected = useWatch({ control, name: 'filter' });
   const search = useWatch({ control, name: 'search' });
 
-  const handleSelectToken = async (type: string) => {
+  const handleSelectToken = async (type: string, chain?: CHAIN) => {
     if (coinsMap[type]) return onSelectToken(coinsMap[type]);
 
     const token = STRICT_TOKENS[network].find((token) => token.type === type);
@@ -53,7 +53,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
       response.status === 200 ? response.json() : response
     );
 
-    return onSelectToken(metadataToCoin(metadata));
+    return onSelectToken({ ...metadataToCoin(metadata), chain });
   };
 
   const isSearchAddress =

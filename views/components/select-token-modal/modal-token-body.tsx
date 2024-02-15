@@ -13,7 +13,7 @@ const ModalTokenBody: FC<ModalTokenBodyProps> = ({
       <TokenModalItem
         key={v4()}
         selected={false}
-        onClick={() => handleSelectToken(token.type)}
+        onClick={() => handleSelectToken(token.type, token.chain)}
         {...token}
       />
     ))}

@@ -11,7 +11,7 @@ import { TOKEN_ICONS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
-import { CoinData } from '@/interface';
+import { CoinDataWithChainInfo } from '@/interface';
 import { FixedPointMath } from '@/lib';
 import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
 import { updateURL } from '@/utils';
@@ -55,13 +55,19 @@ const SelectToken: FC<InputProps> = ({ label }) => {
     name: `${label === 'to' ? 'from' : 'to'}.type`,
   });
 
-  const onSelect = async ({ type, decimals, symbol }: CoinData) => {
+  const onSelect = async ({
+    type,
+    decimals,
+    symbol,
+    chain,
+  }: CoinDataWithChainInfo) => {
     if (type === oppositeType) {
       setValue(label === 'to' ? 'from' : 'to', {
         type: currentToken.type,
         symbol: currentToken.symbol,
         decimals: currentToken.decimals,
         usdPrice: currentToken.usdPrice,
+        chain: currentToken.chain,
         value: '',
         balance: FixedPointMath.toNumber(
           BigNumber(pathOr(0, [currentToken.type, 'balance'], coinsMap))
@@ -80,6 +86,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       symbol,
       usdPrice,
       decimals,
+      chain,
       value: '',
       balance: FixedPointMath.toNumber(
         BigNumber(pathOr(0, [type, 'balance'], coinsMap))
@@ -109,10 +116,14 @@ const SelectToken: FC<InputProps> = ({ label }) => {
     );
 
   return (
-    <Box position="relative">
+    <Box
+      position="relative"
+      minWidth={['8rem', '8rem', '8rem', '8rem', '10rem']}
+    >
       <Button
         p="2xs"
         fontSize="s"
+        width="100%"
         variant="tonal"
         borderRadius="xs"
         bg="highestContainer"
@@ -132,6 +143,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
             >
               <TokenIcon
                 network={network}
+                chain={currentToken.chain}
                 tokenId={
                   network === Network.MAINNET ? currentType : currentSymbol
                 }

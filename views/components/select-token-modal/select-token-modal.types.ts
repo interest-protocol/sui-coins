@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { Control, UseFormSetValue } from 'react-hook-form';
 
-import { Network } from '@/constants';
+import { CHAIN, Network } from '@/constants';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { CoinDataWithChainInfo } from '@/interface';
 
@@ -58,7 +58,7 @@ export interface SelectTokenBaseTokenItemProps
 
 export interface ModalTokenBodyProps {
   tokens: ReadonlyArray<CoinDataWithChainInfo>;
-  handleSelectToken: (type: string) => void;
+  handleSelectToken: (type: string, chain?: CHAIN) => void;
 }
 
 export interface ModalTokenSearchProps {
