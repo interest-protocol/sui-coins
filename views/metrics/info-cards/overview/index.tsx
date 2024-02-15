@@ -20,7 +20,7 @@ const Overview: FC<InfoCardProps> = ({
         <Skeleton width="40%" />
       ) : (
         <Typography size="large" variant="title">
-          {amount}
+          {description === 'Pools' ? parseInt(amount).toFixed() : amount}
         </Typography>
       )}
     </InfoCard>

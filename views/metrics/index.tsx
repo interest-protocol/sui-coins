@@ -24,18 +24,22 @@ const Metrics: FC = () => (
     </Typography>
     <Box
       variant="container"
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignContent="center"
-      gap={['xs', 'xs', 'xs']}
-      gridTemplateColumns={['1fr', '1fr', '1fr', '1fr 1fr']}
+      gap={['xs', 'xs', 'xs', 'xs']}
+      gridTemplateColumns={['1fr', '1fr', '1fr', '1fr']}
     >
       <InfoCards />
       <TotalLiquidity />
       <DailyVolume />
-      <ActiveWallets />
-      <TVLPools />
+      <Box
+        width="100%"
+        display="flex"
+        flexDirection={['column', 'column', 'row', 'row']}
+        justifyContent="center"
+        gap={['xs', 'xs', 'xs']}
+      >
+        <ActiveWallets />
+        <TVLPools />
+      </Box>
       <TopPoolsTable />
       <TopCoinsTable />
     </Box>

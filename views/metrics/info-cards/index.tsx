@@ -11,8 +11,6 @@ import Overview from './overview';
 const InfoCards: FC = () => {
   const [data, setData] = useState<[]>();
 
-  console.log('get overview data', data);
-
   useEffect(() => {
     getMetric('get-overview').then(setData);
   }, []);
@@ -21,7 +19,7 @@ const InfoCards: FC = () => {
       width="100%"
       gap="s"
       display={['flex', 'flex', 'flex', 'grid']}
-      flexDirection={['column', 'row', 'row', 'row']}
+      flexDirection={['column', 'column', 'row', 'row']}
       gridTemplateColumns="repeat(3, 1fr)"
     >
       {INFO_CARDS_DATA.map(({ Icon, description, money }, index) => (
