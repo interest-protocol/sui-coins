@@ -5,6 +5,7 @@ import { FormProvider, useFormContext } from 'react-hook-form';
 
 import Layout from '@/components/layout';
 import { useModal } from '@/hooks/use-modal';
+import { useWeb3 } from '@/hooks/use-web3';
 import { SwapSVG } from '@/svg';
 import { updateURL } from '@/utils';
 
@@ -15,13 +16,14 @@ import SwapManager from './swap-manager';
 import SwapPreviewModal from './swap-preview-modal';
 
 const Swap: FC = () => {
+  const { coinsMap } = useWeb3();
   const { pathname } = useRouter();
   const form = useFormContext<SwapForm>();
   const { setModal, handleClose } = useModal();
 
   const { getValues, setValue } = form;
 
-  const coinsExist = getValues('from.balance') && getValues('to.balance');
+  const coinsExist = coinsMap[getValues('from.type')];
 
   const flipToken = () => {
     const tmpTo = getValues('to');

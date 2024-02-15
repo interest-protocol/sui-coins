@@ -9,7 +9,6 @@ export interface ISwapSettings {
 export interface SwapToken extends CoinDataWithChainInfo {
   value: string;
   locked: boolean;
-  balance: number | null;
   usdPrice: number | null;
 }
 
@@ -26,6 +25,7 @@ export interface SwapForm {
   from: SwapToken;
   settings: ISwapSettings;
   lock: boolean;
+  loading: boolean;
   maxValue: boolean;
   disabled: boolean;
   swapPath: SwapPath;

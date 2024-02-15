@@ -10,7 +10,7 @@ import { ActionGroupProps } from './header.types';
 const ActionGroup: FC<ActionGroupProps> = ({ showSearchView }) => {
   const { push } = useRouter();
 
-  const gotoFindPool = () => push(Routes[RoutesEnum.CreatePool]);
+  const gotoFindPool = () => push(Routes[RoutesEnum.FindPool]);
 
   return (
     <>
@@ -46,7 +46,7 @@ const ActionGroup: FC<ActionGroupProps> = ({ showSearchView }) => {
             </Box>
           }
         >
-          Create Pool
+          Find Pool
         </Button>
       </Box>
       <Box display={['flex', 'flex', 'flex', 'none']} gap="0.25rem">

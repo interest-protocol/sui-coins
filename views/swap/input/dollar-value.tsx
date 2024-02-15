@@ -28,12 +28,8 @@ const AmountInDollar: FC<InputProps> = ({ label }) => {
       variant="body"
       color={value ? 'onSurface' : 'outline'}
     >
-      {usdPrice
-        ? formatDollars(
-            BigNumber(value || 0)
-              .times(BigNumber(usdPrice))
-              .toNumber()
-          )
+      {usdPrice && value
+        ? formatDollars(BigNumber(value).times(BigNumber(usdPrice)).toNumber())
         : '--'}{' '}
       USD
     </Typography>

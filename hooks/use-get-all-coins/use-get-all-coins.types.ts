@@ -1,9 +1,9 @@
 import { CoinMetadata, CoinStruct, SuiClient } from '@mysten/sui.js/client';
 
-import { CHAIN } from '@/constants';
+import { Chain } from '@/interface';
 
 export interface CoinObject extends Pick<CoinMetadata, 'symbol' | 'decimals'> {
-  chain?: CHAIN;
+  chain?: Chain;
   digest?: string;
   version?: string;
   type: string;
