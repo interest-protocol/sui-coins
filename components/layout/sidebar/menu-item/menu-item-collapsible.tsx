@@ -19,7 +19,7 @@ const variants = {
 const MenuItemCollapsible: FC<MenuItemCollapsibleProps> = ({
   accordionList,
 }) => {
-  const { network } = useNetwork();
+  const network = useNetwork();
 
   if (!accordionList || !accordionList.length) return null;
 

@@ -11,7 +11,7 @@ import Swap from '@/views/swap';
 import { SwapForm } from '@/views/swap/swap.types';
 
 const SwapPage: NextPage = () => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const { query } = useRouter();
 
   const form = useForm<SwapForm>({

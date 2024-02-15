@@ -1,9 +1,9 @@
 import { Button, Typography } from '@interest-protocol/ui-kit';
+import { useSuiClient } from '@mysten/dapp-kit';
 import {
   TransactionBlock,
   TransactionResult,
 } from '@mysten/sui.js/transactions';
-import { useWalletKit } from '@mysten/wallet-kit';
 import BigNumber from 'bignumber.js';
 import { useState } from 'react';
 import { useFormContext, UseFormReturn, useWatch } from 'react-hook-form';
@@ -12,7 +12,7 @@ import { EXPLORER_URL, OBJECT_RECORD } from '@/constants';
 import { REGISTRY_POOLS } from '@/constants/dex';
 import { useNetwork } from '@/context/network';
 import { useDialog } from '@/hooks/use-dialog';
-import { useSuiClient } from '@/hooks/use-sui-client';
+import useSignTxb from '@/hooks/use-sign-txb';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import {
@@ -26,12 +26,13 @@ import { getAmountMinusSlippage } from './swap.utils';
 
 const SwapButton = () => {
   const client = useSuiClient();
-  const { network } = useNetwork();
+  const network = useNetwork();
   const { dialog, handleClose } = useDialog();
   const formSwap: UseFormReturn<SwapForm> = useFormContext();
   const [loading, setLoading] = useState(false);
-  const { signTransactionBlock } = useWalletKit();
   const { account, coinsMap, mutate } = useWeb3();
+
+  const signTransactionBlock = useSignTxb();
 
   const resetInput = () => {
     formSwap.setValue('from.value', '0');

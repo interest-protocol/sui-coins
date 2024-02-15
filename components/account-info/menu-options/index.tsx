@@ -1,5 +1,11 @@
 import { Box, Motion, Typography } from '@interest-protocol/ui-kit';
-import { useWalletKit } from '@mysten/wallet-kit';
+import {
+  useAccounts,
+  useCurrentAccount,
+  useCurrentWallet,
+  useSuiClientContext,
+  useSwitchAccount,
+} from '@mysten/dapp-kit';
 import { useRouter } from 'next/router';
 import { toPairs } from 'ramda';
 import { FC, ReactNode, useState } from 'react';
@@ -16,7 +22,9 @@ import { MenuOptionsProps } from './menu-option.types';
 import OptionItem from './option-item';
 
 const AccountSubMenu: FC<{ closeSubmenu: () => void }> = ({ closeSubmenu }) => {
-  const { accounts, currentAccount, selectAccount } = useWalletKit();
+  const accounts = useAccounts();
+  const currentAccount = useCurrentAccount();
+  const { mutate: selectAccount } = useSwitchAccount();
 
   return (
     <>
@@ -29,10 +37,10 @@ const AccountSubMenu: FC<{ closeSubmenu: () => void }> = ({ closeSubmenu }) => {
       {accounts.map((account) => (
         <OptionItem
           key={v4()}
-          onClick={() => selectAccount(account)}
+          onClick={() => selectAccount({ account })}
           selected={currentAccount?.address === account.address}
         >
-          <Avatar withNameOrAddress account={account} />
+          <Avatar withNameOrAddress account={account?.address} />
         </OptionItem>
       ))}
     </>
@@ -40,7 +48,8 @@ const AccountSubMenu: FC<{ closeSubmenu: () => void }> = ({ closeSubmenu }) => {
 };
 
 const NetworkSubMenu: FC<{ closeSubmenu: () => void }> = ({ closeSubmenu }) => {
-  const { network, changeNetwork } = useNetwork();
+  const network = useNetwork();
+  const { selectNetwork } = useSuiClientContext();
 
   return (
     <>
@@ -54,7 +63,7 @@ const NetworkSubMenu: FC<{ closeSubmenu: () => void }> = ({ closeSubmenu }) => {
         <OptionItem
           key={v4()}
           selected={network === networkKey}
-          onClick={() => changeNetwork(networkKey)}
+          onClick={() => selectNetwork(networkKey)}
         >
           <SuiLogoSVG maxWidth="2rem" maxHeight="2rem" />
           <Box>Sui {networkDisplay}</Box>
@@ -68,9 +77,9 @@ const MenuOptions: FC<MenuOptionsProps> = ({
   isMenuOpen,
   handleDisconnect,
 }) => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const { asPath, push } = useRouter();
-  const { isConnected } = useWalletKit();
+  const { isConnected } = useCurrentWallet();
   const [submenu, setSubmenu] = useState<ReactNode>(null);
 
   const closeSubmenu = () => setSubmenu(null);

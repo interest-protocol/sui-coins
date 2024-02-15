@@ -21,7 +21,7 @@ export const useGetCoinsPrices = (
   coinTypes: ReadonlyArray<string>,
   config: SWRConfiguration = {}
 ) => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const {
     data: rawData,
     error,
