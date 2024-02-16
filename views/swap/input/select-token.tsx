@@ -3,11 +3,12 @@ import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import TokenIcon from '@/components/token-icon';
 import { Network } from '@/constants';
 import { TOKEN_ICONS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
-import { CoinData } from '@/interface';
+import { CoinDataWithChainInfo } from '@/interface';
 import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
 import { updateURL } from '@/utils';
 import SelectTokenModal from '@/views/components/select-token-modal';
@@ -52,13 +53,19 @@ const SelectToken: FC<InputProps> = ({ label }) => {
     name: `${label === 'to' ? 'from' : 'to'}.type`,
   });
 
-  const onSelect = async ({ type, decimals, symbol }: CoinData) => {
+  const onSelect = async ({
+    type,
+    decimals,
+    symbol,
+    chain,
+  }: CoinDataWithChainInfo) => {
     if (type === oppositeType) {
       setValue(label === 'to' ? 'from' : 'to', {
         type: currentToken.type,
         symbol: currentToken.symbol,
         decimals: currentToken.decimals,
         usdPrice: currentToken.usdPrice,
+        chain: currentToken.chain,
         value: '',
         locked: false,
       });
@@ -74,6 +81,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       symbol,
       usdPrice,
       decimals,
+      chain,
       value: '',
 
       locked: false,
@@ -101,28 +109,43 @@ const SelectToken: FC<InputProps> = ({ label }) => {
     );
 
   return (
-    <Box position="relative">
+    <Box
+      position="relative"
+      minWidth={['8rem', '8rem', '8rem', '8rem', '10rem']}
+    >
       <Button
-        bg="highestContainer"
-        p="s"
-        borderRadius="xs"
-        variant="tonal"
+        p="2xs"
         fontSize="s"
+        width="100%"
+        variant="tonal"
+        borderRadius="xs"
+        bg="highestContainer"
         onClick={openModal}
         {...(Icon && {
           PrefixIcon: (
-            <Box as="span" display="inline-block">
-              <Icon
-                width="100%"
-                height="100%"
-                maxWidth="1rem"
-                maxHeight="1rem"
+            <Box
+              as="span"
+              width="2.5rem"
+              height="2.5rem"
+              bg="onSurface"
+              color="onPrimary"
+              borderRadius="xs"
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <TokenIcon
+                network={network}
+                chain={currentToken.chain}
+                tokenId={
+                  network === Network.MAINNET ? currentType : currentSymbol
+                }
               />
             </Box>
           ),
         })}
       >
-        <Typography size="large" variant="label">
+        <Typography size="large" variant="label" p="xs">
           {currentSymbol ?? 'Select Token'}
         </Typography>
         {currentSymbol ? (

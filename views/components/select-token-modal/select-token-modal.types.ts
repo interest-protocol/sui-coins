@@ -3,6 +3,7 @@ import { Control, UseFormSetValue } from 'react-hook-form';
 
 import { Network } from '@/constants';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { Chain } from '@/interface';
 import { CoinDataWithChainInfo } from '@/interface';
 
 export interface TokenModalMetadata {
@@ -58,7 +59,7 @@ export interface SelectTokenBaseTokenItemProps
 
 export interface ModalTokenBodyProps {
   tokens: ReadonlyArray<CoinDataWithChainInfo>;
-  handleSelectToken: (type: string) => void;
+  handleSelectToken: (type: string, chain?: Chain) => void;
 }
 
 export interface ModalTokenSearchProps {

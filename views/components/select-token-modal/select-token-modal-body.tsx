@@ -15,6 +15,7 @@ import {
 import { useNetwork } from '@/context/network';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { useWeb3 } from '@/hooks/use-web3';
+import { Chain } from '@/interface';
 import { coinDataToCoinObject } from '@/utils';
 
 import FetchingToken from './fetching-token';
@@ -40,7 +41,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   const filterSelected = useWatch({ control, name: 'filter' });
   const search = useWatch({ control, name: 'search' });
 
-  const handleSelectToken = async (type: string) => {
+  const handleSelectToken = async (type: string, chain?: Chain) => {
     if (coinsMap[type]) return onSelectToken(coinsMap[type]);
 
     const token = STRICT_TOKENS[network].find((token) => token.type === type);
@@ -53,7 +54,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
       response.status === 200 ? response.json() : response
     );
 
-    return onSelectToken(metadataToCoin(metadata));
+    return onSelectToken({ ...metadataToCoin(metadata), chain });
   };
 
   const isSearchAddress =

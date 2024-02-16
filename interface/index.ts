@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js';
 
 import { TOKEN_SYMBOL } from '@/lib';
 
+export type Chain = 'ETH' | 'BSC' | 'SOL' | 'AVA';
 export type BigNumberish = BigNumber | bigint | string | number;
 
 export interface CoinData {
@@ -12,7 +13,7 @@ export interface CoinData {
 }
 
 export interface CoinDataWithChainInfo extends CoinData {
-  chain?: 'ETH' | 'BSC' | 'SOL' | 'AVA';
+  chain?: Chain;
 }
 
 export type LocalTokenMetadataRecord = Record<string, CoinData>;
