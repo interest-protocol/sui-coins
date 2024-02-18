@@ -15,7 +15,7 @@ import TableRow from '../table-row';
 import TopTableSkeleton from '../top-table-skeleton';
 
 const TopPoolsTableBody: FC = () => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const [data, setData] = useState<ReadonlyArray<TopCoinTableItem>>([]);
 
   useEffect(() => {
