@@ -10,7 +10,7 @@ import { IPoolForm } from '@/views/create-pool/create-pool.types';
 import { COINS } from '@/views/pools/coins';
 
 const CreatePoolPage: NextPage = () => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const form = useForm<IPoolForm>({
     mode: 'onBlur',
     reValidateMode: 'onBlur',

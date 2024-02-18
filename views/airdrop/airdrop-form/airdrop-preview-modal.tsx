@@ -21,7 +21,7 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
   onClose,
   setIsProgressView,
 }) => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const { control } = useFormContext<IAirdropForm>();
 
   const { symbol, decimals, type } = useWatch({ control, name: 'token' });

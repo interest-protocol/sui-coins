@@ -10,7 +10,7 @@ import SwapManagerField from './swap-manager-field';
 import { SwapMessages } from './swap-messages';
 
 const SwapManager: FC = () => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const { account } = useWeb3();
   const formSwap: UseFormReturn<SwapForm> = useFormContext();
 

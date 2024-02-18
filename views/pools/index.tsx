@@ -11,7 +11,7 @@ import PoolCard from './pool-card';
 import { PoolTabEnum } from './pools.types';
 
 const Pools: FC = () => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const [tab, setTab] = useState<PoolTabEnum>(PoolTabEnum.Pools);
 
   return (

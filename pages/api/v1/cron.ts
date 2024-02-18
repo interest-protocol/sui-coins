@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { fetchAllHolders, fetchNftMetadata } from '@/api/indexer';
+import { fetchAllHolders, fetchAllNftMetadata } from '@/api/indexer';
 import dbConnect from '@/server';
 import NFTCollectionModel from '@/server/model/nft-collection';
 import NFTCollectionMetadataModel from '@/server/model/nft-collection-metadata';
@@ -9,7 +9,7 @@ export default async function handler(_: NextApiRequest, res: NextApiResponse) {
   try {
     await dbConnect();
 
-    const nftsMetadata = await fetchNftMetadata();
+    const nftsMetadata = await fetchAllNftMetadata();
 
     const nftsSizes = nftsMetadata.map(({ total }) => total);
 

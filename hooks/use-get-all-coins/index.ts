@@ -1,9 +1,8 @@
-import { useWalletKit } from '@mysten/wallet-kit';
+import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 import BigNumber from 'bignumber.js';
 import useSWR from 'swr';
 
 import { useNetwork } from '@/context/network';
-import { useSuiClient } from '@/hooks/use-sui-client';
 import { CoinMetadataWithType } from '@/interface';
 import { makeSWRKey, normalizeSuiType } from '@/utils';
 
@@ -24,8 +23,8 @@ const getAllCoins: TGetAllCoins = async (provider, account, cursor = null) => {
 
 export const useGetAllCoins = () => {
   const suiClient = useSuiClient();
-  const { network } = useNetwork();
-  const { currentAccount } = useWalletKit();
+  const network = useNetwork();
+  const currentAccount = useCurrentAccount();
 
   return useSWR(
     makeSWRKey([network, currentAccount?.address], suiClient.getAllCoins.name),

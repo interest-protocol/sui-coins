@@ -11,7 +11,7 @@ import { parseInputEventToNumberString } from '@/utils';
 import { IAirdropForm } from '../airdrop.types';
 
 const AirdropCustomAmountTextField: FC = () => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const { register, setValue, getValues } = useFormContext<IAirdropForm>();
 
   return (

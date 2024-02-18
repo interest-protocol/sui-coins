@@ -1,5 +1,5 @@
 import { Box } from '@interest-protocol/ui-kit';
-import { useWalletKit } from '@mysten/wallet-kit';
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import { useRouter } from 'next/router';
 import { FC, useEffect, useState } from 'react';
 
@@ -18,7 +18,7 @@ const Profile: FC = () => {
   const [menuIsDropdown, setMenuIsDropdown] = useState(
     isOpenProfile || isOpenAccount
   );
-  const { currentAccount } = useWalletKit();
+  const currentAccount = useCurrentAccount();
 
   const account = currentAccount?.address || '';
 
