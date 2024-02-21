@@ -50,14 +50,17 @@ const Swap: FC = () => {
           <Box my="0.25rem" position="relative">
             <Box
               left="45%"
-              top="-1.25rem"
-              borderRadius="full"
+              top="-1.75rem"
               position="absolute"
-              bg="lowestContainer"
+              bg="onPrimary"
+              border="7px solid"
+              borderColor="surface"
+              borderRadius="s"
             >
               <Button
                 isIcon
-                variant="outline"
+                variant="tonal"
+                bg="onPrimary"
                 color="primary"
                 onClick={flipToken}
               >
