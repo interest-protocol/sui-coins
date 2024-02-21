@@ -62,7 +62,7 @@ const MovementNetwork: FC = () => {
         bg={isOpen ? `${colors.primary}14` : 'container'}
       >
         <Box
-          color="white"
+          color="onSurface"
           display="flex"
           width="1.5rem"
           height="1.5rem"
@@ -98,7 +98,7 @@ const MovementNetwork: FC = () => {
           zIndex={4}
           width="14.5rem"
           initial="closed"
-          borderRadius="1rem"
+          borderRadius="m"
           position="absolute"
           bg="container"
           variants={wrapperVariants}
