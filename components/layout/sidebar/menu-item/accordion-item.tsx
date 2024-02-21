@@ -23,7 +23,7 @@ const AccordionItem: FC<AccordionItemProps> = ({ name, path, disabled }) => {
       onClick={goToPath}
       opacity={disabled ? 0.3 : 1}
       transition="all 350ms ease-in-out"
-      nHover={disabled && { color: 'primary' }}
+      nHover={!disabled && { color: 'primary' }}
       cursor={disabled ? 'not-allowed' : 'pointer'}
       color={asPath === path ? 'primary' : 'onSurface'}
     >
