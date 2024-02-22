@@ -15,11 +15,12 @@ const SlippageInfo: FC<SlippageInfoProps> = ({ isOpen, handleManageView }) => {
 
   return (
     <Box
-      px="1rem"
-      py="0.25rem"
+      px="2xl"
+      py="l"
       display="flex"
       alignItems="center"
       justifyContent="space-between"
+      borderRadius="xs"
     >
       <Typography variant="label" size="large" fontSize="0.875rem">
         Slippage:
