@@ -14,7 +14,7 @@ const Pools: FC = () => {
       <Box
         p={['s', 's', 's', 'l']}
         borderRadius="xs"
-        bg="lowestContainer"
+        bg="container"
         mx={['0', '0', '0', '0', '9xl']}
       >
         <Header setTab={setTab} currentTab={tab} />
