@@ -17,3 +17,7 @@ export interface FormattedNumber {
   value: number;
   toString: (unitSeparator?: string) => string;
 }
+
+export interface PoolPageProps {
+  objectId: string;
+}
