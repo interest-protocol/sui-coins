@@ -32,7 +32,7 @@ const PoolDetails: FC<PoolDetailsProps> = ({ objectId }) => {
         onBack={() => push(Routes[RoutesEnum.Pools])}
         name={tokens.reduce(
           (acc, token) =>
-            acc === '' ? token.symbol : acc + '•' + token.symbol,
+            acc === '' ? token.symbol : `${acc} • ${token.symbol}`,
 
           ''
         )}

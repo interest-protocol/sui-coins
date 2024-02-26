@@ -14,6 +14,7 @@ export const RECOMMENDED_POOLS: Record<
       poolObjectId: COINS[0].type,
       lpCoin: COINS[0],
       stable: false,
+      apr: '3333.45',
     },
     {
       dex: 'interest',
@@ -21,6 +22,7 @@ export const RECOMMENDED_POOLS: Record<
       poolObjectId: COINS[1].type,
       lpCoin: COINS[1],
       stable: false,
+      apr: '3333.45',
     },
     {
       dex: 'interest',
@@ -28,6 +30,7 @@ export const RECOMMENDED_POOLS: Record<
       poolObjectId: COINS[2].type,
       lpCoin: COINS[2],
       stable: false,
+      apr: '3333.45',
     },
   ],
 };

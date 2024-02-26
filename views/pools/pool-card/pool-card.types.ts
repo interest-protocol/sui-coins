@@ -27,4 +27,5 @@ export interface PoolCardProps {
   tokens: ReadonlyArray<CoinData>;
   lpCoin: CoinData;
   poolObjectId: string;
+  apr: string;
 }
