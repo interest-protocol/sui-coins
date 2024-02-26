@@ -54,7 +54,7 @@ const PoolTitleBar: FC<PoolTitleBarProps> = ({
     >
       {iconTokenList.map((Icon) => (
         <Box
-          bg="#fff"
+          bg="onSurface"
           key={v4()}
           display="flex"
           width={['2rem', '2rem', '2rem', '2.5rem']}
