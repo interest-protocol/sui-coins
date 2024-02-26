@@ -8,7 +8,7 @@ import PoolCardHeader from './pool-card-header';
 import PoolCardInfo from './pool-card-info';
 import PoolCardTrade from './pool-card-trade';
 
-const PoolCard: FC<PoolCardProps> = ({ token0, token1, dex, poolObjectId }) => {
+const PoolCard: FC<PoolCardProps> = ({ tokens, dex, poolObjectId }) => {
   const Icon = DEX_MAP[dex].Icon;
 
   return (
@@ -37,7 +37,7 @@ const PoolCard: FC<PoolCardProps> = ({ token0, token1, dex, poolObjectId }) => {
         dexUrl={DEX_MAP[dex].url}
         Logo={<Icon width="100%" maxWidth="1.4rem" maxHeight="1.4rem" />}
       />
-      <PoolCardInfo apr="333.45" coins={[token0, token1]} />
+      <PoolCardInfo apr="333.45" coins={tokens} />
       <Box px="m" py="xs" bg="surface" borderRadius="1rem">
         {LINES.map((line, index) => (
           <PoolCardTrade {...line} index={index} key={v4()} />

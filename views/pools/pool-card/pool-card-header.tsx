@@ -35,10 +35,7 @@ const PoolCardHeader: FC<PoolCardHeaderProps> = ({
         </Typography>
       </Tag>
     </a>
-    {
-      // TODO: Change this route to poolDetalis when this page will be created
-    }
-    <Link href={`${Routes[RoutesEnum.Pools]}?objectId=${objectId}`}>
+    <Link href={`${Routes[RoutesEnum.PoolDetails]}?objectId=${objectId}`}>
       <Button
         isIcon
         opacity="0"
