@@ -11,7 +11,6 @@ import Input from './input';
 import ManageSlippage from './manage-slippage';
 import SwapButton from './swap-button';
 import SwapManager from './swap-manager';
-//import SwapPath from './swap-manager/swap-path';
 
 const Swap: FC = () => {
   const { pathname } = useRouter();
@@ -47,7 +46,7 @@ const Swap: FC = () => {
         >
           <Box py="xl" px="m" my="xs" borderRadius="xs" bg="lowestContainer">
             <Input label="from" />
-            <Box my="0.25rem" position="relative">
+            <Box my="2xs" position="relative">
               <Box
                 left="45%"
                 position="absolute"
