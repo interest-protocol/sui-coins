@@ -8,8 +8,11 @@ import PoolCardHeader from './pool-card-header';
 import PoolCardInfo from './pool-card-info';
 import PoolCardTrade from './pool-card-trade';
 
-const PoolCard: FC<PoolCardProps> = ({ tokens, dex, apr, poolObjectId }) => {
+const PoolCard: FC<PoolCardProps> = ({ tokens, dex, poolObjectId }) => {
   const Icon = DEX_MAP[dex].Icon;
+
+  // TODO: should be updated with real value
+  const apr = '345.44';
 
   return (
     <Box
