@@ -29,7 +29,7 @@ const ManageSlippageForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
   };
 
   return (
-    <Box py="2xl" px="2xl" display="flex" flexDirection="column" gap="1.5rem">
+    <Box px="xl" py="2xl" display="flex" flexDirection="column" gap="m">
       <Box>
         <Typography variant="body" size="small" mb="0.5rem" color="onSurface">
           Slippage Tolerance
@@ -85,7 +85,7 @@ const ManageSlippageForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
         </Box>
       </Box>
       <Box>
-        <Typography variant="body" size="small" mb="0.5rem" color="onSurface">
+        <Typography variant="body" size="small" mb="xs" color="onSurface">
           Transaction deadline
         </Typography>
         <Box>
@@ -105,7 +105,7 @@ const ManageSlippageForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
             })}
             fieldProps={{
               borderRadius: 'xs',
-              width: ['100%', '100%', '100%', '9rem'],
+              width: ['100%', '100%', '100%', '10.3rem'],
             }}
             Suffix={
               <Box display="flex" color="onSurface">
