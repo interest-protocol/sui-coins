@@ -4,6 +4,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 import { parseInputEventToNumberString } from '@/utils';
 
+import SwapFormFieldSlider from '../swap-manager/swap-manager-slider';
 import HeaderInfo from './header-info';
 import { InputProps } from './input.types';
 import InputErrorMessage from './input-error-message';
@@ -24,12 +25,7 @@ const Input: FC<InputProps> = ({ label }) => {
 
   return (
     <>
-      <Box
-        py="l"
-        border="1px solid"
-        borderColor="outlineVariant"
-        borderRadius="xs"
-      >
+      <Box py="l">
         <HeaderInfo label={label} balance={balance} />
         <Box pl="l" pt="1rem" display="flex" justifyContent="space-between">
           <Token label={label} />
@@ -58,6 +54,13 @@ const Input: FC<InputProps> = ({ label }) => {
             />
             <InputErrorMessage label={label} />
           </Box>
+        </Box>
+        <Box pb={label === 'to' ? '2xl' : 's'}>
+          {label === 'from' && (
+            <Box px="s">
+              <SwapFormFieldSlider />
+            </Box>
+          )}
         </Box>
       </Box>
     </>
