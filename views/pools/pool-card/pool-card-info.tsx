@@ -58,7 +58,10 @@ const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({ coins, apr }) => {
             lineHeight="1.7rem"
             color="onSurface"
           >
-            {coins.map(({ symbol }, index) => `${index ? ' • ' : ''}${symbol}`)}
+            {coins.reduce(
+              (acc, { symbol }) => `${acc ? `${acc} • ` : ''}${symbol}`,
+              ''
+            )}
           </Typography>
           <Typography
             textAlign="center"

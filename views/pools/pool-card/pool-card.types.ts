@@ -24,8 +24,7 @@ export interface PoolCardTradeProps {
 export interface PoolCardProps {
   dex: string;
   stable: boolean;
-  token0: CoinData;
-  token1: CoinData;
+  tokens: ReadonlyArray<CoinData>;
   lpCoin: CoinData;
   poolObjectId: string;
 }
