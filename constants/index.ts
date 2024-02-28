@@ -6,16 +6,19 @@ export const MAX_NUMBER_INPUT_VALUE = 9000000000000000;
 
 export const DISPLAY_NETWORK = {
   [Network.DEVNET]: 'Devnet',
+  [Network.TESTNET]: 'Testnet',
 };
 
 export const LOCAL_STORAGE_VERSION = 'v3';
 
 export const RPC_URL = {
-  [Network.DEVNET]: 'https://devnet.m2.movementlabs.xyz:443',
+  [Network.DEVNET]: 'https://sui.devnet.m2.movementlabs.xyz:443',
+  [Network.TESTNET]: 'https://sui.testnet.m2.movementlabs.xyz:443',
 };
 
 export const FAUCET_URL = {
-  [Network.DEVNET]: 'https://devnet.m2.movementlabs.xyz/faucet',
+  [Network.DEVNET]: 'https://sui.devnet.m2.movementlabs.xyz/faucet',
+  [Network.TESTNET]: 'https://sui.testnet.m2.movementlabs.xyz/faucet',
 };
 
 export const CONTROLLERS_MAP: Record<string, string> = {
