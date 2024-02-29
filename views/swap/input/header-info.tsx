@@ -5,11 +5,11 @@ import { HeaderInfoProps } from './input.types';
 
 const HeaderInfo: FC<HeaderInfoProps> = ({ label, balance }) => (
   <Box px="l" display="flex" justifyContent="space-between">
-    <Typography variant="label" size="small">
+    <Typography variant="label" size="small" color="onSurface">
       {label}
     </Typography>
-    <Typography variant="label" size="small">
-      Balance:
+    <Typography variant="label" size="small" color="onSurface">
+      Balance:{' '}
       <Typography variant="label" size="small" color="primary" as="span">
         {balance}
       </Typography>
