@@ -34,8 +34,8 @@ const ActionGroup: FC<ActionGroupProps> = ({ showSearchView }) => {
         />
         <Button
           py="s"
-          color="black"
           bg="onSurface"
+          color="surface"
           variant="filled"
           onClick={handleCreatePool}
           nHover={{
@@ -58,9 +58,9 @@ const ActionGroup: FC<ActionGroupProps> = ({ showSearchView }) => {
       <Box display={['flex', 'flex', 'flex', 'none']} gap="xs">
         <Button
           isIcon
-          color="black"
           width="1.5rem"
           bg="onSurface"
+          color="surface"
           height="1.5rem"
           variant="filled"
           nHover={{
