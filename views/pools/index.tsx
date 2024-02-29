@@ -16,9 +16,9 @@ const Pools: FC = () => {
   const [tab, setTab] = useState<PoolTabEnum>(PoolTabEnum.Pools);
 
   return (
-    <Layout title="">
+    <Layout>
       <Box mx={['0', '0', '0', '0', '9xl']}>
-        <Box py="1.5rem">
+        <Box py="xl">
           <Header setTab={setTab} currentTab={tab} />
         </Box>
         <Box
