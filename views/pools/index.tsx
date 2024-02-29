@@ -16,19 +16,17 @@ const Pools: FC = () => {
   const [tab, setTab] = useState<PoolTabEnum>(PoolTabEnum.Pools);
 
   return (
-    <Layout title="Pools">
-      <Box
-        p={['s', 's', 's', 'l']}
-        borderRadius="xs"
-        bg="container"
-        mx={['0', '0', '0', '0', '9xl']}
-      >
-        <Header setTab={setTab} currentTab={tab} />
+    <Layout title="">
+      <Box mx={['0', '0', '0', '0', '9xl']}>
+        <Box py="1.5rem">
+          <Header setTab={setTab} currentTab={tab} />
+        </Box>
         <Box
           gap="m"
-          my="xl"
-          px="xs"
+          bg="container"
           display="grid"
+          borderRadius="xs"
+          p={['s', 's', 's', 'l']}
           gridTemplateColumns={['1fr', '1fr', '1fr 1fr', '1fr 1fr 1fr']}
         >
           {RECOMMENDED_POOLS[network].map((pool) => (

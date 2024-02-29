@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { FC } from 'react';
 
 import { Routes, RoutesEnum } from '@/constants';
-import { FindSVG, SearchSVG } from '@/svg';
+import { PlusSVG, SearchSVG } from '@/svg';
 
 import { ActionGroupProps } from './header.types';
 
@@ -11,65 +11,65 @@ const ActionGroup: FC<ActionGroupProps> = ({ showSearchView }) => {
   const { push } = useRouter();
 
   // TODO: Change this route to findPool when this page will be created
-  const gotoFindPool = () => push(Routes[RoutesEnum.Pools]);
+  const handleCreatePool = () => push(Routes[RoutesEnum.Pools]);
 
   return (
     <>
       <Box
-        gap="s"
+        gap="2xs"
         alignItems="center"
         display={['none', 'none', 'none', 'flex']}
       >
         <TextField
           Prefix={
             <Box height="1.25rem" width="1.25rem">
-              <SearchSVG maxHeight="1.25rem" maxWidth="1.25rem" width="100%" />
+              <SearchSVG maxHeight="100%" maxWidth="100%" width="100%" />
             </Box>
           }
           placeholder="Search"
           fieldProps={{
             width: '13rem',
+            borderRadius: 'xs',
           }}
         />
         <Button
           py="s"
+          color="black"
+          bg="onSurface"
           variant="filled"
-          onClick={gotoFindPool}
+          onClick={handleCreatePool}
+          nHover={{
+            backgroundColor: 'onPrimaryContainer',
+          }}
           SuffixIcon={
             <Box
               display="flex"
-              width="1.25rem"
-              height="1.25rem"
+              width="0.875rem"
+              height="0.875rem"
               justifyContent="center"
             >
-              <FindSVG maxHeight="100%" maxWidth="100%" width="100%" />
+              <PlusSVG maxHeight="100%" maxWidth="100%" width="100%" />
             </Box>
           }
         >
-          Find Pool
+          Create pool
         </Button>
       </Box>
       <Box display={['flex', 'flex', 'flex', 'none']} gap="xs">
         <Button
           isIcon
+          color="black"
           width="1.5rem"
-          variant="filled"
+          bg="onSurface"
           height="1.5rem"
+          variant="filled"
+          nHover={{
+            backgroundColor: 'outline',
+          }}
           onClick={showSearchView}
         >
           <Box height="1.25rem" width="1.25rem">
             <SearchSVG maxHeight="1.25rem" maxWidth="1.25rem" width="100%" />
-          </Box>
-        </Button>
-        <Button
-          isIcon
-          width="1.5rem"
-          height="1.5rem"
-          variant="filled"
-          onClick={gotoFindPool}
-        >
-          <Box height="1.25rem" width="1.25rem">
-            <FindSVG maxHeight="100%" maxWidth="100%" width="100%" />
           </Box>
         </Button>
       </Box>
