@@ -8,7 +8,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { COINS_MAP } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks';
-import { useModal } from '@/hooks/use-Modal';
+import { useModal } from '@/hooks/use-modal';
 import { FixedPointMath, TOKEN_ICONS } from '@/lib';
 import { ChevronDownSVG } from '@/svg';
 import { updateURL } from '@/utils';
