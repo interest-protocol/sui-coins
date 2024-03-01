@@ -42,7 +42,7 @@ const Dropdown: FC<DropdownProps> = ({ label, values, disabled, onSelect }) => {
         variant="filled"
         onClick={() => setOpen(!isOpen)}
         nHover={{
-          backgroundColor: 'onPrimaryContainer',
+          backgroundColor: 'container',
         }}
         SuffixIcon={
           <Box display="flex" justifyContent="center">
