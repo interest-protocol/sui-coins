@@ -1,7 +1,9 @@
 export { default as ActivitySVG } from './activity';
 export { default as AirdropSVG } from './airdrop';
+export { default as ArrowDownSVG } from './arrow-down';
 export { default as ArrowLeftSVG } from './arrow-left';
 export { default as ArrowTopRightSVG } from './arrow-top-right';
+export { default as ArrowUpSVG } from './arrow-up';
 export { default as AssetsSVG } from './assets';
 export { default as CaretRightSVG } from './caret-right';
 export { default as CaretUpSVG } from './caret-up';
@@ -24,6 +26,7 @@ export { default as DoubleChevronSVG } from './double-chevron';
 export { default as ErrorSVG } from './error';
 export { default as ETHSVG } from './eth';
 export { default as FileSVG } from './file';
+export { default as FilterSVG } from './filter';
 export { default as FolderSVG } from './folder';
 export { default as GithubSVG } from './github';
 export { default as HamburgerSVG } from './hamburger';

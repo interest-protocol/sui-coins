@@ -1,5 +1,11 @@
 import { Routes, RoutesEnum } from '@/constants';
-import { AirdropSVG, CirclePlusSVG, DotsSVG, DoubleChevronSVG } from '@/svg';
+import {
+  AirdropSVG,
+  CirclePlusSVG,
+  DotsSVG,
+  DoubleChevronSVG,
+  PoolSVG,
+} from '@/svg';
 
 import { MenuItemProps } from './sidebar.types';
 
@@ -19,6 +25,12 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     Icon: CirclePlusSVG,
     name: 'create token',
     path: Routes[RoutesEnum.CreateToken],
+    disabled: false,
+  },
+  {
+    Icon: PoolSVG,
+    name: 'Pool',
+    path: Routes[RoutesEnum.Pools],
     disabled: false,
   },
   {
