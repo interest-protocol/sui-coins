@@ -27,6 +27,7 @@ const Dropdown: FC<DropdownProps> = ({ label, values, disabled, onSelect }) => {
     setSelectedOption(option);
     onSelect(option);
     setIsSelected(!isSelected);
+    setOpen(!isOpen);
   };
 
   const dropdownRef = useClickOutsideListenerRef<HTMLDivElement>(closeDropdown);
