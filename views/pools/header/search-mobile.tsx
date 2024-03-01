@@ -22,16 +22,24 @@ const SearchMobile: FC<SearchMobileProps> = ({
             <SearchSVG maxHeight="1.25rem" maxWidth="1.25rem" width="100%" />
           </Box>
         }
+        fieldProps={{
+          borderRadius: 'xs',
+        }}
         placeholder="Search"
       />
       <Button
         isIcon
         my="auto"
+        color="black"
         display="flex"
         width="1.5rem"
-        variant="filled"
+        bg="onSurface"
         height="1.5rem"
+        variant="filled"
         onClick={handleClose}
+        nHover={{
+          backgroundColor: 'outline',
+        }}
       >
         <Box
           width="1rem"
