@@ -32,13 +32,13 @@ const Dropdown: FC<DropdownProps> = ({ label, values, disabled, onSelect }) => {
   const dropdownRef = useClickOutsideListenerRef<HTMLDivElement>(closeDropdown);
 
   return (
-    <Box id={boxId} position="relative">
+    <Box id={boxId} position="relative" my="2xs">
       <Button
         py="s"
-        mx="xs"
+        mx="s"
         bg="surface"
         color="onSurface"
-        minWidth="8rem"
+        minWidth={['5rem', '5rem', '5rem', '8rem']}
         variant="filled"
         onClick={() => setOpen(!isOpen)}
         nHover={{
@@ -54,7 +54,7 @@ const Dropdown: FC<DropdownProps> = ({ label, values, disabled, onSelect }) => {
           </Box>
         }
       >
-        {isSelected ? selectedOption : label}
+        {label}
       </Button>
       {!disabled && isOpen && (
         <Motion
@@ -68,9 +68,9 @@ const Dropdown: FC<DropdownProps> = ({ label, values, disabled, onSelect }) => {
               color="onSurface"
               zIndex="1"
               mx="xs"
-              mt="xs"
+              my="xs"
               display="flex"
-              minWidth="15rem"
+              minWidth={['8rem', '8rem', '8rem', '15rem']}
               position="absolute"
               borderRadius="xs"
               flexDirection="column"
@@ -80,6 +80,7 @@ const Dropdown: FC<DropdownProps> = ({ label, values, disabled, onSelect }) => {
                 return (
                   <Box
                     p="l"
+                    gap="xs"
                     key={v4()}
                     color="onSurface"
                     display="flex"
@@ -87,7 +88,7 @@ const Dropdown: FC<DropdownProps> = ({ label, values, disabled, onSelect }) => {
                     borderRadius="xs"
                     onClick={() => handleSelect(value)}
                     nHover={{
-                      backgroundColor: 'container',
+                      backgroundColor: 'lowestContainer',
                     }}
                   >
                     {value}

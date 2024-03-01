@@ -27,6 +27,7 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({ title, children }) => (
               {title && (
                 <Typography
                   textAlign="center"
+                  color="onSurface"
                   variant="display"
                   size="medium"
                   my="3rem"
