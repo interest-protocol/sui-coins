@@ -36,8 +36,8 @@ const Dropdown: FC<DropdownProps> = ({ label, values, disabled, onSelect }) => {
       <Button
         py="s"
         mx="xs"
-        bg="onSurface"
-        color="surface"
+        bg="surface"
+        color="onSurface"
         minWidth="8rem"
         variant="filled"
         onClick={() => setOpen(!isOpen)}
@@ -64,7 +64,8 @@ const Dropdown: FC<DropdownProps> = ({ label, values, disabled, onSelect }) => {
         >
           <div ref={dropdownRef}>
             <Box
-              bg="onSurface"
+              bg="surface"
+              color="onSurface"
               zIndex="1"
               mx="xs"
               mt="xs"
@@ -80,13 +81,13 @@ const Dropdown: FC<DropdownProps> = ({ label, values, disabled, onSelect }) => {
                   <Box
                     p="l"
                     key={v4()}
-                    color="surface"
+                    color="onSurface"
                     display="flex"
                     justifyContent="space-between"
                     borderRadius="xs"
                     onClick={() => handleSelect(value)}
                     nHover={{
-                      backgroundColor: 'onPrimaryContainer',
+                      backgroundColor: 'container',
                     }}
                   >
                     {value}

@@ -24,11 +24,11 @@ const PoolFilter: FC = () => {
           display="flex"
           width="2rem"
           height="2rem"
-          color="surface"
-          bg="onSurface"
+          bg="surface"
+          color="onSurface"
           variant="filled"
           nHover={{
-            backgroundColor: 'onPrimaryContainer',
+            backgroundColor: 'container',
           }}
         >
           <FilterSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
