@@ -11,7 +11,7 @@ const ArrowDown: FC<SVGProps> = ({ maxWidth, maxHeight, ...props }) => (
   >
     <path
       d="M8.99999 12.3107L14.5607 6.74999L13.5 5.68933L8.99999 10.1893L4.49999 5.68933L3.43933 6.74999L8.99999 12.3107Z"
-      fill="#1B1B1F"
+      fill="currentColor"
     />
   </svg>
 );
