@@ -31,7 +31,7 @@ const PoolFilter: FC = () => {
             backgroundColor: 'onPrimaryContainer',
           }}
         >
-          <FilterSVG maxWidth="1.5rem" maxHeight="1.5rem" />
+          <FilterSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
         </Button>
         <Dropdown
           key={v4()}
