@@ -33,7 +33,6 @@ const Header: FC<HeaderProps> = ({ currentTab, setTab }) => {
       justifyContent="space-between"
     >
       <Box
-        p="xs"
         gap="s"
         width="100%"
         flexWrap="wrap"
@@ -43,7 +42,7 @@ const Header: FC<HeaderProps> = ({ currentTab, setTab }) => {
         display={isMobile ? (showSearchField ? 'none' : 'flex') : 'flex'}
       >
         <Tabs
-          type="circle"
+          type="square"
           onChangeTab={setTab}
           defaultTabIndex={currentTab}
           items={['Pools', 'My Position'].map((tab) => (
