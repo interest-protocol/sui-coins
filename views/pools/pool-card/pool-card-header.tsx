@@ -1,8 +1,7 @@
 import { Box, Button, Tag, Typography } from '@interest-protocol/ui-kit';
-import Link from 'next/link';
 import { FC } from 'react';
+import { v4 } from 'uuid';
 
-import { Routes, RoutesEnum } from '@/constants';
 import { ArrowObliqueSVG } from '@/svg';
 
 import { PoolCardHeaderProps } from './pool-card.types';
@@ -11,44 +10,68 @@ const PoolCardHeader: FC<PoolCardHeaderProps> = ({
   name,
   Logo,
   dexUrl,
-  objectId,
+  tags,
 }) => (
   <Box display="flex" alignItems="center" justifyContent="space-between">
-    <a target="_blank" href={dexUrl} rel="noreferrer">
-      <Tag
-        PrefixIcon={
-          <Box
-            display="flex"
-            alignItems="center"
-            borderRadius="full"
-            color="lowestContainer"
-            justifyContent="center"
+    <Box display="flex" flexWrap="wrap" alignItems="center">
+      <a target="_blank" href={dexUrl} rel="noreferrer">
+        <Tag
+          p="0"
+          mr="2xs"
+          mb="2xs"
+          gap="0"
+          PrefixIcon={
+            <Box
+              display="flex"
+              width="1.4rem"
+              height="1.4rem"
+              alignItems="center"
+              borderRadius="full"
+              color="lowestContainer"
+              justifyContent="center"
+            >
+              {Logo}
+            </Box>
+          }
+          size="small"
+          variant="outline"
+        >
+          <Typography size="small" variant="label">
+            {name}
+          </Typography>
+        </Tag>
+      </a>
+      {tags?.map(({ name, url }) => (
+        <a key={v4()} target="_blank" href={url} rel="noreferrer">
+          <Tag
+            px="0"
+            py="0"
+            mb="2xs"
+            mr="2xs"
+            size="small"
+            height="1.4rem"
+            variant="outline"
           >
-            {Logo}
-          </Box>
-        }
-        size="small"
-        variant="outline"
-      >
-        <Typography size="small" variant="label">
-          {name}
-        </Typography>
-      </Tag>
-    </a>
-    <Link href={`${Routes[RoutesEnum.PoolDetails]}?objectId=${objectId}`}>
-      <Button
-        isIcon
-        opacity="0"
-        variant="text"
-        color="onSurface"
-        className="arrow-wrapper"
-        nHover={{
-          bg: 'surface',
-        }}
-      >
-        <ArrowObliqueSVG maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
-      </Button>
-    </Link>
+            <Typography size="small" variant="label">
+              {name}
+            </Typography>
+          </Tag>
+        </a>
+      ))}
+    </Box>
+    <Button
+      mb="auto"
+      isIcon
+      opacity="0"
+      variant="text"
+      color="onSurface"
+      className="arrow-wrapper"
+      nHover={{
+        bg: 'surface',
+      }}
+    >
+      <ArrowObliqueSVG maxHeight="1.5rem" maxWidth="1.5rem" width="1.5rem" />
+    </Button>
   </Box>
 );
 

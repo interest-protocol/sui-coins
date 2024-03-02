@@ -1,7 +1,10 @@
 import { FC } from 'react';
 
 import { SVGProps } from '@/components/svg/svg.types';
+import { DexName } from '@/constants/pools';
 import { IPXRoundedSVG, LogoSVG } from '@/svg';
+
+import { PoolCardHeaderTagProps } from './pool-card.types';
 
 export const LINES = [
   {
@@ -21,14 +24,50 @@ export const LINES = [
   },
 ];
 
-export const DEX_MAP: Record<
-  string,
-  { name: string; Icon: FC<SVGProps>; url: string }
+export const POOL_CARD_TAGS: Record<
+  DexName,
+  ReadonlyArray<PoolCardHeaderTagProps>
 > = {
-  interest: {
+  [DexName.Interest]: [
+    {
+      name: 'CLAMM',
+      url: 'https://interestprotocol.com',
+    },
+    {
+      name: 'Volatile',
+      url: 'https://interestprotocol.com',
+    },
+  ],
+  [DexName.Suicoins]: [
+    {
+      name: 'CLAMM',
+      url: 'https://interestprotocol.com',
+    },
+    {
+      name: 'Volatile',
+      url: 'https://interestprotocol.com',
+    },
+  ],
+};
+
+export const DEX_MAP: Record<
+  DexName,
+  {
+    name: string;
+    Icon: FC<SVGProps>;
+    url: string;
+    tags?: ReadonlyArray<PoolCardHeaderTagProps>;
+  }
+> = {
+  [DexName.Interest]: {
     name: 'Interest',
     Icon: IPXRoundedSVG,
+    tags: POOL_CARD_TAGS[DexName.Interest],
     url: 'https://interestprotocol.com',
   },
-  suicoins: { name: 'SuiCoins', Icon: LogoSVG, url: 'https://suicoins.com' },
+  [DexName.Suicoins]: {
+    name: 'Suicoins',
+    Icon: LogoSVG,
+    url: 'https://Suicoins.com',
+  },
 };
