@@ -1,6 +1,6 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { useRouter } from 'next/router';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 import Layout from '@/components/layout';
 import { Routes, RoutesEnum } from '@/constants';
@@ -10,12 +10,21 @@ import { TOKEN_ICONS } from '@/lib';
 
 import PoolTitleBar from '../components/pool-title-bar';
 import Error from '../error';
-import { PoolDetailsProps } from './pool-details.types';
+import { PoolDetailsProps, PoolDetailsTabOption } from './pool-details.types';
+import PoolDetaislTabs from './pool-details-tabs';
 import PoolForm from './pool-form';
 
 const PoolDetails: FC<PoolDetailsProps> = ({ objectId }) => {
   const { push } = useRouter();
   const { network } = useNetwork();
+
+  const [poolDetailsView, setPoolDetailsView] = useState<PoolDetailsTabOption>(
+    PoolDetailsTabOption.Detail
+  );
+
+  const handleTabChange = (index: PoolDetailsTabOption) => {
+    setPoolDetailsView(index);
+  };
 
   const pool = RECOMMENDED_POOLS[network].find(
     ({ poolObjectId }) => poolObjectId === objectId
@@ -46,13 +55,15 @@ const PoolDetails: FC<PoolDetailsProps> = ({ objectId }) => {
         display={['flex', 'flex', 'flex', 'grid']}
       >
         <PoolForm />
-        <Box
-          color="onSurface"
-          borderRadius="xs"
-          bg="lowestContainer"
-          p={['m', 'm', 'm', 'xl']}
-        >
-          Pool additional info
+        <Box color="onSurface" borderRadius="xs" bg="lowestContainer">
+          <PoolDetaislTabs
+            onChangeTab={handleTabChange}
+            defaultTabIndex={poolDetailsView}
+            items={['Pool Detail', 'Advance Details']}
+          />
+          {poolDetailsView === PoolDetailsTabOption.Detail
+            ? 'Pool Detail'
+            : 'Advance Details'}
         </Box>
       </Box>
     </Layout>
