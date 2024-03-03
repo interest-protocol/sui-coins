@@ -27,10 +27,10 @@ const PoolCard: FC<PoolCardProps> = ({ tokens, dex, poolObjectId }) => {
         borderRadius="xs"
         flexDirection="column"
         justifyContent="center"
-        width={['100%', '100%', '100%', '100%', '21rem']}
         border="0.063rem solid"
         borderColor="outlineVariant"
         transition="all 300ms ease-in-out"
+        width={['100%', '100%', '100%', '100%', '21rem']}
         nHover={{
           borderColor: '#76767A',
           boxShadow: '0px 24px 46px -10px rgba(13, 16, 23, 0.16)',

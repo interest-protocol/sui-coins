@@ -41,22 +41,21 @@ const PoolCardHeader: FC<PoolCardHeaderProps> = ({
           </Typography>
         </Tag>
       </a>
-      {tags?.map(({ name, url }) => (
-        <a key={v4()} target="_blank" href={url} rel="noreferrer">
-          <Tag
-            px="0"
-            py="0"
-            mb="2xs"
-            mr="2xs"
-            size="small"
-            height="1.4rem"
-            variant="outline"
-          >
-            <Typography size="small" variant="label">
-              {name}
-            </Typography>
-          </Tag>
-        </a>
+      {tags?.map(({ name }) => (
+        <Tag
+          key={v4()}
+          px="0"
+          py="0"
+          mb="2xs"
+          mr="2xs"
+          size="small"
+          height="1.4rem"
+          variant="outline"
+        >
+          <Typography size="small" variant="label">
+            {name}
+          </Typography>
+        </Tag>
       ))}
     </Box>
     <Button

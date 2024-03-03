@@ -5,7 +5,6 @@ import { CoinData } from '@/interface';
 
 export interface PoolCardHeaderTagProps {
   name: string;
-  url: string;
 }
 
 export interface PoolCardHeaderProps {
