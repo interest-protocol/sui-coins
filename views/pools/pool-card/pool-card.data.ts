@@ -31,21 +31,17 @@ export const POOL_CARD_TAGS: Record<
   [DexName.Interest]: [
     {
       name: 'CLAMM',
-      url: 'https://interestprotocol.com',
     },
     {
       name: 'Volatile',
-      url: 'https://interestprotocol.com',
     },
   ],
   [DexName.Suicoins]: [
     {
       name: 'CLAMM',
-      url: 'https://interestprotocol.com',
     },
     {
       name: 'Volatile',
-      url: 'https://interestprotocol.com',
     },
   ],
 };
