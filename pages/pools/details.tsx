@@ -41,6 +41,7 @@ const PoolDetailsPage: NextPage<PoolPageProps> = ({ objectId }) => {
       tokenList: pool?.tokens.map((token) => ({
         ...token,
         value: '123',
+        balance: '40596',
       })) as unknown as Array<PoolToken>,
       lpCoin: {
         symbol: 'LP token',

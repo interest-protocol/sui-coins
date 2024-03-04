@@ -4,6 +4,11 @@ export interface RadioFieldProps {
   currentValue: SelectionFieldValues;
   handleSelect: (newValue: SelectionFieldValues) => void;
 }
+
+export interface TokenListProps {
+  type: SelectionFieldValues;
+}
+
 export enum SelectionFieldValues {
   None,
   OneCoin,

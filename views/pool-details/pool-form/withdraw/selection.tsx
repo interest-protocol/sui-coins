@@ -2,6 +2,7 @@ import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC, useState } from 'react';
 
 import RadioField from './radio-field';
+import SelectionTokenList from './token-list';
 import { SelectionFieldValues } from './withdraw.types';
 
 const Selection: FC = () => {
@@ -13,32 +14,36 @@ const Selection: FC = () => {
     setCurrentSelected(newSelection);
 
   return (
-    <Box display="flex" flexDirection="column" gap="m">
+    <Box display="flex" flexDirection="column" gap="m" mt="s">
       <Typography variant="body" size="large">
         2. Choose type
       </Typography>
       <Box
-        border="1px solid"
-        borderColor="container"
-        px="xl"
-        py="m"
+        pt="m"
+        display="flex"
         bg="container"
         borderRadius="xs"
-        display="flex"
-        gap="xl"
+        border="1px solid"
+        flexDirection="column"
+        borderColor="container"
       >
-        <RadioField
-          label="One Coin"
-          currentValue={currentSelected}
-          type={SelectionFieldValues.OneCoin}
-          handleSelect={handleSelection}
-        />
-        <RadioField
-          label="Balance"
-          currentValue={currentSelected}
-          type={SelectionFieldValues.Balance}
-          handleSelect={handleSelection}
-        />
+        <Box display="flex" gap="xl" pb="m" px="xl">
+          <RadioField
+            label="One Coin"
+            currentValue={currentSelected}
+            type={SelectionFieldValues.OneCoin}
+            handleSelect={handleSelection}
+          />
+          <RadioField
+            label="Balance"
+            currentValue={currentSelected}
+            type={SelectionFieldValues.Balance}
+            handleSelect={handleSelection}
+          />
+        </Box>
+        {currentSelected != SelectionFieldValues.None && (
+          <SelectionTokenList type={currentSelected} />
+        )}
       </Box>
     </Box>
   );

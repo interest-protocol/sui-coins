@@ -14,8 +14,14 @@ const RadioField: FC<RadioFieldProps> = ({
     handleSelect(isSelected ? SelectionFieldValues.None : type);
 
   return (
-    <Box display="flex" alignItems="center" gap="s">
-      <RadioButton defaultValue={isSelected} onClick={onClick} />
+    <Box
+      gap="l"
+      display="flex"
+      cursor="pointer"
+      onClick={onClick}
+      alignItems="center"
+    >
+      <RadioButton defaultValue={isSelected} />
       <Typography variant="body" size="large">
         {label}
       </Typography>
