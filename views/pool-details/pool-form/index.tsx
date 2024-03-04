@@ -1,18 +1,16 @@
 import { Box, Tabs } from '@interest-protocol/ui-kit';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 
+import { PoolOption } from '@/views/pools/pools.types';
+
+import { PoolDetailsFormProps } from '../pool-details.types';
 import PoolDeposit from './deposit';
-import { PoolOption } from './pool-form.types';
+import PoolWithdraw from './withdraw';
 
-const PoolForm: FC = () => {
-  const [poolOptionView, setPoolOptionView] = useState<PoolOption>(
-    PoolOption.Deposit
-  );
-
-  const handleOptionTab = (index: PoolOption) => {
-    setPoolOptionView(index);
-  };
-
+const PoolForm: FC<PoolDetailsFormProps> = ({
+  handleOptionTab,
+  poolOptionView,
+}) => {
   return (
     <Box
       gap="xl"
@@ -31,7 +29,11 @@ const PoolForm: FC = () => {
           defaultTabIndex={poolOptionView}
         />
       </Box>
-      {poolOptionView === PoolOption.Deposit ? <PoolDeposit /> : 'Withdraw'}
+      {poolOptionView === PoolOption.Deposit ? (
+        <PoolDeposit poolOptionView={PoolOption.Deposit} />
+      ) : (
+        <PoolWithdraw poolOptionView={PoolOption.Withdraw} />
+      )}
     </Box>
   );
 };

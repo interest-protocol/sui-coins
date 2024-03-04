@@ -3,31 +3,33 @@ import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { v4 } from 'uuid';
 
-import PoolField from './component/field';
-import { PoolFormProps } from './component/field/field.types';
-import PoolReceiveSection from './component/receive-section';
+import { PoolToken } from '@/views/pools/pools.types';
 
-const PoolDeposit: FC<PoolFormProps> = ({ poolOptionView }) => {
+import PoolField from '../component/field';
+import { PoolFormProps } from '../component/field/field.types';
+import Selection from './selection';
+
+const PoolWithdraw: FC<PoolFormProps> = ({ poolOptionView }) => {
   const { getValues } = useFormContext();
 
-  const tokenList = getValues('tokenList');
+  const lpCoin = getValues('lpCoin') as PoolToken;
 
   return (
     <>
       <Typography size="large" variant="title" fontSize="2xl">
-        I would like to Deposit...
+        I would like to Withdraw...
       </Typography>
       <Box display="flex" flexDirection="column" gap="m">
-        {tokenList.map((_: any, index: number) => (
+        {[lpCoin].map((_: any, index: number) => (
           <PoolField key={v4()} index={index} poolOptionView={poolOptionView} />
         ))}
+        <Selection />
       </Box>
-      <PoolReceiveSection symbol="LPs Coin" balance={getValues('lpCoin')} />
       <Button variant="filled" mt="xl" width="max-content" mx="auto" py="s">
-        Deposit
+        Remove Liquidity
       </Button>
     </>
   );
 };
 
-export default PoolDeposit;
+export default PoolWithdraw;

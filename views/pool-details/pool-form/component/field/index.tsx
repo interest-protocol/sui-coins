@@ -5,15 +5,18 @@ import { useFormContext } from 'react-hook-form';
 import { useNetwork } from '@/context/network';
 import { TOKEN_ICONS } from '@/lib';
 import { parseInputEventToNumberString } from '@/utils';
-import { PoolDepositForm } from '@/views/pools/pools.types';
+import { PoolOption } from '@/views/pools/pools.types';
 
 import { PoolFieldsProps } from './field.types';
 
-const PoolField: FC<PoolFieldsProps> = ({ index }) => {
+const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
   const { network } = useNetwork();
-  const { register, setValue, getValues } = useFormContext<PoolDepositForm>();
+  const { register, setValue, getValues } = useFormContext();
 
-  const token = getValues(`tokenList.${index}`);
+  const fieldName =
+    poolOptionView === PoolOption.Deposit ? `tokenList.${index}` : 'lpCoin';
+
+  const token = getValues(fieldName);
 
   const Icon = TOKEN_ICONS[network][token.symbol];
 
@@ -56,12 +59,9 @@ const PoolField: FC<PoolFieldsProps> = ({ index }) => {
       textAlign="right"
       tokenName={token.symbol}
       labelPosition="right"
-      {...register(`tokenList.${index}.value`, {
+      {...register(`${fieldName}.value`, {
         onChange: (v: ChangeEvent<HTMLInputElement>) => {
-          setValue?.(
-            `tokenList.${index}.value`,
-            parseInputEventToNumberString(v)
-          );
+          setValue?.(`${fieldName}.value`, parseInputEventToNumberString(v));
         },
       })}
     />

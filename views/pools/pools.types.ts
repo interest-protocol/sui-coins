@@ -21,7 +21,13 @@ export interface PoolToken extends CoinData {
   balance: number | null;
 }
 
-export interface PoolDepositForm {
+export interface PoolForm {
   tokenList: Array<PoolToken>;
-  lpCoin: string;
+  lpCoin: string | PoolToken;
 }
+
+/*export interface PoolWithdrawForm {
+  lpCoin: string | PoolToken;
+  tokenList: Array<PoolToken>;
+}
+*/
