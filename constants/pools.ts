@@ -23,7 +23,7 @@ export const RECOMMENDED_POOLS: Record<
       stable: false,
     },
     {
-      dex: 'interest',
+      dex: 'interest1',
       tokens: [COINS[2], COINS[0]],
       poolObjectId: COINS[2].type,
       lpCoin: COINS[2],
