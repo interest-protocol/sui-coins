@@ -5,6 +5,7 @@ import { ETHSVG, MovSVG, USDCSVG } from '@/svg';
 
 export enum Network {
   DEVNET = 'm2:devnet',
+  TESTNET = 'm2:testnet',
 }
 
 /* eslint-disable @typescript-eslint/no-duplicate-enum-values */
@@ -25,5 +26,8 @@ export const TOKEN_ICONS: Record<Network, Record<string, FC<SVGProps>>> = {
     [TOKEN_SYMBOL.USDC]: USDCSVG,
     [TOKEN_SYMBOL.MOV]: MovSVG,
     [TOKEN_SYMBOL.ETH]: ETHSVG,
+  },
+  [Network.TESTNET]: {
+    [TOKEN_SYMBOL.MOV]: MovSVG,
   },
 };
