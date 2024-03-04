@@ -30,4 +30,5 @@ export const RECOMMENDED_POOLS: Record<
       stable: false,
     },
   ],
+  [Network.TESTNET]: [],
 };
