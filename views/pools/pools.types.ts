@@ -25,9 +25,3 @@ export interface PoolForm {
   tokenList: Array<PoolToken>;
   lpCoin: string | PoolToken;
 }
-
-/*export interface PoolWithdrawForm {
-  lpCoin: string | PoolToken;
-  tokenList: Array<PoolToken>;
-}
-*/

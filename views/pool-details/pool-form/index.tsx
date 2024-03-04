@@ -10,32 +10,30 @@ import PoolWithdraw from './withdraw';
 const PoolForm: FC<PoolDetailsFormProps> = ({
   handleOptionTab,
   poolOptionView,
-}) => {
-  return (
-    <Box
-      gap="xl"
-      display="flex"
-      borderRadius="xs"
-      color="onSurface"
-      bg="lowestContainer"
-      flexDirection="column"
-      p={['m', 'm', 'm', 'xl']}
-    >
-      <Box overflowX="auto">
-        <Tabs
-          type="circle"
-          onChangeTab={handleOptionTab}
-          items={['Deposit', 'Withdraw']}
-          defaultTabIndex={poolOptionView}
-        />
-      </Box>
-      {poolOptionView === PoolOption.Deposit ? (
-        <PoolDeposit poolOptionView={PoolOption.Deposit} />
-      ) : (
-        <PoolWithdraw poolOptionView={PoolOption.Withdraw} />
-      )}
+}) => (
+  <Box
+    gap="xl"
+    display="flex"
+    borderRadius="xs"
+    color="onSurface"
+    bg="lowestContainer"
+    flexDirection="column"
+    p={['m', 'm', 'm', 'xl']}
+  >
+    <Box overflowX="auto">
+      <Tabs
+        type="circle"
+        onChangeTab={handleOptionTab}
+        items={['Deposit', 'Withdraw']}
+        defaultTabIndex={poolOptionView}
+      />
     </Box>
-  );
-};
+    {poolOptionView === PoolOption.Deposit ? (
+      <PoolDeposit poolOptionView={PoolOption.Deposit} />
+    ) : (
+      <PoolWithdraw poolOptionView={PoolOption.Withdraw} />
+    )}
+  </Box>
+);
 
 export default PoolForm;
