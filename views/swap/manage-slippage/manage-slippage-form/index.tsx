@@ -6,15 +6,17 @@ import { v4 } from 'uuid';
 import { ClockSVG, PercentageSVG } from '@/svg';
 import { parseInputEventToNumberString } from '@/utils';
 
-import { ISwapSettings } from '../../swap.types';
-import { ManageSlippageProps } from '../manage-slippage-form.types';
+import { ManageSlippageFormProps } from '../manage-slippage-form.types';
 
 const SLIPPAGE_BUTTONS = ['0.1', '0.5', '1'];
 
-const ManageSlippageForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
+const ManageSlippageForm: FC<ManageSlippageFormProps> = ({
+  handleManageView,
+  shortButton,
+}) => {
   const { getValues, setValue } = useFormContext();
 
-  const formTmpSettings = useForm<ISwapSettings>({
+  const formTmpSettings = useForm({
     defaultValues: getValues('settings'),
   });
 
@@ -31,18 +33,19 @@ const ManageSlippageForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
   return (
     <Box px="xl" py="2xl" display="flex" flexDirection="column" gap="m">
       <Box>
-        <Typography variant="body" size="small" mb="0.5rem" color="onSurface">
+        <Typography variant="body" size="small" mb="xs" color="onSurface">
           Slippage Tolerance
         </Typography>
         <Box
           gap="xs"
           flexDirection="column"
-          gridTemplateColumns="4fr repeat(3, auto)"
           display={['flex', 'flex', 'flex', 'grid']}
+          gridTemplateColumns="4fr repeat(3, auto)"
         >
           <TextField
-            color="onSurface"
+            mr="xs"
             fontSize="1rem"
+            color="onSurface"
             placeholder="0.1"
             fontFamily="Satoshi"
             {...formTmpSettings.register('slippage', {
@@ -56,28 +59,38 @@ const ManageSlippageForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
             fieldProps={{
               borderRadius: 'xs',
               mr: 'xs',
-              width: ['100%', '100%', '100%', '114%'],
             }}
             Suffix={
-              <Box display="flex" color="onSurface">
+              <Box
+                display="flex"
+                width="1.25rem"
+                height="1.25rem"
+                color="onSurface"
+              >
                 <PercentageSVG
-                  maxHeight="1.25rem"
-                  maxWidth="1.25rem"
                   width="100%"
+                  maxWidth="1.25rem"
+                  maxHeight="1.25rem"
                 />
               </Box>
             }
           />
           {SLIPPAGE_BUTTONS.map((item) => (
             <Button
-              key={v4()}
               py="xs"
-              borderRadius="xs"
+              key={v4()}
               variant="outline"
-              onClick={() => setTolerance(item)}
               color="onSurface"
+              borderRadius="xs"
+              onClick={() => setTolerance(item)}
+              px={shortButton ? ['m', 'm', 'm', 'xs'] : 'xl'}
             >
-              <Typography variant="label" size="large" width="100%">
+              <Typography
+                size="large"
+                width="100%"
+                variant="label"
+                fontSize={['100%', '100%', '100%', '80%']}
+              >
                 {item} %
               </Typography>
             </Button>
@@ -91,8 +104,8 @@ const ManageSlippageForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
         <Box>
           <TextField
             fontSize="1rem"
-            placeholder="3min"
             color="onSurface"
+            placeholder="3min"
             lineHeight="1.75rem"
             fontFamily="Satoshi"
             {...formTmpSettings.register('deadline', {

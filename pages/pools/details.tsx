@@ -33,6 +33,11 @@ const PoolDetailsPage: NextPage<PoolPageProps> = ({ objectId }) => {
         value: '123',
       })) as unknown as Array<PoolToken>,
       lpCoin: '15546',
+      settings: {
+        deadline: '3',
+        slippage: '0.1',
+        speed: 'instant',
+      },
     },
   });
 
@@ -49,6 +54,11 @@ const PoolDetailsPage: NextPage<PoolPageProps> = ({ objectId }) => {
         type: `${ZERO_BIG_NUMBER}`,
         balance: 1000,
         value: '500',
+      },
+      settings: {
+        deadline: '3',
+        slippage: '0.1',
+        speed: 'instant',
       },
     },
   });

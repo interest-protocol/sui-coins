@@ -28,4 +28,5 @@ export interface SwapTypeArgs {
   coinOut: string;
   lpCoin: string;
 }
+
 export type SwapPath = ReadonlyArray<SwapTypeArgs>;

@@ -4,6 +4,7 @@ import { useFormContext } from 'react-hook-form';
 import { v4 } from 'uuid';
 
 import { PoolToken } from '@/views/pools/pools.types';
+import ManageSlippage from '@/views/swap/manage-slippage';
 
 import PoolField from '../component/field';
 import { PoolFormProps } from '../component/field/field.types';
@@ -24,6 +25,14 @@ const PoolWithdraw: FC<PoolFormProps> = ({ poolOptionView }) => {
           <PoolField key={v4()} index={index} poolOptionView={poolOptionView} />
         ))}
         <Selection />
+      </Box>
+      <Box>
+        <Typography variant="body" size="large" mb="m">
+          Manage your slippage
+        </Typography>
+        <Box bg="container" borderRadius="xs">
+          <ManageSlippage shortButton />
+        </Box>
       </Box>
       <Button variant="filled" mt="xl" width="max-content" mx="auto" py="s">
         Remove Liquidity
