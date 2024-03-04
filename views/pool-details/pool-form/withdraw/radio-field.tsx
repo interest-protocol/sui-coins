@@ -1,12 +1,21 @@
 import { Box, RadioButton, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import { RadioFieldProps } from './withdraw.types';
+import { RadioFieldProps, SelectionFieldValues } from './withdraw.types';
 
-const RadioField: FC<RadioFieldProps> = ({ label }) => {
+const RadioField: FC<RadioFieldProps> = ({
+  label,
+  currentValue,
+  type,
+  handleSelect,
+}) => {
+  const isSelected = type === currentValue;
+  const onClick = () =>
+    handleSelect(isSelected ? SelectionFieldValues.None : type);
+
   return (
-    <Box display="flex" alignItems="center" gap="0.75rem">
-      <RadioButton />
+    <Box display="flex" alignItems="center" gap="s">
+      <RadioButton defaultValue={isSelected} onClick={onClick} />
       <Typography variant="body" size="large">
         {label}
       </Typography>

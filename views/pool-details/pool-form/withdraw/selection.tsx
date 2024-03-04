@@ -1,26 +1,44 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 import RadioField from './radio-field';
+import { SelectionFieldValues } from './withdraw.types';
 
 const Selection: FC = () => {
+  const [currentSelected, setCurrentSelected] = useState<SelectionFieldValues>(
+    SelectionFieldValues.None
+  );
+
+  const handleSelection = (newSelection: SelectionFieldValues) =>
+    setCurrentSelected(newSelection);
+
   return (
-    <Box display="flex" flexDirection="column" gap="1rem">
+    <Box display="flex" flexDirection="column" gap="m">
       <Typography variant="body" size="large">
         2. Choose type
       </Typography>
       <Box
         border="1px solid"
         borderColor="container"
-        px="1.5rem"
-        py="1rem"
+        px="xl"
+        py="m"
         bg="container"
-        borderRadius="0.5rem"
+        borderRadius="xs"
         display="flex"
-        gap="1.5rem"
+        gap="xl"
       >
-        <RadioField label="One Coin" />
-        <RadioField label="Balance" />
+        <RadioField
+          label="One Coin"
+          currentValue={currentSelected}
+          type={SelectionFieldValues.OneCoin}
+          handleSelect={handleSelection}
+        />
+        <RadioField
+          label="Balance"
+          currentValue={currentSelected}
+          type={SelectionFieldValues.Balance}
+          handleSelect={handleSelection}
+        />
       </Box>
     </Box>
   );
