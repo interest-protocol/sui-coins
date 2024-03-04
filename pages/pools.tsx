@@ -3,11 +3,11 @@ import { NextPage } from 'next';
 import { SEO } from '@/components';
 import Pool from '@/views/pools';
 
-const Pools: NextPage = () => (
+const PoolsPage: NextPage = () => (
   <>
     <SEO pageTitle="Pools" />
     <Pool />
   </>
 );
 
-export default Pools;
+export default PoolsPage;

@@ -18,7 +18,7 @@ const Pools: FC = () => {
 
   return (
     <Layout title="Pools">
-      <Box mx={['0', '0', '0', '0', '2xl']}>
+      <Box mx={['0', '0', '0', '0', 'm']}>
         <Box py="xl">
           <Header setTab={setTab} currentTab={tab} />
         </Box>
@@ -30,7 +30,8 @@ const Pools: FC = () => {
           display="flex"
           flexDirection="column"
           borderRadius="xs"
-          p={['s', 's', 's', 'l']}
+          px="m"
+          py={['s', 's', 's', '2xl']}
         >
           <PoolFilter />
           <Box
