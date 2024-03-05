@@ -21,16 +21,16 @@ const PoolCard: FC<PoolCardProps> = ({ tokens, dex, poolObjectId }) => {
     <Link href={`${Routes[RoutesEnum.PoolDetails]}?objectId=${poolObjectId}`}>
       <Box
         p="m"
+        flex="1"
         gap="xs"
         display="flex"
-        bg="lowestContainer"
         borderRadius="xs"
+        bg="lowestContainer"
         flexDirection="column"
         justifyContent="center"
         border="0.063rem solid"
         borderColor="outlineVariant"
         transition="all 300ms ease-in-out"
-        width={['100%', '100%', '100%', '100%', '21rem']}
         nHover={{
           borderColor: '#76767A',
           boxShadow: '0px 24px 46px -10px rgba(13, 16, 23, 0.16)',
