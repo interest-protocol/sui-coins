@@ -1,6 +1,7 @@
 import { Box, Tabs } from '@interest-protocol/ui-kit';
 import { FC, useState } from 'react';
 
+import PoolDeposit from './deposit';
 import { PoolOption } from './pool-form.types';
 
 const PoolForm: FC = () => {
@@ -30,7 +31,7 @@ const PoolForm: FC = () => {
           defaultTabIndex={poolOptionView}
         />
       </Box>
-      {poolOptionView === PoolOption.Deposit ? 'Deposit' : 'Withdraw'}
+      {poolOptionView === PoolOption.Deposit ? <PoolDeposit /> : 'Withdraw'}
     </Box>
   );
 };
