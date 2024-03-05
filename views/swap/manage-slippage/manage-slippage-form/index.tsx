@@ -58,7 +58,7 @@ const ManageSlippageForm: FC<ManageSlippageFormProps> = ({
             })}
             fieldProps={{
               borderRadius: 'xs',
-              mr: 'xs',
+              mr: ['unset', 'unset', 'unset', 'xs'],
             }}
             Suffix={
               <Box

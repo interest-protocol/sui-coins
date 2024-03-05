@@ -27,7 +27,7 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
   const [isLoading, setLoading] = useState(false);
   const [favoriteTokens, setFavoriteTokens] = useLocalStorage<
     ReadonlyArray<string>
-  >(`${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-tokens`, []);
+  >(`${LOCAL_STORAGE_VERSION}-movement-${network}-favorite-tokens`, []);
 
   const isFavorite = favoriteTokens.includes(type);
 
