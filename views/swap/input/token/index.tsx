@@ -1,18 +1,19 @@
-import { Box, Button, ListItem, Typography } from '@interest-protocol/ui-kit';
+import { Box, Button, Motion } from '@interest-protocol/ui-kit';
 import BigNumber from 'bignumber.js';
 import { useRouter } from 'next/router';
-import { not, pathOr } from 'ramda';
+import { pathOr } from 'ramda';
 import { FC, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { v4 } from 'uuid';
 
-import { COINS, COINS_MAP } from '@/constants/coins';
+import { COINS_MAP } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks';
+import { useModal } from '@/hooks/use-modal';
 import { FixedPointMath, TOKEN_ICONS } from '@/lib';
 import { ChevronDownSVG } from '@/svg';
 import { updateURL } from '@/utils';
 
+import SelectTokenModal from '../../components/select-token-modal';
 import { SwapForm } from '../../swap.types';
 import { InputProps as DropdownTokenProps } from '../input.types';
 
@@ -22,6 +23,62 @@ const Token: FC<DropdownTokenProps> = ({ label }) => {
   const { network } = useNetwork();
   const [isOpen, setIsOpen] = useState(false);
   const { control, setValue } = useFormContext<SwapForm>();
+
+  const { setModal, handleClose } = useModal();
+
+  const { symbol } = useWatch({
+    control,
+    name: label,
+  });
+
+  const handleOnSelect = ({ symbol, type, decimals }: any) => {
+    const currentToken = COINS_MAP[type];
+
+    if (type === oppositeType) {
+      setValue(label === 'to' ? 'from' : 'to', {
+        type: currentToken.type,
+        symbol: currentToken.symbol,
+        decimals: currentToken.decimals,
+        value: '',
+        balance: FixedPointMath.toNumber(
+          pathOr(BigNumber(0), [currentToken.type, 'totalBalance'], coinsMap)
+        ),
+        locked: false,
+      });
+    }
+
+    setValue(label, {
+      type,
+      symbol,
+      decimals,
+      value: '',
+      balance: FixedPointMath.toNumber(
+        pathOr(BigNumber(0), [type, 'totalBalance'], coinsMap)
+      ),
+      locked: false,
+    });
+    setValue(`${label === 'from' ? 'to' : 'from'}.value`, '');
+
+    changeURL(type);
+    setIsOpen(false);
+  };
+
+  const openModal = () =>
+    setModal(
+      <Motion
+        animate={{ scale: 1 }}
+        initial={{ scale: 0.85 }}
+        transition={{ duration: 0.3 }}
+      >
+        <SelectTokenModal closeModal={handleClose} onSelect={handleOnSelect} />
+      </Motion>,
+      {
+        isOpen: true,
+        custom: true,
+        opaque: false,
+        allowClose: true,
+      }
+    );
 
   const changeURL = (type: string) => {
     const searchParams = new URLSearchParams(location.search);
@@ -33,11 +90,6 @@ const Token: FC<DropdownTokenProps> = ({ label }) => {
       )}`
     );
   };
-
-  const { symbol, type: currentType } = useWatch({
-    control,
-    name: label,
-  });
 
   const oppositeType = useWatch({
     control,
@@ -53,7 +105,7 @@ const Token: FC<DropdownTokenProps> = ({ label }) => {
         pl="0.5rem"
         variant="tonal"
         fontSize="0.875rem"
-        onClick={() => setIsOpen(not)}
+        onClick={openModal}
         PrefixIcon={
           <Box
             width="1.5rem"
@@ -83,86 +135,6 @@ const Token: FC<DropdownTokenProps> = ({ label }) => {
       >
         {symbol}
       </Button>
-      {isOpen && (
-        <Box
-          top="3rem"
-          zIndex={1}
-          cursor="pointer"
-          bg="lowContainer"
-          borderRadius="xs"
-          position="absolute"
-          border="2px solid"
-          borderColor="outline"
-        >
-          {COINS.map(({ symbol, type, decimals }) => {
-            const Icon = TOKEN_ICONS[network][symbol];
-            return (
-              <ListItem
-                key={v4()}
-                title={symbol}
-                onClick={() => {
-                  if (type === oppositeType) {
-                    const currentToken = COINS_MAP[currentType];
-
-                    setValue(label === 'to' ? 'from' : 'to', {
-                      type: currentToken.type,
-                      symbol: currentToken.symbol,
-                      decimals: currentToken.decimals,
-                      value: '',
-                      balance: FixedPointMath.toNumber(
-                        pathOr(
-                          BigNumber(0),
-                          [currentToken.type, 'totalBalance'],
-                          coinsMap
-                        )
-                      ),
-                      locked: false,
-                    });
-                  }
-
-                  setValue(label, {
-                    type,
-                    symbol,
-                    decimals,
-                    value: '',
-                    balance: FixedPointMath.toNumber(
-                      pathOr(BigNumber(0), [type, 'totalBalance'], coinsMap)
-                    ),
-                    locked: false,
-                  });
-                  setValue(`${label === 'from' ? 'to' : 'from'}.value`, '');
-
-                  changeURL(type);
-                  setIsOpen(false);
-                }}
-                PrefixIcon={
-                  <Box
-                    display="flex"
-                    bg="onSurface"
-                    color="surface"
-                    minWidth="1.5rem"
-                    height="1.5rem"
-                    borderRadius="xs"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    <Icon width="100%" maxWidth="1rem" maxHeight="1rem" />
-                  </Box>
-                }
-                SuffixIcon={
-                  <Typography variant="body" size="medium">
-                    {type
-                      ? FixedPointMath.toNumber(
-                          pathOr(BigNumber(0), [type, 'totalBalance'], coinsMap)
-                        )
-                      : 0}
-                  </Typography>
-                }
-              />
-            );
-          })}
-        </Box>
-      )}
     </Box>
   );
 };
