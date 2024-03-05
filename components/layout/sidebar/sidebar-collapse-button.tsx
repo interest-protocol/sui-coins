@@ -16,7 +16,7 @@ const SidebarCollapseButton: FC<SidebarCollapseButtonProps> = ({
     setIsCollapsed(!isCollapsed);
 
     window.localStorage.setItem(
-      `${LOCAL_STORAGE_VERSION}-sui-coins-menu-collapse`,
+      `${LOCAL_STORAGE_VERSION}-movement-menu-collapse`,
       String(!isCollapsed)
     );
   };

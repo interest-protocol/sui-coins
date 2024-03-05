@@ -1,5 +1,11 @@
 import { Routes, RoutesEnum } from '@/constants';
-import { AirdropSVG, CirclePlusSVG, DotsSVG, DoubleChevronSVG } from '@/svg';
+import {
+  AirdropSVG,
+  CirclePlusSVG,
+  DotsSVG,
+  DoubleChevronSVG,
+  PoolSVG,
+} from '@/svg';
 
 import { MenuItemProps } from './sidebar.types';
 
@@ -13,6 +19,12 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     Icon: DoubleChevronSVG,
     name: 'swap',
     path: Routes[RoutesEnum.Swap],
+    disabled: false,
+  },
+  {
+    Icon: PoolSVG,
+    name: 'pool',
+    path: Routes[RoutesEnum.Pools],
     disabled: false,
   },
   {
