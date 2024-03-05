@@ -15,8 +15,8 @@ const PoolsDetailsTabsItem: FC<PoolDetailsTabsItemProps> = ({
     onClick={onChange}
     alignItems="center"
     justifyContent="center"
-    borderBottom={isSelected ? '2px solid' : ''}
-    borderBottomColor="primary"
+    borderBottom="2px solid"
+    borderBottomColor={isSelected ? 'primary' : 'transparent'}
   >
     <Typography size="medium" variant="body">
       {item}
