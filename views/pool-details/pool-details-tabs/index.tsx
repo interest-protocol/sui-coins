@@ -5,7 +5,7 @@ import { v4 } from 'uuid';
 import { PoolDetailsTabsProps } from './pool-details-tabs.types';
 import PoolDetailsTabsItem from './pool-details-tabs-item';
 
-const PoolDetaislTabs: FC<PoolDetailsTabsProps> = ({
+const PoolDetailsTabs: FC<PoolDetailsTabsProps> = ({
   items,
   defaultTabIndex = 0,
   onChangeTab,
@@ -25,9 +25,9 @@ const PoolDetaislTabs: FC<PoolDetailsTabsProps> = ({
       borderTopRightRadius="inherit"
       borderBottom="0.01px solid #C6C6CA"
     >
-      {items.map((el, index) => (
+      {items.map((item, index) => (
         <PoolDetailsTabsItem
-          item={el}
+          item={item}
           key={v4()}
           isSelected={index === tabIndex}
           onChange={handleChangeTab(index)}
@@ -37,4 +37,4 @@ const PoolDetaislTabs: FC<PoolDetailsTabsProps> = ({
   );
 };
 
-export default PoolDetaislTabs;
+export default PoolDetailsTabs;

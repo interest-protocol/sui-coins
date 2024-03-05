@@ -13,7 +13,7 @@ import Error from '../error';
 import PoolAdvanceDetail from './pool-advance-detail';
 import PoolDetail from './pool-detail';
 import { PoolDetailsProps, PoolDetailsTabOption } from './pool-details.types';
-import PoolDetaislTabs from './pool-details-tabs';
+import PoolDetailsTabs from './pool-details-tabs';
 import PoolForm from './pool-form';
 
 const PoolDetails: FC<PoolDetailsProps> = ({ objectId }) => {
@@ -58,7 +58,7 @@ const PoolDetails: FC<PoolDetailsProps> = ({ objectId }) => {
       >
         <PoolForm />
         <Box color="onSurface" borderRadius="xs" bg="lowestContainer">
-          <PoolDetaislTabs
+          <PoolDetailsTabs
             onChangeTab={handleTabChange}
             defaultTabIndex={poolDetailsView}
             items={['Pool Detail', 'Advance Details']}

@@ -7,22 +7,20 @@ const PoolsDetailsTabsItem: FC<PoolDetailsTabsItemProps> = ({
   isSelected,
   onChange,
   item,
-}) => {
-  return (
-    <Box
-      flex="1"
-      display="flex"
-      cursor="pointer"
-      onClick={onChange}
-      alignItems="center"
-      position="relative"
-      justifyContent="center"
-      borderBottom={isSelected ? '2px solid #0053DB' : ''}
-    >
-      <Typography size="small" position="absolute" variant="body">
-        {item}
-      </Typography>
-    </Box>
-  );
-};
+}) => (
+  <Box
+    flex="1"
+    display="flex"
+    cursor="pointer"
+    onClick={onChange}
+    alignItems="center"
+    position="relative"
+    justifyContent="center"
+    borderBottom={isSelected ? '2px solid #0053DB' : ''}
+  >
+    <Typography size="small" position="absolute" variant="body">
+      {item}
+    </Typography>
+  </Box>
+);
 export default PoolsDetailsTabsItem;
