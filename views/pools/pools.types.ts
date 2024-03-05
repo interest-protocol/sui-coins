@@ -1,9 +1,11 @@
+import { TOKEN_SYMBOL } from '@/lib';
+
+import { ISwapSettings } from '../swap/swap.types';
+
 export enum PoolTabEnum {
   Pools,
   MyPosition,
 }
-
-import { TOKEN_SYMBOL } from '@/lib';
 
 export enum PoolOption {
   Deposit,
@@ -24,4 +26,5 @@ export interface PoolToken extends CoinData {
 export interface PoolForm {
   tokenList: Array<PoolToken>;
   lpCoin: string | PoolToken;
+  settings: ISwapSettings;
 }
