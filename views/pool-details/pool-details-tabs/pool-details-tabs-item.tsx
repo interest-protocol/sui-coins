@@ -14,11 +14,10 @@ const PoolsDetailsTabsItem: FC<PoolDetailsTabsItemProps> = ({
     cursor="pointer"
     onClick={onChange}
     alignItems="center"
-    position="relative"
     justifyContent="center"
     borderBottom={isSelected ? '2px solid #0053DB' : ''}
   >
-    <Typography size="small" position="absolute" variant="body">
+    <Typography size="medium" variant="body">
       {item}
     </Typography>
   </Box>
