@@ -5,6 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { SEO } from '@/components';
 import { COINS_MAP, ETH_TYPE, USDC_TYPE } from '@/constants/coins';
+import { ModalProvider } from '@/context/modal';
 import { useWeb3 } from '@/hooks';
 import { FixedPointMath } from '@/lib';
 import { ZERO_BIG_NUMBER } from '@/utils';
@@ -70,8 +71,10 @@ const SwapPage: NextPage = () => {
 
   return (
     <FormProvider {...form}>
-      <SEO pageTitle="Swap" />
-      <Swap />
+      <ModalProvider>
+        <SEO pageTitle="Swap" />
+        <Swap />
+      </ModalProvider>
     </FormProvider>
   );
 };

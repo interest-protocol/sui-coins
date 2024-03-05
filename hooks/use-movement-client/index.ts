@@ -8,6 +8,9 @@ const client = {
   [Network.DEVNET]: new SuiClient({
     url: RPC_URL[Network.DEVNET],
   }),
+  [Network.TESTNET]: new SuiClient({
+    url: RPC_URL[Network.TESTNET],
+  }),
 };
 
 export const useMovementClient = (): SuiClient => {
