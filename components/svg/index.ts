@@ -30,6 +30,7 @@ export { default as FolderSVG } from './folder';
 export { default as GithubSVG } from './github';
 export { default as HamburgerSVG } from './hamburger';
 export { default as HeartSVG } from './heart';
+export { default as InformationCircleSVG } from './information-circle';
 export { default as IPXSVG } from './ipx';
 export { default as IPXRoundedSVG } from './ipx-rounded';
 export { default as LinkSVG } from './link';

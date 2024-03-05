@@ -10,6 +10,8 @@ import { TOKEN_ICONS } from '@/lib';
 
 import PoolTitleBar from '../components/pool-title-bar';
 import Error from '../error';
+import PoolAdvanceDetail from './pool-advance-detail';
+import PoolDetail from './pool-detail';
 import { PoolDetailsProps, PoolDetailsTabOption } from './pool-details.types';
 import PoolDetaislTabs from './pool-details-tabs';
 import PoolForm from './pool-form';
@@ -61,9 +63,12 @@ const PoolDetails: FC<PoolDetailsProps> = ({ objectId }) => {
             defaultTabIndex={poolDetailsView}
             items={['Pool Detail', 'Advance Details']}
           />
-          {poolDetailsView === PoolDetailsTabOption.Detail
-            ? 'Pool Detail'
-            : 'Advance Details'}
+
+          {poolDetailsView === PoolDetailsTabOption.Detail ? (
+            <PoolDetail />
+          ) : (
+            <PoolAdvanceDetail />
+          )}
         </Box>
       </Box>
     </Layout>
