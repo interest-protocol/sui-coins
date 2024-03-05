@@ -14,7 +14,11 @@ import { PoolDetailsProps, PoolDetailsTabOption } from './pool-details.types';
 import PoolDetailsTabs from './pool-details-tabs';
 import PoolForm from './pool-form';
 
-const PoolDetails: FC<PoolDetailsProps> = ({ objectId }) => {
+const PoolDetails: FC<PoolDetailsProps> = ({
+  objectId,
+  poolOptionView,
+  handleOptionTab,
+}) => {
   const { push } = useRouter();
   const { network } = useNetwork();
 
@@ -54,7 +58,10 @@ const PoolDetails: FC<PoolDetailsProps> = ({ objectId }) => {
         gridTemplateColumns="62% 38%"
         display={['flex', 'flex', 'flex', 'grid']}
       >
-        <PoolForm />
+        <PoolForm
+          poolOptionView={poolOptionView}
+          handleOptionTab={handleOptionTab}
+        />
         <Box color="onSurface" borderRadius="xs" bg="lowestContainer">
           <PoolDetailsTabs
             onChangeTab={handleTabChange}
