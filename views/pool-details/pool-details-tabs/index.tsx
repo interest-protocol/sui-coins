@@ -23,7 +23,8 @@ const PoolDetailsTabs: FC<PoolDetailsTabsProps> = ({
       display="flex"
       borderTopLeftRadius="inherit"
       borderTopRightRadius="inherit"
-      borderBottom="1px solid #C6C6CA"
+      borderBottom="1px solid"
+      borderBottomColor="outlineVariant"
     >
       {items.map((item, index) => (
         <PoolDetailsTabsItem
