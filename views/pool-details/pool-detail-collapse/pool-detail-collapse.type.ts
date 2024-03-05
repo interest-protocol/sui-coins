@@ -9,12 +9,14 @@ export interface PoolDetailsCollapseItemStandardProps {
   label: string;
   content: string | number;
   hasAddtionalInfo?: boolean;
+  isCopyClipBoard?: boolean;
 }
 
 export interface PoolDetailsCollapseItem {
   label: string;
-  info: number;
+  info: number | string;
   additionalInfo?: boolean;
+  clipBoard?: boolean;
 }
 
 export interface PoolDetailsCollapseData {

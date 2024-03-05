@@ -1,13 +1,16 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import { InformationCircleSVG } from '@/svg';
+import { ClipboardSVG, InformationCircleSVG } from '@/svg';
+import { copyToClipboard } from '@/utils';
 
 import { PoolDetailsCollapseItemStandardProps } from './pool-detail-collapse.type';
 
 const PoolDetailsCollapseItemStandard: FC<
   PoolDetailsCollapseItemStandardProps
-> = ({ label, content, hasAddtionalInfo }) => {
+> = ({ label, content, hasAddtionalInfo, isCopyClipBoard }) => {
+  const clipBoardSuccessMessage = 'Address copied to the clipboard';
+
   return (
     <Box
       py="s"
@@ -28,13 +31,34 @@ const PoolDetailsCollapseItemStandard: FC<
         alignItems="center"
         color="lowContainer"
         justifyContent="space-between"
+        width={isCopyClipBoard ? '10rem' : 'auto'}
       >
-        <Box mr="xs">{content}</Box>
+        <Box
+          mr="2xs"
+          overflow="hidden"
+          whiteSpace="nowrap"
+          textOverflow="ellipsis"
+          width={isCopyClipBoard ? '8rem' : 'auto'}
+        >
+          {content}
+        </Box>
         {hasAddtionalInfo && (
           <InformationCircleSVG
-            width="14px"
-            maxWidth="14px"
-            maxHeight="14px"
+            width="0.875rem"
+            maxWidth="0.875rem"
+            maxHeight="0.875rem"
+            cursor="pointer"
+          />
+        )}
+        {isCopyClipBoard && (
+          <ClipboardSVG
+            onClick={(e) => {
+              e.stopPropagation();
+              copyToClipboard(content.toString(), clipBoardSuccessMessage);
+            }}
+            width="1.25rem"
+            maxWidth="1.25rem"
+            maxHeight="1.25rem"
             cursor="pointer"
           />
         )}
