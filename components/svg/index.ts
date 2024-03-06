@@ -25,6 +25,7 @@ export { default as DotsSVG } from './dots';
 export { default as DoubleChevronSVG } from './double-chevron';
 export { default as ErrorSVG } from './error';
 export { default as ETHSVG } from './eth';
+export { default as ExclamationCircleSVG } from './exclamation-circle';
 export { default as FavoriteSVG } from './favorite';
 export { default as FileSVG } from './file';
 export { default as FindSVG } from './find';

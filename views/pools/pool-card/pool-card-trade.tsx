@@ -2,13 +2,14 @@ import { Box, TooltipWrapper, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
-import { QuestionCircleSVG } from '@/svg';
+import { ExclamationCircleSVG, QuestionCircleSVG } from '@/svg';
 
 import { PoolCardTradeProps } from './pool-card.types';
 
 const PoolCardTrade: FC<PoolCardTradeProps> = ({
   index,
   amount,
+  isInfo,
   tooltipInfo,
   description,
 }) => (
@@ -30,8 +31,7 @@ const PoolCardTrade: FC<PoolCardTradeProps> = ({
     </Typography>
     <Box display="flex" gap="xs" alignItems="center">
       <Typography color="onSurface" size="medium" variant="body">
-        {index >= 1 ? '$' : ''}
-        {amount}%
+        {amount}
       </Typography>
       <TooltipWrapper
         bg="onSurface"
@@ -43,7 +43,15 @@ const PoolCardTrade: FC<PoolCardTradeProps> = ({
         }
       >
         <Box color="onSurface">
-          <QuestionCircleSVG width="100%" maxWidth="1rem" maxHeight="1rem" />
+          {isInfo ? (
+            <ExclamationCircleSVG
+              width="100%"
+              maxWidth="1rem"
+              maxHeight="1rem"
+            />
+          ) : (
+            <QuestionCircleSVG width="100%" maxWidth="1rem" maxHeight="1rem" />
+          )}
         </Box>
       </TooltipWrapper>
     </Box>
