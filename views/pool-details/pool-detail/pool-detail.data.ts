@@ -18,3 +18,26 @@ export const POOL_INFORMATION_DATA: PoolDetailsCollapseData = {
     },
   ],
 };
+
+export const POOL_STATISTICS_DATA: PoolDetailsCollapseData = {
+  title: 'STATISTICS',
+  data: [
+    {
+      label: 'Liquidity',
+      info: '$1,317,690',
+    },
+    {
+      label: 'Volume (24h)',
+      info: '$602.59k',
+    },
+    {
+      label: 'Transactions (24h)',
+      info: '121',
+    },
+    {
+      label: 'Virtual Price',
+      info: '1.00473694',
+      additionalInfo: true,
+    },
+  ],
+};

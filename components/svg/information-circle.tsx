@@ -8,7 +8,7 @@ const InformationCircle: FC<SVGProps> = ({ maxHeight, maxWidth, ...props }) => (
     viewBox="0 0 16 16"
     fill="none"
     stroke="currentColor"
-    strokeWidth="2"
+    strokeWidth="0.5"
     strokeLinecap="round"
     strokeLinejoin="round"
     {...props}

@@ -30,9 +30,9 @@ const PoolDetailCollapse: FC<PoolDetailCollapseProps> = ({
         </Typography>
         <Box>
           {isExpanded ? (
-            <MinusSVG maxHeight="2.5rem" maxWidth="2.5rem" width="2.5rem" />
+            <MinusSVG maxHeight="1rem" maxWidth="1rem" width="1rem" />
           ) : (
-            <PlusSVG maxHeight="2.5rem" maxWidth="2.5rem" width="2.5rem" />
+            <PlusSVG maxHeight="1rem" maxWidth="1rem" width="1rem" />
           )}
         </Box>
       </Box>
