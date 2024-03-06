@@ -5,7 +5,7 @@ import { SVGProps } from './svg.types';
 const ArrowLeft: FC<SVGProps> = ({ maxWidth, maxHeight, ...props }) => (
   <svg
     style={{ maxHeight, maxWidth }}
-    viewBox="0 0 24 24"
+    viewBox="0 0 20 20"
     fill="none"
     {...props}
   >
