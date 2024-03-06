@@ -20,7 +20,7 @@ const itemVariants = {
 const Sidebar: FC = () => {
   const isMounted = useIsMounted();
   const isLocalCollapsed = useReadLocalStorage<boolean>(
-    `${LOCAL_STORAGE_VERSION}-sui-coins-menu-collapse`
+    `${LOCAL_STORAGE_VERSION}-movement-menu-collapse`
   );
 
   const [isOpen, setTemporarilyOpen] = useState(false);

@@ -24,7 +24,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   const { network } = useNetwork();
   const { coins, isFetchingCoinBalances } = useWeb3();
   const favoriteTokenTypes = useReadLocalStorage<ReadonlyArray<string>>(
-    `${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-tokens`
+    `${LOCAL_STORAGE_VERSION}-movement-${network}-favorite-tokens`
   );
 
   const filterSelected = useWatch({ control, name: 'filter' });

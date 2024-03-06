@@ -8,7 +8,7 @@ const PoolReceiveSection: FC<ReceiveSectionProps> = ({ symbol, balance }) => (
     <Typography variant="body" size="large" mb="m">
       You will receive (estimated):
     </Typography>
-    <Box borderRadius="xs" bg="surface" py="xs">
+    <Box borderRadius="xs" bg="container" py="xs">
       <Box
         py="xs"
         px="m"
