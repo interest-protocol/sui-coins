@@ -8,7 +8,9 @@ import { PoolToken } from '@/views/pools/pools.types';
 
 import { PoolPreviewProps } from '../preview.types';
 
-const TokenListFields: FC<PoolPreviewProps> = ({ getValues }) => {
+const TokenListFields: FC<Omit<PoolPreviewProps, 'onSubmit'>> = ({
+  getValues,
+}) => {
   const { network } = useNetwork();
   const tokenList = getValues(`tokenList`) as Array<PoolToken>;
 

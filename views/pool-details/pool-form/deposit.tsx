@@ -1,8 +1,10 @@
 import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
-import { FC } from 'react';
+import { not } from 'ramda';
+import { FC, useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { v4 } from 'uuid';
 
+import { useDialog } from '@/hooks';
 import { useModal } from '@/hooks/use-modal';
 import ManageSlippage from '@/views/swap/manage-slippage';
 
@@ -17,14 +19,59 @@ const PoolDeposit: FC<PoolFormProps> = ({ poolOptionView }) => {
 
   const tokenList = getValues('tokenList');
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { dialog, handleClose } = useDialog();
+
   const handleDeposit = () =>
+    new Promise((resolve) => {
+      setTimeout(() => {
+        resolve('');
+      }, 2000);
+    });
+
+  const deposit = () => {
+    dialog.promise(handleDeposit(), {
+      loading: {
+        title: 'Depositing...',
+        message: 'We are Depositing, and you will let you know when it is done',
+      },
+      success: {
+        onClose: handleClose,
+        title: 'Deposit Successfully',
+        message:
+          'Your deposit was successfully, and you can check it on the Explorer',
+        primaryButton: {
+          label: 'See on Explorer',
+          onClick: handleClose,
+        },
+      },
+      error: {
+        onClose: handleClose,
+        title: 'Deposit Failure',
+        message:
+          'Your deposiing failed, please try again or contact the support team',
+        primaryButton: { label: 'Try again', onClick: handleClose },
+      },
+    });
+  };
+
+  const onSubmit = () => setIsSubmitting(not);
+
+  useEffect(() => {
+    if (isSubmitting) {
+      deposit();
+      onSubmit();
+    }
+  }, [isSubmitting]);
+
+  const addDeposit = () =>
     setModal(
       <Motion
         animate={{ scale: 1 }}
         initial={{ scale: 0.85 }}
         transition={{ duration: 0.3 }}
       >
-        <PoolPreview getValues={getValues} isDeposit />
+        <PoolPreview getValues={getValues} onSubmit={onSubmit} isDeposit />
       </Motion>,
       {
         isOpen: true,
@@ -60,7 +107,7 @@ const PoolDeposit: FC<PoolFormProps> = ({ poolOptionView }) => {
         mx="auto"
         variant="filled"
         width="max-content"
-        onClick={handleDeposit}
+        onClick={addDeposit}
       >
         Deposit
       </Button>

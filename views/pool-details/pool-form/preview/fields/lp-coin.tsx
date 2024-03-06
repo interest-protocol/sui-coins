@@ -5,7 +5,10 @@ import IPX from '@/components/svg/ipx';
 
 import { PoolPreviewProps } from '../preview.types';
 
-const LpCoinField: FC<PoolPreviewProps> = ({ getValues }) => {
+const LpCoinField: FC<Omit<PoolPreviewProps, 'onSubmit'>> = ({
+  getValues,
+  isDeposit,
+}) => {
   const lpCoin = getValues(`lpCoin`);
 
   return (
@@ -29,7 +32,7 @@ const LpCoinField: FC<PoolPreviewProps> = ({ getValues }) => {
           </Typography>
         </Box>
         <Typography variant="body" ml="m" size="large">
-          {lpCoin}
+          {isDeposit ? lpCoin : lpCoin.value}
         </Typography>
       </Box>
     </Box>
