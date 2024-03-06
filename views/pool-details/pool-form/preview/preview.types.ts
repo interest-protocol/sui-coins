@@ -1,7 +1,6 @@
 import { FieldValues, UseFormGetValues } from 'react-hook-form';
 
-export interface PoolPreviewProps {
-  isDeposit?: boolean;
+export interface PoolPreviewProps extends PoolPreviewWrapperProps {
   getValues: UseFormGetValues<FieldValues>;
 }
 
