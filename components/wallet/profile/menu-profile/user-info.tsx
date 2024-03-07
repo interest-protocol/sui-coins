@@ -2,10 +2,10 @@ import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { useWalletKit } from '@mysten/wallet-kit';
 import { WalletAccount } from '@wallet-standard/base';
 import { FC } from 'react';
-import { toast } from 'react-hot-toast';
 
 import Avatar from '@/components/account-info/avatar';
 import { CopySVG } from '@/components/svg';
+import { copyToClipboard } from '@/utils';
 
 import ItemWrapper from '../../../menu-mobile/menu-settings/item-wrapper';
 
@@ -14,10 +14,7 @@ const UserInfo: FC = () => {
 
   const account = currentAccount?.address || '';
 
-  const copyToClipboard = (address: string) => {
-    window.navigator.clipboard.writeText(address || '');
-    toast('Address copied to the clipboard');
-  };
+  const clipBoardSuccessMessage = 'Address copied to the clipboard';
 
   return (
     <>
@@ -44,7 +41,7 @@ const UserInfo: FC = () => {
               variant="text"
               onClick={(e) => {
                 e.stopPropagation();
-                copyToClipboard(account || '');
+                copyToClipboard(account || '', clipBoardSuccessMessage);
               }}
               color="onSurface"
             >
