@@ -35,7 +35,7 @@ const PoolCreateSteps: FC<PoolCreateStepsProps> = ({ steps, onStepClick }) => {
       </Box>
       <Box textAlign="center">
         <Typography size="small" color="onSurface" variant="body">
-          01 of {steps}
+          {currentStep + 1} of {steps}
         </Typography>
       </Box>
     </Box>
