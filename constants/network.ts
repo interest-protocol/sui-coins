@@ -1,6 +1,6 @@
 export enum Network {
-  DEVNET = 'movement:devnet',
-  TESTNET = 'movement:testnet',
+  DEVNET = 'm2:devnet',
+  TESTNET = 'm2:testnet',
 }
 
 export const DISPLAY_NETWORK = {

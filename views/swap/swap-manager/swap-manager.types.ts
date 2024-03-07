@@ -7,7 +7,7 @@ import {
   UseFormSetValue,
 } from 'react-hook-form';
 
-import { Network } from '@/lib';
+import { Network } from '@/constants/network';
 
 import { SwapForm, SwapPath } from '../swap.types';
 

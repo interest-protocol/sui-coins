@@ -3,7 +3,7 @@ import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import toast from 'react-hot-toast';
 
 import { EXPLORER_URL } from '@/constants';
-import { Network } from '@/lib';
+import { Network } from '@/constants/network';
 
 export const showTXSuccessToast = async (
   tx: SuiTransactionBlockResponse,

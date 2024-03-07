@@ -10,10 +10,10 @@ import { FC, useState } from 'react';
 import { v4 } from 'uuid';
 
 import { DISPLAY_NETWORK } from '@/constants/network';
+import { Network } from '@/constants/network';
 import { wrapperVariants } from '@/constants/wrapper-variants';
 import { useNetwork } from '@/context/network';
 import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
-import { Network } from '@/lib';
 import { ChevronDownSVG, MovementLogoSVG } from '@/svg';
 
 import OptionItem from './menu-options/option-item';

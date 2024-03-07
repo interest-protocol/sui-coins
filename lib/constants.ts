@@ -1,12 +1,8 @@
 import { FC } from 'react';
 
 import { SVGProps } from '@/components/svg/svg.types';
+import { Network } from '@/constants/network';
 import { ETHSVG, MOVSVG, USDCSVG } from '@/svg';
-
-export enum Network {
-  DEVNET = 'm2:devnet',
-  TESTNET = 'm2:testnet',
-}
 
 /* eslint-disable @typescript-eslint/no-duplicate-enum-values */
 export enum Rounding {

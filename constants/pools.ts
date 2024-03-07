@@ -1,4 +1,4 @@
-import { Network } from '@/lib';
+import { Network } from '@/constants/network';
 import { PoolCardProps } from '@/views/pools/pool-card/pool-card.types';
 
 import { COINS } from './coins';

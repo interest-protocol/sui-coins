@@ -1,4 +1,4 @@
-import { Network } from '@/constants';
+import { Network } from '@/constants/network';
 import { Chain } from '@/interface';
 
 export interface TokenIconProps {
