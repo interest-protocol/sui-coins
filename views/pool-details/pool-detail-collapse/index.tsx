@@ -1,9 +1,15 @@
-import { Box, Typography } from '@interest-protocol/ui-kit';
+import { Box, Motion, Typography } from '@interest-protocol/ui-kit';
 import { FC, useState } from 'react';
 
-import { MinusSVG, PlusSVG } from '@/svg';
-
+import CollapseIcon from './collapsible-icon';
 import { PoolDetailCollapseProps } from './pool-detail-collapse.type';
+
+const variants = {
+  collapsed: {
+    height: 'auto',
+  },
+  rest: { height: 0 },
+};
 
 const PoolDetailCollapse: FC<PoolDetailCollapseProps> = ({
   title,
@@ -16,7 +22,7 @@ const PoolDetailCollapse: FC<PoolDetailCollapseProps> = ({
   };
 
   return (
-    <Box borderBottom="1px solid" px="s">
+    <>
       <Box
         display="flex"
         height="3.5rem"
@@ -24,20 +30,26 @@ const PoolDetailCollapse: FC<PoolDetailCollapseProps> = ({
         alignItems="center"
         justifyContent="space-between"
         onClick={handleCollapseClick}
+        px="s"
       >
         <Typography size="large" variant="label">
           {title}
         </Typography>
-        <Box>
-          {isExpanded ? (
-            <MinusSVG maxHeight="2.5rem" maxWidth="2.5rem" width="2.5rem" />
-          ) : (
-            <PlusSVG maxHeight="2.5rem" maxWidth="2.5rem" width="2.5rem" />
-          )}
-        </Box>
+        <Motion initial="rest" animate={isExpanded ? 'collapsed' : 'rest'}>
+          <CollapseIcon />
+        </Motion>
       </Box>
-      {isExpanded ? <Box py="s">{children}</Box> : null}
-    </Box>
+      <Motion
+        initial="rest"
+        variants={variants}
+        animate={isExpanded ? 'collapsed' : 'rest'}
+        overflow="hidden"
+        borderBottom="1px solid"
+        px="s"
+      >
+        {children}
+      </Motion>
+    </>
   );
 };
 

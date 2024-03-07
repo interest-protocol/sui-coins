@@ -1,8 +1,8 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { v4 } from 'uuid';
 
-import PoolDetailCollapse from '../pool-detail-collapse/pool-detail-collapse';
-import PoolDetailsCollapseItemStandard from '../pool-detail-collapse/pool-detail-collapse-item-standard';
+import PoolDetailCollapse from '../pool-detail-collapse';
+import PoolDetailsCollapseItemStandard from '../pool-detail-collapse/item-standard';
 import { POOL_INFORMATION_DATA } from './pool-detail.data';
 
 const PoolDetail = () => {
