@@ -1,25 +1,32 @@
-import { ReactNode } from 'react';
+import { FC, ReactNode } from 'react';
 
-export interface PoolDetailCollapseProps {
+import { SVGProps } from '@/components/svg/svg.types';
+
+export interface PoolDetailAccordionProps {
   title: string;
   children: ReactNode;
 }
 
-export interface PoolDetailsCollapseItemStandardProps {
+export interface PoolDetailAccordionItemStandardProps {
   label: string;
+  labelColor?: string;
   content: string | number;
-  hasAddtionalInfo?: boolean;
+  popupInfo?: string;
   isCopyClipBoard?: boolean;
 }
 
-export interface PoolDetailsCollapseItem {
-  label: string;
-  info: number | string;
-  additionalInfo?: boolean;
-  clipBoard?: boolean;
+export interface PoolDetailAccordionItemCoinProps {
+  value: string;
+  coinName: string;
+  Icon?: FC<SVGProps>;
+  conversion?: string;
+  percentage?: string;
 }
 
-export interface PoolDetailsCollapseData {
+export interface PoolDetailAccordionData {
   title: string;
-  data: Array<PoolDetailsCollapseItem>;
+  total?: string;
+  data:
+    | Array<PoolDetailAccordionItemStandardProps>
+    | Array<PoolDetailAccordionItemCoinProps>;
 }

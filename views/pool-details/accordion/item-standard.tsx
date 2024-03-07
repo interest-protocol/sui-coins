@@ -1,14 +1,14 @@
-import { Box, Typography } from '@interest-protocol/ui-kit';
+import { Box, TooltipWrapper, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
 import { ClipboardSVG, InformationCircleSVG } from '@/svg';
 import { copyToClipboard } from '@/utils';
 
-import { PoolDetailsCollapseItemStandardProps } from './accordion.type';
+import { PoolDetailAccordionItemStandardProps } from './accordion.type';
 
 const PoolDetailsCollapseItemStandard: FC<
-  PoolDetailsCollapseItemStandardProps
-> = ({ label, content, hasAddtionalInfo, isCopyClipBoard }) => {
+  PoolDetailAccordionItemStandardProps
+> = ({ label, content, popupInfo, isCopyClipBoard, labelColor }) => {
   const clipBoardSuccessMessage = 'Address copied to the clipboard';
 
   return (
@@ -19,36 +19,52 @@ const PoolDetailsCollapseItemStandard: FC<
       alignItems="center"
       justifyContent="space-between"
     >
-      <Typography size="medium" variant="body">
+      <Typography
+        size="medium"
+        color={labelColor ? labelColor : ' '}
+        variant="body"
+      >
         {label}
       </Typography>
       <Box
         px="m"
         py="xs"
         display="flex"
-        bg="onSurface"
+        bg="lowContainer"
         borderRadius="xs"
+        color="onSurface"
         alignItems="center"
-        color="lowContainer"
         justifyContent="space-between"
         width={isCopyClipBoard ? '10rem' : 'auto'}
       >
         <Box
-          mr="2xs"
           overflow="hidden"
           whiteSpace="nowrap"
           textOverflow="ellipsis"
           width={isCopyClipBoard ? '8rem' : 'auto'}
+          mr={isCopyClipBoard || popupInfo ? 'xs' : ''}
         >
-          {content}
+          <Typography size="medium" variant="body">
+            {content}
+          </Typography>
         </Box>
-        {hasAddtionalInfo && (
-          <InformationCircleSVG
-            width="0.875rem"
-            maxWidth="0.875rem"
-            maxHeight="0.875rem"
-            cursor="pointer"
-          />
+        {popupInfo && (
+          <TooltipWrapper
+            bg="onSurface"
+            tooltipPosition="left"
+            tooltipContent={
+              <Typography variant="body" size="small" color="surface">
+                {popupInfo}
+              </Typography>
+            }
+          >
+            <InformationCircleSVG
+              width="0.875rem"
+              maxWidth="0.875rem"
+              maxHeight="0.875rem"
+              cursor="pointer"
+            />
+          </TooltipWrapper>
         )}
         {isCopyClipBoard && (
           <ClipboardSVG
