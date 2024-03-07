@@ -2,10 +2,10 @@ import { Box } from '@interest-protocol/ui-kit';
 import { FC, useState } from 'react';
 import { v4 } from 'uuid';
 
-import { PoolDetailsTabsProps } from './pool-details-tabs.types';
+import { DetaiTabsProps } from './pool-details-tabs.types';
 import PoolDetailsTabsItem from './pool-details-tabs-item';
 
-const PoolDetailsTabs: FC<PoolDetailsTabsProps> = ({
+const DetaiTabs: FC<DetaiTabsProps> = ({
   items,
   defaultTabIndex = 0,
   onChangeTab,
@@ -38,4 +38,4 @@ const PoolDetailsTabs: FC<PoolDetailsTabsProps> = ({
   );
 };
 
-export default PoolDetailsTabs;
+export default DetaiTabs;
