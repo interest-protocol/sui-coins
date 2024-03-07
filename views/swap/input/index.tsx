@@ -8,7 +8,7 @@ import SwapFormFieldSlider from '../swap-manager/swap-manager-slider';
 import HeaderInfo from './header-info';
 import { InputProps } from './input.types';
 import InputErrorMessage from './input-error-message';
-import Token from './token';
+import SelectToken from './select-token';
 
 const Input: FC<InputProps> = ({ label }) => {
   const { control, register, setValue } = useFormContext();
@@ -28,7 +28,7 @@ const Input: FC<InputProps> = ({ label }) => {
       <Box py="l">
         <HeaderInfo label={label} balance={balance} />
         <Box pl="l" pt="1rem" display="flex" justifyContent="space-between">
-          <Token label={label} />
+          <SelectToken label={label} />
           <Box display="flex" flexDirection="column" alignItems="flex-end">
             <TextField
               pr="0rem"

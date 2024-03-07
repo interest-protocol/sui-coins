@@ -1,7 +1,11 @@
 import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import { FC } from 'react';
 
+import { SVGProps } from '@/components/svg/svg.types';
 import { TOKEN_SYMBOL } from '@/lib';
-import { ETHSVG, MovSVG, USDCSVG } from '@/svg';
+import { ETHSVG, MOVSVG, USDCSVG } from '@/svg';
+
+import { Network } from './network';
 
 export const ETH_TYPE =
   '0x7a737fa2643f953d0adb669ab4274ac250c597c47fae6d1af878f38c3b92b370::eth::ETH';
@@ -118,6 +122,38 @@ export const REGISTRY_POOLS = {
 export const COINS_SVG_MAP_V2 = {
   [ETH_TYPE]: ETHSVG,
   [USDC_TYPE]: USDCSVG,
-  [SUI_TYPE_ARG]: MovSVG,
-  default: MovSVG,
+  [SUI_TYPE_ARG]: MOVSVG,
+  default: MOVSVG,
+};
+
+export const TESTNET_BASE_COINS = {
+  ETH: '0xb8656a09a489819f07c444cb4a4a61a3b482a5ea994fd71b0a643ffc1c2f2dd0::eth::ETH',
+  BTC: '0xb8656a09a489819f07c444cb4a4a61a3b482a5ea994fd71b0a643ffc1c2f2dd0::btc::BTC',
+  MOV: '0xb8656a09a489819f07c444cb4a4a61a3b482a5ea994fd71b0a643ffc1c2f2dd0::mov::MOV',
+  USDC: '0xb8656a09a489819f07c444cb4a4a61a3b482a5ea994fd71b0a643ffc1c2f2dd0::usdc::USDC',
+};
+
+export const DEVNET_BASE_COINS = {
+  NATIVE_WORMHOLE_ETH:
+    '0xaf8cd5edc19c4512f4259f0bee101a40d41ebed738ade5874359610ef8eeced5::coin::COIN',
+  ETH_WORMHOLE_USDC:
+    '0xc060006111016b8a020ad5b33834984a437aaa7d3c74c18e09a95d48aceab08c::coin::COIN',
+  SC_V_MOV_ETH:
+    '0xe374195718ad4e47fc69952e903afbb8188de626714ad8e14aeb5a63483fc3e1::sc_v_ move_eth::SC_V_MOV_ETH',
+};
+
+export const TOKEN_ICONS: Record<
+  Network,
+  Record<string, string | FC<SVGProps>>
+> = {
+  [Network.TESTNET]: {
+    ETH: ETHSVG,
+    USDT: USDCSVG,
+    MOV: MOVSVG,
+  },
+  [Network.DEVNET]: {
+    [DEVNET_BASE_COINS.NATIVE_WORMHOLE_ETH]: ETHSVG,
+    [DEVNET_BASE_COINS.ETH_WORMHOLE_USDC]: USDCSVG,
+    [DEVNET_BASE_COINS.SC_V_MOV_ETH]: MOVSVG,
+  },
 };

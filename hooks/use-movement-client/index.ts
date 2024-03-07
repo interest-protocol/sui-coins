@@ -2,7 +2,8 @@ import { SuiClient } from '@mysten/sui.js/client';
 
 import { RPC_URL } from '@/constants';
 import { useNetwork } from '@/context/network';
-import { Network } from '@/lib';
+
+import { Network } from '../../constants/network';
 
 const client = {
   [Network.DEVNET]: new SuiClient({

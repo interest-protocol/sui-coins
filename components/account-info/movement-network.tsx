@@ -9,7 +9,8 @@ import { not, toPairs } from 'ramda';
 import { FC, useState } from 'react';
 import { v4 } from 'uuid';
 
-import { DISPLAY_NETWORK, wrapperVariants } from '@/constants';
+import { DISPLAY_NETWORK } from '@/constants/network';
+import { wrapperVariants } from '@/constants/wrapper-variants';
 import { useNetwork } from '@/context/network';
 import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
 import { Network } from '@/lib';

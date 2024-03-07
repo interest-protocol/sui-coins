@@ -1,23 +1,25 @@
-import { Box, Button, Motion } from '@interest-protocol/ui-kit';
+import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
 import BigNumber from 'bignumber.js';
 import { useRouter } from 'next/router';
 import { pathOr } from 'ramda';
 import { FC, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { TokenIcon } from '@/components';
 import { COINS_MAP } from '@/constants/coins';
+import { Network } from '@/constants/network';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks';
 import { useModal } from '@/hooks/use-modal';
-import { FixedPointMath, TOKEN_ICONS } from '@/lib';
-import { ChevronDownSVG } from '@/svg';
+import { FixedPointMath } from '@/lib';
+import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
 import { updateURL } from '@/utils';
 
-import SelectTokenModal from '../../components/select-token-modal';
-import { SwapForm } from '../../swap.types';
-import { InputProps as DropdownTokenProps } from '../input.types';
+import SelectTokenModal from '../components/select-token-modal';
+import { SwapForm } from '../swap.types';
+import { InputProps as DropdownTokenProps } from './input.types';
 
-const Token: FC<DropdownTokenProps> = ({ label }) => {
+const SelectToken: FC<DropdownTokenProps> = ({ label }) => {
   const { coinsMap } = useWeb3();
   const { pathname } = useRouter();
   const { network } = useNetwork();
@@ -26,10 +28,15 @@ const Token: FC<DropdownTokenProps> = ({ label }) => {
 
   const { setModal, handleClose } = useModal();
 
-  const { symbol } = useWatch({
+  const currentToken = useWatch({
     control,
     name: label,
   });
+
+  const { symbol: currentSymbol, type: currentType } = currentToken ?? {
+    symbol: undefined,
+    type: undefined,
+  };
 
   const handleOnSelect = ({ symbol, type, decimals }: any) => {
     const currentToken = COINS_MAP[type];
@@ -44,6 +51,7 @@ const Token: FC<DropdownTokenProps> = ({ label }) => {
           pathOr(BigNumber(0), [currentToken.type, 'totalBalance'], coinsMap)
         ),
         locked: false,
+        chain: 'ETH',
       });
     }
 
@@ -56,6 +64,7 @@ const Token: FC<DropdownTokenProps> = ({ label }) => {
         pathOr(BigNumber(0), [type, 'totalBalance'], coinsMap)
       ),
       locked: false,
+      chain: 'ETH',
     });
     setValue(`${label === 'from' ? 'to' : 'from'}.value`, '');
 
@@ -63,7 +72,8 @@ const Token: FC<DropdownTokenProps> = ({ label }) => {
     setIsOpen(false);
   };
 
-  const openModal = () =>
+  const openModal = () => {
+    setIsOpen(!isOpen);
     setModal(
       <Motion
         animate={{ scale: 1 }}
@@ -79,6 +89,7 @@ const Token: FC<DropdownTokenProps> = ({ label }) => {
         allowClose: true,
       }
     );
+  };
 
   const changeURL = (type: string) => {
     const searchParams = new URLSearchParams(location.search);
@@ -96,47 +107,51 @@ const Token: FC<DropdownTokenProps> = ({ label }) => {
     name: `${label === 'to' ? 'from' : 'to'}.type`,
   });
 
-  const Icon = TOKEN_ICONS[network][symbol];
-
   return (
-    <Box position="relative">
+    <Box
+      position="relative"
+      minWidth={['8rem', '8rem', '8rem', '8rem', '10rem']}
+    >
       <Button
-        pr="1rem"
-        pl="0.5rem"
+        p="2xs"
+        fontSize="s"
+        width="100%"
         variant="tonal"
-        fontSize="0.875rem"
+        borderRadius="xs"
+        color="onSurface"
+        bg="highestContainer"
         onClick={openModal}
         PrefixIcon={
           <Box
-            width="1.5rem"
+            as="span"
             display="flex"
+            width="2.5rem"
             bg="onSurface"
-            color="surface"
-            height="1.5rem"
-            minWidth="1.5rem"
-            alignItems="center"
-            position="relative"
-            borderRadius="full"
-            justifyContent="center"
-          >
-            <Icon maxWidth="1.125rem" maxHeight="1.125rem" width="100%" />
-          </Box>
-        }
-        SuffixIcon={
-          <Box
-            display="flex"
+            height="2.5rem"
+            color="onPrimary"
+            borderRadius="xs"
             alignItems="center"
             justifyContent="center"
-            rotate={isOpen ? '0deg' : '-90deg'}
           >
-            <ChevronDownSVG width="100%" maxWidth="1rem" maxHeight="1rem" />
+            <TokenIcon
+              network={network}
+              chain={currentToken.chain}
+              tokenId={network === Network.DEVNET ? currentType : currentSymbol}
+            />
           </Box>
         }
       >
-        {symbol}
+        <Typography size="large" variant="label" p="xs">
+          {currentSymbol ?? 'Select Token'}
+        </Typography>
+        {currentSymbol ? (
+          <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+        ) : (
+          <ChevronRightSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+        )}
       </Button>
     </Box>
   );
 };
 
-export default Token;
+export default SelectToken;

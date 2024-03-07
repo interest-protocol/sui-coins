@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import { SVGProps } from '@/components/svg/svg.types';
-import { ETHSVG, MovSVG, USDCSVG } from '@/svg';
+import { ETHSVG, MOVSVG, USDCSVG } from '@/svg';
 
 export enum Network {
   DEVNET = 'm2:devnet',
@@ -24,10 +24,10 @@ export enum TOKEN_SYMBOL {
 export const TOKEN_ICONS: Record<Network, Record<string, FC<SVGProps>>> = {
   [Network.DEVNET]: {
     [TOKEN_SYMBOL.USDC]: USDCSVG,
-    [TOKEN_SYMBOL.MOV]: MovSVG,
+    [TOKEN_SYMBOL.MOV]: MOVSVG,
     [TOKEN_SYMBOL.ETH]: ETHSVG,
   },
   [Network.TESTNET]: {
-    [TOKEN_SYMBOL.MOV]: MovSVG,
+    [TOKEN_SYMBOL.MOV]: MOVSVG,
   },
 };
