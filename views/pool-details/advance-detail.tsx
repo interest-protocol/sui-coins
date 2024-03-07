@@ -1,7 +1,7 @@
 import { Box } from '@interest-protocol/ui-kit';
 
-const PoolAdvanceDetail = () => {
+const AdvanceDetail = () => {
   return <Box>Advance</Box>;
 };
 
-export default PoolAdvanceDetail;
+export default AdvanceDetail;

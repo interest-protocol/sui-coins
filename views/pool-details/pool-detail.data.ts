@@ -1,4 +1,4 @@
-import { PoolDetailsCollapseData } from '../pool-detail-collapse/pool-detail-collapse.type';
+import { PoolDetailsCollapseData } from './accordion/accordion.type';
 
 export const POOL_INFORMATION_DATA: PoolDetailsCollapseData = {
   title: 'POOL INFORMATION',

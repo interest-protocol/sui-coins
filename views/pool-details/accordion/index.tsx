@@ -1,8 +1,8 @@
 import { Box, Motion, Typography } from '@interest-protocol/ui-kit';
 import { FC, useState } from 'react';
 
-import CollapseIcon from './collapsible-icon';
-import { PoolDetailCollapseProps } from './pool-detail-collapse.type';
+import { PoolDetailCollapseProps } from './accordion.type';
+import CollapseIcon from './accordion-icon';
 
 const variants = {
   collapsed: {
