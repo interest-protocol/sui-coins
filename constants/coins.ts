@@ -4,10 +4,10 @@ import { TOKEN_SYMBOL } from '@/lib';
 import { ETHSVG, MovSVG, USDCSVG } from '@/svg';
 
 export const ETH_TYPE =
-  '0x7a737fa2643f953d0adb669ab4274ac250c597c47fae6d1af878f38c3b92b370::eth::ETH';
+  '0x8e614b777730a3b481a5f30b53be062fc0c01f93c6fdfe9fb19ffbae7777b700::eth::ETH';
 
 export const USDC_TYPE =
-  '0x7a737fa2643f953d0adb669ab4274ac250c597c47fae6d1af878f38c3b92b370::usdc::USDC';
+  '0x8e614b777730a3b481a5f30b53be062fc0c01f93c6fdfe9fb19ffbae7777b700::usdc::USDC';
 
 export const SC_V_MOV_ETH =
   '0xe374195718ad4e47fc69952e903afbb8188de626714ad8e14aeb5a63483fc3e1::sc_v_sui_eth::SC_V_SUI_ETH';
