@@ -71,3 +71,84 @@ export const POOL_COMPOSITION: PoolDetailAccordionData = {
   ],
   total: 'USD 54,900',
 };
+
+export const POOL_PARAMETERS: PoolDetailAccordionData = {
+  title: 'PARAMETERS',
+  data: [
+    {
+      label: 'Mid Fee',
+      content: '0.01',
+    },
+    {
+      label: 'Out Fee',
+      content: '1.4',
+    },
+    {
+      label: 'A',
+      popupInfo: 'A',
+      content: '540000',
+    },
+    {
+      label: 'Gamma',
+      content: '0.0000805',
+    },
+    {
+      label: 'Allowed Extra Profit',
+      content: '0.0000000001',
+    },
+    {
+      label: 'Fee Gamma',
+      content: '0.0004',
+    },
+    {
+      label: 'Adjustment Step',
+      content: '0.0000001',
+    },
+    {
+      label: 'Moving Average Time',
+      content: '601',
+    },
+  ],
+};
+
+export const POOL_PRICE: PoolDetailAccordionData = {
+  title: 'PRICE',
+  data: [
+    {
+      Icon: USDTSVG,
+      coinName: 'USDT',
+      value: '2,914.75',
+    },
+    {
+      Icon: BTCSVG,
+      coinName: 'BTC',
+      value: '51,420.9',
+    },
+    {
+      Icon: EthCircleSVG,
+      coinName: 'ETH',
+      value: '2,821.2',
+    },
+  ],
+};
+
+export const POOL_ORACLE_PRICE: PoolDetailAccordionData = {
+  title: 'ORACLE PRICE',
+  data: [
+    {
+      Icon: USDTSVG,
+      coinName: 'USDT',
+      value: '2,914.75',
+    },
+    {
+      Icon: BTCSVG,
+      coinName: 'BTC',
+      value: '51,916.4',
+    },
+    {
+      Icon: EthCircleSVG,
+      coinName: 'ETH',
+      value: '2,914.7',
+    },
+  ],
+};

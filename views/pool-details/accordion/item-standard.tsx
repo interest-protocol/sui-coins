@@ -21,7 +21,7 @@ const PoolDetailsCollapseItemStandard: FC<
     >
       <Typography
         size="medium"
-        color={labelColor ? labelColor : ' '}
+        color={labelColor ? labelColor : ''}
         variant="body"
       >
         {label}
@@ -30,8 +30,8 @@ const PoolDetailsCollapseItemStandard: FC<
         px="m"
         py="xs"
         display="flex"
-        bg="lowContainer"
         borderRadius="xs"
+        bg="lowContainer"
         color="onSurface"
         alignItems="center"
         justifyContent="space-between"
@@ -39,12 +39,16 @@ const PoolDetailsCollapseItemStandard: FC<
       >
         <Box
           overflow="hidden"
-          whiteSpace="nowrap"
-          textOverflow="ellipsis"
-          width={isCopyClipBoard ? '8rem' : 'auto'}
           mr={isCopyClipBoard || popupInfo ? 'xs' : ''}
+          width={isCopyClipBoard ? '8rem' : 'auto'}
         >
-          <Typography size="medium" variant="body">
+          <Typography
+            size="medium"
+            variant="body"
+            overflow="hidden"
+            whiteSpace="nowrap"
+            textOverflow="ellipsis"
+          >
             {content}
           </Typography>
         </Box>
@@ -60,9 +64,9 @@ const PoolDetailsCollapseItemStandard: FC<
           >
             <InformationCircleSVG
               width="0.875rem"
+              cursor="pointer"
               maxWidth="0.875rem"
               maxHeight="0.875rem"
-              cursor="pointer"
             />
           </TooltipWrapper>
         )}
@@ -73,9 +77,9 @@ const PoolDetailsCollapseItemStandard: FC<
               copyToClipboard(content.toString(), clipBoardSuccessMessage);
             }}
             width="1.25rem"
+            cursor="pointer"
             maxWidth="1.25rem"
             maxHeight="1.25rem"
-            cursor="pointer"
           />
         )}
       </Box>

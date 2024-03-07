@@ -12,7 +12,7 @@ const ItemCoin: FC<PoolDetailAccordionItemCoinProps> = ({
 }) => {
   return (
     <Box
-      py="xs"
+      py="l"
       display="flex"
       alignItems="center"
       justifyContent="space-between"
@@ -32,17 +32,21 @@ const ItemCoin: FC<PoolDetailAccordionItemCoinProps> = ({
           <Typography size="large" variant="body">
             {value}
           </Typography>
-          <Typography size="small" color="outline" variant="body">
-            {conversion}
-          </Typography>
-        </Box>
-        <Box display="flex" alignItems="center" justifyContent="center">
-          <Tag variant="filled" bg="lowContainer" color="onSurface">
-            <Typography size="medium" variant="label">
-              {percentage}
+          {conversion && (
+            <Typography size="small" color="outline" variant="body">
+              {conversion}
             </Typography>
-          </Tag>
+          )}
         </Box>
+        {percentage && (
+          <Box display="flex" alignItems="center" justifyContent="center">
+            <Tag variant="filled" bg="lowContainer" color="onSurface">
+              <Typography size="medium" variant="label">
+                {percentage}
+              </Typography>
+            </Tag>
+          </Box>
+        )}
       </Box>
     </Box>
   );
