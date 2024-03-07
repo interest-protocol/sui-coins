@@ -23,6 +23,7 @@ export interface PoolCardTokenInfoProps {
 export interface PoolCardTradeProps {
   index: number;
   amount: string;
+  isInfo?: boolean;
   description: string;
   tooltipInfo: string;
 }
