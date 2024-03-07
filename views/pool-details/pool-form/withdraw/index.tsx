@@ -2,11 +2,9 @@ import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
 import { not } from 'ramda';
 import { FC, useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { v4 } from 'uuid';
 
 import { useDialog } from '@/hooks';
 import { useModal } from '@/hooks/use-modal';
-import { PoolToken } from '@/views/pools/pools.types';
 import ManageSlippage from '@/views/swap/manage-slippage';
 
 import PoolField from '../component/field';
@@ -20,8 +18,6 @@ const PoolWithdraw: FC<PoolFormProps> = ({ poolOptionView }) => {
   const { dialog, handleClose } = useDialog();
 
   const { getValues } = useFormContext();
-
-  const lpCoin = getValues('lpCoin') as PoolToken;
 
   const handleWithdraw = () =>
     new Promise((resolve) => {
@@ -90,9 +86,7 @@ const PoolWithdraw: FC<PoolFormProps> = ({ poolOptionView }) => {
         I would like to Withdraw...
       </Typography>
       <Box display="flex" flexDirection="column" gap="m">
-        {[lpCoin].map((_: any, index: number) => (
-          <PoolField key={v4()} index={index} poolOptionView={poolOptionView} />
-        ))}
+        <PoolField index={0} poolOptionView={poolOptionView} />
         <Selection />
       </Box>
       <Box>

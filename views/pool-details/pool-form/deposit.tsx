@@ -71,7 +71,7 @@ const PoolDeposit: FC<PoolFormProps> = ({ poolOptionView }) => {
         initial={{ scale: 0.85 }}
         transition={{ duration: 0.3 }}
       >
-        <PoolPreview getValues={getValues} onSubmit={onSubmit} isDeposit />
+        <PoolPreview getValues={getValues} onSubmit={onSubmit} />
       </Motion>,
       {
         isOpen: true,
@@ -91,7 +91,10 @@ const PoolDeposit: FC<PoolFormProps> = ({ poolOptionView }) => {
           <PoolField key={v4()} index={index} poolOptionView={poolOptionView} />
         ))}
       </Box>
-      <PoolReceiveSection symbol="LPs Coin" balance={getValues('lpCoin')} />
+      <PoolReceiveSection
+        symbol="LPs Coin"
+        balance={getValues('lpCoin.balance')}
+      />
       <Box>
         <Typography variant="body" size="large" mb="m">
           Manage your slippage
@@ -100,7 +103,6 @@ const PoolDeposit: FC<PoolFormProps> = ({ poolOptionView }) => {
           <ManageSlippage shortButton />
         </Box>
       </Box>
-
       <Button
         py="s"
         mt="xl"
