@@ -11,10 +11,10 @@ const MovingBallSVG: FC<SVGProps> = ({ maxWidth, maxHeight, ...props }) => (
     {...props}
   >
     <circle cx="273" cy="30" r="30" fill="currentColor" />
-    <rect width="273" height="60" fill="url(#paint0_radial_0_1)" />
+    <rect width="273" height="60" fill="url(#riQTUuoZ3iV9RQEH)" />
     <defs>
       <radialGradient
-        id="paint0_radial_0_1"
+        id="riQTUuoZ3iV9RQEH"
         cx="0"
         cy="0"
         r="1"
@@ -41,10 +41,10 @@ const StaticBallSVG: FC<SVGProps> = ({ maxWidth, maxHeight, ...props }) => (
   </svg>
 );
 
-const Illustration: FC = () => {
-  return (
+const Illustration: FC = () => (
+  <Box display="flex" flexDirection="column" gap="m" width="11rem">
     <Box
-      width="12rem"
+      width="100%"
       height="2rem"
       display="flex"
       overflow="hidden"
@@ -59,13 +59,11 @@ const Illustration: FC = () => {
         top="0"
         height="2rem"
         position="absolute"
-        initial={{ x: '-100%', scaleX: '1' }}
-        animate={{
-          x: ['-100%', '100%', '100%', '-100%'],
-          rotate: ['0deg', '0deg', '180deg', '180deg'],
-        }}
+        initial={{ x: '-95%' }}
+        animate={{ x: '50%' }}
         transition={{
-          duration: 4,
+          duration: 2,
+          ease: 'linear',
           repeat: Infinity,
         }}
       >
@@ -75,7 +73,97 @@ const Illustration: FC = () => {
         <StaticBallSVG maxHeight="2rem" maxWidth="100%" height="100%" />
       </Box>
     </Box>
-  );
-};
+    <Box
+      width="100%"
+      height="2rem"
+      display="flex"
+      overflow="hidden"
+      position="relative"
+      borderRadius="1rem"
+      justifyContent="space-between"
+    >
+      <Box>
+        <StaticBallSVG maxHeight="2rem" maxWidth="100%" height="100%" />
+      </Box>
+      <Motion
+        top="0"
+        height="2rem"
+        position="absolute"
+        initial={{ x: '95%', scaleX: '-1' }}
+        animate={{ x: '-50%' }}
+        transition={{
+          duration: 2,
+          ease: 'linear',
+          repeat: Infinity,
+        }}
+      >
+        <MovingBallSVG maxHeight="2rem" maxWidth="100%" height="100%" />
+      </Motion>
+      <Box>
+        <StaticBallSVG maxHeight="2rem" maxWidth="100%" height="100%" />
+      </Box>
+    </Box>
+    <Box
+      width="100%"
+      height="2rem"
+      display="flex"
+      overflow="hidden"
+      position="relative"
+      borderRadius="1rem"
+      justifyContent="space-between"
+    >
+      <Box>
+        <StaticBallSVG maxHeight="2rem" maxWidth="100%" height="100%" />
+      </Box>
+      <Motion
+        top="0"
+        height="2rem"
+        position="absolute"
+        initial={{ x: '-95%' }}
+        animate={{ x: '50%' }}
+        transition={{
+          duration: 2,
+          ease: 'linear',
+          repeat: Infinity,
+        }}
+      >
+        <MovingBallSVG maxHeight="2rem" maxWidth="100%" height="100%" />
+      </Motion>
+      <Box>
+        <StaticBallSVG maxHeight="2rem" maxWidth="100%" height="100%" />
+      </Box>
+    </Box>
+    <Box
+      width="100%"
+      height="2rem"
+      display="flex"
+      overflow="hidden"
+      position="relative"
+      borderRadius="1rem"
+      justifyContent="space-between"
+    >
+      <Box>
+        <StaticBallSVG maxHeight="2rem" maxWidth="100%" height="100%" />
+      </Box>
+      <Motion
+        top="0"
+        height="2rem"
+        position="absolute"
+        initial={{ x: '95%', scaleX: '-1' }}
+        animate={{ x: '-50%' }}
+        transition={{
+          duration: 2,
+          ease: 'linear',
+          repeat: Infinity,
+        }}
+      >
+        <MovingBallSVG maxHeight="2rem" maxWidth="100%" height="100%" />
+      </Motion>
+      <Box>
+        <StaticBallSVG maxHeight="2rem" maxWidth="100%" height="100%" />
+      </Box>
+    </Box>
+  </Box>
+);
 
 export default Illustration;

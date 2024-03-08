@@ -5,20 +5,20 @@ import { CreatePoolForm } from '../../pool-create.types';
 import SelectVolatilityCard from '../select-volatibility-card';
 import Illustration from './illustration';
 
-const SelectStableCard: FC = () => {
+const SelectVolatileCard: FC = () => {
   const { control, setValue } = useFormContext<CreatePoolForm>();
 
   const isStable = useWatch({ control, name: 'isStable' });
 
   return (
     <SelectVolatilityCard
-      title="Stable"
-      isSelected={isStable === true}
+      title="Volatile"
       illustration={<Illustration />}
-      onSelect={() => setValue('isStable', true)}
-      description="Will allow you to have a stable pair, 5 line max."
+      isSelected={isStable === false}
+      onSelect={() => setValue('isStable', false)}
+      description="Will allow you to have a volatile pair, 3 line max."
     />
   );
 };
 
-export default SelectStableCard;
+export default SelectVolatileCard;

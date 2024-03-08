@@ -1,4 +1,4 @@
-import { Box } from '@interest-protocol/ui-kit';
+import { Box, Button } from '@interest-protocol/ui-kit';
 import { useRouter } from 'next/router';
 import { ReactNode, useState } from 'react';
 import { v4 } from 'uuid';
@@ -56,7 +56,14 @@ const PoolCreate = () => {
           currentStep={currentStep}
         />
       </Box>
-      <Box>{stepContent[currentStep]}</Box>
+      <Box my="xl">{stepContent[currentStep]}</Box>
+      <Button
+        mx="auto"
+        variant="filled"
+        onClick={() => onStepClick(currentStep + 1)}
+      >
+        Next
+      </Button>
     </Layout>
   );
 };

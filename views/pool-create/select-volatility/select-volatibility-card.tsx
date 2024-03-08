@@ -5,34 +5,34 @@ import type { SelectVolatilityCardProps } from './select-volatibility.types';
 
 const SelectVolatilityCard: FC<SelectVolatilityCardProps> = ({
   title,
+  onSelect,
+  isSelected,
   description,
   illustration,
 }) => (
   <Box
     p="2xl"
+    gap="xl"
     width="16rem"
+    display="flex"
+    cursor="pointer"
     borderRadius="xs"
-    bg="lowestContainer"
-    nHover={{ boxShadow: '0 2rem 3rem #0004' }}
+    onClick={onSelect}
+    alignItems="center"
+    flexDirection="column"
+    transition="scale 300ms ease-in-out"
+    nHover={{ boxShadow: '0 2rem 3rem #0004', scale: '1.02' }}
+    bg={isSelected ? 'primary' : 'lowestContainer'}
   >
-    <Box color="primary">{illustration}</Box>
-    <Typography
-      size="small"
-      variant="headline"
-      color="onSurface"
-      textAlign="center"
-    >
-      {title}
-    </Typography>
-    <Typography
-      px="l"
-      size="medium"
-      variant="body"
-      color="onSurface"
-      textAlign="center"
-    >
-      {description}
-    </Typography>
+    <Box color={isSelected ? '#0053DB' : 'primary'}>{illustration}</Box>
+    <Box color={isSelected ? '#00174B' : 'onSurface'}>
+      <Typography size="small" variant="headline" textAlign="center">
+        {title}
+      </Typography>
+      <Typography px="l" size="medium" variant="body" textAlign="center">
+        {description}
+      </Typography>
+    </Box>
   </Box>
 );
 
