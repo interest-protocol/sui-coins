@@ -11,7 +11,7 @@ const ActionGroup: FC<ActionGroupProps> = ({ showSearchView }) => {
   const { push } = useRouter();
 
   // TODO: Change this route to findPool when this page will be created
-  const handleCreatePool = () => push(Routes[RoutesEnum.Pools]);
+  const handleCreatePool = () => push(Routes[RoutesEnum.PoolCreate]);
 
   return (
     <>

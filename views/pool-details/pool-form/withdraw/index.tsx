@@ -94,7 +94,7 @@ const PoolWithdraw: FC<PoolFormProps> = ({ poolOptionView }) => {
           Manage your slippage
         </Typography>
         <Box bg="container" borderRadius="xs">
-          <ManageSlippage shortButton />
+          <ManageSlippage />
         </Box>
       </Box>
       <Button

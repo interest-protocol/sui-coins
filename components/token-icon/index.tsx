@@ -1,10 +1,11 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import { TOKEN_ICONS } from '@/lib';
+import { TOKEN_ICONS } from '@/constants/coins';
 import { DefaultSVG } from '@/svg';
 
 import { TokenIconProps } from './token-icon.types';
+
 const TokenIcon: FC<TokenIconProps> = ({
   tokenId,
   network,

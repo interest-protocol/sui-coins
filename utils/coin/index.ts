@@ -5,7 +5,7 @@ import { propOr } from 'ramda';
 import {
   Web3ManagerState,
   Web3ManagerSuiObject,
-} from '@/components/web3-manager/web3-manager.types';
+} from '@/components/web3-provider/web3-manager.types';
 
 import { CreateVectorParameterArgs } from './coin.types';
 

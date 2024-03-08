@@ -1,69 +1,58 @@
 import { Box, TextField } from '@interest-protocol/ui-kit';
 import { ChangeEvent, FC } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 import { parseInputEventToNumberString } from '@/utils';
 
-import SwapFormFieldSlider from '../swap-manager/swap-manager-slider';
+import { SwapForm } from '../swap.types';
 import HeaderInfo from './header-info';
 import { InputProps } from './input.types';
-import InputErrorMessage from './input-error-message';
-import Token from './token';
+import SelectToken from './select-token';
+import SwapFormFieldSlider from './swap-manager-slider';
 
 const Input: FC<InputProps> = ({ label }) => {
-  const { control, register, setValue } = useFormContext();
-
-  const balance = useWatch({
-    control,
-    name: `${label}.balance`,
-  });
-
-  const locked = useWatch({
-    control: control,
-    name: `${label}.locked`,
-  });
+  const { register, setValue } = useFormContext<SwapForm>();
 
   return (
-    <>
-      <Box py="l">
-        <HeaderInfo label={label} balance={balance} />
-        <Box pl="l" pt="1rem" display="flex" justifyContent="space-between">
-          <Token label={label} />
-          <Box display="flex" flexDirection="column" alignItems="flex-end">
-            <TextField
-              pr="0rem"
-              pl="-1rem"
-              disabled={locked}
-              placeholder="0.0"
-              textAlign="right"
-              fontSize="1.375rem"
-              lineHeight="1.75rem"
-              {...register(`${label}.value`, {
-                onChange: (v: ChangeEvent<HTMLInputElement>) => {
-                  setValue?.(
-                    `${label}.value`,
-                    parseInputEventToNumberString(v)
-                  );
-                  setValue('lock', false);
-                },
-              })}
-              fieldProps={{
-                width: '100%',
-                border: 'none !important',
-              }}
-            />
-            <InputErrorMessage label={label} />
-          </Box>
-        </Box>
-        <Box pb={label === 'to' ? '2xl' : 's'}>
-          {label === 'from' && (
-            <Box px="s">
-              <SwapFormFieldSlider />
-            </Box>
-          )}
+    <Box>
+      <HeaderInfo label={label} />
+      <Box pl="l" pt="m" display="flex" justifyContent="space-between">
+        <SelectToken label={label} />
+        <Box
+          display="flex"
+          justifyContent="flex-end"
+          alignItems="flex-end"
+          flexDirection="column"
+        >
+          <TextField
+            pl="-1rem"
+            fontSize="2xl"
+            lineHeight="l"
+            placeholder="0"
+            color="onSurface"
+            textAlign="right"
+            fontFamily="Satoshi"
+            {...register(`${label}.value`, {
+              onChange: (v: ChangeEvent<HTMLInputElement>) => {
+                setValue?.(`${label}.value`, parseInputEventToNumberString(v));
+              },
+            })}
+            fieldProps={{
+              borderColor: 'transparent',
+              borderRadius: 'xs',
+              width: '100%',
+            }}
+          />
         </Box>
       </Box>
-    </>
+      <Box pb={label === 'to' ? '2xl' : 's'}>
+        {label === 'from' && (
+          <Box px="s">
+            <SwapFormFieldSlider />
+          </Box>
+        )}
+      </Box>
+    </Box>
   );
 };
 
