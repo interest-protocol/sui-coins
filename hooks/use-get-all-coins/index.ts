@@ -28,10 +28,13 @@ export const useGetAllCoins = () => {
   const suiClient = useMovementClient();
   const { currentAccount } = useWalletKit();
 
+  console.log('====================================');
+  console.log('Sui client :: ', suiClient);
+  console.log('====================================');
   return useSWR(
-    makeSWRKey([network, currentAccount?.address], suiClient.getAllCoins.name),
+    makeSWRKey([network, currentAccount?.address], suiClient?.getAllCoins.name),
     async () => {
-      if (!currentAccount) return null;
+      if (!currentAccount || !suiClient) return null;
       const coinsRaw = await getAllCoins(suiClient, currentAccount.address);
 
       const coinsMetadata: ReadonlyArray<CoinMetadata | null> =
