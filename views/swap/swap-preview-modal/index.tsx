@@ -24,6 +24,7 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
       width="26.875rem"
       minHeight="30rem"
       maxHeight="90vh"
+      color="onSurface"
       alignItems="center"
       display="inline-flex"
       justifyContent="space-between"
@@ -39,7 +40,7 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
           justifyContent="space-between"
         >
           <ArrowLeftSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
-          <Typography size="large" variant="title">
+          <Typography size="large" variant="title" color="onSurface">
             Swap
           </Typography>
           <TimesSVG
@@ -57,7 +58,7 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
             flexDirection="column"
             justifyContent="start"
           >
-            <Typography size="medium" variant="label" mb="xs">
+            <Typography size="medium" variant="label" mb="xs" color="onSurface">
               FROM
             </Typography>
             <Box
@@ -96,7 +97,12 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
               flexDirection="column"
               justifyContent="start"
             >
-              <Typography size="medium" variant="label" mb="xs">
+              <Typography
+                size="medium"
+                variant="label"
+                mb="xs"
+                color="onSurface"
+              >
                 TO (ESTIMATED)
               </Typography>
               <Box
@@ -120,7 +126,7 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
                   >
                     <TokenIcon network={network} tokenId={tokenTo.symbol} />
                   </Box>
-                  <Typography size="small" variant="title">
+                  <Typography size="small" variant="title" color="onSurface">
                     {tokenTo.symbol}
                   </Typography>
                 </Box>

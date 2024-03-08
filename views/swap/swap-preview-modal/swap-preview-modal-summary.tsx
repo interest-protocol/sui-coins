@@ -23,7 +23,7 @@ const SwapPreviewModalSummary: FC = () => {
             size="medium"
             variant="body"
             opacity="0.80"
-            color="#000000A3"
+            color="onSurface"
           >
             Exchange Rate
           </Typography>
@@ -43,7 +43,7 @@ const SwapPreviewModalSummary: FC = () => {
             variant="body"
             size="medium"
             opacity="0.80"
-            color="#000000A3"
+            color="onSurface"
           >
             Exchange fee
           </Typography>
@@ -69,12 +69,12 @@ const SwapPreviewModalSummary: FC = () => {
             variant="body"
             size="medium"
             opacity="0.80"
-            color="#000000A3"
+            color="onSurface"
           >
             Network fee
           </Typography>
           <Box textAlign="right">
-            <Typography size="medium" variant="body">
+            <Typography size="medium" variant="body" color="onSurface">
               0
             </Typography>
           </Box>
