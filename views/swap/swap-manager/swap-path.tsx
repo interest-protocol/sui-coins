@@ -3,7 +3,6 @@ import { FC } from 'react';
 import { useFormContext, UseFormReturn, useWatch } from 'react-hook-form';
 
 import { TokenIcon } from '@/components';
-import { Network } from '@/constants';
 import { COIN_TYPE_TO_SYMBOL } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { SwapArrowSVG } from '@/svg';
@@ -55,11 +54,7 @@ const SwapPath: FC = () => {
       justifyContent="center"
     >
       <TokenIcon
-        tokenId={
-          network === Network.MAINNET
-            ? coinIn
-            : COIN_TYPE_TO_SYMBOL[network][coinIn]
-        }
+        tokenId={COIN_TYPE_TO_SYMBOL[network][coinIn]}
         maxWidth="1.5rem"
         maxHeight="1.5rem"
         network={network}
@@ -68,11 +63,7 @@ const SwapPath: FC = () => {
       {baseToken && (
         <>
           <TokenIcon
-            tokenId={
-              network === Network.MAINNET
-                ? baseToken
-                : COIN_TYPE_TO_SYMBOL[network][baseToken]
-            }
+            tokenId={COIN_TYPE_TO_SYMBOL[network][baseToken]}
             maxWidth="1.5rem"
             maxHeight="1.5rem"
             network={network}
@@ -81,11 +72,7 @@ const SwapPath: FC = () => {
         </>
       )}
       <TokenIcon
-        tokenId={
-          network === Network.MAINNET
-            ? coinOut
-            : COIN_TYPE_TO_SYMBOL[network][coinOut]
-        }
+        tokenId={COIN_TYPE_TO_SYMBOL[network][coinOut]}
         maxWidth="1.5rem"
         maxHeight="1.5rem"
         network={network}

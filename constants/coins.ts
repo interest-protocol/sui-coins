@@ -19,6 +19,15 @@ export const SC_V_MOV_ETH =
 export const SC_V_ETH_USDC =
   '0xe374195718ad4e47fc69952e903afbb8188de626714ad8e14aeb5a63483fc3e1::sc_v_eth_usdc::SC_V_ETH_USDC';
 
+export const COIN_TYPE_TO_SYMBOL: Record<Network, Record<string, string>> = {
+  [Network.DEVNET]: {
+    [SUI_TYPE_ARG]: TOKEN_SYMBOL.MOV,
+    [ETH_TYPE]: TOKEN_SYMBOL.ETH,
+    [USDC_TYPE]: TOKEN_SYMBOL.USDC,
+  },
+  [Network.TESTNET]: {},
+};
+
 export const COINS = [
   {
     decimals: 9,
