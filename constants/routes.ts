@@ -10,6 +10,7 @@ export enum RoutesEnum {
   MyCoins = 'my-coins',
   CreateToken = 'create-token',
   PoolDetails = 'pool-details',
+  PoolCreate = 'pool-create',
 }
 
 /**
@@ -24,4 +25,5 @@ export const Routes: Record<RoutesEnum, string> = {
   [RoutesEnum.MyCoins]: '/my-coins',
   [RoutesEnum.CreateToken]: '/create-token',
   [RoutesEnum.PoolDetails]: '/pools/details',
+  [RoutesEnum.PoolCreate]: '/pools/create',
 };
