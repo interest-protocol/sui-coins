@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -58,14 +59,18 @@ const PoolDetailsPage: NextPage<PoolPageProps> = ({ objectId }) => {
       tokenList.map((token) => ({
         ...token,
         balance: FixedPointMath.toNumber(
-          coinsMap[token.type]?.totalBalance ?? ZERO_BIG_NUMBER
+          coinsMap[token.type]
+            ? BigNumber(coinsMap[token.type].balance)
+            : ZERO_BIG_NUMBER
         ),
       }))
     );
     form.setValue(
       'lpCoin.balance',
       FixedPointMath.toNumber(
-        coinsMap[lpCoinType]?.totalBalance ?? ZERO_BIG_NUMBER
+        coinsMap[lpCoinType]
+          ? BigNumber(coinsMap[lpCoinType].balance)
+          : ZERO_BIG_NUMBER
       )
     );
   }, [coinsMap]);
