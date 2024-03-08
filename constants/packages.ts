@@ -1,4 +1,4 @@
-import { Network } from '@/lib';
+import { Network } from '@/constants/network';
 
 import { ETH_TYPE, USDC_TYPE } from './coins';
 

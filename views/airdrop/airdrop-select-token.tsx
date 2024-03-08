@@ -85,7 +85,7 @@ const AirdropSelectToken: FC = () => {
           ) : !coins ? (
             <ListItem width="100%" title="You have no coins" />
           ) : (
-            coins.map(({ decimals, symbol, type, totalBalance }) => {
+            coins.map(({ decimals, symbol, type, balance }) => {
               const Icon = TOKEN_ICONS[network][symbol] ?? DefaultTokenSVG;
 
               return (
@@ -101,7 +101,7 @@ const AirdropSelectToken: FC = () => {
                       symbol,
                       decimals,
                       balance: FixedPointMath.toNumber(
-                        BigNumber(totalBalance),
+                        BigNumber(balance),
                         decimals
                       ),
                     });
@@ -123,10 +123,7 @@ const AirdropSelectToken: FC = () => {
                   }
                   SuffixIcon={
                     <Typography variant="body" size="medium">
-                      {FixedPointMath.toNumber(
-                        BigNumber(totalBalance),
-                        decimals
-                      )}
+                      {FixedPointMath.toNumber(BigNumber(balance), decimals)}
                     </Typography>
                   }
                 />

@@ -5,9 +5,10 @@ import useSWR from 'swr';
 
 import { CONTROLLERS_MAP } from '@/constants';
 import { ETH_TYPE, USDC_TYPE } from '@/constants/coins';
+import { Network } from '@/constants/network';
 import { MINT_MODULE_NAME_MAP, PACKAGES } from '@/constants/packages';
 import { useNetwork } from '@/context/network';
-import { Network, TOKEN_SYMBOL } from '@/lib';
+import { TOKEN_SYMBOL } from '@/lib';
 import { makeSWRKey } from '@/utils';
 import { getReturnValuesFromInspectResults } from '@/utils';
 

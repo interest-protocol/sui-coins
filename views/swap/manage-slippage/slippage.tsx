@@ -15,14 +15,14 @@ const SlippageInfo: FC<SlippageInfoProps> = ({ isOpen, handleManageView }) => {
 
   return (
     <Box
-      px="xl"
-      py="xs"
+      py="l"
+      px="2xl"
       display="flex"
+      borderRadius="xs"
       alignItems="center"
       justifyContent="space-between"
-      borderRadius="xs"
     >
-      <Typography variant="label" size="large" color="onSurface">
+      <Typography variant="label" size="large" fontSize="0.875rem">
         Slippage:
         <Typography
           ml="xs"
@@ -34,12 +34,7 @@ const SlippageInfo: FC<SlippageInfoProps> = ({ isOpen, handleManageView }) => {
           {settings.slippage}%
         </Typography>
       </Typography>
-      <Button
-        isIcon
-        variant="text"
-        onClick={handleManageView}
-        color="onSurface"
-      >
+      <Button isIcon variant="text" onClick={handleManageView}>
         <ManageIcon maxWidth="1.25rem" maxHeight="1.25rem" width="100%" />
       </Button>
     </Box>

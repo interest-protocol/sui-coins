@@ -1,7 +1,7 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import { MovSVG } from '@/svg';
+import { MOVSVG } from '@/svg';
 
 const Title: FC = () => (
   <Box display="flex" flexDirection="column" rowGap="l" mb="xl">
@@ -10,7 +10,7 @@ const Title: FC = () => (
         Create coins on M2 Network
       </Typography>
       <Box as="span" display="inline-block" verticalAlign="bottom">
-        <MovSVG maxWidth="4rem" maxHeight="4rem" width="100%" />
+        <MOVSVG maxWidth="4rem" maxHeight="4rem" width="100%" />
       </Box>
     </Box>
     <Typography variant="title" size="large">

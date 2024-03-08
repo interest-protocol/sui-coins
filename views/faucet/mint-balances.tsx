@@ -1,4 +1,5 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
+import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
@@ -58,7 +59,9 @@ const MintBalances: FC = () => {
               </Box>
               <Typography variant="body" size="large">
                 {FixedPointMath.toNumber(
-                  coinsMap[type]?.totalBalance || ZERO_BIG_NUMBER,
+                  coinsMap[type]?.balance
+                    ? BigNumber(coinsMap[type]?.balance)
+                    : ZERO_BIG_NUMBER,
                   coinsMap[type]?.decimals || 0
                 )}
               </Typography>

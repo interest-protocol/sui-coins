@@ -7,7 +7,7 @@ import {
   UseFormSetValue,
 } from 'react-hook-form';
 
-import { Network } from '@/lib';
+import { Network } from '@/constants/network';
 
 import { SwapForm, SwapPath } from '../swap.types';
 
@@ -39,13 +39,14 @@ export interface SwapManagerProps {
 }
 
 export interface FindSwapPathArgs {
+  network: Network;
   coinInType: string;
   coinOutType: string;
 }
 
 export interface QuoteAmountArgs {
-  client: SuiClient;
-  swapPath: SwapPath;
   amount: string;
   network: Network;
+  client: SuiClient;
+  swapPath: SwapPath;
 }
