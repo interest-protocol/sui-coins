@@ -83,7 +83,10 @@ export const COIN_METADATA = {
   },
 };
 
-export const BASE_COINS = [ETH_TYPE];
+export const BASE_COINS = {
+  [Network.DEVNET]: [ETH_TYPE],
+  [Network.TESTNET]: [],
+};
 
 export interface RegistryPool {
   poolId: string;
@@ -148,12 +151,12 @@ export const TOKEN_ICONS: Record<
 > = {
   [Network.TESTNET]: {
     ETH: ETHSVG,
-    USDT: USDCSVG,
+    USDC: USDCSVG,
     MOV: MOVSVG,
   },
   [Network.DEVNET]: {
-    [DEVNET_BASE_COINS.NATIVE_WORMHOLE_ETH]: ETHSVG,
-    [DEVNET_BASE_COINS.ETH_WORMHOLE_USDC]: USDCSVG,
-    [DEVNET_BASE_COINS.SC_V_MOV_ETH]: MOVSVG,
+    ETH: ETHSVG,
+    USDC: USDCSVG,
+    MOV: MOVSVG,
   },
 };

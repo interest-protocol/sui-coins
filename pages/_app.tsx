@@ -12,7 +12,7 @@ import { ThemeManager } from '@/components';
 import { ModalProvider } from '@/context/modal';
 import { NetworkProvider } from '@/context/network';
 
-const Provider = dynamic(() => import('@/components/sui-client-provider'), {
+const Provider = dynamic(() => import('@/components/web3-provider'), {
   ssr: false,
 });
 

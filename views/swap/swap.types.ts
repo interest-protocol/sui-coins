@@ -1,4 +1,4 @@
-import { Chain, CoinData } from '@/interface';
+import { CoinData } from '@/interface';
 
 export interface ISwapSettings {
   slippage: string;
@@ -7,27 +7,38 @@ export interface ISwapSettings {
 }
 
 export interface SwapToken extends CoinData {
-  chain: Chain;
   value: string;
   locked: boolean;
-  balance: number | null;
 }
 
-export interface SwapForm {
-  to: SwapToken;
-  from: SwapToken;
-  settings: ISwapSettings;
-  lock: boolean;
-  maxValue: boolean;
-  disabled: boolean;
-  swapPath: SwapPath;
-  readyToSwap: boolean;
-}
-
-export interface SwapTypeArgs {
+interface SwapTypeArgs {
   coinIn: string;
   coinOut: string;
   lpCoin: string;
 }
 
 export type SwapPath = ReadonlyArray<SwapTypeArgs>;
+
+export interface SwapForm {
+  to: SwapToken;
+  from: SwapToken;
+  settings: ISwapSettings;
+  lock: boolean;
+  loading: boolean;
+  maxValue: boolean;
+  disabled: boolean;
+  swapPath: SwapPath;
+  readyToSwap: boolean;
+}
+
+export interface SwapForm {
+  to: SwapToken;
+  lock: boolean;
+  from: SwapToken;
+  disabled: boolean;
+  maxValue: boolean;
+}
+
+export interface SwapPreviewModalProps {
+  onClose: () => void;
+}

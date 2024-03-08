@@ -1,95 +1,38 @@
 import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
-import BigNumber from 'bignumber.js';
 import { useRouter } from 'next/router';
-import { pathOr } from 'ramda';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { TokenIcon } from '@/components';
-import { COINS_MAP } from '@/constants/coins';
-import { Network } from '@/constants/network';
+import TokenIcon from '@/components/token-icon';
+import { TOKEN_ICONS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
-import { useWeb3 } from '@/hooks';
 import { useModal } from '@/hooks/use-modal';
-import { FixedPointMath } from '@/lib';
+import { CoinData } from '@/interface';
 import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
 import { updateURL } from '@/utils';
+import SelectTokenModal from '@/views/components/select-token-modal';
 
-import SelectTokenModal from '../components/select-token-modal';
 import { SwapForm } from '../swap.types';
-import { InputProps as DropdownTokenProps } from './input.types';
+import { InputProps } from './input.types';
 
-const SelectToken: FC<DropdownTokenProps> = ({ label }) => {
-  const { coinsMap } = useWeb3();
-  const { pathname } = useRouter();
+const SelectToken: FC<InputProps> = ({ label }) => {
   const { network } = useNetwork();
-  const [isOpen, setIsOpen] = useState(false);
-  const { control, setValue } = useFormContext<SwapForm>();
-
+  const { pathname } = useRouter();
   const { setModal, handleClose } = useModal();
+
+  const { setValue, control } = useFormContext<SwapForm>();
 
   const currentToken = useWatch({
     control,
     name: label,
   });
 
-  const { symbol: currentSymbol, type: currentType } = currentToken ?? {
+  const { symbol: currentSymbol } = currentToken ?? {
     symbol: undefined,
     type: undefined,
   };
 
-  const handleOnSelect = ({ symbol, type, decimals }: any) => {
-    const currentToken = COINS_MAP[type];
-
-    if (type === oppositeType) {
-      setValue(label === 'to' ? 'from' : 'to', {
-        type: currentToken.type,
-        symbol: currentToken.symbol,
-        decimals: currentToken.decimals,
-        value: '',
-        balance: FixedPointMath.toNumber(
-          pathOr(BigNumber(0), [currentToken.type, 'totalBalance'], coinsMap)
-        ),
-        locked: false,
-        chain: 'ETH',
-      });
-    }
-
-    setValue(label, {
-      type,
-      symbol,
-      decimals,
-      value: '',
-      balance: FixedPointMath.toNumber(
-        pathOr(BigNumber(0), [type, 'totalBalance'], coinsMap)
-      ),
-      locked: false,
-      chain: 'ETH',
-    });
-    setValue(`${label === 'from' ? 'to' : 'from'}.value`, '');
-
-    changeURL(type);
-    setIsOpen(false);
-  };
-
-  const openModal = () => {
-    setIsOpen(!isOpen);
-    setModal(
-      <Motion
-        animate={{ scale: 1 }}
-        initial={{ scale: 0.85 }}
-        transition={{ duration: 0.3 }}
-      >
-        <SelectTokenModal closeModal={handleClose} onSelect={handleOnSelect} />
-      </Motion>,
-      {
-        isOpen: true,
-        custom: true,
-        opaque: false,
-        allowClose: true,
-      }
-    );
-  };
+  const Icon = TOKEN_ICONS[network][currentSymbol];
 
   const changeURL = (type: string) => {
     const searchParams = new URLSearchParams(location.search);
@@ -107,6 +50,39 @@ const SelectToken: FC<DropdownTokenProps> = ({ label }) => {
     name: `${label === 'to' ? 'from' : 'to'}.type`,
   });
 
+  const onSelect = async ({ type, decimals, symbol }: CoinData) => {
+    if (type === oppositeType)
+      setValue(label === 'to' ? 'from' : 'to', currentToken);
+
+    setValue(label, {
+      type,
+      symbol,
+      decimals,
+      value: '',
+      locked: false,
+    });
+    setValue(`${label === 'from' ? 'to' : 'from'}.value`, '');
+
+    changeURL(type);
+  };
+
+  const openModal = () =>
+    setModal(
+      <Motion
+        animate={{ scale: 1 }}
+        initial={{ scale: 0.85 }}
+        transition={{ duration: 0.3 }}
+      >
+        <SelectTokenModal closeModal={handleClose} onSelect={onSelect} />
+      </Motion>,
+      {
+        isOpen: true,
+        custom: true,
+        opaque: false,
+        allowClose: true,
+      }
+    );
+
   return (
     <Box
       position="relative"
@@ -117,29 +93,27 @@ const SelectToken: FC<DropdownTokenProps> = ({ label }) => {
         fontSize="s"
         width="100%"
         variant="tonal"
-        borderRadius="xs"
         color="onSurface"
+        borderRadius="xs"
         bg="highestContainer"
         onClick={openModal}
-        PrefixIcon={
-          <Box
-            as="span"
-            display="flex"
-            width="2.5rem"
-            bg="onSurface"
-            height="2.5rem"
-            color="onPrimary"
-            borderRadius="xs"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <TokenIcon
-              network={network}
-              chain={currentToken.chain}
-              tokenId={network === Network.DEVNET ? currentType : currentSymbol}
-            />
-          </Box>
-        }
+        {...(Icon && {
+          PrefixIcon: (
+            <Box
+              as="span"
+              width="2.5rem"
+              height="2.5rem"
+              bg="onSurface"
+              color="onPrimary"
+              borderRadius="xs"
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <TokenIcon network={network} tokenId={currentSymbol} />
+            </Box>
+          ),
+        })}
       >
         <Typography size="large" variant="label" p="xs">
           {currentSymbol ?? 'Select Token'}

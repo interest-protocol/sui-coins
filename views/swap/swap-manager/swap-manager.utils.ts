@@ -6,8 +6,10 @@ import {
 import { normalizeSuiAddress } from '@mysten/sui.js/utils';
 import { pathOr } from 'ramda';
 
-import { BASE_COINS, REGISTRY_POOLS, RegistryPool } from '@/constants/coins';
-import { PACKAGES } from '@/constants/packages';
+import { PACKAGES } from '@/constants';
+import { BASE_COINS } from '@/constants/coins';
+import { REGISTRY_POOLS } from '@/constants/pools';
+import { RegistryPool } from '@/interface';
 import { getReturnValuesFromInspectResults } from '@/utils';
 import { SwapPath } from '@/views/swap/swap.types';
 
@@ -16,15 +18,15 @@ import { FindSwapPathArgs, QuoteAmountArgs } from './swap-manager.types';
 export const quoteAmountOut = async ({
   client,
   amount,
-  swapPath,
   network,
+  swapPath,
 }: QuoteAmountArgs) => {
   const txb = new TransactionBlock();
 
   let nextAmountIn: TransactionResult | null = null;
 
   swapPath.forEach(({ coinIn, coinOut, lpCoin }, index) => {
-    const pool = REGISTRY_POOLS[coinIn][coinOut].poolId;
+    const pool = REGISTRY_POOLS[network][coinIn][coinOut].poolId;
 
     nextAmountIn = txb.moveCall({
       target: `${PACKAGES[network].DEX}::quote::amount_out`,
@@ -55,15 +57,15 @@ export const quoteAmountOut = async ({
 export const quoteAmountIn = async ({
   client,
   amount,
-  swapPath,
   network,
+  swapPath,
 }: QuoteAmountArgs) => {
   const txb = new TransactionBlock();
 
   let nextAmountOut: TransactionResult | null = null;
 
   swapPath.forEach(({ coinIn, coinOut, lpCoin }, index) => {
-    const pool = REGISTRY_POOLS[coinIn][coinOut].poolId;
+    const pool = REGISTRY_POOLS[network][coinIn][coinOut].poolId;
 
     nextAmountOut = txb.moveCall({
       target: `${PACKAGES[network].DEX}::quote::amount_in`,
@@ -92,6 +94,7 @@ export const quoteAmountIn = async ({
 };
 
 export const findSwapPaths = ({
+  network,
   coinInType,
   coinOutType,
 }: FindSwapPathArgs): ReadonlyArray<SwapPath> => {
@@ -116,7 +119,7 @@ export const findSwapPaths = ({
 
   const paths = [] as Array<SwapPath>;
 
-  for (const baseCoin of BASE_COINS) {
+  for (const baseCoin of BASE_COINS[network]) {
     const firstPool = pathOr<null | RegistryPool>(
       null,
       [coinInType, baseCoin],

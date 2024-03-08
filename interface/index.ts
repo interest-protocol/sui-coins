@@ -23,6 +23,7 @@ export interface PoolPageProps {
   objectId: string;
 }
 
-export interface CoinDataWithChainInfo extends CoinData {
-  chain?: Chain;
+export interface RegistryPool {
+  poolId: string;
+  lpCoinType: string;
 }

@@ -3,8 +3,9 @@ import { useWalletKit } from '@mysten/wallet-kit';
 import BigNumber from 'bignumber.js';
 import useSWR from 'swr';
 
+import { COINS_MAP } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
-import { makeSWRKey } from '@/utils';
+import { makeSWRKey, normalizeSuiType } from '@/utils';
 
 import { useMovementClient } from '../use-movement-client';
 import { CoinsMap, TGetAllCoins } from './use-get-all-coins.types';
@@ -26,6 +27,7 @@ export const useGetAllCoins = () => {
   const { network } = useNetwork();
   const suiClient = useMovementClient();
   const { currentAccount } = useWalletKit();
+
   return useSWR(
     makeSWRKey([network, currentAccount?.address], suiClient.getAllCoins.name),
     async () => {
@@ -39,28 +41,35 @@ export const useGetAllCoins = () => {
           )
         );
 
-      return coinsRaw.reduce(
-        (acc, coinRaw, i) => ({
-          ...acc,
-          [coinRaw.coinType]: {
-            ...acc[coinRaw.coinType],
-            ...coinRaw,
-            balance: BigNumber(coinRaw.balance)
-              .plus(BigNumber(acc[coinRaw.coinType]?.balance || '0'))
-              .toString(),
-            objects: (acc[coinRaw.coinType]?.objects ?? []).concat(coinRaw),
-            metadata: coinsMetadata[i]
-              ? (coinsMetadata[i] as CoinMetadata)
-              : {
-                  decimals: 0,
-                  name: '',
-                  description: '',
-                  symbol: '',
-                },
+      return coinsRaw.reduce((acc, { coinType, ...coinRaw }, index) => {
+        const type = normalizeSuiType(coinType);
+        const { symbol, decimals, ...metadata } = {
+          ...{
+            name: '',
+            symbol: '',
+            decimals: 0,
+            description: '',
           },
-        }),
-        {} as CoinsMap
-      );
+          ...coinsMetadata[index],
+          ...COINS_MAP[coinType],
+        };
+
+        return {
+          ...acc,
+          [type]: {
+            ...acc[type],
+            ...coinRaw,
+            type,
+            symbol,
+            decimals,
+            metadata,
+            balance: BigNumber(coinRaw.balance)
+              .plus(BigNumber(acc[type]?.balance || '0'))
+              .toString(),
+            objects: (acc[type]?.objects ?? []).concat([{ ...coinRaw, type }]),
+          },
+        };
+      }, {} as CoinsMap);
     },
     {
       revalidateOnMount: true,
