@@ -8,7 +8,7 @@ export const DISPLAY_NETWORK = {
   [Network.DEVNET]: 'Devnet',
 };
 
-export const LOCAL_STORAGE_VERSION = 'v3';
+export const LOCAL_STORAGE_VERSION = 'v4';
 
 export const RPC_URL = {
   [Network.DEVNET]: 'https://sui.devnet.m2.movementlabs.xyz:443',
@@ -20,9 +20,9 @@ export const FAUCET_URL = {
 
 export const CONTROLLERS_MAP: Record<string, string> = {
   [ETH_TYPE]:
-    '0x53c8f4ed74e72f0049c7a0d1eac57d48f7d1e7aa21d1bafbc9ae71b3b5607eb5',
+    '0x8ecb25b173964465000c7297a50dfdaef7152c165136b6f570a1459d0478204a',
   [USDC_TYPE]:
-    '0x58c1a9fbb1eeed1b613295b632c1a75e6fda2e2d54bdcfd5889c0537b1c9e600',
+    '0x50869debb2f34600ebf33b96ec181d89e797c002c3e9c37d4f1f91f8f7ab3ae9',
 };
 
 export const EXPLORER_URL = {
