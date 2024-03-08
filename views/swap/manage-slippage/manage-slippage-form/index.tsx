@@ -7,11 +7,13 @@ import { ClockSVG, PercentageSVG } from '@/svg';
 import { parseInputEventToNumberString } from '@/utils';
 
 import { ISwapSettings } from '../../swap.types';
-import { ManageSlippageProps } from '../manage-slippage-form.types';
+import { ManageSlippageFormProps } from '../manage-slippage-form.types';
 
 const SLIPPAGE_BUTTONS = ['0.1', '0.5', '1'];
 
-const ManageSlippageForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
+const ManageSlippageForm: FC<ManageSlippageFormProps> = ({
+  handleManageView,
+}) => {
   const { getValues, setValue } = useFormContext();
 
   const formTmpSettings = useForm<ISwapSettings>({
@@ -25,7 +27,7 @@ const ManageSlippageForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
     setValue('settings.speed', formTmpSettings.getValues('speed'));
     setValue('settings.slippage', formTmpSettings.getValues('slippage'));
     setValue('settings.deadline', formTmpSettings.getValues('deadline'));
-    handleManageView();
+    handleManageView?.();
   };
 
   return (

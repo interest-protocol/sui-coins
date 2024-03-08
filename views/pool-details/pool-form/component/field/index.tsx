@@ -22,8 +22,34 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
 
   return (
     <TokenField
+      placeholder="0"
+      textAlign="right"
+      labelPosition="right"
+      tokenName={token.symbol}
+      onClick={() => setValue(`${fieldName}.value`, token.balance)}
+      {...register(`${fieldName}.value`, {
+        onChange: (v: ChangeEvent<HTMLInputElement>) => {
+          setValue(`${fieldName}.value`, parseInputEventToNumberString(v));
+        },
+      })}
+      TokenIcon={
+        Icon && (
+          <Box
+            bg="onSurface"
+            width="2.5rem"
+            display="flex"
+            height="2.5rem"
+            borderRadius="xs"
+            alignItems="center"
+            justifyContent="center"
+            color="lowestContainer"
+          >
+            <Icon maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
+          </Box>
+        )
+      }
       Label={
-        token.balance && (
+        poolOptionView !== PoolOption.Deposit && (
           <Typography
             mb="xs"
             size="medium"
@@ -39,31 +65,6 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
           </Typography>
         )
       }
-      placeholder="0"
-      TokenIcon={
-        Icon && (
-          <Box
-            color="lowestContainer"
-            bg="onSurface"
-            width="2.5rem"
-            height="2.5rem"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            borderRadius="xs"
-          >
-            <Icon maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
-          </Box>
-        )
-      }
-      textAlign="right"
-      tokenName={token.symbol}
-      labelPosition="right"
-      {...register(`${fieldName}.value`, {
-        onChange: (v: ChangeEvent<HTMLInputElement>) => {
-          setValue?.(`${fieldName}.value`, parseInputEventToNumberString(v));
-        },
-      })}
     />
   );
 };
