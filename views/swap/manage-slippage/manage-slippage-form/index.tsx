@@ -27,7 +27,7 @@ const ManageSlippageForm: FC<ManageSlippageFormProps> = ({
     setValue('settings.speed', formTmpSettings.getValues('speed'));
     setValue('settings.slippage', formTmpSettings.getValues('slippage'));
     setValue('settings.deadline', formTmpSettings.getValues('deadline'));
-    handleManageView();
+    handleManageView?.();
   };
 
   return (

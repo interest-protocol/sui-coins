@@ -71,7 +71,7 @@ const PoolDeposit: FC<PoolFormProps> = ({ poolOptionView }) => {
         initial={{ scale: 0.85 }}
         transition={{ duration: 0.3 }}
       >
-        <PoolPreview getValues={getValues} onSubmit={onSubmit} />
+        <PoolPreview getValues={getValues} onSubmit={onSubmit} isDeposit />
       </Motion>,
       {
         isOpen: true,
