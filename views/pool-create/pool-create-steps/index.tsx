@@ -1,16 +1,12 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-interface PoolCreateStepsProps {
-  steps: number;
-  currentStep: number;
-  onStepClick: (index: number) => void;
-}
+import { PoolCreateStepsProps } from './pool-create-steps.types';
 
 const PoolCreateSteps: FC<PoolCreateStepsProps> = ({
   steps,
-  currentStep,
   onStepClick,
+  currentStep,
 }) => (
   <Box display="inline-flex" flexDirection="column" justifyContent="center">
     <Box display="flex" justifyContent="center" mb="s">
@@ -23,15 +19,15 @@ const PoolCreateSteps: FC<PoolCreateStepsProps> = ({
           marginRight="xs"
           borderRadius="xs"
           nLastChild={{ marginRight: 0 }}
-          onClick={() => onStepClick(index)}
-          bg={currentStep === index ? 'primary' : 'outlineVariant'}
+          onClick={() => onStepClick?.(index)}
+          bg={currentStep <= index ? 'primary' : 'outlineVariant'}
           borderColor={currentStep !== index ? 'primary' : 'transparent'}
         />
       ))}
     </Box>
     <Box textAlign="center">
       <Typography size="small" color="onSurface" variant="body">
-        01 of {steps}
+        {currentStep + 1} of {steps}
       </Typography>
     </Box>
   </Box>
