@@ -19,8 +19,7 @@ const PoolCreate = () => {
         centerTile
         iconTokenList={[]}
         onBack={() => push(Routes[RoutesEnum.Pools])}
-        name={`What type of pool <br/> you want to create?`}
-        isPageTitle
+        name={`What type of pool\nyou want to create ?`}
       />
       <Box
         gap="xs"

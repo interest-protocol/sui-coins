@@ -9,32 +9,22 @@ import { PoolTitleBarProps } from './pool-title-bar.types';
 const PoolTitleBar: FC<PoolTitleBarProps> = ({
   name,
   onBack,
-  isPageTitle,
   centerTile,
   iconTokenList,
 }) => (
   <Box
-    pb="m"
-    pt={isPageTitle ? 'unset' : 'm'}
+    py="m"
     px="xl"
     mb="xs"
-    gap={['unset', 'm', 'm', 'm', 'm']}
+    gap="m"
     mx="auto"
     display="flex"
     flexWrap="wrap"
     maxWidth="65rem"
-    flexDirection={[isPageTitle ? 'column' : 'row', 'row', 'row', 'row', 'row']}
     borderRadius="xs"
-    alignItems={[
-      isPageTitle ? 'unset' : 'center',
-      'center',
-      'center',
-      'center',
-      'center',
-    ]}
-    bg={isPageTitle ? 'transparent' : 'lowestContainer'}
+    alignItems="center"
+    bg="lowestContainer"
     mt={['5xl', '5xl', '5xl', 'xl']}
-    position="relative"
   >
     <Button
       isIcon
@@ -43,14 +33,8 @@ const PoolTitleBar: FC<PoolTitleBarProps> = ({
       onClick={onBack}
       color="onSurface"
       nHover={{
-        bg: isPageTitle ? 'lowestContainer' : 'surface',
+        bg: 'surface',
       }}
-      position={
-        isPageTitle
-          ? ['relative', 'absolute', 'absolute', 'absolute', 'absolute']
-          : 'relative'
-      }
-      top={isPageTitle ? '0' : 'unset'}
     >
       <ArrowLeftSVG width="1.5rem" maxWidth="1.5rem" maxHeight="1.5rem" />
     </Button>
@@ -60,16 +44,10 @@ const PoolTitleBar: FC<PoolTitleBarProps> = ({
       variant="headline"
       textAlign="center"
       ml={centerTile ? 'auto' : ''}
-      mr={[
-        isPageTitle ? 'auto' : 'unset',
-        isPageTitle ? 'auto' : 'unset',
-        'unset',
-        'unset',
-        'unset',
-      ]}
       fontSize={['xl', 'xl', '3xl', '5xl']}
-      dangerouslySetInnerHTML={{ __html: name }}
-    />
+    >
+      {name}
+    </Typography>
     {iconTokenList && (
       <Box
         gap="s"
