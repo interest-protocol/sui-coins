@@ -21,9 +21,9 @@ const DetaiTabs: FC<DetaiTabsProps> = ({
     <Box
       height="3rem"
       display="flex"
+      borderBottom="1px solid"
       borderTopLeftRadius="inherit"
       borderTopRightRadius="inherit"
-      borderBottom="1px solid"
       borderBottomColor="outlineVariant"
     >
       {items.map((item, index) => (

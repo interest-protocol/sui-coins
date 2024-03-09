@@ -1,6 +1,6 @@
 import { BTCSVG, EthCircleSVG, USDTSVG } from '@/svg';
 
-import { PoolDetailAccordionData } from './accordion/accordion.type';
+import { PoolDetailAccordionData } from './components/accordion/accordion.type';
 
 export const POOL_INFORMATION: PoolDetailAccordionData = {
   title: 'POOL INFORMATION',
@@ -45,7 +45,7 @@ export const POOL_STATISTICS: PoolDetailAccordionData = {
 };
 
 export const POOL_COMPOSITION: PoolDetailAccordionData = {
-  title: 'STATISTICS',
+  title: 'Pool Composition',
   data: [
     {
       Icon: USDTSVG,
