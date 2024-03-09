@@ -1,21 +1,22 @@
-import { Box, Button } from '@interest-protocol/ui-kit';
+import { Box } from '@interest-protocol/ui-kit';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import Layout from '@/components/layout';
 import { Routes, RoutesEnum } from '@/constants';
 
 import CreatePoolHeader from './header';
 import { stepContent, stepTitle } from './pool-create.data';
+import { CreatePoolForm } from './pool-create.types';
 import PoolCreateSteps from './pool-create-steps';
 
 const PoolCreate = () => {
   const { push } = useRouter();
-  const [currentStep, setCurrentStep] = useState(0);
+  const { control, setValue } = useFormContext<CreatePoolForm>();
 
-  const onStepClick = (index: number) => {
-    setCurrentStep(index);
-  };
+  const currentStep = useWatch({ control, name: 'step' });
+
+  const onStepClick = (index: number) => setValue('step', index);
 
   return (
     <Layout>
@@ -37,16 +38,7 @@ const PoolCreate = () => {
           currentStep={currentStep}
         />
       </Box>
-      <Box my="xl">{stepContent[currentStep]}</Box>
-      <Button
-        mx="auto"
-        variant="filled"
-        onClick={() =>
-          onStepClick(currentStep === 4 ? currentStep : currentStep + 1)
-        }
-      >
-        Next
-      </Button>
+      {stepContent[currentStep]}
     </Layout>
   );
 };
