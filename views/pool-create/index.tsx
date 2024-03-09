@@ -1,30 +1,13 @@
 import { Box, Button } from '@interest-protocol/ui-kit';
 import { useRouter } from 'next/router';
-import { ReactNode, useState } from 'react';
-import { v4 } from 'uuid';
+import { useState } from 'react';
 
 import Layout from '@/components/layout';
 import { Routes, RoutesEnum } from '@/constants';
 
-import PoolTitleBar from '../components/pool-title-bar';
+import CreatePoolHeader from './header';
+import { stepContent, stepTitle } from './pool-create.data';
 import PoolCreateSteps from './pool-create-steps';
-import SelectVolatility from './select-volatility';
-
-const stepTitle: ReadonlyArray<string> = [
-  'What type of pool you want to create ?',
-  'Choose your algorithm',
-  '',
-  '',
-  '',
-];
-
-const stepContent: ReadonlyArray<ReactNode> = [
-  null,
-  <SelectVolatility key={v4()} />,
-  null,
-  null,
-  null,
-];
 
 const PoolCreate = () => {
   const { push } = useRouter();
@@ -36,11 +19,9 @@ const PoolCreate = () => {
 
   return (
     <Layout>
-      <PoolTitleBar
-        centerTile
-        iconTokenList={[]}
-        name={stepTitle[currentStep]}
+      <CreatePoolHeader
         onBack={() => push(Routes[RoutesEnum.Pools])}
+        name={stepTitle[currentStep]}
       />
       <Box
         gap="xs"
@@ -60,7 +41,9 @@ const PoolCreate = () => {
       <Button
         mx="auto"
         variant="filled"
-        onClick={() => onStepClick(currentStep + 1)}
+        onClick={() =>
+          onStepClick(currentStep === 4 ? currentStep : currentStep + 1)
+        }
       >
         Next
       </Button>

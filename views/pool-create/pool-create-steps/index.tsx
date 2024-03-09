@@ -20,7 +20,7 @@ const PoolCreateSteps: FC<PoolCreateStepsProps> = ({
           borderRadius="xs"
           nLastChild={{ marginRight: 0 }}
           onClick={() => onStepClick?.(index)}
-          bg={currentStep <= index ? 'primary' : 'outlineVariant'}
+          bg={currentStep >= index ? 'primary' : 'outlineVariant'}
           borderColor={currentStep !== index ? 'primary' : 'transparent'}
         />
       ))}
