@@ -1,20 +1,20 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { v4 } from 'uuid';
 
-import Accordion from './accordion';
-import {
-  PoolDetailAccordionItemCoinProps,
-  PoolDetailAccordionItemStandardProps,
-} from './accordion/accordion.type';
-import ItemStandard from './accordion/item-standard';
-import ItemToken from './accordion/item-token';
 import {
   POOL_COMPOSITION,
   POOL_INFORMATION,
   POOL_STATISTICS,
-} from './pool-detail.data';
+} from './additional-info.data';
+import Accordion from './components/accordion';
+import {
+  PoolDetailAccordionItemCoinProps,
+  PoolDetailAccordionItemStandardProps,
+} from './components/accordion/accordion.type';
+import ItemStandard from './components/accordion/item-standard';
+import ItemToken from './components/accordion/item-token';
 
-const Detail = () => (
+const PoolDetail = () => (
   <Box>
     <Accordion title={POOL_INFORMATION.title}>
       {(
@@ -67,4 +67,4 @@ const Detail = () => (
   </Box>
 );
 
-export default Detail;
+export default PoolDetail;

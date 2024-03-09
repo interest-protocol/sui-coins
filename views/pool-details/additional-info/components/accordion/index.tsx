@@ -30,12 +30,17 @@ const PoolDetailCollapse: FC<PoolDetailAccordionProps> = ({
         alignItems="center"
         justifyContent="space-between"
         onClick={handleCollapseClick}
-        px="s"
+        px="xl"
       >
         <Typography size="large" variant="label">
           {title}
         </Typography>
-        <Motion initial="rest" animate={isExpanded ? 'collapsed' : 'rest'}>
+        <Motion
+          initial="rest"
+          animate={isExpanded ? 'collapsed' : 'rest'}
+          display="flex"
+          alignItems="center"
+        >
           <CollapseIcon />
         </Motion>
       </Box>
@@ -45,7 +50,8 @@ const PoolDetailCollapse: FC<PoolDetailAccordionProps> = ({
         animate={isExpanded ? 'collapsed' : 'rest'}
         overflow="hidden"
         borderBottom="1px solid"
-        px="s"
+        borderBottomColor="outlineVariant"
+        px="xl"
       >
         {children}
       </Motion>
