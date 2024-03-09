@@ -42,7 +42,7 @@ const CreatePoolHeader: FC<CreatePoolProps> = ({ name, onBack }) => (
       width="100%"
       whiteSpace="pre-line"
     >
-      {name.split('<br />').join('\n')}
+      {name}
     </Typography>
   </Box>
 );

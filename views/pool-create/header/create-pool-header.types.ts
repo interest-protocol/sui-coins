@@ -1,4 +1,6 @@
+import { ReactNode } from 'react';
+
 export interface CreatePoolProps {
-  name: string;
+  name: ReactNode;
   onBack: () => void;
 }
