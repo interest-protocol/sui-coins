@@ -15,6 +15,7 @@ import { parseInputEventToNumberString, showTXSuccessToast } from '@/utils';
 import { throwTXIfNotSuccessful } from '@/utils';
 
 import { ICreateTokenForm } from '../create-token.types';
+import __wbg_init from '../move_bytecode_template';
 import { getTokenByteCode } from './api';
 import { Blacklist } from './blacklist';
 import { validationSchema } from './create-token-form.validation';
@@ -65,6 +66,8 @@ const CreateTokenForm: FC = () => {
       ) {
         throw new Error('Nice try :)');
       }
+
+      await __wbg_init('/move_bytecode_template_bg.wasm');
 
       const { dependencies, modules } = await getTokenByteCode({
         name,

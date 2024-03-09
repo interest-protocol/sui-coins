@@ -1,3 +1,5 @@
 # config file
 commitlint.config.js
 jest.config.js
+public
+move_bytecode_template.js
