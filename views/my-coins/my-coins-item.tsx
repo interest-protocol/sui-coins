@@ -14,7 +14,9 @@ const MyCoinsItem: FC<CoinObject & { capId: string | null }> = ({
   capId,
   balance,
   objects,
-  metadata: { iconUrl, name, symbol, decimals },
+  symbol,
+  decimals,
+  metadata: { iconUrl, name },
 }) => {
   const { network } = useNetwork();
   const [isOpen, setIsOpen] = useState(false);

@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 
 export type BigNumberish = BigNumber | bigint | string | number;
+export type Chain = 'ETH' | 'BSC' | 'SOL' | 'AVA' | 'SUI';
 
 export interface CoinData {
   type: string;
@@ -20,4 +21,9 @@ export interface FormattedNumber {
 
 export interface PoolPageProps {
   objectId: string;
+}
+
+export interface RegistryPool {
+  poolId: string;
+  lpCoinType: string;
 }

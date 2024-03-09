@@ -9,19 +9,20 @@ const CreatePoolHeader: FC<CreatePoolProps> = ({ name, onBack }) => (
   <Box
     pb="m"
     px="xl"
-    mb="2.875rem"
-    gap={['unset', 'm', 'm', 'm', 'm']}
     mx="auto"
+    mb="2.875rem"
     display="flex"
     flexWrap="wrap"
     maxWidth="65rem"
     borderRadius="xs"
-    mt={['5xl', '5xl', '5xl', 'xl']}
     position="relative"
+    mt={['5xl', '5xl', '5xl', 'xl']}
+    gap={['unset', 'm', 'm', 'm', 'm']}
   >
     <Button
       isIcon
       mr="xs"
+      top="0"
       variant="text"
       onClick={onBack}
       color="onSurface"
@@ -29,7 +30,6 @@ const CreatePoolHeader: FC<CreatePoolProps> = ({ name, onBack }) => (
         bg: 'lowestContainer',
       }}
       position={['relative', 'absolute', 'absolute', 'absolute', 'absolute']}
-      top="0"
     >
       <ArrowLeftSVG width="1.5rem" maxWidth="1.5rem" maxHeight="1.5rem" />
     </Button>
@@ -40,8 +40,10 @@ const CreatePoolHeader: FC<CreatePoolProps> = ({ name, onBack }) => (
       textAlign="center"
       fontSize={['xl', 'xl', '3xl', '5xl']}
       width="100%"
-      dangerouslySetInnerHTML={{ __html: name }}
-    />
+      whiteSpace="pre-line"
+    >
+      {name.split('<br />').join('\n')}
+    </Typography>
   </Box>
 );
 

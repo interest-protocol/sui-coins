@@ -30,8 +30,6 @@ export interface Web3ManagerProps {
   children: ReactNode;
 }
 
-export type CoinsMap = Web3ManagerState['coinsMap'];
-
 export interface ParseCoinsArgs {
   data: PaginatedCoins['data'] | undefined | never[];
   localTokens: LocalTokenMetadataRecord;

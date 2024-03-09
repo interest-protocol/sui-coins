@@ -1,13 +1,7 @@
-import { Network } from '@/lib';
-
 import { ETH_TYPE, USDC_TYPE } from './coins';
+import { Network } from './network';
 
 export const MAX_NUMBER_INPUT_VALUE = 9000000000000000;
-
-export const DISPLAY_NETWORK = {
-  [Network.DEVNET]: 'Devnet',
-  [Network.TESTNET]: 'Testnet',
-};
 
 export const LOCAL_STORAGE_VERSION = 'v3';
 
@@ -37,4 +31,3 @@ export const TOAST_DURATION = 10000;
 
 export * from './packages';
 export * from './routes';
-export * from './wrapper-variants';

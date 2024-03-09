@@ -6,27 +6,21 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { SEO } from '@/components';
 import { COINS_MAP, ETH_TYPE, USDC_TYPE } from '@/constants/coins';
 import { ModalProvider } from '@/context/modal';
-import { useWeb3 } from '@/hooks';
-import { FixedPointMath } from '@/lib';
-import { ZERO_BIG_NUMBER } from '@/utils';
 import { updateURL } from '@/utils/url';
 import Swap from '@/views/swap';
 import { SwapForm } from '@/views/swap/swap.types';
 
 const SwapPage: NextPage = () => {
-  const { coinsMap } = useWeb3();
   const { query, asPath, pathname } = useRouter();
 
   const form = useForm<SwapForm>({
     defaultValues: {
       to: {
-        balance: 0,
         value: '',
         locked: false,
         ...(COINS_MAP[query.to as string] ?? COINS_MAP[USDC_TYPE]),
       },
       from: {
-        balance: 0,
         value: '',
         locked: false,
         ...(COINS_MAP[query.from as string] ?? COINS_MAP[ETH_TYPE]),
@@ -53,21 +47,6 @@ const SwapPage: NextPage = () => {
       );
     }
   }, []);
-
-  useEffect(() => {
-    form.setValue(
-      'from.balance',
-      FixedPointMath.toNumber(
-        coinsMap[form.getValues('from.type')]?.totalBalance ?? ZERO_BIG_NUMBER
-      )
-    );
-    form.setValue(
-      'to.balance',
-      FixedPointMath.toNumber(
-        coinsMap[form.getValues('to.type')]?.totalBalance ?? ZERO_BIG_NUMBER
-      )
-    );
-  }, [coinsMap]);
 
   return (
     <FormProvider {...form}>

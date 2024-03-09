@@ -7,25 +7,25 @@ import { PoolPreviewProps } from './preview.types';
 import PoolPreviewWrapper from './wrapper';
 
 const PoolPreview: FC<PoolPreviewProps> = ({
+  onSubmit,
   getValues,
   isDeposit,
-  onSubmit,
 }) => (
   <PoolPreviewWrapper isDeposit={isDeposit} onSubmit={onSubmit}>
     <Box display="flex" flexDirection="column" gap="2xl">
       <Box display="flex" flexDirection="column" gap="xs">
         <Typography variant="label" size="small" textTransform="uppercase">
-          {`You will ${isDeposit ? 'Deposit' : 'Withdraw'}`}
+          {`You will ${isDeposit ? 'deposit' : 'withdraw'}`}
         </Typography>
         {isDeposit ? (
           <TokenListFields getValues={getValues} />
         ) : (
-          <LpCoinField getValues={getValues} isDeposit={isDeposit} />
+          <LpCoinField getValues={getValues} />
         )}
       </Box>
       <Box display="flex" flexDirection="column" gap="xs">
         <Typography variant="label" size="small" textTransform="uppercase">
-          you will receive (estimetad):
+          You will receive (estimated):
         </Typography>
         {!isDeposit ? (
           <TokenListFields getValues={getValues} />

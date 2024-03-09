@@ -6,7 +6,7 @@ import { toast } from 'react-hot-toast';
 
 import Avatar from '@/components/account-info/avatar';
 import { CheckmarkSVG, CopySVG } from '@/components/svg';
-import { wrapperVariants } from '@/constants';
+import { wrapperVariants } from '@/constants/wrapper-variants';
 
 import ItemWrapper from '../../../menu-mobile/menu-settings/item-wrapper';
 import { MenuSwitchAccountProps } from '../profile.types';

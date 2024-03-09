@@ -25,13 +25,13 @@ const SwapManagerField: FC<SwapManagerProps> = ({
   setValue,
   swapPaths,
   hasNoMarket,
+  setValueName,
   setIsZeroSwapAmount,
   isFetchingSwapAmount,
   setIsFetchingSwapAmount,
-  setValueName,
 }) => {
-  const { network } = useNetwork();
   const client = useMovementClient();
+  const { network } = useNetwork();
   const [tokenIn] = useDebounce(useWatch({ control, name }), 900);
 
   const lock = useWatch({ control, name: 'lock' });
@@ -59,9 +59,9 @@ const SwapManagerField: FC<SwapManagerProps> = ({
       const promises = swapPaths.map((swapPath) =>
         (setValueName === 'to' ? quoteAmountOut : quoteAmountIn)({
           client,
+          network,
           swapPath,
           amount: safeAmount.toString(),
-          network,
         })
       );
 

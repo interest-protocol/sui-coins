@@ -1,5 +1,6 @@
+import BigNumber from 'bignumber.js';
 import { NextPage } from 'next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { SEO } from '@/components';
@@ -7,12 +8,15 @@ import { withObjectIdGuard } from '@/components/hoc';
 import { Routes, RoutesEnum } from '@/constants';
 import { RECOMMENDED_POOLS } from '@/constants/pools';
 import { useNetwork } from '@/context/network';
+import { useWeb3 } from '@/hooks';
 import { PoolPageProps } from '@/interface';
+import { FixedPointMath } from '@/lib';
 import { ZERO_BIG_NUMBER } from '@/utils';
 import PoolDetails from '@/views/pool-details';
-import { PoolForm, PoolOption, PoolToken } from '@/views/pools/pools.types';
+import { PoolForm, PoolOption } from '@/views/pools/pools.types';
 
 const PoolDetailsPage: NextPage<PoolPageProps> = ({ objectId }) => {
+  const { coinsMap } = useWeb3();
   const { network } = useNetwork();
   const [poolOptionView, setPoolOptionView] = useState<PoolOption>(
     PoolOption.Deposit
@@ -26,34 +30,17 @@ const PoolDetailsPage: NextPage<PoolPageProps> = ({ objectId }) => {
     ({ poolObjectId }) => poolObjectId === objectId
   );
 
-  const formDeposit = useForm<PoolForm>({
+  const form = useForm<PoolForm>({
     defaultValues: {
       tokenList: pool?.tokens.map((token) => ({
         ...token,
-        value: '123',
-      })) as unknown as Array<PoolToken>,
-      lpCoin: '15546',
-      settings: {
-        deadline: '3',
-        slippage: '0.1',
-        speed: 'instant',
-      },
-    },
-  });
-
-  const formWithdraw = useForm<PoolForm>({
-    defaultValues: {
-      tokenList: pool?.tokens.map((token) => ({
-        ...token,
-        value: '123',
-        balance: '40596',
-      })) as unknown as Array<PoolToken>,
+        value: '0',
+      })),
       lpCoin: {
         symbol: 'LP token',
         decimals: 9,
         type: `${ZERO_BIG_NUMBER}`,
-        balance: 1000,
-        value: '500',
+        value: '0',
       },
       settings: {
         deadline: '3',
@@ -63,10 +50,33 @@ const PoolDetailsPage: NextPage<PoolPageProps> = ({ objectId }) => {
     },
   });
 
+  useEffect(() => {
+    const tokenList = form.getValues('tokenList');
+    const lpCoinType = form.getValues('lpCoin.type');
+
+    form.setValue(
+      'tokenList',
+      tokenList.map((token) => ({
+        ...token,
+        balance: FixedPointMath.toNumber(
+          coinsMap[token.type]
+            ? BigNumber(coinsMap[token.type].balance)
+            : ZERO_BIG_NUMBER
+        ),
+      }))
+    );
+    form.setValue(
+      'lpCoin.balance',
+      FixedPointMath.toNumber(
+        coinsMap[lpCoinType]
+          ? BigNumber(coinsMap[lpCoinType].balance)
+          : ZERO_BIG_NUMBER
+      )
+    );
+  }, [coinsMap]);
+
   return (
-    <FormProvider
-      {...(poolOptionView === PoolOption.Deposit ? formDeposit : formWithdraw)}
-    >
+    <FormProvider {...form}>
       <SEO pageTitle="Pool Details" />
       <PoolDetails
         objectId={objectId}

@@ -4,7 +4,8 @@ import { FC, useState } from 'react';
 import { useIsFirstRender } from 'usehooks-ts';
 import { v4 } from 'uuid';
 
-import { EXPLORER_URL, wrapperVariants } from '@/constants';
+import { EXPLORER_URL } from '@/constants';
+import { wrapperVariants } from '@/constants/wrapper-variants';
 import { useNetwork } from '@/context/network';
 import useEventListener from '@/hooks/use-event-listener';
 
