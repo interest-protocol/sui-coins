@@ -6,17 +6,17 @@ import {
 import { useWalletKit } from '@mysten/wallet-kit';
 import BigNumber from 'bignumber.js';
 import { useState } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useFormContext, UseFormReturn } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
-import { EXPLORER_URL, PACKAGES } from '@/constants';
-import { REGISTRY_POOLS } from '@/constants/pools';
+import { REGISTRY_POOLS } from '@/constants/coins';
+import { PACKAGES } from '@/constants/packages';
 import { useNetwork } from '@/context/network';
-import { useMovementClient } from '@/hooks';
-import { useDialog } from '@/hooks/use-dialog';
-import { useWeb3 } from '@/hooks/use-web3';
+import { useMovementClient, useWeb3 } from '@/hooks';
 import { FixedPointMath } from '@/lib';
 import {
   createObjectsParameter,
+  showTXSuccessToast,
   throwTXIfNotSuccessful,
   ZERO_BIG_NUMBER,
 } from '@/utils';
@@ -25,32 +25,17 @@ import { SwapForm } from '@/views/swap/swap.types';
 import { getAmountMinusSlippage } from './swap.utils';
 
 const SwapButton = () => {
-  const client = useMovementClient();
   const { network } = useNetwork();
-  const { dialog, handleClose } = useDialog();
-  const formSwap = useFormContext<SwapForm>();
+  const formSwap: UseFormReturn<SwapForm> = useFormContext();
   const [loading, setLoading] = useState(false);
   const { signTransactionBlock } = useWalletKit();
   const { account, coinsMap, mutate } = useWeb3();
+  const client = useMovementClient();
 
   const resetInput = () => {
     formSwap.setValue('from.value', '0');
     formSwap.setValue('to.value', '0');
   };
-
-  const [explorerLink, setExplorerLink] = useState('');
-
-  const gotoExplorer = () =>
-    window.open(explorerLink, '_blank', 'noopener,noreferrer');
-
-  const tokenIn = useWatch({ control: formSwap.control, name: 'from' });
-
-  const notEnoughBalance = FixedPointMath.toBigNumber(
-    tokenIn.value,
-    tokenIn.decimals
-  )
-    .decimalPlaces(0, BigNumber.ROUND_DOWN)
-    .gt(BigNumber(coinsMap[tokenIn.type]?.balance) ?? ZERO_BIG_NUMBER);
 
   const handleSwap = async () => {
     try {
@@ -69,7 +54,9 @@ const SwapButton = () => {
       const isMaxTrade = formSwap.getValues('maxValue');
 
       const amount = isMaxTrade
-        ? BigNumber(coinsMap[to.type]?.balance) ?? ZERO_BIG_NUMBER
+        ? coinsMap[to.type]
+          ? BigNumber(coinsMap[to.type].balance)
+          : ZERO_BIG_NUMBER
         : FixedPointMath.toBigNumber(from.value, from.decimals).decimalPlaces(
             0,
             BigNumber.ROUND_DOWN
@@ -99,13 +86,12 @@ const SwapButton = () => {
           { coinIn: coinInType, coinOut: coinOutType, lpCoin: lpCoinType },
           index
         ) => {
-          const poolId =
-            REGISTRY_POOLS[network][coinInType][coinOutType].poolId;
+          const poolId = REGISTRY_POOLS[coinInType][coinOutType].poolId;
 
           // FirstSwap
           if (index === 0) {
             const coinIn = txb.moveCall({
-              target: `${PACKAGES[network].UTILS}::utils::handle_coin_vector`, // Utils package ID
+              target: `${PACKAGES[network].UTILS}::utils::handle_coin_vector`,
               typeArguments: [from.type],
               arguments: [
                 txb.makeMoveVec({
@@ -143,8 +129,6 @@ const SwapButton = () => {
       txb.transferObjects([nextCoin!], account);
 
       const { signature, transactionBlockBytes } = await signTransactionBlock({
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         transactionBlock: txb,
       });
 
@@ -157,7 +141,7 @@ const SwapButton = () => {
 
       throwTXIfNotSuccessful(tx);
 
-      setExplorerLink(`${EXPLORER_URL[network]}/txblock/${tx.digest}`);
+      await showTXSuccessToast(tx, network);
     } finally {
       resetInput();
       setLoading(false);
@@ -166,40 +150,17 @@ const SwapButton = () => {
   };
 
   const swap = () => {
-    dialog.promise(handleSwap(), {
-      loading: {
-        title: 'Swapping...',
-        message: 'We are swapping, and you will let you know when it is done',
-      },
-      success: {
-        onClose: handleClose,
-        title: 'Swap Successfully',
-        message:
-          'Your swap was successfully, and you can check it on the Explorer',
-        primaryButton: {
-          label: 'See on Explorer',
-          onClick: gotoExplorer,
-        },
-      },
-      error: {
-        onClose: handleClose,
-        title: 'Swap Failure',
-        message:
-          'Your swap failed, please try again or contact the support team',
-        primaryButton: { label: 'Try again', onClick: handleClose },
-      },
+    toast.promise(handleSwap(), {
+      loading: 'Loading',
+      success: `Swapped successfully`,
+      error: 'Failed to swap',
     });
   };
 
   return (
-    <Button
-      onClick={swap}
-      variant="filled"
-      justifyContent="center"
-      disabled={notEnoughBalance}
-    >
+    <Button variant="filled" onClick={swap}>
       <Typography variant="label" size="large">
-        {loading ? 'Swapping...' : 'Confirm Swap'}
+        {loading ? 'Swapping...' : 'Swap'}
       </Typography>
     </Button>
   );

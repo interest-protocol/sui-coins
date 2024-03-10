@@ -2,14 +2,11 @@ import { Box } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFormContext, UseFormReturn, useWatch } from 'react-hook-form';
 
-import { TokenIcon } from '@/components';
-import { COIN_TYPE_TO_SYMBOL } from '@/constants/coins';
-import { useNetwork } from '@/context/network';
+import { COINS_SVG_MAP_V2 } from '@/constants/coins';
 import { SwapArrowSVG } from '@/svg';
 import { SwapForm } from '@/views/swap/swap.types';
 
 const SwapPath: FC = () => {
-  const { network } = useNetwork();
   const formSwap: UseFormReturn<SwapForm> = useFormContext();
 
   const readyToSwap = useWatch({
@@ -22,15 +19,15 @@ const SwapPath: FC = () => {
     return (
       <Box
         p="l"
-        mt="xl"
+        mt="xs"
         gap="xl"
         mx="auto"
-        height="4rem"
-        borderRadius="m"
+        width="100%"
+        display="flex"
+        bg="container"
         color="onSurface"
+        borderRadius="xs"
         alignItems="center"
-        bg="lowestContainer"
-        display="inline-flex"
         justifyContent="center"
       />
     );
@@ -40,42 +37,49 @@ const SwapPath: FC = () => {
   const coinOut =
     swapPath.length == 1 ? swapPath[0].coinOut : swapPath[1].coinOut;
 
+  const CoinInIcon = COINS_SVG_MAP_V2[coinIn] ?? COINS_SVG_MAP_V2.default;
+
+  const CoinOutIcon = COINS_SVG_MAP_V2[coinOut] ?? COINS_SVG_MAP_V2.default;
+
+  const BaseTokenIcon = COINS_SVG_MAP_V2[baseToken] ?? COINS_SVG_MAP_V2.default;
+
   return (
     <Box
       p="l"
-      mt="xl"
+      mt="xs"
       gap="xl"
       mx="auto"
-      bg="surface"
-      borderRadius="m"
+      width="100%"
+      display="flex"
+      bg="container"
       color="onSurface"
+      borderRadius="xs"
       alignItems="center"
-      display="inline-flex"
       justifyContent="center"
     >
-      <TokenIcon
-        tokenId={COIN_TYPE_TO_SYMBOL[network][coinIn]}
+      <CoinInIcon
+        width="100%"
+        height="100%"
         maxWidth="1.5rem"
         maxHeight="1.5rem"
-        network={network}
       />
       <SwapArrowSVG width="100%" maxWidth="5rem" maxHeight="0.75rem" />
       {baseToken && (
         <>
-          <TokenIcon
-            tokenId={COIN_TYPE_TO_SYMBOL[network][baseToken]}
+          <BaseTokenIcon
+            width="100%"
+            height="100%"
             maxWidth="1.5rem"
             maxHeight="1.5rem"
-            network={network}
           />
           <SwapArrowSVG width="100%" maxWidth="5rem" maxHeight="0.75rem" />
         </>
       )}
-      <TokenIcon
-        tokenId={COIN_TYPE_TO_SYMBOL[network][coinOut]}
+      <CoinOutIcon
+        width="100%"
+        height="100%"
         maxWidth="1.5rem"
         maxHeight="1.5rem"
-        network={network}
       />
     </Box>
   );
