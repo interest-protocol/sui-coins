@@ -1,8 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Form, Typography } from '@interest-protocol/ui-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { normalizeSuiAddress } from '@mysten/sui.js/utils';
 import { useWalletKit } from '@mysten/wallet-kit';
-import BigNumber from 'bignumber.js';
 import { ChangeEvent, FC } from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -15,10 +15,11 @@ import { parseInputEventToNumberString, showTXSuccessToast } from '@/utils';
 import { throwTXIfNotSuccessful } from '@/utils';
 
 import { ICreateTokenForm } from '../create-token.types';
-import { getTokenByteCode } from './api';
 import { Blacklist } from './blacklist';
 import { validationSchema } from './create-token-form.validation';
 import FixedSupplyToggle from './fixed-supply-toggle';
+import initMoveByteCodeTemplate from './move-bytecode-template';
+import { getBytecode } from './template';
 import UploadImage from './upload-image';
 
 const CreateTokenForm: FC = () => {
@@ -49,15 +50,7 @@ const CreateTokenForm: FC = () => {
 
       if (!currentAccount) return;
 
-      const {
-        decimals,
-        name,
-        fixedSupply,
-        totalSupply,
-        symbol,
-        imageUrl,
-        description,
-      } = getValues();
+      const { name, symbol } = getValues();
 
       if (
         Blacklist.includes(name.toUpperCase().trim()) ||
@@ -66,21 +59,21 @@ const CreateTokenForm: FC = () => {
         throw new Error('Nice try :)');
       }
 
-      const { dependencies, modules } = await getTokenByteCode({
-        name,
-        symbol,
-        fixedSupply,
-        url: imageUrl ?? '',
-        decimals: decimals ?? 9,
-        description: description ?? '',
-        mintAmount: BigNumber(totalSupply)
-          .multipliedBy(BigNumber(10).pow(decimals ? decimals : 9))
-          .toString(),
-      });
+      await initMoveByteCodeTemplate('/move_bytecode_template_bg.wasm');
 
       const txb = new TransactionBlock();
 
-      const [upgradeCap] = txb.publish({ modules, dependencies });
+      const [upgradeCap] = txb.publish({
+        modules: [
+          [
+            ...getBytecode({
+              ...getValues(),
+              recipient: currentAccount.address,
+            }),
+          ],
+        ],
+        dependencies: [normalizeSuiAddress('0x1'), normalizeSuiAddress('0x2')],
+      });
 
       txb.transferObjects([upgradeCap], txb.pure(currentAccount.address));
 
