@@ -158,9 +158,9 @@ const SwapButton = () => {
   };
 
   return (
-    <Button variant="filled" onClick={swap}>
+    <Button variant="filled" onClick={swap} justifyContent="center">
       <Typography variant="label" size="large">
-        {loading ? 'Swapping...' : 'Swap'}
+        {loading ? 'Swapping...' : 'Confirm Swap'}
       </Typography>
     </Button>
   );

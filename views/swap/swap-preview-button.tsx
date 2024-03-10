@@ -61,7 +61,6 @@ const SwapPreviewButton: FC = () => {
       borderRadius="xs"
       disabled={!isEnabled}
       onClick={handlePreview}
-      nHover={{ bg: 'lowestContainer' }}
       variant={isEnabled ? 'filled' : 'tonal'}
       cursor={isEnabled ? 'pointer' : 'not-allowed'}
       bg={isEnabled ? 'filled' : 'outlineContainer'}
