@@ -13,6 +13,7 @@ const variants = {
 
 const PoolDetailCollapse: FC<PoolDetailAccordionProps> = ({
   title,
+  noBorder,
   children,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -50,7 +51,7 @@ const PoolDetailCollapse: FC<PoolDetailAccordionProps> = ({
         animate={isExpanded ? 'collapsed' : 'rest'}
         overflow="hidden"
         borderBottom="1px solid"
-        borderBottomColor="outlineVariant"
+        borderBottomColor={noBorder ? 'transparent' : 'outlineVariant'}
         px="xl"
       >
         {children}

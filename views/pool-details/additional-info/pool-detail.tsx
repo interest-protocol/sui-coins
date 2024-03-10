@@ -42,7 +42,7 @@ const PoolDetail = () => (
         />
       ))}
     </Accordion>
-    <Accordion title={POOL_COMPOSITION.title}>
+    <Accordion title={POOL_COMPOSITION.title} noBorder>
       {(POOL_COMPOSITION.data as Array<PoolDetailAccordionItemCoinProps>).map(
         ({ Icon, coinName, conversion, percentage, value }) => (
           <ItemToken
