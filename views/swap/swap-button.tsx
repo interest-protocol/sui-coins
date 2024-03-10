@@ -116,7 +116,7 @@ const SwapButton = () => {
             });
 
             nextCoin = txb.moveCall({
-              target: `${PACKAGES[network].DEX}::sui_coins_amm::swap`,
+              target: `${PACKAGES[network].DEX}::interest_protocol_amm::swap`,
               typeArguments: [coinInType, coinOutType, lpCoinType],
               arguments: [
                 txb.object(poolId),
@@ -126,7 +126,7 @@ const SwapButton = () => {
             });
           } else {
             nextCoin = txb.moveCall({
-              target: `${PACKAGES[network].DEX}::sui_coins_amm::swap`,
+              target: `${PACKAGES[network].DEX}::interest_protocol_amm::swap`,
               typeArguments: [coinInType, coinOutType, lpCoinType],
               arguments: [
                 txb.object(poolId),
