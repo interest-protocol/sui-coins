@@ -8,6 +8,7 @@ import { useNetwork } from '@/context/network';
 
 import Header from './header';
 import PoolCard from './pool-card';
+import PoolFilter from './pool-filter';
 import { PoolTabEnum } from './pools.types';
 
 const Pools: FC = () => {
@@ -16,28 +17,35 @@ const Pools: FC = () => {
   const [tab, setTab] = useState<PoolTabEnum>(PoolTabEnum.Pools);
 
   return (
-    <Layout>
-      <Box py="xl">
-        <Header setTab={setTab} currentTab={tab} />
-      </Box>
-      <Box
-        gap="m"
-        bg="container"
-        display="grid"
-        borderRadius="xs"
-        p={['s', 's', 's', 'l']}
-        gridTemplateColumns={[
-          '1fr',
-          '1fr',
-          '1fr 1fr',
-          '1fr 1fr',
-          '1fr 1fr 1fr',
-          '1fr 1fr 1fr',
-        ]}
-      >
-        {RECOMMENDED_POOLS[network].map((pool) => (
-          <PoolCard key={v4()} {...pool} />
-        ))}
+    <Layout title="Pools">
+      <Box mx={['0', '0', '0', '0', 'm']}>
+        <Box py="xl">
+          <Header setTab={setTab} currentTab={tab} />
+        </Box>
+        <Box
+          gap="2xs"
+          bg="container"
+          maxWidth="100%"
+          maxHeight="100%"
+          display="flex"
+          flexDirection="column"
+          borderRadius="xs"
+          px="m"
+          py={['s', 's', 's', '2xl']}
+        >
+          <PoolFilter />
+          <Box
+            gap="m"
+            display="grid"
+            borderRadius="xs"
+            p={['s', 's', 's', 'l']}
+            gridTemplateColumns={['1fr', '1fr', '1fr 1fr', '1fr 1fr 1fr']}
+          >
+            {RECOMMENDED_POOLS[network].map((pool) => (
+              <PoolCard key={v4()} {...pool} />
+            ))}
+          </Box>
+        </Box>
       </Box>
     </Layout>
   );

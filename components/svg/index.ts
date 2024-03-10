@@ -1,8 +1,10 @@
 export { default as ActivitySVG } from './activity';
 export { default as AirdropSVG } from './airdrop';
+export { default as ArrowDownSVG } from './arrow-down';
 export { default as ArrowLeftSVG } from './arrow-left';
 export { default as ArrowObliqueSVG } from './arrow-oblique';
 export { default as ArrowTopRightSVG } from './arrow-top-right';
+export { default as ArrowUpSVG } from './arrow-up';
 export { default as AssetsSVG } from './assets';
 export { default as AVAChainSVG } from './ava-chain';
 export { default as BSCChainSVG } from './bsc-chain';
@@ -34,6 +36,7 @@ export { default as EthCircleSVG } from './eth-circle';
 export { default as ExclamationCircleSVG } from './exclamation-circle';
 export { default as FavoriteSVG } from './favorite';
 export { default as FileSVG } from './file';
+export { default as FilterSVG } from './filter';
 export { default as FindSVG } from './find';
 export { default as FolderSVG } from './folder';
 export { default as GithubSVG } from './github';

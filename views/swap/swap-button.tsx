@@ -199,7 +199,7 @@ const SwapButton = () => {
       disabled={notEnoughBalance}
     >
       <Typography variant="label" size="large">
-        {loading ? 'Swapping...' : 'Swap'}
+        {loading ? 'Swapping...' : 'Confirm Swap'}
       </Typography>
     </Button>
   );
