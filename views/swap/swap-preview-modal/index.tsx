@@ -1,8 +1,10 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
+import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { TokenIcon } from '@/components';
+import { Routes, RoutesEnum } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { ArrowLeftSVG, TimesSVG } from '@/svg';
 
@@ -13,6 +15,12 @@ import SwapPreviewModalSummary from './swap-preview-modal-summary';
 const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
   const { network } = useNetwork();
   const { control } = useFormContext<SwapForm>();
+  const { push } = useRouter();
+
+  const handleGoback = () => {
+    push(Routes[RoutesEnum.Swap]);
+    onClose();
+  };
 
   const tokenFrom = useWatch({ control, name: 'from' });
   const tokenTo = useWatch({ control, name: 'to' });
@@ -39,7 +47,12 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
           alignItems="center"
           justifyContent="space-between"
         >
-          <ArrowLeftSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+          <ArrowLeftSVG
+            maxWidth="1.5rem"
+            maxHeight="1.5rem"
+            width="100%"
+            onClick={handleGoback}
+          />
           <Typography size="large" variant="title" color="onSurface">
             Swap
           </Typography>
