@@ -60,7 +60,6 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       decimals,
       value: '',
       locked: false,
-      usdPrice: undefined,
     });
     setValue(`${label === 'from' ? 'to' : 'from'}.value`, '');
 
