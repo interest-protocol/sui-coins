@@ -1,11 +1,14 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
+import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { v4 } from 'uuid';
 
 import { TokenIcon } from '@/components';
+import { Routes, RoutesEnum } from '@/constants';
 import { DexName } from '@/constants/pools';
 import { useNetwork } from '@/context/network';
+import { useDialog } from '@/hooks';
 import { CircleCheckSVG } from '@/svg';
 import { formatMoney } from '@/utils';
 import { DEX_MAP } from '@/views/pools/pool-card/pool-card.data';
@@ -13,12 +16,43 @@ import { DEX_MAP } from '@/views/pools/pool-card/pool-card.data';
 import { CreatePoolForm } from '../pool-create.types';
 
 const PoolSummary: FC = () => {
+  const { push } = useRouter();
   const { network } = useNetwork();
+  const { dialog, handleClose } = useDialog();
   const { getValues } = useFormContext<CreatePoolForm>();
   const { type, isStable, tokens, dex } = getValues();
 
   // TODO: add fee
   const fee = 0;
+
+  const onCreatePool = async () => {
+    console.log({ type, isStable, tokens, dex });
+  };
+
+  const createPool = () =>
+    dialog.promise(onCreatePool(), {
+      loading: {
+        title: 'Create the pool...',
+        message: 'We are creating the pool, and you will know when it is done',
+      },
+      success: {
+        onClose: handleClose,
+        title: 'Pool created successfully',
+        message:
+          'Your pool was create successfully, and you can check it on the Explorer',
+        primaryButton: {
+          label: 'See on Explorer',
+          onClick: handleClose,
+        },
+      },
+      error: {
+        onClose: handleClose,
+        title: 'Pool creation failed',
+        message:
+          'Your pool was not created, please try again or contact the support team',
+        primaryButton: { label: 'Try again', onClick: handleClose },
+      },
+    });
 
   return (
     <Box
@@ -222,13 +256,16 @@ const PoolSummary: FC = () => {
       </Box>
       <Box display="flex" justifyContent="center" gap="s" mt="xl">
         <Button
-          variant="outline"
           color="onSurface"
+          variant="outline"
           borderColor="outlineVariant"
+          onClick={() => push(Routes[RoutesEnum.Pools])}
         >
           Cancel
         </Button>
-        <Button variant="filled">Create Pool</Button>
+        <Button variant="filled" onClick={createPool}>
+          Create Pool
+        </Button>
       </Box>
     </Box>
   );

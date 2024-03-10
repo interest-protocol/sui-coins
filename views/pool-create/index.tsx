@@ -12,14 +12,18 @@ import PoolCreateSteps from './pool-create-steps';
 
 const PoolCreate = () => {
   const { push } = useRouter();
-  const { control } = useFormContext<CreatePoolForm>();
+  const { control, setValue } = useFormContext<CreatePoolForm>();
 
   const currentStep = useWatch({ control, name: 'step' });
 
   return (
     <Layout>
       <CreatePoolHeader
-        onBack={() => push(Routes[RoutesEnum.Pools])}
+        onBack={() =>
+          currentStep
+            ? setValue('step', currentStep - 1)
+            : push(Routes[RoutesEnum.Pools])
+        }
         name={stepTitle[currentStep]}
       />
       <Box
