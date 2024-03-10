@@ -1,7 +1,10 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
+import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { AIRDROP_SUI_FEE_PER_ADDRESS } from '@/constants/fees';
+import { FixedPointMath } from '@/lib';
 import { BATCH_SIZE } from '@/views/airdrop/airdrop.constants';
 
 const SwapPreviewModalSummary: FC = () => {
@@ -75,7 +78,13 @@ const SwapPreviewModalSummary: FC = () => {
           </Typography>
           <Box textAlign="right">
             <Typography size="medium" variant="body" color="onSurface">
-              0
+              {airdropList
+                ? FixedPointMath.toNumber(
+                    new BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS).times(
+                      airdropList.length
+                    )
+                  ).toString()
+                : '0'}
             </Typography>
           </Box>
         </Box>
