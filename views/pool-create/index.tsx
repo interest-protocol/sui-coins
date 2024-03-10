@@ -12,11 +12,9 @@ import PoolCreateSteps from './pool-create-steps';
 
 const PoolCreate = () => {
   const { push } = useRouter();
-  const { control, setValue } = useFormContext<CreatePoolForm>();
+  const { control } = useFormContext<CreatePoolForm>();
 
   const currentStep = useWatch({ control, name: 'step' });
-
-  const onStepClick = (index: number) => setValue('step', index);
 
   return (
     <Layout>
@@ -32,11 +30,7 @@ const PoolCreate = () => {
         flexDirection="column"
         justifyContent="center"
       >
-        <PoolCreateSteps
-          steps={5}
-          onStepClick={onStepClick}
-          currentStep={currentStep}
-        />
+        <PoolCreateSteps steps={5} currentStep={currentStep} />
       </Box>
       {stepContent[currentStep]}
     </Layout>
