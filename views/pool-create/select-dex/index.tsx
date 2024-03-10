@@ -74,6 +74,7 @@ const SelectDex: FC = () => {
               <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
               {isOpen && (
                 <Box
+                  zIndex={2}
                   top="3rem"
                   overflow="hidden"
                   borderRadius="xs"
