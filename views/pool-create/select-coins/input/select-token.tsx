@@ -17,7 +17,7 @@ const SelectToken: FC<InputProps> = ({ index }) => {
   const { network } = useNetwork();
   const { setModal, handleClose } = useModal();
 
-  const { setValue, control } = useFormContext<CreatePoolForm>();
+  const { setValue, control, getValues } = useFormContext<CreatePoolForm>();
 
   const currentToken = useWatch({
     control,
@@ -29,12 +29,13 @@ const SelectToken: FC<InputProps> = ({ index }) => {
   const Icon = currentSymbol ? TOKEN_ICONS[network][currentSymbol] : null;
 
   const onSelect = async ({ type, decimals, symbol }: CoinData) => {
-    setValue(`tokens.${index}`, {
-      type,
-      symbol,
-      decimals,
-      value: '',
-    });
+    getValues('tokens')?.filter((token) => token.type === type).length == 0 &&
+      setValue(`tokens.${index}`, {
+        type,
+        symbol,
+        decimals,
+        value: '',
+      });
   };
 
   const openModal = () =>
