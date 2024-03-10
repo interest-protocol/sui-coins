@@ -89,7 +89,7 @@ const Swap: FC = () => {
               py="s"
               px="xl"
               fontSize="s"
-              bg={coinsExist ? 'filled' : 'container'}
+              bg={coinsExist ? 'filled' : 'outlineContainer'}
               type="button"
               variant={coinsExist ? 'filled' : 'tonal'}
               color={coinsExist ? 'surface' : 'outlineVariant'}
@@ -97,6 +97,9 @@ const Swap: FC = () => {
               borderRadius="xs"
               fontFamily="Proto"
               onClick={handlePreview}
+              nHover={{
+                backgroundColor: 'lowestContainer',
+              }}
             >
               Preview swap
             </Button>
