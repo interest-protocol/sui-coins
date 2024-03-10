@@ -15,6 +15,7 @@ export { default as ChevronDownSVG } from './chevron-down';
 export { default as ChevronLeftSVG } from './chevron-left';
 export { default as ChevronRightSVG } from './chevron-right';
 export { default as CircleSVG } from './circle';
+export { default as CircleCheckSVG } from './circle-check';
 export { default as CirclePlusSVG } from './circle-plus';
 export { default as ClipboardSVG } from './clipboard';
 export { default as ClockSVG } from './clock';

@@ -8,6 +8,6 @@ export interface CreatePoolForm {
   dex: string;
   step: number;
   isStable: boolean;
-  algorithm: 'CLAMM' | 'AMM';
+  type: 'CLAMM' | 'AMM';
   tokens: ReadonlyArray<Token>;
 }

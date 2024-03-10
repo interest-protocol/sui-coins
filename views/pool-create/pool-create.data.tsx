@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { v4 } from 'uuid';
 
+import PoolSummary from './pool-summary';
 import SelectCoins from './select-coins';
 import SelectDex from './select-dex';
 import SelectVolatility from './select-volatility';
@@ -18,5 +19,5 @@ export const stepContent: ReadonlyArray<ReactNode> = [
   <SelectVolatility key={v4()} />,
   <SelectCoins key={v4()} />,
   <SelectDex key={v4()} />,
-  null,
+  <PoolSummary key={v4()} />,
 ];
