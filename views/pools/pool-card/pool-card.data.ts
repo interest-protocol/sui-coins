@@ -62,8 +62,8 @@ export const DEX_MAP: Record<
     url: 'https://interestprotocol.com',
   },
   [DexName.Suicoins]: {
-    name: 'Suicoins',
+    name: 'Sui Coins',
     Icon: LogoSVG,
-    url: 'https://Suicoins.com',
+    url: 'https://suicoins.com',
   },
 };
