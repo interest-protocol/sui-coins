@@ -6,9 +6,9 @@ import { CreatePoolForm } from './pool-create.types';
 
 const PoolCreateButton: FC = () => {
   const { control, setValue } = useFormContext<CreatePoolForm>();
-  const { step, algorithm, isStable } = useWatch({ control });
+  const { step, type, isStable } = useWatch({ control });
 
-  const isDisabled = [algorithm === undefined, isStable === undefined];
+  const isDisabled = [type === undefined, isStable === undefined];
   const handleClick = [
     null,
     () =>

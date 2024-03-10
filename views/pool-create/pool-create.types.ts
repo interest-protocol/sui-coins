@@ -7,6 +7,6 @@ export interface Token extends CoinData {
 export interface CreatePoolForm {
   step: number;
   isStable: boolean;
-  algorithm: 'CLAMM' | 'AMM';
+  type: 'CLAMM' | 'AMM';
   tokens: ReadonlyArray<Token>;
 }
