@@ -43,7 +43,7 @@ const AdvanceDetail = () => (
         )
       )}
     </Accordion>
-    <Accordion title={POOL_ORACLE_PRICE.title}>
+    <Accordion title={POOL_ORACLE_PRICE.title} noBorder>
       {(POOL_ORACLE_PRICE.data as Array<PoolDetailAccordionItemCoinProps>).map(
         ({ Icon, coinName, conversion, percentage, value }) => (
           <ItemToken

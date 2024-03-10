@@ -4,14 +4,15 @@ import { SVGProps } from '@/components/svg/svg.types';
 
 export interface PoolDetailAccordionProps {
   title: string;
+  noBorder?: boolean;
   children: ReactNode;
 }
 
 export interface PoolDetailAccordionItemStandardProps {
   label: string;
+  popupInfo?: string;
   labelColor?: string;
   content: string | number;
-  popupInfo?: string;
   isCopyClipBoard?: boolean;
 }
 
