@@ -30,11 +30,21 @@ const plusVariants = {
 };
 
 const CollapseIcon: FC = () => (
-  <Box position="relative" width="1.2rem" height="1.2rem">
-    <Motion overflow="hidden" position="absolute" variants={minusVariants}>
+  <Box position="relative" width="1.2rem" height="1.2rem" display="flex">
+    <Motion
+      overflow="hidden"
+      position="absolute"
+      variants={minusVariants}
+      display="flex"
+    >
       <MinusSVG maxHeight="1.5rem" maxWidth="1.5em" width="100%" />
     </Motion>
-    <Motion overflow="hidden" position="absolute" variants={plusVariants}>
+    <Motion
+      overflow="hidden"
+      position="absolute"
+      variants={plusVariants}
+      display="flex"
+    >
       <PlusSVG maxHeight="1.2rem" maxWidth="1.2rem" width="100%" />
     </Motion>
   </Box>

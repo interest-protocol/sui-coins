@@ -28,7 +28,7 @@ const ItemCoin: FC<PoolDetailAccordionItemCoinProps> = ({
         </Typography>
       </Box>
       <Box display="flex">
-        <Box textAlign="right" mr="m">
+        <Box textAlign="right">
           <Typography size="large" variant="body">
             {value}
           </Typography>

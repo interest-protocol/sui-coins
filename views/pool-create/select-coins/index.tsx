@@ -3,7 +3,6 @@ import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { CreatePoolForm } from '../pool-create.types';
-import PoolCreateButton from '../pool-create-button';
 
 const SelectCoins: FC = () => {
   const { getValues } = useFormContext<CreatePoolForm>();

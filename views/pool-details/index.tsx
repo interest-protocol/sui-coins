@@ -1,6 +1,6 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { useRouter } from 'next/router';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 
 import Layout from '@/components/layout';
 import { Routes, RoutesEnum } from '@/constants';
@@ -10,10 +10,8 @@ import { TOKEN_ICONS } from '@/lib';
 
 import PoolTitleBar from '../components/pool-title-bar';
 import Error from '../error';
-import PoolAdvanceDetail from './advance-detail';
-import PoolDetail from './detail';
-import DetailTabs from './detail-tabs';
-import { PoolDetailsProps, PoolDetailsTabOption } from './pool-details.types';
+import PoolAdditionalInfo from './additional-info';
+import { PoolDetailsProps } from './pool-details.types';
 import PoolForm from './pool-form';
 
 const PoolDetails: FC<PoolDetailsProps> = ({
@@ -23,14 +21,6 @@ const PoolDetails: FC<PoolDetailsProps> = ({
 }) => {
   const { push } = useRouter();
   const { network } = useNetwork();
-
-  const [poolDetailsView, setPoolDetailsView] = useState<PoolDetailsTabOption>(
-    PoolDetailsTabOption.Detail
-  );
-
-  const handleTabChange = (index: PoolDetailsTabOption) => {
-    setPoolDetailsView(index);
-  };
 
   const pool = RECOMMENDED_POOLS[network].find(
     ({ poolObjectId }) => poolObjectId === objectId
@@ -64,19 +54,7 @@ const PoolDetails: FC<PoolDetailsProps> = ({
           poolOptionView={poolOptionView}
           handleOptionTab={handleOptionTab}
         />
-        <Box color="onSurface" borderRadius="xs" bg="lowestContainer">
-          <DetailTabs
-            onChangeTab={handleTabChange}
-            defaultTabIndex={poolDetailsView}
-            items={['Pool Detail', 'Advance Details']}
-          />
-
-          {poolDetailsView === PoolDetailsTabOption.Detail ? (
-            <PoolDetail />
-          ) : (
-            <PoolAdvanceDetail />
-          )}
-        </Box>
+        <PoolAdditionalInfo />
       </Box>
     </Layout>
   );

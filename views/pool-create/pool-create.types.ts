@@ -5,6 +5,7 @@ export interface Token extends CoinData {
 }
 
 export interface CreatePoolForm {
+  dex: string;
   step: number;
   isStable: boolean;
   type: 'CLAMM' | 'AMM';

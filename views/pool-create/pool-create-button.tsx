@@ -6,9 +6,16 @@ import { CreatePoolForm } from './pool-create.types';
 
 const PoolCreateButton: FC = () => {
   const { control, setValue } = useFormContext<CreatePoolForm>();
-  const { step, type, isStable } = useWatch({ control });
+  const { step, type, isStable, tokens } = useWatch({ control });
 
-  const isDisabled = [type === undefined, isStable === undefined];
+  const isDisabled = [
+    type === undefined,
+    isStable === undefined,
+    !tokens?.every(
+      ({ type, value, symbol, decimals }) =>
+        type && symbol && Number(value) && String(decimals)
+    ),
+  ];
   const handleClick = [
     null,
     () =>
@@ -16,6 +23,7 @@ const PoolCreateButton: FC = () => {
         { type: '', symbol: '', decimals: 0, value: '' },
         { type: '', symbol: '', decimals: 0, value: '' },
       ]),
+    () => setValue('dex', ''),
   ];
 
   return (
