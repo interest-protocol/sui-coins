@@ -8,7 +8,7 @@ import { CreatePoolForm } from '@/views/pool-create/pool-create.types';
 const PoolCreatePage: NextPage = () => {
   const form = useForm<CreatePoolForm>({
     defaultValues: {
-      step: 2,
+      step: 0,
     },
   });
 
