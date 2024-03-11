@@ -71,6 +71,7 @@ const ManageSlippageForm: FC<ManageSlippageFormProps> = ({
           />
           {SLIPPAGE_BUTTONS.map((item) => (
             <Button
+              py="2xs"
               key={v4()}
               borderRadius="xs"
               variant="outline"
@@ -115,10 +116,10 @@ const ManageSlippageForm: FC<ManageSlippageFormProps> = ({
       </Box>
       <Box display="flex" gap="0.5rem" justifyContent="flex-end">
         <Button
-          variant="tonal"
-          borderRadius="xs"
           px="l"
           py="s"
+          variant="tonal"
+          borderRadius="xs"
           bg="rgba(0, 0, 0, 0.08)"
           onClick={handleManageView}
         >
