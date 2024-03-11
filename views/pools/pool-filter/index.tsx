@@ -4,28 +4,9 @@ import { v4 } from 'uuid';
 
 import { FilterSVG } from '@/svg';
 
-import { FilterTypeEnum } from '../pools.types';
 import Dropdown from './dropdown';
 import FilterSelectedItem from './filter-selected-item';
-import { ALGORITHM_TYPE, COIN_TYPE, POOL_TYPE } from './pool-filter.data';
-
-const Filters_Data = [
-  {
-    label: 'Algorithm',
-    data: ALGORITHM_TYPE,
-    type: FilterTypeEnum.ALGORITHM,
-  },
-  {
-    label: 'Pool Type',
-    data: POOL_TYPE,
-    type: FilterTypeEnum.POOL_TYPE,
-  },
-  {
-    label: 'Coin Type',
-    data: COIN_TYPE,
-    type: FilterTypeEnum.COIN_TYPE,
-  },
-];
+import { Filters_Data } from './pool-filter.data';
 
 const PoolFilter: FC = () => {
   return (
