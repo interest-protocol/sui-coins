@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 import { useFormContext, UseFormReturn, useWatch } from 'react-hook-form';
 
 import { useNetwork } from '@/context/network';
-import { useWeb3 } from '@/hooks/use-web3';
+import { useWeb3 } from '@/hooks';
 import { SwapForm } from '@/views/swap/swap.types';
 import { findSwapPaths } from '@/views/swap/swap-manager/swap-manager.utils';
 
@@ -10,8 +10,8 @@ import SwapManagerField from './swap-manager-field';
 import { SwapMessages } from './swap-messages';
 
 const SwapManager: FC = () => {
-  const { network } = useNetwork();
   const { account } = useWeb3();
+  const { network } = useNetwork();
   const formSwap: UseFormReturn<SwapForm> = useFormContext();
 
   const [error, setError] = useState(false);

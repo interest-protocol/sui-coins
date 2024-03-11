@@ -6,10 +6,8 @@ import {
 import { normalizeSuiAddress } from '@mysten/sui.js/utils';
 import { pathOr } from 'ramda';
 
-import { PACKAGES } from '@/constants';
-import { BASE_COINS } from '@/constants/coins';
-import { REGISTRY_POOLS } from '@/constants/pools';
-import { RegistryPool } from '@/interface';
+import { BASE_COINS, REGISTRY_POOLS, RegistryPool } from '@/constants/coins';
+import { PACKAGES } from '@/constants/packages';
 import { getReturnValuesFromInspectResults } from '@/utils';
 import { SwapPath } from '@/views/swap/swap.types';
 
@@ -18,15 +16,15 @@ import { FindSwapPathArgs, QuoteAmountArgs } from './swap-manager.types';
 export const quoteAmountOut = async ({
   client,
   amount,
-  network,
   swapPath,
+  network,
 }: QuoteAmountArgs) => {
   const txb = new TransactionBlock();
 
   let nextAmountIn: TransactionResult | null = null;
 
   swapPath.forEach(({ coinIn, coinOut, lpCoin }, index) => {
-    const pool = REGISTRY_POOLS[network][coinIn][coinOut].poolId;
+    const pool = REGISTRY_POOLS[coinIn][coinOut].poolId;
 
     nextAmountIn = txb.moveCall({
       target: `${PACKAGES[network].DEX}::quote::amount_out`,
@@ -57,15 +55,15 @@ export const quoteAmountOut = async ({
 export const quoteAmountIn = async ({
   client,
   amount,
-  network,
   swapPath,
+  network,
 }: QuoteAmountArgs) => {
   const txb = new TransactionBlock();
 
   let nextAmountOut: TransactionResult | null = null;
 
   swapPath.forEach(({ coinIn, coinOut, lpCoin }, index) => {
-    const pool = REGISTRY_POOLS[network][coinIn][coinOut].poolId;
+    const pool = REGISTRY_POOLS[coinIn][coinOut].poolId;
 
     nextAmountOut = txb.moveCall({
       target: `${PACKAGES[network].DEX}::quote::amount_in`,

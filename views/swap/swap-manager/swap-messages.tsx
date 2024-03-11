@@ -86,11 +86,15 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
   }, [isFetchingSwapAmountIn, isFetchingSwapAmountOut]);
 
   useEffect(() => {
-    if (toastState) toast.loading(' fetching prices');
+    if (toastState) {
+      setValue('loading', true);
+      toast.loading('Fetching prices');
+    }
   }, [toastState]);
 
   useEffect(() => {
     if (!(isFetchingSwapAmountIn || isFetchingSwapAmountOut) && toastState) {
+      setValue('loading', false);
       setToastState(false);
       toast.dismiss();
     }
