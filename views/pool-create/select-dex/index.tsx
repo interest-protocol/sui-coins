@@ -80,6 +80,7 @@ const SelectDex: FC = () => {
                   borderRadius="xs"
                   border="1px solid"
                   position="absolute"
+                  mx="-1rem"
                   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   // @ts-ignore
                   ref={selectDexBoxRef}
