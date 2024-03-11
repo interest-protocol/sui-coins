@@ -37,7 +37,6 @@ const Dropdown: FC<DropdownProps> = ({ label, type, filterData, disabled }) => {
   };
 
   useEffect(() => {
-    console.log(fields, '>>>> FIELDS');
     const fieldSelected = fields?.filter((field) => field.type == type)[0];
     setSelectedOption({
       type: type,
