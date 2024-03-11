@@ -97,11 +97,17 @@ const MintForm: FC = () => {
       p={['xl', 'xl', 'xl', '7xl']}
       width={['100%', '100%', '100%', '39.75rem']}
     >
-      <Typography size="large" fontSize="5xl" variant="title" fontWeight="500">
+      <Typography
+        size="large"
+        fontSize="5xl"
+        variant="title"
+        fontWeight="500"
+        color="onSurface"
+      >
         I would like to mint...
       </Typography>
       <Box my="6xl" display="flex" gap="s" flexDirection="column">
-        <Typography variant="body" size="small">
+        <Typography variant="body" size="small" color="onSurface">
           Choose coin to mint
         </Typography>
         <Box position="relative" display="flex" flexDirection="column">
@@ -114,7 +120,6 @@ const MintForm: FC = () => {
               <Box
                 display="flex"
                 bg="onSurface"
-                color="surface"
                 width="2.5rem"
                 height="2.5rem"
                 borderRadius="xs"
@@ -131,6 +136,7 @@ const MintForm: FC = () => {
             SuffixIcon={
               <Box
                 display="flex"
+                color="onSurface"
                 alignItems="center"
                 justifyContent="center"
                 rotate={isOpen ? '180deg' : '0deg'}
@@ -139,7 +145,12 @@ const MintForm: FC = () => {
               </Box>
             }
           >
-            <Typography variant="body" size="large" width="100%">
+            <Typography
+              size="large"
+              width="100%"
+              variant="body"
+              color="onSurface"
+            >
               {selected.symbol}
             </Typography>
           </Button>
@@ -155,8 +166,8 @@ const MintForm: FC = () => {
               cursor="pointer"
               bg="lowContainer"
               borderRadius="xs"
-              position="absolute"
               border="2px solid"
+              position="absolute"
               borderColor="outline"
             >
               {COINS.map(({ symbol, type, decimals }) => {
@@ -174,9 +185,9 @@ const MintForm: FC = () => {
                         display="flex"
                         bg="onSurface"
                         color="surface"
-                        minWidth="1.5rem"
                         height="1.5rem"
                         borderRadius="xs"
+                        minWidth="1.5rem"
                         alignItems="center"
                         justifyContent="center"
                       >
@@ -191,7 +202,12 @@ const MintForm: FC = () => {
         </Box>
       </Box>
       <Box display="flex" justifyContent="center">
-        <Button disabled={isSameEpoch} variant="filled" onClick={onMint}>
+        <Button
+          disabled={isSameEpoch}
+          variant="filled"
+          onClick={onMint}
+          color="onSurface"
+        >
           Mint
         </Button>
       </Box>
