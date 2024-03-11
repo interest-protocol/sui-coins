@@ -39,9 +39,9 @@ const FilterSelectedItem: FC = () => {
           <Button
             variant="outline"
             borderRadius="full"
-            py="0.5rem"
-            pl="0.5rem"
-            pr="1rem"
+            py="xs"
+            pl="xs"
+            pr="m"
             onClick={() => removeFilter(field)}
             PrefixIcon={
               <Box
