@@ -107,7 +107,7 @@ const MintForm: FC = () => {
         I would like to mint...
       </Typography>
       <Box my="6xl" display="flex" gap="s" flexDirection="column">
-        <Typography variant="body" size="small" color="onSurface">
+        <Typography variant="body" size="large" color="onSurface">
           Choose coin to mint
         </Typography>
         <Box position="relative" display="flex" flexDirection="column">
