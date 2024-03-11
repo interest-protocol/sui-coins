@@ -40,7 +40,7 @@ const ItemCoin: FC<PoolDetailAccordionItemCoinProps> = ({
         </Box>
         {percentage && (
           <Box display="flex" alignItems="center" justifyContent="center">
-            <Tag variant="filled" bg="lowContainer" color="onSurface">
+            <Tag variant="filled" bg="lowContainer" color="onSurface" ml="xs">
               <Typography size="medium" variant="label">
                 {percentage}
               </Typography>
