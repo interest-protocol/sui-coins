@@ -24,7 +24,7 @@ const MintBalances: FC = () => {
       p={['xl', 'xl', 'xl', '7xl']}
       width={['100%', '100%', '100%', '39.75rem']}
     >
-      <Typography variant="body" size="large">
+      <Typography variant="body" size="large" color="onSurface">
         Balance minted
       </Typography>
       <Box
@@ -53,11 +53,11 @@ const MintBalances: FC = () => {
                 >
                   <Icon width="100%" maxWidth="1.5rem" maxHeight="1.5rem" />
                 </Box>
-                <Typography variant="body" size="large">
+                <Typography variant="body" size="large" color="onSurface">
                   {symbol}
                 </Typography>
               </Box>
-              <Typography variant="body" size="large">
+              <Typography variant="body" size="large" color="onSurface">
                 {FixedPointMath.toNumber(
                   coinsMap[type]?.balance
                     ? BigNumber(coinsMap[type]?.balance)

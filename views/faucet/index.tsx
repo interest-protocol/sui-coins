@@ -8,7 +8,13 @@ import MintForm from './mint-form';
 
 const Faucet: FC = () => (
   <Layout>
-    <Typography my="2xl" size="large" variant="display" textAlign="center">
+    <Typography
+      my="2xl"
+      size="large"
+      variant="display"
+      textAlign="center"
+      color="onSurface"
+    >
       Faucet
     </Typography>
     <MintForm />
