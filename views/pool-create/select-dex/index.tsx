@@ -48,7 +48,7 @@ const SelectDex: FC = () => {
           maxWidth="33rem"
           borderRadius="xs"
         >
-          <Typography variant="body" size="small" color="onSurface">
+          <Typography variant="body" size="large" color="onSurface">
             Select Dex
           </Typography>
           <Box display="grid" gap="s" my="s" id={BOX_ID}>
@@ -76,6 +76,8 @@ const SelectDex: FC = () => {
                 <Box
                   zIndex={2}
                   top="3rem"
+                  mx="-1rem"
+                  width="100%"
                   overflow="hidden"
                   borderRadius="xs"
                   border="1px solid"
