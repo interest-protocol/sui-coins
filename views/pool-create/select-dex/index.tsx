@@ -76,11 +76,12 @@ const SelectDex: FC = () => {
                 <Box
                   zIndex={2}
                   top="3rem"
+                  mx="-1rem"
+                  width="100%"
                   overflow="hidden"
                   borderRadius="xs"
                   border="1px solid"
                   position="absolute"
-                  mx="-1rem"
                   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   // @ts-ignore
                   ref={selectDexBoxRef}
