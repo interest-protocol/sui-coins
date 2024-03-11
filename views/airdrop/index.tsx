@@ -40,6 +40,7 @@ const Airdrop: FC = () => {
         variant="display"
         textAlign="center"
         fontSize={['5xl', '8xl']}
+        color="onSurface"
       >
         Airdrop
       </Typography>
