@@ -1,6 +1,8 @@
+import { FilterItemProps, FilterTypeEnum } from '../../pools.types';
+
 export interface DropdownProps {
   label?: string;
   disabled?: boolean;
-  values: ReadonlyArray<string>;
-  onSelect: (value: string) => void;
+  type: FilterTypeEnum;
+  filterData: ReadonlyArray<FilterItemProps>;
 }

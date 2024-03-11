@@ -1,16 +1,29 @@
 import { Box, Button, Motion, RadioButton } from '@interest-protocol/ui-kit';
-import { FC, useId, useState } from 'react';
+import { FC, useEffect, useId, useState } from 'react';
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
 import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
 import { ArrowDownSVG, ArrowUpSVG } from '@/svg';
 
+import { FilterItemProps, PoolForm } from '../../pools.types';
 import { DropdownProps } from './dropdown.types';
 
-const Dropdown: FC<DropdownProps> = ({ label, values, disabled, onSelect }) => {
+const Dropdown: FC<DropdownProps> = ({ label, type, filterData, disabled }) => {
+  const { control } = useFormContext<PoolForm>();
+  const fields = useWatch({ control, name: 'filterList' });
+  const { replace } = useFieldArray({
+    control, // control props comes from useForm (optional: if you are using FormContext)
+    name: 'filterList',
+  });
+
   const boxId = useId();
   const [isOpen, setOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedOption, setSelectedOption] = useState<FilterItemProps>({
+    type: type,
+    description: '',
+  });
+
   const [isSelected, setIsSelected] = useState(false);
 
   const closeDropdown = (event: any) => {
@@ -23,10 +36,25 @@ const Dropdown: FC<DropdownProps> = ({ label, values, disabled, onSelect }) => {
     setOpen(!false);
   };
 
-  const handleSelect = (option: any) => {
-    setSelectedOption(option);
-    onSelect(option);
-    setIsSelected(!isSelected);
+  useEffect(() => {
+    console.log(fields, '>>>> FIELDS');
+    const fieldSelected = fields?.filter((field) => field.type == type)[0];
+    setSelectedOption({
+      type: type,
+      description: fieldSelected?.description || '',
+    });
+  }, [fields]);
+
+  const handleSelect = (option: FilterItemProps) => {
+    if (option.description != selectedOption.description) {
+      const tmpFilters = fields?.filter(
+        (field) => selectedOption.description != field.description
+      );
+      tmpFilters.push({ ...option });
+      setSelectedOption(option);
+      setIsSelected(!isSelected);
+      replace(tmpFilters);
+    }
     setOpen(!isOpen);
   };
 
@@ -37,11 +65,12 @@ const Dropdown: FC<DropdownProps> = ({ label, values, disabled, onSelect }) => {
       <Box>
         <Button
           py="s"
-          m="xs"
+          my="xs"
+          mx={['unset', 'unset', 'unset', 'xs']}
           variant="filled"
           color="onSurface"
-          bg={selectedOption ? 'onPrimary' : 'surface'}
-          width={['20rem', '30rem', '40rem', '8rem']}
+          bg={isOpen ? 'onPrimary' : 'surface'}
+          width={['fill-available', 'fill-available', 'fill-available', '8rem']}
           onClick={() => setOpen(!isOpen)}
           nHover={{
             backgroundColor: 'container',
@@ -82,7 +111,7 @@ const Dropdown: FC<DropdownProps> = ({ label, values, disabled, onSelect }) => {
                 flexDirection="column"
                 cursor={disabled ? 'not-allowed' : 'pointer'}
               >
-                {values.map((value) => {
+                {filterData.map((value) => {
                   return (
                     <Box
                       p="l"
@@ -97,12 +126,12 @@ const Dropdown: FC<DropdownProps> = ({ label, values, disabled, onSelect }) => {
                         backgroundColor: 'lowestContainer',
                       }}
                     >
-                      {value}
-                      {selectedOption === value ? (
-                        <RadioButton defaultValue />
-                      ) : (
-                        <RadioButton />
-                      )}
+                      {value.description}
+                      <RadioButton
+                        defaultValue={
+                          selectedOption.description === value.description
+                        }
+                      />
                     </Box>
                   );
                 })}
