@@ -75,7 +75,12 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
         ) : finished !== 100 ? (
           <>
             <ProgressIndicator variant="loading" size={200} />
-            <Typography variant="title" size="large" position="absolute">
+            <Typography
+              variant="title"
+              size="large"
+              position="absolute"
+              color="onSurface"
+            >
               {finished}%
             </Typography>
           </>
@@ -116,8 +121,8 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
           variant="filled"
           onClick={goBack}
           justifyContent="center"
-          bg={error || failedItems.length ? 'error' : 'primary'}
-          color={error || failedItems.length ? 'onError' : 'onPrimary'}
+          bg={error || failedItems.length ? 'error' : 'surface'}
+          color={error || failedItems.length ? 'onError' : 'onSurface'}
         >
           Go back
         </Button>

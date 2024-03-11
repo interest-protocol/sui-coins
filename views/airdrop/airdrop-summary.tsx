@@ -15,7 +15,7 @@ const AirdropSummary = () => {
 
   return (
     <Box display="flex" flexDirection="column" gap="s">
-      <Typography variant="body" size="large">
+      <Typography variant="body" size="large" color="onSurface">
         Summary
       </Typography>
       <Box bg="surface" px="m" py="xs" borderRadius="xs">
