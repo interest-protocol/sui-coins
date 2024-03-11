@@ -12,7 +12,7 @@ const SelectCoins: FC = () => {
   const { control } = useFormContext<CreatePoolForm>();
   const isStable = useWatch({ control, name: 'isStable' });
   const { fields, append } = useFieldArray({
-    control, // control props comes from useForm (optional: if you are using FormContext)
+    control,
     name: 'tokens',
     rules: { maxLength: isStable ? 5 : 3 },
   });

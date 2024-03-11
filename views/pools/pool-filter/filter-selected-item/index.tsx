@@ -11,7 +11,7 @@ const FilterSelectedItem: FC = () => {
   const { control } = useFormContext<PoolForm>();
   const fields = useWatch({ control, name: 'filterList' });
   const { replace } = useFieldArray({
-    control, // control props comes from useForm (optional: if you are using FormContext)
+    control,
     name: 'filterList',
   });
 
