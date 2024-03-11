@@ -27,7 +27,7 @@ const AirdropUploadStatus: FC = () => {
       bg="lowestContainer"
       flexDirection="column"
     >
-      <Typography variant="title" size="medium">
+      <Typography variant="title" size="medium" color="onSurface">
         Progress Summary
       </Typography>
       <Box display="flex" gap="m" flexDirection="column-reverse">

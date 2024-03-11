@@ -61,7 +61,7 @@ const AirdropUploadFile: FC = () => {
 
   return (
     <Box display="flex" flexDirection="column" gap="s">
-      <Typography variant="body" size="large">
+      <Typography variant="body" size="large" color="onSurface">
         2. Upload file
       </Typography>
       {airdropList ? (
@@ -99,6 +99,7 @@ const AirdropUploadFile: FC = () => {
             variant="body"
             maxWidth="9rem"
             textAlign="center"
+            color="onSurface"
           >
             Drop your file here or{' '}
             <Typography

@@ -38,7 +38,20 @@ const AirdropSelectToken: FC = () => {
   const renderToken = () => {
     if (!token) return null;
     const TokenIcon = TOKEN_ICONS[network][token.symbol] ?? DefaultTokenSVG;
-    return <TokenIcon maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />;
+    return (
+      <Box
+        display="flex"
+        bg="onSurface"
+        color="surface"
+        height="1.8rem"
+        minWidth="1.8rem"
+        borderRadius="xs"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <TokenIcon maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+      </Box>
+    );
   };
 
   return (
@@ -56,10 +69,16 @@ const AirdropSelectToken: FC = () => {
         onClick={() => setIsOpen(not)}
       >
         {renderToken()}
-        <Typography variant="label" size="large" flex="1" as="span">
+        <Typography
+          flex="1"
+          as="span"
+          size="large"
+          variant="label"
+          color="onSurface"
+        >
           {token ? token.symbol : '---'}
         </Typography>
-        <Box rotate="90deg">
+        <Box rotate="90deg" color="onSurface">
           <ChevronRightSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
         </Box>
       </Box>
@@ -72,6 +91,7 @@ const AirdropSelectToken: FC = () => {
           cursor="pointer"
           maxHeight="20rem"
           bg="lowContainer"
+          color="onSurface"
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           ref={dropdownRef}
@@ -122,7 +142,7 @@ const AirdropSelectToken: FC = () => {
                     </Box>
                   }
                   SuffixIcon={
-                    <Typography variant="body" size="medium">
+                    <Typography variant="body" size="medium" color="onSurface">
                       {FixedPointMath.toNumber(BigNumber(balance), decimals)}
                     </Typography>
                   }

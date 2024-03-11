@@ -215,6 +215,7 @@ const AirdropButton: FC<AirdropButtonProps> = ({ setIsProgressView }) => {
             variant="label"
             cursor="pointer"
             textDecoration="underline"
+            color="onSurface"
           >
             Explorer
           </Typography>
@@ -225,7 +226,12 @@ const AirdropButton: FC<AirdropButtonProps> = ({ setIsProgressView }) => {
 
   return (
     <Box display="flex" justifyContent="center">
-      <Button disabled={isDisabled} variant="filled" onClick={handleSend}>
+      <Button
+        disabled={isDisabled}
+        variant="filled"
+        onClick={handleSend}
+        color="onSurface"
+      >
         Send
       </Button>
     </Box>

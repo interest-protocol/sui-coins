@@ -42,10 +42,15 @@ const AirdropUploadFileCard: FC<AirdropUploadFileCardProps> = ({
           <FileSVG width="100%" maxWidth="1.5rem" maxHeight="1.5rem" />
         </Box>
         <Box>
-          <Typography variant="body" size="large">
+          <Typography variant="body" size="large" color="onSurface">
             {name}
           </Typography>
-          <Typography variant="body" size="small" opacity="0.48">
+          <Typography
+            variant="body"
+            size="small"
+            opacity="0.48"
+            color="onSurface"
+          >
             {size} address{size !== 1 && 'es'}
           </Typography>
         </Box>
