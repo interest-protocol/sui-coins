@@ -2,6 +2,12 @@ import { TOKEN_SYMBOL } from '@/lib';
 
 import { ISwapSettings } from '../swap/swap.types';
 
+export enum FilterTypeEnum {
+  ALGORITHM,
+  POOL_TYPE,
+  COIN_TYPE,
+}
+
 export enum PoolTabEnum {
   Pools,
   MyPosition,
@@ -27,4 +33,10 @@ export interface PoolForm {
   lpCoin: PoolToken;
   settings: ISwapSettings;
   tokenList: ReadonlyArray<PoolToken>;
+  filterList: ReadonlyArray<FilterItemProps>;
+}
+
+export interface FilterItemProps {
+  type: FilterTypeEnum;
+  description: string;
 }
