@@ -35,10 +35,16 @@ const Swap: FC = () => {
         display="flex"
         borderRadius="2xl"
         flexDirection="column"
-        px={['xl', 'xl', 'xl', '7xl']}
+        px={['2xs', 'xl', 'xl', '7xl']}
         width={['100%', '100%', '100%', '39.75rem']}
       >
-        <Box py="xl" px="m" my="xs" borderRadius="xs" bg="lowestContainer">
+        <Box
+          py="xl"
+          my="xs"
+          px={['2xs', 'm']}
+          borderRadius="xs"
+          bg="lowestContainer"
+        >
           <Input label="from" />
           <Box my="0.25rem" position="relative">
             <Box

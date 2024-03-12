@@ -38,6 +38,10 @@ const Input: FC<InputProps> = ({ label }) => {
               width: '100%',
               borderRadius: 'xs',
               borderColor: 'transparent',
+              border: 'none !important',
+              nHover: { border: 'none !important' },
+              nFocus: { border: 'none !important' },
+              nActive: { border: 'none !important' },
             }}
             {...register(`${label}.value`, {
               onChange: (v: ChangeEvent<HTMLInputElement>) => {

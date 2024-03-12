@@ -142,7 +142,11 @@ const SwapManager: FC = () => {
           />
         </>
       ))}
-      <a href="https://aftermath.finance">
+      <a
+        target="_blank"
+        rel="noopener, noreferrer"
+        href="https://aftermath.finance"
+      >
         <Box
           gap="2xs"
           display="flex"

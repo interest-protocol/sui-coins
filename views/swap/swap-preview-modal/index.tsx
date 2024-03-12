@@ -38,7 +38,12 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
           alignItems="center"
           justifyContent="space-between"
         >
-          <ArrowLeftSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+          <ArrowLeftSVG
+            width="100%"
+            onClick={onClose}
+            maxWidth="1.5rem"
+            maxHeight="1.5rem"
+          />
           <Typography size="large" variant="title">
             Swap
           </Typography>

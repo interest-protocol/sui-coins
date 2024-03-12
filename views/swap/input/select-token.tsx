@@ -111,7 +111,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
   return (
     <Box
       position="relative"
-      minWidth={['8rem', '8rem', '8rem', '8rem', '10rem']}
+      minWidth={['4rem', '8rem', '8rem', '8rem', '10rem']}
     >
       <Button
         p="2xs"
@@ -132,7 +132,12 @@ const SelectToken: FC<InputProps> = ({ label }) => {
           ),
         })}
       >
-        <Typography size="large" variant="label" p="xs">
+        <Typography
+          p="xs"
+          size="large"
+          variant="label"
+          display={['none', 'block']}
+        >
           {currentSymbol ?? 'Select Token'}
         </Typography>
         {currentSymbol ? (
