@@ -13,6 +13,7 @@ const PoolForm: FC<PoolDetailsFormProps> = ({
 }) => (
   <Box
     gap="xl"
+    width="100%"
     display="flex"
     borderRadius="xs"
     color="onSurface"
