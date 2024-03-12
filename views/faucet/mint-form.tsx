@@ -206,7 +206,7 @@ const MintForm: FC = () => {
           disabled={isSameEpoch}
           variant="filled"
           onClick={onMint}
-          color="onSurface"
+          color="surface"
         >
           Mint
         </Button>
