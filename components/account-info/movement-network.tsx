@@ -112,7 +112,7 @@ const MovementNetwork: FC = () => {
             <OptionItem
               key={v4()}
               selected={networkKey === network}
-              disabled={networkKey === 'm2:testnet'}
+              disabled={networkKey === Network.TESTNET}
               onClick={() => changeNetwork(networkKey as Network)}
             >
               <MovementLogoSVG maxWidth="2rem" maxHeight="2rem" />
