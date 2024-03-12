@@ -42,11 +42,7 @@ const PreviewSwapButton: FC = () => {
     if (from && Number(from.value) && from.type && String(from.decimals)) {
       const isGreaterThanBalance = BigNumber(
         Number(from.value!) * 10 ** from.decimals!
-      ).gt(
-        BigNumber(coinsMap[from.type]?.balance ?? 0).minus(
-          BigNumber(from.type === SUI_TYPE_ARG ? 10 ** from.decimals! : 0)
-        )
-      );
+      ).gt(BigNumber(coinsMap[from.type]?.balance ?? 0));
 
       if (isGreaterThanBalance) {
         setValue('error', 'You do not have enough tokens.');
@@ -62,7 +58,7 @@ const PreviewSwapButton: FC = () => {
       );
 
       if (from.type === SUI_TYPE_ARG && isGreaterThanAllowedForSui) {
-        setValue('error', 'You must have at least 1SUI on your wallet');
+        setValue('error', 'You must have at least 1 SUI on your wallet');
         return;
       }
     }
