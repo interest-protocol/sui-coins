@@ -22,7 +22,7 @@ const SwapPreviewModalSummary: FC = () => {
   const route = useWatch({ control, name: 'route' });
   const slippage = useWatch({ control, name: 'settings.slippage' });
 
-  const { data: networkFee, isLoading } = useSWR(
+  const { data: fees, isLoading } = useSWR(
     `network-fee-${route?.spotPrice}-${currentAccount?.address}-${slippage}`,
     async () => {
       if (!route || !currentAccount) return;
@@ -38,16 +38,17 @@ const SwapPreviewModalSummary: FC = () => {
         sender: currentAccount.address,
       });
 
-      const { storageCost, ...gasStructure } = inspect.effects.gasUsed;
+      const { storageRebate, ...gasStructure } = inspect.effects.gasUsed;
 
-      console.log({ ...gasStructure, storageCost });
-
-      return FixedPointMath.toNumber(
-        values(gasStructure).reduce(
-          (acc, value) => acc.plus(BigNumber(value)),
-          ZERO_BIG_NUMBER
-        )
-      );
+      return [
+        FixedPointMath.toNumber(
+          values(gasStructure).reduce(
+            (acc, value) => acc.plus(BigNumber(value)),
+            ZERO_BIG_NUMBER
+          )
+        ),
+        FixedPointMath.toNumber(BigNumber(storageRebate)),
+      ];
     }
   );
 
@@ -124,7 +125,34 @@ const SwapPreviewModalSummary: FC = () => {
               </Box>
             ) : (
               <Typography size="medium" variant="body">
-                {networkFee ?? 0} SUI
+                ~{fees?.[0] ?? 0} SUI
+              </Typography>
+            )}
+          </Box>
+        </Box>
+        <Box
+          py="m"
+          display="flex"
+          borderTop="1px solid"
+          borderColor="outlineVariant"
+          justifyContent="space-between"
+        >
+          <Typography
+            size="medium"
+            variant="body"
+            opacity="0.80"
+            color="#000000A3"
+          >
+            Rebated fee
+          </Typography>
+          <Box textAlign="right">
+            {isLoading ? (
+              <Box width="1rem" height="1rem" mt="-1.2rem">
+                <ProgressIndicator variant="loading" size={16} />
+              </Box>
+            ) : (
+              <Typography size="medium" variant="body">
+                ~{fees?.[1] ?? 0} SUI
               </Typography>
             )}
           </Box>
