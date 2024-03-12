@@ -3,16 +3,17 @@ import { ChangeEvent, FC } from 'react';
 import { useForm, useFormContext } from 'react-hook-form';
 import { v4 } from 'uuid';
 
+import { LOCAL_STORAGE_VERSION } from '@/constants';
 import { ClockSVG, PercentageSVG } from '@/svg';
 import { parseInputEventToNumberString } from '@/utils';
 
-import { ISwapSettings } from '../../swap.types';
+import { ISwapSettings, SwapForm } from '../../swap.types';
 import { ManageSlippageProps } from '../manage-slippage-form.types';
 
 const SLIPPAGE_BUTTONS = ['0.1', '0.5', '1'];
 
 const ManageSlippageForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
-  const { getValues, setValue } = useFormContext();
+  const { getValues, setValue } = useFormContext<SwapForm>();
 
   const formTmpSettings = useForm<ISwapSettings>({
     defaultValues: getValues('settings'),
@@ -22,9 +23,16 @@ const ManageSlippageForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
     formTmpSettings.setValue('slippage', value);
 
   const onConfirm = () => {
-    setValue('settings.speed', formTmpSettings.getValues('speed'));
-    setValue('settings.slippage', formTmpSettings.getValues('slippage'));
-    setValue('settings.deadline', formTmpSettings.getValues('deadline'));
+    const { slippage, interval } = formTmpSettings.getValues();
+
+    setValue('settings.slippage', slippage);
+    setValue('settings.interval', interval);
+
+    localStorage.setItem(
+      `${LOCAL_STORAGE_VERSION}-sui-coins-settings`,
+      JSON.stringify({ slippage, interval })
+    );
+
     handleManageView();
   };
 
@@ -32,10 +40,10 @@ const ManageSlippageForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
     <Box
       py="2xl"
       px="2xl"
+      gap="xl"
+      bg="onPrimary"
       display="flex"
       flexDirection="column"
-      gap="1.5rem"
-      bg="onPrimary"
     >
       <Box>
         <Typography variant="body" size="small" mb="0.5rem">
@@ -50,7 +58,6 @@ const ManageSlippageForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
           <TextField
             fontSize="1rem"
             placeholder="0.1"
-            fontFamily="Satoshi"
             {...formTmpSettings.register('slippage', {
               onChange: (v: ChangeEvent<HTMLInputElement>) => {
                 formTmpSettings.setValue?.(
@@ -76,32 +83,31 @@ const ManageSlippageForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
           />
           {SLIPPAGE_BUTTONS.map((item) => (
             <Button
+              py="xs"
               key={v4()}
               borderRadius="xs"
               variant="outline"
               onClick={() => setTolerance(item)}
             >
-              <Typography variant="label" size="large" width="100%">
-                {item} %
-              </Typography>
+              {item}%
             </Button>
           ))}
         </Box>
       </Box>
       <Box>
         <Typography variant="body" size="small" mb="0.5rem">
-          Transaction deadline
+          Price updating interval
         </Typography>
         <Box>
           <TextField
             fontSize="1rem"
-            placeholder="3min"
+            placeholder="1"
             lineHeight="1.75rem"
-            fontFamily="Satoshi"
-            {...formTmpSettings.register('deadline', {
+            nPlaceholder={{ opacity: 0.7 }}
+            {...formTmpSettings.register('interval', {
               onChange: (v: ChangeEvent<HTMLInputElement>) => {
                 formTmpSettings.setValue?.(
-                  'deadline',
+                  'interval',
                   parseInputEventToNumberString(v)
                 );
               },
@@ -111,7 +117,10 @@ const ManageSlippageForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
               width: ['100%', '100%', '100%', '10rem'],
             }}
             Suffix={
-              <Box display="flex">
+              <Box gap="2xs" display="flex" alignItems="center">
+                <Typography variant="label" size="small">
+                  (sec)
+                </Typography>
                 <ClockSVG maxHeight="1.25rem" maxWidth="1.25rem" width="100%" />
               </Box>
             }
@@ -120,10 +129,10 @@ const ManageSlippageForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
       </Box>
       <Box display="flex" gap="0.5rem" justifyContent="flex-end">
         <Button
-          variant="tonal"
-          borderRadius="xs"
           px="l"
           py="s"
+          variant="tonal"
+          borderRadius="xs"
           bg="rgba(0, 0, 0, 0.08)"
           onClick={handleManageView}
         >

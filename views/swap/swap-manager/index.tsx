@@ -38,6 +38,11 @@ const SwapManager: FC = () => {
     name: 'to.type',
   });
 
+  const interval = useWatch({
+    control,
+    name: 'settings.interval',
+  });
+
   useSWR(
     `${coinInType}-${coinOutType}-${coinInValue}`,
     async () => {
@@ -81,7 +86,7 @@ const SwapManager: FC = () => {
         ).toPrecision()
       );
     },
-    { refreshInterval: 10000, refreshWhenOffline: false }
+    { refreshInterval: Number(interval) * 1000, refreshWhenOffline: false }
   );
 
   const swapPath = useWatch({ control, name: 'swapPath' });

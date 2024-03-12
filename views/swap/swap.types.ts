@@ -4,8 +4,7 @@ import { CoinDataWithChainInfo } from '@/interface';
 
 export interface ISwapSettings {
   slippage: string;
-  deadline: string;
-  speed: 'normal' | 'fast' | 'instant';
+  interval: string;
 }
 
 export interface SwapToken extends CoinDataWithChainInfo {

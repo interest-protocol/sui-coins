@@ -7,14 +7,16 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useReadLocalStorage } from 'usehooks-ts';
 
 import { SEO } from '@/components';
+import { LOCAL_STORAGE_VERSION } from '@/constants';
 import { COIN_TYPE_TO_COIN } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks/use-web3';
 import { getCoin, updateURL } from '@/utils';
 import Swap from '@/views/swap';
-import { SwapForm, SwapToken } from '@/views/swap/swap.types';
+import { ISwapSettings, SwapForm, SwapToken } from '@/views/swap/swap.types';
 
 const SwapPage: NextPage = () => {
   const { coinsMap } = useWeb3();
@@ -25,13 +27,14 @@ const SwapPage: NextPage = () => {
     asPath,
   } = useRouter();
 
+  const settings = useReadLocalStorage<ISwapSettings>(
+    `${LOCAL_STORAGE_VERSION}-sui-coins-settings`
+  ) ?? { interval: '10', slippage: '0.1' };
+
   const form = useForm<SwapForm>({
     defaultValues: {
       loading: true,
-      settings: {
-        deadline: '3',
-        slippage: '0.1',
-      },
+      settings,
     },
   });
 
@@ -88,6 +91,10 @@ const SwapPage: NextPage = () => {
       return type;
     }
   };
+
+  useEffect(() => {
+    form.setValue('settings', settings);
+  }, [settings]);
 
   useEffect(() => {
     (async () => {
