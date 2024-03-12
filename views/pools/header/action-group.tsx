@@ -39,7 +39,7 @@ const ActionGroup: FC<ActionGroupProps> = ({ showSearchView }) => {
           variant="filled"
           onClick={handleCreatePool}
           nHover={{
-            backgroundColor: 'onPrimaryContainer',
+            bg: 'onPrimaryContainer',
           }}
           SuffixIcon={
             <Box
@@ -64,7 +64,7 @@ const ActionGroup: FC<ActionGroupProps> = ({ showSearchView }) => {
           height="1.5rem"
           variant="filled"
           nHover={{
-            backgroundColor: 'outline',
+            bg: 'outline',
           }}
           onClick={showSearchView}
         >
@@ -79,7 +79,7 @@ const ActionGroup: FC<ActionGroupProps> = ({ showSearchView }) => {
           variant="filled"
           onClick={handleCreatePool}
           nHover={{
-            backgroundColor: 'onPrimaryContainer',
+            bg: 'onPrimaryContainer',
           }}
           SuffixIcon={
             <Box
