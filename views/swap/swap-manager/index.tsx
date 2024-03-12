@@ -52,23 +52,31 @@ const SwapManager: FC = () => {
         setValue('route', null);
         return;
       }
-
       toast.loading('Updating prices');
 
-      const data = await aftermathRouter.getCompleteTradeRouteGivenAmountIn({
-        coinInType,
-        coinOutType,
-        coinInAmount: BigInt(
-          Math.floor(Number(coinInValue) * 10 ** getValues('from.decimals'))
-        ),
-        referrer: TREASURY,
-        externalFee: {
-          recipient: TREASURY,
-          feePercentage: 0.005,
-        },
-      });
-
-      toast.dismiss();
+      const data = await aftermathRouter
+        .getCompleteTradeRouteGivenAmountIn({
+          coinInType,
+          coinOutType,
+          coinInAmount: BigInt(
+            Math.floor(Number(coinInValue) * 10 ** getValues('from.decimals'))
+          ),
+          referrer: TREASURY,
+          externalFee: {
+            recipient: TREASURY,
+            feePercentage: 0.005,
+          },
+        })
+        .catch((e) => {
+          setValue('to.value', '0');
+          setValue('swapPath', []);
+          setValue('route', null);
+          setValue('error', 'There is no market for these coins.');
+          throw e;
+        })
+        .finally(() => {
+          toast.dismiss();
+        });
 
       setValue('route', data);
 

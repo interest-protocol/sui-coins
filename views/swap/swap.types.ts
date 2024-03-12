@@ -28,6 +28,7 @@ export interface SwapForm {
   loading: boolean;
   maxValue: boolean;
   disabled: boolean;
+  error: string | null;
   readyToSwap: boolean;
   settings: ISwapSettings;
   route: RouterCompleteTradeRoute | null;

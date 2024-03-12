@@ -68,15 +68,7 @@ const Swap: FC = () => {
         </Box>
         <Box py="xl" px="m" borderRadius="xs" bg="lowestContainer">
           <Input label="to" />
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            mt="l"
-            mb="l"
-          >
-            <PreviewSwapButton />
-          </Box>
+          <PreviewSwapButton />
         </Box>
         <SwapManager />
         <Box my="xs">

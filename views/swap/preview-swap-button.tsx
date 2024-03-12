@@ -1,4 +1,4 @@
-import { Button } from '@interest-protocol/ui-kit';
+import { Box, Button } from '@interest-protocol/ui-kit';
 import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
 import { FC, useEffect } from 'react';
@@ -8,6 +8,7 @@ import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
 
 import { SwapForm } from './swap.types';
+import SwapMessages from './swap-messages';
 import SwapPreviewModal from './swap-preview-modal';
 
 const PreviewSwapButton: FC = () => {
@@ -15,9 +16,10 @@ const PreviewSwapButton: FC = () => {
   const form = useFormContext<SwapForm>();
   const { setModal, handleClose } = useModal();
 
-  const { control, setError } = form;
+  const { control, setValue } = form;
 
-  const { from, to } = useWatch({ control });
+  const from = useWatch({ control, name: 'from' });
+  const to = useWatch({ control, name: 'to' });
 
   const ableToSwap =
     from &&
@@ -47,10 +49,7 @@ const PreviewSwapButton: FC = () => {
       );
 
       if (isGreaterThanBalance) {
-        setError('from.value', {
-          type: 'max',
-          message: 'You do not have enough tokens.',
-        });
+        setValue('error', 'You do not have enough tokens.');
         return;
       }
 
@@ -63,13 +62,11 @@ const PreviewSwapButton: FC = () => {
       );
 
       if (from.type === SUI_TYPE_ARG && isGreaterThanAllowedForSui) {
-        setError('from.value', {
-          type: 'max',
-          message: 'You must have at least 1SUI on your wallet',
-        });
+        setValue('error', 'You must have at least 1SUI on your wallet');
         return;
       }
     }
+    setValue('error', null);
   }, [from]);
 
   const handlePreview = () =>
@@ -83,18 +80,29 @@ const PreviewSwapButton: FC = () => {
     );
 
   return (
-    <Button
-      py="s"
-      px="xl"
-      fontSize="s"
-      type="button"
-      variant="filled"
-      borderRadius="xs"
-      disabled={!ableToSwap}
-      onClick={handlePreview}
-    >
-      Preview swap
-    </Button>
+    <>
+      <SwapMessages />
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        mt="l"
+        mb="l"
+      >
+        <Button
+          py="s"
+          px="xl"
+          fontSize="s"
+          type="button"
+          variant="filled"
+          borderRadius="xs"
+          disabled={!ableToSwap}
+          onClick={handlePreview}
+        >
+          Preview swap
+        </Button>
+      </Box>
+    </>
   );
 };
 
