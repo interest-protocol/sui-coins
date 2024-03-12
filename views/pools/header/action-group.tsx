@@ -55,7 +55,7 @@ const ActionGroup: FC<ActionGroupProps> = ({ showSearchView }) => {
           Create pool
         </Button>
       </Box>
-      <Box display={['flex', 'flex', 'flex', 'none']} gap="xs">
+      <Box gap="xs" display={['flex', 'flex', 'flex', 'none']}>
         <Button
           isIcon
           width="1.5rem"
@@ -72,6 +72,26 @@ const ActionGroup: FC<ActionGroupProps> = ({ showSearchView }) => {
             <SearchSVG maxHeight="1.25rem" maxWidth="1.25rem" width="100%" />
           </Box>
         </Button>
+        <Button
+          px="s"
+          bg="onSurface"
+          color="surface"
+          variant="filled"
+          onClick={handleCreatePool}
+          nHover={{
+            backgroundColor: 'onPrimaryContainer',
+          }}
+          SuffixIcon={
+            <Box
+              display="flex"
+              width="0.875rem"
+              height="0.875rem"
+              justifyContent="center"
+            >
+              <PlusSVG maxHeight="100%" maxWidth="100%" width="100%" />
+            </Box>
+          }
+        />
       </Box>
     </>
   );
