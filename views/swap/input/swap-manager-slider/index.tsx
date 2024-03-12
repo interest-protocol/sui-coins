@@ -1,4 +1,5 @@
 import { Box } from '@interest-protocol/ui-kit';
+import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
 import dynamic from 'next/dynamic';
 import { FC } from 'react';
@@ -20,8 +21,11 @@ const SwapFormFieldSlider: FC = () => {
 
   const type = useWatch({ control, name: 'from.type' });
 
+  const safeRemoval =
+    type === SUI_TYPE_ARG ? 10 ** getValues('from.decimals') : 0;
+
   const balance = FixedPointMath.toNumber(
-    BigNumber(coinsMap[type]?.balance || 0),
+    BigNumber(coinsMap[type] ? +coinsMap[type].balance - safeRemoval : 0),
     coinsMap[type]?.decimals ?? (getValues('from.decimals') || 0)
   );
 
@@ -31,17 +35,20 @@ const SwapFormFieldSlider: FC = () => {
         min={0}
         max={100}
         disabled={!balance}
-        initial={
+        initial={Math.floor(
           Number(getValues('from.value')) && balance
             ? balance >= Number(getValues('from.value'))
               ? (Number(getValues('from.value')) * 100) / balance
               : 100
             : 0
-        }
+        )}
         onChange={(value: number) => {
           setValue('lock', false);
           setValue('maxValue', value === 100);
-          setValue('from.value', `${(value / 100) * balance}`);
+          setValue(
+            'from.value',
+            `${Number(((value / 100) * balance).toFixed(6)).toPrecision()}`
+          );
         }}
       />
     </Box>

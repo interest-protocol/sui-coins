@@ -1,10 +1,10 @@
 import { Network } from '@/constants';
-import { Chain } from '@/views/pool-details/pool-form/pool-form.types';
 
 export interface TokenIconProps {
-  chain?: Chain;
-  tokenId: string;
+  type: string;
+  size?: string;
+  symbol: string;
+  withBg?: boolean;
   network: Network;
-  maxWidth?: string;
-  maxHeight?: string;
+  rounded?: boolean;
 }

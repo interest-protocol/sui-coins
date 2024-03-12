@@ -3,7 +3,6 @@ import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { TokenIcon } from '@/components';
-import { Network } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { useModal } from '@/hooks/use-modal';
@@ -66,21 +65,12 @@ const AirdropSelectToken: FC = () => {
         borderColor="outlineVariant"
       >
         {token && (
-          <Box
-            bg="black"
-            color="white"
-            display="flex"
-            width="2.5rem"
-            height="2.5rem"
-            borderRadius="xs"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <TokenIcon
-              network={network}
-              tokenId={network === Network.MAINNET ? token.type : token.symbol}
-            />
-          </Box>
+          <TokenIcon
+            withBg
+            type={token.type}
+            network={network}
+            symbol={token.symbol}
+          />
         )}
         <Typography variant="label" size="large" flex="1" as="span">
           {token ? getSymbol(token.symbol, token.type) : '---'}

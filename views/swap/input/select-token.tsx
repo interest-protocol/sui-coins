@@ -123,25 +123,12 @@ const SelectToken: FC<InputProps> = ({ label }) => {
         onClick={openModal}
         {...(Icon && {
           PrefixIcon: (
-            <Box
-              as="span"
-              width="2.5rem"
-              height="2.5rem"
-              bg="onSurface"
-              color="onPrimary"
-              borderRadius="xs"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <TokenIcon
-                network={network}
-                chain={currentToken.chain}
-                tokenId={
-                  network === Network.MAINNET ? currentType : currentSymbol
-                }
-              />
-            </Box>
+            <TokenIcon
+              withBg
+              network={network}
+              type={currentType}
+              symbol={currentSymbol}
+            />
           ),
         })}
       >

@@ -1,3 +1,5 @@
+import { RouterCompleteTradeRoute, RouterTradePath } from 'aftermath-ts-sdk';
+
 import { CoinDataWithChainInfo } from '@/interface';
 
 export interface ISwapSettings {
@@ -22,14 +24,15 @@ export type SwapPath = ReadonlyArray<SwapTypeArgs>;
 
 export interface SwapForm {
   to: SwapToken;
-  from: SwapToken;
-  settings: ISwapSettings;
   lock: boolean;
+  from: SwapToken;
   loading: boolean;
   maxValue: boolean;
   disabled: boolean;
-  swapPath: SwapPath;
   readyToSwap: boolean;
+  settings: ISwapSettings;
+  route: RouterCompleteTradeRoute | null;
+  swapPath: ReadonlyArray<RouterTradePath>;
 }
 
 export interface SwapForm {

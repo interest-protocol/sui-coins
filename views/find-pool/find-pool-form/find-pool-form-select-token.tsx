@@ -59,17 +59,8 @@ const FindPoolFormSelectToken: FC<{ name: `token${'A' | 'B'}` }> = ({
       alignItems="center"
       onClick={openModal}
     >
-      <Box
-        bg="black"
-        color="white"
-        display="flex"
-        width="1.8rem"
-        height="1.8rem"
-        alignItems="center"
-        borderRadius="full"
-        justifyContent="center"
-      >
-        <TokenIcon maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+      <Box overflow="hidden" borderRadius="full">
+        <TokenIcon maxWidth="1.2rem" maxHeight="1.2rem" width="100%" />
       </Box>
       <Typography variant="label" size="large" flex="1" as="span">
         {token.symbol}

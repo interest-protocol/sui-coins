@@ -48,9 +48,9 @@ const CreatePoolFormSelectToken: FC<{ name: `token${'A' | 'B'}` }> = ({
   return (
     <Box
       p="xs"
+      ml="-s"
       gap="xs"
       bg="surface"
-      ml="-s"
       display="flex"
       minWidth="8rem"
       cursor="pointer"

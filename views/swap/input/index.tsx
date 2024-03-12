@@ -5,11 +5,11 @@ import { useFormContext } from 'react-hook-form';
 import { parseInputEventToNumberString } from '@/utils';
 
 import { SwapForm } from '../swap.types';
-import SwapFormFieldSlider from '../swap-manager/swap-manager-slider';
 import AmountInDollar from './dollar-value';
 import HeaderInfo from './header-info';
 import { InputProps } from './input.types';
 import SelectToken from './select-token';
+import SwapFormFieldSlider from './swap-manager-slider';
 
 const Input: FC<InputProps> = ({ label }) => {
   const { register, setValue } = useFormContext<SwapForm>();
@@ -21,28 +21,29 @@ const Input: FC<InputProps> = ({ label }) => {
         <SelectToken label={label} />
         <Box
           display="flex"
-          justifyContent="flex-end"
           alignItems="flex-end"
           flexDirection="column"
+          justifyContent="flex-end"
         >
           <TextField
             pl="-1rem"
+            fontSize="2xl"
+            lineHeight="l"
             placeholder="0"
             color="onSurface"
             textAlign="right"
-            fontSize="2xl"
-            lineHeight="l"
             fontFamily="Satoshi"
+            disabled={label === 'to'}
+            fieldProps={{
+              width: '100%',
+              borderRadius: 'xs',
+              borderColor: 'transparent',
+            }}
             {...register(`${label}.value`, {
               onChange: (v: ChangeEvent<HTMLInputElement>) => {
                 setValue?.(`${label}.value`, parseInputEventToNumberString(v));
               },
             })}
-            fieldProps={{
-              borderColor: 'transparent',
-              borderRadius: 'xs',
-              width: '100%',
-            }}
           />
           <AmountInDollar label={label} />
         </Box>

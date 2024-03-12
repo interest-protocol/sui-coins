@@ -2,7 +2,7 @@ import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import { FC } from 'react';
 
 import { SVGProps } from '@/components/svg/svg.types';
-import { CoinData, CoinDataWithChainInfo } from '@/interface';
+import { Chain, CoinData, CoinDataWithChainInfo } from '@/interface';
 import { TOKEN_SYMBOL } from '@/lib';
 import {
   ADASVG,
@@ -30,6 +30,9 @@ export const COIN_METADATA = {
     symbol: TOKEN_SYMBOL.SUI,
   },
 };
+
+export const SUI_TYPE_ARG_LONG =
+  '0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI';
 
 export const TESTNET_BASE_COINS = {
   SUI: SUI_TYPE_ARG,
@@ -628,6 +631,26 @@ export const CELER_TOKENS_TYPE: Record<Network, ReadonlyArray<string>> = {
     MAINNET_BASE_COINS.ETH_CELER_WBTC,
     MAINNET_BASE_COINS.ETH_CELER_WETH,
   ],
+};
+
+export const CHAIN_MAP: Record<string, Chain> = {
+  [COIN_TYPE[Network.MAINNET].ETH_WORMHOLE_USDC]: 'ETH',
+  [COIN_TYPE[Network.MAINNET].ETH_WORMHOLE_USDT]: 'ETH',
+  [COIN_TYPE[Network.MAINNET].NATIVE_WORMHOLE_ETH]: 'ETH',
+  [COIN_TYPE[Network.MAINNET].NATIVE_WORMHOLE_WBNB]: 'BSC',
+  [COIN_TYPE[Network.MAINNET].BSC_WORMHOLE_USDC]: 'BSC',
+  [COIN_TYPE[Network.MAINNET].BSC_WORMHOLE_USDT]: 'BSC',
+  [COIN_TYPE[Network.MAINNET].BSC_WORMHOLE_ETH]: 'BSC',
+  [COIN_TYPE[Network.MAINNET].BSC_WORMHOLE_ADA]: 'BSC',
+  [COIN_TYPE[Network.MAINNET].BSC_WORMHOLE_BTCB]: 'BSC',
+  [COIN_TYPE[Network.MAINNET].BSC_WORMHOLE_DOGE]: 'BSC',
+  [COIN_TYPE[Network.MAINNET].BSC_WORMHOLE_FLOKI]: 'BSC',
+  [COIN_TYPE[Network.MAINNET].NATIVE_WORMHOLE_SOL]: 'SOL',
+  [COIN_TYPE[Network.MAINNET].NATIVE_WORMHOLE_WAVAX]: 'AVA',
+  [COIN_TYPE[Network.MAINNET].ETH_CELER_USDC]: 'ETH',
+  [COIN_TYPE[Network.MAINNET].ETH_CELER_USDT]: 'ETH',
+  [COIN_TYPE[Network.MAINNET].ETH_CELER_WBTC]: 'ETH',
+  [COIN_TYPE[Network.MAINNET].ETH_CELER_WETH]: 'ETH',
 };
 
 export const WORMHOLE_TOKENS: Record<Network, Array<CoinDataWithChainInfo>> = {
