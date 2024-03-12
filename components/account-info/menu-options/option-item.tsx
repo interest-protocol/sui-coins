@@ -25,12 +25,12 @@ const OptionItem: FC<PropsWithChildren<OptionItemProps>> = ({
 }) => (
   <Motion
     p="m"
-    onClick={onClick}
     alignItems="center"
     borderTop="1px solid"
     variants={itemVariants}
     initial={itemVariants.closed}
     justifyContent="space-between"
+    onClick={!disabled ? onClick : undefined}
     cursor={disabled ? 'not-allowed' : 'pointer'}
     bg={selected ? 'rgba(0, 83, 219, 0.08)' : 'unset'}
     borderColor={withBorderTop ? 'outlineVariant' : 'transparent'}
