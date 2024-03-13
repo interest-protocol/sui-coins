@@ -1,85 +1,175 @@
-import { FC, useState } from 'react';
-import { useFormContext, UseFormReturn, useWatch } from 'react-hook-form';
+import { Box, Typography } from '@interest-protocol/ui-kit';
+import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import { FC } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import useSWR from 'swr';
+import { useDebounce } from 'use-debounce';
 
+import { TokenIcon } from '@/components';
+import { TREASURY } from '@/constants';
+import { COIN_TYPE_TO_SYMBOL, SUI_TYPE_ARG_LONG } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
-import { useWeb3 } from '@/hooks/use-web3';
+import { AftermathSVG, SwapArrowSVG } from '@/svg';
 import { SwapForm } from '@/views/swap/swap.types';
-import { findSwapPaths } from '@/views/swap/swap-manager/swap-manager.utils';
 
-import SwapManagerField from './swap-manager-field';
-import { SwapMessages } from './swap-messages';
+import { useAftermathRouter } from './swap-manager.hooks';
 
 const SwapManager: FC = () => {
   const { network } = useNetwork();
-  const { account } = useWeb3();
-  const formSwap: UseFormReturn<SwapForm> = useFormContext();
-
-  const [error, setError] = useState(false);
-  const [isZeroSwapAmountIn, setIsZeroSwapAmountIn] = useState(false);
-  const [isZeroSwapAmountOut, setIsZeroSwapAmountOut] = useState(false);
-  const [isFetchingSwapAmountIn, setIsFetchingSwapAmountIn] = useState(false);
-  const [isFetchingSwapAmountOut, setIsFetchingSwapAmountOut] = useState(false);
+  const aftermathRouter = useAftermathRouter();
+  const { control, setValue, getValues } = useFormContext<SwapForm>();
 
   const coinInType = useWatch({
-    control: formSwap.control,
+    control,
     name: 'from.type',
   });
 
+  const [coinInValue] = useDebounce(
+    useWatch({
+      control,
+      name: 'from.value',
+    }),
+    800
+  );
+
   const coinOutType = useWatch({
-    control: formSwap.control,
+    control,
     name: 'to.type',
   });
 
-  const swapPaths = findSwapPaths({
-    network,
-    coinInType,
-    coinOutType,
+  const interval = useWatch({
+    control,
+    name: 'settings.interval',
   });
 
-  const hasNoMarket = !swapPaths.length;
+  useSWR(
+    `${coinInType}-${coinOutType}-${coinInValue}`,
+    async () => {
+      if (!(coinInType && coinOutType && Number(coinInValue))) {
+        setValue('to.value', '0');
+        setValue('swapPath', []);
+        setValue('route', null);
+        return;
+      }
+      toast.loading('Updating prices');
+
+      const data = await aftermathRouter
+        .getCompleteTradeRouteGivenAmountIn({
+          coinInType,
+          coinOutType,
+          coinInAmount: BigInt(
+            Math.floor(Number(coinInValue) * 10 ** getValues('from.decimals'))
+          ),
+          referrer: TREASURY,
+          externalFee: {
+            recipient: TREASURY,
+            feePercentage: 0.005,
+          },
+        })
+        .catch((e) => {
+          setValue('to.value', '0');
+          setValue('swapPath', []);
+          setValue('route', null);
+          setValue('error', 'There is no market for these coins.');
+          throw e;
+        })
+        .finally(() => {
+          toast.dismiss();
+        });
+
+      setValue('route', data);
+
+      setValue(
+        'swapPath',
+        data.routes.reduce((acc, curr) =>
+          acc.spotPrice > curr.spotPrice ? curr : acc
+        ).paths
+      );
+
+      setValue(
+        'to.value',
+        Number(
+          (Number(coinInValue) / (data.spotPrice * 1000)).toFixed(6)
+        ).toPrecision()
+      );
+    },
+    { refreshInterval: Number(interval) * 1000, refreshWhenOffline: false }
+  );
+
+  const swapPath = useWatch({ control, name: 'swapPath' });
+
+  if (!swapPath?.length) return null;
 
   return (
-    <>
-      <SwapManagerField
-        name="from"
-        setValueName="to"
-        account={account}
-        setError={setError}
-        type={coinOutType}
-        swapPaths={swapPaths}
-        hasNoMarket={hasNoMarket}
-        control={formSwap.control}
-        setValue={formSwap.setValue}
-        setIsZeroSwapAmount={setIsZeroSwapAmountOut}
-        isFetchingSwapAmount={isFetchingSwapAmountOut}
-        setIsFetchingSwapAmount={setIsFetchingSwapAmountOut}
-      />
-      <SwapManagerField
-        name="to"
-        setValueName="from"
-        account={account}
-        type={coinInType}
-        setError={setError}
-        swapPaths={swapPaths}
-        hasNoMarket={hasNoMarket}
-        control={formSwap.control}
-        setValue={formSwap.setValue}
-        setIsZeroSwapAmount={setIsZeroSwapAmountIn}
-        isFetchingSwapAmount={isFetchingSwapAmountIn}
-        setIsFetchingSwapAmount={setIsFetchingSwapAmountIn}
-      />
-      <SwapMessages
-        error={error}
-        hasNoMarket={hasNoMarket}
-        control={formSwap.control}
-        setError={formSwap.setError}
-        errors={formSwap.formState.errors}
-        isZeroSwapAmountIn={isZeroSwapAmountIn}
-        isZeroSwapAmountOut={isZeroSwapAmountOut}
-        isFetchingSwapAmountIn={isFetchingSwapAmountIn}
-        isFetchingSwapAmountOut={isFetchingSwapAmountOut}
-      />
-    </>
+    <Box
+      p="l"
+      mt="xs"
+      gap="xl"
+      mx="auto"
+      width="100%"
+      display="flex"
+      color="onSurface"
+      borderRadius="xs"
+      alignItems="center"
+      position="relative"
+      bg="lowestContainer"
+      justifyContent="center"
+    >
+      {swapPath?.map(({ coinIn, coinOut, protocolName }, index) => (
+        <>
+          {!index && (
+            <TokenIcon
+              network={network}
+              type={
+                coinIn.type === SUI_TYPE_ARG_LONG ? SUI_TYPE_ARG : coinIn.type
+              }
+              symbol={
+                COIN_TYPE_TO_SYMBOL[network][
+                  coinIn.type === SUI_TYPE_ARG_LONG ? SUI_TYPE_ARG : coinIn.type
+                ]
+              }
+            />
+          )}
+          <Box>
+            <Typography variant="label" size="small">
+              {protocolName}
+            </Typography>
+            <SwapArrowSVG width="100%" maxWidth="5rem" maxHeight="0.75rem" />
+          </Box>
+          <TokenIcon
+            network={network}
+            type={
+              coinOut.type === SUI_TYPE_ARG_LONG ? SUI_TYPE_ARG : coinOut.type
+            }
+            symbol={
+              COIN_TYPE_TO_SYMBOL[network][
+                coinOut.type === SUI_TYPE_ARG_LONG ? SUI_TYPE_ARG : coinOut.type
+              ]
+            }
+          />
+        </>
+      ))}
+      <a
+        target="_blank"
+        rel="noopener, noreferrer"
+        href="https://aftermath.finance"
+      >
+        <Box
+          gap="2xs"
+          display="flex"
+          right="0.75rem"
+          bottom="0.25rem"
+          position="absolute"
+          alignItems="flex-end"
+        >
+          <Typography variant="body" size="small">
+            Powered by
+          </Typography>
+          <AftermathSVG width="100%" maxWidth="1.2rem" maxHeight="1.2rem" />
+        </Box>
+      </a>
+    </Box>
   );
 };
 

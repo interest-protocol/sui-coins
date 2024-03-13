@@ -3,7 +3,6 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { TokenIcon } from '@/components';
-import { Network } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { ArrowLeftSVG, TimesSVG } from '@/svg';
 
@@ -39,7 +38,12 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
           alignItems="center"
           justifyContent="space-between"
         >
-          <ArrowLeftSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+          <ArrowLeftSVG
+            width="100%"
+            onClick={onClose}
+            maxWidth="1.5rem"
+            maxHeight="1.5rem"
+          />
           <Typography size="large" variant="title">
             Swap
           </Typography>
@@ -70,25 +74,12 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
               justifyContent="space-between"
             >
               <Box display="flex" alignItems="center" gap="m">
-                <Box
-                  bg="black"
-                  color="white"
-                  width="2.5rem"
-                  height="2.5rem"
-                  borderRadius="xs"
-                  alignItems="center"
-                  display="inline-flex"
-                  justifyContent="center"
-                >
-                  <TokenIcon
-                    network={network}
-                    tokenId={
-                      network === Network.MAINNET
-                        ? tokenFrom.type
-                        : tokenFrom.symbol
-                    }
-                  />
-                </Box>
+                <TokenIcon
+                  withBg
+                  network={network}
+                  type={tokenFrom.type}
+                  symbol={tokenFrom.symbol}
+                />
                 <Typography size="small" variant="title">
                   {tokenFrom.symbol}
                 </Typography>
@@ -119,33 +110,20 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
                 TO (ESTIMATED)
               </Typography>
               <Box
-                bg="surface"
                 p="s"
-                borderRadius="xs"
+                bg="surface"
                 display="flex"
+                borderRadius="xs"
                 alignItems="center"
                 justifyContent="space-between"
               >
                 <Box display="flex" alignItems="center" gap="m">
-                  <Box
-                    bg="black"
-                    color="white"
-                    width="2.5rem"
-                    height="2.5rem"
-                    borderRadius="xs"
-                    alignItems="center"
-                    display="inline-flex"
-                    justifyContent="center"
-                  >
-                    <TokenIcon
-                      network={network}
-                      tokenId={
-                        network === Network.MAINNET
-                          ? tokenTo.type
-                          : tokenTo.symbol
-                      }
-                    />
-                  </Box>
+                  <TokenIcon
+                    withBg
+                    network={network}
+                    type={tokenTo.type}
+                    symbol={tokenTo.symbol}
+                  />
                   <Typography size="small" variant="title">
                     {tokenTo.symbol}
                   </Typography>

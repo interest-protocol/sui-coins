@@ -10,7 +10,7 @@ import Skeleton from 'react-loading-skeleton';
 import { useLocalStorage } from 'usehooks-ts';
 
 import { TokenIcon } from '@/components';
-import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
+import { LOCAL_STORAGE_VERSION } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { FavoriteSVG } from '@/svg';
 
@@ -68,11 +68,11 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
       )}
       <Box display="flex" alignItems="center">
         <TokenIcon
+          withBg
+          type={type}
+          size="1.6rem"
+          symbol={symbol}
           network={network}
-          maxWidth="1.6rem"
-          maxHeight="1.6rem"
-          chain={chain ?? 'SUI'}
-          tokenId={network === Network.MAINNET ? type : symbol}
         />
         <Box
           ml="1rem"

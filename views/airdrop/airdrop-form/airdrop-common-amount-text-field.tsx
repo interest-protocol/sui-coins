@@ -1,10 +1,9 @@
-import { Box, TextField } from '@interest-protocol/ui-kit';
+import { TextField } from '@interest-protocol/ui-kit';
 import BigNumber from 'bignumber.js';
 import { ChangeEvent, FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { TokenIcon } from '@/components';
-import { Network } from '@/constants/dapp';
 import { useNetwork } from '@/context/network';
 import { parseInputEventToNumberString } from '@/utils';
 
@@ -39,28 +38,14 @@ const AirdropCustomAmountTextField: FC = () => {
         borderRadius: 'xs',
       }}
       Prefix={
-        <Box
-          bg="black"
-          color="white"
-          display="flex"
-          width="1.5rem"
-          height="1.5rem"
-          minWidth="1.5rem"
-          minHeight="1.5rem"
-          overflow="hidden"
-          borderRadius="full"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <TokenIcon
-            network={network}
-            maxWidth="1.5rem"
-            maxHeight="1.5rem"
-            tokenId={getValues(
-              `token.${network === Network.MAINNET ? 'type' : 'symbol'}`
-            )}
-          />
-        </Box>
+        <TokenIcon
+          withBg
+          rounded
+          size="1rem"
+          network={network}
+          type={getValues('token.type')}
+          symbol={getValues('token.symbol')}
+        />
       }
     />
   );

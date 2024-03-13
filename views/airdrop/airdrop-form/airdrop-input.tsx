@@ -1,6 +1,6 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { FormProvider, useFormContext, useWatch } from 'react-hook-form';
 
 import { useModal } from '@/hooks/use-modal';
 
@@ -13,17 +13,20 @@ import AirdropUploadFile from './airdrop-upload-file';
 
 const AirdropInput: FC<AirdropInputProps> = ({ setIsProgressView }) => {
   const { setModal, handleClose } = useModal();
-  const { control } = useFormContext<IAirdropForm>();
+  const form = useFormContext<IAirdropForm>();
+  const { control } = form;
   const token = useWatch({ control, name: 'token' });
   const method = useWatch({ control, name: 'method' });
 
   const handleOpenSummaryModal = () =>
     setModal(
-      <AirdropPreviewModal
-        method={method}
-        onClose={handleClose}
-        setIsProgressView={setIsProgressView}
-      />,
+      <FormProvider {...form}>
+        <AirdropPreviewModal
+          method={method}
+          onClose={handleClose}
+          setIsProgressView={setIsProgressView}
+        />
+      </FormProvider>,
       { custom: true }
     );
 

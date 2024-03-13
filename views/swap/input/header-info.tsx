@@ -14,6 +14,7 @@ const HeaderInfo: FC<InputProps> = ({ label }) => {
   const { control } = useFormContext<SwapForm>();
 
   const type = useWatch({ control, name: `${label}.type` });
+  const symbol = useWatch({ control, name: `${label}.symbol` });
   const decimals = useWatch({ control, name: `${label}.decimals` });
 
   const balance = FixedPointMath.toNumber(
@@ -25,6 +26,14 @@ const HeaderInfo: FC<InputProps> = ({ label }) => {
     <Box px="l" display="flex" justifyContent="space-between">
       <Typography variant="label" size="small">
         {label}
+        <Typography
+          as="span"
+          size="small"
+          variant="label"
+          display={['inline-block', 'none']}
+        >
+          : {symbol}
+        </Typography>
       </Typography>
       <Box display="flex" justifyContent="center" alignItems="center" gap="2xs">
         <Typography variant="label" size="small">

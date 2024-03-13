@@ -1,14 +1,10 @@
-import { Box } from '@interest-protocol/ui-kit';
+import { Box, ProgressIndicator } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
+import useSWR from 'swr';
 
-import { TOKEN_ICONS } from '@/constants/coins';
-import {
-  AVAChainSVG,
-  BSCChainSVG,
-  DefaultSVG,
-  ETHChainSVG,
-  SOLChainSVG,
-} from '@/svg';
+import { Network } from '@/constants';
+import { CHAIN_MAP, TOKEN_ICONS } from '@/constants/coins';
+import { AVAChainSVG, BSCChainSVG, ETHChainSVG, SOLChainSVG } from '@/svg';
 
 import { TokenIconProps } from './token-icon.types';
 
@@ -21,66 +17,110 @@ const CHAIN_ICON = {
 };
 
 const TokenIcon: FC<TokenIconProps> = ({
-  chain,
-  tokenId,
+  type,
+  withBg,
+  symbol,
   network,
-  maxWidth,
-  maxHeight,
+  rounded,
+  size = '1.5rem',
 }) => {
-  if (!tokenId) return null;
+  const isMainnet = network === Network.MAINNET;
+  const TokenIcon = TOKEN_ICONS[network][isMainnet ? type : symbol] ?? null;
 
-  const TokenIcon = TOKEN_ICONS[network][tokenId] ?? DefaultSVG;
+  const { data: iconSrc, isLoading } = useSWR(
+    `${network}-${type}`,
+    async () => {
+      if (TokenIcon && isMainnet) return null;
 
-  if (!chain)
+      const data = await fetch(
+        `/api/v1/coin-metadata?network=${network}&type=${type}`
+      ).then((res) => res.json());
+
+      return data.iconUrl;
+    }
+  );
+
+  const chain = CHAIN_MAP[type];
+  const ChainIcon = chain ? CHAIN_ICON[chain] : null;
+
+  if (!TokenIcon && !iconSrc && !isLoading) return null;
+
+  if (!TokenIcon && (isLoading || iconSrc)) {
     return (
-      <>
-        {typeof TokenIcon === 'string' ? (
-          <Box
-            borderRadius="xs"
-            overflow="hidden"
-            width={maxWidth ?? '2.5rem'}
-            height={maxHeight ?? '2.5rem'}
-          >
-            <img src={TokenIcon} width="100%" alt="Token Icon" />
+      <Box
+        display="flex"
+        position="relative"
+        alignItems="center"
+        justifyContent="center"
+        width={`calc(${size} * 1.66)`}
+        height={`calc(${size} * 1.66)`}
+        borderRadius={rounded ? 'full' : 'xs'}
+        {...(withBg && { bg: 'black', color: 'white' })}
+      >
+        <Box
+          overflow="hidden"
+          width={`calc(${size} * 1.66)`}
+          height={`calc(${size} * 1.66)`}
+          borderRadius={rounded ? 'full' : 'xs'}
+        >
+          {isLoading && (
+            <Box position="absolute" top="-0.5rem">
+              <ProgressIndicator size={16} variant="loading" />
+            </Box>
+          )}
+          <img src={iconSrc} width="100%" alt="Token Icon" />
+        </Box>
+        {ChainIcon && (
+          <Box position="absolute" bottom="-0.3rem" right="-0.5rem">
+            <ChainIcon maxHeight={size} maxWidth={size} width="100%" />
           </Box>
-        ) : (
-          <TokenIcon
-            width="100%"
-            maxWidth={maxWidth ?? '1.5rem'}
-            maxHeight={maxHeight ?? '1.5rem'}
-          />
         )}
-      </>
+      </Box>
     );
-
-  const ChainIcon = CHAIN_ICON[chain!];
+  }
 
   return (
     <Box
-      bg="black"
-      color="white"
       display="flex"
-      width="2.5rem"
-      height="2.5rem"
-      borderRadius="xs"
       position="relative"
       alignItems="center"
       justifyContent="center"
+      width={`calc(${size} * 1.66)`}
+      height={`calc(${size} * 1.66)`}
+      borderRadius={rounded ? 'full' : 'xs'}
+      {...(withBg && { bg: 'black', color: 'white' })}
     >
       {typeof TokenIcon === 'string' ? (
-        <Box width="2.5rem" height="2.5rem" borderRadius="xs" overflow="hidden">
+        <Box
+          overflow="hidden"
+          width={`calc(${size} * 1.66)`}
+          height={`calc(${size} * 1.66)`}
+          borderRadius={rounded ? 'full' : 'xs'}
+        >
           <img src={TokenIcon} width="100%" alt="Token Icon" />
         </Box>
       ) : (
-        <TokenIcon
-          width="100%"
-          maxWidth={maxWidth ?? '1.5rem'}
-          maxHeight={maxHeight ?? '1.5rem'}
-        />
+        <Box
+          display="flex"
+          overflow="hidden"
+          position="relative"
+          alignItems="center"
+          justifyContent="center"
+          width={`calc(${size} * 1.66)`}
+          height={`calc(${size} * 1.66)`}
+          borderRadius={rounded ? 'full' : 'xs'}
+          {...(withBg && { bg: 'black', color: 'white' })}
+        >
+          <TokenIcon
+            width="100%"
+            maxWidth={size ?? '1.5rem'}
+            maxHeight={size ?? '1.5rem'}
+          />
+        </Box>
       )}
       {ChainIcon && (
         <Box position="absolute" bottom="-0.3rem" right="-0.5rem">
-          <ChainIcon maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
+          <ChainIcon maxHeight={size} maxWidth={size} width="100%" />
         </Box>
       )}
     </Box>

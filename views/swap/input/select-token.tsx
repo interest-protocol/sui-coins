@@ -111,7 +111,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
   return (
     <Box
       position="relative"
-      minWidth={['8rem', '8rem', '8rem', '8rem', '10rem']}
+      minWidth={['4rem', '8rem', '8rem', '8rem', '10rem']}
     >
       <Button
         p="2xs"
@@ -123,29 +123,21 @@ const SelectToken: FC<InputProps> = ({ label }) => {
         onClick={openModal}
         {...(Icon && {
           PrefixIcon: (
-            <Box
-              as="span"
-              width="2.5rem"
-              height="2.5rem"
-              bg="onSurface"
-              color="onPrimary"
-              borderRadius="xs"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <TokenIcon
-                network={network}
-                chain={currentToken.chain}
-                tokenId={
-                  network === Network.MAINNET ? currentType : currentSymbol
-                }
-              />
-            </Box>
+            <TokenIcon
+              withBg
+              network={network}
+              type={currentType}
+              symbol={currentSymbol}
+            />
           ),
         })}
       >
-        <Typography size="large" variant="label" p="xs">
+        <Typography
+          p="xs"
+          size="large"
+          variant="label"
+          display={['none', 'block']}
+        >
           {currentSymbol ?? 'Select Token'}
         </Typography>
         {currentSymbol ? (

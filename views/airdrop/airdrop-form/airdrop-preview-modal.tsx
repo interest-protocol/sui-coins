@@ -4,7 +4,6 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { TokenIcon } from '@/components';
-import { Network } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { FixedPointMath } from '@/lib';
 import { ArrowLeftSVG, TimesSVG } from '@/svg';
@@ -82,29 +81,15 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
             You will send
           </Typography>
           <Box
-            bg="surface"
             p="s"
-            borderRadius="xs"
+            bg="surface"
             display="flex"
+            borderRadius="xs"
             alignItems="center"
             justifyContent="space-between"
           >
             <Box display="flex" alignItems="center" gap="m">
-              <Box
-                bg="black"
-                color="white"
-                width="2.5rem"
-                height="2.5rem"
-                borderRadius="xs"
-                alignItems="center"
-                display="inline-flex"
-                justifyContent="center"
-              >
-                <TokenIcon
-                  network={network}
-                  tokenId={network === Network.MAINNET ? type : symbol}
-                />
-              </Box>
+              <TokenIcon type={type} symbol={symbol} network={network} />
               <Typography size="small" variant="title">
                 {symbol}
               </Typography>
