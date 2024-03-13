@@ -23,19 +23,20 @@ const PoolFilter: FC = () => (
       justifyContent={['center', 'center', 'center', 'flex-start']}
     >
       <Box
-        mx={['auto', 'auto', 'auto', 'xs']}
         zIndex="1"
         width="2.5rem"
-        height="2.5rem"
         display="flex"
-        justifyContent="center"
-        alignItems="center"
+        height="2.5rem"
         color="onSurface"
         borderRadius="xs"
+        alignItems="center"
         flexDirection="column"
+        justifyContent="center"
+        mx={['auto', 'auto', 'auto', '2xs']}
       >
         <FilterSVG maxWidth="2rem" maxHeight="2rem" width="100%" />
       </Box>
+
       {Filters_Data.map((filter) => (
         <Dropdown
           key={v4()}

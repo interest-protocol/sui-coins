@@ -12,20 +12,25 @@ const SearchMobile: FC<SearchMobileProps> = ({
   return (
     <Box
       gap="m"
-      px="xs"
       width="100%"
       display={showSearchView ? ['flex', 'flex', 'flex', 'none'] : 'none'}
     >
       <TextField
-        Prefix={
+        fontFamily="Proto"
+        fontSize="0.875rem"
+        placeholder="FIND POOL"
+        fieldProps={{
+          border: 'none',
+          width: '10.7rem',
+          borderRadius: 'xs',
+          color: 'onSurface',
+          bg: 'highestContainer',
+        }}
+        Suffix={
           <Box height="1.25rem" width="1.25rem">
-            <SearchSVG maxHeight="1.25rem" maxWidth="1.25rem" width="100%" />
+            <SearchSVG maxHeight="100%" maxWidth="100%" width="100%" />
           </Box>
         }
-        fieldProps={{
-          borderRadius: 'xs',
-        }}
-        placeholder="Search"
       />
       <Button
         isIcon

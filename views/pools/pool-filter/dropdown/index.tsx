@@ -65,10 +65,10 @@ const Dropdown: FC<DropdownProps> = ({ label, type, filterData, disabled }) => {
         <Button
           py="s"
           my="xs"
-          mx={['unset', 'unset', 'unset', 'xs']}
           variant="filled"
           color="onSurface"
           bg={isOpen ? 'onPrimary' : 'surface'}
+          mx={['unset', 'unset', 'unset', '2xs']}
           width={['fill-available', 'fill-available', 'fill-available', '8rem']}
           onClick={() => setOpen(!isOpen)}
           nHover={{
@@ -78,9 +78,9 @@ const Dropdown: FC<DropdownProps> = ({ label, type, filterData, disabled }) => {
             <Box display="flex" justifyContent="center">
               {isOpen ? (
                 <ArrowDownSVG
+                  width="100%"
                   maxWidth="1.5rem"
                   maxHeight="1.5rem"
-                  width="100%"
                 />
               ) : (
                 <ArrowUpSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />

@@ -17,20 +17,20 @@ const Pools: FC = () => {
   const [tab, setTab] = useState<PoolTabEnum>(PoolTabEnum.Pools);
 
   return (
-    <Layout title="Pools">
+    <Layout>
       <Box mx={['0', '0', '0', '0', 'm']}>
         <Box py="xl">
           <Header setTab={setTab} currentTab={tab} />
         </Box>
         <Box
+          px="m"
           gap="2xs"
           bg="container"
+          display="flex"
           maxWidth="100%"
           maxHeight="100%"
-          display="flex"
-          flexDirection="column"
           borderRadius="xs"
-          px="m"
+          flexDirection="column"
           py={['s', 's', 's', '2xl']}
         >
           <PoolFilter />
