@@ -9,7 +9,7 @@ const INIT_ARG = {
 };
 
 export const useAftermathRouter = () => {
-  const { network } = useNetwork();
+  const network = useNetwork();
 
   return new Aftermath(INIT_ARG[network]).Router();
 };

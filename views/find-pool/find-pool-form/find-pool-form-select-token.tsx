@@ -17,7 +17,7 @@ const FindPoolFormSelectToken: FC<{ name: `token${'A' | 'B'}` }> = ({
   const { control, setValue } = useFormContext<IPoolForm>();
   const token = useWatch({ control, name });
 
-  const { network } = useNetwork();
+  const network = useNetwork();
   const TokenIcon = TOKEN_ICONS[network][token.type] ?? DefaultSVG;
 
   const { setModal, handleClose } = useModal();

@@ -20,7 +20,7 @@ import { ISwapSettings, SwapForm, SwapToken } from '@/views/swap/swap.types';
 
 const SwapPage: NextPage = () => {
   const { coinsMap } = useWeb3();
-  const { network } = useNetwork();
+  const network = useNetwork();
   const {
     query: { to, from },
     pathname,

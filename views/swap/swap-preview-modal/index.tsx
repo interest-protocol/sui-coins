@@ -11,7 +11,7 @@ import SwapButton from '../swap-button';
 import SwapPreviewModalSummary from './swap-preview-modal-summary';
 
 const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const { control } = useFormContext<SwapForm>();
 
   const tokenFrom = useWatch({ control, name: 'from' });

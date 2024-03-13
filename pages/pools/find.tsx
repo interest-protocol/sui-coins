@@ -10,7 +10,7 @@ import FindPool from '@/views/find-pool';
 import { IPoolForm } from '@/views/find-pool/find-pool.types';
 
 const FindPoolPage: NextPage = () => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const form = useForm<IPoolForm>({
     mode: 'onBlur',
     reValidateMode: 'onBlur',

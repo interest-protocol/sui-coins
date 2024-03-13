@@ -1,4 +1,5 @@
 import { Box, ProgressIndicator, Typography } from '@interest-protocol/ui-kit';
+import { useSuiClient } from '@mysten/dapp-kit';
 import { useWalletKit } from '@mysten/wallet-kit';
 import BigNumber from 'bignumber.js';
 import { values } from 'ramda';
@@ -6,7 +7,6 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import useSWR from 'swr';
 
-import { useSuiClient } from '@/hooks/use-sui-client';
 import { FixedPointMath } from '@/lib';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
