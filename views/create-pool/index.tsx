@@ -15,7 +15,7 @@ import Illustration from './illustration';
 
 const CreatePoolPage: FC = () => {
   const { push } = useRouter();
-  const { network } = useNetwork();
+  const network = useNetwork();
   const { control } = useFormContext<IPoolForm>();
   const tokenAType = useWatch({ control, name: 'tokenA.type' });
   const tokenBType = useWatch({ control, name: 'tokenB.type' });

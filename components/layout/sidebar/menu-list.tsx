@@ -13,7 +13,7 @@ const SidebarMenuList: FC<MenuListProps> = ({
   setIsCollapsed,
   setTemporarilyOpen,
 }) => {
-  const { network } = useNetwork();
+  const network = useNetwork();
 
   return (
     <Box display="flex" flexDirection="column" gap="s">

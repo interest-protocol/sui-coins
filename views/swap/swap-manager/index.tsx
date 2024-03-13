@@ -16,7 +16,7 @@ import { SwapForm } from '@/views/swap/swap.types';
 import { useAftermathRouter } from './swap-manager.hooks';
 
 const SwapManager: FC = () => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const aftermathRouter = useAftermathRouter();
   const { control, setValue, getValues } = useFormContext<SwapForm>();
 

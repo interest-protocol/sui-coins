@@ -1,6 +1,9 @@
 import { Box, Button, Motion } from '@interest-protocol/ui-kit';
-import { useWalletKit } from '@mysten/wallet-kit';
-import { WalletAccount } from '@wallet-standard/base';
+import {
+  useAccounts,
+  useCurrentAccount,
+  useSwitchAccount,
+} from '@mysten/dapp-kit';
 import { FC } from 'react';
 import { toast } from 'react-hot-toast';
 
@@ -11,12 +14,15 @@ import { wrapperVariants } from '@/constants';
 import ItemWrapper from '../../../menu-mobile/menu-settings/item-wrapper';
 import { MenuSwitchAccountProps } from '../profile.types';
 import MenuSwitchAccountHeader from './header';
+
 const MenuSwitchAccount: FC<MenuSwitchAccountProps> = ({
   isOpen,
   onBack,
   handleCloseProfile,
 }) => {
-  const { accounts, selectAccount, currentAccount } = useWalletKit();
+  const accounts = useAccounts();
+  const currentAccount = useCurrentAccount();
+  const { mutate: selectAccount } = useSwitchAccount();
 
   const account = currentAccount?.address || '';
 
@@ -54,7 +60,7 @@ const MenuSwitchAccount: FC<MenuSwitchAccountProps> = ({
           disabled={walletAccount.address === account}
           onClick={() => {
             if (!(walletAccount.address === account)) {
-              selectAccount(walletAccount);
+              selectAccount({ account: walletAccount });
               onBack();
             }
           }}
@@ -80,10 +86,7 @@ const MenuSwitchAccount: FC<MenuSwitchAccountProps> = ({
                   />
                 </Box>
               )}
-              <Avatar
-                withNameOrAddress
-                account={currentAccount as WalletAccount}
-              />
+              <Avatar withNameOrAddress account={walletAccount.address} />
             </Box>
             <Button
               isIcon

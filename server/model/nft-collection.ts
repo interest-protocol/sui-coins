@@ -23,10 +23,6 @@ export const NFTCollectionSchema = new Schema({
     type: [String],
     required: true,
   },
-  updatedAt: {
-    type: Number,
-    required: true,
-  },
 });
 
 export default mongoose.models[modelName] ||

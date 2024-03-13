@@ -1,4 +1,5 @@
 import { Box, Motion, Tabs } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { not } from 'ramda';
 import { FC, useState } from 'react';
 
@@ -9,7 +10,9 @@ import MenuSettingsListHeaderMobile from './header';
 import ItemWrapper from './item-wrapper';
 
 const MenuSettingsList: FC = () => {
-  const { network, changeNetwork } = useNetwork();
+  const network = useNetwork();
+
+  const { selectNetwork } = useSuiClientContext();
 
   const [toggle, setToggle] = useState(false);
 
@@ -35,7 +38,7 @@ const MenuSettingsList: FC = () => {
               items={['Mainnet', 'Testnet']}
               defaultTabIndex={network !== Network.MAINNET ? 1 : 0}
               onChangeTab={(index) =>
-                changeNetwork(!index ? Network.MAINNET : Network.TESTNET)
+                selectNetwork(!index ? Network.MAINNET : Network.TESTNET)
               }
             />
           </Box>

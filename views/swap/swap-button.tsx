@@ -1,4 +1,5 @@
 import { Button, Typography } from '@interest-protocol/ui-kit';
+import { useSuiClient } from '@mysten/dapp-kit';
 import { useWalletKit } from '@mysten/wallet-kit';
 import { useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -6,7 +7,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { EXPLORER_URL } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useDialog } from '@/hooks/use-dialog';
-import { useSuiClient } from '@/hooks/use-sui-client';
+import useSignTxb from '@/hooks/use-sign-txb';
 import { useWeb3 } from '@/hooks/use-web3';
 import { throwTXIfNotSuccessful } from '@/utils';
 import { SwapForm } from '@/views/swap/swap.types';
@@ -15,14 +16,15 @@ import { useAftermathRouter } from './swap-manager/swap-manager.hooks';
 
 const SwapButton = () => {
   const client = useSuiClient();
-  const { network } = useNetwork();
+  const network = useNetwork();
   const router = useAftermathRouter();
   const { currentAccount } = useWalletKit();
   const { dialog, handleClose } = useDialog();
   const formSwap = useFormContext<SwapForm>();
   const [loading, setLoading] = useState(false);
-  const { signTransactionBlock } = useWalletKit();
   const { mutate } = useWeb3();
+
+  const signTransactionBlock = useSignTxb();
 
   const resetInput = () => {
     formSwap.setValue('from.value', '0');
@@ -53,8 +55,6 @@ const SwapButton = () => {
       });
 
       const { signature, transactionBlockBytes } = await signTransactionBlock({
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         transactionBlock: txb,
       });
 

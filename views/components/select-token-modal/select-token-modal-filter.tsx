@@ -12,7 +12,7 @@ const SelectTokenFilter: FC<SelectTokenFilterProps> = ({
   control,
   setValue,
 }) => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const filterSelected = useWatch({ control, name: 'filter' });
 
   return (
