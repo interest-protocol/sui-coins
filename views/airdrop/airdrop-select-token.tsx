@@ -1,14 +1,15 @@
 import { Box, Motion, Typography } from '@interest-protocol/ui-kit';
+import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
-import { CoinData } from '@/interface';
-import { TOKEN_ICONS } from '@/lib';
+import { FixedPointMath, TOKEN_ICONS } from '@/lib';
 import { ChevronRightSVG, DefaultTokenSVG } from '@/svg';
 
 import SelectTokenModal from '../components/select-token-modal';
+import { CoinDataWithChainInfo } from '../components/select-token-modal/select-token-modal.types';
 import { IAirdropForm } from './airdrop.types';
 
 const BOX_ID = 'dropdown-id';
@@ -19,9 +20,19 @@ const AirdropSelectToken: FC = () => {
   const { control, setValue } = useFormContext<IAirdropForm>();
   const token = useWatch({ control, name: 'token' });
 
-  const onSelect = async (tmpToken: CoinData) => {
-    setValue('decimals', tmpToken.decimals);
-    setValue('token', tmpToken);
+  const onSelect = async ({
+    decimals,
+    symbol,
+    type,
+    balance,
+  }: CoinDataWithChainInfo) => {
+    setValue('decimals', decimals);
+    setValue('token', {
+      type,
+      symbol,
+      decimals,
+      balance: FixedPointMath.toNumber(BigNumber(balance), decimals),
+    });
     handleClose();
   };
 
@@ -88,7 +99,7 @@ const AirdropSelectToken: FC = () => {
           variant="label"
           color="onSurface"
         >
-          {token ? token.symbol : '---'}
+          {token?.symbol || '---'}
         </Typography>
         <Box rotate="90deg" color="onSurface">
           <ChevronRightSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
