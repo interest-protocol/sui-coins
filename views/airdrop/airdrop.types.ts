@@ -12,7 +12,7 @@ export interface AirdropData {
 }
 
 export interface IAirdropForm {
-  token: IToken;
+  token: CoinData;
   error: boolean;
   decimals: number;
   done: ReadonlyArray<number>;

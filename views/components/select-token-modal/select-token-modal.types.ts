@@ -16,6 +16,7 @@ export interface TokenModalItemProps
 
 export interface SelectTokenModalProps {
   simple?: boolean;
+  wallet?: boolean;
   closeModal: () => void;
   onSelect: (coin: CoinDataWithChainInfo) => void;
 }
