@@ -9,7 +9,6 @@ import FindPoolModal from '../find-pool-modal';
 const FinPoolButton: FC = () => {
   const { setModal, handleClose } = useModal();
 
-  const handleSelectPool = () => {};
   const openModal = () =>
     setModal(
       <Motion
@@ -17,7 +16,7 @@ const FinPoolButton: FC = () => {
         initial={{ scale: 0.85 }}
         transition={{ duration: 0.3 }}
       >
-        <FindPoolModal closeModal={handleClose} onSelect={handleSelectPool} />
+        <FindPoolModal closeModal={handleClose} />
       </Motion>,
       {
         isOpen: true,
