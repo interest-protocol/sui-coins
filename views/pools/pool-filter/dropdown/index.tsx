@@ -81,7 +81,7 @@ const Dropdown: FC<DropdownProps> = ({
           width={[
             'fill-available',
             '5rem',
-            '5rem',
+            'fill-available',
             'fill-available',
             'fill-available',
           ]}
@@ -93,7 +93,7 @@ const Dropdown: FC<DropdownProps> = ({
           PrefixIcon={
             <Box
               justifyContent="center"
-              display={['flex', 'flex', 'flex', 'none', 'none']}
+              display={['flex', 'flex', 'none', 'none', 'none']}
             >
               <Icon maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
             </Box>
@@ -115,7 +115,7 @@ const Dropdown: FC<DropdownProps> = ({
           <Typography
             size="large"
             variant="label"
-            display={['none', 'none', 'none', 'block', 'block']}
+            display={['none', 'none', 'block', 'block', 'block']}
           >
             {label}
           </Typography>
@@ -132,7 +132,7 @@ const Dropdown: FC<DropdownProps> = ({
               ref={dropdownRef}
             >
               <Box
-                mx="2xs"
+                mx="s"
                 my="xs"
                 zIndex="1"
                 bg="surface"
@@ -143,7 +143,7 @@ const Dropdown: FC<DropdownProps> = ({
                 position="absolute"
                 flexDirection="column"
                 borderColor="outlineVariant"
-                minWidth={['8rem', '8rem', '8rem', '15rem']}
+                minWidth={['8rem', '8rem', '8rem', '8rem', '15rem']}
                 cursor={disabled ? 'not-allowed' : 'pointer'}
               >
                 {filterData.map((value) => {
