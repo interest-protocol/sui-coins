@@ -22,15 +22,15 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     disabled: false,
   },
   {
-    Icon: CirclePlusSVG,
-    name: 'create token',
-    path: Routes[RoutesEnum.CreateToken],
-    disabled: false,
-  },
-  {
     Icon: PoolSVG,
     name: 'Pool',
     path: Routes[RoutesEnum.Pools],
+    disabled: false,
+  },
+  {
+    Icon: CirclePlusSVG,
+    name: 'create token',
+    path: Routes[RoutesEnum.CreateToken],
     disabled: false,
   },
   {
@@ -42,7 +42,6 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
   {
     Icon: DotsSVG,
     name: 'More',
-    path: '#',
     disabled: false,
     accordionList: [
       {

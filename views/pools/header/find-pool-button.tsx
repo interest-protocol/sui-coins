@@ -1,23 +1,36 @@
 import { Box, Button, Motion } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { useModal } from '@/hooks/use-modal';
 import { SearchSVG } from '@/svg';
 
 import FindPoolModal from '../find-pool-modal';
+import { FindPoolForm } from '../find-pool-modal/find-pool-modal.types';
 
 const FinPoolButton: FC = () => {
   const { setModal, handleClose } = useModal();
 
+  const form = useForm<FindPoolForm>({
+    defaultValues: {
+      tokens: [
+        { type: '', symbol: '', decimals: 0 },
+        { type: '', symbol: '', decimals: 0 },
+      ],
+    },
+  });
+
   const openModal = () =>
     setModal(
-      <Motion
-        animate={{ scale: 1 }}
-        initial={{ scale: 0.85 }}
-        transition={{ duration: 0.3 }}
-      >
-        <FindPoolModal closeModal={handleClose} />
-      </Motion>,
+      <FormProvider {...form}>
+        <Motion
+          animate={{ scale: 1 }}
+          initial={{ scale: 0.85 }}
+          transition={{ duration: 0.3 }}
+        >
+          <FindPoolModal closeModal={handleClose} />
+        </Motion>
+      </FormProvider>,
       {
         isOpen: true,
         custom: true,

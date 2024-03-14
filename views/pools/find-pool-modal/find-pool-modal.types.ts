@@ -8,3 +8,7 @@ export interface FindPoolModalProps {
 export interface FindPoolForm {
   tokens: ReadonlyArray<CoinData>;
 }
+
+export interface SelectTokenProps {
+  index: number;
+}
