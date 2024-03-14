@@ -21,9 +21,9 @@ const ActionGroup: FC = () => {
       >
         <Button
           py="s"
-          color="onSurface"
           variant="tonal"
-          bg="#ffffff14"
+          color="onSurface"
+          bg="highContainer"
           onClick={handleFindPool}
           nHover={{
             bg: `${colors.primary}14`,
@@ -31,9 +31,9 @@ const ActionGroup: FC = () => {
           SuffixIcon={
             <Box
               ml="m"
-              display="flex"
               width="1rem"
               height="1rem"
+              display="flex"
               justifyContent="center"
             >
               <SearchSVG maxHeight="100%" maxWidth="100%" width="100%" />

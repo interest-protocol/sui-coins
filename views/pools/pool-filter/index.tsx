@@ -28,13 +28,7 @@ const PoolFilter: FC = () => (
         alignItems="center"
         flexDirection="column"
         justifyContent="center"
-        display={[
-          'none',
-          'inline-flex',
-          'inline-flex',
-          'inline-flex',
-          'inline-flex',
-        ]}
+        display={['none', 'none', 'inline-flex', 'inline-flex', 'inline-flex']}
       >
         <FilterSVG maxWidth="2rem" maxHeight="2rem" width="100%" />
       </Box>
