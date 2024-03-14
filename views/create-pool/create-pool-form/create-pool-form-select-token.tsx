@@ -14,7 +14,7 @@ import { IPoolForm } from '../create-pool.types';
 const CreatePoolFormSelectToken: FC<{ name: `token${'A' | 'B'}` }> = ({
   name,
 }) => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const { control, setValue } = useFormContext<IPoolForm>();
   const token = useWatch({ control, name });
   const TokenIcon = TOKEN_ICONS[network][token.type] ?? SUISVG;

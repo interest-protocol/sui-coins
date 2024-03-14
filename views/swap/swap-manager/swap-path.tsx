@@ -10,7 +10,7 @@ import { SwapArrowSVG } from '@/svg';
 import { SwapForm } from '@/views/swap/swap.types';
 
 const SwapPath: FC = () => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const formSwap: UseFormReturn<SwapForm> = useFormContext();
 
   const readyToSwap = useWatch({

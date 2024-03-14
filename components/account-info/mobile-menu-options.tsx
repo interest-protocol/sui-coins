@@ -1,5 +1,5 @@
 import { Box } from '@interest-protocol/ui-kit';
-import { useWalletKit } from '@mysten/wallet-kit';
+import { useCurrentWallet, useDisconnectWallet } from '@mysten/dapp-kit';
 import { FC } from 'react';
 
 import { MenuSVG } from '@/svg';
@@ -13,7 +13,8 @@ const AccountInfo: FC<AccountInfoProps> = ({
   handleOpenMenu,
   handleCloseMenu,
 }) => {
-  const { isConnected, disconnect } = useWalletKit();
+  const { isConnected } = useCurrentWallet();
+  const { mutate: disconnect } = useDisconnectWallet();
 
   const handleDisconnect = () => {
     handleCloseMenu();

@@ -1,8 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Form, Typography } from '@interest-protocol/ui-kit';
+import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { normalizeSuiAddress } from '@mysten/sui.js/utils';
-import { useWalletKit } from '@mysten/wallet-kit';
 import { ChangeEvent, FC } from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 
 import { useNetwork } from '@/context/network';
 import { TextField } from '@/elements';
-import { useSuiClient } from '@/hooks/use-sui-client';
+import useSignTxb from '@/hooks/use-sign-txb';
 import { parseInputEventToNumberString, showTXSuccessToast } from '@/utils';
 import { throwTXIfNotSuccessful } from '@/utils';
 
@@ -41,8 +41,9 @@ const CreateTokenForm: FC = () => {
   });
 
   const suiClient = useSuiClient();
-  const { network } = useNetwork();
-  const { currentAccount, signTransactionBlock } = useWalletKit();
+  const network = useNetwork();
+  const currentAccount = useCurrentAccount();
+  const signTransactionBlock = useSignTxb();
 
   const createToken = async () => {
     try {

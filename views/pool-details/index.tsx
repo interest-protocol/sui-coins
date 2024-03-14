@@ -17,7 +17,7 @@ import PoolTransaction from './pool-transaction';
 
 const PoolDetails: FC<PoolDetailsProps> = ({ objectId }) => {
   const { push } = useRouter();
-  const { network } = useNetwork();
+  const network = useNetwork();
 
   const pool = RECOMMENDED_POOLS[network].find(
     ({ poolObjectId }) => poolObjectId === objectId

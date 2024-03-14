@@ -1,3 +1,5 @@
+import { createNetworkConfig, SuiClientProvider } from '@mysten/dapp-kit';
+import { getFullnodeUrl } from '@mysten/sui.js/client';
 import {
   createContext,
   FC,
@@ -9,14 +11,20 @@ import {
 
 import { Network } from '@/constants';
 
-interface INetworkContext {
-  network: Network;
-  changeNetwork: (network: Network) => void;
-}
-
 const LOCAL_NETWORK_KEY = 'suicoins:network';
 
-const networkContext = createContext<INetworkContext>({} as INetworkContext);
+const networkContext = createContext<Network>('' as Network);
+
+const { networkConfig } = createNetworkConfig({
+  [Network.TESTNET]: {
+    url:
+      process.env.NEXT_PUBLIC_SUI_TESTNET_RPC_URL || getFullnodeUrl('testnet'),
+  },
+  [Network.MAINNET]: {
+    url:
+      process.env.NEXT_PUBLIC_SUI_MAINNET_RPC_URL || getFullnodeUrl('mainnet'),
+  },
+});
 
 export const NetworkProvider: FC<PropsWithChildren> = ({ children }) => {
   const { Provider } = networkContext;
@@ -34,7 +42,17 @@ export const NetworkProvider: FC<PropsWithChildren> = ({ children }) => {
     window.localStorage.setItem(LOCAL_NETWORK_KEY, network);
   };
 
-  return <Provider value={{ network, changeNetwork }}>{children}</Provider>;
+  return (
+    <SuiClientProvider
+      network={network}
+      networks={networkConfig}
+      onNetworkChange={(network) => {
+        changeNetwork(network);
+      }}
+    >
+      <Provider value={network}>{children}</Provider>
+    </SuiClientProvider>
+  );
 };
 
 export const useNetwork = () => useContext(networkContext);
