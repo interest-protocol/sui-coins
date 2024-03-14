@@ -1,8 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Form, Typography } from '@interest-protocol/ui-kit';
 import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
-import { normalizeSuiAddress } from '@mysten/sui.js/src/utils';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { normalizeSuiAddress } from '@mysten/sui.js/utils';
 import { ChangeEvent, FC } from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
