@@ -19,6 +19,10 @@ const SwapPreviewModalSummary: FC = () => {
   const currentAccount = useCurrentAccount();
   const { control } = useFormContext<SwapForm>();
 
+  const fromValue = useWatch({ control, name: 'from.value' });
+  const fromUSDPrice = useWatch({ control, name: 'from.usdPrice' });
+  const toValue = useWatch({ control, name: 'to.value' });
+  const toUSDPrice = useWatch({ control, name: 'to.usdPrice' });
   const route = useWatch({ control, name: 'route' });
   const slippage = useWatch({ control, name: 'settings.slippage' });
 
@@ -52,6 +56,11 @@ const SwapPreviewModalSummary: FC = () => {
     }
   );
 
+  const priceImpact =
+    fromUSDPrice && toUSDPrice
+      ? ((+fromValue * fromUSDPrice) / +toValue) * toUSDPrice
+      : null;
+
   return (
     <Box display="flex" flexDirection="column" mb="m">
       <Box bg="surface" px="m" py="2xs" borderRadius="xs">
@@ -68,7 +77,7 @@ const SwapPreviewModalSummary: FC = () => {
             opacity="0.80"
             color="#000000A3"
           >
-            Exchange Rate
+            Price impact
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center">
             <Typography
@@ -77,8 +86,8 @@ const SwapPreviewModalSummary: FC = () => {
               color="onSurface"
               mr="0.5rem"
             >
-              {route
-                ? Number((route.spotPrice * 1000).toFixed(6)).toPrecision()
+              {priceImpact
+                ? `${priceImpact > 0.1 ? priceImpact.toFixed(2) : '< 0.1'}%`
                 : '--'}
             </Typography>
           </Box>
@@ -120,7 +129,7 @@ const SwapPreviewModalSummary: FC = () => {
               </Box>
             ) : (
               <Typography size="medium" variant="body">
-                ~{fees?.[0] ?? 0} SUI
+                {fees ? `~${fees[0] ?? 0} SUI` : '--'}
               </Typography>
             )}
           </Box>
@@ -147,7 +156,7 @@ const SwapPreviewModalSummary: FC = () => {
               </Box>
             ) : (
               <Typography size="medium" variant="body">
-                ~{fees?.[1] ?? 0} SUI
+                {fees ? `~${fees[1] ?? 0} SUI` : '--'}
               </Typography>
             )}
           </Box>

@@ -60,7 +60,7 @@ const SwapManager: FC = () => {
           coinInType,
           coinOutType,
           coinInAmount: BigInt(
-            Math.floor(Number(coinInValue) * 10 ** getValues('from.decimals'))
+            Math.floor(+coinInValue * 10 ** getValues('from.decimals'))
           ),
           referrer: TREASURY,
           externalFee: {
@@ -88,14 +88,13 @@ const SwapManager: FC = () => {
         ).paths
       );
 
-      console.log(getValues('to.decimals'));
-
       setValue(
         'to.value',
         Number(
           (
-            (Number(coinInValue) / (data.spotPrice * 1000)) *
-            10 ** getValues('to.decimals')
+            (+coinInValue *
+              10 ** (getValues('from.decimals') - getValues('to.decimals'))) /
+            data.spotPrice
           ).toFixed(6)
         ).toPrecision()
       );
