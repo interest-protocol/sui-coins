@@ -12,9 +12,9 @@ const Wallet: FC = () => {
   return (
     <Box
       display="flex"
+      alignItems="center"
       justifyContent="flex-end"
       flexDirection={['row-reverse', 'row-reverse', 'row-reverse', 'row']}
-      alignItems="center"
     >
       <Box display="flex" gap="m">
         {!!currentAccount && (
