@@ -13,21 +13,21 @@ import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
 import { updateURL } from '@/utils';
 import SelectTokenModal from '@/views/components/select-token-modal';
 
-import { SwapForm } from '../swap.types';
-import { InputProps } from './input.types';
+import { DCAForm } from '../dca.types';
+import SelectTokenInfo from './select-token-info';
 
-const SelectToken: FC<InputProps> = ({ label }) => {
+const SelectToken: FC = () => {
   const network = useNetwork();
   const { pathname } = useRouter();
   const { setModal, handleClose } = useModal();
 
   const isMainnet = Network.MAINNET === network;
 
-  const { setValue, control } = useFormContext<SwapForm>();
+  const { setValue, control } = useFormContext<DCAForm>();
 
   const currentToken = useWatch({
     control,
-    name: label,
+    name: 'to',
   });
 
   const { symbol: currentSymbol, type: currentType } = currentToken ?? {
@@ -39,7 +39,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
 
   const changeURL = (type: string) => {
     const searchParams = new URLSearchParams(location.search);
-    searchParams.set(label, type);
+    searchParams.set('to', type);
 
     updateURL(
       `${pathname}?from=${searchParams.get('from')}&to=${searchParams.get(
@@ -50,17 +50,17 @@ const SelectToken: FC<InputProps> = ({ label }) => {
 
   const oppositeType = useWatch({
     control,
-    name: `${label === 'to' ? 'from' : 'to'}.type`,
+    name: 'from.type',
   });
 
   const onSelect = async ({ type, decimals, symbol, chain }: Token) => {
     if (type === oppositeType) {
-      setValue(label === 'to' ? 'from' : 'to', {
+      setValue('from', {
         type: currentToken.type,
         symbol: currentToken.symbol,
         decimals: currentToken.decimals,
-        usdPrice: currentToken.usdPrice,
         chain: currentToken.chain,
+        usdPrice: currentToken.usdPrice,
         value: '',
       });
     }
@@ -70,15 +70,16 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       .then((data) => data[symbol][0].quote.USD.price)
       .catch(() => null);
 
-    setValue(label, {
+    setValue('to', {
       type,
+      chain,
       symbol,
       usdPrice,
       decimals,
-      chain,
       value: '',
     });
-    setValue(`${label === 'from' ? 'to' : 'from'}.value`, '');
+
+    setValue('from.value', '');
 
     changeURL(type);
   };
@@ -101,18 +102,16 @@ const SelectToken: FC<InputProps> = ({ label }) => {
     );
 
   return (
-    <Box
-      position="relative"
-      minWidth={['4rem', '8rem', '8rem', '8rem', '10rem']}
-    >
+    <Box display="flex" flexDirection="column">
+      <SelectTokenInfo />
       <Button
-        p="2xs"
+        mt="m"
+        mx="l"
         fontSize="s"
-        width="100%"
-        variant="tonal"
+        variant="outline"
         borderRadius="xs"
-        bg="highestContainer"
         onClick={openModal}
+        borderColor="outlineVariant"
         {...(Icon && {
           PrefixIcon: (
             <TokenIcon
@@ -126,6 +125,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       >
         <Typography
           p="xs"
+          flex="1"
           size="large"
           variant="label"
           display={['none', 'block']}

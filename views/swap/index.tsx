@@ -29,7 +29,7 @@ const Swap: FC = () => {
   };
 
   return (
-    <Layout title="Swap">
+    <Layout title="Trade">
       <Box
         mx="auto"
         display="flex"

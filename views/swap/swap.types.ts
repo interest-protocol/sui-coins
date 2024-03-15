@@ -8,27 +8,15 @@ export interface ISwapSettings {
 
 export interface SwapToken extends Token {
   value: string;
-  locked: boolean;
   usdPrice: number | null;
 }
-
-interface SwapTypeArgs {
-  coinIn: string;
-  coinOut: string;
-  lpCoin: string;
-}
-
-export type SwapPath = ReadonlyArray<SwapTypeArgs>;
 
 export interface SwapForm {
   to: SwapToken;
   lock: boolean;
   from: SwapToken;
   loading: boolean;
-  maxValue: boolean;
-  disabled: boolean;
   error: string | null;
-  readyToSwap: boolean;
   settings: ISwapSettings;
   route: RouterCompleteTradeRoute | null;
   swapPath: ReadonlyArray<RouterTradePath>;

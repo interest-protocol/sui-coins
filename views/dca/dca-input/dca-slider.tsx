@@ -8,16 +8,16 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 
-import { SwapForm } from '../../swap.types';
+import { DCAForm } from '../dca.types';
 
 const Slider = dynamic(
   import('@interest-protocol/ui-kit').then(({ Slider }) => Slider),
   { ssr: false }
 );
 
-const SwapFormFieldSlider: FC = () => {
+const DCASlider: FC = () => {
   const { coinsMap } = useWeb3();
-  const { control, setValue, getValues } = useFormContext<SwapForm>();
+  const { control, setValue, getValues } = useFormContext<DCAForm>();
 
   const type = useWatch({ control, name: 'from.type' });
 
@@ -54,4 +54,4 @@ const SwapFormFieldSlider: FC = () => {
   );
 };
 
-export default SwapFormFieldSlider;
+export default DCASlider;
