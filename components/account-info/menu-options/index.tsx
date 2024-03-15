@@ -121,7 +121,7 @@ const MenuOptions: FC<MenuOptionsProps> = ({
             <OptionItem
               key={v4()}
               selected={asPath == path}
-              onClick={() => push(path)}
+              onClick={() => path && push(path)}
             >
               {name}
             </OptionItem>
