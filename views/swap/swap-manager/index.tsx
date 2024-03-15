@@ -88,12 +88,14 @@ const SwapManager: FC = () => {
         ).paths
       );
 
+      console.log(getValues('to.decimals'));
+
       setValue(
         'to.value',
         Number(
           (
-            (Number(coinInValue) * 10 ** getValues('to.decimals')) /
-            (data.spotPrice * 1000)
+            (Number(coinInValue) / (data.spotPrice * 1000)) *
+            10 ** getValues('to.decimals')
           ).toFixed(6)
         ).toPrecision()
       );
