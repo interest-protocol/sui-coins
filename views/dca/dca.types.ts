@@ -1,5 +1,5 @@
 import { Token } from '@interest-protocol/sui-tokens';
-import { RouterCompleteTradeRoute, RouterTradePath } from 'aftermath-ts-sdk';
+import { RouterCompleteTradeRoute } from 'aftermath-ts-sdk';
 
 export type Period = 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month';
 
@@ -23,7 +23,6 @@ export interface DCAForm {
   error: string | null;
   settings: DCASettings;
   route: RouterCompleteTradeRoute | null;
-  swapPath: ReadonlyArray<RouterTradePath>;
 }
 
 export interface DCAPreviewModalProps {

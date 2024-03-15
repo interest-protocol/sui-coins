@@ -101,11 +101,14 @@ const DCA: FC = () => {
             <Box>
               <TextField
                 label="Over"
+                Suffix="orders"
+                color="onSurface"
                 {...form.register('settings.iterations')}
                 fieldProps={{
+                  py: 'xl',
+                  color: 'outline',
                   borderRadius: 'xs',
                   borderWidth: '1px',
-                  py: 'xl',
                   nHover: {
                     borderWidth: '1px',
                   },
