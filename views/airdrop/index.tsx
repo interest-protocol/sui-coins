@@ -20,11 +20,11 @@ const AirdropBody: FC<AirdropBodyProps> = ({ setIsProgressView }) => {
   const { control } = useFormContext<IAirdropForm>();
   const token = useWatch({ control, name: 'token' });
   return token ? (
-    <>
+    <Box bg="lowestContainer" borderRadius="xs" p="xl">
       <AirdropUploadFile />
       <AirdropSummary />
       <AirdropButton setIsProgressView={setIsProgressView} />
-    </>
+    </Box>
   ) : null;
 };
 
@@ -64,14 +64,11 @@ const Airdrop: FC = () => {
         </Box>
       ) : (
         <Box
-          p="xl"
-          gap="4xl"
+          gap="m"
           mx="auto"
           mb="10xl"
           display="flex"
-          borderRadius="m"
           maxWidth="39.5rem"
-          bg="lowestContainer"
           flexDirection="column"
         >
           <AirdropChooseCoin />
