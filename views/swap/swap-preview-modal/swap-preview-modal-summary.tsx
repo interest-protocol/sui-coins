@@ -56,10 +56,13 @@ const SwapPreviewModalSummary: FC = () => {
     }
   );
 
+  const toUSD = toUSDPrice ? +toValue * toUSDPrice : null;
+  const fromUSD = fromUSDPrice ? +fromValue * fromUSDPrice : null;
+
+  const differenceBetween = fromUSD && toUSD ? Math.abs(toUSD - fromUSD) : null;
+
   const priceImpact =
-    fromUSDPrice && toUSDPrice
-      ? ((+fromValue * fromUSDPrice) / (+toValue * toUSDPrice)) * 100
-      : null;
+    differenceBetween && fromUSD ? (differenceBetween * 100) / fromUSD : null;
 
   return (
     <Box display="flex" flexDirection="column" mb="m">

@@ -57,12 +57,16 @@ const SwapButton = () => {
         transactionBlock: txb,
       });
 
+      console.log('execute');
+
       const tx = await client.executeTransactionBlock({
         transactionBlock: transactionBlockBytes,
         signature,
         options: { showEffects: true },
         requestType: 'WaitForEffectsCert',
       });
+
+      console.log('tx :: ', tx);
 
       throwTXIfNotSuccessful(tx);
 
