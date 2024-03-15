@@ -1,6 +1,5 @@
 import { Button, Typography } from '@interest-protocol/ui-kit';
-import { useSuiClient } from '@mysten/dapp-kit';
-import { useWalletKit } from '@mysten/wallet-kit';
+import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 import { useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
@@ -18,7 +17,7 @@ const SwapButton = () => {
   const client = useSuiClient();
   const network = useNetwork();
   const router = useAftermathRouter();
-  const { currentAccount } = useWalletKit();
+  const currentAccount = useCurrentAccount();
   const { dialog, handleClose } = useDialog();
   const formSwap = useFormContext<SwapForm>();
   const [loading, setLoading] = useState(false);

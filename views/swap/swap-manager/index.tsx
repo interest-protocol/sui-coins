@@ -9,6 +9,7 @@ import { useDebounce } from 'use-debounce';
 import { TokenIcon } from '@/components';
 import { TREASURY } from '@/constants';
 import { COIN_TYPE_TO_SYMBOL, SUI_TYPE_ARG_LONG } from '@/constants/coins';
+import { EXCHANGE_FEE } from '@/constants/dex';
 import { useNetwork } from '@/context/network';
 import { AftermathSVG, SwapArrowSVG } from '@/svg';
 import { SwapForm } from '@/views/swap/swap.types';
@@ -64,7 +65,7 @@ const SwapManager: FC = () => {
           referrer: TREASURY,
           externalFee: {
             recipient: TREASURY,
-            feePercentage: 0.005,
+            feePercentage: EXCHANGE_FEE,
           },
         })
         .catch((e) => {
@@ -90,7 +91,10 @@ const SwapManager: FC = () => {
       setValue(
         'to.value',
         Number(
-          (Number(coinInValue) / (data.spotPrice * 1000)).toFixed(6)
+          (
+            (Number(coinInValue) * 10 ** getValues('to.decimals')) /
+            (data.spotPrice * 1000)
+          ).toFixed(6)
         ).toPrecision()
       );
     },

@@ -1,12 +1,12 @@
 import { Box, ProgressIndicator, Typography } from '@interest-protocol/ui-kit';
-import { useSuiClient } from '@mysten/dapp-kit';
-import { useWalletKit } from '@mysten/wallet-kit';
+import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 import BigNumber from 'bignumber.js';
 import { values } from 'ramda';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import useSWR from 'swr';
 
+import { EXCHANGE_FEE } from '@/constants/dex';
 import { FixedPointMath } from '@/lib';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
@@ -16,7 +16,7 @@ import { useAftermathRouter } from '../swap-manager/swap-manager.hooks';
 const SwapPreviewModalSummary: FC = () => {
   const suiClient = useSuiClient();
   const router = useAftermathRouter();
-  const { currentAccount } = useWalletKit();
+  const currentAccount = useCurrentAccount();
   const { control } = useFormContext<SwapForm>();
 
   const route = useWatch({ control, name: 'route' });
@@ -93,13 +93,8 @@ const SwapPreviewModalSummary: FC = () => {
             Exchange fee
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center">
-            <Typography
-              variant="body"
-              size="medium"
-              color="onSurface"
-              mr="0.5rem"
-            >
-              0.5%
+            <Typography mr="s" variant="body" size="medium" color="onSurface">
+              {EXCHANGE_FEE * 1000}%
             </Typography>
           </Box>
         </Box>

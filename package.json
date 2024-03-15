@@ -20,7 +20,6 @@
     "@mysten/dapp-kit": "^0.12.5",
     "@mysten/sui.js": "^0.51.0",
     "@mysten/suins-toolkit": "^0.4.4",
-    "@mysten/wallet-kit": "^0.8.2",
     "@stylin.js/react": "^1.0.4-alpha.0",
     "@tanstack/react-query": "^5.7.2",
     "@vercel/analytics": "^1.1.1",

@@ -5,6 +5,8 @@ import { Network } from './dapp';
 
 export type TDexSources = 'interest' | 'suicoins';
 
+export const EXCHANGE_FEE = 0.005;
+
 export const DEX_BASE_COINS = {
   [Network.TESTNET]: [COIN_TYPE[Network.TESTNET].ETH],
   [Network.MAINNET]: [
