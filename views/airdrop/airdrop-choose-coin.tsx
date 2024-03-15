@@ -4,7 +4,14 @@ import { FC } from 'react';
 import AirdropSelectToken from './airdrop-select-token';
 
 const AirdropChooseCoin: FC = () => (
-  <Box display="flex" flexDirection="column" gap="s">
+  <Box
+    p="xl"
+    gap="s"
+    display="flex"
+    borderRadius="xs"
+    bg="lowestContainer"
+    flexDirection="column"
+  >
     <Box display="flex" justifyContent="space-between">
       <Typography variant="body" size="large" color="onSurface">
         1. Choose coin

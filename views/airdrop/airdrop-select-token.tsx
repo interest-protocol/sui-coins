@@ -31,7 +31,7 @@ const AirdropSelectToken: FC = () => {
       type,
       symbol,
       decimals,
-      balance: FixedPointMath.toNumber(BigNumber(balance), decimals),
+      balance: FixedPointMath.toNumber(BigNumber(balance || 0), decimals),
     });
     handleClose();
   };
@@ -43,12 +43,7 @@ const AirdropSelectToken: FC = () => {
         initial={{ scale: 0.85 }}
         transition={{ duration: 0.3 }}
       >
-        <SelectTokenModal
-          closeModal={handleClose}
-          onSelect={onSelect}
-          simple
-          wallet
-        />
+        <SelectTokenModal closeModal={handleClose} onSelect={onSelect} />
       </Motion>,
       {
         isOpen: true,
@@ -80,7 +75,7 @@ const AirdropSelectToken: FC = () => {
   return (
     <Box position="relative" id={BOX_ID}>
       <Box
-        p="s"
+        p="xs"
         gap="xs"
         display="flex"
         minWidth="8rem"
@@ -88,8 +83,8 @@ const AirdropSelectToken: FC = () => {
         borderRadius="xs"
         border="1px solid"
         alignItems="center"
-        borderColor="outlineVariant"
         onClick={openModal}
+        borderColor="outlineVariant"
       >
         {renderToken()}
         <Typography

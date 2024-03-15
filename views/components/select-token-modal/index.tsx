@@ -21,14 +21,13 @@ import SelectTokenFilter from './select-token-modal-filter';
 
 const SelectTokenModal: FC<SelectTokenModalProps> = ({
   simple,
-  wallet,
   onSelect,
   closeModal,
 }) => {
   const { control, register, setValue } = useForm<SearchTokenForm>({
     defaultValues: {
       search: '',
-      filter: wallet ? TokenOrigin.Wallet : TokenOrigin.Strict,
+      filter: TokenOrigin.Strict,
     },
   });
 
