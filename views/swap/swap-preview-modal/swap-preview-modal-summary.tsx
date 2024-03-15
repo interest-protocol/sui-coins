@@ -103,7 +103,7 @@ const SwapPreviewModalSummary: FC = () => {
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center">
             <Typography mr="s" variant="body" size="medium" color="onSurface">
-              {EXCHANGE_FEE * 1000}%
+              {EXCHANGE_FEE * 100}%
             </Typography>
           </Box>
         </Box>
