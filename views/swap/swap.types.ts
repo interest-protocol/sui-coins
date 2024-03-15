@@ -1,13 +1,12 @@
+import { Token } from '@interest-protocol/sui-tokens';
 import { RouterCompleteTradeRoute, RouterTradePath } from 'aftermath-ts-sdk';
-
-import { CoinDataWithChainInfo } from '@/interface';
 
 export interface ISwapSettings {
   slippage: string;
   interval: string;
 }
 
-export interface SwapToken extends CoinDataWithChainInfo {
+export interface SwapToken extends Token {
   value: string;
   locked: boolean;
   usdPrice: number | null;

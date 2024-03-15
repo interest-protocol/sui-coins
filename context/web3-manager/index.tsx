@@ -43,7 +43,7 @@ const Web3Manager: FC<Web3ManagerProps> = ({ children }) => {
       value={{
         mutate,
         nfts: nfts ?? [],
-        nftsMap: (nfts ?? []).reduce(
+        nftsMap: (nfts ?? [])?.reduce?.(
           (acc, curr) => ({ ...acc, [curr.id]: curr }),
           {}
         ),

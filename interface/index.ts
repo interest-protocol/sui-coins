@@ -12,10 +12,6 @@ export interface CoinData {
   symbol: TOKEN_SYMBOL | string;
 }
 
-export interface CoinDataWithChainInfo extends CoinData {
-  chain?: Chain;
-}
-
 export type LocalTokenMetadataRecord = Record<string, CoinData>;
 
 export type DexMarket = Record<string, Record<string, string>>;
