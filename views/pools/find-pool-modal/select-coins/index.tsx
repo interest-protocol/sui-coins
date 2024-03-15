@@ -32,6 +32,7 @@ const SelectCoins: FC = () => {
             mx="auto"
             variant="outline"
             color="onSurface"
+            borderRadius="xs"
             borderColor="outlineVariant"
             onClick={() => append({ type: '', symbol: '', decimals: 0 })}
             PrefixIcon={

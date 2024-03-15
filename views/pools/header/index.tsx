@@ -25,8 +25,7 @@ const Header: FC<HeaderProps> = ({ currentTab, setTab }) => {
     <Box
       display="flex"
       flexWrap="wrap"
-      overflowX="auto"
-      overflowY="hidden"
+      overflow="none"
       alignItems="center"
       justifyContent="space-between"
     >
@@ -34,8 +33,6 @@ const Header: FC<HeaderProps> = ({ currentTab, setTab }) => {
         gap="s"
         width="100%"
         flexWrap="wrap"
-        overflowX="auto"
-        overflowY="hidden"
         justifyContent="space-between"
         display={isMobile ? (showSearchField ? 'none' : 'flex') : 'flex'}
       >

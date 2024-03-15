@@ -48,6 +48,7 @@ const FindPoolModal: FC<FindPoolModalProps> = ({ closeModal }) => (
         display="flex"
         variant="filled"
         minWidth="17rem"
+        borderRadius="xs"
         justifyContent="center"
       >
         Search

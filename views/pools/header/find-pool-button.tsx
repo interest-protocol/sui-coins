@@ -51,6 +51,7 @@ const FinPoolButton: FC = () => {
           bg="onSurface"
           color="surface"
           variant="filled"
+          borderRadius="xs"
           onClick={openModal}
           nHover={{
             bg: 'onPrimaryContainer',
