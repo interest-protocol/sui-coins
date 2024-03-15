@@ -147,7 +147,7 @@ const SwapPreviewModalSummary: FC = () => {
             opacity="0.80"
             color="#000000A3"
           >
-            Rebated fee
+            Storage rebate
           </Typography>
           <Box textAlign="right">
             {isLoading ? (
