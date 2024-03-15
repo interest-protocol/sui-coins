@@ -6,10 +6,10 @@ import { ProfileMenuItemProps } from '../profile.types';
 
 const MenuProfileItem: FC<ProfileMenuItemProps> = ({
   name,
-  description,
   Icon,
-  hasBorder,
   disabled,
+  hasBorder,
+  description,
   handleAction,
 }) => (
   <Box
