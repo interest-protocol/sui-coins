@@ -58,7 +58,7 @@ const SwapPreviewModalSummary: FC = () => {
 
   const priceImpact =
     fromUSDPrice && toUSDPrice
-      ? ((+fromValue * fromUSDPrice) / +toValue) * toUSDPrice
+      ? ((+fromValue * fromUSDPrice) / (+toValue * toUSDPrice)) * 100
       : null;
 
   return (
