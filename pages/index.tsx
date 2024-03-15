@@ -38,7 +38,10 @@ const SwapPage: NextPage = () => {
     },
   });
 
-  const setDefaultToken = async (value: string, field: 'to' | 'from') => {
+  const setDefaultToken = async (
+    value: `0x${string}`,
+    field: 'to' | 'from'
+  ) => {
     if (value === SUI_TYPE_ARG) {
       const { type, symbol, decimals } =
         COIN_TYPE_TO_COIN[network][SUI_TYPE_ARG];
@@ -100,8 +103,8 @@ const SwapPage: NextPage = () => {
     (async () => {
       const searchParams = new URLSearchParams(asPath);
       const [fromType, toType] = await Promise.all([
-        setDefaultToken(from as string, 'from'),
-        setDefaultToken(to as string, 'to'),
+        setDefaultToken(from as `0x${string}`, 'from'),
+        setDefaultToken(to as `0x${string}`, 'to'),
       ]);
 
       searchParams.set('from', fromType ?? '');

@@ -1,10 +1,9 @@
-import { Token } from '@interest-protocol/sui-tokens';
+import { Chain, Token } from '@interest-protocol/sui-tokens';
 import BigNumber from 'bignumber.js';
 import { Control, UseFormSetValue } from 'react-hook-form';
 
 import { Network } from '@/constants';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
-import { Chain } from '@/interface';
 
 export interface TokenModalMetadata {
   name: string;

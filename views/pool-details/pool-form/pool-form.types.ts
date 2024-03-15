@@ -8,18 +8,11 @@ export enum PoolOption {
 export interface CoinData {
   decimals: number;
   symbol: TOKEN_SYMBOL | string;
-  type: string;
-}
-
-export type Chain = 'ETH' | 'BSC' | 'SOL' | 'AVA' | 'SUI';
-
-export interface CoinDataWithChainInfo extends CoinData {
-  chain?: Chain;
+  type: `0x${string}`;
 }
 
 export interface PoolToken extends CoinData {
   value: string;
-  balance: number | null;
 }
 
 export interface PoolDepositForm {

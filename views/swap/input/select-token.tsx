@@ -1,3 +1,4 @@
+import { Token } from '@interest-protocol/sui-tokens';
 import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
@@ -8,7 +9,6 @@ import { Network } from '@/constants';
 import { TOKEN_ICONS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
-import { CoinDataWithChainInfo } from '@/interface';
 import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
 import { updateURL } from '@/utils';
 import SelectTokenModal from '@/views/components/select-token-modal';
@@ -53,12 +53,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
     name: `${label === 'to' ? 'from' : 'to'}.type`,
   });
 
-  const onSelect = async ({
-    type,
-    decimals,
-    symbol,
-    chain,
-  }: CoinDataWithChainInfo) => {
+  const onSelect = async ({ type, decimals, symbol, chain }: Token) => {
     if (type === oppositeType) {
       setValue(label === 'to' ? 'from' : 'to', {
         type: currentToken.type,

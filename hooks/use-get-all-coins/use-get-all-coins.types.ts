@@ -1,13 +1,12 @@
+import { Chain } from '@interest-protocol/sui-tokens';
 import { CoinMetadata, CoinStruct, SuiClient } from '@mysten/sui.js/client';
-
-import { Chain } from '@/interface';
 
 export interface CoinObject extends Pick<CoinMetadata, 'symbol' | 'decimals'> {
   chain?: Chain;
   digest?: string;
   version?: string;
-  type: string;
   balance: string;
+  type: `0x${string}`;
   coinObjectId: string;
   previousTransaction?: string;
   lockedUntilEpoch?: number | null | undefined;

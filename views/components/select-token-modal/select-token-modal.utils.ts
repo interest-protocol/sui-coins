@@ -17,7 +17,7 @@ export const metadataToCoin = (coinMetadata: CoinMetadataWithType) => {
 };
 
 export const mapMetadataToCoin = (
-  coinType: string,
+  coinType: `0x${string}`,
   coinsMetadata: Record<string, CoinMetadataWithType>
 ): CoinObject => {
   if (!coinType || !coinsMetadata[coinType])

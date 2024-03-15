@@ -21,17 +21,15 @@ const PoolForm: FC = () => {
     defaultValues: {
       firstToken: {
         value: '',
-        balance: 0.0456,
         decimals: 0,
         symbol: TOKEN_SYMBOL.BNB,
-        type: '',
+        type: '' as `0x${string}`,
       },
       secondToken: {
         value: '',
-        balance: 0.0456,
         decimals: 0,
         symbol: TOKEN_SYMBOL.BNB,
-        type: '',
+        type: '' as `0x${string}`,
       },
     },
   });
@@ -40,10 +38,9 @@ const PoolForm: FC = () => {
     defaultValues: {
       tokenLP: {
         value: '',
-        balance: 0.0456,
         decimals: 0,
         symbol: 'LPs Coin',
-        type: '',
+        type: '' as `0x${string}`,
       },
     },
   });

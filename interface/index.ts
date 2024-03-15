@@ -3,12 +3,11 @@ import BigNumber from 'bignumber.js';
 
 import { TOKEN_SYMBOL } from '@/lib';
 
-export type Chain = 'ETH' | 'BSC' | 'SOL' | 'AVA';
 export type BigNumberish = BigNumber | bigint | string | number;
 
 export interface CoinData {
-  type: string;
   decimals: number;
+  type: `0x${string}`;
   symbol: TOKEN_SYMBOL | string;
 }
 
@@ -28,7 +27,7 @@ export interface RegistryPool {
 }
 
 export interface CoinMetadataWithType extends CoinMetadata {
-  type: string;
+  type: `0x${string}`;
 }
 
 export interface NFTCollection {

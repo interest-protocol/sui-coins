@@ -1,3 +1,4 @@
+import { Chain } from '@interest-protocol/sui-tokens';
 import { isValidSuiAddress } from '@mysten/sui.js/utils';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
@@ -15,7 +16,6 @@ import {
 import { useNetwork } from '@/context/network';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { useWeb3 } from '@/hooks/use-web3';
-import { Chain } from '@/interface';
 import { coinDataToCoinObject } from '@/utils';
 
 import FetchingToken from './fetching-token';

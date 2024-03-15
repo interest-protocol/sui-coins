@@ -1,7 +1,8 @@
 import { RegistryPool } from '@/interface';
 
-import { COIN_TYPE, COINS, POOL_ID_MAP } from '../views/pools/coins';
+import { COIN_TYPE, COINS } from './coins';
 import { Network } from './dapp';
+import { POOL_ID_MAP } from './pools';
 
 export type TDexSources = 'interest' | 'suicoins';
 

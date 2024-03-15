@@ -1,9 +1,17 @@
+import { Token } from '@interest-protocol/sui-tokens';
 import { formatAddress, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
 import { propOr } from 'ramda';
 
 import { Network } from '@/constants';
-import { STRICT_TOKENS, STRICT_TOKENS_TYPE } from '@/constants/coins';
+import {
+  CELER_TOKENS,
+  CELER_TOKENS_TYPE,
+  STRICT_TOKENS,
+  STRICT_TOKENS_TYPE,
+  WORMHOLE_TOKENS,
+  WORMHOLE_TOKENS_TYPE,
+} from '@/constants/coins';
 import {
   CoinObject,
   CoinsMap,
@@ -128,23 +136,49 @@ export const coinDataToCoinObject = (coinData: CoinData): CoinObject => ({
   objects: [],
 });
 
+const coinObjectToToken = (coin: CoinObject): Token => ({
+  name: coin.metadata.name,
+  symbol: coin.symbol,
+  decimals: coin.decimals,
+  type: coin.type,
+});
+
+const coinMetadataToToken = (coin: CoinMetadataWithType): Token => ({
+  name: coin.name,
+  symbol: coin.symbol,
+  decimals: coin.decimals,
+  type: coin.type,
+});
+
 export const getCoin = async (
-  type: string,
+  type: `0x${string}`,
   network: Network,
   coinsMap: CoinsMap
-): Promise<CoinMetadataWithType | CoinObject | CoinData> =>
+): Promise<Token> =>
   new Promise((resolve) => {
-    if (coinsMap[type]) return resolve(coinsMap[type]);
-
-    if (STRICT_TOKENS_TYPE[network].includes(type))
+    if (
+      STRICT_TOKENS_TYPE[network].includes(type) ??
+      WORMHOLE_TOKENS_TYPE[network].includes(type) ??
+      CELER_TOKENS_TYPE[network].includes(type)
+    )
       return resolve(
         STRICT_TOKENS[network].find(
           ({ type: strictType }) => type === strictType
-        )!
+        ) ??
+          WORMHOLE_TOKENS[network].find(
+            ({ type: strictType }) => type === strictType
+          ) ??
+          CELER_TOKENS[network].find(
+            ({ type: strictType }) => type === strictType
+          )!
       );
+
+    if (coinsMap[type]) return resolve(coinObjectToToken(coinsMap[type]));
 
     fetch(`/api/v1/coin-metadata?network=${network}&type=${type}`)
       .then((res) => res.json())
-      .then((metadata) => resolve(metadata))
+      .then((metadata: CoinMetadataWithType) =>
+        resolve(coinMetadataToToken(metadata))
+      )
       .catch(() => resolve({ type, ...getBasicCoinMetadata(type) }));
   });
