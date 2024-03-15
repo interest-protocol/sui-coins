@@ -1,5 +1,3 @@
-import { RegistryPool } from '@/interface';
-
 import { COIN_TYPE, COINS } from './coins';
 import { Network } from './dapp';
 

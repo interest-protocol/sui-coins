@@ -16,8 +16,7 @@ import {
   CoinObject,
   CoinsMap,
 } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
-import { CoinMetadataWithType } from '@/interface';
-import { CoinData } from '@/views/pool-details/pool-form/pool-form.types';
+import { CoinData, CoinMetadataWithType } from '@/interface';
 
 import { getBasicCoinMetadata } from '../fn';
 import { CreateVectorParameterArgs } from './coin.types';
