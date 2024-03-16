@@ -14,6 +14,7 @@ export interface SwapToken extends Token {
 export interface SwapForm {
   to: SwapToken;
   from: SwapToken;
+  loading: boolean;
   error: string | null;
   settings: ISwapSettings;
   route: RouterCompleteTradeRoute | null;
