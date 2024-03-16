@@ -69,6 +69,7 @@ export { default as TimesSVG } from './times';
 export { default as USDCSVG } from './usdc';
 export { default as USDTSVG } from './usdt';
 export { default as UserSVG } from './user';
+export { default as WalletSVG } from './wallet';
 export { default as WarningSVG } from './warning';
 export { default as XSVG } from './x';
 export { default as XCirlceSVG } from './x-circle';
