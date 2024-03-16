@@ -37,10 +37,16 @@ const SwapPreviewModalSummary: FC = () => {
         slippage: Number(slippage),
       });
 
-      const inspect = await suiClient.devInspectTransactionBlock({
-        transactionBlock: txb,
-        sender: currentAccount.address,
-      });
+      const inspect = await suiClient
+        .devInspectTransactionBlock({
+          transactionBlock: txb,
+          sender: currentAccount.address,
+        })
+        .catch((e) => {
+          console.log({ e });
+
+          throw e;
+        });
 
       const { storageRebate, ...gasStructure } = inspect.effects.gasUsed;
 

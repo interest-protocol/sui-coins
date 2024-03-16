@@ -13,8 +13,11 @@ const useSignTxb = () => {
     chain?: IdentifierString;
     account?: WalletAccount;
   }): Promise<SignedTransactionBlock> =>
-    new Promise((resolve) =>
-      signTransactionBlock.mutate(args, { onSuccess: resolve })
+    new Promise((resolve, reject) =>
+      signTransactionBlock.mutate(args, {
+        onSuccess: resolve,
+        onError: reject,
+      })
     );
 };
 

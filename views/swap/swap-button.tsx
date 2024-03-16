@@ -1,26 +1,26 @@
-import { Button, Typography } from '@interest-protocol/ui-kit';
+import { Button, Dialog, Typography } from '@interest-protocol/ui-kit';
+import { DialogProps } from '@interest-protocol/ui-kit/dist/components/dialog/dialog.types';
 import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { EXPLORER_URL } from '@/constants';
 import { useNetwork } from '@/context/network';
-import { useDialog } from '@/hooks/use-dialog';
 import useSignTxb from '@/hooks/use-sign-txb';
 import { useWeb3 } from '@/hooks/use-web3';
 import { throwTXIfNotSuccessful } from '@/utils';
-import { SwapForm } from '@/views/swap/swap.types';
+import { SwapForm, SwapPreviewModalProps } from '@/views/swap/swap.types';
 
 import { useAftermathRouter } from './swap-manager/swap-manager.hooks';
 
-const SwapButton = () => {
+const SwapButton: FC<SwapPreviewModalProps> = ({ onClose }) => {
   const client = useSuiClient();
   const network = useNetwork();
   const router = useAftermathRouter();
   const currentAccount = useCurrentAccount();
-  const { dialog, handleClose } = useDialog();
   const formSwap = useFormContext<SwapForm>();
-  const [loading, setLoading] = useState(false);
+
+  const [explorerLink, setExplorerLink] = useState('');
   const { mutate } = useWeb3();
 
   const signTransactionBlock = useSignTxb();
@@ -30,11 +30,10 @@ const SwapButton = () => {
     formSwap.setValue('to.value', '0');
   };
 
-  const [explorerLink, setExplorerLink] = useState('');
-
   const gotoExplorer = () =>
     window.open(explorerLink, '_blank', 'noopener,noreferrer');
 
+  const status = useWatch({ control: formSwap.control, name: 'swapStatus' });
   const route = useWatch({ control: formSwap.control, name: 'route' });
   const slippage = useWatch({
     control: formSwap.control,
@@ -43,9 +42,10 @@ const SwapButton = () => {
 
   const handleSwap = async () => {
     try {
-      if (!route || !currentAccount) return;
+      if (!route || !currentAccount || status)
+        throw new Error('Something went wrong');
 
-      setLoading(true);
+      formSwap.setValue('swapStatus', 'loading');
 
       const txb = await router.getTransactionForCompleteTradeRoute({
         walletAddress: currentAccount.address,
@@ -57,8 +57,6 @@ const SwapButton = () => {
         transactionBlock: txb,
       });
 
-      console.log('execute');
-
       const tx = await client.executeTransactionBlock({
         transactionBlock: transactionBlockBytes,
         signature,
@@ -66,54 +64,66 @@ const SwapButton = () => {
         requestType: 'WaitForEffectsCert',
       });
 
-      console.log('tx :: ', tx);
-
       throwTXIfNotSuccessful(tx);
 
+      formSwap.setValue('swapStatus', 'success');
       setExplorerLink(`${EXPLORER_URL[network]}/txblock/${tx.digest}`);
-    } finally {
-      resetInput();
-      setLoading(false);
-      await mutate();
+    } catch (e) {
+      formSwap.setValue('swapStatus', 'error');
     }
   };
 
-  const swap = () => {
-    dialog.promise(handleSwap(), {
-      loading: {
-        title: 'Swapping...',
-        message: 'We are swapping, and you will let you know when it is done',
+  const handleClose = () => {
+    formSwap.setValue('swapStatus', null);
+    resetInput();
+    mutate();
+    onClose();
+  };
+
+  const dialogProps: Record<
+    'loading' | 'success' | 'error',
+    Omit<DialogProps, 'isOpen'>
+  > = {
+    loading: {
+      status: 'loading',
+      title: 'Swapping...',
+      message: 'We are swapping, and you will let you know when it is done',
+    },
+    error: {
+      status: 'error',
+      title: 'Swap Failure',
+      message:
+        'Your swap failed, please try to increment your slippage and try again or contact the support team',
+      primaryButton: { label: 'Try again', onClick: handleClose },
+    },
+    success: {
+      status: 'success',
+      title: 'Swap Successfully',
+      message:
+        'Your swap was successfully, and you can check it on the Explorer',
+      primaryButton: {
+        label: 'See on Explorer',
+        onClick: () => gotoExplorer(),
       },
-      success: {
-        onClose: handleClose,
-        title: 'Swap Successfully',
-        message:
-          'Your swap was successfully, and you can check it on the Explorer',
-        primaryButton: {
-          label: 'See on Explorer',
-          onClick: gotoExplorer,
-        },
-        secondaryButton: {
-          label: 'got it',
-          onClick: handleClose,
-        },
-      },
-      error: {
-        onClose: handleClose,
-        title: 'Swap Failure',
-        message:
-          'Your swap failed, please try again or contact the support team',
-        primaryButton: { label: 'Try again', onClick: handleClose },
-      },
-    });
+      secondaryButton: (
+        <Button variant="outline" mr="s" onClick={handleClose}>
+          got it
+        </Button>
+      ),
+    },
   };
 
   return (
-    <Button onClick={swap} variant="filled" justifyContent="center">
-      <Typography variant="label" size="large">
-        {loading ? 'Swapping...' : 'Swap'}
-      </Typography>
-    </Button>
+    <>
+      <Button variant="filled" onClick={handleSwap} justifyContent="center">
+        <Typography variant="label" size="large">
+          {status === 'loading' ? 'Swapping...' : 'Swap'}
+        </Typography>
+      </Button>
+      {!!status && (
+        <Dialog isOpen onClose={handleClose} {...dialogProps[status]} />
+      )}
+    </>
   );
 };
 

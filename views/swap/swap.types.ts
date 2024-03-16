@@ -13,21 +13,12 @@ export interface SwapToken extends Token {
 
 export interface SwapForm {
   to: SwapToken;
-  lock: boolean;
   from: SwapToken;
-  loading: boolean;
   error: string | null;
   settings: ISwapSettings;
   route: RouterCompleteTradeRoute | null;
   swapPath: ReadonlyArray<RouterTradePath>;
-}
-
-export interface SwapForm {
-  to: SwapToken;
-  lock: boolean;
-  from: SwapToken;
-  disabled: boolean;
-  maxValue: boolean;
+  swapStatus: 'loading' | 'success' | 'error' | null;
 }
 
 export interface SwapPreviewModalProps {

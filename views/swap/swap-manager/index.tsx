@@ -5,6 +5,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import useSWR from 'swr';
 import { useDebounce } from 'use-debounce';
+import { v4 } from 'uuid';
 
 import { TokenIcon } from '@/components';
 import { TREASURY } from '@/constants';
@@ -53,7 +54,7 @@ const SwapManager: FC = () => {
         setValue('route', null);
         return;
       }
-      toast.loading('Updating prices');
+      const id = toast.loading('Updating prices');
 
       const data = await aftermathRouter
         .getCompleteTradeRouteGivenAmountIn({
@@ -75,9 +76,7 @@ const SwapManager: FC = () => {
           setValue('error', 'There is no market for these coins.');
           throw e;
         })
-        .finally(() => {
-          toast.dismiss();
-        });
+        .finally(() => toast.dismiss(id));
 
       setValue('route', data);
 
@@ -121,40 +120,40 @@ const SwapManager: FC = () => {
       bg="lowestContainer"
       justifyContent="center"
     >
-      {swapPath?.map(({ coinIn, coinOut, protocolName }, index) => (
-        <>
-          {!index && (
-            <TokenIcon
-              network={network}
-              type={
-                coinIn.type === SUI_TYPE_ARG_LONG ? SUI_TYPE_ARG : coinIn.type
-              }
-              symbol={
-                COIN_TYPE_TO_SYMBOL[network][
-                  coinIn.type === SUI_TYPE_ARG_LONG ? SUI_TYPE_ARG : coinIn.type
-                ]
-              }
-            />
-          )}
-          <Box>
-            <Typography variant="label" size="small">
-              {protocolName}
-            </Typography>
-            <SwapArrowSVG width="100%" maxWidth="5rem" maxHeight="0.75rem" />
-          </Box>
+      {swapPath?.map(({ coinIn, coinOut, protocolName }, index) => [
+        !index ? (
           <TokenIcon
+            key={v4()}
             network={network}
             type={
-              coinOut.type === SUI_TYPE_ARG_LONG ? SUI_TYPE_ARG : coinOut.type
+              coinIn.type === SUI_TYPE_ARG_LONG ? SUI_TYPE_ARG : coinIn.type
             }
             symbol={
               COIN_TYPE_TO_SYMBOL[network][
-                coinOut.type === SUI_TYPE_ARG_LONG ? SUI_TYPE_ARG : coinOut.type
+                coinIn.type === SUI_TYPE_ARG_LONG ? SUI_TYPE_ARG : coinIn.type
               ]
             }
           />
-        </>
-      ))}
+        ) : null,
+        <Box key={v4()}>
+          <Typography variant="label" size="small">
+            {protocolName}
+          </Typography>
+          <SwapArrowSVG width="100%" maxWidth="5rem" maxHeight="0.75rem" />
+        </Box>,
+        <TokenIcon
+          key={v4()}
+          network={network}
+          type={
+            coinOut.type === SUI_TYPE_ARG_LONG ? SUI_TYPE_ARG : coinOut.type
+          }
+          symbol={
+            COIN_TYPE_TO_SYMBOL[network][
+              coinOut.type === SUI_TYPE_ARG_LONG ? SUI_TYPE_ARG : coinOut.type
+            ]
+          }
+        />,
+      ])}
       <a
         target="_blank"
         rel="noopener, noreferrer"

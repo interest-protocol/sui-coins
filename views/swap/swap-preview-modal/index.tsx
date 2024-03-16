@@ -20,6 +20,7 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
   return (
     <Box
       maxWidth="95%"
+      overflow="auto"
       borderRadius="xs"
       width="26.875rem"
       minHeight="30rem"
@@ -146,7 +147,7 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
       </Box>
       <Box width="100%" p="xl" display="flex" flexDirection="column">
         <SwapPreviewModalSummary />
-        <SwapButton />
+        <SwapButton onClose={onClose} />
       </Box>
     </Box>
   );

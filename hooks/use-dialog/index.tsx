@@ -11,7 +11,7 @@ export const useDialog = () => {
     handleClose,
     dialog: {
       promise: async (
-        promise: Promise<void | unknown>,
+        promise: Promise<void>,
         {
           loading,
           success,
