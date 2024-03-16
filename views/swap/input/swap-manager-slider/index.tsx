@@ -43,7 +43,6 @@ const SwapFormFieldSlider: FC = () => {
             : 0
         )}
         onChange={(value: number) => {
-          setValue('lock', false);
           setValue(
             'from.value',
             `${Number(((value / 100) * balance).toFixed(6)).toPrecision()}`
