@@ -5,7 +5,6 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import TokenIcon from '@/components/token-icon';
-import { Network } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
 import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
@@ -19,8 +18,6 @@ const SelectToken: FC<InputProps> = ({ label }) => {
   const network = useNetwork();
   const { pathname } = useRouter();
   const { setModal, handleClose } = useModal();
-
-  const isMainnet = Network.MAINNET === network;
 
   const { setValue, control } = useFormContext<SwapForm>();
 
@@ -113,20 +110,25 @@ const SelectToken: FC<InputProps> = ({ label }) => {
         borderRadius="xs"
         bg="highestContainer"
         onClick={openModal}
-        PrefixIcon={
-          <TokenIcon
-            withBg
-            network={network}
-            type={currentType}
-            symbol={currentSymbol}
-          />
-        }
+        {...(currentType && {
+          PrefixIcon: (
+            <TokenIcon
+              withBg
+              network={network}
+              type={currentType}
+              symbol={currentSymbol}
+            />
+          ),
+        })}
       >
         <Typography
-          p="xs"
+          m="xs"
           size="large"
           variant="label"
-          display={['none', 'block']}
+          overflow="hidden"
+          whiteSpace="nowrap"
+          width={['0px', 'auto']}
+          display={[currentType ? 'none' : 'block', 'block']}
         >
           {currentSymbol ?? 'Select Token'}
         </Typography>
