@@ -15,6 +15,7 @@ export interface SwapForm {
   to: SwapToken;
   from: SwapToken;
   loading: boolean;
+  explorerLink: string;
   error: string | null;
   readyToSwap: boolean;
   fetchingPrices: boolean;

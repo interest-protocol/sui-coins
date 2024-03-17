@@ -8,7 +8,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 
-import { SwapForm } from '../../swap.types';
+import { SwapForm } from '../swap.types';
 
 const Slider = dynamic(
   import('@interest-protocol/ui-kit').then(({ Slider }) => Slider),
@@ -45,7 +45,7 @@ const SwapFormFieldSlider: FC = () => {
         onChange={(value: number) => {
           setValue(
             'from.value',
-            `${Number(((value / 100) * balance).toFixed(6)).toPrecision()}`
+            Number(((value / 100) * balance).toFixed(6)).toPrecision()
           );
         }}
       />

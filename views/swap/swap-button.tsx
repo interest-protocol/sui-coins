@@ -14,15 +14,14 @@ import { SwapForm } from '@/views/swap/swap.types';
 import { useAftermathRouter } from './swap.hooks';
 
 const SwapButton: FC = () => {
-  const client = useSuiClient();
   const network = useNetwork();
+  const client = useSuiClient();
   const router = useAftermathRouter();
   const currentAccount = useCurrentAccount();
   const formSwap = useFormContext<SwapForm>();
   const { dialog, handleClose } = useDialog();
   const [loading, setLoading] = useState(false);
 
-  const [explorerLink, setExplorerLink] = useState('');
   const { mutate } = useWeb3();
 
   const signTransactionBlock = useSignTxb();
@@ -31,9 +30,6 @@ const SwapButton: FC = () => {
     formSwap.setValue('from.value', '0');
     formSwap.setValue('to.value', '0');
   };
-
-  const gotoExplorer = () =>
-    window.open(explorerLink, '_blank', 'noopener,noreferrer');
 
   const readyToSwap = useWatch({
     control: formSwap.control,
@@ -44,6 +40,16 @@ const SwapButton: FC = () => {
     control: formSwap.control,
     name: 'settings.slippage',
   });
+
+  const gotoExplorer = () => {
+    window.open(
+      formSwap.getValues('explorerLink'),
+      '_blank',
+      'noopener,noreferrer'
+    );
+
+    formSwap.setValue('explorerLink', '');
+  };
 
   const handleSwap = async () => {
     try {
@@ -71,7 +77,10 @@ const SwapButton: FC = () => {
 
       throwTXIfNotSuccessful(tx);
 
-      setExplorerLink(`${EXPLORER_URL[network]}/txblock/${tx.digest}`);
+      formSwap.setValue(
+        'explorerLink',
+        EXPLORER_URL[network](`/txblock/${tx.digest}`)
+      );
     } finally {
       resetInput();
       setLoading(false);
@@ -98,7 +107,7 @@ const SwapButton: FC = () => {
           'Your swap was successfully, and you can check it on the Explorer',
         primaryButton: {
           label: 'See on Explorer',
-          onClick: () => gotoExplorer(),
+          onClick: gotoExplorer,
         },
         secondaryButton: (
           <Button variant="outline" mr="s" onClick={handleClose}>

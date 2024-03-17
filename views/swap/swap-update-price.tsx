@@ -7,6 +7,7 @@ import { useDebounce } from 'use-debounce';
 
 import { TREASURY } from '@/constants';
 import { EXCHANGE_FEE } from '@/constants/dex';
+import { FixedPointMath } from '@/lib';
 import { RefreshSVG } from '@/svg';
 
 import { useAftermathRouter } from './swap.hooks';
@@ -88,7 +89,10 @@ const SwapUpdatePrice: FC = () => {
           coinInType,
           coinOutType,
           coinInAmount: BigInt(
-            Math.floor(+coinInValue * 10 ** getValues('from.decimals'))
+            FixedPointMath.toBigNumber(
+              coinInValue,
+              getValues('from.decimals')
+            ).toString()
           ),
           referrer: TREASURY,
           externalFee: {

@@ -5,6 +5,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { TokenIcon } from '@/components';
 import { useNetwork } from '@/context/network';
 import { ArrowLeftSVG, TimesSVG } from '@/svg';
+import { formatDollars } from '@/utils';
 
 import { SwapForm, SwapPreviewModalProps } from '../swap.types';
 import SwapButton from '../swap-button';
@@ -91,7 +92,11 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
                 </Typography>
                 <Typography variant="body" size="small" color="#000000A3">
                   {tokenFrom.usdPrice
-                    ? Number(tokenFrom.value || 0) * tokenFrom.usdPrice
+                    ? formatDollars(
+                        +(
+                          Number(tokenFrom.value || 0) * tokenFrom.usdPrice
+                        ).toFixed(3)
+                      )
                     : '--'}{' '}
                   USD
                 </Typography>
@@ -135,7 +140,11 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
                   </Typography>
                   <Typography variant="body" size="small" color="#000000A3">
                     {tokenTo.usdPrice
-                      ? Number(tokenTo.value || 0) * tokenTo.usdPrice
+                      ? formatDollars(
+                          +(
+                            Number(tokenTo.value || 0) * tokenTo.usdPrice
+                          ).toFixed(3)
+                        )
                       : '--'}{' '}
                     USD
                   </Typography>

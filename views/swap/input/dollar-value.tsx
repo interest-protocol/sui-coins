@@ -29,7 +29,9 @@ const AmountInDollar: FC<InputProps> = ({ label }) => {
       color={value ? 'onSurface' : 'outline'}
     >
       {usdPrice && value
-        ? formatDollars(BigNumber(value).times(BigNumber(usdPrice)).toNumber())
+        ? formatDollars(
+            +BigNumber(value).times(BigNumber(usdPrice)).toNumber().toFixed(3)
+          )
         : '--'}{' '}
       USD
     </Typography>

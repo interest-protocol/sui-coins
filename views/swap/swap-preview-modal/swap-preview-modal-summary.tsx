@@ -8,6 +8,7 @@ import useSWR from 'swr';
 
 import { EXCHANGE_FEE } from '@/constants/dex';
 import { FixedPointMath } from '@/lib';
+import { DotErrorSVG } from '@/svg';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { useAftermathRouter } from '../swap.hooks';
@@ -67,7 +68,7 @@ const SwapPreviewModalSummary: FC = () => {
     differenceBetween && fromUSD ? (differenceBetween * 100) / fromUSD : null;
 
   return (
-    <Box display="flex" flexDirection="column" mb="m">
+    <Box display="flex" flexDirection="column" mb="m" gap="l">
       <Box bg="surface" px="m" py="2xs" borderRadius="xs">
         <Box
           py="m"
@@ -167,6 +168,23 @@ const SwapPreviewModalSummary: FC = () => {
           </Box>
         </Box>
       </Box>
+      {!isLoading && !fees && (
+        <Box
+          p="s"
+          gap="s"
+          display="flex"
+          borderRadius="xs"
+          border="1px solid"
+          bg="errorContainer"
+          color="onErrorContainer"
+          borderColor="onErrorContainer"
+        >
+          <DotErrorSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+          <Typography variant="label" size="medium">
+            ERROR: Try to increase the Slippage
+          </Typography>
+        </Box>
+      )}
     </Box>
   );
 };
