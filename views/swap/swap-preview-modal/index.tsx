@@ -147,7 +147,7 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
       </Box>
       <Box width="100%" p="xl" display="flex" flexDirection="column">
         <SwapPreviewModalSummary />
-        <SwapButton onClose={onClose} />
+        <SwapButton />
       </Box>
     </Box>
   );
