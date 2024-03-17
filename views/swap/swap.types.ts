@@ -16,10 +16,11 @@ export interface SwapForm {
   from: SwapToken;
   loading: boolean;
   error: string | null;
+  fetchingPrices: boolean;
   settings: ISwapSettings;
+  lastFetchDate: number | null;
   route: RouterCompleteTradeRoute | null;
   swapPath: ReadonlyArray<RouterTradePath>;
-  swapStatus: 'loading' | 'success' | 'error' | null;
 }
 
 export interface SwapPreviewModalProps {

@@ -11,7 +11,7 @@ import { FixedPointMath } from '@/lib';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { SwapForm } from '../swap.types';
-import { useAftermathRouter } from '../swap-manager/swap-manager.hooks';
+import { useAftermathRouter } from '../swap.hooks';
 
 const SwapPreviewModalSummary: FC = () => {
   const suiClient = useSuiClient();

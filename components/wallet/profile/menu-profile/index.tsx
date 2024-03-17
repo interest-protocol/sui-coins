@@ -1,7 +1,7 @@
 import { Box, Motion, Theme, useTheme } from '@interest-protocol/ui-kit';
 import { useCurrentAccount, useDisconnectWallet } from '@mysten/dapp-kit';
 import { FC, useState } from 'react';
-import { useIsFirstRender } from 'usehooks-ts';
+import { useIsMounted } from 'usehooks-ts';
 import { v4 } from 'uuid';
 
 import { EXPLORER_URL, wrapperVariants } from '@/constants';
@@ -20,7 +20,7 @@ const MenuProfile: FC<MenuProfileProps> = ({
   handleCloseProfile,
 }) => {
   const network = useNetwork();
-  const firstRender = useIsFirstRender();
+  const isMounted = useIsMounted();
   const { breakpoints } = useTheme() as Theme;
   const [isDesktop, setIsDesktop] = useState(false);
   const currentAccount = useCurrentAccount();
@@ -64,7 +64,7 @@ const MenuProfile: FC<MenuProfileProps> = ({
       height={['100vh', '100vh', '100vh', 'unset']}
       width={['100vw', '100vw', '100vw', '14.5rem']}
       position={['fixed', 'fixed', 'fixed', 'absolute']}
-      initial={isOpen || firstRender ? 'closed' : 'open'}
+      initial={!isMounted ? 'closed' : isOpen ? 'closed' : 'open'}
     >
       <Box display="flex" flexDirection="column" justifyContent="space-between">
         <Box

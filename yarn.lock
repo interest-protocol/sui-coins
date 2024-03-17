@@ -853,10 +853,10 @@
   resolved "https://registry.yarnpkg.com/@interest-protocol/sui-tokens/-/sui-tokens-1.0.0-beta.0.tgz#9a284e07c910d7540db190e1fd9fff14484487ef"
   integrity sha512-5tzi4BTJpEnJHIibVYYbq/eiWXk6HQyk9ugBH0HHxjUNivLh9KwqlTOFvcHoePnTrKqV9mFJthdsJvJ1xLACBg==
 
-"@interest-protocol/ui-kit@^0.2.22-alpha":
-  version "0.2.22-alpha"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/ui-kit/-/ui-kit-0.2.22-alpha.tgz#5590bb3cb9b249295de48fd786cdd60e6b1a25fd"
-  integrity sha512-VmYvuDJsc7ntKzxDPCZIHEfXnIHAGQLV/FDCwjn9KDZmkexqugzZCMKZf/qOdTe1t9AptoPRVCX/J3BWX1okFg==
+"@interest-protocol/ui-kit@^0.2.25-alpha":
+  version "0.2.25-alpha"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/ui-kit/-/ui-kit-0.2.25-alpha.tgz#419d58da5892d6b6b799f6d2d5cc99c4651f33da"
+  integrity sha512-HdS12/G6v6aYEZZfJjhrESnE5KmLtX0j0LumjI5ZGnEhFUnI5/uw9xewoEQ7KC4sKJGqnL+ki7BduC35mdgg0A==
   dependencies:
     "@emotion/react" "^11.10.6"
     "@stylin.js/react" "^1.0.1"
@@ -8020,6 +8020,13 @@ raw-body@2.4.1:
     http-errors "1.7.3"
     iconv-lite "0.4.24"
     unpipe "1.0.0"
+
+react-countdown@^2.3.5:
+  version "2.3.5"
+  resolved "https://registry.yarnpkg.com/react-countdown/-/react-countdown-2.3.5.tgz#70c035b5cbc7e8fdb4ad91fe5f44afd7a7933a68"
+  integrity sha512-K26ENYEesMfPxhRRtm1r+Pf70SErrvW3g4CArLi/x6MPFjgfDFYePT4UghEj8p2nI0cqVV7/JjDgjyr//U60Og==
+  dependencies:
+    prop-types "^15.7.2"
 
 react-dom@^18.2.0:
   version "18.2.0"

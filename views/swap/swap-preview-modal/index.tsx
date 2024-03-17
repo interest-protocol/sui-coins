@@ -67,10 +67,10 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
               FROM
             </Typography>
             <Box
-              bg="surface"
               p="s"
-              borderRadius="xs"
+              bg="surface"
               display="flex"
+              borderRadius="xs"
               alignItems="center"
               justifyContent="space-between"
             >

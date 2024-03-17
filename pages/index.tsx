@@ -46,20 +46,22 @@ const SwapPage: NextPage = () => {
       const { type, symbol, decimals } =
         COIN_TYPE_TO_COIN[network][SUI_TYPE_ARG];
 
-      const usdPrice = await fetch(`/api/v1/coin-price?symbol=${symbol}`)
-        .then((response) => response.json())
-        .then((data) => data[symbol][0].quote.USD.price)
-        .catch(() => null);
-
       const token: SwapToken = {
         type,
         symbol,
         decimals,
-        usdPrice,
         value: '',
+        usdPrice: null,
       };
 
       form.setValue(field, token);
+
+      fetch(`/api/v1/coin-price?symbol=${symbol}`)
+        .then((response) => response.json())
+        .then((data) =>
+          form.setValue(`${field}.usdPrice`, data[symbol][0].quote.USD.price)
+        )
+        .catch(() => null);
 
       return type;
     }
@@ -74,20 +76,22 @@ const SwapPage: NextPage = () => {
         coinsMap
       );
 
-      const usdPrice = await fetch(`/api/v1/coin-price?symbol=${symbol}`)
-        .then((response) => response.json?.())
-        .then((data) => data[symbol][0].quote.USD.price)
-        .catch(console.log);
-
       const token: SwapToken = {
         type,
         symbol,
         decimals,
-        usdPrice,
         value: '',
+        usdPrice: null,
       };
 
       form.setValue(field, token);
+
+      fetch(`/api/v1/coin-price?symbol=${symbol}`)
+        .then((response) => response.json?.())
+        .then((data) =>
+          form.setValue(`${field}.usdPrice`, data[symbol][0].quote.USD.price)
+        )
+        .catch(console.log);
 
       return type;
     }
@@ -105,15 +109,15 @@ const SwapPage: NextPage = () => {
         setDefaultToken(to as `0x${string}`, 'to'),
       ]);
 
-      searchParams.set('from', fromType ?? '');
-      searchParams.set('to', toType ?? '');
+      fromType && searchParams.set('from', fromType);
+      toType && searchParams.set('to', toType);
 
       form.setValue('loading', false);
 
       updateURL(
-        `${pathname}?from=${searchParams.get('from')}&to=${searchParams.get(
-          'to'
-        )}`
+        `${pathname}?${fromType ? `from=${searchParams.get('from')}` : ''}${
+          fromType && toType ? '&' : ''
+        }${toType ? `to=${searchParams.get('to')}` : ''}`
       );
     })();
   }, []);

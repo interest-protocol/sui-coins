@@ -65,19 +65,22 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       });
     }
 
-    const usdPrice = await fetch(`/api/v1/coin-price?symbol=${symbol}`)
-      .then((response) => response.json())
-      .then((data) => data[symbol][0].quote.USD.price)
-      .catch(() => null);
-
     setValue(label, {
       type,
-      symbol,
-      usdPrice,
-      decimals,
       chain,
+      symbol,
+      decimals,
       value: '',
+      usdPrice: null,
     });
+
+    fetch(`/api/v1/coin-price?symbol=${symbol}`)
+      .then((response) => response.json())
+      .then((data) =>
+        setValue(`${label}.usdPrice`, data[symbol][0].quote.USD.price)
+      )
+      .catch(() => null);
+
     setValue(`${label === 'from' ? 'to' : 'from'}.value`, '');
 
     changeURL(type);
