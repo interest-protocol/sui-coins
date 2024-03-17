@@ -6,7 +6,6 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 import TokenIcon from '@/components/token-icon';
 import { Network } from '@/constants';
-import { TOKEN_ICONS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
 import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
@@ -34,8 +33,6 @@ const SelectToken: FC<InputProps> = ({ label }) => {
     symbol: undefined,
     type: undefined,
   };
-
-  const Icon = TOKEN_ICONS[network][isMainnet ? currentType : currentSymbol];
 
   const changeURL = (type: string) => {
     const searchParams = new URLSearchParams(location.search);
@@ -116,16 +113,14 @@ const SelectToken: FC<InputProps> = ({ label }) => {
         borderRadius="xs"
         bg="highestContainer"
         onClick={openModal}
-        {...(Icon && {
-          PrefixIcon: (
-            <TokenIcon
-              withBg
-              network={network}
-              type={currentType}
-              symbol={currentSymbol}
-            />
-          ),
-        })}
+        PrefixIcon={
+          <TokenIcon
+            withBg
+            network={network}
+            type={currentType}
+            symbol={currentSymbol}
+          />
+        }
       >
         <Typography
           p="xs"
