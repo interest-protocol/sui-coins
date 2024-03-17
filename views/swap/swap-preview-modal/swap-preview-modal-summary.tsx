@@ -10,14 +10,14 @@ import { EXCHANGE_FEE } from '@/constants/dex';
 import { FixedPointMath } from '@/lib';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
-import { SwapForm } from '../swap.types';
 import { useAftermathRouter } from '../swap.hooks';
+import { SwapForm } from '../swap.types';
 
 const SwapPreviewModalSummary: FC = () => {
   const suiClient = useSuiClient();
   const router = useAftermathRouter();
   const currentAccount = useCurrentAccount();
-  const { control } = useFormContext<SwapForm>();
+  const { control, setValue } = useFormContext<SwapForm>();
 
   const fromValue = useWatch({ control, name: 'from.value' });
   const fromUSDPrice = useWatch({ control, name: 'from.usdPrice' });
@@ -43,6 +43,8 @@ const SwapPreviewModalSummary: FC = () => {
       });
 
       const { storageRebate, ...gasStructure } = inspect.effects.gasUsed;
+
+      setValue('readyToSwap', true);
 
       return [
         FixedPointMath.toNumber(

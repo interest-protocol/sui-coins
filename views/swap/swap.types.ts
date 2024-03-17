@@ -16,6 +16,7 @@ export interface SwapForm {
   from: SwapToken;
   loading: boolean;
   error: string | null;
+  readyToSwap: boolean;
   fetchingPrices: boolean;
   settings: ISwapSettings;
   lastFetchDate: number | null;

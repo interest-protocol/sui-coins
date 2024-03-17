@@ -65,7 +65,9 @@ const PreviewSwapButton: FC = () => {
     setValue('error', null);
   }, [from]);
 
-  const handlePreview = () =>
+  const handlePreview = () => {
+    setValue('readyToSwap', false);
+
     setModal(
       <FormProvider {...form}>
         <SwapPreviewModal onClose={handleClose} />
@@ -74,7 +76,7 @@ const PreviewSwapButton: FC = () => {
         custom: true,
       }
     );
-
+  };
   return (
     <>
       <SwapMessages />
