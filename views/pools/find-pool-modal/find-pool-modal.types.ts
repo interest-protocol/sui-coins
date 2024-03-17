@@ -1,7 +1,7 @@
 import { CoinData } from '@/interface';
 
 export interface FindPoolModalProps {
-  handleSearch?: () => void;
+  handleSearch: (tokens: ReadonlyArray<CoinData>) => void;
   closeModal: () => void;
 }
 

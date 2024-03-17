@@ -1,3 +1,132 @@
 {
-  "cSpell.words": ["Fullnode", "Stylin", "toformat"]
+  "workbench.startupEditor": "none",
+  "files.autoSave": "onWindowChange",
+  "editor.tabSize": 2,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "debug.javascript.autoAttachFilter": "disabled",
+  "eslint.codeAction.showDocumentation": {
+    "enable": true
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+    "escriptreact",
+    "javascriptreact",
+    "typescriptreact"
+  ],
+  "editor.parameterHints.enabled": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": false
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": false
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": false
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": false
+  },
+  "explorer.confirmDragAndDrop": false,
+  "liveServer.settings.donotShowInfoMsg": true,
+  "editor.fontFamily": "JetBrains Mono",
+  "editor.fontLigatures": true,
+  "cSpell.userWords": [
+    "batdevs",
+    "Birthdate",
+    "Biswap",
+    "blackfriday",
+    "BURNBASE",
+    "chakra",
+    "checkmark",
+    "commitlint",
+    "comprimir",
+    "CONTENFUL",
+    "Contentful",
+    "Devs",
+    "firestore",
+    "Flexbox",
+    "fortawesome",
+    "gerencie",
+    "gitmoji",
+    "IFAQ",
+    "linebreak",
+    "LPSVG",
+    "mailchimp",
+    "Multicaixa",
+    "nowrap",
+    "NSDEV",
+    "ofertia",
+    "Parens",
+    "photochromatic",
+    "pinterest",
+    "Prettierrc",
+    "scrollspy",
+    "stylin",
+    "tesseract",
+    "TFAQ",
+    "Tiktok",
+    "Typeform",
+    "vercel",
+    "vtex",
+    "webp"
+  ],
+  "editor.suggestSelection": "first",
+  "workbench.iconTheme": "material-icon-theme",
+  "files.exclude": {
+    "**/.classpath": true,
+    "**/.project": true,
+    "**/.settings": true,
+    "**/.factorypath": true
+  },
+  "todo-tree.general.tags": [
+    "BUG",
+    "HACK",
+    "FIXME",
+    "TODO",
+    "XXX",
+    "[ ]",
+    "[x]"
+  ],
+  "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
+  "redhat.telemetry.enabled": true,
+  "workbench.editorAssociations": {
+    "*.cs": "default"
+  },
+  "files.eol": "\n",
+  "editor.fontSize": 13,
+  "cSpell.language": "en,pt,pt_PT",
+  "security.workspace.trust.untrustedFiles": "open",
+  "explorer.confirmDelete": false,
+  "extensions.ignoreRecommendations": true,
+  "workbench.colorTheme": "Omni",
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.python"
+  },
+  "gitlens.advanced.messages": {
+    "suppressCommitHasNoPreviousCommitWarning": true
+  },
+  "diffEditor.renderSideBySide": false,
+  "githubPullRequests.pullBranch": "never",
+  "terminal.integrated.tabs.location": "left",
+  "[xml]": {
+    "editor.defaultFormatter": "redhat.vscode-xml"
+  },
+  "solidity.telemetry": true,
+  "editor.minimap.enabled": false,
+  "git.ignoreMissingGitWarning": true,
+  "git.openRepositoryInParentFolders": "always",
+  "workbench.activityBar.location": "side",
+  "git.ignoreRebaseWarning": true,
+  "window.zoomLevel": -1,
+  "githubPullRequests.terminalLinksHandler": "github"
 }

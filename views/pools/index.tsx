@@ -1,5 +1,6 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { FC, useState } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
 import Layout from '@/components/layout';
@@ -9,10 +10,17 @@ import { useNetwork } from '@/context/network';
 import Header from './header';
 import PoolCard from './pool-card';
 import PoolFilter from './pool-filter';
-import { PoolTabEnum } from './pools.types';
+import { PoolForm, PoolTabEnum } from './pools.types';
 
 const Pools: FC = () => {
+  const { control } = useFormContext<PoolForm>();
   const { network } = useNetwork();
+  const tokens = useWatch({
+    control,
+    name: 'tokenList',
+  });
+
+  console.log('tokens data ::', tokens);
 
   const [tab, setTab] = useState<PoolTabEnum>(PoolTabEnum.Pools);
 

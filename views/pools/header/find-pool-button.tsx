@@ -1,36 +1,41 @@
-import { Box, Button, Motion } from '@interest-protocol/ui-kit';
+import {
+  Box,
+  Button,
+  Motion,
+  Theme,
+  useTheme,
+} from '@interest-protocol/ui-kit';
 import { FC } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 import { useModal } from '@/hooks/use-modal';
 import { SearchSVG } from '@/svg';
 
 import FindPoolModal from '../find-pool-modal';
-import { FindPoolForm } from '../find-pool-modal/find-pool-modal.types';
+import { PoolForm } from '../pools.types';
 
 const FinPoolButton: FC = () => {
+  const { colors } = useTheme() as Theme;
   const { setModal, handleClose } = useModal();
 
-  const form = useForm<FindPoolForm>({
-    defaultValues: {
-      tokens: [
-        { type: '', symbol: '', decimals: 0 },
-        { type: '', symbol: '', decimals: 0 },
-      ],
-    },
-  });
+  const { setValue } = useFormContext<PoolForm>();
 
-  const openModal = () =>
+  const openModal = () => {
     setModal(
-      <FormProvider {...form}>
-        <Motion
-          animate={{ scale: 1 }}
-          initial={{ scale: 0.85 }}
-          transition={{ duration: 0.3 }}
-        >
-          <FindPoolModal closeModal={handleClose} />
-        </Motion>
-      </FormProvider>,
+      <Motion
+        animate={{ scale: 1 }}
+        initial={{ scale: 0.85 }}
+        transition={{ duration: 0.3 }}
+      >
+        <FindPoolModal
+          handleSearch={(tokens) => {
+            console.log('tokens data :: ', tokens);
+            setValue('tokenList', tokens);
+            handleClose();
+          }}
+          closeModal={handleClose}
+        />
+      </Motion>,
       {
         isOpen: true,
         custom: true,
@@ -38,6 +43,7 @@ const FinPoolButton: FC = () => {
         allowClose: true,
       }
     );
+  };
 
   return (
     <>
@@ -48,26 +54,44 @@ const FinPoolButton: FC = () => {
       >
         <Button
           py="s"
-          bg="onSurface"
-          color="surface"
-          variant="filled"
-          borderRadius="xs"
+          variant="tonal"
+          color="onSurface"
+          bg="highContainer"
           onClick={openModal}
           nHover={{
-            bg: 'onPrimaryContainer',
+            bg: `${colors.primary}14`,
           }}
           SuffixIcon={
             <Box
+              ml="m"
+              width="1rem"
+              height="1rem"
               display="flex"
-              width="0.875rem"
-              height="0.875rem"
               justifyContent="center"
             >
               <SearchSVG maxHeight="100%" maxWidth="100%" width="100%" />
             </Box>
           }
         >
-          Find pool
+          find pool
+        </Button>
+      </Box>
+      <Box gap="xs" display={['flex', 'flex', 'flex', 'none']}>
+        <Button
+          isIcon
+          width="1.5rem"
+          bg="onSurface"
+          color="surface"
+          height="1.5rem"
+          variant="filled"
+          nHover={{
+            bg: 'outline',
+          }}
+          onClick={openModal}
+        >
+          <Box height="1.25rem" width="1.25rem">
+            <SearchSVG maxHeight="1.25rem" maxWidth="1.25rem" width="100%" />
+          </Box>
         </Button>
       </Box>
     </>
