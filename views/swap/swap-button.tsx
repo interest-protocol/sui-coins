@@ -35,6 +35,10 @@ const SwapButton: FC = () => {
   const gotoExplorer = () =>
     window.open(explorerLink, '_blank', 'noopener,noreferrer');
 
+  const readyToSwap = useWatch({
+    control: formSwap.control,
+    name: 'readyToSwap',
+  });
   const route = useWatch({ control: formSwap.control, name: 'route' });
   const slippage = useWatch({
     control: formSwap.control,
@@ -76,6 +80,7 @@ const SwapButton: FC = () => {
   };
 
   const swap = () =>
+    readyToSwap &&
     dialog.promise(handleSwap(), {
       loading: {
         title: 'Swapping...',
@@ -104,7 +109,12 @@ const SwapButton: FC = () => {
     });
 
   return (
-    <Button variant="filled" onClick={swap} justifyContent="center">
+    <Button
+      onClick={swap}
+      variant="filled"
+      justifyContent="center"
+      disabled={!readyToSwap}
+    >
       <Typography variant="label" size="large">
         {loading ? 'Swapping...' : 'Swap'}
       </Typography>
