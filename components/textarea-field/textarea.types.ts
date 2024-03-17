@@ -1,7 +1,6 @@
+import { BoxProps } from '@interest-protocol/ui-kit';
 import { StylinComponentProps } from '@stylin.js/react';
 import { TextareaHTMLAttributes } from 'react';
-
-import { BoxProps } from '../box/box.types';
 
 export type TextAreaElementProps = Omit<
   TextareaHTMLAttributes<HTMLInputElement>,

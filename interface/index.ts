@@ -5,10 +5,16 @@ import { TOKEN_SYMBOL } from '@/lib';
 
 export type BigNumberish = BigNumber | bigint | string | number;
 
-interface CoinData {
+export interface CoinData {
   type: string;
   decimals: number;
   symbol: TOKEN_SYMBOL | string;
+}
+
+export type TChain = 'ETH' | 'BSC' | 'SOL' | 'AVA';
+
+export interface CoinDataWithChainInfo extends CoinData {
+  chain?: TChain;
 }
 
 export type LocalTokenMetadataRecord = Record<string, CoinData>;
@@ -43,3 +49,5 @@ export interface NFTCollectionMetadata {
   total: number;
   updatedAt?: number;
 }
+
+export * from './sentio';

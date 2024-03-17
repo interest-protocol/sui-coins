@@ -19,14 +19,19 @@ const Pools: FC = () => {
       <Typography my="2xl" size="large" variant="display" textAlign="center">
         Pools
       </Typography>
-      <Box p={['s', 's', 's', 'l']} borderRadius="xs" bg="lowestContainer">
+      <Box
+        p={['s', 's', 's', 'l']}
+        borderRadius="l"
+        bg="lowestContainer"
+        mx={['0', '0', '0', '0', '9xl']}
+      >
         <Header setTab={setTab} currentTab={tab} />
         <Box
           gap="m"
           my="xl"
-          px="xs"
           display="grid"
-          gridTemplateColumns={['1fr', '1fr', '1fr 1fr', '1fr 1fr 1fr']}
+          px="xs"
+          gridTemplateColumns={['100%', '1fr', '1fr 1fr', '1fr 1fr 1fr']}
         >
           {RECOMMENDED_POOLS[network].map((pool) => (
             <PoolCard key={v4()} {...pool} />

@@ -24,7 +24,7 @@ const CompositionItem: FC<CompositionItemProps> = ({
           display="flex"
           alignItems="center"
           justifyContent="center"
-          borderRadius="xs"
+          borderRadius="0.5rem"
         >
           <Logo maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
         </Box>

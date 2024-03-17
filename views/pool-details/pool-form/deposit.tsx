@@ -10,7 +10,7 @@ const PoolDeposit: FC = () => {
       <Typography
         size="large"
         variant="title"
-        fontSize={['2xl', '2xl', '2xl', '5xl']}
+        fontSize={['1.375rem', '1.375rem', '1.375rem', '2rem']}
       >
         I would like to Deposit...
       </Typography>
@@ -27,12 +27,11 @@ const PoolDeposit: FC = () => {
         ]}
       />
       <Button
-        py="s"
-        mt="3xl"
-        mx="auto"
         variant="filled"
-        borderRadius="xs"
+        mt="1.5rem"
         width="max-content"
+        mx="auto"
+        py="0.625rem"
       >
         Deposit
       </Button>

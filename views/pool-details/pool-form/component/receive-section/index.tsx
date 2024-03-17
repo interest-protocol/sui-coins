@@ -5,17 +5,19 @@ import { v4 } from 'uuid';
 import ReceiveSectionLine from './line';
 import { ReceiveSectionProps } from './receive-section.types';
 
-const PoolReceiveSection: FC<ReceiveSectionProps> = ({ items }) => (
-  <Box>
-    <Typography variant="body" size="large" mb="m">
-      You will receive
-    </Typography>
-    <Box borderRadius="xs" bg="surface" py="xs">
-      {items.map((item) => (
-        <ReceiveSectionLine key={v4()} {...item} />
-      ))}
+const PoolReceiveSection: FC<ReceiveSectionProps> = ({ items }) => {
+  return (
+    <Box>
+      <Typography variant="body" size="large" mb="1rem">
+        You will receive
+      </Typography>
+      <Box borderRadius="0.5rem" bg="surface" py="0.5rem">
+        {items.map((item) => (
+          <ReceiveSectionLine key={v4()} {...item} />
+        ))}
+      </Box>
     </Box>
-  </Box>
-);
+  );
+};
 
 export default PoolReceiveSection;

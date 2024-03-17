@@ -99,4 +99,19 @@ export const GlobalStyles = css`
     border-radius: 0.5rem;
     border: 5px solid transparent;
   }
+
+  .box-pie .recharts-responsive-container {
+    height: unset !important;
+  }
+
+  .box-pie .recharts-responsive-container .recharts-wrapper {
+    max-height: unset !important;
+  }
+
+  .box-pie
+    .recharts-responsive-container
+    .recharts-wrapper
+    .recharts-legend-wrapper {
+    position: unset !important;
+  }
 `;

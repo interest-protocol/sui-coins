@@ -3,7 +3,7 @@ import { Control, UseFormSetValue } from 'react-hook-form';
 
 import { Network } from '@/constants';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
-import { CoinDataWithChainInfo } from '@/views/pool-details/pool-form/pool-form.types';
+import { CoinDataWithChainInfo } from '@/interface';
 
 export interface TokenModalMetadata {
   name: string;

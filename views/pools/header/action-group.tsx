@@ -3,21 +3,21 @@ import { useRouter } from 'next/router';
 import { FC } from 'react';
 
 import { Routes, RoutesEnum } from '@/constants';
-import { PlusSVG, SearchSVG } from '@/svg';
+import { FindSVG, SearchSVG } from '@/svg';
 
 import { ActionGroupProps } from './header.types';
 
 const ActionGroup: FC<ActionGroupProps> = ({ showSearchView }) => {
   const { push } = useRouter();
 
-  const gotoCreatePool = () => push(Routes[RoutesEnum.CreatePool]);
+  const gotoFindPool = () => push(Routes[RoutesEnum.FindPool]);
 
   return (
     <>
       <Box
+        display={['none', 'none', 'none', 'flex']}
         gap="0.25rem"
         alignItems="center"
-        display={['none', 'none', 'none', 'flex']}
       >
         <TextField
           Prefix={
@@ -28,15 +28,13 @@ const ActionGroup: FC<ActionGroupProps> = ({ showSearchView }) => {
           placeholder="Search"
           fieldProps={{
             width: '13rem',
-            borderRadius: 'xs',
           }}
         />
         <Button
           py="0.725rem"
           variant="tonal"
-          borderRadius="xs"
           bg="#00000016"
-          onClick={gotoCreatePool}
+          onClick={gotoFindPool}
           SuffixIcon={
             <Box
               display="flex"
@@ -44,7 +42,7 @@ const ActionGroup: FC<ActionGroupProps> = ({ showSearchView }) => {
               height="1.25rem"
               justifyContent="center"
             >
-              <PlusSVG maxHeight="1.125rem" maxWidth="1.125rem" width="100%" />
+              <FindSVG maxHeight="100%" maxWidth="100%" width="100%" />
             </Box>
           }
         >
@@ -66,14 +64,14 @@ const ActionGroup: FC<ActionGroupProps> = ({ showSearchView }) => {
         </Button>
         <Button
           isIcon
-          variant="tonal"
-          height="1.5rem"
           width="1.5rem"
+          height="1.5rem"
+          variant="tonal"
+          onClick={gotoFindPool}
           bg="rgba(0, 0, 0, 0.08)"
-          onClick={gotoCreatePool}
         >
           <Box height="1.25rem" width="1.25rem">
-            <PlusSVG maxHeight="1.25rem" maxWidth="1.25rem" width="100%" />
+            <FindSVG maxHeight="100%" maxWidth="100%" width="100%" />
           </Box>
         </Button>
       </Box>

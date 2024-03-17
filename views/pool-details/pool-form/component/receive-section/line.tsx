@@ -25,7 +25,7 @@ const ReceiveSectionLine: FC<ReceiveSectionLineProps> = ({
           display="flex"
           alignItems="center"
           justifyContent="center"
-          borderRadius="xs"
+          borderRadius="0.5rem"
         >
           <Icon maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
         </Box>

@@ -7,16 +7,16 @@ import CreateTokenForm from './create-token-form';
 
 const CreateToken: FC = () => (
   <Layout>
-    <Box
-      mt="10xl"
-      gap="3xl"
-      display="flex"
-      alignItems="center"
-      flexDirection="column"
+    <Typography
+      my="6xl"
+      size="small"
+      variant="display"
+      textAlign="center"
+      fontSize={['5xl', '8xl']}
     >
-      <Typography variant="display" size="large">
-        Create coin
-      </Typography>
+      Create coin
+    </Typography>
+    <Box display="flex" justifyContent="center">
       <CreateTokenForm />
     </Box>
   </Layout>

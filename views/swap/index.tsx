@@ -1,21 +1,27 @@
 import { Box, Button } from '@interest-protocol/ui-kit';
+import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import Layout from '@/components/layout';
 import { SwapSVG } from '@/svg';
+import { updateURL } from '@/utils';
 
 import Input from './input';
 import ManageSlippage from './manage-slippage';
 import SwapManager from './swap-manager';
 
 const Swap: FC = () => {
+  const { pathname } = useRouter();
   const { getValues, setValue } = useFormContext();
 
   const flipToken = () => {
-    const tmp = getValues('to');
-    setValue('to', getValues('from'));
-    setValue('from', tmp);
+    const tmpTo = getValues('to');
+    const tmpFrom = getValues('from');
+    setValue('to', { ...tmpFrom, value: '' });
+    setValue('from', { ...tmpTo, value: '' });
+
+    updateURL(`${pathname}?from=${tmpTo.type}&to=${tmpFrom.type}`);
   };
 
   return (

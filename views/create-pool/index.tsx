@@ -11,6 +11,7 @@ import { useNetwork } from '@/context/network';
 import PoolTitleBar from '../components/pool-title-bar';
 import { IPoolForm } from './create-pool.types';
 import CreateTokenForm from './create-pool-form';
+import Illustration from './illustration';
 
 const CreatePoolPage: FC = () => {
   const { push } = useRouter();
@@ -24,15 +25,14 @@ const CreatePoolPage: FC = () => {
 
   return (
     <Layout>
-      <Box width={['100%', '100%', '100%', '100%', '50%']} mx="auto">
-        <PoolTitleBar
-          name="Create pool"
-          onBack={() => push(Routes[RoutesEnum.Pools])}
-          iconTokenList={[IconA, IconB].filter((Icon) => Icon)}
-        />
-        <Box my="xs" mx="auto" display="flex" maxWidth="65rem">
-          <CreateTokenForm />
-        </Box>
+      <PoolTitleBar
+        name="Create pool"
+        onBack={() => push(Routes[RoutesEnum.Pools])}
+        iconTokenList={[IconA, IconB].filter((Icon) => Icon)}
+      />
+      <Box my="3xl" mx="auto" display="flex" maxWidth="65rem">
+        <Illustration />
+        <CreateTokenForm />
       </Box>
     </Layout>
   );
