@@ -12,7 +12,6 @@ const FindPoolDialog: FC<FindPoolDialogProps> = ({
   onCreatePool,
 }) => (
   <Box
-    p="m"
     width="25rem"
     maxWidth="90%"
     borderRadius="xs"
@@ -24,6 +23,7 @@ const FindPoolDialog: FC<FindPoolDialogProps> = ({
     backgroundColor="lowestContainer"
   >
     <Box
+      p="m"
       display="flex"
       minWidth="100%"
       color="onSurface"
@@ -45,6 +45,7 @@ const FindPoolDialog: FC<FindPoolDialogProps> = ({
     </Box>
     <Box
       pt="xl"
+      p="m"
       gap="m"
       display="flex"
       maxWidth="22rem"
@@ -75,13 +76,17 @@ const FindPoolDialog: FC<FindPoolDialogProps> = ({
       </Typography>
     </Box>
     <Box
-      pt="xl"
-      mt="xl"
+      mt="m"
+      width="100%"
+      borderTop="1px solid"
+      borderColor="outlineVariant"
+    />
+    <Box
+      p="m"
+      mt="s"
       display="flex"
       minWidth="100%"
       flexDirection="row"
-      borderTop="1px solid"
-      borderColor="outlineVariant"
       justifyContent="space-between"
     >
       <Button

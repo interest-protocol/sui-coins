@@ -20,13 +20,19 @@ const SearchButton: FC<Pick<FindPoolModalProps, 'handleSearch'>> = ({
     name: 'tokens',
   });
 
-  const handleCreatePool = () => {
-    if (fields) {
-      handleClose();
+  const handleFindPool = () => {
+    //This condition (!field) is used only to show pool doesn't exist modal
+    if (!fields) {
       handleSearch(fields);
+      handleClose();
     } else {
       openModal();
     }
+  };
+
+  const handleCreatePool = () => {
+    push(Routes[RoutesEnum.PoolCreate]);
+    handleClose();
   };
 
   const openModal = () => {
@@ -40,7 +46,7 @@ const SearchButton: FC<Pick<FindPoolModalProps, 'handleSearch'>> = ({
           title="Pool doesn't exist"
           description="If you like, you can create this pool"
           onClose={handleClose}
-          onCreatePool={() => push(Routes[RoutesEnum.PoolCreate])}
+          onCreatePool={handleCreatePool}
         />
       </Motion>,
       {
@@ -59,7 +65,7 @@ const SearchButton: FC<Pick<FindPoolModalProps, 'handleSearch'>> = ({
       minWidth="17rem"
       borderRadius="xs"
       justifyContent="center"
-      onClick={handleCreatePool}
+      onClick={handleFindPool}
     >
       Search
     </Button>

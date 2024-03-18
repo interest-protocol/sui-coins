@@ -10,7 +10,7 @@ export const useDialog = () => {
     handleClose,
     dialog: {
       promise: async (
-        promise: Promise<void | unknown>,
+        promise: Promise<void>,
         {
           loading,
           success,
@@ -21,19 +21,19 @@ export const useDialog = () => {
           setModal(<Dialog status="loading" {...loading} />, {
             isOpen: true,
             custom: true,
-            onClose: loading.onClose,
+            onClose: handleClose,
           });
           await promise;
           setModal(<Dialog status="success" {...success} />, {
             isOpen: true,
             custom: true,
-            onClose: success.onClose,
+            onClose: handleClose,
           });
         } catch {
           setModal(<Dialog status="error" {...error} />, {
             isOpen: true,
             custom: true,
-            onClose: error.onClose,
+            onClose: handleClose,
           });
         }
       },
