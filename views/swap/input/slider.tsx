@@ -1,12 +1,12 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
-import BigNumber from 'bignumber.js';
 import dynamic from 'next/dynamic';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
+import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { SwapForm } from '../swap.types';
 
@@ -22,12 +22,20 @@ const SwapFormFieldSlider: FC = () => {
   const type = useWatch({ control, name: 'from.type' });
 
   const safeRemoval =
-    type === SUI_TYPE_ARG ? 10 ** getValues('from.decimals') : 0;
+    type === SUI_TYPE_ARG
+      ? FixedPointMath.toBigNumber(1, getValues('from.decimals'))
+      : ZERO_BIG_NUMBER;
 
-  const balance = FixedPointMath.toNumber(
-    BigNumber(coinsMap[type] ? +coinsMap[type].balance - safeRemoval : 0),
-    coinsMap[type]?.decimals ?? (getValues('from.decimals') || 0)
-  );
+  const balance = coinsMap[type]
+    ? coinsMap[type].balance.minus(safeRemoval)
+    : ZERO_BIG_NUMBER;
+
+  const fromValue = type
+    ? FixedPointMath.toBigNumber(
+        getValues('from.value'),
+        getValues('from.decimals')
+      )
+    : ZERO_BIG_NUMBER;
 
   return (
     <Box mx="s">
@@ -36,16 +44,24 @@ const SwapFormFieldSlider: FC = () => {
         max={100}
         disabled={!balance}
         initial={Math.floor(
-          Number(getValues('from.value')) && balance
-            ? balance >= Number(getValues('from.value'))
-              ? (Number(getValues('from.value')) * 100) / balance
+          !fromValue.isZero() && !balance.isZero()
+            ? balance.gt(fromValue)
+              ? FixedPointMath.toNumber(
+                  fromValue.div(balance),
+                  getValues('from.decimals')
+                ) * 100
               : 100
             : 0
         )}
         onChange={(value: number) => {
           setValue(
             'from.value',
-            Number(((value / 100) * balance).toFixed(6)).toPrecision()
+            Number(
+              (
+                FixedPointMath.toNumber(balance, getValues('from.decimals')) *
+                (value / 100)
+              ).toFixed(6)
+            ).toPrecision()
           );
         }}
       />

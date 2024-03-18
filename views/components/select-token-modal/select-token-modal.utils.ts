@@ -1,6 +1,6 @@
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { CoinMetadataWithType } from '@/interface';
-import { getSymbolByType } from '@/utils';
+import { getSymbolByType, ZERO_BIG_NUMBER } from '@/utils';
 
 export const metadataToCoin = (coinMetadata: CoinMetadataWithType) => {
   const { type, symbol, decimals, ...metadata } = coinMetadata;
@@ -10,8 +10,8 @@ export const metadataToCoin = (coinMetadata: CoinMetadataWithType) => {
     symbol,
     decimals,
     metadata,
-    balance: '',
     objects: [],
+    balance: ZERO_BIG_NUMBER,
     coinObjectId: metadata.id!,
   };
 };
@@ -23,10 +23,10 @@ export const mapMetadataToCoin = (
   if (!coinType || !coinsMetadata[coinType])
     return {
       decimals: 0,
-      balance: '',
       objects: [],
       coinObjectId: '',
       type: coinType,
+      balance: ZERO_BIG_NUMBER,
       symbol: getSymbolByType(coinType),
       metadata: {
         description: '',

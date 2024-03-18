@@ -18,6 +18,7 @@ import {
 } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { CoinData, CoinMetadataWithType } from '@/interface';
 
+import { ZERO_BIG_NUMBER } from '../big-number';
 import { getBasicCoinMetadata } from '../fn';
 import { CreateVectorParameterArgs } from './coin.types';
 
@@ -79,9 +80,7 @@ export const processSafeAmount = (
 
   if (!object) return amount;
 
-  return amount.gt(BigNumber(object.balance))
-    ? BigNumber(object.balance)
-    : amount;
+  return amount.gt(object.balance) ? object.balance : amount;
 };
 
 export const getCoinsFromLpCoinType = (poolType: string) => {
@@ -129,7 +128,7 @@ export const normalizeSuiType = (x: string) => {
 
 export const coinDataToCoinObject = (coinData: CoinData): CoinObject => ({
   ...coinData,
-  balance: '0',
+  balance: ZERO_BIG_NUMBER,
   coinObjectId: '',
   metadata: { name: formatAddress(coinData.type), description: '' },
   objects: [],

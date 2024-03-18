@@ -27,9 +27,7 @@ const PreviewSwapButton: FC = () => {
     : ZERO_BIG_NUMBER;
 
   const fromBalance =
-    from && coinsMap[from.type]
-      ? FixedPointMath.toBigNumber(coinsMap[from.type].balance, from.decimals)
-      : ZERO_BIG_NUMBER;
+    from && coinsMap[from.type] ? coinsMap[from.type].balance : ZERO_BIG_NUMBER;
 
   const oneCoin = from
     ? FixedPointMath.toBigNumber(1, from.decimals)
