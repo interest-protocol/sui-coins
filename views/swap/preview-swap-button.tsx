@@ -33,9 +33,9 @@ const PreviewSwapButton: FC = () => {
     ? FixedPointMath.toBigNumber(1, from.decimals)
     : ZERO_BIG_NUMBER;
 
-  const isGreaterThanBalance = fromValue.gt(fromBalance);
+  const isGreaterThanBalance = fromBalance.lt(fromValue);
 
-  const isGreaterThanAllowedWhenSui = fromValue.gt(fromBalance.minus(oneCoin));
+  const isGreaterThanAllowedWhenSui = fromBalance.minus(oneCoin).lt(fromValue);
 
   const ableToSwap =
     from &&
