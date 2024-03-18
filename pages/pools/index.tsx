@@ -8,6 +8,8 @@ import { PoolForm } from '@/views/pools/pools.types';
 const PoolsPage: NextPage = () => {
   const form = useForm<PoolForm>();
 
+  console.log('form data :: ', form);
+
   return (
     <FormProvider {...form}>
       <SEO pageTitle="Pools" />
