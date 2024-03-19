@@ -97,7 +97,6 @@ const MenuOptions: FC<MenuOptionsProps> = ({
       zIndex={4}
       overflowY="auto"
       width="14.5rem"
-      initial="closed"
       maxHeight="83vh"
       border="1px solid"
       borderRadius="1rem"
@@ -106,6 +105,7 @@ const MenuOptions: FC<MenuOptionsProps> = ({
       variants={wrapperVariants}
       textTransform="capitalize"
       borderColor="outlineVariant"
+      initial={isMenuOpen ? 'open' : 'closed'}
       animate={isMenuOpen ? 'open' : 'closed'}
       pointerEvents={isMenuOpen ? 'auto' : 'none'}
       boxShadow="0px 2px 4px -2px rgba(13, 16, 23, 0.04), 0px 4px 8px -2px rgba(13, 16, 23, 0.12);"
@@ -121,7 +121,7 @@ const MenuOptions: FC<MenuOptionsProps> = ({
             <OptionItem
               key={v4()}
               selected={asPath == path}
-              onClick={() => push(path)}
+              onClick={() => path && push(path)}
             >
               {name}
             </OptionItem>

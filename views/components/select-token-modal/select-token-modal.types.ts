@@ -1,9 +1,9 @@
+import { Chain, Token } from '@interest-protocol/sui-tokens';
 import BigNumber from 'bignumber.js';
 import { Control, UseFormSetValue } from 'react-hook-form';
 
 import { Network } from '@/constants';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
-import { CoinDataWithChainInfo } from '@/views/pool-details/pool-form/pool-form.types';
 
 export interface TokenModalMetadata {
   name: string;
@@ -12,8 +12,7 @@ export interface TokenModalMetadata {
   totalBalance: BigNumber;
 }
 
-export interface TokenModalItemProps
-  extends Omit<CoinDataWithChainInfo, 'decimals'> {
+export interface TokenModalItemProps extends Omit<Token, 'decimals'> {
   selected: boolean;
   onClick: () => void;
 }
@@ -57,8 +56,8 @@ export interface SelectTokenBaseTokenItemProps
 }
 
 export interface ModalTokenBodyProps {
-  tokens: ReadonlyArray<CoinDataWithChainInfo>;
-  handleSelectToken: (type: string) => void;
+  tokens: ReadonlyArray<Token>;
+  handleSelectToken: (type: string, chain?: Chain) => void;
 }
 
 export interface ModalTokenSearchProps {

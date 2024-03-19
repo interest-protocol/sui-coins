@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import TextareaField from '@/elements/textearea-field';
+import { TextareaField } from '@/components';
 
 import { IAirdropForm } from '../airdrop.types';
 import { textToAirdrop } from '../airdrop.utils';

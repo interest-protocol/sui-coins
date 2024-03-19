@@ -4,7 +4,7 @@ import useSWR from 'swr';
 
 import { useNetwork } from '@/context/network';
 import { CoinMetadataWithType } from '@/interface';
-import { makeSWRKey, normalizeSuiType } from '@/utils';
+import { makeSWRKey, normalizeSuiType, ZERO_BIG_NUMBER } from '@/utils';
 
 import { CoinsMap, TGetAllCoins } from './use-get-all-coins.types';
 
@@ -22,15 +22,18 @@ const getAllCoins: TGetAllCoins = async (provider, account, cursor = null) => {
 };
 
 export const useGetAllCoins = () => {
-  const suiClient = useSuiClient();
   const network = useNetwork();
+  const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
 
   return useSWR(
     makeSWRKey([network, currentAccount?.address], suiClient.getAllCoins.name),
     async () => {
       if (!currentAccount) return {} as CoinsMap;
+
       const coinsRaw = await getAllCoins(suiClient, currentAccount.address);
+
+      if (!coinsRaw.length) return {} as CoinsMap;
 
       const coinsType = coinsRaw.map(({ coinType }) => coinType);
 
@@ -46,8 +49,14 @@ export const useGetAllCoins = () => {
           data.reduce((acc, item) => ({ ...acc, [item.type]: item }), {})
         );
 
-      return coinsRaw.reduce((acc, { coinType, ...coinRaw }) => {
-        const type = normalizeSuiType(coinType);
+      const filteredCoinsRaw = coinsRaw.filter(
+        ({ coinType }) => dbCoinsMetadata[coinType]
+      );
+
+      if (!filteredCoinsRaw.length) return {} as CoinsMap;
+
+      return filteredCoinsRaw.reduce((acc, { coinType, ...coinRaw }) => {
+        const type = normalizeSuiType(coinType) as `0x${string}`;
         const { symbol, decimals, ...metadata } = dbCoinsMetadata[coinType];
 
         return {
@@ -59,13 +68,13 @@ export const useGetAllCoins = () => {
             symbol,
             decimals,
             metadata,
-            balance: BigNumber(coinRaw.balance)
-              .plus(BigNumber(acc[type]?.balance || '0'))
-              .toString(),
+            balance: BigNumber(coinRaw.balance).plus(
+              acc[type]?.balance ?? ZERO_BIG_NUMBER
+            ),
             objects: (acc[type]?.objects ?? []).concat([{ ...coinRaw, type }]),
           },
         };
-      }, {} as CoinsMap);
+      }, {} as CoinsMap) as unknown as CoinsMap;
     },
     {
       revalidateOnFocus: false,

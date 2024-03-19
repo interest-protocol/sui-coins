@@ -1,31 +1,30 @@
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { Token } from '@interest-protocol/sui-tokens';
+import { RouterCompleteTradeRoute, RouterTradePath } from 'aftermath-ts-sdk';
 
 export interface ISwapSettings {
   slippage: string;
-  deadline: string;
-  speed: 'normal' | 'fast' | 'instant';
+  interval: string;
 }
 
-export interface SwapToken extends CoinObject {
+export interface SwapToken extends Token {
   value: string;
-  locked: boolean;
+  usdPrice: number | null;
 }
-
-interface SwapTypeArgs {
-  coinIn: string;
-  coinOut: string;
-  lpCoin: string;
-}
-
-export type SwapPath = ReadonlyArray<SwapTypeArgs>;
 
 export interface SwapForm {
   to: SwapToken;
   from: SwapToken;
-  settings: ISwapSettings;
-  lock: boolean;
-  maxValue: boolean;
-  disabled: boolean;
-  swapPath: SwapPath;
+  loading: boolean;
+  explorerLink: string;
+  error: string | null;
   readyToSwap: boolean;
+  fetchingPrices: boolean;
+  settings: ISwapSettings;
+  lastFetchDate: number | null;
+  route: RouterCompleteTradeRoute | null;
+  swapPath: ReadonlyArray<RouterTradePath>;
+}
+
+export interface SwapPreviewModalProps {
+  onClose: () => void;
 }

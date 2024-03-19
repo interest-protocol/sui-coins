@@ -5,9 +5,9 @@ import { TOKEN_SYMBOL } from '@/lib';
 
 export type BigNumberish = BigNumber | bigint | string | number;
 
-interface CoinData {
-  type: string;
+export interface CoinData {
   decimals: number;
+  type: `0x${string}`;
   symbol: TOKEN_SYMBOL | string;
 }
 
@@ -27,7 +27,7 @@ export interface RegistryPool {
 }
 
 export interface CoinMetadataWithType extends CoinMetadata {
-  type: string;
+  type: `0x${string}`;
 }
 
 export interface NFTCollection {

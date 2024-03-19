@@ -44,7 +44,7 @@ const MenuItemTitleContent: FC<MenuItemTitleContentProps> = ({
     asPath === path || accordionList?.some(({ path }) => path === asPath);
 
   const onClick = () => {
-    if (accordionList || disabled) return;
+    if (accordionList || disabled || !path) return;
     push(path);
   };
 

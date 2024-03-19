@@ -11,30 +11,16 @@ const Wallet: FC = () => {
 
   return (
     <Box
+      gap="m"
       display="flex"
+      alignItems="center"
       justifyContent="flex-end"
       flexDirection={['row-reverse', 'row-reverse', 'row-reverse', 'row']}
-      alignItems="center"
     >
-      <Box display="flex" gap="m">
-        {!!currentAccount && (
-          <>
-            <Box
-              gap="l"
-              justifyContent="flex-end"
-              display={['none', 'none', 'none', 'flex']}
-            >
-              <SuiNetwork />
-            </Box>
-            <Profile />
-          </>
-        )}
+      <Box display={['none', 'none', 'none', 'flex']}>
+        <SuiNetwork />
       </Box>
-      {!currentAccount && (
-        <Box display="flex">
-          <ConnectWalletButton />
-        </Box>
-      )}
+      {currentAccount ? <Profile /> : <ConnectWalletButton />}
     </Box>
   );
 };

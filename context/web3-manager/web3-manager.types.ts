@@ -11,16 +11,16 @@ import {
 import { LocalTokenMetadataRecord, NFTCollectionMetadata } from '@/interface';
 
 export interface Web3ManagerState {
-  nfts: ReadonlyArray<NFTCollectionMetadata>;
-  nftsMap: Record<string, NFTCollectionMetadata>;
-  account: null | string;
-  coins: ReadonlyArray<CoinObject>;
-  coinsMap: CoinsMap;
-  connected: boolean;
   error: boolean;
+  connected: boolean;
+  coinsMap: CoinsMap;
+  account: null | string;
   mutate: KeyedMutator<CoinsMap>;
   isFetchingCoinBalances: boolean;
+  coins: ReadonlyArray<CoinObject>;
   walletAccount: null | WalletAccount;
+  nfts: ReadonlyArray<NFTCollectionMetadata>;
+  nftsMap: Record<string, NFTCollectionMetadata>;
 }
 
 export interface Web3ManagerProps {

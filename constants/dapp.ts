@@ -36,7 +36,7 @@ export const AIRDROP_SEND_CONTRACT = {
 export const TOAST_DURATION = 10000;
 
 // TODO: object ids
-export const OBJECT_RECORD = {
+export const OBJECT_RECORD: Record<Network, Record<string, `0x${string}`>> = {
   [Network.TESTNET]: {
     DEX_PACKAGE_ID:
       '0xd15fcc9307dcf822a6ec40950b8b8331ae2367c4455c568296ed4e1eb8527a75',

@@ -34,15 +34,21 @@ const getCoinMetadataList = async (
   for await (const batch of missingCoinsTypeBatches) {
     const data = await Promise.all(
       batch.map((coinType) =>
-        suiClient.getCoinMetadata({ coinType }).then((metadata) => ({
-          ...(metadata ?? getBasicCoinMetadata(coinType)),
-          hasMetadata: !!metadata,
-          type: coinType,
-        }))
+        suiClient
+          .getCoinMetadata({ coinType })
+          .then((metadata) => ({
+            ...(metadata ?? getBasicCoinMetadata(coinType)),
+            hasMetadata: !!metadata,
+            type: coinType,
+          }))
+          .catch(() => null)
       )
     );
+    const filteredData = data.filter((item) => item) as ReadonlyArray<
+      CoinMetadataWithType & { hasMetadata: boolean }
+    >;
 
-    data.forEach((item) => missingCoinsMetadata.push(item));
+    missingCoinsMetadata.push(...filteredData);
   }
 
   const itemsToSaveBatches = chunk<

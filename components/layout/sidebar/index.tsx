@@ -40,17 +40,7 @@ const Sidebar: FC = () => {
       transition={{ duration: 0.5 }}
       display={['none', 'none', 'none', 'flex']}
       animate={isOpen || !isCollapsed ? 'open' : 'closed'}
-      initial={
-        itemVariants[
-          isOpen || !isCollapsed
-            ? isMounted()
-              ? 'closed'
-              : 'open'
-            : isMounted()
-              ? 'open'
-              : 'closed'
-        ]
-      }
+      initial={(isOpen || !isCollapsed) === isMounted() ? 'closed' : 'open'}
     >
       <Box>
         <SidebarHeader isCollapsed={!isOpen && isCollapsed} />

@@ -103,8 +103,6 @@ export const SuiNsProvider: FC<PropsWithChildren> = ({ children }) => {
                     showAvatar: true,
                   })
                   .then(async (object) => {
-                    console.log({ object });
-
                     const nftId = prop('nftId', object as any);
 
                     if (!nftId) return [nameServer, null];

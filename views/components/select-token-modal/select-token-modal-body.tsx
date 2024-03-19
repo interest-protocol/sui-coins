@@ -1,3 +1,4 @@
+import { Chain } from '@interest-protocol/sui-tokens';
 import { isValidSuiAddress } from '@mysten/sui.js/utils';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
@@ -40,7 +41,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   const filterSelected = useWatch({ control, name: 'filter' });
   const search = useWatch({ control, name: 'search' });
 
-  const handleSelectToken = async (type: string) => {
+  const handleSelectToken = async (type: string, chain?: Chain) => {
     if (coinsMap[type]) return onSelectToken(coinsMap[type]);
 
     const token = STRICT_TOKENS[network].find((token) => token.type === type);
@@ -53,7 +54,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
       response.status === 200 ? response.json() : response
     );
 
-    return onSelectToken(metadataToCoin(metadata));
+    return onSelectToken({ ...metadataToCoin(metadata), chain });
   };
 
   const isSearchAddress =
@@ -69,7 +70,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
       <ModalTokenBody
         handleSelectToken={handleSelectToken}
         tokens={STRICT_TOKENS[network]
-          .sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
+          ?.sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
           .filter(
             ({ symbol, type }) =>
               !search ||
@@ -89,7 +90,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
       <ModalTokenBody
         handleSelectToken={handleSelectToken}
         tokens={WORMHOLE_TOKENS[network]
-          .sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
+          ?.sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
           .filter(
             ({ symbol, type }) =>
               !search ||
@@ -109,7 +110,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
       <ModalTokenBody
         handleSelectToken={handleSelectToken}
         tokens={CELER_TOKENS[network]
-          .sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
+          ?.sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
           .filter(
             ({ symbol, type }) =>
               !search ||
@@ -137,7 +138,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
       <ModalTokenBody
         handleSelectToken={handleSelectToken}
         tokens={(coins as Array<CoinObject>)
-          .sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
+          ?.sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
           .filter(
             ({ symbol, type }) =>
               !search || symbol.includes(search) || type.includes(search)
