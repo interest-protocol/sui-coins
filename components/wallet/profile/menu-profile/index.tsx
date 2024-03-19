@@ -19,7 +19,6 @@ const MenuProfile: FC<MenuProfileProps> = ({
   handleCloseProfile,
 }) => {
   const network = useNetwork();
-
   const { breakpoints } = useTheme() as Theme;
   const [isDesktop, setIsDesktop] = useState(false);
   const currentAccount = useCurrentAccount();
