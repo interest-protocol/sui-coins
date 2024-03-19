@@ -42,7 +42,7 @@ export interface AirdropProgressIndicatorProps {
   goBack: () => void;
 }
 
-export interface AirdropInputProps {
+export interface AirdropProgressProps {
   setIsProgressView: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -50,15 +50,10 @@ export interface AirdropPreviewButtonProps {
   handleOpenSummaryModal: () => void;
 }
 
-export interface AirdropPreviewModalProps {
+export interface AirdropPreviewModalProps extends AirdropProgressProps {
   method: TMethod;
   isOpen: boolean;
   onClose: () => void;
-  setIsProgressView: Dispatch<SetStateAction<boolean>>;
-}
-
-export interface AirdropConfirmButtonProps {
-  setIsProgressView: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface AirdropSummaryProps {

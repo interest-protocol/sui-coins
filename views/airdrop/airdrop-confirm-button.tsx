@@ -21,9 +21,9 @@ import {
 import { splitArray } from '@/utils';
 
 import { BATCH_SIZE, RATE_LIMIT_DELAY } from './airdrop.constants';
-import { AirdropConfirmButtonProps, IAirdropForm } from './airdrop.types';
+import { AirdropProgressProps, IAirdropForm } from './airdrop.types';
 
-const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
+const AirdropConfirmButton: FC<AirdropProgressProps> = ({
   setIsProgressView,
 }) => {
   const { control, getValues, setValue } = useFormContext<IAirdropForm>();

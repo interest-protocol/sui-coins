@@ -20,9 +20,9 @@ import {
 } from '@/utils';
 
 import { BATCH_SIZE, RATE_LIMIT_DELAY } from './airdrop.constants';
-import { AirdropButtonProps, IAirdropForm } from './airdrop.types';
+import { AirdropProgressProps, IAirdropForm } from './airdrop.types';
 
-const AirdropButton: FC<AirdropButtonProps> = ({ setIsProgressView }) => {
+const AirdropButton: FC<AirdropProgressProps> = ({ setIsProgressView }) => {
   const { control, getValues, setValue } = useFormContext<IAirdropForm>();
   const { currentAccount } = useWalletKit();
   const { coinsMap } = useWeb3();
