@@ -6,24 +6,21 @@ import { FC, PropsWithChildren } from 'react';
 
 import { NetworkProvider } from '@/context/network';
 import { SuiNsProvider } from '@/context/suins';
-import Web3Manager from '@/context/web3-manager';
 
 import ThemeManager from '../theme-manager';
 
 const queryClient = new QueryClient();
 
-const Web3Provider: FC<PropsWithChildren> = ({ children }) => (
+const Provider: FC<PropsWithChildren> = ({ children }) => (
   <ThemeManager>
     <NetworkProvider>
       <QueryClientProvider client={queryClient}>
         <WalletProvider autoConnect>
-          <SuiNsProvider>
-            <Web3Manager>{children}</Web3Manager>
-          </SuiNsProvider>
+          <SuiNsProvider>{children}</SuiNsProvider>
         </WalletProvider>
       </QueryClientProvider>
     </NetworkProvider>
   </ThemeManager>
 );
 
-export default Web3Provider;
+export default Provider;

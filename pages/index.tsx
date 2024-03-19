@@ -103,22 +103,23 @@ const SwapPage: NextPage = () => {
 
   useEffect(() => {
     (async () => {
-      const searchParams = new URLSearchParams(asPath);
+      const searchParams = new URLSearchParams(
+        asPath.replace('/', '').replace('?', '')
+      );
       const [fromType, toType] = await Promise.all([
         setDefaultToken(from as `0x${string}`, 'from'),
         setDefaultToken(to as `0x${string}`, 'to'),
       ]);
+
+      searchParams.delete('from');
+      searchParams.delete('to');
 
       fromType && searchParams.set('from', fromType);
       toType && searchParams.set('to', toType);
 
       form.setValue('loading', false);
 
-      updateURL(
-        `${pathname}?${fromType ? `from=${searchParams.get('from')}` : ''}${
-          fromType && toType ? '&' : ''
-        }${toType ? `to=${searchParams.get('to')}` : ''}`
-      );
+      updateURL(`${pathname}?${searchParams.toString()}`);
     })();
   }, []);
 
