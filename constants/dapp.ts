@@ -17,11 +17,9 @@ export const DISPLAY_NETWORK = {
 export const INDEXER_URL = 'https://api.indexer.xyz/graphql';
 
 export const EXPLORER_URL = {
-  [SUI_MAINNET_CHAIN]: (complement: string) =>
-    `https://suiexplorer.com/${complement}`,
-  [SUI_TESTNET_CHAIN]: (complement: string) =>
-    `https://suiexplorer.com/${complement}?network=testnet`,
-} as Record<Network, (complement: string) => string>;
+  [SUI_MAINNET_CHAIN]: `https://suiscan.xyz/mainnet`,
+  [SUI_TESTNET_CHAIN]: `https://suiscan.xyz/testnet`,
+} as Record<Network, string>;
 
 export const TREASURY =
   '0xdd224f2287f0b38693555c6077abe85fcb4aa13e355ad54bc167611896b007e6';
