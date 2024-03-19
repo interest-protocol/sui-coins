@@ -1,5 +1,5 @@
 import { Token } from '@interest-protocol/sui-tokens';
-import { RouterCompleteTradeRoute, RouterTradePath } from 'aftermath-ts-sdk';
+import { RouterCompleteTradeRoute } from 'aftermath-ts-sdk';
 
 export interface ISwapSettings {
   slippage: string;
@@ -22,7 +22,6 @@ export interface SwapForm {
   settings: ISwapSettings;
   lastFetchDate: number | null;
   route: RouterCompleteTradeRoute | null;
-  swapPath: ReadonlyArray<RouterTradePath>;
 }
 
 export interface SwapPreviewModalProps {

@@ -14,59 +14,76 @@ const SwapPath: FC = () => {
   const network = useNetwork();
   const { control } = useFormContext<SwapForm>();
 
-  const swapPath = useWatch({ control, name: 'swapPath' });
+  const routes = useWatch({ control, name: 'route.routes' });
 
-  if (!swapPath?.length) return null;
+  if (!routes?.length) return null;
 
   return (
     <Box
       p="l"
+      gap="l"
       mt="xs"
-      gap="xl"
       mx="auto"
       width="100%"
       display="flex"
       color="onSurface"
       borderRadius="xs"
-      alignItems="center"
       position="relative"
+      alignItems="center"
       bg="lowestContainer"
-      justifyContent="center"
+      flexDirection="column"
     >
-      {swapPath?.map(({ coinIn, coinOut, protocolName }, index) => [
-        !index ? (
-          <TokenIcon
-            key={v4()}
-            network={network}
-            type={
-              coinIn.type === SUI_TYPE_ARG_LONG ? SUI_TYPE_ARG : coinIn.type
-            }
-            symbol={
-              COIN_TYPE_TO_SYMBOL[network][
-                coinIn.type === SUI_TYPE_ARG_LONG ? SUI_TYPE_ARG : coinIn.type
-              ]
-            }
-          />
-        ) : null,
-        <Box key={v4()}>
-          <Typography variant="label" size="small">
-            {protocolName}
-          </Typography>
-          <SwapArrowSVG width="100%" maxWidth="5rem" maxHeight="0.75rem" />
-        </Box>,
-        <TokenIcon
+      {routes.map(({ paths }) => (
+        <Box
+          gap="m"
           key={v4()}
-          network={network}
-          type={
-            coinOut.type === SUI_TYPE_ARG_LONG ? SUI_TYPE_ARG : coinOut.type
-          }
-          symbol={
-            COIN_TYPE_TO_SYMBOL[network][
-              coinOut.type === SUI_TYPE_ARG_LONG ? SUI_TYPE_ARG : coinOut.type
-            ]
-          }
-        />,
-      ])}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Typography variant="label" size="small">
+            {(+(100 / routes.length).toFixed(1)).toPrecision()}%
+          </Typography>
+          {paths?.map(({ coinIn, coinOut, protocolName }, index) => [
+            !index ? (
+              <TokenIcon
+                key={v4()}
+                network={network}
+                type={
+                  coinIn.type === SUI_TYPE_ARG_LONG ? SUI_TYPE_ARG : coinIn.type
+                }
+                symbol={
+                  COIN_TYPE_TO_SYMBOL[network][
+                    coinIn.type === SUI_TYPE_ARG_LONG
+                      ? SUI_TYPE_ARG
+                      : coinIn.type
+                  ]
+                }
+              />
+            ) : null,
+            <Box key={v4()}>
+              <Typography variant="label" size="small">
+                {protocolName}
+              </Typography>
+              <SwapArrowSVG width="100%" maxWidth="5rem" maxHeight="0.75rem" />
+            </Box>,
+            <TokenIcon
+              key={v4()}
+              network={network}
+              type={
+                coinOut.type === SUI_TYPE_ARG_LONG ? SUI_TYPE_ARG : coinOut.type
+              }
+              symbol={
+                COIN_TYPE_TO_SYMBOL[network][
+                  coinOut.type === SUI_TYPE_ARG_LONG
+                    ? SUI_TYPE_ARG
+                    : coinOut.type
+                ]
+              }
+            />,
+          ])}
+        </Box>
+      ))}
       <a
         target="_blank"
         rel="noopener, noreferrer"
