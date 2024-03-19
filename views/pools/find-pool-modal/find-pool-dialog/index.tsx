@@ -13,14 +13,14 @@ const FindPoolDialog: FC<FindPoolDialogProps> = ({
 }) => (
   <Box
     width="25rem"
-    maxWidth="90%"
+    display="flex"
+    maxWidth="95%"
     borderRadius="xs"
+    bg="lowContainer"
     alignItems="center"
-    display="inline-flex"
     flexDirection="column"
     justifyContent="center"
-    boxShadow="dropShadow.2xl"
-    backgroundColor="lowestContainer"
+    ml={['-1rem', 0, 0, 0]}
   >
     <Box
       p="m"
@@ -57,11 +57,11 @@ const FindPoolDialog: FC<FindPoolDialogProps> = ({
       <Box
         p="s"
         display="flex"
+        color="onSurface"
         width="fit-content"
         borderRadius="50%"
+        bg="highContainer"
         alignItems="center"
-        color="onSurface"
-        backgroundColor="highContainer"
       >
         <PlusSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
       </Box>

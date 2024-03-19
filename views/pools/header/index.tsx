@@ -1,5 +1,4 @@
 import { Box, Tabs, Typography } from '@interest-protocol/ui-kit';
-//import { not } from 'ramda';
 import { FC, useCallback, useState } from 'react';
 import { v4 } from 'uuid';
 
@@ -11,7 +10,6 @@ import { HeaderProps } from './header.types';
 const Header: FC<HeaderProps> = ({ currentTab, setTab }) => {
   const [showSearchField, setShowSearchField] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  //const handleCloseSearch = () => setShowSearchField(not);
 
   const handleSetDesktop = useCallback(() => {
     const mediaIsMobile = !window.matchMedia('(min-width: 65em)').matches;
