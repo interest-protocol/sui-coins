@@ -50,7 +50,7 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
         justifyContent="space-between"
         flexDirection="column"
         boxShadow="dropShadow.2xl"
-        backgroundColor="lowestContainer"
+        backgroundColor="lowContainer"
       >
         <Box width="100%">
           <Box
@@ -83,8 +83,8 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
               You will send
             </Typography>
             <Box
-              bg="#EDEDF1"
-              p="0.75rem"
+              bg="onSurface"
+              p="s"
               borderRadius="xs"
               display="flex"
               alignItems="center"
@@ -92,8 +92,8 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
             >
               <Box display="flex" alignItems="center" gap="m">
                 <Box
-                  bg="black"
-                  color="white"
+                  bg="lowestContainer"
+                  color="onSurface"
                   width="2.5rem"
                   height="2.5rem"
                   borderRadius="xs"

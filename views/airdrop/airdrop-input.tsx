@@ -18,15 +18,13 @@ const AirdropInput: FC<AirdropProgressProps> = ({ setIsProgressView }) => {
 
   if (!token || !method) return null;
 
-  console.log(setIsProgressView);
-
   return (
     <Box
       p="xl"
       gap="3xl"
       display="flex"
       borderRadius="xs"
-      bg="lowestContainer"
+      bg="lowContainer"
       flexDirection="column"
     >
       {method === 'csv' && <AirdropUploadFile />}

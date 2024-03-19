@@ -21,7 +21,7 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
 
   return (
     <Box display="flex" flexDirection="column" mb="m">
-      <Box bg="container" px="m" py="2xs" borderRadius="xs">
+      <Box bg="lowestContainer" px="m" py="2xs" borderRadius="xs">
         <Box
           py="m"
           display="flex"
