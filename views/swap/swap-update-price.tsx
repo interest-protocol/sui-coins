@@ -106,6 +106,8 @@ const SwapUpdatePrice: FC = () => {
           throw e;
         });
 
+      if (!Number(getValues('from.value'))) return;
+
       setValue('route', data);
 
       setValue(
