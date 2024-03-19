@@ -41,20 +41,8 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
   },
   {
     Icon: DotsSVG,
-    name: 'More',
-    path: '#',
+    name: 'Faucet',
+    path: Routes[RoutesEnum.Faucet],
     disabled: false,
-    accordionList: [
-      {
-        name: 'My Coins',
-        path: Routes[RoutesEnum.MyCoins],
-        disabled: false,
-      },
-      {
-        name: 'Faucet',
-        path: Routes[RoutesEnum.Faucet],
-        disabled: false,
-      },
-    ],
   },
 ];
