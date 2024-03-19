@@ -68,7 +68,6 @@ const SwapUpdatePrice: FC = () => {
 
   const resetFields = () => {
     setValue('route', null);
-    setValue('swapPath', []);
     setValue('to.value', '0');
     setValue('lastFetchDate', null);
     setValue('fetchingPrices', false);
@@ -109,13 +108,6 @@ const SwapUpdatePrice: FC = () => {
       if (!Number(getValues('from.value'))) return;
 
       setValue('route', data);
-
-      setValue(
-        'swapPath',
-        data.routes.reduce((acc, curr) =>
-          acc.spotPrice > curr.spotPrice ? curr : acc
-        ).paths
-      );
 
       setValue(
         'to.value',
