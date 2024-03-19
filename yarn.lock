@@ -848,10 +848,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-2.0.2.tgz#d9fae00a2d5cb40f92cfe64b47ad749fbc38f917"
   integrity sha512-6EwiSjwWYP7pTckG6I5eyFANjPhmPjUX9JRLUSfNPC7FX7zK9gyZAfUEaECL6ALTpGX5AjnBq3C9XmVWPitNpw==
 
-"@interest-protocol/sui-tokens@^1.0.0-beta.0":
-  version "1.0.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/sui-tokens/-/sui-tokens-1.0.0-beta.0.tgz#9a284e07c910d7540db190e1fd9fff14484487ef"
-  integrity sha512-5tzi4BTJpEnJHIibVYYbq/eiWXk6HQyk9ugBH0HHxjUNivLh9KwqlTOFvcHoePnTrKqV9mFJthdsJvJ1xLACBg==
+"@interest-protocol/sui-tokens@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/sui-tokens/-/sui-tokens-1.0.1.tgz#07863d4d4502e830015ecd0caab989189cb2c948"
+  integrity sha512-T+Xo1UnydzAnmGmRinPdAeyZ7sWF2kYd1EKSesi3R3HG8bquC47vrknJDzoHs9l1l15k3j8kRnNk2nGb9uEXFw==
 
 "@interest-protocol/ui-kit@^0.2.25-alpha":
   version "0.2.25-alpha"
