@@ -1,14 +1,32 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
-import { FC, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import Layout from '@/components/layout';
+import { IAirdropForm } from '@/views/airdrop/airdrop.types';
 
-import AirdropBody from './airdrop-body';
+import AirdropButton from './airdrop-button';
 import AirdropChooseCoin from './airdrop-choose-coin';
-import AirdropChooseMethod from './airdrop-choose-method';
 import AirdropProgressIndicator from './airdrop-progress-indicator';
+import AirdropSummary from './airdrop-summary';
+import AirdropUploadFile from './airdrop-upload-file';
 import AirdropUploadStatus from './airdrop-upload-status';
+
+interface AirdropBodyProps {
+  setIsProgressView: Dispatch<SetStateAction<boolean>>;
+}
+
+const AirdropBody: FC<AirdropBodyProps> = ({ setIsProgressView }) => {
+  const { control } = useFormContext<IAirdropForm>();
+  const token = useWatch({ control, name: 'token' });
+  return token ? (
+    <>
+      <AirdropUploadFile />
+      <AirdropSummary />
+      <AirdropButton setIsProgressView={setIsProgressView} />
+    </>
+  ) : null;
+};
 
 const Airdrop: FC = () => {
   const { reset } = useFormContext();
@@ -46,15 +64,17 @@ const Airdrop: FC = () => {
         </Box>
       ) : (
         <Box
-          gap="m"
+          p="xl"
+          gap="4xl"
           mx="auto"
           mb="10xl"
           display="flex"
+          borderRadius="m"
           maxWidth="39.5rem"
+          bg="lowestContainer"
           flexDirection="column"
         >
           <AirdropChooseCoin />
-          <AirdropChooseMethod />
           <AirdropBody setIsProgressView={setIsProgressView} />
         </Box>
       )}
