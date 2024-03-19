@@ -38,3 +38,9 @@ export interface AirdropButtonProps {
 export interface AirdropProgressIndicatorProps {
   goBack: () => void;
 }
+
+export interface AirdropSendingProgressProps {
+  title: string;
+  loadingProgress: number;
+  description: string;
+}
