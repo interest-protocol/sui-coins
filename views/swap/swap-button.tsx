@@ -79,7 +79,7 @@ const SwapButton: FC = () => {
 
       formSwap.setValue(
         'explorerLink',
-        EXPLORER_URL[network](`/txblock/${tx.digest}`)
+        `${EXPLORER_URL[network]}/tx/${tx.digest}`
       );
     } finally {
       resetInput();
