@@ -21,6 +21,7 @@ export interface IAirdropForm {
   decimals: number;
   asset?: CoinObject;
   commonAmount: string;
+  tokenUSDPrice?: number;
   done: ReadonlyArray<number>;
   failed: ReadonlyArray<number>;
   airdropList: ReadonlyArray<AirdropData> | null;
@@ -37,14 +38,29 @@ export interface AirdropUploadFileCardProps {
   name: string;
 }
 
-export interface AirdropButtonProps {
-  setIsProgressView: Dispatch<SetStateAction<boolean>>;
-}
-
 export interface AirdropProgressIndicatorProps {
   goBack: () => void;
 }
 
-export interface AirdropBodyProps {
+export interface AirdropInputProps {
   setIsProgressView: Dispatch<SetStateAction<boolean>>;
+}
+
+export interface AirdropPreviewButtonProps {
+  handleOpenSummaryModal: () => void;
+}
+
+export interface AirdropPreviewModalProps {
+  method: TMethod;
+  isOpen: boolean;
+  onClose: () => void;
+  setIsProgressView: Dispatch<SetStateAction<boolean>>;
+}
+
+export interface AirdropConfirmButtonProps {
+  setIsProgressView: Dispatch<SetStateAction<boolean>>;
+}
+
+export interface AirdropSummaryProps {
+  method: TMethod;
 }

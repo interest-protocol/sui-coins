@@ -2,13 +2,11 @@ import { Box } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { AirdropBodyProps, IAirdropForm } from '@/views/airdrop/airdrop.types';
+import { AirdropInputProps, IAirdropForm } from '@/views/airdrop/airdrop.types';
 
-import AirdropButton from './airdrop-button';
-import AirdropSummary from './airdrop-summary';
-import AirdropUploadFile from './airdrop-upload-file';
+import AirdropInput from './airdrop-input';
 
-const AirdropBody: FC<AirdropBodyProps> = ({ setIsProgressView }) => {
+const AirdropBody: FC<AirdropInputProps> = ({ setIsProgressView }) => {
   const { control } = useFormContext<IAirdropForm>();
   const token = useWatch({ control, name: 'token' });
   const method = useWatch({ control, name: 'method' });
@@ -16,10 +14,8 @@ const AirdropBody: FC<AirdropBodyProps> = ({ setIsProgressView }) => {
   if (!token || !method) return null;
 
   return (
-    <Box bg="lowestContainer" borderRadius="xs" p="xl">
-      <AirdropUploadFile />
-      <AirdropSummary />
-      <AirdropButton setIsProgressView={setIsProgressView} />
+    <Box>
+      <AirdropInput setIsProgressView={setIsProgressView} />
     </Box>
   );
 };

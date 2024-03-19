@@ -8,7 +8,7 @@ import {
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { FileSVG, XCirlceSVG } from '@/svg';
+import { FileSVG, TimesSVG } from '@/svg';
 
 import { AirdropUploadFileCardProps, IAirdropForm } from './airdrop.types';
 
@@ -42,16 +42,11 @@ const AirdropUploadFileCard: FC<AirdropUploadFileCardProps> = ({
           <FileSVG width="100%" maxWidth="1.5rem" maxHeight="1.5rem" />
         </Box>
         <Box>
-          <Typography variant="body" size="large" color="onSurface">
+          <Typography variant="body" size="large">
             {name}
           </Typography>
-          <Typography
-            variant="body"
-            size="small"
-            opacity="0.48"
-            color="onSurface"
-          >
-            {size} address{size !== 1 && 'es'}
+          <Typography variant="body" size="small" opacity="0.48">
+            {size} Addresses
           </Typography>
         </Box>
       </Box>
@@ -60,7 +55,7 @@ const AirdropUploadFileCard: FC<AirdropUploadFileCardProps> = ({
         variant="text"
         onClick={() => setValue('airdropList', null)}
       >
-        <XCirlceSVG maxHeight="1rem" maxWidth="1rem" width="1rem" />
+        <TimesSVG maxHeight="1rem" maxWidth="1rem" width="1rem" />
       </Button>
     </Box>
   );
