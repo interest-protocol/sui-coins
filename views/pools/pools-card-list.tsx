@@ -9,21 +9,20 @@ import PoolCard from './pool-card';
 import { DEX_MAP } from './pool-card/pool-card.data';
 import { PoolForm } from './pools.types';
 
-const PoolCardLIst = () => {
+const PoolCardList = () => {
   const { network } = useNetwork();
   const { control } = useFormContext<PoolForm>();
   const fields = useWatch({ control, name: 'filterList' });
-  const filteredPools = fields?.length
-    ? RECOMMENDED_POOLS[network].filter(
-        (pool) =>
-          fields?.some(
-            (field) =>
-              DEX_MAP[pool.dex].tags?.some(
-                (tag) => tag.name === field.description
-              )
-          )
-      )
-    : RECOMMENDED_POOLS[network];
+  const filteredPools = RECOMMENDED_POOLS[network].filter((pool) =>
+    fields?.length
+      ? fields?.some(
+          (field) =>
+            DEX_MAP[pool.dex].tags?.some(
+              (tag) => tag.name === field.description
+            )
+        )
+      : true
+  );
 
   return (
     <Box
@@ -33,10 +32,9 @@ const PoolCardLIst = () => {
       p={['s', 's', 's', 'l']}
       gridTemplateColumns={['1fr', '1fr', '1fr 1fr', '1fr 1fr 1fr']}
     >
-      {filteredPools.map((pool) => (
-        <PoolCard key={v4()} {...pool} />
-      ))}
-      {!filteredPools.length && (
+      {filteredPools.length ? (
+        filteredPools.map((pool) => <PoolCard key={v4()} {...pool} />)
+      ) : (
         <Box width="100%" color="white">
           <Typography size="small" variant="display">
             Nenhum pool encontrado
@@ -47,4 +45,4 @@ const PoolCardLIst = () => {
   );
 };
 
-export default PoolCardLIst;
+export default PoolCardList;
