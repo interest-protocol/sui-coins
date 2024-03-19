@@ -47,12 +47,6 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
   const isDisabled =
     !airdropList || !token?.balance || token.balance < amountList;
 
-  console.log(
-    !airdropList,
-    !token?.balance,
-    token,
-    (token?.balance || 0) < amountList
-  );
   const handleSend = async () => {
     setIsProgressView(true);
 
