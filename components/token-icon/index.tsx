@@ -70,6 +70,8 @@ const TokenIcon: FC<TokenIconProps> = ({
   if (!TokenIcon && !iconSrc && !isLoading)
     return (
       <Box
+        bg="black"
+        color="white"
         display="flex"
         overflow="hidden"
         position="relative"
@@ -77,8 +79,7 @@ const TokenIcon: FC<TokenIconProps> = ({
         justifyContent="center"
         width={`calc(${size} * 1.66)`}
         height={`calc(${size} * 1.66)`}
-        borderRadius={rounded ? 'full' : 'xs'}
-        {...(withBg && { bg: 'black', color: 'white' })}
+        borderRadius={rounded || !withBg ? 'full' : 'xs'}
       >
         <DefaultSVG
           width="100%"
@@ -110,7 +111,9 @@ const TokenIcon: FC<TokenIconProps> = ({
               <ProgressIndicator size={16} variant="loading" />
             </Box>
           )}
-          <img src={TokenIcon ?? iconSrc} width="100%" alt={symbol} />
+          {(iconSrc || TokenIcon) && (
+            <img src={TokenIcon ?? iconSrc} width="100%" alt={symbol} />
+          )}
         </Box>
         {ChainIcon && (
           <Box position="absolute" bottom="-0.3rem" right="-0.5rem">
