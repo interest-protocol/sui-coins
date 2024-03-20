@@ -7,10 +7,6 @@ export interface SearchMobileProps {
   showSearchView: boolean;
 }
 
-export interface ActionGroupProps {
-  showSearchView: () => void;
-}
-
 export interface HeaderProps {
   setTab: Dispatch<SetStateAction<PoolTabEnum>>;
   currentTab: PoolTabEnum;

@@ -15,7 +15,7 @@ export interface MainMenuMobileProps {
 
 export interface MenuMobileItemProps extends MenuItemCollapsibleProps {
   name: string;
-  path: string;
+  path?: string;
   disabled?: boolean;
   Icon: FC<SVGProps>;
   index: number;

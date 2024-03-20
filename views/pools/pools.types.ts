@@ -32,7 +32,7 @@ export interface PoolToken extends CoinData {
 export interface PoolForm {
   lpCoin: PoolToken;
   settings: ISwapSettings;
-  tokenList: ReadonlyArray<PoolToken>;
+  tokenList: ReadonlyArray<CoinData>;
   filterList: ReadonlyArray<FilterItemProps>;
 }
 

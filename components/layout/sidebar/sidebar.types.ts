@@ -8,7 +8,7 @@ export interface MenuItemCollapsibleProps {
 
 export interface MenuItemTitleContentProps extends MenuItemCollapsibleProps {
   name: string;
-  path: string;
+  path?: string;
   disabled: boolean;
   Icon: FC<SVGProps>;
   isCollapsed: boolean;

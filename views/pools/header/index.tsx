@@ -1,19 +1,15 @@
 import { Box, Tabs, Typography } from '@interest-protocol/ui-kit';
-import { not } from 'ramda';
 import { FC, useCallback, useState } from 'react';
 import { v4 } from 'uuid';
 
 import useEventListener from '@/hooks/use-event-listener';
 
-import ActionGroup from './action-group';
+import FinPoolButton from './find-pool-button';
 import { HeaderProps } from './header.types';
-import SearchMobile from './search-mobile';
 
 const Header: FC<HeaderProps> = ({ currentTab, setTab }) => {
   const [showSearchField, setShowSearchField] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-
-  const handleCloseSearch = () => setShowSearchField(not);
 
   const handleSetDesktop = useCallback(() => {
     const mediaIsMobile = !window.matchMedia('(min-width: 65em)').matches;
@@ -27,8 +23,7 @@ const Header: FC<HeaderProps> = ({ currentTab, setTab }) => {
     <Box
       display="flex"
       flexWrap="wrap"
-      overflowX="auto"
-      overflowY="hidden"
+      overflow="none"
       alignItems="center"
       justifyContent="space-between"
     >
@@ -36,8 +31,6 @@ const Header: FC<HeaderProps> = ({ currentTab, setTab }) => {
         gap="s"
         width="100%"
         flexWrap="wrap"
-        overflowX="auto"
-        overflowY="hidden"
         justifyContent="space-between"
         display={isMobile ? (showSearchField ? 'none' : 'flex') : 'flex'}
       >
@@ -55,12 +48,8 @@ const Header: FC<HeaderProps> = ({ currentTab, setTab }) => {
             </Typography>
           ))}
         />
-        <ActionGroup showSearchView={handleCloseSearch} />
+        <FinPoolButton />
       </Box>
-      <SearchMobile
-        handleClose={handleCloseSearch}
-        showSearchView={showSearchField}
-      />
     </Box>
   );
 };
