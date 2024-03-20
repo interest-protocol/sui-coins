@@ -805,13 +805,6 @@
   resolved "https://registry.yarnpkg.com/@graphql-typed-document-node/core/-/core-3.2.0.tgz#5f3d96ec6b2354ad6d8a28bf216a1d97b5426861"
   integrity sha512-mB9oAsNCm9aM3/SOv4YtBMqZbYj10R7dkq8byBqxGY/ncFwhf2oQzMV+LCRlWoDSEBJ3COiR1yeDvMtsoOsuFQ==
 
-"@headlessui/react@^1.7.15":
-  version "1.7.17"
-  resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-1.7.17.tgz#a0ec23af21b527c030967245fd99776aa7352bc6"
-  integrity sha512-4am+tzvkqDSSgiwrsEpGWqgGo9dz8qU5M3znCkC4PgkpY4HcCZzEDEvozltGGGHIKl9jbXbZPSH5TWn4sWJdow==
-  dependencies:
-    client-only "^0.0.1"
-
 "@hookform/resolvers@^3.3.2":
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-3.3.2.tgz#5c40f06fe8137390b071d961c66d27ee8f76f3bc"
@@ -1141,13 +1134,6 @@
   dependencies:
     bs58 "^5.0.0"
 
-"@mysten/bcs@0.9.0":
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/@mysten/bcs/-/bcs-0.9.0.tgz#d95c13d822647d0ce5a1ff24b5cb4732e5f95727"
-  integrity sha512-h56essa8oSS4/J0Dby8k8stMoOSt+QZIEIeZNtgTOWh9HeV69yFg2BUg/+Rk7jzfWzvUmw9lFyKNipXcD5QOTw==
-  dependencies:
-    bs58 "^5.0.0"
-
 "@mysten/dapp-kit@^0.12.2":
   version "0.12.2"
   resolved "https://registry.yarnpkg.com/@mysten/dapp-kit/-/dapp-kit-0.12.2.tgz#3c0d97e9563f6f1584246f82cffe7c18f2c7e80d"
@@ -1164,20 +1150,6 @@
     "@vanilla-extract/recipes" "^0.5.0"
     clsx "^2.0.0"
     zustand "^4.4.1"
-
-"@mysten/sui.js@0.48.0":
-  version "0.48.0"
-  resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.48.0.tgz#a119a0b4019082f03168f2bd7bf30b967a97f4ca"
-  integrity sha512-kGeV5F3IYThiliVbIou3YOOGAr8TdNyub4hGY2gevnphFQF8SukwQk8cyzuEEsAVSDUt0rsA9xxpncSgX+RjMA==
-  dependencies:
-    "@mysten/bcs" "0.9.0"
-    "@noble/curves" "^1.1.0"
-    "@noble/hashes" "^1.3.1"
-    "@scure/bip32" "^1.3.1"
-    "@scure/bip39" "^1.2.1"
-    "@suchipi/femver" "^1.0.0"
-    superstruct "^1.0.3"
-    tweetnacl "^1.0.3"
 
 "@mysten/sui.js@0.50.1", "@mysten/sui.js@^0.50.1":
   version "0.50.1"
@@ -1204,39 +1176,12 @@
   dependencies:
     "@mysten/sui.js" "0.50.1"
 
-"@mysten/dapp-kit-core@0.6.14":
-  version "0.6.14"
-  resolved "https://registry.yarnpkg.com/@mysten/dapp-kit-core/-/wallet-kit-core-0.6.14.tgz#82fc4485e5edec4e24d2e5b6d44c9eebf30811cd"
-  integrity sha512-Q1JWoWnFDDXU5ugVgCqcmgW26aEvvnlsRtO7RY6K86u6yiDVTSovLyHbJs38fxb0xuW8HApQPck/VZoK659HfA==
-  dependencies:
-    "@mysten/sui.js" "0.48.0"
-    "@mysten/wallet-standard" "0.8.11"
-
-"@mysten/dapp-kit@^0.8.6":
-  version "0.8.6"
-  resolved "https://registry.yarnpkg.com/@mysten/dapp-kit/-/wallet-kit-0.8.6.tgz#366188148679ad0c80896ecd8a003434adbc5fc6"
-  integrity sha512-RT6F+TjnBAXK5tRF0DY/mXfVK8wlezQteqzSJGCLGhHWZcbVXc61zFaUrFWP5FdCy6HCGugMlZd/sOiOx6u+hA==
-  dependencies:
-    "@headlessui/react" "^1.7.15"
-    "@mysten/sui.js" "0.48.0"
-    "@mysten/dapp-kit-core" "0.6.14"
-    "@mysten/wallet-standard" "0.8.11"
-    "@stitches/react" "^1.2.8"
-
 "@mysten/wallet-standard@0.10.3":
   version "0.10.3"
   resolved "https://registry.yarnpkg.com/@mysten/wallet-standard/-/wallet-standard-0.10.3.tgz#915a0c2822527562be288fc1f784c0411db27b43"
   integrity sha512-StEMbJ7YkdjxoScmOJJjt9JaNgoRLD3FgU4LGFrKFtMXOhPu1Z4WF3qgfYBr+C3UgDh+JNiDIfN9TiGeM/Ahpw==
   dependencies:
     "@mysten/sui.js" "0.50.1"
-    "@wallet-standard/core" "1.0.3"
-
-"@mysten/wallet-standard@0.8.11":
-  version "0.8.11"
-  resolved "https://registry.yarnpkg.com/@mysten/wallet-standard/-/wallet-standard-0.8.11.tgz#3e12289eaf43ed18177ac17701001990a7f7883c"
-  integrity sha512-kkD/8vBzI0wMyeN/2QRVESINeufIJnJLE0jUT2Bl2eRSJDYhIIpVppVGPaVjYP+qMThZMk6WEgUVMLs9dVjJ2Q==
-  dependencies:
-    "@mysten/sui.js" "0.48.0"
     "@wallet-standard/core" "1.0.3"
 
 "@mysten/zksend@0.2.2":
@@ -1666,11 +1611,6 @@
   integrity sha512-V4BG07kuYSUkTCSBHG8G8TNhM+F19jXFWnQtzj+we8DrkpSBCee9Z3Ms8yiGer/dlmhe35/Xdgyo3/0rQKg7YA==
   dependencies:
     "@sinonjs/commons" "^3.0.0"
-
-"@stitches/react@^1.2.8":
-  version "1.2.8"
-  resolved "https://registry.yarnpkg.com/@stitches/react/-/react-1.2.8.tgz#954f8008be8d9c65c4e58efa0937f32388ce3a38"
-  integrity sha512-9g9dWI4gsSVe8bNLlb+lMkBYsnIKCZTmvqvDG+Avnn69XfmHZKiaMrx7cgTaddq7aTPPmXiTsbFcUy0xgI4+wA==
 
 "@stylin.js/core@latest":
   version "1.0.1"

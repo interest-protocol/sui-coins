@@ -8,11 +8,17 @@ import { useFormContext } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { AIRDROP_SEND_CONTRACT, TREASURY } from '@/constants';
+import { SUI_TYPE_ARG_LONG } from '@/constants/coins';
 import { AIRDROP_SUI_FEE_PER_ADDRESS } from '@/constants/fees';
 import { useNetwork } from '@/context/network';
 import useSignTxb from '@/hooks/use-sign-txb';
 import { useWeb3 } from '@/hooks/use-web3';
-import { showTXSuccessToast, sleep, throwTXIfNotSuccessful } from '@/utils';
+import {
+  getCoinOfValue,
+  showTXSuccessToast,
+  sleep,
+  throwTXIfNotSuccessful,
+} from '@/utils';
 import { splitArray } from '@/utils';
 
 import { BATCH_SIZE, RATE_LIMIT_DELAY } from '../airdrop.constants';
@@ -21,7 +27,7 @@ import { AirdropConfirmButtonProps, IAirdropForm } from '../airdrop.types';
 const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
   setIsProgressView,
 }) => {
-  const { coinsMap } = useWeb3();
+  const { coinsMap, account } = useWeb3();
   const { getValues, setValue } = useFormContext<IAirdropForm>();
 
   const network = useNetwork();
@@ -41,7 +47,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
       const list = splitArray(airdropList, BATCH_SIZE);
 
-      if (token.type === SUI_TYPE_ARG) {
+      if (token.type === SUI_TYPE_ARG || token.type === SUI_TYPE_ARG_LONG) {
         for await (const [index, batch] of Object.entries(list)) {
           const totalAMount = batch
             .reduce(
@@ -99,36 +105,22 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         return;
       }
 
-      const firstCoin = coinsMap[token.type].objects[0];
-
       for await (const [index, batch] of Object.entries(list)) {
         const txb = new TransactionBlock();
-
-        // There are other coins
-        if (+index === 0 && coinsMap[token.type].objects.length > 1) {
-          txb.moveCall({
-            target: '0x2::pay::join_vec',
-            typeArguments: [token.type],
-            arguments: [
-              txb.object(firstCoin.coinObjectId),
-              txb.makeMoveVec({
-                objects: coinsMap[token.type]
-                  ? coinsMap[token.type].objects
-                      .slice(1)
-                      .map((x) => txb.object(x.coinObjectId))
-                  : [],
-              }),
-            ],
-          });
-        }
 
         const totalAMount = batch
           .reduce((acc, data) => acc.plus(BigNumber(data.amount)), BigNumber(0))
           .toString();
 
-        const coinToSend = txb.splitCoins(txb.object(firstCoin.coinObjectId), [
-          txb.pure(totalAMount),
-        ]);
+        console.log(token.type);
+
+        const coinToSend = await getCoinOfValue(
+          suiClient,
+          txb,
+          account!,
+          token.type,
+          totalAMount
+        );
 
         const [fee] = txb.splitCoins(txb.gas, [
           txb.pure(
@@ -173,6 +165,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         setValue('done', [...getValues('done'), Number(index)]);
       }
     } catch (e: any) {
+      console.log(e);
       toast.error((e?.message as string) ?? e ?? 'Something went wrong!');
       if (((e?.message as string) ?? e) === 'Rejected from user') {
         setValue('error', true);
