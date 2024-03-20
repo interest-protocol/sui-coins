@@ -1171,7 +1171,7 @@
   dependencies:
     bs58 "^5.0.0"
 
-"@mysten/bcs@^0.8.1":
+"@mysten/bcs@0.8.1", "@mysten/bcs@^0.8.1":
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/@mysten/bcs/-/bcs-0.8.1.tgz#30d3256a728a4a934ae608d118347289fe0ba1e7"
   integrity sha512-wSEdP7QEfGQdb34g+7R0f3OdRqrv88iIABfJVDVJ6IsGLYVILreh8dZfNpZNUUyzctiyhX7zB9e/lR5qkddFPA==
