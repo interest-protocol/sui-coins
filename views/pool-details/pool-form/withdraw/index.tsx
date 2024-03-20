@@ -19,12 +19,9 @@ const PoolWithdraw: FC<PoolFormProps> = ({ poolOptionView }) => {
 
   const { getValues } = useFormContext();
 
-  const handleWithdraw = () =>
-    new Promise((resolve) => {
-      setTimeout(() => {
-        resolve('');
-      }, 2000);
-    });
+  const handleWithdraw = async () => {
+    setTimeout(() => {}, 2000);
+  };
 
   const withdraw = () => {
     dialog.promise(handleWithdraw(), {
@@ -34,7 +31,6 @@ const PoolWithdraw: FC<PoolFormProps> = ({ poolOptionView }) => {
           'We are Withdrawing, and you will let you know when it is done',
       },
       success: {
-        onClose: handleClose,
         title: 'Withdraw Successfully',
         message:
           'Your withdraw was successfully, and you can check it on the Explorer',
@@ -44,7 +40,6 @@ const PoolWithdraw: FC<PoolFormProps> = ({ poolOptionView }) => {
         },
       },
       error: {
-        onClose: handleClose,
         title: 'Withdraw Failure',
         message:
           'Your withdrawing failed, please try again or contact the support team',

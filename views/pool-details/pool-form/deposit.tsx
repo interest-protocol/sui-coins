@@ -22,12 +22,9 @@ const PoolDeposit: FC<PoolFormProps> = ({ poolOptionView }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { dialog, handleClose } = useDialog();
 
-  const handleDeposit = () =>
-    new Promise((resolve) => {
-      setTimeout(() => {
-        resolve('');
-      }, 2000);
-    });
+  const handleDeposit = async () => {
+    setTimeout(() => {}, 2000);
+  };
 
   const deposit = () => {
     dialog.promise(handleDeposit(), {
@@ -36,7 +33,6 @@ const PoolDeposit: FC<PoolFormProps> = ({ poolOptionView }) => {
         message: 'We are Depositing, and you will let you know when it is done',
       },
       success: {
-        onClose: handleClose,
         title: 'Deposit Successfully',
         message:
           'Your deposit was successfully, and you can check it on the Explorer',
@@ -46,7 +42,6 @@ const PoolDeposit: FC<PoolFormProps> = ({ poolOptionView }) => {
         },
       },
       error: {
-        onClose: handleClose,
         title: 'Deposit Failure',
         message:
           'Your deposiing failed, please try again or contact the support team',
