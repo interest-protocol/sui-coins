@@ -11,8 +11,16 @@ export interface CreateVectorParameterArgs {
 }
 
 export interface GetCoinsArgs {
-  provider: SuiClient;
+  suiClient: SuiClient;
   account: string;
   coinType: string;
   cursor?: string | null;
+}
+
+export interface GetCoinOfValueArgs {
+  suiClient: SuiClient;
+  txb: TransactionBlock;
+  account: string;
+  coinType: string;
+  coinValue: number | bigint | string;
 }

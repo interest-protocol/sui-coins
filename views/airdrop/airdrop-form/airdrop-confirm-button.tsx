@@ -112,15 +112,13 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           .reduce((acc, data) => acc.plus(BigNumber(data.amount)), BigNumber(0))
           .toString();
 
-        console.log(token.type);
-
-        const coinToSend = await getCoinOfValue(
+        const coinToSend = await getCoinOfValue({
           suiClient,
+          account: account!,
           txb,
-          account!,
-          token.type,
-          totalAMount
-        );
+          coinType: token.type,
+          coinValue: totalAMount,
+        });
 
         const [fee] = txb.splitCoins(txb.gas, [
           txb.pure(
@@ -165,7 +163,6 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         setValue('done', [...getValues('done'), Number(index)]);
       }
     } catch (e: any) {
-      console.log(e);
       toast.error((e?.message as string) ?? e ?? 'Something went wrong!');
       if (((e?.message as string) ?? e) === 'Rejected from user') {
         setValue('error', true);

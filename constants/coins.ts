@@ -26,6 +26,9 @@ import {
 
 import { Network } from '.';
 
+export const SUI_TYPE_ARG_LONG =
+  '0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI';
+
 export const COIN_METADATA = {
   [SUI_TYPE_ARG]: {
     name: 'Sui',
