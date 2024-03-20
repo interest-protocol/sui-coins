@@ -34,6 +34,7 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
       gap="4xl"
       display="flex"
       borderRadius="m"
+      color="onSurface"
       bg="lowestContainer"
       flexDirection="column"
     >
@@ -41,13 +42,15 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
         variant="headline"
         size="large"
         textAlign="center"
-        color={isError ? 'error' : finished !== 100 ? 'onSurface' : 'success'}
+        color={
+          isError
+            ? 'errorContainer'
+            : finished !== 100
+              ? 'onSurface'
+              : 'success'
+        }
       >
-        {isError
-          ? 'error found'
-          : finished !== 100
-            ? 'Sending'
-            : 'You are done'}
+        {isError ? 'error found' : finished !== 100 ? 'Sending' : "You're done"}
       </Typography>
       <Box
         display="flex"
@@ -63,14 +66,9 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
             height="8.75rem"
             borderRadius="full"
             alignItems="center"
-            bg="errorContainer"
             justifyContent="center"
           >
-            <WarningSVG
-              width="100%"
-              maxWidth="3.96831rem"
-              maxHeight="3.73075rem"
-            />
+            <WarningSVG width="100%" maxWidth="8.75rem" maxHeight="8.75rem" />
           </Box>
         ) : finished !== 100 ? (
           <>
@@ -92,14 +90,9 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
             color="success"
             borderRadius="full"
             alignItems="center"
-            bg="successContainer"
             justifyContent="center"
           >
-            <CheckSVG
-              width="100%"
-              maxWidth="3.43225rem"
-              maxHeight="2.52081rem"
-            />
+            <CheckSVG width="100%" maxWidth="8.75rem" maxHeight="8.75rem" />
           </Box>
         )}
       </Box>
@@ -109,23 +102,49 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
         variant="body"
         maxWidth="20rem"
         textAlign="center"
+        color="onSurface"
       >
         {error || finished !== 100
-          ? 'Sending batches'
+          ? "This is the loading description. It can be anything you want and as long as you want. But please don't make it too long."
           : doneItems.length === allBatches
             ? 'The airdrop has been sent'
             : `${failedItems.length} batches was not sent`}
       </Typography>
       {(error || finished === 100) && (
-        <Button
-          variant="filled"
-          onClick={goBack}
-          justifyContent="center"
-          bg={error || failedItems.length ? 'error' : 'surface'}
-          color={error || failedItems.length ? 'onError' : 'onSurface'}
+        <Box
+          pt="xl"
+          display="flex"
+          minWidth="100%"
+          justifyContent="space-between"
+          flexDirection="row"
         >
-          Go back
-        </Button>
+          <Button
+            flex="1"
+            marginRight="s"
+            borderRadius="xs"
+            variant="outline"
+            onClick={goBack}
+            justifyContent="center"
+            borderColor="outlineVariant"
+            color="onSurface"
+          >
+            Close
+          </Button>
+          <Button
+            flex="3"
+            variant="filled"
+            onClick={goBack}
+            borderRadius="xs"
+            justifyContent="center"
+            bg={error || failedItems.length ? 'errorContainer' : 'surface'}
+            color={error || failedItems.length ? 'onSurface' : 'onSurface'}
+            nHover={{
+              backgroundColor: 'lowContainer',
+            }}
+          >
+            Resend failed batches
+          </Button>
+        </Box>
       )}
     </Box>
   );
