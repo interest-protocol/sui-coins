@@ -35,9 +35,6 @@ export const COIN_METADATA = {
   },
 };
 
-export const SUI_TYPE_ARG_LONG =
-  '0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI';
-
 export const TESTNET_BASE_COINS: Record<string, `0x${string}`> = {
   SUI: SUI_TYPE_ARG,
   BNB: '0xb8656a09a489819f07c444cb4a4a61a3b482a5ea994fd71b0a643ffc1c2f2dd0::ibnb::IBNB',
