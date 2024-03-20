@@ -1151,24 +1151,6 @@
     clsx "^2.0.0"
     zustand "^4.4.1"
 
-"@mysten/sui.js@0.50.1":
-  version "0.50.1"
-  resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.50.1.tgz#f201d7cad343321f93297d9b14319b2e155d6876"
-  integrity sha512-AY0wb4n6PMTRsDGygzrrTHUK/m5KwKZ4aQcN9cayiwsq2iIhfjGo7uuqMA7Y5UiqvLCoF+z7Ig14Q5qejQ/S/w==
-  dependencies:
-    "@graphql-typed-document-node/core" "^3.2.0"
-    "@mysten/bcs" "0.11.1"
-    "@noble/curves" "^1.1.0"
-    "@noble/hashes" "^1.3.1"
-    "@scure/bip32" "^1.3.1"
-    "@scure/bip39" "^1.2.1"
-    "@suchipi/femver" "^1.0.0"
-    bech32 "^2.0.0"
-    gql.tada "^1.2.0"
-    graphql "^16.8.1"
-    superstruct "^1.0.3"
-    tweetnacl "^1.0.3"
-
 "@mysten/sui.js@0.51.0", "@mysten/sui.js@^0.51.0":
   version "0.51.0"
   resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.51.0.tgz#b1716f2cb1e0766f057eefb175caa16fdaec1e27"
@@ -1187,12 +1169,12 @@
     superstruct "^1.0.3"
     tweetnacl "^1.0.3"
 
-"@mysten/suins-toolkit@^0.4.3":
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/@mysten/suins-toolkit/-/suins-toolkit-0.4.3.tgz#ac03ad0b197d95a309e0380b1570db5f7ab96310"
-  integrity sha512-IaiZwWxt4QM0zJ1EHiMiSX3TWi1Fhb6AH24/J4mQ8v4Mum6RdI5ly6jrG2ssr6/FyaWe9++avJLgyZ9fYBWtzg==
+"@mysten/suins-toolkit@^0.4.4":
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/@mysten/suins-toolkit/-/suins-toolkit-0.4.4.tgz#24f226fb90a85ab301aafe302f7d0e026348c152"
+  integrity sha512-LWFYxUvVxakJ0/oSEmRakdsOOs3HWbwIKjMvx30SBQLKPqKMvpJn+oWeJeuwTLpDfPGB4MJp7HmMczebE8UIxg==
   dependencies:
-    "@mysten/sui.js" "0.50.1"
+    "@mysten/sui.js" "0.51.0"
 
 "@mysten/wallet-standard@0.11.0":
   version "0.11.0"
