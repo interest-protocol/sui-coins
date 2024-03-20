@@ -40,7 +40,7 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
   return (
     <Modal custom isOpen={isOpen}>
       <Box
-        maxWidth="95%"
+        maxWidth="100%"
         borderRadius="xs"
         width="26.875rem"
         minHeight="30rem"
@@ -58,6 +58,7 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
             display="flex"
             alignItems="center"
             justifyContent="space-between"
+            color="onSurface"
           >
             <ArrowLeftSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
             <Typography size="large" variant="title">
@@ -79,7 +80,7 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
             flexDirection="column"
             justifyContent="start"
           >
-            <Typography size="medium" variant="label" mb="xs">
+            <Typography size="medium" variant="label" mb="xs" color="onSurface">
               You will send
             </Typography>
             <Box
