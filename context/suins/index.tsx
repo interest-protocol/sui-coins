@@ -29,7 +29,7 @@ export const suiClientRecord = {
   [Network.TESTNET]: testnetClient,
 } as Record<Network, SuiClient>;
 
-const testnetSuiNs = new SuinsClient(testnetClient, {
+const testnetSuiNs = new SuinsClient(testnetClient as any, {
   networkType: 'testnet',
   contractObjects: {
     packageId:
@@ -42,7 +42,7 @@ const testnetSuiNs = new SuinsClient(testnetClient, {
   },
 });
 
-export const suiNSMainNetProvider = new SuinsClient(mainnetClient, {
+export const suiNSMainNetProvider = new SuinsClient(mainnetClient as any, {
   contractObjects: {
     packageId:
       '0xd22b24490e0bae52676651b4f56660a5ff8022a2576e0089f79b3c88d44e08f0',
