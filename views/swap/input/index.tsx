@@ -2,6 +2,7 @@ import { Box, TextField } from '@interest-protocol/ui-kit';
 import { ChangeEvent, FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
+import { FixedPointMath } from '@/lib';
 import { parseInputEventToNumberString } from '@/utils';
 
 import { SwapForm } from '../swap.types';
@@ -12,7 +13,7 @@ import SelectToken from './select-token';
 import Slider from './slider';
 
 const Input: FC<InputProps> = ({ label }) => {
-  const { register, setValue } = useFormContext<SwapForm>();
+  const { register, setValue, getValues } = useFormContext<SwapForm>();
 
   return (
     <Box>
@@ -43,9 +44,18 @@ const Input: FC<InputProps> = ({ label }) => {
               nFocus: { border: 'none !important' },
               nActive: { border: 'none !important' },
             }}
-            {...register(`${label}.value`, {
+            {...register(`${label}.display`, {
               onChange: (v: ChangeEvent<HTMLInputElement>) => {
-                setValue?.(`${label}.value`, parseInputEventToNumberString(v));
+                const value = parseInputEventToNumberString(v);
+                setValue(`${label}.display`, value);
+                if (label === 'from')
+                  setValue(
+                    'from.value',
+                    FixedPointMath.toBigNumber(
+                      value,
+                      getValues(`from.decimals`)
+                    )
+                  );
               },
             })}
           />

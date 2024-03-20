@@ -50,7 +50,7 @@ const SwapPage: NextPage = () => {
         type,
         symbol,
         decimals,
-        value: '',
+        display: '',
         usdPrice: null,
       };
 
@@ -80,7 +80,7 @@ const SwapPage: NextPage = () => {
         type,
         symbol,
         decimals,
-        value: '',
+        display: '',
         usdPrice: null,
       };
 

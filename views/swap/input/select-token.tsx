@@ -55,7 +55,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
         decimals: currentToken.decimals,
         usdPrice: currentToken.usdPrice,
         chain: currentToken.chain,
-        value: '',
+        display: '',
       });
     }
 
@@ -64,7 +64,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       chain,
       symbol,
       decimals,
-      value: '',
+      display: '',
       usdPrice: null,
     });
 
@@ -75,7 +75,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       )
       .catch(() => null);
 
-    setValue(`${label === 'from' ? 'to' : 'from'}.value`, '');
+    setValue(`${label === 'from' ? 'to' : 'from'}.display`, '');
 
     changeURL(type);
   };
