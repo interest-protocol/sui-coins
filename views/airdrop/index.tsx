@@ -7,9 +7,10 @@ import { IAirdropForm } from '@/views/airdrop/airdrop.types';
 
 import AirdropButton from './airdrop-button';
 import AirdropChooseCoin from './airdrop-choose-coin';
-import AirdropSendingProgress from './airdrop-sending-progress';
+import AirdropProgressIndicator from './airdrop-progress-indicator';
 import AirdropSummary from './airdrop-summary';
 import AirdropUploadFile from './airdrop-upload-file';
+import AirdropUploadStatus from './airdrop-upload-status';
 
 interface AirdropBodyProps {
   setIsProgressView: Dispatch<SetStateAction<boolean>>;
@@ -28,6 +29,7 @@ const AirdropBody: FC<AirdropBodyProps> = ({ setIsProgressView }) => {
 };
 
 const Airdrop: FC = () => {
+  const { reset } = useFormContext();
   const [isProgressView, setIsProgressView] = useState(false);
 
   return (
@@ -43,11 +45,23 @@ const Airdrop: FC = () => {
         Airdrop
       </Typography>
       {isProgressView ? (
-        <AirdropSendingProgress
-          title="Sending"
-          loadingProgress={52}
-          description="This is the loading description. It can be anything you want and as long as you want. But please don't make it too long."
-        />
+        <Box
+          gap="s"
+          mx="auto"
+          mb="10xl"
+          width="100%"
+          display="flex"
+          maxWidth="39.5rem"
+          flexDirection="column"
+        >
+          <AirdropProgressIndicator
+            goBack={() => {
+              setIsProgressView(false);
+              reset();
+            }}
+          />
+          <AirdropUploadStatus />
+        </Box>
       ) : (
         <Box
           p="xl"

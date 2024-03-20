@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 
+import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { CoinData } from '@/interface';
 
 export interface IToken extends CoinData {
@@ -11,10 +12,15 @@ export interface AirdropData {
   amount: string;
 }
 
+export type TMethod = 'csv' | 'addressList';
+
 export interface IAirdropForm {
   token: IToken;
   error: boolean;
+  method: TMethod;
   decimals: number;
+  asset?: CoinObject;
+  commonAmount: string;
   done: ReadonlyArray<number>;
   failed: ReadonlyArray<number>;
   airdropList: ReadonlyArray<AirdropData> | null;
@@ -39,8 +45,6 @@ export interface AirdropProgressIndicatorProps {
   goBack: () => void;
 }
 
-export interface AirdropSendingProgressProps {
-  title: string;
-  loadingProgress: number;
-  description: string;
+export interface AirdropBodyProps {
+  setIsProgressView: Dispatch<SetStateAction<boolean>>;
 }
