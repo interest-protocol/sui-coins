@@ -1,83 +1,106 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import BigNumber from 'bignumber.js';
+import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { AIRDROP_SUI_FEE_PER_ADDRESS } from '@/constants/fees';
 import { FixedPointMath } from '@/lib';
 import { BATCH_SIZE } from '@/views/airdrop/airdrop.constants';
 
-import { IAirdropForm } from './airdrop.types';
+import { AirdropSummaryProps, IAirdropForm } from './airdrop.types';
 
-const AirdropSummary = () => {
+const METHOD_TITLE = {
+  csv: 'CSV',
+  addressList: 'List of addresses',
+};
+
+const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
   const { control } = useFormContext<IAirdropForm>();
 
-  const { symbol, decimals } = useWatch({ control, name: 'token' });
   const airdropList = useWatch({ control, name: 'airdropList' });
 
   return (
-    <Box display="flex" flexDirection="column" gap="s">
-      <Typography variant="body" size="large" color="onSurface">
-        Summary
-      </Typography>
-      <Box bg="surface" px="m" py="xs" borderRadius="xs">
+    <Box display="flex" flexDirection="column" mb="m" color="onSurface">
+      <Box bg="lowestContainer" px="m" py="2xs" borderRadius="xs">
         <Box
-          py="xs"
+          py="m"
           display="flex"
           borderBottom="1px solid"
           borderColor="outlineVariant"
           justifyContent="space-between"
         >
-          <Typography
-            size="medium"
-            variant="body"
-            opacity="0.80"
-            color="onSurface"
-          >
-            You will send
+          <Typography size="medium" variant="body" opacity="0.80">
+            Delivery method
           </Typography>
-          <Typography variant="body" size="medium" color="onSurface">
-            {airdropList
-              ? FixedPointMath.toNumber(
-                  airdropList?.reduce(
-                    (acc, { amount }) => acc.plus(BigNumber(amount)),
-                    BigNumber(0)
-                  ),
-                  decimals
-                )
-              : 0}{' '}
-            {symbol}
-          </Typography>
+          <Box display="flex" justifyContent="center" alignItems="center">
+            <Typography
+              variant="body"
+              size="medium"
+              color="onSurface"
+              mr="0.5rem"
+            >
+              {method ? METHOD_TITLE[method] : '--'}
+            </Typography>
+          </Box>
         </Box>
         <Box
-          py="xs"
+          py="m"
           display="flex"
           borderBottom="1px solid"
           borderColor="outlineVariant"
           justifyContent="space-between"
         >
-          <Typography
-            variant="body"
-            size="medium"
-            opacity="0.80"
-            color="onSurface"
-          >
-            Total Addresses
+          <Typography variant="body" size="medium" opacity="0.80">
+            Total addresses
           </Typography>
-          <Typography variant="body" size="medium" color="onSurface">
-            {airdropList ? airdropList.length : '--'}
-          </Typography>
+
+          <Box display="flex" justifyContent="center" alignItems="center">
+            <Typography
+              variant="body"
+              size="medium"
+              color="onSurface"
+              mr="0.5rem"
+            >
+              {airdropList ? airdropList.length : '--'}
+            </Typography>
+          </Box>
         </Box>
-        <Box py="xs" display="flex" justifyContent="space-between">
-          <Typography
-            variant="body"
-            size="medium"
-            opacity="0.80"
-            color="onSurface"
-          >
-            Number of batches
+        <Box py="m" display="flex" justifyContent="space-between">
+          <Typography variant="body" size="medium" opacity="0.80">
+            Sent in batches of
           </Typography>
-          <Typography variant="body" size="medium" color="onSurface">
-            {airdropList ? Math.ceil(airdropList.length / BATCH_SIZE) : '--'}
+          <Box display="flex" justifyContent="center" alignItems="center">
+            <Typography
+              variant="body"
+              size="medium"
+              color="onSurface"
+              mr="0.5rem"
+            >
+              {airdropList ? Math.ceil(airdropList.length / BATCH_SIZE) : '--'}
+            </Typography>
+          </Box>
+        </Box>
+        <Box
+          py="m"
+          display="flex"
+          borderTop="1px solid"
+          borderColor="outlineVariant"
+          justifyContent="space-between"
+        >
+          <Typography variant="body" size="medium" opacity="0.80">
+            Total SUI fee
           </Typography>
+          <Box textAlign="right">
+            <Typography size="medium" variant="body">
+              {airdropList
+                ? FixedPointMath.toNumber(
+                    new BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS).times(
+                      airdropList.length
+                    )
+                  ).toString()
+                : '0'}
+            </Typography>
+          </Box>
         </Box>
       </Box>
     </Box>

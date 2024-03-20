@@ -1,10 +1,11 @@
 import { Box, Motion, Typography } from '@interest-protocol/ui-kit';
 import BigNumber from 'bignumber.js';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
+import useTokenPriceBySymbol from '@/hooks/use-token-price';
 import { FixedPointMath, TOKEN_ICONS } from '@/lib';
 import { ChevronRightSVG, DefaultTokenSVG } from '@/svg';
 
@@ -19,6 +20,15 @@ const AirdropSelectToken: FC = () => {
   const { setModal, handleClose } = useModal();
   const { control, setValue } = useFormContext<IAirdropForm>();
   const token = useWatch({ control, name: 'token' });
+  const {
+    isLoading,
+    error,
+    data: usdPrice,
+  } = useTokenPriceBySymbol(token?.symbol);
+
+  useEffect(() => {
+    if (!isLoading && !error) setValue('tokenUSDPrice', usdPrice);
+  }, [usdPrice, isLoading, error]);
 
   const onSelect = async ({
     decimals,
@@ -27,12 +37,14 @@ const AirdropSelectToken: FC = () => {
     balance,
   }: CoinDataWithChainInfo) => {
     setValue('decimals', decimals);
+    console.log('balance: ', balance);
     setValue('token', {
       type,
       symbol,
       decimals,
       balance: FixedPointMath.toNumber(BigNumber(balance || 0), decimals),
     });
+    setValue('tokenUSDPrice', undefined);
     handleClose();
   };
 

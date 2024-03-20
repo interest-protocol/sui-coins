@@ -9,7 +9,7 @@ const AirdropChooseCoin: FC = () => (
     gap="s"
     display="flex"
     borderRadius="xs"
-    bg="lowestContainer"
+    bg="lowContainer"
     flexDirection="column"
   >
     <Box display="flex" justifyContent="space-between">

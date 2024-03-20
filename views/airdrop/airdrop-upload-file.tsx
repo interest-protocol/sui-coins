@@ -60,22 +60,31 @@ const AirdropUploadFile: FC = () => {
   };
 
   return (
-    <Box display="flex" flexDirection="column" gap="s">
-      <Typography variant="body" size="large" color="onSurface">
-        2. Upload file
+    <Box display="flex" flexDirection="column" gap="s" color="onSurface">
+      <Typography variant="body" size="large">
+        3. Upload file{' '}
+        <Typography
+          as="strong"
+          size="small"
+          variant="body"
+          color="primary"
+          cursor="pointer"
+          textDecoration="underline"
+        >
+          (<a href="/airdrop.csv">example file</a>)
+        </Typography>
       </Typography>
       {airdropList ? (
         <AirdropUploadFileCard name="Airdrop List" size={airdropList.length} />
       ) : (
         <Box
-          p="2xl"
+          p="m"
           gap="m"
           bg="surface"
           display="flex"
           borderRadius="xs"
           borderWidth="1px"
           alignItems="center"
-          flexDirection="column"
           onDrop={handleDropFile}
           onDragEnter={() => setDragging(true)}
           onDragLeave={() => setDragging(false)}
@@ -90,17 +99,12 @@ const AirdropUploadFile: FC = () => {
             borderRadius="full"
             alignItems="center"
             justifyContent="center"
-            bg={`${colors.primary}14`}
+            bg={`${colors.primary}29`}
+            color="onSurface"
           >
             <FolderSVG maxWidth="1.4rem" maxHeight="1.4rem" width="100%" />
           </Box>
-          <Typography
-            size="large"
-            variant="body"
-            maxWidth="9rem"
-            textAlign="center"
-            color="onSurface"
-          >
+          <Typography size="large" variant="body" textAlign="center">
             Drop your file here or{' '}
             <Typography
               as="label"
