@@ -20,7 +20,7 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
   const airdropList = useWatch({ control, name: 'airdropList' });
 
   return (
-    <Box display="flex" flexDirection="column" mb="m">
+    <Box display="flex" flexDirection="column" mb="m" color="onSurface">
       <Box bg="lowestContainer" px="m" py="2xs" borderRadius="xs">
         <Box
           py="m"
@@ -29,12 +29,7 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
           borderColor="outlineVariant"
           justifyContent="space-between"
         >
-          <Typography
-            size="medium"
-            variant="body"
-            opacity="0.80"
-            color="#000000A3"
-          >
+          <Typography size="medium" variant="body" opacity="0.80">
             Delivery method
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center">
@@ -55,12 +50,7 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
           borderColor="outlineVariant"
           justifyContent="space-between"
         >
-          <Typography
-            variant="body"
-            size="medium"
-            opacity="0.80"
-            color="#000000A3"
-          >
+          <Typography variant="body" size="medium" opacity="0.80">
             Total addresses
           </Typography>
 
@@ -76,12 +66,7 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
           </Box>
         </Box>
         <Box py="m" display="flex" justifyContent="space-between">
-          <Typography
-            variant="body"
-            size="medium"
-            opacity="0.80"
-            color="#000000A3"
-          >
+          <Typography variant="body" size="medium" opacity="0.80">
             Sent in batches of
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center">
@@ -102,12 +87,7 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
           borderColor="outlineVariant"
           justifyContent="space-between"
         >
-          <Typography
-            variant="body"
-            size="medium"
-            opacity="0.80"
-            color="#000000A3"
-          >
+          <Typography variant="body" size="medium" opacity="0.80">
             Total SUI fee
           </Typography>
           <Box textAlign="right">
