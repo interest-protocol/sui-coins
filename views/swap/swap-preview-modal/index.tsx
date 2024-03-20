@@ -20,7 +20,7 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
 
   return (
     <Box
-      maxWidth="95%"
+      maxWidth="100%"
       overflow="auto"
       borderRadius="xs"
       width="26.875rem"
