@@ -16,7 +16,7 @@ const Web3Provider: FC<PropsWithChildren> = ({ children }) => (
   <ThemeManager>
     <NetworkProvider>
       <QueryClientProvider client={queryClient}>
-        <WalletProvider>
+        <WalletProvider autoConnect>
           <SuiNsProvider>
             <Web3Manager>{children}</Web3Manager>
           </SuiNsProvider>
