@@ -42,7 +42,13 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
         variant="headline"
         size="large"
         textAlign="center"
-        color={isError ? 'error' : finished !== 100 ? 'onSurface' : 'success'}
+        color={
+          isError
+            ? 'errorContainer'
+            : finished !== 100
+              ? 'onSurface'
+              : 'success'
+        }
       >
         {isError ? 'error found' : finished !== 100 ? 'Sending' : "You're done"}
       </Typography>
@@ -60,14 +66,9 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
             height="8.75rem"
             borderRadius="full"
             alignItems="center"
-            bg="errorContainer"
             justifyContent="center"
           >
-            <WarningSVG
-              width="100%"
-              maxWidth="3.96831rem"
-              maxHeight="3.73075rem"
-            />
+            <WarningSVG width="100%" maxWidth="8.75rem" maxHeight="8.75rem" />
           </Box>
         ) : finished !== 100 ? (
           <>
@@ -89,14 +90,9 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
             color="success"
             borderRadius="full"
             alignItems="center"
-            bg="successContainer"
             justifyContent="center"
           >
-            <CheckSVG
-              width="100%"
-              maxWidth="3.43225rem"
-              maxHeight="2.52081rem"
-            />
+            <CheckSVG width="100%" maxWidth="8.75rem" maxHeight="8.75rem" />
           </Box>
         )}
       </Box>
@@ -130,8 +126,7 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
             onClick={goBack}
             justifyContent="center"
             borderColor="outlineVariant"
-            bg={error || failedItems.length ? 'error' : 'surface'}
-            color={error || failedItems.length ? 'onError' : 'onSurface'}
+            color="onSurface"
           >
             Close
           </Button>
@@ -141,10 +136,13 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
             onClick={goBack}
             borderRadius="xs"
             justifyContent="center"
-            bg={error || failedItems.length ? 'error' : 'surface'}
-            color={error || failedItems.length ? 'onError' : 'onSurface'}
+            bg={error || failedItems.length ? 'errorContainer' : 'surface'}
+            color={error || failedItems.length ? 'onSurface' : 'onSurface'}
+            nHover={{
+              backgroundColor: 'lowContainer',
+            }}
           >
-            Go back
+            Resend failed batches
           </Button>
         </Box>
       )}
