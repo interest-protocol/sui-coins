@@ -1,39 +1,69 @@
-import { Box, ListItem, Typography } from '@interest-protocol/ui-kit';
+import { Box, Motion, Typography } from '@interest-protocol/ui-kit';
 import BigNumber from 'bignumber.js';
-import { not } from 'ramda';
-import { FC, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { v4 } from 'uuid';
 
 import { useNetwork } from '@/context/network';
-import { useWeb3 } from '@/hooks';
-import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
+import { useModal } from '@/hooks/use-modal';
+import useTokenPriceBySymbol from '@/hooks/use-token-price';
 import { FixedPointMath, TOKEN_ICONS } from '@/lib';
 import { ChevronRightSVG, DefaultTokenSVG } from '@/svg';
 
+import SelectTokenModal from '../components/select-token-modal';
+import { CoinDataWithChainInfo } from '../components/select-token-modal/select-token-modal.types';
 import { IAirdropForm } from './airdrop.types';
-import { convertTypeToShortPackedId } from './airdrop.utils';
 
 const BOX_ID = 'dropdown-id';
 
 const AirdropSelectToken: FC = () => {
   const { network } = useNetwork();
-  const [isOpen, setIsOpen] = useState(false);
-  const { coins, isFetchingCoinBalances } = useWeb3();
+  const { setModal, handleClose } = useModal();
   const { control, setValue } = useFormContext<IAirdropForm>();
   const token = useWatch({ control, name: 'token' });
+  const {
+    isLoading,
+    error,
+    data: usdPrice,
+  } = useTokenPriceBySymbol(token?.symbol);
 
-  const closeDropdown = (event: any) => {
-    if (
-      event?.path?.some((node: any) => node?.id == BOX_ID) ||
-      event?.composedPath()?.some((node: any) => node?.id == BOX_ID)
-    )
-      return;
+  useEffect(() => {
+    if (!isLoading && !error) setValue('tokenUSDPrice', usdPrice);
+  }, [usdPrice, isLoading, error]);
 
-    setIsOpen(false);
+  const onSelect = async ({
+    decimals,
+    symbol,
+    type,
+    balance,
+  }: CoinDataWithChainInfo) => {
+    setValue('decimals', decimals);
+    console.log('balance: ', balance);
+    setValue('token', {
+      type,
+      symbol,
+      decimals,
+      balance: FixedPointMath.toNumber(BigNumber(balance || 0), decimals),
+    });
+    setValue('tokenUSDPrice', undefined);
+    handleClose();
   };
 
-  const dropdownRef = useClickOutsideListenerRef<HTMLDivElement>(closeDropdown);
+  const openModal = () =>
+    setModal(
+      <Motion
+        animate={{ scale: 1 }}
+        initial={{ scale: 0.85 }}
+        transition={{ duration: 0.3 }}
+      >
+        <SelectTokenModal closeModal={handleClose} onSelect={onSelect} />
+      </Motion>,
+      {
+        isOpen: true,
+        custom: true,
+        opaque: false,
+        allowClose: true,
+      }
+    );
 
   const renderToken = () => {
     if (!token) return null;
@@ -57,7 +87,7 @@ const AirdropSelectToken: FC = () => {
   return (
     <Box position="relative" id={BOX_ID}>
       <Box
-        p="s"
+        p="xs"
         gap="xs"
         display="flex"
         minWidth="8rem"
@@ -65,8 +95,8 @@ const AirdropSelectToken: FC = () => {
         borderRadius="xs"
         border="1px solid"
         alignItems="center"
+        onClick={openModal}
         borderColor="outlineVariant"
-        onClick={() => setIsOpen(not)}
       >
         {renderToken()}
         <Typography
@@ -76,82 +106,12 @@ const AirdropSelectToken: FC = () => {
           variant="label"
           color="onSurface"
         >
-          {token ? token.symbol : '---'}
+          {token?.symbol || '---'}
         </Typography>
         <Box rotate="90deg" color="onSurface">
           <ChevronRightSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
         </Box>
       </Box>
-      {isOpen && (
-        <Box
-          zIndex={1}
-          top="3.5rem"
-          width="100%"
-          overflow="auto"
-          cursor="pointer"
-          maxHeight="20rem"
-          bg="lowContainer"
-          color="onSurface"
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          ref={dropdownRef}
-          borderRadius="xs"
-          position="absolute"
-          border="2px solid"
-          borderColor="outline"
-        >
-          {isFetchingCoinBalances ? (
-            <ListItem width="100%" title="Loading..." />
-          ) : !coins ? (
-            <ListItem width="100%" title="You have no coins" />
-          ) : (
-            coins.map(({ decimals, symbol, type, balance }) => {
-              const Icon = TOKEN_ICONS[network][symbol] ?? DefaultTokenSVG;
-
-              return (
-                <ListItem
-                  key={v4()}
-                  width="100%"
-                  cursor="pointer"
-                  title={`${symbol} [${convertTypeToShortPackedId(type)}]`}
-                  onClick={() => {
-                    setValue('decimals', decimals);
-                    setValue('token', {
-                      type,
-                      symbol,
-                      decimals,
-                      balance: FixedPointMath.toNumber(
-                        BigNumber(balance),
-                        decimals
-                      ),
-                    });
-                    setIsOpen(false);
-                  }}
-                  PrefixIcon={
-                    <Box
-                      display="flex"
-                      bg="onSurface"
-                      color="surface"
-                      height="1.8rem"
-                      minWidth="1.8rem"
-                      borderRadius="xs"
-                      alignItems="center"
-                      justifyContent="center"
-                    >
-                      <Icon width="100%" maxWidth="1.2rem" maxHeight="1.2rem" />
-                    </Box>
-                  }
-                  SuffixIcon={
-                    <Typography variant="body" size="medium" color="onSurface">
-                      {FixedPointMath.toNumber(BigNumber(balance), decimals)}
-                    </Typography>
-                  }
-                />
-              );
-            })
-          )}
-        </Box>
-      )}
     </Box>
   );
 };

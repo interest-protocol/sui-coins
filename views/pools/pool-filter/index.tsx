@@ -17,7 +17,7 @@ const PoolFilter: FC = () => (
       flexDirection="row"
       justifyContent="flex-start"
       gridTemplateColumns="1fr 1fr 1fr"
-      display={['grid', 'flex', 'flex', 'flex', 'flex']}
+      display={['grid', 'flex']}
     >
       <Box
         zIndex="1"
@@ -28,7 +28,7 @@ const PoolFilter: FC = () => (
         alignItems="center"
         flexDirection="column"
         justifyContent="center"
-        display={['none', 'none', 'inline-flex', 'inline-flex', 'inline-flex']}
+        display={['none', 'none', 'inline-flex']}
       >
         <FilterSVG maxWidth="2rem" maxHeight="2rem" width="100%" />
       </Box>

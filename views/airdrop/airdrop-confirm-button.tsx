@@ -9,20 +9,23 @@ import toast from 'react-hot-toast';
 
 import { EXPLORER_URL, PACKAGES } from '@/constants';
 import { useNetwork } from '@/context/network';
-import { useMovementClient, useWeb3 } from '@/hooks';
+import { useMovementClient } from '@/hooks';
+import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import {
   createObjectsParameter,
   showTXSuccessToast,
   sleep,
-  splitArray,
   throwTXIfNotSuccessful,
 } from '@/utils';
+import { splitArray } from '@/utils';
 
 import { BATCH_SIZE, RATE_LIMIT_DELAY } from './airdrop.constants';
 import { AirdropProgressProps, IAirdropForm } from './airdrop.types';
 
-const AirdropButton: FC<AirdropProgressProps> = ({ setIsProgressView }) => {
+const AirdropConfirmButton: FC<AirdropProgressProps> = ({
+  setIsProgressView,
+}) => {
   const { control, getValues, setValue } = useFormContext<IAirdropForm>();
   const { currentAccount } = useWalletKit();
   const { coinsMap } = useWeb3();
@@ -30,17 +33,19 @@ const AirdropButton: FC<AirdropProgressProps> = ({ setIsProgressView }) => {
   const { network } = useNetwork();
   const suiClient = useMovementClient();
   const { signTransactionBlock } = useWalletKit();
-  const isDisabled =
-    !airdropList ||
-    !token?.balance ||
-    token.balance <
-      FixedPointMath.toNumber(
+
+  const amountList = airdropList
+    ? FixedPointMath.toNumber(
         airdropList?.reduce(
           (acc, { amount }) => acc.plus(BigNumber(amount ?? 0)),
           BigNumber(0)
         ),
-        token.decimals
-      );
+        token?.decimals || 0
+      )
+    : 0;
+
+  const isDisabled =
+    !airdropList || !token?.balance || token.balance < amountList;
 
   const handleSend = async () => {
     setIsProgressView(true);
@@ -227,15 +232,20 @@ const AirdropButton: FC<AirdropProgressProps> = ({ setIsProgressView }) => {
   return (
     <Box display="flex" justifyContent="center">
       <Button
-        disabled={isDisabled}
+        width="100%"
+        display="flex"
         variant="filled"
         onClick={handleSend}
-        color="onSurface"
+        disabled={isDisabled}
+        borderRadius="0.5rem"
+        justifyContent="center"
       >
-        Send
+        <Typography variant="label" size="large">
+          Confirm airdrop
+        </Typography>
       </Button>
     </Box>
   );
 };
 
-export default AirdropButton;
+export default AirdropConfirmButton;

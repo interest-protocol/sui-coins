@@ -36,7 +36,6 @@ const PoolSummary: FC = () => {
         message: 'We are creating the pool, and you will know when it is done',
       },
       success: {
-        onClose: handleClose,
         title: 'Pool created successfully',
         message:
           'Your pool was create successfully, and you can check it on the Explorer',
@@ -46,7 +45,6 @@ const PoolSummary: FC = () => {
         },
       },
       error: {
-        onClose: handleClose,
         title: 'Pool creation failed',
         message:
           'Your pool was not created, please try again or contact the support team',

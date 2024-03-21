@@ -1,16 +1,49 @@
-import { Box, Button, Theme, useTheme } from '@interest-protocol/ui-kit';
-import { useRouter } from 'next/router';
+import {
+  Box,
+  Button,
+  Motion,
+  Theme,
+  useTheme,
+} from '@interest-protocol/ui-kit';
 import { FC } from 'react';
+import { useFormContext } from 'react-hook-form';
 
-import { Routes, RoutesEnum } from '@/constants';
+import { useModal } from '@/hooks/use-modal';
 import { SearchSVG } from '@/svg';
 
-const ActionGroup: FC = () => {
-  const { colors } = useTheme() as Theme;
-  const { push } = useRouter();
+import FindPoolModal from '../find-pool-modal';
+import { PoolForm } from '../pools.types';
 
-  // TODO: @MarioBatalha call ur modal here
-  const handleFindPool = () => push(Routes[RoutesEnum.Pools]);
+const FinPoolButton: FC = () => {
+  const { colors } = useTheme() as Theme;
+  const { setModal, handleClose } = useModal();
+
+  const { setValue } = useFormContext<PoolForm>();
+
+  const openModal = () => {
+    setModal(
+      <Motion
+        animate={{ scale: 1 }}
+        initial={{ scale: 0.85 }}
+        transition={{ duration: 0.3 }}
+      >
+        <FindPoolModal
+          handleSearch={(tokens) => {
+            console.log('tokens data :: ', tokens);
+            setValue('tokenList', tokens);
+            handleClose();
+          }}
+          closeModal={handleClose}
+        />
+      </Motion>,
+      {
+        isOpen: true,
+        custom: true,
+        opaque: false,
+        allowClose: true,
+      }
+    );
+  };
 
   return (
     <>
@@ -24,7 +57,7 @@ const ActionGroup: FC = () => {
           variant="tonal"
           color="onSurface"
           bg="highContainer"
-          onClick={handleFindPool}
+          onClick={openModal}
           nHover={{
             bg: `${colors.primary}14`,
           }}
@@ -54,7 +87,7 @@ const ActionGroup: FC = () => {
           nHover={{
             bg: 'outline',
           }}
-          onClick={handleFindPool}
+          onClick={openModal}
         >
           <Box height="1.25rem" width="1.25rem">
             <SearchSVG maxHeight="1.25rem" maxWidth="1.25rem" width="100%" />
@@ -65,4 +98,4 @@ const ActionGroup: FC = () => {
   );
 };
 
-export default ActionGroup;
+export default FinPoolButton;

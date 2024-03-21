@@ -6,10 +6,11 @@ export interface CoinDataWithChainInfo {
   type: string;
   decimals: number;
   symbol: TOKEN_SYMBOL | string;
+  balance: number | string;
 }
 
 export interface TokenModalItemProps
-  extends Omit<CoinDataWithChainInfo, 'decimals'> {
+  extends Omit<CoinDataWithChainInfo, 'decimals' | 'balance'> {
   selected: boolean;
   onClick: () => void;
 }

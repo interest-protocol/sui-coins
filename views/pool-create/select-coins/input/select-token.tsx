@@ -29,13 +29,14 @@ const SelectToken: FC<InputProps> = ({ index }) => {
   const Icon = currentSymbol ? TOKEN_ICONS[network][currentSymbol] : null;
 
   const onSelect = async ({ type, decimals, symbol }: CoinData) => {
-    getValues('tokens')?.filter((token) => token.type === type).length == 0 &&
-      setValue(`tokens.${index}`, {
-        type,
-        symbol,
-        decimals,
-        value: '',
-      });
+    if (getValues('tokens')?.some((token) => token.type === type)) return;
+
+    setValue(`tokens.${index}`, {
+      type,
+      symbol,
+      decimals,
+      value: '',
+    });
   };
 
   const openModal = () =>
