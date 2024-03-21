@@ -35,23 +35,17 @@ const PreviewSwapButton: FC = () => {
 
   const isGreaterThanAllowedWhenSui = fromBalance.minus(oneCoin).lt(fromValue);
 
-  console.log({
-    balance: fromBalance.minus(oneCoin).toString(),
-    from: fromValue.toString(),
-  });
-
   const ableToSwap =
     from &&
     to &&
     from.type &&
     to.type &&
-    Number(from.value) &&
+    from.value?.isZero() &&
     Number(to.display) &&
-    String(from.decimals) &&
     coinsMap[from.type] &&
-    from.type === SUI_TYPE_ARG
+    (from.type === SUI_TYPE_ARG
       ? !isGreaterThanAllowedWhenSui
-      : !isGreaterThanBalance;
+      : !isGreaterThanBalance);
 
   useEffect(() => {
     if (
@@ -87,16 +81,11 @@ const PreviewSwapButton: FC = () => {
       }
     );
   };
+
   return (
     <>
       <SwapMessages />
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        mt="l"
-        mb="l"
-      >
+      <Box my="l" display="flex" alignItems="center" justifyContent="center">
         <Button
           py="s"
           px="xl"
