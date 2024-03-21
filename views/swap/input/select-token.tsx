@@ -19,7 +19,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
   const { pathname } = useRouter();
   const { setModal, handleClose } = useModal();
 
-  const { setValue, control } = useFormContext<SwapForm>();
+  const { setValue, control, getValues } = useFormContext<SwapForm>();
 
   const currentToken = useWatch({
     control,
@@ -75,7 +75,10 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       )
       .catch(() => null);
 
-    setValue(`${label === 'from' ? 'to' : 'from'}.display`, '');
+    setValue(
+      `${label === 'from' ? 'to' : 'from'}.display`,
+      getValues('from.display')
+    );
 
     changeURL(type);
   };

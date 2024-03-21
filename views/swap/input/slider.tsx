@@ -44,7 +44,7 @@ const SwapFormFieldSlider: FC = () => {
             ? balance.gt(fromValue)
               ? (FixedPointMath.toNumber(fromValue) * 100) /
                 FixedPointMath.toNumber(balance, getValues('from.decimals'))
-              : 100
+              : 0
             : 0
         )}
         onChange={(value: number) => {
