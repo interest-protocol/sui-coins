@@ -106,9 +106,10 @@ const SwapPage: NextPage = () => {
       const searchParams = new URLSearchParams(
         asPath.replace('/', '').replace('?', '')
       );
+
       const [fromType, toType] = await Promise.all([
         setDefaultToken(from as `0x${string}`, 'from'),
-        setDefaultToken(to as `0x${string}`, 'to'),
+        from !== to ? setDefaultToken(to as `0x${string}`, 'to') : undefined,
       ]);
 
       searchParams.delete('from');
