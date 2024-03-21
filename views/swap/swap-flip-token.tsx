@@ -33,10 +33,9 @@ const SwapFlipToken: FC = () => {
       width="1.5rem"
       height="1.5rem"
       color="primary"
-      variant="filled"
+      variant="text"
       onClick={flipToken}
       disabled={!to && !from}
-      nHover={{ bg: 'lowContainer' }}
     >
       <SwapSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
     </Button>
