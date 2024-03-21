@@ -68,7 +68,7 @@ const SwapUpdatePrice: FC = () => {
 
   const resetFields = () => {
     setValue('route', null);
-    setValue('to.value', '0');
+    setValue('to.display', '0');
     setValue('lastFetchDate', null);
     setValue('fetchingPrices', false);
   };
@@ -87,12 +87,7 @@ const SwapUpdatePrice: FC = () => {
         .getCompleteTradeRouteGivenAmountIn({
           coinInType,
           coinOutType,
-          coinInAmount: BigInt(
-            FixedPointMath.toBigNumber(
-              coinInValue,
-              getValues('from.decimals')
-            ).toString()
-          ),
+          coinInAmount: BigInt(coinInValue.toString()),
           referrer: TREASURY,
           externalFee: {
             recipient: TREASURY,
@@ -110,10 +105,10 @@ const SwapUpdatePrice: FC = () => {
       setValue('route', data);
 
       setValue(
-        'to.value',
+        'to.display',
         Number(
           (
-            (+coinInValue *
+            (FixedPointMath.toNumber(coinInValue, getValues('from.decimals')) *
               10 ** (getValues('from.decimals') - getValues('to.decimals'))) /
             data.spotPrice
           ).toFixed(6)

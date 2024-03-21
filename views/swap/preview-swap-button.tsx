@@ -22,9 +22,7 @@ const PreviewSwapButton: FC = () => {
   const from = useWatch({ control, name: 'from' });
   const to = useWatch({ control, name: 'to' });
 
-  const fromValue = from
-    ? FixedPointMath.toBigNumber(from?.value, from.decimals)
-    : ZERO_BIG_NUMBER;
+  const fromValue = from?.value ?? ZERO_BIG_NUMBER;
 
   const fromBalance =
     from && coinsMap[from.type] ? coinsMap[from.type].balance : ZERO_BIG_NUMBER;
@@ -37,17 +35,23 @@ const PreviewSwapButton: FC = () => {
 
   const isGreaterThanAllowedWhenSui = fromBalance.minus(oneCoin).lt(fromValue);
 
+  console.log({
+    balance: fromBalance.minus(oneCoin).toString(),
+    from: fromValue.toString(),
+  });
+
   const ableToSwap =
     from &&
     to &&
     from.type &&
     to.type &&
     Number(from.value) &&
-    Number(to.value) &&
+    Number(to.display) &&
     String(from.decimals) &&
     coinsMap[from.type] &&
-    (!isGreaterThanBalance ||
-      (from.type === SUI_TYPE_ARG && !isGreaterThanAllowedWhenSui));
+    from.type === SUI_TYPE_ARG
+      ? !isGreaterThanAllowedWhenSui
+      : !isGreaterThanBalance;
 
   useEffect(() => {
     if (
@@ -57,13 +61,14 @@ const PreviewSwapButton: FC = () => {
       String(from.decimals) &&
       coinsMap[from.type]
     ) {
+      if (from.type === SUI_TYPE_ARG)
+        if (isGreaterThanAllowedWhenSui) {
+          setValue('error', 'You must have at least 1 SUI on your wallet');
+          return;
+        }
+
       if (isGreaterThanBalance) {
         setValue('error', 'You do not have enough tokens.');
-        return;
-      }
-
-      if (from.type === SUI_TYPE_ARG && isGreaterThanAllowedWhenSui) {
-        setValue('error', 'You must have at least 1 SUI on your wallet');
         return;
       }
     }
