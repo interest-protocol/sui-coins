@@ -6,7 +6,7 @@ export interface ICreateTokenForm {
   totalSupply: string;
   decimals?: number | undefined;
   imageUrl?: string | undefined;
-  description?: string | undefined;
+  description: string;
   fixedSupply: NonNullable<boolean | undefined>;
 }
 
