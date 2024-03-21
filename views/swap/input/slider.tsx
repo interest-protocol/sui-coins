@@ -40,7 +40,7 @@ const SwapFormFieldSlider: FC = () => {
         max={100}
         disabled={!balance}
         initial={Math.floor(
-          !fromValue.isZero?.() && !balance.isZero?.()
+          !fromValue?.isZero?.() && !balance?.isZero?.()
             ? balance.gt(fromValue)
               ? FixedPointMath.toNumber(
                   fromValue.div(balance),
