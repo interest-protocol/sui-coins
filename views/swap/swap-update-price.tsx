@@ -52,6 +52,11 @@ const SwapUpdatePrice: FC = () => {
     name: 'to.type',
   });
 
+  const swapping = useWatch({
+    control,
+    name: 'swapping',
+  });
+
   const interval = useWatch({
     control,
     name: 'settings.interval',
@@ -81,6 +86,8 @@ const SwapUpdatePrice: FC = () => {
         resetFields();
         return;
       }
+
+      if (swapping) return;
 
       setValue('fetchingPrices', true);
 

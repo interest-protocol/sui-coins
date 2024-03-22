@@ -26,6 +26,11 @@ const SelectToken: FC<InputProps> = ({ label }) => {
     name: label,
   });
 
+  const swapping = useWatch({
+    control,
+    name: 'swapping',
+  });
+
   const { symbol: currentSymbol, type: currentType } = currentToken ?? {
     symbol: undefined,
     type: undefined,
@@ -80,10 +85,11 @@ const SelectToken: FC<InputProps> = ({ label }) => {
 
     setValue(`${label === 'from' ? 'to' : 'from'}.display`, '');
 
-    changeURL(type, currentToken.type);
+    changeURL(type, type === oppositeType ? currentToken.type : undefined);
   };
 
   const openModal = () =>
+    !swapping &&
     setModal(
       <Motion
         animate={{ scale: 1 }}
@@ -111,8 +117,9 @@ const SelectToken: FC<InputProps> = ({ label }) => {
         width="100%"
         variant="tonal"
         borderRadius="xs"
-        bg="highestContainer"
         onClick={openModal}
+        bg="highestContainer"
+        opacity={swapping ? 0.7 : 1}
         {...(currentType && {
           PrefixIcon: (
             <TokenIcon
