@@ -146,7 +146,7 @@ const SwapUpdatePrice: FC = () => {
       variant="filled"
       alignItems="center"
       position="relative"
-      disabled={!Number(coinInValue)}
+      disabled={!Number(coinInValue) || !coinOutType}
       nHover={
         Number(coinInValue) ? { bg: 'lowContainer' } : { bg: 'lowestContainer' }
       }
