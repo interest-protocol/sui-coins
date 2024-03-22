@@ -38,6 +38,11 @@ const SwapPage: NextPage = () => {
     },
   });
 
+  useEffect(() => {
+    form.resetField('from');
+    form.resetField('to');
+  }, [network]);
+
   const setDefaultToken = async (
     value: `0x${string}`,
     field: 'to' | 'from'

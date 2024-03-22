@@ -117,6 +117,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
         width="100%"
         variant="tonal"
         borderRadius="xs"
+        disabled={swapping}
         onClick={openModal}
         bg="highestContainer"
         opacity={swapping ? 0.7 : 1}

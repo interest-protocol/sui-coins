@@ -16,8 +16,10 @@ const SwapFlipToken: FC = () => {
 
   const to = useWatch({ control, name: 'to' });
   const from = useWatch({ control, name: 'from' });
+  const swapping = useWatch({ control, name: 'swapping' });
 
   const flipToken = () => {
+    if (swapping) return;
     const tmpTo = to;
     const tmpFrom = from;
     setValue('to', { ...tmpFrom, display: '' });
@@ -29,13 +31,13 @@ const SwapFlipToken: FC = () => {
   return (
     <Button
       isIcon
+      variant="text"
       bg="onPrimary"
       width="1.5rem"
       height="1.5rem"
       color="primary"
-      variant="text"
       onClick={flipToken}
-      disabled={!to && !from}
+      disabled={(!to && !from) || swapping}
     >
       <SwapSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
     </Button>
