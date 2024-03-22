@@ -15,6 +15,7 @@ export interface SwapToken extends Token {
 export interface SwapForm {
   to: SwapToken;
   loading: boolean;
+  swapping: boolean;
   explorerLink: string;
   error: string | null;
   readyToSwap: boolean;

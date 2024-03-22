@@ -89,6 +89,7 @@ const SuiNetwork: FC = () => {
           top="3rem"
           zIndex={4}
           width="14.5rem"
+          overflow="hidden"
           border="1px solid"
           borderRadius="1rem"
           position="absolute"

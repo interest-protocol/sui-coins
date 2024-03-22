@@ -8,6 +8,7 @@ import { useDebounce } from 'use-debounce';
 
 import { TREASURY } from '@/constants';
 import { EXCHANGE_FEE } from '@/constants/dex';
+import { useNetwork } from '@/context/network';
 import { FixedPointMath } from '@/lib';
 import { RefreshSVG } from '@/svg';
 
@@ -31,6 +32,7 @@ const countdownRenderer =
   };
 
 const SwapUpdatePrice: FC = () => {
+  const network = useNetwork();
   const aftermathRouter = useAftermathRouter();
   const { control, setValue, getValues } = useFormContext<SwapForm>();
 
@@ -50,6 +52,11 @@ const SwapUpdatePrice: FC = () => {
   const coinOutType = useWatch({
     control,
     name: 'to.type',
+  });
+
+  const swapping = useWatch({
+    control,
+    name: 'swapping',
   });
 
   const interval = useWatch({
@@ -72,15 +79,20 @@ const SwapUpdatePrice: FC = () => {
     setValue('to.display', '0');
     setValue('lastFetchDate', null);
     setValue('fetchingPrices', false);
+    setValue('error', null);
   };
 
+  const disabled = !coinInValue || coinInValue.isZero() || !coinOutType;
+
   const { mutate } = useSWR(
-    `${coinInType}-${coinOutType}-${coinInValue}`,
+    `${coinInType}-${coinOutType}-${coinInValue?.toString()}-${network}`,
     async () => {
-      if (!(coinInType && coinOutType && Number(coinInValue))) {
+      if (disabled) {
         resetFields();
         return;
       }
+
+      if (swapping) return;
 
       setValue('fetchingPrices', true);
 
@@ -105,8 +117,6 @@ const SwapUpdatePrice: FC = () => {
         .finally(() => {
           setValue('fetchingPrices', false);
         });
-
-      if (!Number(getValues('from.value'))) return;
 
       setValue('route', data);
 
@@ -136,14 +146,12 @@ const SwapUpdatePrice: FC = () => {
       variant="filled"
       alignItems="center"
       position="relative"
-      disabled={!Number(coinInValue)}
-      nHover={
-        Number(coinInValue) ? { bg: 'lowContainer' } : { bg: 'lowestContainer' }
-      }
-      nFocus={Number(coinInValue) && { bg: 'lowContainer' }}
-      nActive={Number(coinInValue) && { bg: 'lowContainer' }}
+      disabled={disabled}
+      nFocus={!disabled && { bg: 'lowContainer' }}
+      nActive={!disabled && { bg: 'lowContainer' }}
+      nHover={!disabled ? { bg: 'lowContainer' } : { bg: 'lowestContainer' }}
       nDisabled={
-        !Number(coinInValue) && {
+        disabled && {
           opacity: 1,
           color: 'outline',
           bg: 'lowestContainer',

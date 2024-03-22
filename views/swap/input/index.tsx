@@ -1,6 +1,6 @@
 import { Box, TextField } from '@interest-protocol/ui-kit';
 import { ChangeEvent, FC } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import { FixedPointMath } from '@/lib';
 import { parseInputEventToNumberString } from '@/utils';
@@ -13,7 +13,12 @@ import SelectToken from './select-token';
 import Slider from './slider';
 
 const Input: FC<InputProps> = ({ label }) => {
-  const { register, setValue, getValues } = useFormContext<SwapForm>();
+  const { register, setValue, getValues, control } = useFormContext<SwapForm>();
+
+  const swapping = useWatch({
+    control,
+    name: 'swapping',
+  });
 
   return (
     <Box>
@@ -34,7 +39,7 @@ const Input: FC<InputProps> = ({ label }) => {
             color="onSurface"
             textAlign="right"
             fontFamily="Satoshi"
-            disabled={label === 'to'}
+            disabled={label === 'to' || swapping}
             fieldProps={{
               width: '100%',
               borderRadius: 'xs',
