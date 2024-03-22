@@ -19,8 +19,8 @@ import Swap from '@/views/swap';
 import { ISwapSettings, SwapForm, SwapToken } from '@/views/swap/swap.types';
 
 const SwapPage: NextPage = () => {
-  const { coinsMap } = useWeb3();
   const network = useNetwork();
+  const { coinsMap } = useWeb3();
   const {
     query: { to, from },
     pathname,

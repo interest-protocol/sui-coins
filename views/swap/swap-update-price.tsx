@@ -8,6 +8,7 @@ import { useDebounce } from 'use-debounce';
 
 import { TREASURY } from '@/constants';
 import { EXCHANGE_FEE } from '@/constants/dex';
+import { useNetwork } from '@/context/network';
 import { FixedPointMath } from '@/lib';
 import { RefreshSVG } from '@/svg';
 
@@ -31,6 +32,7 @@ const countdownRenderer =
   };
 
 const SwapUpdatePrice: FC = () => {
+  const network = useNetwork();
   const aftermathRouter = useAftermathRouter();
   const { control, setValue, getValues } = useFormContext<SwapForm>();
 
@@ -80,7 +82,7 @@ const SwapUpdatePrice: FC = () => {
   };
 
   const { mutate } = useSWR(
-    `${coinInType}-${coinOutType}-${coinInValue}`,
+    `${coinInType}-${coinOutType}-${coinInValue}-${network}`,
     async () => {
       if (!(coinInType && coinOutType && !coinInValue.isZero())) {
         resetFields();
