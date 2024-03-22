@@ -38,9 +38,9 @@ const SwapFormFieldSlider: FC = () => {
       <Slider
         min={0}
         max={100}
-        disabled={!balance}
+        disabled={!balance || balance.isZero?.()}
         initial={Math.floor(
-          !fromValue?.isZero?.() && !balance?.isZero?.()
+          fromValue && balance && !fromValue.isZero?.() && !balance.isZero?.()
             ? balance.gt(fromValue)
               ? (FixedPointMath.toNumber(fromValue) * 100) /
                 FixedPointMath.toNumber(balance, getValues('from.decimals'))
