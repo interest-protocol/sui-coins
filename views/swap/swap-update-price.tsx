@@ -79,6 +79,7 @@ const SwapUpdatePrice: FC = () => {
     setValue('to.display', '0');
     setValue('lastFetchDate', null);
     setValue('fetchingPrices', false);
+    setValue('error', null);
   };
 
   const { mutate } = useSWR(
