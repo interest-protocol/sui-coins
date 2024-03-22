@@ -116,7 +116,7 @@ const SwapUpdatePrice: FC = () => {
           setValue('fetchingPrices', false);
         });
 
-      if (!Number(getValues('from.value'))) return;
+      if (!coinInValue || coinInValue.isZero()) return;
 
       setValue('route', data);
 
