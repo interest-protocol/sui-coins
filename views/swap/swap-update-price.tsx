@@ -82,10 +82,12 @@ const SwapUpdatePrice: FC = () => {
     setValue('error', null);
   };
 
+  const disabled = !coinInValue || coinInValue.isZero() || !coinOutType;
+
   const { mutate } = useSWR(
-    `${coinInType}-${coinOutType}-${coinInValue}-${network}`,
+    `${coinInType}-${coinOutType}-${coinInValue?.toString()}-${network}`,
     async () => {
-      if (!(coinInType && coinOutType && !coinInValue.isZero())) {
+      if (disabled) {
         resetFields();
         return;
       }
@@ -116,8 +118,6 @@ const SwapUpdatePrice: FC = () => {
           setValue('fetchingPrices', false);
         });
 
-      if (!coinInValue || coinInValue.isZero()) return resetFields();
-
       setValue('route', data);
 
       setValue(
@@ -135,8 +135,6 @@ const SwapUpdatePrice: FC = () => {
     },
     { refreshInterval: Number(interval) * 1000, refreshWhenOffline: false }
   );
-
-  const disabled = !coinInValue || coinInValue.isZero() || !coinOutType;
 
   return (
     <Button

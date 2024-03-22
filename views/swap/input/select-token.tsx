@@ -8,7 +8,7 @@ import TokenIcon from '@/components/token-icon';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
 import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
-import { updateURL, ZERO_BIG_NUMBER } from '@/utils';
+import { updateURL } from '@/utils';
 import SelectTokenModal from '@/views/components/select-token-modal';
 
 import { SwapForm } from '../swap.types';
@@ -83,8 +83,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       )
       .catch(() => null);
 
-    setValue(`${label === 'from' ? 'to' : 'from'}.display`, '');
-    if (label === 'to') setValue('from.value', ZERO_BIG_NUMBER);
+    if (label === 'from') setValue('to.display', '');
 
     changeURL(type, type === oppositeType ? currentToken.type : undefined);
   };
