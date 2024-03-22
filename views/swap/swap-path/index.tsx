@@ -42,7 +42,7 @@ const SwapPath: FC = () => {
           key={v4()}
           display="flex"
           alignItems="center"
-          justifyContent={['center', 'center', 'center']}
+          justifyContent="center"
         >
           <Typography variant="label" size="small">
             {(+(100 / routes.length).toFixed(1)).toPrecision()}%
