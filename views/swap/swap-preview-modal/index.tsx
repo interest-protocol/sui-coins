@@ -37,6 +37,7 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
         <Box
           p="xl"
           display="flex"
+          cursor="pointer"
           alignItems="center"
           justifyContent="space-between"
         >
