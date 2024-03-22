@@ -77,7 +77,7 @@ const SwapUpdatePrice: FC = () => {
   const { mutate } = useSWR(
     `${coinInType}-${coinOutType}-${coinInValue}`,
     async () => {
-      if (!(coinInType && coinOutType && coinInValue.isZero())) {
+      if (!(coinInType && coinOutType && !coinInValue.isZero())) {
         resetFields();
         return;
       }
