@@ -8,7 +8,7 @@ import { useNetwork } from '@/context/network';
 import { useDialog } from '@/hooks/use-dialog';
 import useSignTxb from '@/hooks/use-sign-txb';
 import { useWeb3 } from '@/hooks/use-web3';
-import { throwTXIfNotSuccessful } from '@/utils';
+import { throwTXIfNotSuccessful, ZERO_BIG_NUMBER } from '@/utils';
 import { SwapForm } from '@/views/swap/swap.types';
 
 import { useAftermathRouter } from './swap.hooks';
@@ -26,8 +26,9 @@ const SwapButton: FC = () => {
   const signTransactionBlock = useSignTxb();
 
   const resetInput = () => {
-    formSwap.setValue('from.display', '0');
     formSwap.setValue('to.display', '0');
+    formSwap.setValue('from.display', '0');
+    formSwap.setValue('from.value', ZERO_BIG_NUMBER);
   };
 
   const route = useWatch({ control: formSwap.control, name: 'route' });
