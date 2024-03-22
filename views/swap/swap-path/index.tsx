@@ -25,13 +25,16 @@ const SwapPath: FC = () => {
       mt="xs"
       mx="auto"
       width="100%"
+      maxWidth="90vw"
       display="flex"
       color="onSurface"
       borderRadius="xs"
       position="relative"
-      alignItems="center"
       bg="lowestContainer"
+      alignItems={['unset', 'unset', 'center']}
       flexDirection="column"
+      flexWrap="wrap"
+      overflowX="auto"
     >
       {routes.map(({ paths }) => (
         <Box
@@ -92,6 +95,7 @@ const SwapPath: FC = () => {
         <Box
           gap="2xs"
           display="flex"
+          left={['0.75rem', 'unset']}
           right="0.75rem"
           bottom="0.25rem"
           position="absolute"
