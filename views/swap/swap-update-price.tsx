@@ -147,13 +147,16 @@ const SwapUpdatePrice: FC = () => {
       alignItems="center"
       position="relative"
       disabled={!Number(coinInValue) || !coinOutType}
+      nFocus={Number(coinInValue) && coinOutType && { bg: 'lowContainer' }}
+      nActive={Number(coinInValue) && coinOutType && { bg: 'lowContainer' }}
       nHover={
-        Number(coinInValue) ? { bg: 'lowContainer' } : { bg: 'lowestContainer' }
+        Number(coinInValue) && coinOutType
+          ? { bg: 'lowContainer' }
+          : { bg: 'lowestContainer' }
       }
-      nFocus={Number(coinInValue) && { bg: 'lowContainer' }}
-      nActive={Number(coinInValue) && { bg: 'lowContainer' }}
       nDisabled={
-        !Number(coinInValue) && {
+        !Number(coinInValue) &&
+        !coinOutType && {
           opacity: 1,
           color: 'outline',
           bg: 'lowestContainer',
