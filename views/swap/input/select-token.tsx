@@ -31,9 +31,12 @@ const SelectToken: FC<InputProps> = ({ label }) => {
     type: undefined,
   };
 
-  const changeURL = (type: string) => {
+  const changeURL = (type: string, oppositeType?: string) => {
     const searchParams = new URLSearchParams(location.search);
     searchParams.set(label, type);
+
+    if (oppositeType)
+      searchParams.set(label === 'to' ? 'from' : 'to', oppositeType);
 
     updateURL(
       `${pathname}?from=${searchParams.get('from')}&to=${searchParams.get(
@@ -77,7 +80,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
 
     setValue(`${label === 'from' ? 'to' : 'from'}.display`, '');
 
-    changeURL(type);
+    changeURL(type, currentToken.type);
   };
 
   const openModal = () =>

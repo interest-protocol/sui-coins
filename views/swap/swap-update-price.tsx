@@ -10,6 +10,7 @@ import { TREASURY } from '@/constants';
 import { EXCHANGE_FEE } from '@/constants/dex';
 import { FixedPointMath } from '@/lib';
 import { RefreshSVG } from '@/svg';
+import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { useAftermathRouter } from './swap.hooks';
 import { SwapForm } from './swap.types';
@@ -70,14 +71,16 @@ const SwapUpdatePrice: FC = () => {
   const resetFields = () => {
     setValue('route', null);
     setValue('to.display', '0');
+    setValue('from.display', '0');
     setValue('lastFetchDate', null);
     setValue('fetchingPrices', false);
+    setValue('from.value', ZERO_BIG_NUMBER);
   };
 
   const { mutate } = useSWR(
     `${coinInType}-${coinOutType}-${coinInValue}`,
     async () => {
-      if (!(coinInType && coinOutType && Number(coinInValue))) {
+      if (!(coinInType && coinOutType && coinInValue.isZero())) {
         resetFields();
         return;
       }
