@@ -6,10 +6,10 @@ import { ProfileMenuItemProps } from '../profile.types';
 
 const MenuProfileItem: FC<ProfileMenuItemProps> = ({
   name,
-  description,
   Icon,
-  hasBorder,
   disabled,
+  hasBorder,
+  description,
   handleAction,
 }) => (
   <Box
@@ -22,14 +22,14 @@ const MenuProfileItem: FC<ProfileMenuItemProps> = ({
         !disabled && handleAction && handleAction[name]?.();
       }}
     >
-      <Box display="flex" alignItems="center" gap="l">
+      <Box
+        gap="l"
+        display="flex"
+        alignItems="center"
+        opacity={disabled ? 0.7 : 1}
+      >
         <Icon maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
-        <Typography
-          size="small"
-          variant="title"
-          color="onSurface"
-          opacity={disabled ? 0.7 : 1}
-        >
+        <Typography size="small" variant="title" color="onSurface">
           {description}
         </Typography>
       </Box>

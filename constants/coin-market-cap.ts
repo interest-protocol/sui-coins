@@ -1,4 +1,4 @@
-import { COIN_TYPE } from '../views/pools/coins';
+import { COIN_TYPE } from './coins';
 import { Network } from './dapp';
 
 export const COIN_MARKET_CAP_ID_RECORD = {

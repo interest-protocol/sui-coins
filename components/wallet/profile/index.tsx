@@ -70,6 +70,11 @@ const Profile: FC = () => {
     setIsOpenAccount(false);
   };
 
+  const handleCloseAll = () => {
+    handleCloseAccount();
+    handleCloseProfile();
+  };
+
   return (
     <Box
       id={BOX_ID}
@@ -98,14 +103,16 @@ const Profile: FC = () => {
       {account && (
         <Box
           gap="m"
+          alignItems="center"
           display={[
             menuIsDropdown ? 'none' : 'flex',
             menuIsDropdown ? 'none' : 'flex',
             menuIsDropdown ? 'none' : 'flex',
             'flex',
           ]}
-          alignItems="center"
-          onClick={handleOpenProfile}
+          onClick={
+            isOpenProfile || isOpenAccount ? handleCloseAll : handleOpenProfile
+          }
         >
           <Avatar isLarge />
         </Box>

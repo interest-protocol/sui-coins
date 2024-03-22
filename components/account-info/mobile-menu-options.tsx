@@ -23,7 +23,7 @@ const AccountInfo: FC<AccountInfoProps> = ({
 
   return (
     <Box
-      gap="1rem"
+      gap="m"
       p="0.25rem"
       cursor="pointer"
       borderRadius="full"

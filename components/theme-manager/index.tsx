@@ -10,7 +10,6 @@ import { Toaster } from 'react-hot-toast';
 import { SkeletonTheme } from 'react-loading-skeleton';
 
 import { TOAST_DURATION } from '@/constants';
-import { ModalProvider } from '@/context/modal';
 import { GlobalStyles } from '@/styles';
 
 const ThemeManager: FC<Omit<ThemeProviderProps, 'theme'>> = ({ children }) => (
@@ -31,7 +30,7 @@ const ThemeManager: FC<Omit<ThemeProviderProps, 'theme'>> = ({ children }) => (
       }}
     />
     <SkeletonTheme baseColor="#99BBFF28" highlightColor="#99BBFF14">
-      <ModalProvider>{children}</ModalProvider>
+      {children}
     </SkeletonTheme>
   </InterestThemeProvider>
 );

@@ -27,7 +27,7 @@ const MobileMenuListItem: FC<MenuMobileItemProps> = ({
         cursor={disabled ? 'not-allowed' : 'pointer'}
         height="2.2rem"
         bg={asPath === path ? 'highestContainer' : undefined}
-        onClick={disabled ? noop : () => push(path)}
+        onClick={disabled || !path ? noop : () => push(path)}
         nHover={{
           bg: !disabled && 'highestContainer',
         }}

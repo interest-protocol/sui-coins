@@ -1,86 +1,155 @@
-import { Box } from '@interest-protocol/ui-kit';
+import { Chain } from '@interest-protocol/sui-tokens';
+import { Box, ProgressIndicator } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
+import useSWR from 'swr';
 
-import { TOKEN_ICONS } from '@/constants/coins';
+import { Network } from '@/constants';
 import {
-  AVAChainSVG,
+  CELER_TOKENS,
+  STRICT_TOKENS_MAP,
+  TOKEN_ICONS,
+  WORMHOLE_TOKENS,
+} from '@/constants/coins';
+import {
+  ARBChainSVG,
+  AVAXChainSVG,
   BSCChainSVG,
+  BTCChainSVG,
   DefaultSVG,
   ETHChainSVG,
+  MATICChainSVG,
   SOLChainSVG,
 } from '@/svg';
 
+import FTMChain from '../svg/ftm-chain';
+import { SVGProps } from '../svg/svg.types';
 import { TokenIconProps } from './token-icon.types';
 
-const CHAIN_ICON = {
+const CHAIN_ICON: Record<Chain, FC<SVGProps>> = {
   BSC: BSCChainSVG,
   ETH: ETHChainSVG,
   SOL: SOLChainSVG,
-  AVA: AVAChainSVG,
-  SUI: null,
+  AVAX: AVAXChainSVG,
+  ARB: ARBChainSVG,
+  BTC: BTCChainSVG,
+  FTM: FTMChain,
+  MATIC: MATICChainSVG,
 };
 
 const TokenIcon: FC<TokenIconProps> = ({
-  chain,
-  tokenId,
+  type,
+  symbol,
+  withBg,
   network,
-  maxWidth,
-  maxHeight,
+  rounded,
+  size = '1.5rem',
 }) => {
-  if (!tokenId) return null;
+  const isMainnet = network === Network.MAINNET;
+  const TokenIcon = TOKEN_ICONS[network][isMainnet ? type : symbol] ?? null;
 
-  const TokenIcon = TOKEN_ICONS[network][tokenId] ?? DefaultSVG;
+  const { data: iconSrc, isLoading } = useSWR(
+    `${network}-${type}`,
+    async () => {
+      if (TokenIcon && isMainnet) return null;
 
-  if (!chain)
+      const data = await fetch(
+        `/api/v1/coin-metadata?network=${network}&type=${type}`
+      ).then((res) => res.json());
+
+      return data.iconUrl;
+    }
+  );
+
+  const chain =
+    STRICT_TOKENS_MAP[network][type]?.chain ??
+    WORMHOLE_TOKENS[network].find((token) => token.type === type)?.chain ??
+    CELER_TOKENS[network].find((token) => token.type === type)?.chain;
+
+  const ChainIcon = chain ? CHAIN_ICON[chain] : null;
+
+  if (!TokenIcon && !iconSrc && !isLoading)
     return (
-      <>
-        {typeof TokenIcon === 'string' ? (
-          <Box
-            borderRadius="xs"
-            overflow="hidden"
-            width={maxWidth ?? '2.5rem'}
-            height={maxHeight ?? '2.5rem'}
-          >
-            <img src={TokenIcon} width="100%" alt="Token Icon" />
-          </Box>
-        ) : (
-          <TokenIcon
-            width="100%"
-            maxWidth={maxWidth ?? '1.5rem'}
-            maxHeight={maxHeight ?? '1.5rem'}
-          />
-        )}
-      </>
+      <Box
+        bg="black"
+        color="white"
+        display="flex"
+        overflow="hidden"
+        position="relative"
+        alignItems="center"
+        justifyContent="center"
+        width={`calc(${size} * 1.66)`}
+        height={`calc(${size} * 1.66)`}
+        borderRadius={rounded || !withBg ? 'full' : 'xs'}
+      >
+        <DefaultSVG
+          width="100%"
+          maxWidth={size ?? '1.5rem'}
+          maxHeight={size ?? '1.5rem'}
+        />
+      </Box>
     );
 
-  const ChainIcon = CHAIN_ICON[chain!];
+  if ((!TokenIcon && (isLoading || iconSrc)) || typeof TokenIcon === 'string')
+    return (
+      <Box
+        display="flex"
+        position="relative"
+        alignItems="center"
+        justifyContent="center"
+        width={`calc(${size} * 1.66)`}
+        height={`calc(${size} * 1.66)`}
+        borderRadius={rounded ? 'full' : 'xs'}
+      >
+        <Box
+          overflow="hidden"
+          width={`calc(${size} * 1.66)`}
+          height={`calc(${size} * 1.66)`}
+          borderRadius={rounded ? 'full' : 'xs'}
+        >
+          {isLoading && (
+            <Box position="absolute" top="-0.5rem" left="0.9rem">
+              <ProgressIndicator size={16} variant="loading" />
+            </Box>
+          )}
+          {(iconSrc || TokenIcon) && (
+            <img src={TokenIcon ?? iconSrc} width="100%" alt={symbol} />
+          )}
+        </Box>
+        {ChainIcon && (
+          <Box position="absolute" bottom="-0.3rem" right="-0.5rem">
+            <ChainIcon maxHeight={size} maxWidth={size} width="100%" />
+          </Box>
+        )}
+      </Box>
+    );
 
   return (
     <Box
-      bg="black"
-      color="white"
       display="flex"
-      width="2.5rem"
-      height="2.5rem"
-      borderRadius="xs"
       position="relative"
       alignItems="center"
       justifyContent="center"
     >
-      {typeof TokenIcon === 'string' ? (
-        <Box width="2.5rem" height="2.5rem" borderRadius="xs" overflow="hidden">
-          <img src={TokenIcon} width="100%" alt="Token Icon" />
-        </Box>
-      ) : (
+      <Box
+        display="flex"
+        overflow="hidden"
+        position="relative"
+        alignItems="center"
+        justifyContent="center"
+        width={`calc(${size} * 1.66)`}
+        height={`calc(${size} * 1.66)`}
+        borderRadius={rounded ? 'full' : 'xs'}
+        {...(withBg && { bg: 'black', color: 'white' })}
+      >
         <TokenIcon
           width="100%"
-          maxWidth={maxWidth ?? '1.5rem'}
-          maxHeight={maxHeight ?? '1.5rem'}
+          maxWidth={size ?? '1.5rem'}
+          maxHeight={size ?? '1.5rem'}
         />
-      )}
+      </Box>
       {ChainIcon && (
         <Box position="absolute" bottom="-0.3rem" right="-0.5rem">
-          <ChainIcon maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
+          <ChainIcon maxHeight={size} maxWidth={size} width="100%" />
         </Box>
       )}
     </Box>

@@ -1,93 +1,74 @@
-import { Box, Button } from '@interest-protocol/ui-kit';
+import { Box } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { v4 } from 'uuid';
 
 import Layout from '@/components/layout';
-import { SwapSVG } from '@/svg';
 
 import Input from './input';
 import ManageSlippage from './manage-slippage';
-import SwapManager from './swap-manager';
+import PreviewSwapButton from './preview-swap-button';
+import SwapFlipToken from './swap-flip-token';
+import SwapPath from './swap-path';
+import SwapUpdatePrice from './swap-update-price';
 
-const Swap: FC = () => {
-  const { getValues, setValue } = useFormContext();
-
-  const flipToken = () => {
-    const tmp = getValues('to');
-    setValue('to', getValues('from'));
-    setValue('from', tmp);
-  };
-
-  return (
-    <Layout>
+const Swap: FC = () => (
+  <Layout title="Swap">
+    <Box
+      mx="auto"
+      display="flex"
+      borderRadius="2xl"
+      flexDirection="column"
+      px={['2xs', 'xl', 'xl', '7xl']}
+      width={['100%', '100%', '100%', '39.75rem']}
+    >
       <Box
-        my="2xl"
-        fontFamily="Proto"
-        textAlign="center"
-        fontSize={['5xl', '8xl']}
+        py="xl"
+        my="xs"
+        px={['2xs', 'm']}
+        borderRadius="xs"
+        bg="lowestContainer"
       >
-        Swap
+        <Input label="from" />
       </Box>
-      <Box
-        mx="auto"
-        display="flex"
-        borderRadius="2xl"
-        flexDirection="column"
-        p={['xl', 'xl', 'xl', '7xl']}
-        width={['100%', '100%', '100%', '39.75rem']}
-      >
-        <Box py="xl" px="m" my="xs" borderRadius="xs" bg="lowestContainer">
-          <Input label="from" />
-          <Box my="0.25rem" position="relative">
-            <Box
-              left="45%"
-              position="absolute"
-              border="7px solid"
-              borderColor="surface"
-              borderRadius="s"
-            >
-              <Button
-                isIcon
-                variant="tonal"
-                bg="onPrimary"
-                color="primary"
-                onClick={flipToken}
+      <Box position="relative">
+        <Box
+          px="xl"
+          my="-2rem"
+          width="100%"
+          display="flex"
+          position="absolute"
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          {[<SwapFlipToken key={v4()} />, <SwapUpdatePrice key={v4()} />].map(
+            (button) => (
+              <Box
+                key={v4()}
+                display="flex"
+                width="3.25rem"
+                height="3.25rem"
+                borderRadius="s"
+                border="6px solid"
+                alignItems="center"
+                borderColor="surface"
+                justifyContent="center"
               >
-                <SwapSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
-              </Button>
-            </Box>
-          </Box>
-        </Box>
-        <Box py="xl" px="m" borderRadius="xs" bg="lowestContainer">
-          <Input label="to" />
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            mt="l"
-            mb="l"
-          >
-            <Button
-              bg="container"
-              opacity="0.4"
-              color="onSurface"
-              px="l"
-              py="s"
-              borderRadius="xs"
-              variant="tonal"
-              fontSize="s"
-            >
-              Preview swap
-            </Button>
-          </Box>
-        </Box>
-        <Box my="xs">
-          <ManageSlippage />
+                {button}
+              </Box>
+            )
+          )}
         </Box>
       </Box>
-      <SwapManager />
-    </Layout>
-  );
-};
+      <Box py="xl" px={['2xs', 'm']} borderRadius="xs" bg="lowestContainer">
+        <Input label="to" />
+        <PreviewSwapButton />
+      </Box>
+      <SwapPath />
+      <Box my="xs">
+        <ManageSlippage />
+      </Box>
+    </Box>
+  </Layout>
+);
 
 export default Swap;

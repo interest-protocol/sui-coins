@@ -8,8 +8,8 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
+import { TextField } from '@/components';
 import { useNetwork } from '@/context/network';
-import { TextField } from '@/elements';
 import useSignTxb from '@/hooks/use-sign-txb';
 import { parseInputEventToNumberString, showTXSuccessToast } from '@/utils';
 import { throwTXIfNotSuccessful } from '@/utils';
@@ -79,6 +79,8 @@ const CreateTokenForm: FC = () => {
       txb.transferObjects([upgradeCap], txb.pure(currentAccount.address));
 
       const { signature, transactionBlockBytes } = await signTransactionBlock({
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         transactionBlock: txb,
         account: currentAccount,
       });
@@ -115,6 +117,7 @@ const CreateTokenForm: FC = () => {
       borderRadius="xs"
       overflow="hidden"
       bg="lowestContainer"
+      mx="auto"
       onSubmit={handleSubmit(onSubmit)}
     >
       <Typography variant="title" size="large" p="xl">

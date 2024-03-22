@@ -1,9 +1,9 @@
-import { RegistryPool } from '@/interface';
-
-import { COIN_TYPE, COINS, POOL_ID_MAP } from '../views/pools/coins';
+import { COIN_TYPE, COINS } from './coins';
 import { Network } from './dapp';
 
 export type TDexSources = 'interest' | 'suicoins';
+
+export const EXCHANGE_FEE = 0.002;
 
 export const DEX_BASE_COINS = {
   [Network.TESTNET]: [COIN_TYPE[Network.TESTNET].ETH],
@@ -25,58 +25,4 @@ export const DEX_MAIN_TOKENS = {
     COINS[Network.MAINNET].NATIVE_WORMHOLE_ETH,
     COINS[Network.MAINNET].ETH_WORMHOLE_USDC,
   ],
-};
-
-export const REGISTRY_POOLS: Record<
-  Network,
-  Record<string, Record<string, RegistryPool>>
-> = {
-  [Network.TESTNET]: {
-    [COIN_TYPE[Network.TESTNET].ETH]: {
-      [COIN_TYPE[Network.TESTNET].SUI]: {
-        poolId: POOL_ID_MAP[Network.TESTNET].V_LP_SUI_ETH,
-        lpCoinType: COIN_TYPE[Network.TESTNET].V_LP_SUI_ETH,
-      },
-      [COIN_TYPE[Network.TESTNET].USDC]: {
-        poolId: POOL_ID_MAP[Network.TESTNET].V_LP_ETH_USDC,
-        lpCoinType: COIN_TYPE[Network.TESTNET].V_LP_ETH_USDC,
-      },
-    },
-    [COIN_TYPE[Network.TESTNET].USDC]: {
-      [COIN_TYPE[Network.TESTNET].ETH]: {
-        poolId: POOL_ID_MAP[Network.TESTNET].V_LP_ETH_USDC,
-        lpCoinType: COIN_TYPE[Network.TESTNET].V_LP_ETH_USDC,
-      },
-    },
-    [COIN_TYPE[Network.TESTNET].SUI]: {
-      [COIN_TYPE[Network.TESTNET].ETH]: {
-        poolId: POOL_ID_MAP[Network.TESTNET].V_LP_SUI_ETH,
-        lpCoinType: COIN_TYPE[Network.TESTNET].V_LP_SUI_ETH,
-      },
-    },
-  },
-  [Network.MAINNET]: {
-    [COIN_TYPE[Network.MAINNET].SUI]: {
-      [COIN_TYPE[Network.MAINNET].NATIVE_WORMHOLE_ETH]: {
-        poolId: POOL_ID_MAP[Network.MAINNET].V_LP_SUI_NATIVE_WORMHOLE_ETH,
-        lpCoinType: COIN_TYPE[Network.MAINNET].V_LP_SUI_NATIVE_WORMHOLE_ETH,
-      },
-      [COIN_TYPE[Network.MAINNET].ETH_WORMHOLE_USDC]: {
-        poolId: POOL_ID_MAP[Network.MAINNET].V_LP_SUI_ETH_WORMHOLE_USDC,
-        lpCoinType: COIN_TYPE[Network.MAINNET].V_LP_SUI_ETH_WORMHOLE_USDC,
-      },
-    },
-    [COIN_TYPE[Network.MAINNET].ETH_WORMHOLE_USDC]: {
-      [COIN_TYPE[Network.MAINNET].SUI]: {
-        poolId: POOL_ID_MAP[Network.MAINNET].V_LP_SUI_ETH_WORMHOLE_USDC,
-        lpCoinType: COIN_TYPE[Network.MAINNET].V_LP_SUI_ETH_WORMHOLE_USDC,
-      },
-    },
-    [COIN_TYPE[Network.MAINNET].NATIVE_WORMHOLE_ETH]: {
-      [COIN_TYPE[Network.MAINNET].SUI]: {
-        poolId: POOL_ID_MAP[Network.MAINNET].V_LP_SUI_NATIVE_WORMHOLE_ETH,
-        lpCoinType: COIN_TYPE[Network.MAINNET].V_LP_SUI_NATIVE_WORMHOLE_ETH,
-      },
-    },
-  },
 };

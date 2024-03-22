@@ -8,3 +8,4 @@ export * from './promise';
 export * from './string';
 export * from './toast';
 export * from './tx';
+export * from './url';

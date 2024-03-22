@@ -89,7 +89,6 @@ const SuiNetwork: FC = () => {
           top="3rem"
           zIndex={4}
           width="14.5rem"
-          initial="closed"
           border="1px solid"
           borderRadius="1rem"
           position="absolute"
@@ -97,6 +96,7 @@ const SuiNetwork: FC = () => {
           variants={wrapperVariants}
           textTransform="capitalize"
           borderColor="outlineVariant"
+          initial={isOpen ? 'closed' : 'open'}
           animate={isOpen ? 'open' : 'closed'}
           pointerEvents={isOpen ? 'auto' : 'none'}
           boxShadow="0px 2px 4px -2px rgba(13, 16, 23, 0.04), 0px 4px 8px -2px rgba(13, 16, 23, 0.12);"

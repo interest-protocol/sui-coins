@@ -35,16 +35,15 @@ const SidebarCollapseButton: FC<SidebarCollapseButtonProps> = ({
 
   return (
     <Motion
-      m="s"
+      my="s"
       gap="m"
+      mx="2xs"
       display="flex"
-      animation={isCollapsed ? '2.5rem' : 'auto'}
-      transition={{
-        duration: 0.5,
-      }}
+      transition={{ duration: 0.5 }}
+      animation={isCollapsed ? 'collapsed' : 'unCollapsed'}
       variants={{
-        collapsed: { width: '2.5rem ' },
-        unCollapsed: { width: 'auto' },
+        collapsed: { width: '2.5rem' },
+        unCollapsed: { width: '100%' },
       }}
     >
       <Box

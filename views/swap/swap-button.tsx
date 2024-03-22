@@ -1,147 +1,68 @@
 import { Button, Typography } from '@interest-protocol/ui-kit';
-import { useSuiClient } from '@mysten/dapp-kit';
-import {
-  TransactionBlock,
-  TransactionResult,
-} from '@mysten/sui.js/transactions';
-import BigNumber from 'bignumber.js';
-import { useState } from 'react';
-import { useFormContext, UseFormReturn, useWatch } from 'react-hook-form';
+import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
+import { FC, useState } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 
-import { EXPLORER_URL, OBJECT_RECORD } from '@/constants';
-import { REGISTRY_POOLS } from '@/constants/dex';
+import { EXPLORER_URL } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useDialog } from '@/hooks/use-dialog';
 import useSignTxb from '@/hooks/use-sign-txb';
 import { useWeb3 } from '@/hooks/use-web3';
-import { FixedPointMath } from '@/lib';
-import {
-  createObjectsParameter,
-  throwTXIfNotSuccessful,
-  ZERO_BIG_NUMBER,
-} from '@/utils';
+import { throwTXIfNotSuccessful } from '@/utils';
 import { SwapForm } from '@/views/swap/swap.types';
 
-import { getAmountMinusSlippage } from './swap.utils';
+import { useAftermathRouter } from './swap.hooks';
 
-const SwapButton = () => {
-  const client = useSuiClient();
+const SwapButton: FC = () => {
   const network = useNetwork();
+  const client = useSuiClient();
+  const router = useAftermathRouter();
+  const currentAccount = useCurrentAccount();
+  const formSwap = useFormContext<SwapForm>();
   const { dialog, handleClose } = useDialog();
-  const formSwap: UseFormReturn<SwapForm> = useFormContext();
   const [loading, setLoading] = useState(false);
-  const { account, coinsMap, mutate } = useWeb3();
+
+  const { mutate } = useWeb3();
 
   const signTransactionBlock = useSignTxb();
 
   const resetInput = () => {
-    formSwap.setValue('from.value', '0');
-    formSwap.setValue('to.value', '0');
+    formSwap.setValue('from.display', '0');
+    formSwap.setValue('to.display', '0');
   };
 
-  const [explorerLink, setExplorerLink] = useState('');
+  const readyToSwap = useWatch({
+    control: formSwap.control,
+    name: 'readyToSwap',
+  });
+  const route = useWatch({ control: formSwap.control, name: 'route' });
+  const slippage = useWatch({
+    control: formSwap.control,
+    name: 'settings.slippage',
+  });
 
-  const gotoExplorer = () =>
-    window.open(explorerLink, '_blank', 'noopener,noreferrer');
+  const gotoExplorer = () => {
+    window.open(
+      formSwap.getValues('explorerLink'),
+      '_blank',
+      'noopener,noreferrer'
+    );
 
-  const tokenIn = useWatch({ control: formSwap.control, name: 'from' });
-
-  const notEnoughBalance = FixedPointMath.toBigNumber(
-    tokenIn.value,
-    tokenIn.decimals
-  )
-    .decimalPlaces(0, BigNumber.ROUND_DOWN)
-    .gt(BigNumber(coinsMap[tokenIn.type]?.balance) ?? ZERO_BIG_NUMBER);
+    formSwap.setValue('explorerLink', '');
+  };
 
   const handleSwap = async () => {
     try {
+      if (!route || !currentAccount || status)
+        throw new Error('Something went wrong');
+
       setLoading(true);
 
-      const { settings, from, to, swapPath } = formSwap.getValues();
-
-      if (!swapPath.length) throw new Error('There is no market');
-
-      if (!to.type || !from.type) throw new Error('No tokens selected');
-
-      if (!account) throw new Error('No account');
-
-      if (!+from.value) throw new Error('Cannot swap zero coins');
-
-      const isMaxTrade = formSwap.getValues('maxValue');
-
-      const amount = isMaxTrade
-        ? BigNumber(coinsMap[to.type]?.balance) ?? ZERO_BIG_NUMBER
-        : FixedPointMath.toBigNumber(from.value, from.decimals).decimalPlaces(
-            0,
-            BigNumber.ROUND_DOWN
-          );
-
-      const amountOut = FixedPointMath.toBigNumber(
-        to.value,
-        to.decimals
-      ).decimalPlaces(0, BigNumber.ROUND_DOWN);
-
-      const minAmountOut = getAmountMinusSlippage(amountOut, settings.slippage);
-
-      const txb = new TransactionBlock();
-
-      const coinInList = createObjectsParameter({
-        coinsMap,
-        txb,
-        type: from.type,
-        amount: amount.toString(),
+      const txb = await router.getTransactionForCompleteTradeRoute({
+        walletAddress: currentAccount.address,
+        completeRoute: route,
+        slippage: Number(slippage),
       });
-
-      let nextCoin: null | TransactionResult = null;
-      const numberOfSwaps = swapPath.length;
-
-      swapPath.forEach(
-        (
-          { coinIn: coinInType, coinOut: coinOutType, lpCoin: lpCoinType },
-          index
-        ) => {
-          const poolId =
-            REGISTRY_POOLS[network][coinInType][coinOutType].poolId;
-
-          // FirstSwap
-          if (index === 0) {
-            const coinIn = txb.moveCall({
-              target: `${OBJECT_RECORD[network].UTILS_PACKAGE_ID}::utils::handle_coin_vector`, // Utils package ID
-              typeArguments: [from.type],
-              arguments: [
-                txb.makeMoveVec({
-                  objects: coinInList,
-                }),
-                txb.pure(amount),
-              ],
-            });
-
-            nextCoin = txb.moveCall({
-              target: `${OBJECT_RECORD[network].DEX_PACKAGE_ID}::sui_coins_amm::swap`,
-              typeArguments: [coinInType, coinOutType, lpCoinType],
-              arguments: [
-                txb.object(poolId),
-                coinIn,
-                txb.pure(numberOfSwaps === 0 ? minAmountOut.toString() : '0'),
-              ],
-            });
-          } else {
-            nextCoin = txb.moveCall({
-              target: `${OBJECT_RECORD[network].DEX_PACKAGE_ID}::sui_coins_amm::swap`,
-              typeArguments: [coinInType, coinOutType, lpCoinType],
-              arguments: [
-                txb.object(poolId),
-                nextCoin!,
-                txb.pure(
-                  numberOfSwaps === index ? minAmountOut.toString() : '0'
-                ),
-              ],
-            });
-          }
-        }
-      );
-
-      txb.transferObjects([nextCoin!], account);
 
       const { signature, transactionBlockBytes } = await signTransactionBlock({
         transactionBlock: txb,
@@ -156,82 +77,53 @@ const SwapButton = () => {
 
       throwTXIfNotSuccessful(tx);
 
-      setExplorerLink(`${EXPLORER_URL[network]}/txblock/${tx.digest}`);
+      formSwap.setValue(
+        'explorerLink',
+        `${EXPLORER_URL[network]}/tx/${tx.digest}`
+      );
     } finally {
       resetInput();
       setLoading(false);
-      await mutate();
+      mutate();
     }
   };
 
-  const swap = () => {
+  const swap = () =>
+    readyToSwap &&
     dialog.promise(handleSwap(), {
       loading: {
         title: 'Swapping...',
         message: 'We are swapping, and you will let you know when it is done',
       },
-      success: {
-        title: 'Swap Successfully',
-        message:
-          'Your swap was successfully, and you can check it on the Explorer.',
-        primaryButton: (
-          <Button
-            width="100%"
-            py="0.62rem"
-            variant="filled"
-            borderRadius="xs"
-            onClick={gotoExplorer}
-          >
-            <Typography
-              size="large"
-              width="100%"
-              variant="label"
-              textAlign="center"
-            >
-              See on Explorer
-            </Typography>
-          </Button>
-        ),
-        secondaryButton: (
-          <Button
-            mr="s"
-            borderRadius="xs"
-            variant="outline"
-            onClick={handleClose}
-          >
-            Close
-          </Button>
-        ),
-      },
       error: {
         title: 'Swap Failure',
         message:
-          'Your swap failed, please try again or contact the support team',
-        primaryButton: (
-          <Button
-            bg="error"
-            width="100%"
-            py="0.62rem"
-            variant="filled"
-            borderRadius="xs"
-            onClick={handleClose}
-          >
-            <Typography
-              size="large"
-              width="100%"
-              variant="label"
-              textAlign="center"
-            >
-              Try again
-            </Typography>
+          'Your swap failed, please try to increment your slippage and try again or contact the support team',
+        primaryButton: { label: 'Try again', onClick: handleClose },
+      },
+      success: {
+        title: 'Swap Successfully',
+        message:
+          'Your swap was successfully, and you can check it on the Explorer',
+        primaryButton: {
+          label: 'See on Explorer',
+          onClick: gotoExplorer,
+        },
+        secondaryButton: (
+          <Button variant="outline" mr="s" onClick={handleClose}>
+            got it
           </Button>
         ),
       },
     });
-  };
 
   return (
-    <Button disabled={notEnoughBalance} variant="filled" onClick={swap}>
+    <Button
+      onClick={swap}
+      variant="filled"
+      justifyContent="center"
+      disabled={!readyToSwap}
+    >
       <Typography variant="label" size="large">
         {loading ? 'Swapping...' : 'Swap'}
       </Typography>
