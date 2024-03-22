@@ -16,7 +16,7 @@
     "@emotion/react": "^11.11.1",
     "@hookform/resolvers": "^3.3.2",
     "@interest-protocol/sui-tokens": "^1.0.1",
-    "@interest-protocol/ui-kit": "^0.2.25-alpha",
+    "@interest-protocol/ui-kit": "^0.2.26-alpha",
     "@mysten/dapp-kit": "^0.12.5",
     "@mysten/sui.js": "^0.51.0",
     "@mysten/suins-toolkit": "^0.4.4",
