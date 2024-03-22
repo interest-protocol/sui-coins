@@ -49,6 +49,7 @@ const SwapPage: NextPage = () => {
     form.resetField('loading');
     form.resetField('explorerLink');
     form.resetField('error');
+    updateURL(pathname);
   }, [network]);
 
   const setDefaultToken = async (
@@ -134,7 +135,9 @@ const SwapPage: NextPage = () => {
 
       form.setValue('loading', false);
 
-      updateURL(`${pathname}?${searchParams.toString()}`);
+      const params = searchParams.toString();
+
+      updateURL(`${pathname}${params ? `?${params}` : ''}`);
     })();
   }, []);
 
