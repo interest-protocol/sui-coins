@@ -116,7 +116,7 @@ const SwapUpdatePrice: FC = () => {
           setValue('fetchingPrices', false);
         });
 
-      if (!coinInValue || coinInValue.isZero()) return;
+      if (!coinInValue || coinInValue.isZero()) return resetFields();
 
       setValue('route', data);
 
@@ -136,6 +136,8 @@ const SwapUpdatePrice: FC = () => {
     { refreshInterval: Number(interval) * 1000, refreshWhenOffline: false }
   );
 
+  const disabled = !coinInValue || coinInValue.isZero() || !coinOutType;
+
   return (
     <Button
       isIcon
@@ -146,17 +148,12 @@ const SwapUpdatePrice: FC = () => {
       variant="filled"
       alignItems="center"
       position="relative"
-      disabled={!Number(coinInValue) || !coinOutType}
-      nFocus={Number(coinInValue) && coinOutType && { bg: 'lowContainer' }}
-      nActive={Number(coinInValue) && coinOutType && { bg: 'lowContainer' }}
-      nHover={
-        Number(coinInValue) && coinOutType
-          ? { bg: 'lowContainer' }
-          : { bg: 'lowestContainer' }
-      }
+      disabled={disabled}
+      nFocus={!disabled && { bg: 'lowContainer' }}
+      nActive={!disabled && { bg: 'lowContainer' }}
+      nHover={!disabled ? { bg: 'lowContainer' } : { bg: 'lowestContainer' }}
       nDisabled={
-        !Number(coinInValue) &&
-        !coinOutType && {
+        disabled && {
           opacity: 1,
           color: 'outline',
           bg: 'lowestContainer',
