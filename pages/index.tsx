@@ -39,16 +39,8 @@ const SwapPage: NextPage = () => {
   });
 
   useEffect(() => {
-    form.resetField('from');
-    form.resetField('to');
-    form.resetField('swapping');
-    form.resetField('route');
-    form.resetField('lastFetchDate');
-    form.resetField('readyToSwap');
-    form.resetField('fetchingPrices');
-    form.resetField('loading');
-    form.resetField('explorerLink');
-    form.resetField('error');
+    form.reset();
+    form.setValue('settings', settings);
     updateURL(pathname);
   }, [network]);
 
