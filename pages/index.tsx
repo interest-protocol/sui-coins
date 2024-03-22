@@ -73,6 +73,7 @@ const SwapPage: NextPage = () => {
 
     if (
       typeof value === 'string' &&
+      value.startsWith('0x') &&
       isValidSuiAddress(normalizeSuiAddress(value).split('::')[0])
     ) {
       const { type, symbol, decimals } = await getCoin(
