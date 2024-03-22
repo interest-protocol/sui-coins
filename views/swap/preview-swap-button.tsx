@@ -40,7 +40,7 @@ const PreviewSwapButton: FC = () => {
     to &&
     from.type &&
     to.type &&
-    from.value?.isZero() &&
+    !from.value?.isZero() &&
     Number(to.display) &&
     coinsMap[from.type] &&
     (from.type === SUI_TYPE_ARG
