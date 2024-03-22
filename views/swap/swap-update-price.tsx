@@ -1,4 +1,5 @@
 import { Box, Button, ProgressIndicator } from '@interest-protocol/ui-kit';
+import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import Countdown, { CountdownRendererFn } from 'react-countdown';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -87,7 +88,9 @@ const SwapUpdatePrice: FC = () => {
         .getCompleteTradeRouteGivenAmountIn({
           coinInType,
           coinOutType,
-          coinInAmount: BigInt(coinInValue.toString()),
+          coinInAmount: BigInt(
+            coinInValue.decimalPlaces(0, BigNumber.ROUND_DOWN).toString()
+          ),
           referrer: TREASURY,
           externalFee: {
             recipient: TREASURY,
@@ -98,6 +101,9 @@ const SwapUpdatePrice: FC = () => {
           resetFields();
           setValue('error', 'There is no market for these coins.');
           throw e;
+        })
+        .finally(() => {
+          setValue('fetchingPrices', false);
         });
 
       if (!Number(getValues('from.value'))) return;
@@ -115,7 +121,6 @@ const SwapUpdatePrice: FC = () => {
         ).toPrecision()
       );
 
-      setValue('fetchingPrices', false);
       setValue('lastFetchDate', Date.now());
     },
     { refreshInterval: Number(interval) * 1000, refreshWhenOffline: false }
