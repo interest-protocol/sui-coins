@@ -31,10 +31,12 @@ const PoolCardList: FC = () => {
   const { data: pools } = useSWR(`${isFindingPool}`, async () => {
     const tokenList = getValues('tokenList');
 
-    if (!tokenList.length || !isFindingPool) return RECOMMENDED_POOLS[network];
+    if (!isFindingPool) return RECOMMENDED_POOLS[network];
 
-    const filteredPools = RECOMMENDED_POOLS[network].filter((pool) =>
-      tokenList.every(({ type }, index) => pool.tokens[index].type === type)
+    const filteredPools = RECOMMENDED_POOLS[network].filter(
+      (pool) =>
+        tokenList.length === pool.tokens.length &&
+        tokenList.every(({ type }, index) => pool.tokens[index].type === type)
     );
 
     if (filteredPools.length) return filteredPools;

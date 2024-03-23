@@ -9,6 +9,7 @@ import { FilterItemProps, PoolForm } from '../../pools.types';
 
 const FilterSelectedItem: FC = () => {
   const { control, resetField } = useFormContext<PoolForm>();
+  const isFindingPool = useWatch({ control, name: 'isFindingPool' });
   const tokens = useWatch({ control, name: 'tokenList' });
   const fields = useWatch({ control, name: 'filterList' });
   const { replace } = useFieldArray({
@@ -64,7 +65,7 @@ const FilterSelectedItem: FC = () => {
           </Button>
         </Box>
       ))}
-      {tokens?.length && (
+      {isFindingPool && tokens?.length && (
         <Box
           key={v4()}
           display="flex"
@@ -98,7 +99,7 @@ const FilterSelectedItem: FC = () => {
           </Button>
         </Box>
       )}
-      {fields?.length != 0 && (
+      {!!fields?.length && (
         <Button
           px="m"
           py="xs"

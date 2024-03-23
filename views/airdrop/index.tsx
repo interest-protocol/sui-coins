@@ -19,13 +19,17 @@ interface AirdropBodyProps {
 const AirdropBody: FC<AirdropBodyProps> = ({ setIsProgressView }) => {
   const { control } = useFormContext<IAirdropForm>();
   const token = useWatch({ control, name: 'token' });
-  return token ? (
+  const method = useWatch({ control, name: 'method' });
+
+  if (!token) return null;
+
+  return (
     <>
       <AirdropUploadFile />
-      <AirdropSummary />
+      <AirdropSummary method={method} />
       <AirdropButton setIsProgressView={setIsProgressView} />
     </>
-  ) : null;
+  );
 };
 
 const Airdrop: FC = () => {
