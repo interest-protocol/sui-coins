@@ -6,7 +6,7 @@ import {
   useTheme,
 } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { FormProvider, useFormContext } from 'react-hook-form';
 
 import { useModal } from '@/hooks/use-modal';
 import { SearchSVG } from '@/svg';
@@ -18,24 +18,24 @@ const FinPoolButton: FC = () => {
   const { colors } = useTheme() as Theme;
   const { setModal, handleClose } = useModal();
 
-  const { setValue } = useFormContext<PoolForm>();
+  const form = useFormContext<PoolForm>();
 
   const openModal = () => {
+    form.setValue('tokenList', [
+      { symbol: '', type: '', decimals: 0 },
+      { symbol: '', type: '', decimals: 0 },
+    ]);
+
     setModal(
-      <Motion
-        animate={{ scale: 1 }}
-        initial={{ scale: 0.85 }}
-        transition={{ duration: 0.3 }}
-      >
-        <FindPoolModal
-          handleSearch={(tokens) => {
-            console.log('tokens data :: ', tokens);
-            setValue('tokenList', tokens);
-            handleClose();
-          }}
-          closeModal={handleClose}
-        />
-      </Motion>,
+      <FormProvider {...form}>
+        <Motion
+          animate={{ scale: 1 }}
+          initial={{ scale: 0.85 }}
+          transition={{ duration: 0.3 }}
+        >
+          <FindPoolModal closeModal={handleClose} />
+        </Motion>
+      </FormProvider>,
       {
         isOpen: true,
         custom: true,
