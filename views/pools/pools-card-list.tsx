@@ -13,15 +13,12 @@ const PoolCardList = () => {
   const { network } = useNetwork();
   const { control } = useFormContext<PoolForm>();
   const fields = useWatch({ control, name: 'filterList' });
-  const filteredPools = RECOMMENDED_POOLS[network].filter((pool) =>
-    fields?.length
-      ? fields?.some(
-          (field) =>
-            DEX_MAP[pool.dex].tags?.some(
-              (tag) => tag.name === field.description
-            )
-        )
-      : true
+  const filteredPools = RECOMMENDED_POOLS[network].filter(
+    (pool) =>
+      fields?.some(
+        (field) =>
+          DEX_MAP[pool.dex].tags?.some((tag) => tag.name === field.description)
+      ) ?? true
   );
 
   return (
