@@ -1,5 +1,5 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
-import { useSuiClient } from '@mysten/dapp-kit';
+import { useSignTransactionBlock, useSuiClient } from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { normalizeSuiAddress, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
@@ -11,7 +11,6 @@ import { AIRDROP_SEND_CONTRACT, TREASURY } from '@/constants';
 import { SUI_TYPE_ARG_LONG } from '@/constants/coins';
 import { AIRDROP_SUI_FEE_PER_ADDRESS } from '@/constants/fees';
 import { useNetwork } from '@/context/network';
-import useSignTxb from '@/hooks/use-sign-txb';
 import { useWeb3 } from '@/hooks/use-web3';
 import {
   getCoinOfValue,
@@ -32,8 +31,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
   const network = useNetwork();
   const suiClient = useSuiClient();
-
-  const signTransactionBlock = useSignTxb();
+  const signTransactionBlock = useSignTransactionBlock();
 
   const handleSend = async () => {
     setIsProgressView(true);
@@ -82,7 +80,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
             ],
           });
           const { signature, transactionBlockBytes } =
-            await signTransactionBlock({ transactionBlock: txb });
+            await signTransactionBlock.mutateAsync({ transactionBlock: txb });
 
           const tx = await suiClient.executeTransactionBlock({
             transactionBlock: transactionBlockBytes,
@@ -139,13 +137,12 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
             txb.pure(batch.map((x) => x.amount)),
           ],
         });
-        const { signature, transactionBlockBytes } = await signTransactionBlock(
-          {
+        const { signature, transactionBlockBytes } =
+          await signTransactionBlock.mutateAsync({
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             transactionBlock: txb,
-          }
-        );
+          });
 
         const tx = await suiClient.executeTransactionBlock({
           transactionBlock: transactionBlockBytes,
