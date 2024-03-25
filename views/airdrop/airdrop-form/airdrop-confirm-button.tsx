@@ -139,8 +139,6 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         });
         const { signature, transactionBlockBytes } =
           await signTransactionBlock.mutateAsync({
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
             transactionBlock: txb,
           });
 
