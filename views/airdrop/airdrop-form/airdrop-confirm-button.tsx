@@ -73,6 +73,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
             txb.pure(
               new BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS)
                 .times(batch.length)
+                .decimalPlaces(0)
                 .toString()
             ),
           ]);
@@ -135,6 +136,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           txb.pure(
             new BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS)
               .times(batch.length)
+              .decimalPlaces(0)
               .toString()
           ),
         ]);
