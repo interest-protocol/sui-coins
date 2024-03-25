@@ -1,10 +1,13 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
+import { SUI_TYPE_ARG } from '@mysten/sui.js/dist/cjs/utils';
 import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { AIRDROP_SUI_FEE_PER_ADDRESS } from '@/constants/fees';
+import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
+import { ZERO_BIG_NUMBER } from '@/utils';
 import { BATCH_SIZE } from '@/views/airdrop/airdrop.constants';
 
 import { AirdropSummaryProps, IAirdropForm } from '../airdrop.types';
@@ -16,9 +19,14 @@ const METHOD_TITLE = {
 };
 
 const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
+  const { coinsMap } = useWeb3();
   const { control } = useFormContext<IAirdropForm>();
 
   const airdropList = useWatch({ control, name: 'airdropList' });
+
+  const airdropFee = airdropList
+    ? BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS).times(airdropList.length)
+    : ZERO_BIG_NUMBER;
 
   return (
     <Box display="flex" flexDirection="column" mb="m">
@@ -112,14 +120,16 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
             Total SUI fee
           </Typography>
           <Box textAlign="right">
-            <Typography size="medium" variant="body">
-              {airdropList
-                ? FixedPointMath.toNumber(
-                    new BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS).times(
-                      airdropList.length
-                    )
-                  ).toString()
-                : '0'}
+            <Typography
+              size="medium"
+              variant="body"
+              color={
+                airdropFee.gt(coinsMap[SUI_TYPE_ARG].balance)
+                  ? 'error'
+                  : 'unset'
+              }
+            >
+              {FixedPointMath.toNumber(airdropFee)}
             </Typography>
           </Box>
         </Box>

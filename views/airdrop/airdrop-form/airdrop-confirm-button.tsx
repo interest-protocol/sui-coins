@@ -15,9 +15,11 @@ import useSignTxb from '@/hooks/use-sign-txb';
 import { useWeb3 } from '@/hooks/use-web3';
 import {
   getCoinOfValue,
+  noop,
   showTXSuccessToast,
   sleep,
   throwTXIfNotSuccessful,
+  ZERO_BIG_NUMBER,
 } from '@/utils';
 import { splitArray } from '@/utils';
 
@@ -171,6 +173,13 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
       }
     }
   };
+  const airdropList = getValues('airdropList');
+
+  const airdropFee = airdropList
+    ? BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS).times(airdropList.length)
+    : ZERO_BIG_NUMBER;
+
+  const disabled = airdropFee.gt(coinsMap[SUI_TYPE_ARG].balance);
 
   return (
     <Box display="flex" justifyContent="center">
@@ -178,9 +187,10 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         width="100%"
         display="flex"
         variant="filled"
-        onClick={handleSend}
+        disabled={disabled}
         borderRadius="0.5rem"
         justifyContent="center"
+        onClick={disabled ? noop : handleSend}
       >
         <Typography variant="label" size="large">
           Confirm airdrop
