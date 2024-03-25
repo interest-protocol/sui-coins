@@ -1,6 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Form, Typography } from '@interest-protocol/ui-kit';
-import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
+import {
+  useCurrentAccount,
+  useSignTransactionBlock,
+  useSuiClient,
+} from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { normalizeSuiAddress } from '@mysten/sui.js/utils';
 import { ChangeEvent, FC } from 'react';
@@ -10,7 +14,6 @@ import toast from 'react-hot-toast';
 
 import { TextField } from '@/components';
 import { useNetwork } from '@/context/network';
-import useSignTxb from '@/hooks/use-sign-txb';
 import { parseInputEventToNumberString, showTXSuccessToast } from '@/utils';
 import { throwTXIfNotSuccessful } from '@/utils';
 
@@ -43,7 +46,7 @@ const CreateTokenForm: FC = () => {
   const suiClient = useSuiClient();
   const network = useNetwork();
   const currentAccount = useCurrentAccount();
-  const signTransactionBlock = useSignTxb();
+  const signTransactionBlock = useSignTransactionBlock();
 
   const createToken = async () => {
     try {
@@ -78,12 +81,11 @@ const CreateTokenForm: FC = () => {
 
       txb.transferObjects([upgradeCap], txb.pure(currentAccount.address));
 
-      const { signature, transactionBlockBytes } = await signTransactionBlock({
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        transactionBlock: txb,
-        account: currentAccount,
-      });
+      const { signature, transactionBlockBytes } =
+        await signTransactionBlock.mutateAsync({
+          transactionBlock: txb,
+          account: currentAccount,
+        });
 
       const tx = await suiClient.executeTransactionBlock({
         signature,

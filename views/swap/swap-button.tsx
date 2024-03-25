@@ -1,12 +1,15 @@
 import { Button, Typography } from '@interest-protocol/ui-kit';
-import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
+import {
+  useCurrentAccount,
+  useSignTransactionBlock,
+  useSuiClient,
+} from '@mysten/dapp-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { EXPLORER_URL } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useDialog } from '@/hooks/use-dialog';
-import useSignTxb from '@/hooks/use-sign-txb';
 import { useWeb3 } from '@/hooks/use-web3';
 import { throwTXIfNotSuccessful, ZERO_BIG_NUMBER } from '@/utils';
 import { SwapForm } from '@/views/swap/swap.types';
@@ -23,7 +26,7 @@ const SwapButton: FC = () => {
 
   const { mutate } = useWeb3();
 
-  const signTransactionBlock = useSignTxb();
+  const signTransactionBlock = useSignTransactionBlock();
 
   const resetInput = () => {
     formSwap.setValue('to.display', '0');
@@ -70,9 +73,11 @@ const SwapButton: FC = () => {
         slippage: Number(slippage),
       });
 
-      const { signature, transactionBlockBytes } = await signTransactionBlock({
-        transactionBlock: txb,
-      });
+      const { signature, transactionBlockBytes } =
+        await signTransactionBlock.mutateAsync({
+          transactionBlock: txb,
+          account: currentAccount,
+        });
 
       const tx = await client.executeTransactionBlock({
         transactionBlock: transactionBlockBytes,
