@@ -1,5 +1,9 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
-import { useSignTransactionBlock, useSuiClient } from '@mysten/dapp-kit';
+import {
+  useCurrentAccount,
+  useSignTransactionBlock,
+  useSuiClient,
+} from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { normalizeSuiAddress, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
@@ -32,6 +36,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
   const network = useNetwork();
   const suiClient = useSuiClient();
   const signTransactionBlock = useSignTransactionBlock();
+  const currentAccount = useCurrentAccount();
 
   const handleSend = async () => {
     setIsProgressView(true);
@@ -39,14 +44,15 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
     try {
       const { airdropList, token } = getValues();
 
-      if (!airdropList || !coinsMap || !coinsMap[token.type]) return;
+      if (!airdropList || !coinsMap || !coinsMap[token.type] || !currentAccount)
+        return;
 
       const contractPackageId = AIRDROP_SEND_CONTRACT[network];
 
       const list = splitArray(airdropList, BATCH_SIZE);
 
       if (token.type === SUI_TYPE_ARG || token.type === SUI_TYPE_ARG_LONG) {
-        for await (const [index, batch] of Object.entries(list)) {
+        for (const [index, batch] of Object.entries(list)) {
           const totalAMount = batch
             .reduce(
               (acc, data) => acc.plus(BigNumber(data.amount)),
@@ -80,7 +86,10 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
             ],
           });
           const { signature, transactionBlockBytes } =
-            await signTransactionBlock.mutateAsync({ transactionBlock: txb });
+            await signTransactionBlock.mutateAsync({
+              transactionBlock: txb,
+              account: currentAccount,
+            });
 
           const tx = await suiClient.executeTransactionBlock({
             transactionBlock: transactionBlockBytes,
@@ -103,7 +112,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         return;
       }
 
-      for await (const [index, batch] of Object.entries(list)) {
+      for (const [index, batch] of Object.entries(list)) {
         const txb = new TransactionBlock();
 
         const totalAMount = batch
