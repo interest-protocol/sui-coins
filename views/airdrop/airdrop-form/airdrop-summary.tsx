@@ -107,6 +107,7 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
         <Box
           py="m"
           display="flex"
+          alignItems="center"
           borderTop="1px solid"
           borderColor="outlineVariant"
           justifyContent="space-between"
@@ -131,6 +132,11 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
             >
               {FixedPointMath.toNumber(airdropFee)}
             </Typography>
+            {airdropFee.gt(coinsMap[SUI_TYPE_ARG].balance) && (
+              <Typography size="small" variant="body" color="error">
+                Not enough SUI
+              </Typography>
+            )}
           </Box>
         </Box>
       </Box>
