@@ -1,5 +1,9 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
-import { useSuiClient } from '@mysten/dapp-kit';
+import {
+  useCurrentAccount,
+  useSignTransactionBlock,
+  useSuiClient,
+} from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { normalizeSuiAddress, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
@@ -11,13 +15,14 @@ import { AIRDROP_SEND_CONTRACT, TREASURY } from '@/constants';
 import { SUI_TYPE_ARG_LONG } from '@/constants/coins';
 import { AIRDROP_SUI_FEE_PER_ADDRESS } from '@/constants/fees';
 import { useNetwork } from '@/context/network';
-import useSignTxb from '@/hooks/use-sign-txb';
 import { useWeb3 } from '@/hooks/use-web3';
 import {
   getCoinOfValue,
+  noop,
   showTXSuccessToast,
   sleep,
   throwTXIfNotSuccessful,
+  ZERO_BIG_NUMBER,
 } from '@/utils';
 import { splitArray } from '@/utils';
 
@@ -32,8 +37,8 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
   const network = useNetwork();
   const suiClient = useSuiClient();
-
-  const signTransactionBlock = useSignTxb();
+  const signTransactionBlock = useSignTransactionBlock();
+  const currentAccount = useCurrentAccount();
 
   const handleSend = async () => {
     setIsProgressView(true);
@@ -41,19 +46,21 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
     try {
       const { airdropList, token } = getValues();
 
-      if (!airdropList || !coinsMap || !coinsMap[token.type]) return;
+      if (!airdropList || !coinsMap || !coinsMap[token.type] || !currentAccount)
+        return;
 
       const contractPackageId = AIRDROP_SEND_CONTRACT[network];
 
       const list = splitArray(airdropList, BATCH_SIZE);
 
       if (token.type === SUI_TYPE_ARG || token.type === SUI_TYPE_ARG_LONG) {
-        for await (const [index, batch] of Object.entries(list)) {
+        for (const [index, batch] of Object.entries(list)) {
           const totalAMount = batch
             .reduce(
               (acc, data) => acc.plus(BigNumber(data.amount)),
               BigNumber(0)
             )
+            .decimalPlaces(0)
             .toString();
 
           const txb = new TransactionBlock();
@@ -66,6 +73,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
             txb.pure(
               new BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS)
                 .times(batch.length)
+                .decimalPlaces(0)
                 .toString()
             ),
           ]);
@@ -77,12 +85,15 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
             typeArguments: [token.type],
             arguments: [
               coinToSend,
-              txb.pure(batch.map((x) => x.address)),
+              txb.pure(batch.map((x) => normalizeSuiAddress(x.address))),
               txb.pure(batch.map((x) => x.amount)),
             ],
           });
           const { signature, transactionBlockBytes } =
-            await signTransactionBlock({ transactionBlock: txb });
+            await signTransactionBlock.mutateAsync({
+              transactionBlock: txb,
+              account: currentAccount,
+            });
 
           const tx = await suiClient.executeTransactionBlock({
             transactionBlock: transactionBlockBytes,
@@ -105,15 +116,16 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         return;
       }
 
-      for await (const [index, batch] of Object.entries(list)) {
+      for (const [index, batch] of Object.entries(list)) {
         const txb = new TransactionBlock();
 
         const totalAMount = batch
           .reduce((acc, data) => acc.plus(BigNumber(data.amount)), BigNumber(0))
+          .decimalPlaces(0)
           .toString();
 
         const coinToSend = await getCoinOfValue({
-          suiClient,
+          suiClient: suiClient,
           account: account!,
           txb,
           coinType: token.type,
@@ -124,6 +136,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           txb.pure(
             new BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS)
               .times(batch.length)
+              .decimalPlaces(0)
               .toString()
           ),
         ]);
@@ -139,13 +152,11 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
             txb.pure(batch.map((x) => x.amount)),
           ],
         });
-        const { signature, transactionBlockBytes } = await signTransactionBlock(
-          {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
+        const { signature, transactionBlockBytes } =
+          await signTransactionBlock.mutateAsync({
             transactionBlock: txb,
-          }
-        );
+            account: currentAccount,
+          });
 
         const tx = await suiClient.executeTransactionBlock({
           transactionBlock: transactionBlockBytes,
@@ -171,6 +182,13 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
       }
     }
   };
+  const airdropList = getValues('airdropList');
+
+  const airdropFee = airdropList
+    ? BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS).times(airdropList.length)
+    : ZERO_BIG_NUMBER;
+
+  const disabled = airdropFee.gt(coinsMap[SUI_TYPE_ARG].balance);
 
   return (
     <Box display="flex" justifyContent="center">
@@ -178,9 +196,10 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         width="100%"
         display="flex"
         variant="filled"
-        onClick={handleSend}
+        disabled={disabled}
         borderRadius="0.5rem"
         justifyContent="center"
+        onClick={disabled ? noop : handleSend}
       >
         <Typography variant="label" size="large">
           Confirm airdrop
