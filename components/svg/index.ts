@@ -68,6 +68,7 @@ export { default as PoolSVG } from './pool';
 export { default as QuestionCircleSVG } from './question-circle';
 export { default as RefreshSVG } from './refresh';
 export { default as SearchSVG } from './search';
+export { default as SendSVG } from './send';
 export { default as SignOutSVG } from './sign-out';
 export { default as SOLSVG } from './sol';
 export { default as SOLChainSVG } from './sol-chain';
