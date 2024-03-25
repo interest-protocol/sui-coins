@@ -13,13 +13,13 @@ const queryClient = new QueryClient();
 
 const Provider: FC<PropsWithChildren> = ({ children }) => (
   <ThemeManager>
-    <NetworkProvider>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <NetworkProvider>
         <WalletProvider autoConnect>
           <SuiNsProvider>{children}</SuiNsProvider>
         </WalletProvider>
-      </QueryClientProvider>
-    </NetworkProvider>
+      </NetworkProvider>
+    </QueryClientProvider>
   </ThemeManager>
 );
 

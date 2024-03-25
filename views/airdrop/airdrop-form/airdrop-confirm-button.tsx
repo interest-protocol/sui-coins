@@ -60,6 +60,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
               (acc, data) => acc.plus(BigNumber(data.amount)),
               BigNumber(0)
             )
+            .decimalPlaces(0)
             .toString();
 
           const txb = new TransactionBlock();
@@ -83,7 +84,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
             typeArguments: [token.type],
             arguments: [
               coinToSend,
-              txb.pure(batch.map((x) => x.address)),
+              txb.pure(batch.map((x) => normalizeSuiAddress(x.address))),
               txb.pure(batch.map((x) => x.amount)),
             ],
           });
@@ -119,10 +120,11 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
         const totalAMount = batch
           .reduce((acc, data) => acc.plus(BigNumber(data.amount)), BigNumber(0))
+          .decimalPlaces(0)
           .toString();
 
         const coinToSend = await getCoinOfValue({
-          suiClient,
+          suiClient: suiClient,
           account: account!,
           txb,
           coinType: token.type,
