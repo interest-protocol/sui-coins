@@ -155,6 +155,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         const { signature, transactionBlockBytes } =
           await signTransactionBlock.mutateAsync({
             transactionBlock: txb,
+            account: currentAccount,
           });
 
         const tx = await suiClient.executeTransactionBlock({
