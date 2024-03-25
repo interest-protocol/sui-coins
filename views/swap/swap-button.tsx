@@ -1,6 +1,6 @@
 import { Button, Typography } from '@interest-protocol/ui-kit';
 import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { EXPLORER_URL } from '@/constants';
@@ -8,7 +8,7 @@ import { useNetwork } from '@/context/network';
 import { useDialog } from '@/hooks/use-dialog';
 import useSignTxb from '@/hooks/use-sign-txb';
 import { useWeb3 } from '@/hooks/use-web3';
-import { throwTXIfNotSuccessful } from '@/utils';
+import { throwTXIfNotSuccessful, ZERO_BIG_NUMBER } from '@/utils';
 import { SwapForm } from '@/views/swap/swap.types';
 
 import { useAftermathRouter } from './swap.hooks';
@@ -20,22 +20,29 @@ const SwapButton: FC = () => {
   const currentAccount = useCurrentAccount();
   const formSwap = useFormContext<SwapForm>();
   const { dialog, handleClose } = useDialog();
-  const [loading, setLoading] = useState(false);
 
   const { mutate } = useWeb3();
 
   const signTransactionBlock = useSignTxb();
 
   const resetInput = () => {
-    formSwap.setValue('from.display', '0');
     formSwap.setValue('to.display', '0');
+    formSwap.setValue('from.display', '0');
+    formSwap.setValue('from.value', ZERO_BIG_NUMBER);
   };
+
+  const route = useWatch({ control: formSwap.control, name: 'route' });
+
+  const swapping = useWatch({
+    control: formSwap.control,
+    name: 'swapping',
+  });
 
   const readyToSwap = useWatch({
     control: formSwap.control,
     name: 'readyToSwap',
   });
-  const route = useWatch({ control: formSwap.control, name: 'route' });
+
   const slippage = useWatch({
     control: formSwap.control,
     name: 'settings.slippage',
@@ -53,10 +60,9 @@ const SwapButton: FC = () => {
 
   const handleSwap = async () => {
     try {
-      if (!route || !currentAccount || status)
-        throw new Error('Something went wrong');
+      if (!route || !currentAccount) throw new Error('Something went wrong');
 
-      setLoading(true);
+      formSwap.setValue('swapping', true);
 
       const txb = await router.getTransactionForCompleteTradeRoute({
         walletAddress: currentAccount.address,
@@ -83,7 +89,7 @@ const SwapButton: FC = () => {
       );
     } finally {
       resetInput();
-      setLoading(false);
+      formSwap.setValue('swapping', false);
       mutate();
     }
   };
@@ -125,7 +131,7 @@ const SwapButton: FC = () => {
       disabled={!readyToSwap}
     >
       <Typography variant="label" size="large">
-        {loading ? 'Swapping...' : 'Swap'}
+        {swapping ? 'Swapping...' : 'Swap'}
       </Typography>
     </Button>
   );

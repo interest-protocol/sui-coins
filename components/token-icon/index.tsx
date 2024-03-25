@@ -107,7 +107,7 @@ const TokenIcon: FC<TokenIconProps> = ({
           borderRadius={rounded ? 'full' : 'xs'}
         >
           {isLoading && (
-            <Box position="absolute" top="-0.5rem">
+            <Box position="absolute" top="-0.5rem" left="0.9rem">
               <ProgressIndicator size={16} variant="loading" />
             </Box>
           )}

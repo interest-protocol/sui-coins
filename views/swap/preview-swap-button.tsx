@@ -21,6 +21,7 @@ const PreviewSwapButton: FC = () => {
 
   const from = useWatch({ control, name: 'from' });
   const to = useWatch({ control, name: 'to' });
+  const swapping = useWatch({ control, name: 'swapping' });
 
   const fromValue = from?.value ?? ZERO_BIG_NUMBER;
 
@@ -40,6 +41,7 @@ const PreviewSwapButton: FC = () => {
     to &&
     from.type &&
     to.type &&
+    !swapping &&
     !from.value?.isZero() &&
     Number(to.display) &&
     coinsMap[from.type] &&
@@ -96,7 +98,7 @@ const PreviewSwapButton: FC = () => {
           disabled={!ableToSwap}
           onClick={handlePreview}
         >
-          Preview swap
+          {swapping ? 'swapping...' : 'Preview swap'}
         </Button>
       </Box>
     </>

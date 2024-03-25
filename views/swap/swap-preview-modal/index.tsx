@@ -37,6 +37,7 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
         <Box
           p="xl"
           display="flex"
+          cursor="pointer"
           alignItems="center"
           justifyContent="space-between"
         >
@@ -94,7 +95,7 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
                   {tokenFrom.usdPrice
                     ? formatDollars(
                         +(
-                          Number(tokenFrom.value || 0) * tokenFrom.usdPrice
+                          Number(tokenFrom.display || 0) * tokenFrom.usdPrice
                         ).toFixed(3)
                       )
                     : '--'}{' '}

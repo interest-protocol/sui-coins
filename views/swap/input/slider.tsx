@@ -21,6 +21,7 @@ const SwapFormFieldSlider: FC = () => {
   const { control, setValue, getValues } = useFormContext<SwapForm>();
 
   const type = useWatch({ control, name: 'from.type' });
+  const swapping = useWatch({ control, name: 'swapping' });
 
   const safeRemoval =
     type === SUI_TYPE_ARG
@@ -38,7 +39,7 @@ const SwapFormFieldSlider: FC = () => {
       <Slider
         min={0}
         max={100}
-        disabled={!balance || balance.isZero?.()}
+        disabled={!balance || balance.isZero?.() || swapping}
         initial={Math.floor(
           fromValue && balance && !fromValue.isZero?.() && !balance.isZero?.()
             ? balance.gt(fromValue)

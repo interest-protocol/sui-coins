@@ -19,8 +19,8 @@ import Swap from '@/views/swap';
 import { ISwapSettings, SwapForm, SwapToken } from '@/views/swap/swap.types';
 
 const SwapPage: NextPage = () => {
-  const { coinsMap } = useWeb3();
   const network = useNetwork();
+  const { coinsMap } = useWeb3();
   const {
     query: { to, from },
     pathname,
@@ -37,6 +37,12 @@ const SwapPage: NextPage = () => {
       settings,
     },
   });
+
+  useEffect(() => {
+    form.reset();
+    form.setValue('settings', settings);
+    updateURL(pathname);
+  }, [network]);
 
   const setDefaultToken = async (
     value: `0x${string}`,
@@ -68,6 +74,7 @@ const SwapPage: NextPage = () => {
 
     if (
       typeof value === 'string' &&
+      value.startsWith('0x') &&
       isValidSuiAddress(normalizeSuiAddress(value).split('::')[0])
     ) {
       const { type, symbol, decimals } = await getCoin(
@@ -120,7 +127,9 @@ const SwapPage: NextPage = () => {
 
       form.setValue('loading', false);
 
-      updateURL(`${pathname}?${searchParams.toString()}`);
+      const params = searchParams.toString();
+
+      updateURL(`${pathname}${params ? `?${params}` : ''}`);
     })();
   }, []);
 

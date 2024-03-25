@@ -26,14 +26,22 @@ const SelectToken: FC<InputProps> = ({ label }) => {
     name: label,
   });
 
+  const swapping = useWatch({
+    control,
+    name: 'swapping',
+  });
+
   const { symbol: currentSymbol, type: currentType } = currentToken ?? {
     symbol: undefined,
     type: undefined,
   };
 
-  const changeURL = (type: string) => {
+  const changeURL = (type: string, oppositeType?: string) => {
     const searchParams = new URLSearchParams(location.search);
     searchParams.set(label, type);
+
+    if (oppositeType)
+      searchParams.set(label === 'to' ? 'from' : 'to', oppositeType);
 
     updateURL(
       `${pathname}?from=${searchParams.get('from')}&to=${searchParams.get(
@@ -75,12 +83,13 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       )
       .catch(() => null);
 
-    setValue(`${label === 'from' ? 'to' : 'from'}.display`, '');
+    if (label === 'from') setValue('to.display', '');
 
-    changeURL(type);
+    changeURL(type, type === oppositeType ? currentToken.type : undefined);
   };
 
   const openModal = () =>
+    !swapping &&
     setModal(
       <Motion
         animate={{ scale: 1 }}
@@ -108,8 +117,10 @@ const SelectToken: FC<InputProps> = ({ label }) => {
         width="100%"
         variant="tonal"
         borderRadius="xs"
-        bg="highestContainer"
+        disabled={swapping}
         onClick={openModal}
+        bg="highestContainer"
+        opacity={swapping ? 0.7 : 1}
         {...(currentType && {
           PrefixIcon: (
             <TokenIcon
