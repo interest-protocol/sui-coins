@@ -1,4 +1,5 @@
 import { Box, Button, ProgressIndicator } from '@interest-protocol/ui-kit';
+import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import Countdown, { CountdownRendererFn } from 'react-countdown';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -73,7 +74,7 @@ const SwapUpdatePrice: FC = () => {
     setValue('fetchingPrices', false);
   };
 
-  const { mutate } = useSWR(
+  const { mutate, error } = useSWR(
     `${coinInType}-${coinOutType}-${coinInValue}`,
     async () => {
       if (!(coinInType && coinOutType && Number(coinInValue))) {
@@ -120,6 +121,8 @@ const SwapUpdatePrice: FC = () => {
     },
     { refreshInterval: Number(interval) * 1000, refreshWhenOffline: false }
   );
+
+  console.log(error);
 
   return (
     <Button
