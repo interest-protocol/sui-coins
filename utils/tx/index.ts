@@ -37,6 +37,7 @@ export const signAndExecute = async ({
   currentAccount,
   txb,
   signTransactionBlock,
+  options,
 }: SignAndExecuteArgs) => {
   const { signature, transactionBlockBytes } =
     await signTransactionBlock.mutateAsync({
@@ -47,7 +48,10 @@ export const signAndExecute = async ({
   return suiClient.executeTransactionBlock({
     transactionBlock: transactionBlockBytes,
     signature,
-    options: { showEffects: true },
+    options: {
+      showEffects: true,
+      ...options,
+    },
     requestType: 'WaitForLocalExecution',
   });
 };

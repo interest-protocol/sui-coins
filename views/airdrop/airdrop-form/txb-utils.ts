@@ -1,11 +1,13 @@
+import { SuiTransactionBlockResponse } from '@mysten/sui.js/src/client';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { normalizeSuiAddress } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
+import { prop } from 'ramda';
 
 import { TREASURY } from '@/constants';
 import { AIRDROP_SUI_FEE_PER_ADDRESS } from '@/constants/fees';
 import { signAndExecute } from '@/utils';
-import { AirdropData, SendAirdropArgs } from '@/views/airdrop/airdrop.types';
+import { SendAirdropArgs } from '@/views/airdrop/airdrop.types';
 
 export const chargeFee = (txb: TransactionBlock, len: number) => {
   const [fee] = txb.splitCoins(txb.gas, [
@@ -20,11 +22,22 @@ export const chargeFee = (txb: TransactionBlock, len: number) => {
   txb.transferObjects([fee], txb.pure(TREASURY));
 };
 
-export const totalBatchAmount = (batch: readonly AirdropData[]) =>
-  batch
-    .reduce((acc, data) => acc.plus(BigNumber(data.amount)), BigNumber(0))
-    .decimalPlaces(0)
-    .toString();
+export const findNextVersionAndDigest = (
+  tx: SuiTransactionBlockResponse,
+  id: string
+) => {
+  let nextDigest = '';
+  let nextVersion = '';
+  tx.objectChanges!.forEach((objectChanged: any) => {
+    const objectId = prop('objectId', objectChanged);
+    if (objectId === id) {
+      nextDigest = prop('digest', objectChanged);
+      nextVersion = prop('version', objectChanged);
+    }
+  });
+
+  return [nextDigest, nextVersion];
+};
 
 export const sendAirdrop = async ({
   suiClient,
@@ -42,7 +55,9 @@ export const sendAirdrop = async ({
     arguments: [
       coinToSend,
       txb.pure(batch.map((x) => normalizeSuiAddress(x.address))),
-      txb.pure(batch.map((x) => x.amount)),
+      txb.pure(
+        batch.map((x) => BigNumber(x.amount).decimalPlaces(0).toString())
+      ),
     ],
   });
 
@@ -51,5 +66,8 @@ export const sendAirdrop = async ({
     txb,
     currentAccount,
     signTransactionBlock,
+    options: {
+      showObjectChanges: true,
+    },
   });
 };
