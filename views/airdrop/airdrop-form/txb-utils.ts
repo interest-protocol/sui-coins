@@ -1,4 +1,4 @@
-import { SuiTransactionBlockResponse } from '@mysten/sui.js/src/client';
+import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { normalizeSuiAddress } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
