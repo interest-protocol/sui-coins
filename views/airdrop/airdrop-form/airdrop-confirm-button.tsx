@@ -61,7 +61,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
       const list = splitArray(airdropList, BATCH_SIZE);
 
-      if (token.type === SUI_TYPE_ARG || token.type === SUI_TYPE_ARG_LONG) {
+      if (normalizeSuiType(token.type) === normalizeSuiType(SUI_TYPE_ARG)) {
         const txb = new TransactionBlock();
 
         const totalAmount = airdropList
@@ -172,6 +172,12 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
       const mergeCoinsPred = otherCoins.length > 0;
       const mergeGasPred = otherGasCoins.length > 0;
 
+      let nextDigest = '';
+      let nextVersion = '';
+
+      let nextGasDigest = '';
+      let nextGasVersion = '';
+
       if (mergeCoinsPred || mergeGasPred) {
         const txb = new TransactionBlock();
 
@@ -198,14 +204,18 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
         showTXSuccessToast(tx, network);
 
+        [nextDigest, nextVersion] = findNextVersionAndDigest(
+          tx,
+          firstCoin.coinObjectId
+        );
+
+        [nextGasDigest, nextGasVersion] = findNextVersionAndDigest(
+          tx,
+          firstGasCoin.coinObjectId
+        );
+
         await sleep(RATE_LIMIT_DELAY);
       }
-
-      let nextDigest = firstCoin.digest;
-      let nextVersion = firstCoin.version;
-
-      let nextGasDigest = firstGasCoin.digest;
-      let nextGasVersion = firstGasCoin.version;
 
       for (const [index, batch] of Object.entries(list)) {
         const txb = new TransactionBlock();
