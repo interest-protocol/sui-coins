@@ -1,6 +1,6 @@
 import { Box, Motion, Theme, useTheme } from '@interest-protocol/ui-kit';
 import { useCurrentAccount, useDisconnectWallet } from '@mysten/dapp-kit';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 
 import { EXPLORER_URL, wrapperVariants } from '@/constants';
@@ -21,8 +21,13 @@ const MenuProfile: FC<MenuProfileProps> = ({
   const network = useNetwork();
   const { breakpoints } = useTheme() as Theme;
   const [isDesktop, setIsDesktop] = useState(false);
+  const [firstRender, setFirstRender] = useState(true);
   const currentAccount = useCurrentAccount();
   const { mutate: disconnect } = useDisconnectWallet();
+
+  useEffect(() => {
+    setFirstRender(false);
+  }, []);
 
   const account = currentAccount?.address || '';
 
@@ -66,6 +71,7 @@ const MenuProfile: FC<MenuProfileProps> = ({
       height={['100vh', '100vh', '100vh', 'unset']}
       width={['100vw', '100vw', '100vw', '14.5rem']}
       position={['fixed', 'fixed', 'fixed', 'absolute']}
+      initial={isOpen || firstRender ? 'closed' : 'open'}
     >
       <Box display="flex" flexDirection="column" justifyContent="space-between">
         <Box
