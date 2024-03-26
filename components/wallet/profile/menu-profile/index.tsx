@@ -66,7 +66,6 @@ const MenuProfile: FC<MenuProfileProps> = ({
       height={['100vh', '100vh', '100vh', 'unset']}
       width={['100vw', '100vw', '100vw', '14.5rem']}
       position={['fixed', 'fixed', 'fixed', 'absolute']}
-      initial="closed"
     >
       <Box display="flex" flexDirection="column" justifyContent="space-between">
         <Box
