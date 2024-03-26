@@ -6,30 +6,43 @@ import Layout from '@/components/layout';
 import Header from './header';
 import PoolFilter from './pool-filter';
 import { PoolTabEnum } from './pools.types';
-import PoolCardLIst from './pools-card-list';
+import PoolCardList from './pools-card-list';
 
 const Pools: FC = () => {
   const [tab, setTab] = useState<PoolTabEnum>(PoolTabEnum.Pools);
 
   return (
-    <Layout title="Pools">
-      <Box mx={['0', '0', '0', '0', 'm']}>
-        <Box py="xl">
-          <Header setTab={setTab} currentTab={tab} />
-        </Box>
+    <Layout>
+      <Box py="xl">
+        <Header setTab={setTab} currentTab={tab} />
+      </Box>
+      <Box
+        px="s"
+        gap="2xs"
+        bg="container"
+        display="flex"
+        maxWidth="100%"
+        maxHeight="100%"
+        borderRadius="xs"
+        flexDirection="column"
+        py={['s', 's', 's', '2xl']}
+      >
+        <PoolFilter />
         <Box
-          gap="2xs"
-          bg="container"
-          maxWidth="100%"
-          maxHeight="100%"
-          display="flex"
-          flexDirection="column"
+          gap="m"
+          display="grid"
           borderRadius="xs"
-          px="m"
-          py={['s', 's', 's', '2xl']}
+          p={['s', 's', 's', 'l']}
+          gridTemplateColumns={[
+            '1fr',
+            '1fr',
+            '1fr 1fr',
+            '1fr 1fr',
+            '1fr 1fr 1fr',
+          ]}
         >
           <PoolFilter />
-          <PoolCardLIst />
+          <PoolCardList />
         </Box>
       </Box>
     </Layout>

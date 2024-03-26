@@ -21,11 +21,13 @@ const Header: FC<HeaderProps> = ({ currentTab, setTab }) => {
 
   return (
     <Box
-      display="flex"
+      gap="s"
+      width="100%"
       flexWrap="wrap"
       overflow="none"
       alignItems="center"
       justifyContent="space-between"
+      display="flex"
     >
       <Box
         gap="s"
@@ -53,5 +55,4 @@ const Header: FC<HeaderProps> = ({ currentTab, setTab }) => {
     </Box>
   );
 };
-
 export default Header;
