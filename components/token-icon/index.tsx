@@ -25,7 +25,7 @@ const TokenIcon: FC<TokenIconProps> = ({
           width={maxWidth ?? '2.5rem'}
           height={maxHeight ?? '2.5rem'}
         >
-          <img src={TokenIcon} width="100%" alt="Token Icon" />s
+          <img src={TokenIcon} width="100%" alt="Token Icon" />
         </Box>
       ) : (
         <TokenIcon
