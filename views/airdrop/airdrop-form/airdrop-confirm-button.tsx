@@ -19,6 +19,7 @@ import { useWeb3 } from '@/hooks/use-web3';
 import {
   getCoins,
   noop,
+  normalizeSuiType,
   showTXSuccessToast,
   signAndExecute,
   sleep,
@@ -60,27 +61,69 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
       const list = splitArray(airdropList, BATCH_SIZE);
 
       if (token.type === SUI_TYPE_ARG || token.type === SUI_TYPE_ARG_LONG) {
+        const txb = new TransactionBlock();
+
+        const totalAmount = totalBatchAmount(airdropList);
+
+        const [coinToSend, fee] = txb.splitCoins(txb.gas, [
+          txb.pure(totalAmount),
+          txb.pure(
+            new BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS)
+              .times(airdropList.length)
+              .decimalPlaces(0)
+              .toString()
+          ),
+        ]);
+
+        txb.transferObjects([coinToSend], txb.pure(currentAccount.address));
+        txb.transferObjects([fee], txb.pure(TREASURY));
+
+        const tx = await signAndExecute({
+          suiClient,
+          txb,
+          currentAccount,
+          signTransactionBlock,
+        });
+
+        throwTXIfNotSuccessful(tx);
+
+        showTXSuccessToast(tx, network);
+
+        await sleep(RATE_LIMIT_DELAY);
+
+        const allCoins = await getCoins({
+          suiClient,
+          coinType: normalizeSuiType(SUI_TYPE_ARG),
+          cursor: null,
+          account: currentAccount.address,
+        });
+
+        const firstCoin = allCoins.filter((x) => x.balance === totalAmount)[0];
+
         for (const [index, batch] of Object.entries(list)) {
-          const totalAMount = totalBatchAmount(batch);
           const txb = new TransactionBlock();
 
-          const [coinToSend, fee] = txb.splitCoins(txb.gas, [
-            txb.pure(totalAMount),
-            txb.pure(
-              new BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS)
-                .times(batch.length)
-                .decimalPlaces(0)
-                .toString()
-            ),
-          ]);
+          const coinToSend = await suiClient.getObject({
+            id: firstCoin.coinObjectId,
+            options: {
+              showContent: true,
+            },
+          });
 
-          txb.transferObjects([fee], txb.pure(TREASURY));
+          if (!coinToSend.data)
+            throw new Error(
+              'Failed to fetch object with id' + firstCoin.coinObjectId
+            );
 
           const tx = await sendAirdrop({
             suiClient,
             batch,
             txb,
-            coinToSend,
+            coinToSend: txb.objectRef({
+              digest: coinToSend.data.digest,
+              objectId: coinToSend.data.objectId,
+              version: coinToSend.data.version,
+            }),
             currentAccount,
             signTransactionBlock,
             tokenType: token.type,
@@ -103,7 +146,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
       const paginatedCoins = await getCoins({
         suiClient,
-        coinType: token.type,
+        coinType: normalizeSuiType(token.type),
         cursor: null,
         account: currentAccount.address,
       });
@@ -135,19 +178,30 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
       for (const [index, batch] of Object.entries(list)) {
         const txb = new TransactionBlock();
-        const totalAMount = totalBatchAmount(batch);
-        const [coinToSend] = txb.splitCoins(
-          txb.object(firstCoin.coinObjectId),
-          [txb.pure(totalAMount)]
-        );
 
         chargeFee(txb, batch.length);
+
+        const coinToSend = await suiClient.getObject({
+          id: firstCoin.coinObjectId,
+          options: {
+            showContent: true,
+          },
+        });
+
+        if (!coinToSend.data)
+          throw new Error(
+            'Failed to fetch object with id' + firstCoin.coinObjectId
+          );
 
         const tx = await sendAirdrop({
           suiClient,
           batch,
           txb,
-          coinToSend,
+          coinToSend: txb.objectRef({
+            digest: coinToSend.data.digest,
+            objectId: coinToSend.data.objectId,
+            version: coinToSend.data.version,
+          }),
           currentAccount,
           signTransactionBlock,
           tokenType: token.type,

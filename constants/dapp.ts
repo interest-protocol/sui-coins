@@ -26,9 +26,9 @@ export const TREASURY =
 
 export const AIRDROP_SEND_CONTRACT = {
   [SUI_MAINNET_CHAIN]:
-    '0xbb94b3ad2fca50c5d21345d7d99118875521a39551483e7f02370227e462c59f',
+    '0x0fe9c0cdd44a98581faf8b1e45a5fc851b9b7dd6eda31edbf183b2893be69fee',
   [SUI_TESTNET_CHAIN]:
-    '0x84289b9b9aef3a159c0e08a708e0bc413a81c566c28408276d8f7ed978118d46',
+    '0x85a5eba4d4be22baec1d69c0bbf57fd69fc1d73a2dacede22a1e145fcbcef81d',
 };
 
 export const TOAST_DURATION = 10000;
