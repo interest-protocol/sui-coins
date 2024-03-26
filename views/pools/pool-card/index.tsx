@@ -32,19 +32,19 @@ const PoolCard: FC<PoolCardProps> = ({ tokens, dex, poolObjectId }) => {
         borderColor="outlineVariant"
         transition="all 300ms ease-in-out"
         nHover={{
+          cursor: 'pointer',
           borderColor: '#76767A',
           boxShadow: '0px 24px 46px -10px rgba(13, 16, 23, 0.16)',
           '.arrow-wrapper': {
             opacity: 1,
           },
-          cursor: 'pointer',
         }}
       >
         <PoolCardHeader
           objectId={poolObjectId}
           name={DEX_MAP[dex].name}
-          dexUrl={DEX_MAP[dex].url}
           tags={DEX_MAP[dex].tags}
+          dexUrl={DEX_MAP[dex].url}
           Logo={<Icon width="100%" maxWidth="1rem" maxHeight="1rem" />}
         />
         <PoolCardInfo apr={apr} coins={tokens} />

@@ -1,19 +1,14 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { FC, useState } from 'react';
-import { v4 } from 'uuid';
 
 import Layout from '@/components/layout';
-import { RECOMMENDED_POOLS } from '@/constants/pools';
-import { useNetwork } from '@/context/network';
 
 import Header from './header';
-import PoolCard from './pool-card';
 import PoolFilter from './pool-filter';
 import { PoolTabEnum } from './pools.types';
+import PoolCardList from './pools-card-list';
 
 const Pools: FC = () => {
-  const { network } = useNetwork();
-
   const [tab, setTab] = useState<PoolTabEnum>(PoolTabEnum.Pools);
 
   return (
@@ -46,9 +41,8 @@ const Pools: FC = () => {
             '1fr 1fr 1fr',
           ]}
         >
-          {RECOMMENDED_POOLS[network].map((pool) => (
-            <PoolCard key={v4()} {...pool} />
-          ))}
+          <PoolFilter />
+          <PoolCardList />
         </Box>
       </Box>
     </Layout>
