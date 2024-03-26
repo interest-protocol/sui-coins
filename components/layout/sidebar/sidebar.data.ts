@@ -23,13 +23,6 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     networks: [Network.MAINNET, Network.TESTNET],
   },
   {
-    name: 'zkSend',
-    disabled: false,
-    Icon: SendSVG,
-    path: Routes[RoutesEnum.ZkSend],
-    networks: [Network.MAINNET],
-  },
-  {
     name: 'pool',
     Icon: PoolSVG,
     disabled: true,
@@ -49,5 +42,12 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     Icon: AirdropSVG,
     path: Routes[RoutesEnum.Airdrop],
     networks: [Network.MAINNET, Network.TESTNET],
+  },
+  {
+    name: 'send',
+    disabled: false,
+    Icon: SendSVG,
+    path: Routes[RoutesEnum.Send],
+    networks: [Network.MAINNET],
   },
 ];

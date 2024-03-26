@@ -10,9 +10,9 @@ import { useModal } from '@/hooks/use-modal';
 import { ChevronRightSVG } from '@/svg';
 import SelectObjectModal from '@/views/components/select-object-modal';
 
-import { ZkSendForm } from '../zksend.types';
+import { ZkSendForm } from '../send.types';
 
-const ZkSendSelectObject: FC = () => {
+const SendSelectButton: FC = () => {
   const network = useNetwork();
   const { setModal, handleClose } = useModal();
   const { control, setValue } = useFormContext<ZkSendForm>();
@@ -68,4 +68,4 @@ const ZkSendSelectObject: FC = () => {
   );
 };
 
-export default ZkSendSelectObject;
+export default SendSelectButton;

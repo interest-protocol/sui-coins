@@ -4,9 +4,9 @@
  */
 export enum RoutesEnum {
   Swap = 'swap',
+  Send = 'send',
   Pools = 'pools',
   Faucet = 'faucet',
-  ZkSend = 'zksend',
   Airdrop = 'airdrop',
   Metrics = 'metrics',
   CreateCoin = 'create-coin',
@@ -21,9 +21,9 @@ export enum RoutesEnum {
  */
 export const Routes: Record<RoutesEnum, string> = {
   [RoutesEnum.Swap]: '/',
+  [RoutesEnum.Send]: '/send',
   [RoutesEnum.Pools]: '/pools',
   [RoutesEnum.Faucet]: '/faucet',
-  [RoutesEnum.ZkSend]: '/zksend',
   [RoutesEnum.Metrics]: '/metrics',
   [RoutesEnum.Airdrop]: '/airdrop',
   [RoutesEnum.FindPool]: '/pools/find',

@@ -3,22 +3,24 @@ import { FC } from 'react';
 
 import Layout from '@/components/layout';
 
-import ZkSendSelectObject from './zksend-select-object/zksend-select-button';
+import SendSelectObject from './send-select-object/send-select-button';
 
-const ZkSend: FC = () => (
-  <Layout title="zkSend">
+const Send: FC = () => (
+  <Layout title="Send">
     <Box
+      p="4xl"
       mx="auto"
       width="100%"
       display="flex"
-      borderRadius="2xl"
+      borderRadius="s"
       maxWidth="39.75rem"
+      bg="lowestContainer"
       flexDirection="column"
       px={['2xs', 'xl', 'xl', '7xl']}
     >
-      <ZkSendSelectObject />
+      <SendSelectObject />
     </Box>
   </Layout>
 );
 
-export default ZkSend;
+export default Send;

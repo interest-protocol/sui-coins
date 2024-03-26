@@ -1,9 +1,9 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import AirdropSelectToken from '../../airdrop/airdrop-form/airdrop-select-token';
+import SendSelectButton from './send-select-button';
 
-const ZkSendSelectToken: FC = () => (
+const SendSelectToken: FC = () => (
   <Box
     p="xl"
     gap="s"
@@ -17,8 +17,8 @@ const ZkSendSelectToken: FC = () => (
         1. Choose object
       </Typography>
     </Box>
-    < />
+    <SendSelectButton />
   </Box>
 );
 
-export default ZkSendSelectToken;
+export default SendSelectToken;

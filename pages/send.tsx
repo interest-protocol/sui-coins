@@ -2,18 +2,18 @@ import { NextPage } from 'next';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { SEO } from '@/components';
-import ZkSend from '@/views/zksend';
-import { ZkSendForm } from '@/views/zksend/zksend.types';
+import Send from '@/views/send';
+import { ZkSendForm } from '@/views/send/send.types';
 
-const ZkSendPage: NextPage = () => {
+const SendPage: NextPage = () => {
   const form = useForm<ZkSendForm>();
 
   return (
     <FormProvider {...form}>
-      <SEO pageTitle="ZkSend " />
-      <ZkSend />
+      <SEO pageTitle="Send " />
+      <Send />
     </FormProvider>
   );
 };
 
-export default ZkSendPage;
+export default SendPage;
