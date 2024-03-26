@@ -101,8 +101,6 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         return;
       }
 
-      const txb = new TransactionBlock();
-
       const paginatedCoins = await getCoins({
         suiClient,
         coinType: token.type,
@@ -112,26 +110,28 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
       // Merge all coins into one
       const [firstCoin, ...otherCoins] = paginatedCoins;
-      const firstCoinInput = txb.object(firstCoin.coinObjectId);
+
       if (otherCoins.length > 0) {
+        const txb = new TransactionBlock();
+
         txb.mergeCoins(
-          firstCoinInput,
+          txb.object(firstCoin.coinObjectId),
           otherCoins.map((coin) => coin.coinObjectId)
         );
+
+        const tx = await signAndExecute({
+          suiClient,
+          txb,
+          currentAccount,
+          signTransactionBlock,
+        });
+
+        throwTXIfNotSuccessful(tx);
+
+        showTXSuccessToast(tx, network);
+
+        await sleep(RATE_LIMIT_DELAY);
       }
-
-      const tx = await signAndExecute({
-        suiClient,
-        txb,
-        currentAccount,
-        signTransactionBlock,
-      });
-
-      throwTXIfNotSuccessful(tx);
-
-      showTXSuccessToast(tx, network);
-
-      await sleep(RATE_LIMIT_DELAY);
 
       for (const [index, batch] of Object.entries(list)) {
         const txb = new TransactionBlock();
