@@ -107,7 +107,6 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
         const coins: CoinInfo[] = [];
         tx.objectChanges!.forEach((objectChanged: any) => {
-          console.log(objectChanged);
           if (
             objectChanged.type === 'created' &&
             normalizeSuiAddress(
