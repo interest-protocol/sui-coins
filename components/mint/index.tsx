@@ -1,5 +1,6 @@
 import { Button } from '@interest-protocol/ui-kit';
 import { useCurrentAccount } from '@mysten/dapp-kit';
+import { getFaucetHost, requestSuiFromFaucetV1 } from '@mysten/sui.js/faucet';
 import { FC } from 'react';
 import toast from 'react-hot-toast';
 
@@ -10,23 +11,23 @@ const Mint: FC = () => {
   const network = useNetwork();
   const currentAccount = useCurrentAccount();
 
-  const getFaucet = () =>
-    currentAccount &&
-    toast.promise(
-      fetch('https://faucet.testnet.sui.io/v1/gas', {
-        method: 'POST',
-        body: JSON.stringify({
-          FixedAmountRequest: {
-            recipient: currentAccount.address,
-          },
-        }),
-      }),
-      {
-        loading: 'Minting SUI...',
-        success: 'SUI Minted!',
-        error: (e) => e.message ?? 'Error to Mint SUI!',
-      }
-    );
+  const getFaucet = async () => {
+    if (!currentAccount) return;
+
+    const loading = toast.loading('Minting SUI...');
+
+    try {
+      await requestSuiFromFaucetV1({
+        host: getFaucetHost('testnet'),
+        recipient: currentAccount.address,
+      });
+      toast.success('SUI Minted!');
+    } catch (e) {
+      toast.error((e as Error)?.message ?? 'Error to Mint SUI!');
+    } finally {
+      toast.dismiss(loading);
+    }
+  };
 
   if (!currentAccount || network !== Network.TESTNET) return null;
 

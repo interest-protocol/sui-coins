@@ -102,13 +102,15 @@ const CreateTokenForm: FC = () => {
   };
 
   const onSubmit = async () => {
-    await toast
-      .promise(createToken(), {
-        loading: 'Generating new coin...',
-        success: 'Coin Generated',
-        error: (e) => e.message || 'Something went wrong',
-      })
-      .catch(console.log);
+    const loading = toast.loading('Generating new coin...');
+    try {
+      await createToken();
+      toast.success('Coin Generated!');
+    } catch (e) {
+      toast.error((e as Error).message || 'Something went wrong');
+    } finally {
+      toast.dismiss(loading);
+    }
   };
 
   return (
