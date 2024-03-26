@@ -1,13 +1,9 @@
 import { useSignTransactionBlock } from '@mysten/dapp-kit';
 import { SuiClient } from '@mysten/sui.js/client';
-import { TransactionObjectArgument } from '@mysten/sui.js/src/transactions';
-import {
-  TransactionBlock,
-  TransactionResult,
-} from '@mysten/sui.js/transactions';
+import { TransactionObjectArgument } from '@mysten/sui.js/transactions';
+import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { WalletAccount } from '@wallet-standard/base';
 import { Dispatch, SetStateAction } from 'react';
-import { integer, literal } from 'superstruct';
 
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { NFTCollectionMetadata } from '@/interface';
