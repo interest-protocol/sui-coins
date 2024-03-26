@@ -5,7 +5,7 @@ import {
   useSuiClient,
 } from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { normalizeSuiAddress, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -17,14 +17,20 @@ import { AIRDROP_SUI_FEE_PER_ADDRESS } from '@/constants/fees';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks/use-web3';
 import {
-  getCoinOfValue,
+  getCoins,
   noop,
   showTXSuccessToast,
+  signAndExecute,
   sleep,
   throwTXIfNotSuccessful,
   ZERO_BIG_NUMBER,
 } from '@/utils';
 import { splitArray } from '@/utils';
+import {
+  chargeFee,
+  sendAirdrop,
+  totalBatchAmount,
+} from '@/views/airdrop/airdrop-form/txb-utils';
 
 import { BATCH_SIZE, RATE_LIMIT_DELAY } from '../airdrop.constants';
 import { AirdropConfirmButtonProps, IAirdropForm } from '../airdrop.types';
@@ -32,7 +38,7 @@ import { AirdropConfirmButtonProps, IAirdropForm } from '../airdrop.types';
 const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
   setIsProgressView,
 }) => {
-  const { coinsMap, account } = useWeb3();
+  const { coinsMap } = useWeb3();
   const { getValues, setValue } = useFormContext<IAirdropForm>();
 
   const network = useNetwork();
@@ -55,21 +61,11 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
       if (token.type === SUI_TYPE_ARG || token.type === SUI_TYPE_ARG_LONG) {
         for (const [index, batch] of Object.entries(list)) {
-          const totalAMount = batch
-            .reduce(
-              (acc, data) => acc.plus(BigNumber(data.amount)),
-              BigNumber(0)
-            )
-            .decimalPlaces(0)
-            .toString();
-
+          const totalAMount = totalBatchAmount(batch);
           const txb = new TransactionBlock();
 
-          const [coinToSend] = txb.splitCoins(txb.gas, [
-            txb.pure(totalAMount.toString()),
-          ]);
-
-          const [fee] = txb.splitCoins(txb.gas, [
+          const [coinToSend, fee] = txb.splitCoins(txb.gas, [
+            txb.pure(totalAMount),
             txb.pure(
               new BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS)
                 .times(batch.length)
@@ -80,26 +76,15 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
           txb.transferObjects([fee], txb.pure(TREASURY));
 
-          txb.moveCall({
-            target: `${contractPackageId}::airdrop::send`,
-            typeArguments: [token.type],
-            arguments: [
-              coinToSend,
-              txb.pure(batch.map((x) => normalizeSuiAddress(x.address))),
-              txb.pure(batch.map((x) => x.amount)),
-            ],
-          });
-          const { signature, transactionBlockBytes } =
-            await signTransactionBlock.mutateAsync({
-              transactionBlock: txb,
-              account: currentAccount,
-            });
-
-          const tx = await suiClient.executeTransactionBlock({
-            transactionBlock: transactionBlockBytes,
-            signature,
-            options: { showEffects: true },
-            requestType: 'WaitForEffectsCert',
+          const tx = await sendAirdrop({
+            suiClient,
+            batch,
+            txb,
+            coinToSend,
+            currentAccount,
+            signTransactionBlock,
+            tokenType: token.type,
+            contractPackageId,
           });
 
           throwTXIfNotSuccessful(tx, () =>
@@ -116,53 +101,57 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         return;
       }
 
+      const txb = new TransactionBlock();
+
+      const paginatedCoins = await getCoins({
+        suiClient,
+        coinType: token.type,
+        cursor: null,
+        account: currentAccount.address,
+      });
+
+      // Merge all coins into one
+      const [firstCoin, ...otherCoins] = paginatedCoins;
+      const firstCoinInput = txb.object(firstCoin.coinObjectId);
+      if (otherCoins.length > 0) {
+        txb.mergeCoins(
+          firstCoinInput,
+          otherCoins.map((coin) => coin.coinObjectId)
+        );
+      }
+
+      const tx = await signAndExecute({
+        suiClient,
+        txb,
+        currentAccount,
+        signTransactionBlock,
+      });
+
+      throwTXIfNotSuccessful(tx);
+
+      showTXSuccessToast(tx, network);
+
+      await sleep(RATE_LIMIT_DELAY);
+
       for (const [index, batch] of Object.entries(list)) {
         const txb = new TransactionBlock();
+        const totalAMount = totalBatchAmount(batch);
+        const [coinToSend] = txb.splitCoins(
+          txb.object(firstCoin.coinObjectId),
+          [txb.pure(totalAMount)]
+        );
 
-        const totalAMount = batch
-          .reduce((acc, data) => acc.plus(BigNumber(data.amount)), BigNumber(0))
-          .decimalPlaces(0)
-          .toString();
+        chargeFee(txb, batch.length);
 
-        const coinToSend = await getCoinOfValue({
-          suiClient: suiClient,
-          account: account!,
+        const tx = await sendAirdrop({
+          suiClient,
+          batch,
           txb,
-          coinType: token.type,
-          coinValue: totalAMount,
-        });
-
-        const [fee] = txb.splitCoins(txb.gas, [
-          txb.pure(
-            new BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS)
-              .times(batch.length)
-              .decimalPlaces(0)
-              .toString()
-          ),
-        ]);
-
-        txb.transferObjects([fee], txb.pure(TREASURY));
-
-        txb.moveCall({
-          target: `${contractPackageId}::airdrop::send`,
-          typeArguments: [token.type],
-          arguments: [
-            coinToSend,
-            txb.pure(batch.map((x) => normalizeSuiAddress(x.address))),
-            txb.pure(batch.map((x) => x.amount)),
-          ],
-        });
-        const { signature, transactionBlockBytes } =
-          await signTransactionBlock.mutateAsync({
-            transactionBlock: txb,
-            account: currentAccount,
-          });
-
-        const tx = await suiClient.executeTransactionBlock({
-          transactionBlock: transactionBlockBytes,
-          signature,
-          options: { showEffects: true },
-          requestType: 'WaitForEffectsCert',
+          coinToSend,
+          currentAccount,
+          signTransactionBlock,
+          tokenType: token.type,
+          contractPackageId,
         });
 
         throwTXIfNotSuccessful(tx, () =>
