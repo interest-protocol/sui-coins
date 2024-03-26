@@ -27,7 +27,7 @@ const Header: FC<HeaderProps> = ({ currentTab, setTab }) => {
       overflow="none"
       alignItems="center"
       justifyContent="space-between"
-      display={'flex'}
+      display="flex"
     >
       <Box
         gap="s"
