@@ -4,10 +4,10 @@ import toast from 'react-hot-toast';
 
 import { EXPLORER_URL, Network } from '@/constants';
 
-export const showTXSuccessToast = async (
+export const showTXSuccessToast = (
   tx: SuiTransactionBlockResponse,
   network: Network
-): Promise<void> => {
+): void => {
   const explorerLink = `${EXPLORER_URL[network]}/tx/${tx.digest}`;
 
   toast(

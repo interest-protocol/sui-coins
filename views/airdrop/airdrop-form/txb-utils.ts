@@ -1,10 +1,18 @@
-import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
-import { normalizeSuiAddress } from '@mysten/sui.js/utils';
+import {
+  SuiObjectChange,
+  SuiObjectResponse,
+  SuiTransactionBlockResponse,
+} from '@mysten/sui.js/client';
+import { normalizeSuiAddress, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
-import { prop } from 'ramda';
+import { pathOr, prop } from 'ramda';
 
-import { signAndExecute } from '@/utils';
-import { SendAirdropArgs } from '@/views/airdrop/airdrop.types';
+import { isSameAddress, signAndExecute } from '@/utils';
+import {
+  CreatedCoinInfo,
+  SendAirdropArgs,
+  SuiCreateObject,
+} from '@/views/airdrop/airdrop.types';
 
 export const findNextVersionAndDigest = (
   tx: SuiTransactionBlockResponse,
@@ -55,3 +63,30 @@ export const sendAirdrop = async ({
     },
   });
 };
+
+const isCreatedObject = (object: SuiObjectChange): object is SuiCreateObject =>
+  object.type === 'created';
+
+export const createdCoinIdsReducer =
+  (address: string) =>
+  (
+    acc: ReadonlyArray<string>,
+    object: SuiObjectChange
+  ): ReadonlyArray<string> => {
+    if (!isCreatedObject(object)) return acc;
+
+    if (!object.objectType.includes(SUI_TYPE_ARG)) return acc;
+
+    if (!isSameAddress(pathOr('', ['owner', 'AddressOwner'], object), address))
+      return acc;
+
+    return [...acc, object.objectId];
+  };
+
+export const getCreatedCoinInfo = (
+  object: SuiObjectResponse
+): CreatedCoinInfo => ({
+  objectId: pathOr('', ['data', 'objectId'], object),
+  version: pathOr('', ['data', 'version'], object),
+  digest: pathOr('', ['data', 'digest'], object),
+});
