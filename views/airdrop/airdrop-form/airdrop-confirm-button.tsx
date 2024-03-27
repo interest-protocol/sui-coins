@@ -75,19 +75,12 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           .times(airdropList.length)
           .decimalPlaces(0);
 
-        const remainingAmount = coinsMap[SUI_TYPE_ARG as string].balance
-          .minus(totalAmount)
-          .minus(feeAmount)
-          .minus(BigNumber('500000000'));
-
-        const [coinToSend, fee, gas] = txb.splitCoins(txb.gas, [
+        const [coinToSend, fee] = txb.splitCoins(txb.gas, [
           txb.pure(totalAmount.toString()),
           txb.pure(feeAmount.toString()),
-          txb.pure(remainingAmount.toString()),
         ]);
 
         txb.transferObjects([coinToSend], txb.pure(currentAccount.address));
-        txb.transferObjects([gas], txb.pure(currentAccount.address));
         txb.transferObjects([fee], txb.pure(TREASURY));
 
         const tx = await signAndExecute({
@@ -107,7 +100,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         const coins: CoinInfo[] = [];
         tx.objectChanges!.forEach((objectChanged: any) => {
           if (
-            objectChanged.type === 'created' &&
+            objectChanged.objectType.includes(SUI_TYPE_ARG) &&
             normalizeSuiAddress(
               pathOr('', ['owner', 'AddressOwner'], objectChanged)
             ) === normalizeSuiAddress(currentAccount.address)
@@ -130,11 +123,11 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           )
         );
 
-        const isGasTheFirst =
+        const isSendTheFirst =
           path(['data', 'content', 'fields', 'balance'], coin1) ===
-          remainingAmount.toString();
+          totalAmount.toString();
 
-        const gasCoin: CoinInfo = isGasTheFirst
+        const spendCoin: CoinInfo = isSendTheFirst
           ? {
               id: path(['data', 'objectId'], coin1) as string,
               version: path(['data', 'version'], coin1) as string,
@@ -146,7 +139,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
               digest: path(['data', 'digest'], coin2) as string,
             };
 
-        const spendCoin: CoinInfo = isGasTheFirst
+        const gasCoin: CoinInfo = isSendTheFirst
           ? {
               id: path(['data', 'objectId'], coin2) as string,
               version: path(['data', 'version'], coin2) as string,
