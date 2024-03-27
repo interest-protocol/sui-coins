@@ -2,6 +2,7 @@ import { Box } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
 import MenuMobile from '@/components/menu-mobile';
+import Mint from '@/components/mint';
 import Wallet from '@/components/wallet';
 import { LogoSVG } from '@/svg';
 
@@ -45,6 +46,7 @@ const Header: FC = () => (
         <LogoSVG maxHeight="1.5rem" maxWidth="7.5rem" width="100%" />
       </Box>
       <Box position="relative" display="flex" gap="s" alignItems="center">
+        <Mint />
         <Wallet />
         <MenuMobile />
       </Box>

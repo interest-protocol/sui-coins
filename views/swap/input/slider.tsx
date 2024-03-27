@@ -1,5 +1,6 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import BigNumber from 'bignumber.js';
 import dynamic from 'next/dynamic';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -20,6 +21,7 @@ const SwapFormFieldSlider: FC = () => {
   const { control, setValue, getValues } = useFormContext<SwapForm>();
 
   const type = useWatch({ control, name: 'from.type' });
+  const swapping = useWatch({ control, name: 'swapping' });
 
   const safeRemoval =
     type === SUI_TYPE_ARG
@@ -30,38 +32,37 @@ const SwapFormFieldSlider: FC = () => {
     ? coinsMap[type].balance.minus(safeRemoval)
     : ZERO_BIG_NUMBER;
 
-  const fromValue = type
-    ? FixedPointMath.toBigNumber(
-        getValues('from.value'),
-        getValues('from.decimals')
-      )
-    : ZERO_BIG_NUMBER;
+  const fromValue = type ? getValues('from.value') : ZERO_BIG_NUMBER;
 
   return (
     <Box mx="s">
       <Slider
         min={0}
         max={100}
-        disabled={!balance}
+        disabled={!balance || balance.isZero?.() || swapping}
         initial={Math.floor(
-          !fromValue.isZero() && !balance.isZero()
+          fromValue && balance && !fromValue.isZero?.() && !balance.isZero?.()
             ? balance.gt(fromValue)
               ? FixedPointMath.toNumber(
-                  fromValue.div(balance),
+                  fromValue.times(100).div(balance),
                   getValues('from.decimals')
-                ) * 100
+                )
               : 100
             : 0
         )}
         onChange={(value: number) => {
           setValue(
-            'from.value',
+            'from.display',
             Number(
               (
                 FixedPointMath.toNumber(balance, getValues('from.decimals')) *
                 (value / 100)
               ).toFixed(6)
             ).toPrecision()
+          );
+          setValue(
+            'from.value',
+            balance.times(BigNumber(value)).div(BigNumber(100))
           );
         }}
       />

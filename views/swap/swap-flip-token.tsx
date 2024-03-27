@@ -4,7 +4,7 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { SwapSVG } from '@/svg';
-import { updateURL } from '@/utils';
+import { updateURL, ZERO_BIG_NUMBER } from '@/utils';
 
 import { SwapForm } from './swap.types';
 
@@ -16,12 +16,14 @@ const SwapFlipToken: FC = () => {
 
   const to = useWatch({ control, name: 'to' });
   const from = useWatch({ control, name: 'from' });
+  const swapping = useWatch({ control, name: 'swapping' });
 
   const flipToken = () => {
+    if (swapping) return;
     const tmpTo = to;
     const tmpFrom = from;
-    setValue('to', { ...tmpFrom, value: '' });
-    setValue('from', { ...tmpTo, value: '' });
+    setValue('to', { ...tmpFrom, display: '' });
+    setValue('from', { ...tmpTo, display: '', value: ZERO_BIG_NUMBER });
 
     updateURL(`${pathname}?from=${tmpTo.type}&to=${tmpFrom.type}`);
   };
@@ -29,14 +31,13 @@ const SwapFlipToken: FC = () => {
   return (
     <Button
       isIcon
+      variant="text"
       bg="onPrimary"
       width="1.5rem"
       height="1.5rem"
       color="primary"
-      variant="filled"
       onClick={flipToken}
-      disabled={!to && !from}
-      nHover={{ bg: 'lowContainer' }}
+      disabled={(!to && !from) || swapping}
     >
       <SwapSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
     </Button>

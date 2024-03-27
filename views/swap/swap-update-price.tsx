@@ -1,4 +1,5 @@
 import { Box, Button, ProgressIndicator } from '@interest-protocol/ui-kit';
+import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import Countdown, { CountdownRendererFn } from 'react-countdown';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -7,6 +8,7 @@ import { useDebounce } from 'use-debounce';
 
 import { TREASURY } from '@/constants';
 import { EXCHANGE_FEE } from '@/constants/dex';
+import { useNetwork } from '@/context/network';
 import { FixedPointMath } from '@/lib';
 import { RefreshSVG } from '@/svg';
 
@@ -30,6 +32,7 @@ const countdownRenderer =
   };
 
 const SwapUpdatePrice: FC = () => {
+  const network = useNetwork();
   const aftermathRouter = useAftermathRouter();
   const { control, setValue, getValues } = useFormContext<SwapForm>();
 
@@ -51,6 +54,11 @@ const SwapUpdatePrice: FC = () => {
     name: 'to.type',
   });
 
+  const swapping = useWatch({
+    control,
+    name: 'swapping',
+  });
+
   const interval = useWatch({
     control,
     name: 'settings.interval',
@@ -68,18 +76,23 @@ const SwapUpdatePrice: FC = () => {
 
   const resetFields = () => {
     setValue('route', null);
-    setValue('to.value', '0');
+    setValue('to.display', '0');
     setValue('lastFetchDate', null);
     setValue('fetchingPrices', false);
+    setValue('error', null);
   };
 
+  const disabled = !coinInValue || coinInValue.isZero() || !coinOutType;
+
   const { mutate } = useSWR(
-    `${coinInType}-${coinOutType}-${coinInValue}`,
+    `${coinInType}-${coinOutType}-${coinInValue?.toString()}-${network}`,
     async () => {
-      if (!(coinInType && coinOutType && Number(coinInValue))) {
+      if (disabled) {
         resetFields();
         return;
       }
+
+      if (swapping) return;
 
       setValue('fetchingPrices', true);
 
@@ -88,10 +101,7 @@ const SwapUpdatePrice: FC = () => {
           coinInType,
           coinOutType,
           coinInAmount: BigInt(
-            FixedPointMath.toBigNumber(
-              coinInValue,
-              getValues('from.decimals')
-            ).toString()
+            coinInValue.decimalPlaces(0, BigNumber.ROUND_DOWN).toString()
           ),
           referrer: TREASURY,
           externalFee: {
@@ -103,24 +113,24 @@ const SwapUpdatePrice: FC = () => {
           resetFields();
           setValue('error', 'There is no market for these coins.');
           throw e;
+        })
+        .finally(() => {
+          setValue('fetchingPrices', false);
         });
-
-      if (!Number(getValues('from.value'))) return;
 
       setValue('route', data);
 
       setValue(
-        'to.value',
+        'to.display',
         Number(
           (
-            (+coinInValue *
+            (FixedPointMath.toNumber(coinInValue, getValues('from.decimals')) *
               10 ** (getValues('from.decimals') - getValues('to.decimals'))) /
             data.spotPrice
           ).toFixed(6)
         ).toPrecision()
       );
 
-      setValue('fetchingPrices', false);
       setValue('lastFetchDate', Date.now());
     },
     { refreshInterval: Number(interval) * 1000, refreshWhenOffline: false }
@@ -136,14 +146,12 @@ const SwapUpdatePrice: FC = () => {
       variant="filled"
       alignItems="center"
       position="relative"
-      disabled={!Number(coinInValue)}
-      nHover={
-        Number(coinInValue) ? { bg: 'lowContainer' } : { bg: 'lowestContainer' }
-      }
-      nFocus={Number(coinInValue) && { bg: 'lowContainer' }}
-      nActive={Number(coinInValue) && { bg: 'lowContainer' }}
+      disabled={disabled}
+      nFocus={!disabled && { bg: 'lowContainer' }}
+      nActive={!disabled && { bg: 'lowContainer' }}
+      nHover={!disabled ? { bg: 'lowContainer' } : { bg: 'lowestContainer' }}
       nDisabled={
-        !Number(coinInValue) && {
+        disabled && {
           opacity: 1,
           color: 'outline',
           bg: 'lowestContainer',

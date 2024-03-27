@@ -13,7 +13,7 @@ const AmountInDollar: FC<InputProps> = ({ label }) => {
 
   const value = useWatch({
     control,
-    name: `${label}.value`,
+    name: `${label}.display`,
   });
 
   const usdPrice = useWatch({

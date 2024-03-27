@@ -102,6 +102,8 @@ export const parseInputEventToNumberString = (
 
   if (isNaN(+x)) return '';
 
+  if (+x < 0) return '0';
+
   if (+x >= max) return max.toString();
 
   if (x.charAt(0) == '0' && !x.startsWith('0.')) return String(Number(x));

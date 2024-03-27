@@ -20,7 +20,7 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
 
   return (
     <Box
-      maxWidth="95%"
+      maxWidth="100%"
       overflow="auto"
       borderRadius="xs"
       width="26.875rem"
@@ -37,6 +37,7 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
         <Box
           p="xl"
           display="flex"
+          cursor="pointer"
           alignItems="center"
           justifyContent="space-between"
         >
@@ -88,13 +89,13 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
               </Box>
               <Box textAlign="right">
                 <Typography variant="body" size="medium">
-                  {tokenFrom.value || 0}
+                  {tokenFrom.display || 0}
                 </Typography>
                 <Typography variant="body" size="small" color="#000000A3">
                   {tokenFrom.usdPrice
                     ? formatDollars(
                         +(
-                          Number(tokenFrom.value || 0) * tokenFrom.usdPrice
+                          Number(tokenFrom.display || 0) * tokenFrom.usdPrice
                         ).toFixed(3)
                       )
                     : '--'}{' '}
@@ -136,13 +137,13 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
                 </Box>
                 <Box textAlign="right">
                   <Typography variant="body" size="medium">
-                    {tokenTo.value || 0}
+                    {tokenTo.display || 0}
                   </Typography>
                   <Typography variant="body" size="small" color="#000000A3">
                     {tokenTo.usdPrice
                       ? formatDollars(
                           +(
-                            Number(tokenTo.value || 0) * tokenTo.usdPrice
+                            Number(tokenTo.display || 0) * tokenTo.usdPrice
                           ).toFixed(3)
                         )
                       : '--'}{' '}

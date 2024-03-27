@@ -19,8 +19,8 @@ import Swap from '@/views/swap';
 import { ISwapSettings, SwapForm, SwapToken } from '@/views/swap/swap.types';
 
 const SwapPage: NextPage = () => {
-  const { coinsMap } = useWeb3();
   const network = useNetwork();
+  const { coinsMap } = useWeb3();
   const {
     query: { to, from },
     pathname,
@@ -38,6 +38,12 @@ const SwapPage: NextPage = () => {
     },
   });
 
+  useEffect(() => {
+    form.reset();
+    form.setValue('settings', settings);
+    updateURL(pathname);
+  }, [network]);
+
   const setDefaultToken = async (
     value: `0x${string}`,
     field: 'to' | 'from'
@@ -50,7 +56,7 @@ const SwapPage: NextPage = () => {
         type,
         symbol,
         decimals,
-        value: '',
+        display: '',
         usdPrice: null,
       };
 
@@ -68,6 +74,7 @@ const SwapPage: NextPage = () => {
 
     if (
       typeof value === 'string' &&
+      value.startsWith('0x') &&
       isValidSuiAddress(normalizeSuiAddress(value).split('::')[0])
     ) {
       const { type, symbol, decimals } = await getCoin(
@@ -80,7 +87,7 @@ const SwapPage: NextPage = () => {
         type,
         symbol,
         decimals,
-        value: '',
+        display: '',
         usdPrice: null,
       };
 
@@ -106,9 +113,10 @@ const SwapPage: NextPage = () => {
       const searchParams = new URLSearchParams(
         asPath.replace('/', '').replace('?', '')
       );
+
       const [fromType, toType] = await Promise.all([
         setDefaultToken(from as `0x${string}`, 'from'),
-        setDefaultToken(to as `0x${string}`, 'to'),
+        from !== to ? setDefaultToken(to as `0x${string}`, 'to') : undefined,
       ]);
 
       searchParams.delete('from');
@@ -119,7 +127,9 @@ const SwapPage: NextPage = () => {
 
       form.setValue('loading', false);
 
-      updateURL(`${pathname}?${searchParams.toString()}`);
+      const params = searchParams.toString();
+
+      updateURL(`${pathname}${params ? `?${params}` : ''}`);
     })();
   }, []);
 
