@@ -7,3 +7,6 @@ export function validateAndNormalizeSuiAddress(address: string): string | null {
   }
   return normalizedAddr;
 }
+
+export const isSameAddress = (addressA: string, addressB: string) =>
+  normalizeSuiAddress(addressA) === normalizeSuiAddress(addressB);

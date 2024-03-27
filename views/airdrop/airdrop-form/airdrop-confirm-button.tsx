@@ -4,35 +4,38 @@ import {
   useSignTransactionBlock,
   useSuiClient,
 } from '@mysten/dapp-kit';
+import { SuiObjectChangeCreated } from '@mysten/sui.js/client';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
+import { path } from 'ramda';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { AIRDROP_SEND_CONTRACT, TREASURY } from '@/constants';
-import { SUI_TYPE_ARG_LONG } from '@/constants/coins';
 import { AIRDROP_SUI_FEE_PER_ADDRESS } from '@/constants/fees';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks/use-web3';
 import {
   getCoins,
+  isSui,
   noop,
+  pauseUtilNextTx,
   showTXSuccessToast,
   signAndExecute,
-  sleep,
   throwTXIfNotSuccessful,
   ZERO_BIG_NUMBER,
 } from '@/utils';
 import { splitArray } from '@/utils';
 import {
-  chargeFee,
+  findNextVersionAndDigest,
+  getCreatedCoinInfo,
   sendAirdrop,
-  totalBatchAmount,
+  suiObjectIdsReducer,
 } from '@/views/airdrop/airdrop-form/txb-utils';
 
-import { BATCH_SIZE, RATE_LIMIT_DELAY } from '../airdrop.constants';
+import { BATCH_SIZE } from '../airdrop.constants';
 import { AirdropConfirmButtonProps, IAirdropForm } from '../airdrop.types';
 
 const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
@@ -40,7 +43,6 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 }) => {
   const { coinsMap } = useWeb3();
   const { getValues, setValue } = useFormContext<IAirdropForm>();
-
   const network = useNetwork();
   const suiClient = useSuiClient();
   const signTransactionBlock = useSignTransactionBlock();
@@ -59,33 +61,98 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
       const list = splitArray(airdropList, BATCH_SIZE);
 
-      if (token.type === SUI_TYPE_ARG || token.type === SUI_TYPE_ARG_LONG) {
+      const totalAmount = airdropList
+        .reduce((acc, data) => BigNumber(data.amount).plus(acc), BigNumber(0))
+        .decimalPlaces(0);
+
+      const feeAmount = BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS)
+        .times(airdropList.length)
+        .decimalPlaces(0);
+
+      if (isSui(token.type)) {
+        const txb = new TransactionBlock();
+
+        const [coinToSend, fee] = txb.splitCoins(txb.gas, [
+          txb.pure(totalAmount.toString()),
+          txb.pure(feeAmount.toString()),
+        ]);
+
+        txb.transferObjects([coinToSend], txb.pure(currentAccount.address));
+        txb.transferObjects([fee], txb.pure(TREASURY));
+
+        const tx = await signAndExecute({
+          suiClient,
+          txb,
+          currentAccount,
+          signTransactionBlock,
+          options: {
+            showObjectChanges: true,
+          },
+        });
+        const initTransferTxMS = Date.now();
+
+        throwTXIfNotSuccessful(tx, () => setValue('error', true));
+
+        showTXSuccessToast(tx, network);
+
+        const suiCreatedIds: ReadonlyArray<string> =
+          (tx.objectChanges as Array<SuiObjectChangeCreated>)!.reduce(
+            suiObjectIdsReducer(currentAccount.address),
+            []
+          );
+
+        const [coinObj1, coinObj2] = await Promise.all(
+          suiCreatedIds.map((id) =>
+            suiClient.getObject({
+              id,
+              options: {
+                showContent: true,
+              },
+            })
+          )
+        );
+
+        const isSendTheFirst =
+          path(['data', 'content', 'fields', 'balance'], coinObj1) ===
+          totalAmount.toString();
+
+        const [spendCoin, gasCoin] = (
+          isSendTheFirst ? [coinObj1, coinObj2] : [coinObj2, coinObj1]
+        ).map((coinObj) => getCreatedCoinInfo(coinObj));
+
+        console.log({ spendCoin, gasCoin });
+
+        await pauseUtilNextTx(initTransferTxMS);
+
         for (const [index, batch] of Object.entries(list)) {
-          const totalAMount = totalBatchAmount(batch);
           const txb = new TransactionBlock();
 
-          const [coinToSend, fee] = txb.splitCoins(txb.gas, [
-            txb.pure(totalAMount),
-            txb.pure(
-              new BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS)
-                .times(batch.length)
-                .decimalPlaces(0)
-                .toString()
-            ),
-          ]);
-
-          txb.transferObjects([fee], txb.pure(TREASURY));
+          txb.setGasPayment([gasCoin]);
 
           const tx = await sendAirdrop({
-            suiClient,
-            batch,
             txb,
-            coinToSend,
+            batch,
+            suiClient,
             currentAccount,
+            contractPackageId,
             signTransactionBlock,
             tokenType: token.type,
-            contractPackageId,
+            coinToSend: txb.objectRef(spendCoin),
           });
+          const initAirdropTxMS = Date.now();
+
+          const nextGasInfo = findNextVersionAndDigest(tx, gasCoin.objectId);
+
+          const nextSpendInfo = findNextVersionAndDigest(
+            tx,
+            spendCoin.objectId
+          );
+
+          gasCoin.digest = nextGasInfo[0];
+          gasCoin.version = nextGasInfo[1];
+
+          spendCoin.digest = nextSpendInfo[0];
+          spendCoin.version = nextSpendInfo[1];
 
           throwTXIfNotSuccessful(tx, () =>
             setValue('failed', [...getValues('failed'), Number(index)])
@@ -95,74 +162,134 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
           showTXSuccessToast(tx, network);
 
-          await sleep(RATE_LIMIT_DELAY);
+          await pauseUtilNextTx(initAirdropTxMS);
         }
 
         return;
       }
 
-      const paginatedCoins = await getCoins({
+      const [firstCoin, ...otherCoins] = await getCoins({
         suiClient,
         coinType: token.type,
         cursor: null,
         account: currentAccount.address,
       });
 
-      // Merge all coins into one
-      const [firstCoin, ...otherCoins] = paginatedCoins;
+      const mergeCoinsPred = !!otherCoins.length;
 
-      if (otherCoins.length > 0) {
-        const txb = new TransactionBlock();
+      let nextDigest = firstCoin.digest;
+      let nextVersion = firstCoin.version;
 
+      const txb = new TransactionBlock();
+
+      if (mergeCoinsPred)
         txb.mergeCoins(
           txb.object(firstCoin.coinObjectId),
           otherCoins.map((coin) => coin.coinObjectId)
         );
 
-        const tx = await signAndExecute({
-          suiClient,
-          txb,
-          currentAccount,
-          signTransactionBlock,
-        });
+      const [x, fee] = txb.splitCoins(txb.gas, [
+        txb.pure(1n),
+        txb.pure(feeAmount.toString()),
+      ]);
 
-        throwTXIfNotSuccessful(tx);
+      txb.transferObjects([x], txb.pure(currentAccount.address));
+      txb.transferObjects([fee], txb.pure(TREASURY));
 
-        showTXSuccessToast(tx, network);
+      const tx = await signAndExecute({
+        txb,
+        suiClient,
+        currentAccount,
+        signTransactionBlock,
+        options: { showObjectChanges: true },
+      });
+      const initMergeAndSplitTxMS = Date.now();
 
-        await sleep(RATE_LIMIT_DELAY);
-      }
+      throwTXIfNotSuccessful(tx, () => setValue('error', true));
+
+      showTXSuccessToast(tx, network);
+
+      if (mergeCoinsPred)
+        [nextDigest, nextVersion] = findNextVersionAndDigest(
+          tx,
+          firstCoin.coinObjectId
+        );
+
+      const suiCreatedIds: ReadonlyArray<string> =
+        (tx.objectChanges as Array<SuiObjectChangeCreated>)!.reduce(
+          suiObjectIdsReducer(currentAccount.address),
+          []
+        );
+
+      const [coinObj1, coinObj2] = await Promise.all(
+        suiCreatedIds.map((id) =>
+          suiClient.getObject({
+            id,
+            options: {
+              showContent: true,
+            },
+          })
+        )
+      );
+
+      const firstGasCoin =
+        path(['data', 'content', 'fields', 'balance'], coinObj1) === '1'
+          ? coinObj2
+          : coinObj1;
+
+      await pauseUtilNextTx(initMergeAndSplitTxMS);
+
+      let { digest: nextGasDigest, version: nextGasVersion } =
+        firstGasCoin.data!;
 
       for (const [index, batch] of Object.entries(list)) {
         const txb = new TransactionBlock();
-        const totalAMount = totalBatchAmount(batch);
-        const [coinToSend] = txb.splitCoins(
-          txb.object(firstCoin.coinObjectId),
-          [txb.pure(totalAMount)]
-        );
 
-        chargeFee(txb, batch.length);
+        const gas = {
+          digest: nextGasDigest,
+          objectId: firstGasCoin.data!.objectId,
+          version: nextGasVersion,
+        };
+
+        const coin = {
+          digest: nextDigest,
+          objectId: firstCoin.coinObjectId,
+          version: nextVersion,
+        };
+
+        txb.setGasPayment([gas]);
 
         const tx = await sendAirdrop({
-          suiClient,
-          batch,
           txb,
-          coinToSend,
+          batch,
+          suiClient,
           currentAccount,
+          contractPackageId,
           signTransactionBlock,
           tokenType: token.type,
-          contractPackageId,
+          coinToSend: txb.objectRef(coin),
         });
+        const initAirdropTxMS = Date.now();
+
+        [nextDigest, nextVersion] = findNextVersionAndDigest(
+          tx,
+          firstCoin.coinObjectId
+        );
+
+        [nextGasDigest, nextGasVersion] = findNextVersionAndDigest(
+          tx,
+          firstGasCoin.data!.objectId
+        );
 
         throwTXIfNotSuccessful(tx, () =>
           setValue('failed', [...getValues('failed'), Number(index)])
         );
 
-        await sleep(RATE_LIMIT_DELAY);
-
-        await showTXSuccessToast(tx, network);
+        showTXSuccessToast(tx, network);
 
         setValue('done', [...getValues('done'), Number(index)]);
+
+        await pauseUtilNextTx(initAirdropTxMS);
       }
     } catch (e: any) {
       toast.error((e?.message as string) ?? e ?? 'Something went wrong!');
