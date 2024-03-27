@@ -29,7 +29,6 @@ import {
 } from '@/utils';
 import { splitArray } from '@/utils';
 import {
-  chargeFee,
   findNextVersionAndDigest,
   sendAirdrop,
 } from '@/views/airdrop/airdrop-form/txb-utils';
