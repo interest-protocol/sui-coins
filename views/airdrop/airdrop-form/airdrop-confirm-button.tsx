@@ -120,8 +120,6 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           isSendTheFirst ? [coinObj1, coinObj2] : [coinObj2, coinObj1]
         ).map((coinObj) => getCreatedCoinInfo(coinObj));
 
-        console.log({ spendCoin, gasCoin });
-
         await pauseUtilNextTx(initTransferTxMS);
 
         for (const [index, batch] of Object.entries(list)) {
