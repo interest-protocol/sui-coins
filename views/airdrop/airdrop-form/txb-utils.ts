@@ -1,13 +1,23 @@
-import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
+import {
+  SuiObjectChange,
+  SuiObjectResponse,
+  SuiTransactionBlockResponse,
+} from '@mysten/sui.js/client';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { normalizeSuiAddress } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
-import { prop } from 'ramda';
+import { pathOr, prop } from 'ramda';
 
 import { TREASURY } from '@/constants';
 import { AIRDROP_SUI_FEE_PER_ADDRESS } from '@/constants/fees';
 import { signAndExecute } from '@/utils';
-import { SendAirdropArgs } from '@/views/airdrop/airdrop.types';
+import {
+  CreatedCoinInfo,
+  SendAirdropArgs,
+  SuiCreateObject,
+} from '@/views/airdrop/airdrop.types';
+
+import { isSameAddress } from './../../../utils/address/index';
 
 export const chargeFee = (txb: TransactionBlock, len: number) => {
   const [fee] = txb.splitCoins(txb.gas, [
@@ -71,3 +81,28 @@ export const sendAirdrop = async ({
     },
   });
 };
+
+const isCreatedObject = (object: SuiObjectChange): object is SuiCreateObject =>
+  object.type === 'created';
+
+export const createdCoinIdsReducer =
+  (address: string) =>
+  (
+    acc: ReadonlyArray<string>,
+    object: SuiObjectChange
+  ): ReadonlyArray<string> => {
+    if (!isCreatedObject(object)) return acc;
+
+    if (!isSameAddress(pathOr('', ['owner', 'AddressOwner'], object), address))
+      return acc;
+
+    return [...acc, object.objectId];
+  };
+
+export const getCreatedCoinInfo = (
+  object: SuiObjectResponse
+): CreatedCoinInfo => ({
+  objectId: pathOr('', ['data', 'objectId'], object),
+  version: pathOr('', ['data', 'version'], object),
+  digest: pathOr('', ['data', 'digest'], object),
+});

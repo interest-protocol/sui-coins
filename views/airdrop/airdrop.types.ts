@@ -1,5 +1,5 @@
 import { useSignTransactionBlock } from '@mysten/dapp-kit';
-import { SuiClient } from '@mysten/sui.js/client';
+import { ObjectOwner, SuiClient } from '@mysten/sui.js/client';
 import { TransactionObjectArgument } from '@mysten/sui.js/transactions';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { WalletAccount } from '@wallet-standard/base';
@@ -78,6 +78,23 @@ export interface SendAirdropArgs {
   currentAccount: WalletAccount;
   signTransactionBlock: ReturnType<typeof useSignTransactionBlock>;
 }
+
 export interface AirdropPreviewButtonProps {
   handleOpenSummaryModal: () => void;
 }
+
+export interface CreatedCoinInfo {
+  digest: string;
+  version: string;
+  objectId: string;
+}
+
+export type SuiCreateObject = {
+  digest: string;
+  objectId: string;
+  objectType: string;
+  owner: ObjectOwner;
+  sender: string;
+  type: 'created';
+  version: string;
+};

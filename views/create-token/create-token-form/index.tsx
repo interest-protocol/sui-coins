@@ -95,7 +95,7 @@ const CreateTokenForm: FC = () => {
 
       throwTXIfNotSuccessful(tx);
 
-      await showTXSuccessToast(tx, network);
+      showTXSuccessToast(tx, network);
     } finally {
       setLoading(false);
     }

@@ -20,6 +20,7 @@ import {
 } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { CoinData, CoinMetadataWithType } from '@/interface';
 
+import { isSameAddress } from '../address';
 import { ZERO_BIG_NUMBER } from '../big-number';
 import { getBasicCoinMetadata } from '../fn';
 import {
@@ -247,3 +248,5 @@ export async function getCoinOfValue({
   }
   return coinOfValue;
 }
+
+export const isSui = (type: string) => isSameAddress(type, SUI_TYPE_ARG);
