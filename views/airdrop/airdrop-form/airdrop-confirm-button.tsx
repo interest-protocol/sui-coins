@@ -4,6 +4,7 @@ import {
   useSignTransactionBlock,
   useSuiClient,
 } from '@mysten/dapp-kit';
+import { SuiObjectChangeCreated } from '@mysten/sui.js/client';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
@@ -28,10 +29,10 @@ import {
 } from '@/utils';
 import { splitArray } from '@/utils';
 import {
-  createdCoinIdsReducer,
   findNextVersionAndDigest,
   getCreatedCoinInfo,
   sendAirdrop,
+  suiObjectIdsReducer,
 } from '@/views/airdrop/airdrop-form/txb-utils';
 
 import { BATCH_SIZE } from '../airdrop.constants';
@@ -94,10 +95,11 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
         showTXSuccessToast(tx, network);
 
-        const suiCreatedIds: ReadonlyArray<string> = tx.objectChanges!.reduce(
-          createdCoinIdsReducer(currentAccount.address),
-          []
-        );
+        const suiCreatedIds: ReadonlyArray<string> =
+          (tx.objectChanges as Array<SuiObjectChangeCreated>)!.reduce(
+            suiObjectIdsReducer(currentAccount.address),
+            []
+          );
 
         const [coinObj1, coinObj2] = await Promise.all(
           suiCreatedIds.map((id) =>
@@ -117,6 +119,8 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         const [spendCoin, gasCoin] = (
           isSendTheFirst ? [coinObj1, coinObj2] : [coinObj2, coinObj1]
         ).map((coinObj) => getCreatedCoinInfo(coinObj));
+
+        console.log({ spendCoin, gasCoin });
 
         await pauseUtilNextTx(initTransferTxMS);
 
@@ -211,10 +215,11 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           firstCoin.coinObjectId
         );
 
-      const suiCreatedIds: ReadonlyArray<string> = tx.objectChanges!.reduce(
-        createdCoinIdsReducer(currentAccount.address),
-        []
-      );
+      const suiCreatedIds: ReadonlyArray<string> =
+        (tx.objectChanges as Array<SuiObjectChangeCreated>)!.reduce(
+          suiObjectIdsReducer(currentAccount.address),
+          []
+        );
 
       const [coinObj1, coinObj2] = await Promise.all(
         suiCreatedIds.map((id) =>

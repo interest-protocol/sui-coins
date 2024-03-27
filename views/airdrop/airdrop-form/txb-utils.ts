@@ -1,5 +1,5 @@
 import {
-  SuiObjectChange,
+  SuiObjectChangeCreated,
   SuiObjectResponse,
   SuiTransactionBlockResponse,
 } from '@mysten/sui.js/client';
@@ -11,7 +11,6 @@ import { isSameAddress, signAndExecute } from '@/utils';
 import {
   CreatedCoinInfo,
   SendAirdropArgs,
-  SuiCreateObject,
 } from '@/views/airdrop/airdrop.types';
 
 export const findNextVersionAndDigest = (
@@ -64,17 +63,12 @@ export const sendAirdrop = async ({
   });
 };
 
-const isCreatedObject = (object: SuiObjectChange): object is SuiCreateObject =>
-  object.type === 'created';
-
-export const createdCoinIdsReducer =
+export const suiObjectIdsReducer =
   (address: string) =>
   (
     acc: ReadonlyArray<string>,
-    object: SuiObjectChange
+    object: SuiObjectChangeCreated
   ): ReadonlyArray<string> => {
-    if (!isCreatedObject(object)) return acc;
-
     if (!object.objectType.includes(SUI_TYPE_ARG)) return acc;
 
     if (!isSameAddress(pathOr('', ['owner', 'AddressOwner'], object), address))

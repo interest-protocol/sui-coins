@@ -1,5 +1,5 @@
 import { useSignTransactionBlock } from '@mysten/dapp-kit';
-import { ObjectOwner, SuiClient } from '@mysten/sui.js/client';
+import { SuiClient } from '@mysten/sui.js/client';
 import { TransactionObjectArgument } from '@mysten/sui.js/transactions';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { WalletAccount } from '@wallet-standard/base';
@@ -87,13 +87,3 @@ export interface CreatedCoinInfo {
   version: string;
   objectId: string;
 }
-
-export type SuiCreateObject = {
-  digest: string;
-  objectId: string;
-  objectType: string;
-  owner: ObjectOwner;
-  sender: string;
-  type: 'created';
-  version: string;
-};
