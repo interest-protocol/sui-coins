@@ -3,6 +3,7 @@ import { FC, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { AirdropProgressProps, IAirdropForm } from './airdrop.types';
+import AirdropCustomAmountMethod from './airdrop-custom-amount-method';
 import AirdropPreviewButton from './airdrop-preview-button';
 import AirdropPreviewModal from './airdrop-preview-modal';
 import AirdropUploadFile from './airdrop-upload-file';
@@ -28,6 +29,7 @@ const AirdropInput: FC<AirdropProgressProps> = ({ setIsProgressView }) => {
       flexDirection="column"
     >
       {method === 'csv' && <AirdropUploadFile />}
+      {method === 'addressList' && <AirdropCustomAmountMethod />}
       <AirdropPreviewModal
         method={method}
         isOpen={isSummaryOpen}
