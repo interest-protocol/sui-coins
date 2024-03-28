@@ -30,19 +30,22 @@ export const useGetAllObjects = () => {
   const currentAccount = useCurrentAccount();
 
   return useSWR(
-    makeSWRKey([network, currentAccount?.address], suiClient.getAllCoins.name),
+    makeSWRKey(
+      [network, currentAccount?.address],
+      suiClient.getOwnedObjects.name
+    ),
     async () => {
       if (!currentAccount) return {};
 
       const objectsRaw = await getAllObjects(suiClient, currentAccount.address);
+
+      console.log({ objectsRaw });
 
       const objects: ReadonlyArray<ObjectData> = objectsRaw.reduce(
         (acc, objectRaw) => {
           if (!objectRaw.data?.content?.dataType) return acc;
           if (objectRaw.data.content.dataType !== 'moveObject') return acc;
           if (!objectRaw.data.content.hasPublicTransfer) return acc;
-          if (objectRaw.data.content.type.startsWith('0x2::coin::Coin<'))
-            return acc;
 
           return [
             ...acc,
@@ -58,15 +61,19 @@ export const useGetAllObjects = () => {
 
       if (!objects.length) return {};
 
-      const [ownedNfts, otherObjects] = [
-        objects.filter((object) => object.display),
-        objects.filter((object) => !object.display),
+      const [coinsObjects, ownedNfts, otherObjects] = [
+        objects.filter((object) => object.type.startsWith('0x2::coin::Coin<')),
+        objects.filter(
+          (object) =>
+            !object.type.startsWith('0x2::coin::Coin<') && object.display
+        ),
+        objects.filter(
+          (object) =>
+            !object.type.startsWith('0x2::coin::Coin<') && !object.display
+        ),
       ];
 
-      return {
-        ownedNfts,
-        otherObjects,
-      };
+      return { coinsObjects, ownedNfts, otherObjects };
     },
     {
       revalidateOnFocus: false,

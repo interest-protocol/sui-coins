@@ -1,24 +1,63 @@
-import { Box, Typography } from '@interest-protocol/ui-kit';
+import { Box, TextField, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 
-import SendSelectButton from './send-select-button';
+import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { FixedPointMath } from '@/lib';
+import { parseInputEventToNumberString, ZERO_BIG_NUMBER } from '@/utils';
 
-const SendSelectToken: FC = () => (
-  <Box
-    p="xl"
-    gap="s"
-    display="flex"
-    borderRadius="xs"
-    bg="lowestContainer"
-    flexDirection="column"
-  >
-    <Box display="flex" justifyContent="space-between">
-      <Typography variant="body" size="large">
-        1. Choose object
-      </Typography>
+import { ZkSendForm } from '../send.types';
+import SelectObject from './select-object';
+import SendSelectObjectHeader from './send-select-object-header';
+
+const SendSelectObject: FC = () => {
+  const { register, control, setValue } = useFormContext<ZkSendForm>();
+
+  const editable = useWatch({ control, name: 'object.editable' });
+  const display = useWatch({ control, name: 'object.display' });
+
+  return (
+    <Box>
+      <SendSelectObjectHeader />
+      <TextField
+        placeholder="0"
+        textAlign="right"
+        Prefix={<SelectObject />}
+        opacity={editable ? 1 : 0.7}
+        {...register('object.value', {
+          onChange: (v) =>
+            setValue(
+              'object.value',
+              parseInputEventToNumberString(
+                v,
+                FixedPointMath.toNumber(
+                  (display as CoinObject)?.balance ?? ZERO_BIG_NUMBER,
+                  (display as CoinObject)?.decimals ?? 0
+                )
+              )
+            ),
+        })}
+        fieldProps={{ borderRadius: 'xs', height: '3.5rem' }}
+      />
+      {(display as CoinObject)?.type && (
+        <Typography variant="label" size="large" textAlign="right" mt="s">
+          Balance:{' '}
+          <Typography
+            as="strong"
+            size="large"
+            variant="label"
+            color="primary"
+            textAlign="right"
+          >
+            {FixedPointMath.toNumber(
+              (display as CoinObject)?.balance ?? ZERO_BIG_NUMBER,
+              (display as CoinObject)?.decimals ?? 0
+            )}
+          </Typography>
+        </Typography>
+      )}
     </Box>
-    <SendSelectButton />
-  </Box>
-);
+  );
+};
 
-export default SendSelectToken;
+export default SendSelectObject;

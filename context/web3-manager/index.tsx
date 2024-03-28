@@ -20,6 +20,7 @@ const CONTEXT_DEFAULT_STATE = {
   account: null,
   ownedNfts: [],
   otherObjects: [],
+  coinsObjects: [],
   connected: false,
   walletAccount: null,
   isFetchingCoinBalances: false,
@@ -40,12 +41,14 @@ const Web3Manager: FC<Web3ManagerProps> = ({ children }) => {
     mutate: mutateCoins,
     isLoading: fetchingAllCoins,
   } = useGetAllCoins();
+
   const {
     data: objects,
     error: objectsError,
     mutate: mutateObjects,
     isLoading: fetchingAllObjects,
   } = useGetAllObjects();
+
   const {
     data: nfts,
     error: nftsError,
@@ -70,12 +73,18 @@ const Web3Manager: FC<Web3ManagerProps> = ({ children }) => {
         coinsMap: coins ?? ({} as CoinsMap),
         ownedNfts: objects?.ownedNfts ?? [],
         walletAccount: currentAccount || null,
-        otherObjects: objects?.otherObjects ?? [],
-        error: !!coinsError || nftsError || objectsError,
         coins: values(coins ?? ({} as CoinsMap)),
         account: currentAccount?.address || null,
+        otherObjects: objects?.otherObjects ?? [],
+        error: !!coinsError || nftsError || objectsError,
         isFetchingCoinBalances:
           fetchingAllCoins || fetchingAllObjects || isLoadingNfts,
+        coinsObjects:
+          objects?.coinsObjects?.map(({ type, ...rest }) => ({
+            type,
+            ...rest,
+            display: coins?.[type.split('0x2::coin::Coin<')[1].split('>')[0]],
+          })) ?? [],
       }}
     >
       {children}

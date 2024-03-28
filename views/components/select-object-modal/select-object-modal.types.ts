@@ -1,18 +1,16 @@
 import { Control, UseFormSetValue } from 'react-hook-form';
 
 import { Network } from '@/constants';
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { ObjectData } from '@/hooks/use-get-all-objects/use-get-all-objects.types';
 
-import { ObjectData } from './../../../hooks/use-get-all-objects/use-get-all-objects.types';
-
-export type ObjectModalItemProps = {
+export interface ObjectModalItemProps extends ObjectData {
   selected: boolean;
   onClick: () => void;
-} & (CoinObject | ObjectData);
+}
 
 export interface SelectObjectModalProps {
   closeModal: () => void;
-  onSelect: (object: CoinObject | ObjectData) => void;
+  onSelect: (object: ObjectData) => void;
 }
 
 export interface SelectObjectFilterProps {
@@ -32,7 +30,7 @@ export interface SearchObjectForm {
 }
 
 export interface SelectObjectBaseObjectsProps {
-  handleSelectObject: (object: CoinObject | ObjectData) => void;
+  handleSelectObject: (object: ObjectData) => void;
 }
 
 export interface SelectObjectModalBodyProps
@@ -41,13 +39,13 @@ export interface SelectObjectModalBodyProps
 }
 
 export interface SelectObjectBaseObjectItemProps
-  extends Pick<CoinObject | ObjectData, 'type'> {
+  extends Pick<ObjectData, 'type'> {
   network: Network;
   handleSelectObject: () => void;
 }
 
 export interface ModalObjectBodyProps extends SelectObjectBaseObjectsProps {
-  objects: ReadonlyArray<CoinObject | ObjectData>;
+  objects: ReadonlyArray<ObjectData>;
 }
 
 export interface ModalObjectSearchProps extends SelectObjectBaseObjectsProps {

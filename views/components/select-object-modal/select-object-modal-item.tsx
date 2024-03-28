@@ -5,6 +5,7 @@ import {
   Typography,
   useTheme,
 } from '@interest-protocol/ui-kit';
+import { formatAddress } from '@mysten/sui.js/utils';
 import { FC, MouseEventHandler, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { useLocalStorage } from 'usehooks-ts';
@@ -12,14 +13,15 @@ import { useLocalStorage } from 'usehooks-ts';
 import { TokenIcon } from '@/components';
 import { LOCAL_STORAGE_VERSION } from '@/constants';
 import { useNetwork } from '@/context/network';
+import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { FavoriteSVG } from '@/svg';
+import { getSymbolByType } from '@/utils';
 
 import { ObjectModalItemProps } from './select-object-modal.types';
 
 const ObjectModalItem: FC<ObjectModalItemProps> = ({
   type,
-  name,
-  symbol,
+  display,
   onClick,
   selected,
 }) => {
@@ -47,6 +49,17 @@ const ObjectModalItem: FC<ObjectModalItemProps> = ({
     setLoading(true);
   };
 
+  const displayName = display
+    ? (display as Record<string, string>).name ?? display.symbol ?? type
+    : type;
+
+  const { symbol, type: coinType } = (display as CoinObject) ?? {
+    type,
+    symbol: getSymbolByType(type),
+  };
+
+  const url = (display as Record<string, string>)?.image_url;
+
   return (
     <Box
       p="xl"
@@ -69,10 +82,9 @@ const ObjectModalItem: FC<ObjectModalItemProps> = ({
       <Box display="flex" alignItems="center">
         <TokenIcon
           withBg
-          type={type}
           size="1.6rem"
           symbol={symbol}
-          network={network}
+          {...(url ? { url } : { type: coinType, network })}
         />
         <Box
           ml="1rem"
@@ -86,20 +98,7 @@ const ObjectModalItem: FC<ObjectModalItemProps> = ({
             variant="title"
             alignItems="flex-end"
           >
-            {symbol}
-          </Typography>
-          <Typography
-            gap="2xs"
-            size="medium"
-            display="flex"
-            variant="title"
-            alignItems="center"
-          >
-            {name && (
-              <Typography variant="body" size="small" opacity="0.6">
-                {name}
-              </Typography>
-            )}
+            {type === displayName ? formatAddress(type) : displayName}
           </Typography>
         </Box>
       </Box>

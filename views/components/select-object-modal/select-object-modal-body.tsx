@@ -5,7 +5,6 @@ import { useReadLocalStorage } from 'usehooks-ts';
 
 import { LOCAL_STORAGE_VERSION } from '@/constants';
 import { useNetwork } from '@/context/network';
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { useWeb3 } from '@/hooks/use-web3';
 
 import ModalObjectBody from './modal-object-body';
@@ -20,7 +19,7 @@ const SelectObjectModalBody: FC<SelectObjectModalBodyProps> = ({
   handleSelectObject,
 }) => {
   const network = useNetwork();
-  const { coins, ownedNfts, otherObjects } = useWeb3();
+  const { coinsObjects, ownedNfts, otherObjects } = useWeb3();
   const favoriteObjectTypes = useReadLocalStorage<ReadonlyArray<string>>(
     `${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-objects`
   );
@@ -35,19 +34,14 @@ const SelectObjectModalBody: FC<SelectObjectModalBodyProps> = ({
     (!isSearchAddress && filterSelected === ObjectOrigin.Coins) ||
     (filterSelected === ObjectOrigin.Coins &&
       isSearchAddress &&
-      coins.some(({ type }) => type === search))
+      coinsObjects.some(({ type }) => type === search))
   )
     return (
       <ModalObjectBody
         handleSelectObject={handleSelectObject}
-        objects={Array(...coins)
+        objects={Array(...coinsObjects)
           ?.sort(({ type }) => (favoriteObjectTypes?.includes(type) ? -1 : 1))
-          .filter(
-            ({ symbol, type }) =>
-              !search ||
-              symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
-              type.includes(search)
-          )}
+          .filter(({ type }) => !search || type.includes(search))}
       />
     );
 
@@ -60,14 +54,9 @@ const SelectObjectModalBody: FC<SelectObjectModalBodyProps> = ({
     return (
       <ModalObjectBody
         handleSelectObject={handleSelectObject}
-        objects={Array(...(ownedNfts as unknown as ReadonlyArray<CoinObject>))
+        objects={Array(...ownedNfts)
           ?.sort(({ type }) => (favoriteObjectTypes?.includes(type) ? -1 : 1))
-          .filter(
-            ({ symbol, type }) =>
-              !search ||
-              symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
-              type.includes(search)
-          )}
+          .filter(({ type }) => !search || type.includes(search))}
       />
     );
 
@@ -80,16 +69,9 @@ const SelectObjectModalBody: FC<SelectObjectModalBodyProps> = ({
     return (
       <ModalObjectBody
         handleSelectObject={handleSelectObject}
-        objects={Array(
-          ...(otherObjects as unknown as ReadonlyArray<CoinObject>)
-        )
+        objects={Array(...otherObjects)
           ?.sort(({ type }) => (favoriteObjectTypes?.includes(type) ? -1 : 1))
-          .filter(
-            ({ symbol, type }) =>
-              !search ||
-              symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
-              type.includes(search)
-          )}
+          .filter(({ type }) => !search || type.includes(search))}
       />
     );
 

@@ -20,6 +20,7 @@ export interface Web3ManagerState {
   coins: ReadonlyArray<CoinObject>;
   walletAccount: null | WalletAccount;
   ownedNfts: ReadonlyArray<ObjectData>;
+  coinsObjects: ReadonlyArray<ObjectData>;
   otherObjects: ReadonlyArray<ObjectData>;
   nfts: ReadonlyArray<NFTCollectionMetadata>;
   nftsMap: Record<string, NFTCollectionMetadata>;
