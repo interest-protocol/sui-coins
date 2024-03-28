@@ -8,7 +8,6 @@ import { SuiObjectChangeCreated } from '@mysten/sui.js/client';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
-import { path } from 'ramda';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -30,9 +29,8 @@ import {
 import { splitArray } from '@/utils';
 import {
   findNextVersionAndDigest,
-  getCreatedCoinInfo,
   sendAirdrop,
-  suiObjectIdsReducer,
+  suiObjectReducer,
 } from '@/views/airdrop/airdrop-form/txb-utils';
 
 import { BATCH_SIZE } from '../airdrop.constants';
@@ -95,30 +93,11 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
         showTXSuccessToast(tx, network);
 
-        const suiCreatedIds: ReadonlyArray<string> =
+        const [gasCoin, spendCoin] =
           (tx.objectChanges as Array<SuiObjectChangeCreated>)!.reduce(
-            suiObjectIdsReducer(currentAccount.address),
+            suiObjectReducer(currentAccount.address),
             []
           );
-
-        const [coinObj1, coinObj2] = await Promise.all(
-          suiCreatedIds.map((id) =>
-            suiClient.getObject({
-              id,
-              options: {
-                showContent: true,
-              },
-            })
-          )
-        );
-
-        const isSendTheFirst =
-          path(['data', 'content', 'fields', 'balance'], coinObj1) ===
-          totalAmount.toString();
-
-        const [spendCoin, gasCoin] = (
-          isSendTheFirst ? [coinObj1, coinObj2] : [coinObj2, coinObj1]
-        ).map((coinObj) => getCreatedCoinInfo(coinObj));
 
         await pauseUtilNextTx(initTransferTxMS);
 
@@ -175,8 +154,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
       const mergeCoinsPred = !!otherCoins.length;
 
-      let nextDigest = firstCoin.digest;
-      let nextVersion = firstCoin.version;
+      let { digest: nextDigest, version: nextVersion } = firstCoin;
 
       const txb = new TransactionBlock();
 
@@ -186,12 +164,8 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           otherCoins.map((coin) => coin.coinObjectId)
         );
 
-      const [x, fee] = txb.splitCoins(txb.gas, [
-        txb.pure(1n),
-        txb.pure(feeAmount.toString()),
-      ]);
+      const [fee] = txb.splitCoins(txb.gas, [txb.pure(feeAmount.toString())]);
 
-      txb.transferObjects([x], txb.pure(currentAccount.address));
       txb.transferObjects([fee], txb.pure(TREASURY));
 
       const tx = await signAndExecute({
@@ -213,39 +187,22 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           firstCoin.coinObjectId
         );
 
-      const suiCreatedIds: ReadonlyArray<string> =
+      const [gasCoin] =
         (tx.objectChanges as Array<SuiObjectChangeCreated>)!.reduce(
-          suiObjectIdsReducer(currentAccount.address),
+          suiObjectReducer(currentAccount.address),
           []
         );
 
-      const [coinObj1, coinObj2] = await Promise.all(
-        suiCreatedIds.map((id) =>
-          suiClient.getObject({
-            id,
-            options: {
-              showContent: true,
-            },
-          })
-        )
-      );
-
-      const firstGasCoin =
-        path(['data', 'content', 'fields', 'balance'], coinObj1) === '1'
-          ? coinObj2
-          : coinObj1;
-
       await pauseUtilNextTx(initMergeAndSplitTxMS);
 
-      let { digest: nextGasDigest, version: nextGasVersion } =
-        firstGasCoin.data!;
+      let { digest: nextGasDigest, version: nextGasVersion } = gasCoin;
 
       for (const [index, batch] of Object.entries(list)) {
         const txb = new TransactionBlock();
 
         const gas = {
           digest: nextGasDigest,
-          objectId: firstGasCoin.data!.objectId,
+          objectId: gasCoin.objectId,
           version: nextGasVersion,
         };
 
@@ -276,7 +233,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
         [nextGasDigest, nextGasVersion] = findNextVersionAndDigest(
           tx,
-          firstGasCoin.data!.objectId
+          gasCoin.objectId
         );
 
         throwTXIfNotSuccessful(tx, () =>

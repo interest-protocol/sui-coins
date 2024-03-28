@@ -63,18 +63,25 @@ export const sendAirdrop = async ({
   });
 };
 
-export const suiObjectIdsReducer =
+export const suiObjectReducer =
   (address: string) =>
   (
-    acc: ReadonlyArray<string>,
+    acc: ReadonlyArray<CreatedCoinInfo>,
     object: SuiObjectChangeCreated
-  ): ReadonlyArray<string> => {
+  ): ReadonlyArray<CreatedCoinInfo> => {
     if (!object.objectType.includes(SUI_TYPE_ARG)) return acc;
 
     if (!isSameAddress(pathOr('', ['owner', 'AddressOwner'], object), address))
       return acc;
 
-    return [...acc, object.objectId];
+    return [
+      ...acc,
+      {
+        objectId: object.objectId,
+        version: object.version,
+        digest: object.digest,
+      },
+    ];
   };
 
 export const getCreatedCoinInfo = (
