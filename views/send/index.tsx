@@ -3,6 +3,7 @@ import { FC } from 'react';
 
 import Layout from '@/components/layout';
 
+import SendButton from './send-button';
 import SendSelectObject from './send-select-object';
 
 const Send: FC = () => (
@@ -32,6 +33,7 @@ const Send: FC = () => (
         funds if they have not been previously claimed.
       </Typography>
       <SendSelectObject />
+      <SendButton />
     </Box>
   </Layout>
 );
