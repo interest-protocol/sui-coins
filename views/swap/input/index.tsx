@@ -8,11 +8,10 @@ import { parseInputEventToNumberString } from '@/utils';
 import { SwapForm } from '../swap.types';
 import AmountInDollar from './dollar-value';
 import HeaderInfo from './header-info';
-import { InputProps } from './input.types';
+import { InputFieldProps } from './input.types';
 import SelectToken from './select-token';
-import Slider from './slider';
 
-const Input: FC<InputProps> = ({ label }) => {
+const Input: FC<InputFieldProps> = ({ label, slider }) => {
   const { register, setValue, getValues, control } = useFormContext<SwapForm>();
 
   const swapping = useWatch({
@@ -58,7 +57,7 @@ const Input: FC<InputProps> = ({ label }) => {
                     'from.value',
                     FixedPointMath.toBigNumber(
                       value,
-                      getValues(`from.decimals`)
+                      getValues('from.decimals')
                     )
                   );
               },
@@ -67,13 +66,7 @@ const Input: FC<InputProps> = ({ label }) => {
           <AmountInDollar label={label} />
         </Box>
       </Box>
-      <Box pb={label === 'to' ? '2xl' : 's'}>
-        {label === 'from' && (
-          <Box px="s">
-            <Slider />
-          </Box>
-        )}
-      </Box>
+      <Box pb={label === 'to' ? '2xl' : 's'}>{slider}</Box>
     </Box>
   );
 };

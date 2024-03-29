@@ -5,6 +5,7 @@ import { v4 } from 'uuid';
 import Layout from '@/components/layout';
 
 import Input from './input';
+import Slider from './input/slider';
 import ManageSlippage from './manage-slippage';
 import PreviewSwapButton from './preview-swap-button';
 import SwapFlipToken from './swap-flip-token';
@@ -28,7 +29,14 @@ const Swap: FC = () => (
         borderRadius="xs"
         bg="lowestContainer"
       >
-        <Input label="from" />
+        <Input
+          label="from"
+          slider={
+            <Box px="s">
+              <Slider />
+            </Box>
+          }
+        />
       </Box>
       <Box position="relative">
         <Box

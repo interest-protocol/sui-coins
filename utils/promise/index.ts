@@ -1,3 +1,5 @@
+import { RATE_LIMIT_DELAY } from '@/views/airdrop/airdrop.constants';
+
 export async function tryCatch<T>(
   promise: Promise<T>,
   onError: (e: unknown) => void,
@@ -14,3 +16,6 @@ export async function tryCatch<T>(
 
 export const sleep = (delay: number) =>
   new Promise((resolve) => setTimeout(resolve, delay));
+
+export const pauseUtilNextTx = (txInitTimeMS: number) =>
+  sleep(RATE_LIMIT_DELAY - (Date.now() - txInitTimeMS));

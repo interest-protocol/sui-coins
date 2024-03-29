@@ -1,3 +1,8 @@
+import { useSignTransactionBlock } from '@mysten/dapp-kit';
+import { SuiClient } from '@mysten/sui.js/client';
+import { TransactionObjectArgument } from '@mysten/sui.js/transactions';
+import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { WalletAccount } from '@wallet-standard/base';
 import { Dispatch, SetStateAction } from 'react';
 
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
@@ -57,10 +62,28 @@ export interface AirdropSummaryProps {
   method: TMethod;
 }
 
-export interface AirdropNftCoinsMethodProps {
-  method: string;
+export interface SendAirdropArgs {
+  suiClient: SuiClient;
+  txb: TransactionBlock;
+  contractPackageId: string;
+  tokenType: string;
+  coinToSend:
+    | {
+        kind: 'NestedResult';
+        index: number;
+        resultIndex: number;
+      }
+    | TransactionObjectArgument;
+  batch: readonly AirdropData[];
+  currentAccount: WalletAccount;
+  signTransactionBlock: ReturnType<typeof useSignTransactionBlock>;
 }
-
 export interface AirdropPreviewButtonProps {
   handleOpenSummaryModal: () => void;
+}
+
+export interface CreatedCoinInfo {
+  digest: string;
+  version: string;
+  objectId: string;
 }

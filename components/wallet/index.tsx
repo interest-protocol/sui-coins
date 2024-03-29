@@ -3,6 +3,7 @@ import { useCurrentAccount } from '@mysten/dapp-kit';
 import { FC } from 'react';
 
 import SuiNetwork from '../account-info/sui-network';
+import Mint from '../mint';
 import ConnectWalletButton from './connect-wallet-button';
 import Profile from './profile';
 
@@ -17,7 +18,8 @@ const Wallet: FC = () => {
       justifyContent="flex-end"
       flexDirection={['row-reverse', 'row-reverse', 'row-reverse', 'row']}
     >
-      <Box display={['none', 'none', 'none', 'flex']}>
+      <Box display={['none', 'none', 'none', 'flex']} gap="s">
+        <Mint />
         <SuiNetwork />
       </Box>
       {currentAccount ? <Profile /> : <ConnectWalletButton />}
