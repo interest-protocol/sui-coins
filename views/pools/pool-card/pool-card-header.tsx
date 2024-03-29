@@ -22,9 +22,9 @@ const PoolCardHeader: FC<PoolCardHeaderProps> = ({
           gap="0"
           PrefixIcon={
             <Box
-              display="inline-flex"
-              minWidth="1.4rem"
-              minHeight="1.4rem"
+              display="flex"
+              width="1.4rem"
+              height="1.4rem"
               alignItems="center"
               borderRadius="full"
               color="lowestContainer"
