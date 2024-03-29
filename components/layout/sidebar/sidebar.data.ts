@@ -2,8 +2,8 @@ import { Routes, RoutesEnum } from '@/constants';
 import {
   AirdropSVG,
   CirclePlusSVG,
-  DotsSVG,
   DoubleChevronSVG,
+  FaucetSVG,
   PoolSVG,
 } from '@/svg';
 
@@ -40,7 +40,7 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     disabled: false,
   },
   {
-    Icon: DotsSVG,
+    Icon: FaucetSVG,
     name: 'Faucet',
     path: Routes[RoutesEnum.Faucet],
     disabled: false,
