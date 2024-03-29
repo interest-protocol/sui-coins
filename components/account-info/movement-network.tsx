@@ -92,35 +92,33 @@ const MovementNetwork: FC = () => {
           <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
         </Box>
       </Box>
-      {isOpen && (
-        <Motion
-          right="0"
-          top="3rem"
-          zIndex={4}
-          width="14.5rem"
-          initial="closed"
-          borderRadius="m"
-          position="absolute"
-          bg="container"
-          variants={wrapperVariants}
-          textTransform="capitalize"
-          animate={isOpen ? 'open' : 'closed'}
-          pointerEvents={isOpen ? 'auto' : 'none'}
-          boxShadow="0px 2px 4px -2px rgba(13, 16, 23, 0.04), 0px 4px 8px -2px rgba(13, 16, 23, 0.12);"
-        >
-          {toPairs(DISPLAY_NETWORK).map(([networkKey, displayNetwork]) => (
-            <OptionItem
-              key={v4()}
-              selected={networkKey === network}
-              disabled={networkKey === Network.TESTNET}
-              onClick={() => changeNetwork(networkKey as Network)}
-            >
-              <MovementLogoSVG maxWidth="2rem" maxHeight="2rem" />
-              <Box>M2 {displayNetwork}</Box>
-            </OptionItem>
-          ))}
-        </Motion>
-      )}
+      <Motion
+        right="0"
+        top="3rem"
+        zIndex={4}
+        width="14.5rem"
+        borderRadius="m"
+        position="absolute"
+        bg="container"
+        variants={wrapperVariants}
+        textTransform="capitalize"
+        initial={isOpen ? 'closed' : 'open'}
+        animate={isOpen ? 'open' : 'closed'}
+        pointerEvents={isOpen ? 'auto' : 'none'}
+        boxShadow="0px 2px 4px -2px rgba(13, 16, 23, 0.04), 0px 4px 8px -2px rgba(13, 16, 23, 0.12);"
+      >
+        {toPairs(DISPLAY_NETWORK).map(([networkKey, displayNetwork]) => (
+          <OptionItem
+            key={v4()}
+            selected={networkKey === network}
+            disabled={networkKey === Network.TESTNET}
+            onClick={() => changeNetwork(networkKey as Network)}
+          >
+            <MovementLogoSVG maxWidth="2rem" maxHeight="2rem" />
+            <Box>M2 {displayNetwork}</Box>
+          </OptionItem>
+        ))}
+      </Motion>
     </Box>
   );
 };
