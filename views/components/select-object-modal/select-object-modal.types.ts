@@ -3,10 +3,10 @@ import { Control, UseFormSetValue } from 'react-hook-form';
 import { Network } from '@/constants';
 import { ObjectData } from '@/hooks/use-get-all-objects/use-get-all-objects.types';
 
-export interface ObjectModalItemProps extends ObjectData {
+export type ObjectModalItemProps = ObjectData & {
   selected: boolean;
   onClick: () => void;
-}
+};
 
 export interface SelectObjectModalProps {
   closeModal: () => void;

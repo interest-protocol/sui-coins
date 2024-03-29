@@ -43,3 +43,8 @@ export interface NFTCollectionMetadata {
   total: number;
   updatedAt?: number;
 }
+
+export interface ZkSendLinkData {
+  id: string;
+  link: string;
+}

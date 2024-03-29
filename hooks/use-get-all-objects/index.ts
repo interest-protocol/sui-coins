@@ -39,8 +39,6 @@ export const useGetAllObjects = () => {
 
       const objectsRaw = await getAllObjects(suiClient, currentAccount.address);
 
-      console.log({ objectsRaw });
-
       const objects: ReadonlyArray<ObjectData> = objectsRaw.reduce(
         (acc, objectRaw) => {
           if (!objectRaw.data?.content?.dataType) return acc;

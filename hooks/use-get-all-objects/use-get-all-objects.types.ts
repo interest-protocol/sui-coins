@@ -8,8 +8,14 @@ export type TGetAllObjects = (
   cursor?: string | null
 ) => Promise<ReadonlyArray<SuiObjectResponse>>;
 
-export interface ObjectData {
+interface BaseObjectData {
   type: string;
   objectId: string;
-  display?: Record<string, string> | CoinObject | undefined | null;
+  display?: Record<string, string> | undefined | null;
 }
+
+export interface CoinObjectData extends Omit<BaseObjectData, 'display'> {
+  display: CoinObject;
+}
+
+export type ObjectData = BaseObjectData | CoinObjectData;

@@ -35,7 +35,7 @@ const SelectObject: FC = () => {
     setValue('object', {
       ...object,
       editable,
-      value: !editable && !balance ? '1' : '0',
+      value: !editable && !balance ? '1' : '',
     });
   };
 
@@ -104,7 +104,7 @@ const SelectObject: FC = () => {
             (type && type === displayName
               ? formatAddress(type)
               : displayName) ||
-            'Select Token'}
+            'Select Item'}
         </Typography>
         {type ? (
           <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />

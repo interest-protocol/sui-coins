@@ -82,6 +82,7 @@ export { default as TelegramSVG } from './telegram';
 export { default as TickSVG } from './tick';
 export { default as TimesSVG } from './times';
 export { default as TURBOSSVG } from './turbos';
+export { default as UploadSVG } from './upload';
 export { default as USDCSVG } from './usdc';
 export { default as USDTSVG } from './usdt';
 export { default as UserSVG } from './user';
