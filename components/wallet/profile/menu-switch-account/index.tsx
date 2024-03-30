@@ -4,7 +4,7 @@ import {
   useCurrentAccount,
   useSwitchAccount,
 } from '@mysten/dapp-kit';
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { toast } from 'react-hot-toast';
 
 import Avatar from '@/components/account-info/avatar';
@@ -22,7 +22,6 @@ const MenuSwitchAccount: FC<MenuSwitchAccountProps> = ({
 }) => {
   const accounts = useAccounts();
   const currentAccount = useCurrentAccount();
-  const [firstRender, setFirstRender] = useState(true);
   const { mutate: selectAccount } = useSwitchAccount();
 
   const account = currentAccount?.address || '';
@@ -31,10 +30,6 @@ const MenuSwitchAccount: FC<MenuSwitchAccountProps> = ({
     window.navigator.clipboard.writeText(address || '');
     toast('Address copied to the clipboard');
   };
-
-  useEffect(() => {
-    setFirstRender(false);
-  }, []);
 
   return (
     <Motion
@@ -47,7 +42,7 @@ const MenuSwitchAccount: FC<MenuSwitchAccountProps> = ({
       bg="container"
       variants={wrapperVariants}
       animate={isOpen ? 'open' : 'closed'}
-      initial={isOpen || firstRender ? 'closed' : 'open'}
+      initial={isOpen ? 'closed' : 'open'}
       pointerEvents={isOpen ? 'auto' : 'none'}
       textTransform="capitalize"
       width={['100vw', '100vw', '100vw', '14.5rem']}
