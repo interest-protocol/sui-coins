@@ -13,6 +13,7 @@ import { v4 } from 'uuid';
 import { DISPLAY_NETWORK, wrapperVariants } from '@/constants';
 import { useNetwork } from '@/context/network';
 import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
+import { useIsFirstRender } from '@/hooks/use-is-first-render';
 import { ChevronDownSVG, SuiLogoSVG } from '@/svg';
 
 import OptionItem from './menu-options/option-item';
@@ -20,10 +21,11 @@ import OptionItem from './menu-options/option-item';
 const BOX_ID = 'network-box-id';
 
 const SuiNetwork: FC = () => {
+  const isFirstRender = useIsFirstRender();
   const { colors } = useTheme() as Theme;
   const [isOpen, setIsOpen] = useState(false);
-  const network = useNetwork();
   const { selectNetwork } = useSuiClientContext();
+  const network = useNetwork();
 
   const closeNetworkDropdown = (event: any) => {
     if (
@@ -83,13 +85,12 @@ const SuiNetwork: FC = () => {
           <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
         </Box>
       </Box>
-      {isOpen && (
+      {!isFirstRender && (
         <Motion
           right="0"
           top="3rem"
           zIndex={4}
           width="14.5rem"
-          overflow="hidden"
           border="1px solid"
           borderRadius="1rem"
           position="absolute"
