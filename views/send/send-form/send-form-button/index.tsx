@@ -1,5 +1,5 @@
 import { Box, Button } from '@interest-protocol/ui-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui.js/src/client';
+import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
