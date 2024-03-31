@@ -1194,14 +1194,14 @@
   dependencies:
     bs58 "^5.0.0"
 
-"@mysten/dapp-kit@^0.12.5":
-  version "0.12.5"
-  resolved "https://registry.yarnpkg.com/@mysten/dapp-kit/-/dapp-kit-0.12.5.tgz#740e9cca1d2d0a4a75c301545f47eca43f5822a2"
-  integrity sha512-16jkaCSOWMisQ+K4cuY563HiB433Q4Dn0jnjrHyN7i29PU1s2ZeLEkZZ1aJ/N624d+F3ptCKxtvTp9GV2WCsIQ==
+"@mysten/dapp-kit@^0.12.7":
+  version "0.12.7"
+  resolved "https://registry.yarnpkg.com/@mysten/dapp-kit/-/dapp-kit-0.12.7.tgz#46e2a34338cf8000d40b1c88a38946bc87525559"
+  integrity sha512-GtRs1Fi3jZ4WcpHjpOz+OCH110llASar2IPU7veDi6nlmLCx2CwXW76o77yKyhuq2+afbBY73wT9GNt/MsQ8dQ==
   dependencies:
-    "@mysten/sui.js" "0.51.0"
-    "@mysten/wallet-standard" "0.11.0"
-    "@mysten/zksend" "0.3.1"
+    "@mysten/sui.js" "0.51.1"
+    "@mysten/wallet-standard" "0.11.1"
+    "@mysten/zksend" "0.4.1"
     "@radix-ui/react-dialog" "^1.0.4"
     "@radix-ui/react-dropdown-menu" "^2.0.5"
     "@radix-ui/react-slot" "^1.0.2"
@@ -1211,7 +1211,7 @@
     clsx "^2.0.0"
     zustand "^4.4.1"
 
-"@mysten/sui.js@0.51.0", "@mysten/sui.js@^0.51.0":
+"@mysten/sui.js@0.51.0":
   version "0.51.0"
   resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.51.0.tgz#b1716f2cb1e0766f057eefb175caa16fdaec1e27"
   integrity sha512-/D/JDE+dgL1Nc6/Ju32bIrTr5XYcYdYMHzhgRk+f8nGf3eZRGaWIphN9VEBXjn+4F8M9/t3BKLfITWrQ2o3++w==
@@ -1229,7 +1229,7 @@
     superstruct "^1.0.3"
     tweetnacl "^1.0.3"
 
-"@mysten/sui.js@0.51.1":
+"@mysten/sui.js@0.51.1", "@mysten/sui.js@^0.51.1":
   version "0.51.1"
   resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.51.1.tgz#c784a042b6aa0fe370d2ac1feff81ba771c743b6"
   integrity sha512-6zufv+rGW2fsH6hyYylJonFi/B2Gh8mycx6p0gSNgOcMz6nmGhfRMU2J9SF8XjQL2Bi0SoOC6cO8F97H+8o0ZA==
@@ -1286,14 +1286,6 @@
   dependencies:
     "@mysten/sui.js" "0.51.0"
 
-"@mysten/wallet-standard@0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@mysten/wallet-standard/-/wallet-standard-0.11.0.tgz#476256b4c578b74743946fc15e12654b81952047"
-  integrity sha512-SzofHHjyZcc/6dqCHEiZoPJpKWVMu35ynjgBbl7dXbdHRlkO7Vb2p5NZ3LA0h3wo6+4gFZ8/IQmxuOhE/EF4Ng==
-  dependencies:
-    "@mysten/sui.js" "0.51.0"
-    "@wallet-standard/core" "1.0.3"
-
 "@mysten/wallet-standard@0.11.1":
   version "0.11.1"
   resolved "https://registry.yarnpkg.com/@mysten/wallet-standard/-/wallet-standard-0.11.1.tgz#1cab69aa3aa95fafec7eafd4d7f5b9607e88f9b7"
@@ -1302,18 +1294,7 @@
     "@mysten/sui.js" "0.51.1"
     "@wallet-standard/core" "1.0.3"
 
-"@mysten/zksend@0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@mysten/zksend/-/zksend-0.3.1.tgz#c23248a71acad241b5262e698422091fc0dce5fa"
-  integrity sha512-BopD+TXm5Gu3tPJj/iOTJaJht5KCzvsoZnnbJKKQM7EJPlSMa8U+fje1JQVXN4kXc3e8xBJXNX/7qn1IzPm1vw==
-  dependencies:
-    "@mysten/sui.js" "0.51.0"
-    "@mysten/wallet-standard" "0.11.0"
-    mitt "^3.0.1"
-    nanostores "^0.9.3"
-    valibot "^0.25.0"
-
-"@mysten/zksend@^0.4.1":
+"@mysten/zksend@0.4.1", "@mysten/zksend@^0.4.1":
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/@mysten/zksend/-/zksend-0.4.1.tgz#ba8a43007dd7f4d2b09f8e83455f16f0fde13437"
   integrity sha512-Zu+eXwOiwpznF5sOnK0Rbp+pwd/oUPw19OaTFYwdWrSHkK2O6nPc30pYZ8pDX5rSoSVvkUILHODmdXkoutcTrA==
@@ -9749,6 +9730,7 @@ wide-align@^1.1.2, wide-align@^1.1.5:
     string-width "^1.0.2 || 2 || 3 || 4"
 
 "wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@^7.0.0:
+  name wrap-ansi-cjs
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==

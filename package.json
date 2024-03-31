@@ -1,5 +1,6 @@
 {
-  "name": "sui-mint",
+  "name": "sui-coins",
+  "version": "0.1.0",
   "description": "The frontend to mint and create tokens",
   "license": "MIT",
   "keywords": [
@@ -10,15 +11,14 @@
     "move",
     "mint"
   ],
-  "version": "0.1.0",
   "private": false,
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@hookform/resolvers": "^3.3.2",
     "@interest-protocol/sui-tokens": "^1.0.1",
     "@interest-protocol/ui-kit": "^0.2.26-alpha",
-    "@mysten/dapp-kit": "^0.12.5",
-    "@mysten/sui.js": "^0.51.0",
+    "@mysten/dapp-kit": "^0.12.7",
+    "@mysten/sui.js": "^0.51.1",
     "@mysten/suins-toolkit": "^0.4.4",
     "@mysten/zksend": "^0.4.1",
     "@stylin.js/react": "^1.0.4-alpha.0",
@@ -70,12 +70,6 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
-    ]
-  },
-  "findUnusedExports": {
-    "include": [
-      "./**/*.d.ts",
-      "./**/*.@(js|jsx|ts|tsx)"
     ]
   },
   "devDependencies": {
