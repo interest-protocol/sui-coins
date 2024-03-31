@@ -83,7 +83,8 @@ const Web3Manager: FC<Web3ManagerProps> = ({ children }) => {
           objects?.coinsObjects?.map(({ type, ...rest }) => ({
             type,
             ...rest,
-            display: coins?.[type.split('0x2::coin::Coin<')[1].split('>')[0]],
+            display:
+              coins?.[type.split('0x2::coin::Coin<')[1].split('>')[0]] ?? {},
           })) ?? [],
       }}
     >
