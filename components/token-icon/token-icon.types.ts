@@ -5,6 +5,7 @@ interface BaseTokenIconProps {
   symbol: string;
   withBg?: boolean;
   rounded?: boolean;
+  loaderSize?: number;
 }
 
 export interface TypeBasedIcon extends BaseTokenIconProps {

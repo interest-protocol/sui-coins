@@ -45,11 +45,13 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
     network,
     rounded,
     size = '1.5rem',
+    loaderSize = 16,
   } = {
     type: '',
     withBg: '',
     network: '',
     rounded: '',
+    loaderSize: 16,
     size: '1.5rem',
     ...props,
   } as TypeBasedIcon;
@@ -87,8 +89,15 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
           height={`calc(${size} * 1.66)`}
           borderRadius={rounded ? 'full' : 'xs'}
         >
-          <Box position="absolute" top="-0.5rem" left="0.9rem">
-            <ProgressIndicator size={16} variant="loading" />
+          <Box
+            display="flex"
+            position="absolute"
+            alignItems="center"
+            justifyContent="center"
+            width={`calc(${size} * 1.66)`}
+            height={`calc(${size} * 1.66)`}
+          >
+            <ProgressIndicator size={loaderSize} variant="loading" />
           </Box>
           <img
             alt={symbol}

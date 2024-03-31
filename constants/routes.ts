@@ -13,6 +13,7 @@ export enum RoutesEnum {
   SendLink = 'send-link',
   CreateCoin = 'create-coin',
   CreatePool = 'create-pool',
+  SendHistory = 'send-history',
   PoolDetails = 'pool-details',
 }
 
@@ -31,5 +32,6 @@ export const Routes: Record<RoutesEnum, string> = {
   [RoutesEnum.FindPool]: '/pools/find',
   [RoutesEnum.CreateCoin]: '/create-coin',
   [RoutesEnum.CreatePool]: '/pools/create',
+  [RoutesEnum.SendHistory]: '/send/history',
   [RoutesEnum.PoolDetails]: '/pools/details',
 };

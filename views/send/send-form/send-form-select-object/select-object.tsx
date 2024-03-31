@@ -62,12 +62,12 @@ const SelectObject: FC = () => {
       type
     : type;
 
+  const url = (object?.display as Record<string, string>)?.image_url || '';
+
   const { symbol, type: coinType } = (object?.display as CoinObject) ?? {
     type,
     symbol: '',
   };
-
-  const url = (object?.display as Record<string, string>)?.image_url || '';
 
   return (
     <Box position="relative">

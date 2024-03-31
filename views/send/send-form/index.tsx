@@ -12,26 +12,21 @@ const SendForm: FC = () => {
   return (
     <FormProvider {...form}>
       <Box
-        p="4xl"
+        p="xl"
         gap="xl"
         mx="auto"
         width="100%"
         display="flex"
         borderRadius="s"
+        px={['2xs', 'xl']}
         maxWidth="39.75rem"
         bg="lowestContainer"
         flexDirection="column"
-        px={['2xs', 'xl', 'xl', '7xl']}
       >
-        <Typography variant="title" size="large" textAlign="center">
-          Create link
+        <Typography variant="title" size="large" fontSize="5xl">
+          Create a link to send
         </Typography>
-        <Typography
-          size="large"
-          variant="body"
-          color="outline"
-          textAlign="center"
-        >
+        <Typography size="large" variant="body" color="outline">
           The funds can only be claim via the link once. You can also reclaim
           the funds if they have not been previously claimed.
         </Typography>
