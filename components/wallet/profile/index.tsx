@@ -1,10 +1,10 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { useCurrentAccount } from '@mysten/dapp-kit';
-import { useRouter } from 'next/router';
 import { FC, useEffect, useState } from 'react';
 
 import Avatar from '@/components/account-info/avatar';
 import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
+import { useIsFirstRender } from '@/hooks/use-is-first-render';
 
 import MenuProfile from './menu-profile';
 import MenuSwitchAccount from './menu-switch-account';
@@ -12,14 +12,13 @@ import MenuSwitchAccount from './menu-switch-account';
 const BOX_ID = 'wallet-box';
 
 const Profile: FC = () => {
-  const { query } = useRouter();
-  const [isOpenProfile, setIsOpenProfile] = useState(Boolean(query.profile));
-  const [isOpenAccount, setIsOpenAccount] = useState(Boolean(query.account));
+  const [isOpenProfile, setIsOpenProfile] = useState(false);
+  const [isOpenAccount, setIsOpenAccount] = useState(false);
   const [menuIsDropdown, setMenuIsDropdown] = useState(
     isOpenProfile || isOpenAccount
   );
   const currentAccount = useCurrentAccount();
-
+  const isFirstRender = useIsFirstRender();
   const account = currentAccount?.address || '';
 
   useEffect(() => {
@@ -41,32 +40,20 @@ const Profile: FC = () => {
 
   const handleOpenProfile = () => {
     handleCloseAccount();
-    const url = new URL(window.location.href);
-    url.searchParams.set('profile', 'true');
-    window.history.pushState('', '', url.toString());
     setIsOpenProfile(true);
   };
 
   const handleCloseProfile = () => {
     handleCloseAccount();
-    const url = new URL(window.location.href);
-    url.searchParams.delete('profile');
-    window.history.pushState('', '', url.toString());
     setIsOpenProfile(false);
   };
 
   const handleOpenAccount = () => {
     handleCloseProfile();
-    const url = new URL(window.location.href);
-    url.searchParams.set('account', 'true');
-    window.history.pushState('', '', url.toString());
     setIsOpenAccount(true);
   };
 
   const handleCloseAccount = () => {
-    const url = new URL(window.location.href);
-    url.searchParams.delete('account');
-    window.history.pushState('', '', url.toString());
     setIsOpenAccount(false);
   };
 
@@ -117,16 +104,22 @@ const Profile: FC = () => {
           <Avatar isLarge />
         </Box>
       )}
-      <MenuProfile
-        isOpen={isOpenProfile}
-        handleOpenSwitch={handleOpenAccount}
-        handleCloseProfile={handleCloseProfile}
-      />
-      <MenuSwitchAccount
-        isOpen={isOpenAccount}
-        onBack={handleOpenProfile}
-        handleCloseProfile={handleCloseProfile}
-      />
+      {!isFirstRender && (
+        <>
+          <MenuProfile
+            isOpen={isOpenProfile}
+            handleOpenSwitch={handleOpenAccount}
+            handleCloseProfile={handleCloseProfile}
+          />
+          {isOpenAccount && (
+            <MenuSwitchAccount
+              isOpen={isOpenAccount}
+              onBack={handleOpenProfile}
+              handleCloseProfile={handleCloseProfile}
+            />
+          )}
+        </>
+      )}
     </Box>
   );
 };
