@@ -22,11 +22,11 @@ export enum RoutesEnum {
  */
 export const Routes: Record<RoutesEnum, string> = {
   [RoutesEnum.Swap]: '/',
+  [RoutesEnum.Send]: '/send',
   [RoutesEnum.Pools]: '/pools',
   [RoutesEnum.Faucet]: '/faucet',
   [RoutesEnum.Metrics]: '/metrics',
   [RoutesEnum.Airdrop]: '/airdrop',
-  [RoutesEnum.Send]: '/send/create',
   [RoutesEnum.SendLink]: '/send/link',
   [RoutesEnum.FindPool]: '/pools/find',
   [RoutesEnum.CreateCoin]: '/create-coin',

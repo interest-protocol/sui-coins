@@ -6,7 +6,7 @@ import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { FixedPointMath } from '@/lib';
 import { parseInputEventToNumberString, ZERO_BIG_NUMBER } from '@/utils';
 
-import { ZkSendForm } from '../send.types';
+import { ZkSendForm } from '../send-form.types';
 import SelectObject from './select-object';
 import SendSelectObjectHeader from './send-select-object-header';
 

@@ -11,7 +11,7 @@ import { useModal } from '@/hooks/use-modal';
 import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
 import SelectObjectModal from '@/views/components/select-object-modal';
 
-import { ZkSendForm } from '../send.types';
+import { ZkSendForm } from '../send-form.types';
 
 const SelectObject: FC = () => {
   const network = useNetwork();

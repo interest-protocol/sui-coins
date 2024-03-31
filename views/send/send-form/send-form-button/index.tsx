@@ -11,7 +11,7 @@ import { FixedPointMath } from '@/lib';
 import { showTXSuccessToast } from '@/utils';
 import { isCoinObject } from '@/views/components/select-object-modal/select-object-modal.utils';
 
-import { ZkSendForm } from '../send.types';
+import { ZkSendForm } from '../send-form.types';
 import useCreateLink from './send-button.hooks';
 
 const SendButton: FC = () => {
