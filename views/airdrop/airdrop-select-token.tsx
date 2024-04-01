@@ -37,7 +37,6 @@ const AirdropSelectToken: FC = () => {
     balance,
   }: CoinDataWithChainInfo) => {
     setValue('decimals', decimals);
-    console.log('balance: ', balance);
     setValue('token', {
       type,
       symbol,

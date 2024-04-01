@@ -1,29 +1,31 @@
-import { Box, Button, ListItem, Typography } from '@interest-protocol/ui-kit';
+import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import { useWalletKit } from '@mysten/wallet-kit';
-import { not } from 'ramda';
 import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
-import { v4 } from 'uuid';
 
 import { CONTROLLERS_MAP } from '@/constants';
 import { COINS } from '@/constants/coins';
 import { MINT_MODULE_NAME_MAP, PACKAGES } from '@/constants/packages';
 import { useNetwork } from '@/context/network';
 import { useMovementClient, useUserMintEpoch, useWeb3 } from '@/hooks';
+import { useModal } from '@/hooks/use-modal';
 import { useSuiSystemState } from '@/hooks/use-sui-system-state';
 import { TOKEN_ICONS, TOKEN_SYMBOL } from '@/lib';
 import { ChevronDownSVG } from '@/svg';
 import { showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
 import { requestMov } from '@/views/faucet/faucet.utils';
 
+import SelectTokenModal from '../components/select-token-modal';
+import { CoinDataWithChainInfo } from '../components/select-token-modal/select-token-modal.types';
+
 const MintForm: FC = () => {
   const [selected, setSelected] = useState(COINS[0]);
-  const [isOpen, setIsOpen] = useState(false);
   const { network } = useNetwork();
   const client = useMovementClient();
   const { account, mutate } = useWeb3();
+  const { setModal, handleClose } = useModal();
   const { signTransactionBlock } = useWalletKit();
 
   const SelectedIcon = TOKEN_ICONS[network][selected.symbol];
@@ -78,6 +80,32 @@ const MintForm: FC = () => {
     }
   };
 
+  const onSelect = async ({
+    decimals,
+    symbol,
+    type,
+  }: CoinDataWithChainInfo) => {
+    setSelected({ symbol: symbol as TOKEN_SYMBOL, type, decimals });
+    handleClose();
+  };
+
+  const openModal = () =>
+    setModal(
+      <Motion
+        animate={{ scale: 1 }}
+        initial={{ scale: 0.85 }}
+        transition={{ duration: 0.3 }}
+      >
+        <SelectTokenModal closeModal={handleClose} onSelect={onSelect} />
+      </Motion>,
+      {
+        isOpen: true,
+        custom: true,
+        opaque: false,
+        allowClose: true,
+      }
+    );
+
   const onMint = () => {
     toast.promise(handleMint(), {
       loading: 'Loading',
@@ -89,12 +117,12 @@ const MintForm: FC = () => {
   return (
     <Box
       mb="s"
+      p="xl"
       mx="auto"
       display="flex"
-      borderRadius="2rem"
+      borderRadius="xs"
       bg="lowestContainer"
       flexDirection="column"
-      p={['xl', 'xl', 'xl', '7xl']}
       width={['100%', '100%', '100%', '39.75rem']}
     >
       <Typography
@@ -115,7 +143,11 @@ const MintForm: FC = () => {
             px="xs"
             variant="outline"
             borderRadius="xs"
-            onClick={() => setIsOpen(not)}
+            borderColor="onSurface"
+            onClick={openModal}
+            nHover={{
+              color: 'unset',
+            }}
             PrefixIcon={
               <Box
                 display="flex"
@@ -139,9 +171,12 @@ const MintForm: FC = () => {
                 color="onSurface"
                 alignItems="center"
                 justifyContent="center"
-                rotate={isOpen ? '180deg' : '0deg'}
               >
-                <ChevronDownSVG width="100%" maxWidth="1rem" maxHeight="1rem" />
+                <ChevronDownSVG
+                  width="100%"
+                  maxWidth="1.5rem"
+                  maxHeight="1.5rem"
+                />
               </Box>
             }
           >
@@ -158,46 +193,6 @@ const MintForm: FC = () => {
             <Typography variant="body" size="small" color="error" mt="xs">
               You cannot mint more {selected.symbol}
             </Typography>
-          )}
-          {isOpen && (
-            <Box
-              top="4rem"
-              zIndex={1}
-              cursor="pointer"
-              bg="lowContainer"
-              borderRadius="xs"
-              border="2px solid"
-              position="absolute"
-              borderColor="outline"
-            >
-              {COINS.map(({ symbol, type, decimals }) => {
-                const Icon = TOKEN_ICONS[network][symbol];
-                return (
-                  <ListItem
-                    key={v4()}
-                    title={symbol}
-                    onClick={() => {
-                      setSelected({ symbol, type, decimals });
-                      setIsOpen(false);
-                    }}
-                    PrefixIcon={
-                      <Box
-                        display="flex"
-                        bg="onSurface"
-                        color="surface"
-                        height="1.5rem"
-                        borderRadius="xs"
-                        minWidth="1.5rem"
-                        alignItems="center"
-                        justifyContent="center"
-                      >
-                        <Icon width="100%" maxWidth="1rem" maxHeight="1rem" />
-                      </Box>
-                    }
-                  />
-                );
-              })}
-            </Box>
           )}
         </Box>
       </Box>
