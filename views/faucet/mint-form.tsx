@@ -140,7 +140,7 @@ const MintForm: FC = () => {
         </Typography>
         <Box position="relative" display="flex" flexDirection="column">
           <Button
-            px="xs"
+            p="xs"
             variant="outline"
             borderRadius="xs"
             borderColor="outlineVariant"
@@ -153,7 +153,7 @@ const MintForm: FC = () => {
                 display="flex"
                 bg="onSurface"
                 width="2.5rem"
-                height="2.5rem"
+                height="2rem"
                 borderRadius="xs"
                 alignItems="center"
                 justifyContent="center"
@@ -161,7 +161,7 @@ const MintForm: FC = () => {
                 <SelectedIcon
                   width="100%"
                   maxWidth="1.5rem"
-                  maxHeight="1.5rem"
+                  maxHeight="1.25rem"
                 />
               </Box>
             }
