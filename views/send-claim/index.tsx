@@ -4,8 +4,7 @@ import {
   ProgressIndicator,
   Typography,
 } from '@interest-protocol/ui-kit';
-import { useCurrentAccount } from '@mysten/dapp-kit';
-// import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
+import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { ZkSendLink } from '@mysten/zksend';
 import { not } from 'ramda';
 import { FC, useState } from 'react';
@@ -14,14 +13,14 @@ import useSWR from 'swr';
 import Layout from '@/components/layout';
 import { useNetwork } from '@/context/network';
 import { AssetSVG, ChevronDownSVG, ErrorSVG } from '@/svg';
+import { showTXSuccessToast } from '@/utils';
 
-// import { showTXSuccessToast } from '@/utils';
 import SendHistoryDetails from '../send/send-history/send-history-table/send-history-details';
+import { useClaimLink } from './send-claim.hooks';
 
 const SendClaim: FC<{ id: string }> = ({ id }) => {
   const network = useNetwork();
   const [isOpen, setOpen] = useState(false);
-  const currentAccount = useCurrentAccount();
 
   const {
     data: link,
@@ -33,15 +32,11 @@ const SendClaim: FC<{ id: string }> = ({ id }) => {
       .then((data) => ZkSendLink.fromUrl(data.link))
   );
 
-  const claim = () => {
-    if (!link || !currentAccount) return;
+  const claim = useClaimLink();
 
-    link.claimAssets(currentAccount.address);
+  const onSuccess = (tx: SuiTransactionBlockResponse) => {
+    showTXSuccessToast(tx, network);
   };
-
-  // const onSuccess = (tx: SuiTransactionBlockResponse) => {
-  //   showTXSuccessToast(tx, network);
-  // };
 
   const items = [
     ...(link?.assets?.nfts ?? []),
@@ -135,7 +130,7 @@ const SendClaim: FC<{ id: string }> = ({ id }) => {
         <Box display="flex" justifyContent="center">
           <Button
             variant="filled"
-            onClick={() => claim()}
+            onClick={() => claim(link, onSuccess)}
             disabled={!link || isLoading || error || link.claimed}
           >
             {link?.claimed ? 'Claimed' : 'Claim'}

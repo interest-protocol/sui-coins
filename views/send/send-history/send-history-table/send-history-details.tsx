@@ -58,7 +58,7 @@ const SendHistoryDetails: FC<{
   );
 
   return (
-    <Box px="2xl" py="l" display="flex" gap="s">
+    <Box px="2xl" py="l" display="flex" gap="s" flexDirection="column">
       {coins?.map(({ type, symbol, decimals }) => (
         <Box key={v4()} display="flex" alignItems="center" gap="s">
           <TokenIcon
