@@ -23,12 +23,12 @@ const SendLink: FC<{ id: string }> = ({ id }) => {
   const { data, isLoading, error } = useSWR<ZkSendLinkData>(
     `${id}-${network}`,
     () =>
-      fetch(`/api/v1/zksend?network=${network}&id=${id}`).then(
-        (response) => response.json?.()
+      fetch(`/api/v1/zksend?network=${network}&id=${id}`).then((response) =>
+        response.json?.()
       )
   );
 
-  const url = useMemo(() => `${location.origin}/claim/${id}`, []);
+  const url = useMemo(() => `${location.origin}/send/claim/${id}`, []);
 
   const reclaim = useReclaimLink();
 
