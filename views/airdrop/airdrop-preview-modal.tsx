@@ -50,7 +50,7 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
         justifyContent="space-between"
         flexDirection="column"
         boxShadow="dropShadow.2xl"
-        backgroundColor="lowContainer"
+        backgroundColor="container"
       >
         <Box width="100%">
           <Box

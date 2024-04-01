@@ -23,7 +23,7 @@ const PoolTitleBar: FC<PoolTitleBarProps> = ({
     maxWidth="65rem"
     borderRadius="xs"
     alignItems="center"
-    bg="lowestContainer"
+    bg="container"
     mt={['5xl', '5xl', '5xl', 'xl']}
   >
     <Button

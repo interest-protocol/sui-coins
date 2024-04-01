@@ -13,7 +13,7 @@ const PoolPreviewWrapper: FC<PropsWithChildren<PoolPreviewWrapperProps>> = ({
   <Motion
     layout
     display="flex"
-    bg="lowestContainer"
+    bg="container"
     height="41rem"
     minWidth="22rem"
     maxHeight="90vh"
