@@ -1,6 +1,6 @@
 export const wrapperVariants = {
   open: {
-    clipPath: 'inset(0% 0% 0% 0% round 10px)',
+    x: 0,
     transition: {
       type: 'spring',
       bounce: 0,
@@ -10,11 +10,11 @@ export const wrapperVariants = {
     },
   },
   closed: {
-    clipPath: 'inset(10% 50% 90% 50% round 10px)',
+    x: '120vw',
     transition: {
-      type: 'spring',
+      type: 'easeIn',
       bounce: 0,
-      duration: 0.3,
+      duration: 2,
     },
   },
 };
