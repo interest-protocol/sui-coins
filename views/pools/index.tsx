@@ -28,22 +28,7 @@ const Pools: FC = () => {
         py={['s', 's', 's', '2xl']}
       >
         <PoolFilter />
-        <Box
-          gap="m"
-          display="grid"
-          borderRadius="xs"
-          p={['s', 's', 's', 'l']}
-          gridTemplateColumns={[
-            '1fr',
-            '1fr',
-            '1fr 1fr',
-            '1fr 1fr',
-            '1fr 1fr 1fr',
-          ]}
-        >
-          <PoolFilter />
-          <PoolCardList />
-        </Box>
+        <PoolCardList />
       </Box>
     </Layout>
   );

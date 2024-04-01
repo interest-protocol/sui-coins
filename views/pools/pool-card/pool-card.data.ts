@@ -2,9 +2,7 @@ import { FC } from 'react';
 
 import { SVGProps } from '@/components/svg/svg.types';
 import { DexName } from '@/constants/pools';
-import { IPXRoundedSVG, LogoSVG } from '@/svg';
-
-import { PoolCardHeaderTagProps } from './pool-card.types';
+import { IPXRoundedSVG, SuiCoinsSVG } from '@/svg';
 
 export const LINES = [
   {
@@ -24,46 +22,22 @@ export const LINES = [
   },
 ];
 
-export const POOL_CARD_TAGS: Record<
-  DexName,
-  ReadonlyArray<PoolCardHeaderTagProps>
-> = {
-  [DexName.Interest]: [
-    {
-      name: 'CLAMM',
-    },
-    {
-      name: 'Volatile',
-    },
-  ],
-  [DexName.Suicoins]: [
-    {
-      name: 'CLAMM',
-    },
-    {
-      name: 'Volatile',
-    },
-  ],
-};
-
 export const DEX_MAP: Record<
   DexName,
   {
     name: string;
     Icon: FC<SVGProps>;
     url: string;
-    tags?: ReadonlyArray<PoolCardHeaderTagProps>;
   }
 > = {
   [DexName.Interest]: {
     name: 'Interest',
     Icon: IPXRoundedSVG,
-    tags: POOL_CARD_TAGS[DexName.Interest],
     url: 'https://interestprotocol.com',
   },
   [DexName.Suicoins]: {
     name: 'Sui Coins',
-    Icon: LogoSVG,
+    Icon: SuiCoinsSVG,
     url: 'https://suicoins.com',
   },
 };

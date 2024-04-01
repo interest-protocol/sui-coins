@@ -6,19 +6,31 @@ import { RECOMMENDED_POOLS } from '@/constants/pools';
 import { useNetwork } from '@/context/network';
 
 import PoolCard from './pool-card';
-import { DEX_MAP } from './pool-card/pool-card.data';
 import { PoolForm } from './pools.types';
 
 const PoolCardList = () => {
   const { network } = useNetwork();
+
   const { control } = useFormContext<PoolForm>();
-  const fields = useWatch({ control, name: 'filterList' });
-  const filteredPools = RECOMMENDED_POOLS[network].filter(
-    (pool) =>
-      fields?.some(
-        (field) =>
-          DEX_MAP[pool.dex].tags?.some((tag) => tag.name === field.description)
-      ) ?? true
+  const filterList = useWatch({ control, name: 'filterList' });
+
+  const filteredPools = RECOMMENDED_POOLS[network].filter((pool) =>
+    filterList?.length
+      ? filterList.every(({ type, description }) => {
+          if (
+            type === 'algorithmn' &&
+            (description === 'stable') === pool.stable
+          )
+            return true;
+
+          if (type === 'pool_type' && description === pool.poolType)
+            return true;
+
+          console.log({ type, description });
+
+          return false;
+        })
+      : true
   );
 
   return (
