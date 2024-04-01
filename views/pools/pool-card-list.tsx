@@ -10,6 +10,7 @@ import { Routes, RoutesEnum } from '@/constants';
 import { RECOMMENDED_POOLS } from '@/constants/pools';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
+import { PlusSVG } from '@/svg';
 
 import FindPoolDialog from './find-pool-modal/find-pool-dialog';
 import PoolCard from './pool-card';
@@ -70,6 +71,7 @@ const PoolCardList: FC = () => {
           <FindPoolDialog
             title="Pool doesn't exist"
             description="If you like, you can create this pool"
+            Icon={<PlusSVG maxWidth="1rem" maxHeight="1rem" width="100%" />}
             onClose={handleClose}
             onCreatePool={handleCreatePool}
           />

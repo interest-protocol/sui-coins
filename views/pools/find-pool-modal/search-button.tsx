@@ -1,30 +1,73 @@
-import { Button } from '@interest-protocol/ui-kit';
-import { FC } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { Box, Button, Typography } from '@interest-protocol/ui-kit';
+import { FC, useState } from 'react';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 
-import { PoolForm } from '../pools.types';
+import { CoinData, PoolForm } from '../pools.types';
 import { FindPoolModalProps } from './find-pool-modal.types';
 
 const SearchButton: FC<FindPoolModalProps> = ({ closeModal }) => {
-  const { setValue } = useFormContext<PoolForm>();
+  const { setValue, getValues, control } = useFormContext<PoolForm>();
+  const [isError, setError] = useState(false);
+  useFieldArray({
+    control,
+    name: 'tokenList',
+    rules: { maxLength: 5 },
+  });
+
+  const tokenListData = getValues('tokenList');
+
   const handleSearch = () => setValue('isFindingPool', true);
 
+  const hasEmptyKeys = (token: [] | readonly CoinData[]) => {
+    return token.some((obj) =>
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      Object.entries(obj).some(([key, value]) => !value)
+    );
+  };
+
   const handleFindPool = () => {
-    handleSearch();
-    closeModal();
+    const listOfToken = hasEmptyKeys(tokenListData);
+    if (!listOfToken) {
+      handleSearch();
+      closeModal();
+    } else {
+      setError(true);
+      const timeout = setTimeout(() => {
+        setError(false);
+      }, 3000);
+      return () => clearTimeout(timeout);
+    }
   };
 
   return (
-    <Button
+    <Box
       display="flex"
-      variant="filled"
-      minWidth="17rem"
-      borderRadius="xs"
+      flexDirection="column"
       justifyContent="center"
-      onClick={handleFindPool}
+      alignItems="center"
     >
-      Search
-    </Button>
+      {isError && (
+        <Typography
+          p="2xs"
+          color="error"
+          size="medium"
+          variant="body"
+          textAlign="center"
+        >
+          Token cannot be empty, please select a token
+        </Typography>
+      )}
+      <Button
+        display="flex"
+        variant="filled"
+        minWidth="17rem"
+        borderRadius="xs"
+        justifyContent="center"
+        onClick={handleFindPool}
+      >
+        Search
+      </Button>
+    </Box>
   );
 };
 

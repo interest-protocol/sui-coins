@@ -1,13 +1,14 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import { PlusSVG, TimesSVG } from '@/svg';
+import { TimesSVG } from '@/svg';
 
 import { FindPoolDialogProps } from './find-pool-dialog.types';
 
 const FindPoolDialog: FC<FindPoolDialogProps> = ({
   title,
   description,
+  Icon,
   onClose,
   onCreatePool,
 }) => (
@@ -63,7 +64,7 @@ const FindPoolDialog: FC<FindPoolDialogProps> = ({
         bg="highContainer"
         alignItems="center"
       >
-        <PlusSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+        {Icon}
       </Box>
       <Typography
         size="medium"

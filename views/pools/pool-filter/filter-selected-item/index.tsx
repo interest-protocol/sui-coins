@@ -25,8 +25,7 @@ const FilterSelectedItem: FC = () => {
   };
 
   const erase = () => {
-    resetField('tokenList');
-    resetField('filterList');
+    replace([]);
   };
 
   return (
