@@ -45,6 +45,24 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       return res.status(200).send('Link created successfully!');
     }
+
+    if (req.method === 'PUT') {
+      const digest = req.query.digest as string;
+      const body: ZkSendLinkData = JSON.parse(req.body);
+
+      if (digest) {
+        const doc = await ZkSendLinkModel[network].findOneAndUpdate(
+          { digest },
+          body
+        );
+
+        if (!doc) (await ZkSendLinkModel[network].create(body)).save();
+
+        return res.status(200).send('Link updated successfully!');
+      }
+
+      return res.status(400).send({ message: 'Missing param: digest' });
+    }
     return res.status(405).send('Method not allowed!');
   } catch (e) {
     res.status(500).send(e);

@@ -59,6 +59,7 @@ const useCreateLink = () => {
       method: 'POST',
       body: JSON.stringify({
         id,
+        digest: tx.digest,
         link: link.getLink(),
       }),
     });

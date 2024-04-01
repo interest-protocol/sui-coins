@@ -1,31 +1,32 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
-import { useState } from 'react';
 import { FC } from 'react';
 
 import SendHistoryTable from './send-history-table';
-import SendHistoryTabs from './send-history-tabs';
 
-const SendHistory: FC = () => {
-  const [tabIndex, setTabIndex] = useState(0);
-
-  return (
-    <Box
-      gap="xl"
-      mx="auto"
-      width="100%"
-      display="flex"
-      borderRadius="s"
-      maxWidth="39.75rem"
-      bg="lowestContainer"
-      flexDirection="column"
+const SendHistory: FC = () => (
+  <Box
+    gap="xl"
+    mx="auto"
+    width="100%"
+    display="flex"
+    borderRadius="s"
+    overflow="hidden"
+    maxWidth="39.75rem"
+    bg="lowestContainer"
+    flexDirection="column"
+  >
+    <Typography
+      p="xl"
+      size="large"
+      fontSize="5xl"
+      variant="title"
+      borderBottom="1px solid"
+      borderColor="container"
     >
-      <Typography variant="title" size="large" fontSize="5xl" p="xl">
-        Transaction history
-      </Typography>
-      <SendHistoryTabs tabIndex={tabIndex} onChangeTab={setTabIndex} />
-      <SendHistoryTable />
-    </Box>
-  );
-};
+      Transaction history
+    </Typography>
+    <SendHistoryTable />
+  </Box>
+);
 
 export default SendHistory;

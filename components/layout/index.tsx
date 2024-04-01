@@ -9,11 +9,15 @@ import Header from './header';
 import { LayoutProps } from './layout.types';
 import Sidebar from './sidebar';
 
-const Layout: FC<PropsWithChildren<LayoutProps>> = ({ title, children }) => (
+const Layout: FC<PropsWithChildren<LayoutProps>> = ({
+  title,
+  children,
+  noSidebar,
+}) => (
   <Box display="flex" height="100vh" overflow="hidden" bg="surface">
-    <Sidebar />
+    {!noSidebar && <Sidebar />}
     <Box as="aside" position="relative" flex="1">
-      <Header />
+      <Header withLogo={noSidebar} />
       <Web3Manager>
         <ModalProvider>
           <Box width="100%" overflowY="auto">

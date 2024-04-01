@@ -14,6 +14,11 @@ export const ZkSendLinkSchema = new Schema({
     type: String,
     required: true,
   },
+  digest: {
+    index: true,
+    type: String,
+    required: true,
+  },
   link: {
     type: String,
     required: true,

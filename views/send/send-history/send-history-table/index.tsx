@@ -1,22 +1,35 @@
-import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
+import {
+  Box,
+  Button,
+  Motion,
+  TooltipWrapper,
+  Typography,
+} from '@interest-protocol/ui-kit';
 import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
+import { SuiTransactionBlockResponse } from '@mysten/sui.js/dist/cjs/client';
 import { AnimatePresence } from 'framer-motion';
+import { useRouter } from 'next/router';
 import { FC, useState } from 'react';
 import useSWR from 'swr';
 import { v4 } from 'uuid';
 
-import { Network } from '@/constants';
+import { EXPLORER_URL, Network, Routes, RoutesEnum } from '@/constants';
 import { useNetwork } from '@/context/network';
-import { DefaultSVG, WarningSVG } from '@/svg';
+import { AssetSVG, InfoSVG, ReloadSVG, SendSVG } from '@/svg';
+import { showTXSuccessToast } from '@/utils';
 import { listCreatedLinks } from '@/utils/zksend';
 
+import { useRegenerateLink } from '../send-history.hooks';
 import SendHistoryDetails from './send-history-details';
 
 const SendHistoryTable: FC = () => {
+  const { push } = useRouter();
   const network = useNetwork();
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
   const [detailsIndex, setDetailsIndex] = useState<number | null>(null);
+
+  const regenerateLink = useRegenerateLink();
 
   const { data } = useSWR(
     `${network}-${currentAccount?.address}-${suiClient}`,
@@ -33,19 +46,29 @@ const SendHistoryTable: FC = () => {
     }
   );
 
+  const onSuccess = (tx: SuiTransactionBlockResponse, id: string) => {
+    showTXSuccessToast(tx, network);
+
+    push(`${Routes[RoutesEnum.SendLink]}/${id}`);
+  };
+
+  const gotoExplorer = (digest: string) =>
+    window.open(`${EXPLORER_URL[network]}/tx/${digest}`);
+
   return (
-    <Motion rowGap="l" as="table">
+    <Motion as="table" rowGap="l">
       <Box as="thead">
         <Box as="tr">
-          {['Asset', 'Status', 'Date'].map((item) => (
+          {['Asset', 'Date', 'Status'].map((item, index) => (
             <Typography
               as="th"
-              px="xl"
               key={v4()}
               size="small"
               color="outline"
               variant="label"
               textAlign="left"
+              {...(!index && { pl: 'xl' })}
+              {...(index === 2 && { pr: 'xl' })}
             >
               {item}
             </Typography>
@@ -53,94 +76,168 @@ const SendHistoryTable: FC = () => {
         </Box>
       </Box>
       <Motion as="tbody">
-        {data?.links.map(({ assets, createdAt, claimed }, index) => (
-          <>
-            <Box as="tr" key={v4()}>
-              <Typography
-                px="xl"
-                my="xs"
-                as="td"
-                gap="s"
-                size="small"
-                display="flex"
-                variant="label"
-                alignItems="center"
-              >
-                <Box
-                  bg="black"
-                  width="2rem"
-                  color="white"
-                  height="2rem"
-                  display="flex"
-                  borderRadius="xs"
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  <DefaultSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
-                </Box>
-                <Typography as="span" size="small" variant="label">
-                  {assets.nfts.length + assets.balances.length} Asset
-                  {assets.nfts.length + assets.balances.length !== 1 && 's'}
-                </Typography>
-              </Typography>
-              <Typography as="td" size="small" variant="label" px="xl">
+        {data?.links.map(
+          ({ link, assets, createdAt, claimed, digest }, index) => (
+            <>
+              <Box as="tr" key={v4()}>
                 <Typography
-                  p="xs"
-                  as="span"
-                  size="medium"
+                  pl="xl"
+                  my="xs"
+                  as="td"
+                  gap="s"
+                  size="small"
+                  display="flex"
                   variant="label"
-                  borderRadius="full"
-                  bg={claimed ? 'warningContainer' : 'successContainer'}
-                  color={claimed ? 'onWarningContainer' : 'onSuccessContainer'}
+                  alignItems="center"
                 >
-                  {claimed ? 'Claimed' : 'Active'}
+                  <Box
+                    bg="black"
+                    width="2rem"
+                    color="white"
+                    height="2rem"
+                    display="flex"
+                    borderRadius="xs"
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    <AssetSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+                  </Box>
+                  <Typography as="span" size="medium" variant="body">
+                    {assets.nfts.length + assets.balances.length} Asset
+                    {assets.nfts.length + assets.balances.length !== 1 && 's'}
+                  </Typography>
                 </Typography>
-              </Typography>
-              <Typography as="td" size="small" variant="label" px="xl">
-                {new Date(createdAt!).toLocaleString(undefined, {
-                  minute: 'numeric',
-                  hour: 'numeric',
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric',
-                })}
-              </Typography>
-              <Typography as="td" size="small" variant="label" px="xl">
-                <Button
-                  variant="outline"
-                  isIcon
-                  borderRadius="full"
-                  onClick={() =>
-                    setDetailsIndex((i) => (i === index ? null : index))
-                  }
+                <Typography as="td" size="small" variant="body">
+                  {new Date(createdAt!).toLocaleString(undefined, {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                  })}
+                </Typography>
+                <Typography as="td" size="small" variant="label">
+                  <Typography
+                    p="xs"
+                    as="span"
+                    size="medium"
+                    variant="label"
+                    borderRadius="full"
+                    bg={`${claimed ? 'warning' : 'success'}Container`}
+                    color={`on${claimed ? 'Warning' : 'Success'}Container`}
+                  >
+                    {claimed ? 'Claimed' : 'Active'}
+                  </Typography>
+                </Typography>
+
+                <Typography
+                  as="td"
+                  pr="xl"
+                  gap="xs"
+                  size="small"
+                  display="flex"
+                  variant="label"
+                  justifyContent="flex-end"
                 >
-                  <WarningSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-                </Button>
-              </Typography>
-            </Box>
-            <AnimatePresence>
-              {index === detailsIndex && (
-                <Motion
-                  as="tr"
-                  key={v4()}
-                  bg="container"
-                  exit={{ scaleY: 0 }}
-                  style={{ originY: 0 }}
-                  initial={{ scaleY: 0 }}
-                  animate={{ scaleY: 1 }}
-                  transition={{
-                    duration: 0.1,
-                    ease: 'easeInOut',
-                  }}
-                >
-                  <td colSpan={5}>
-                    <SendHistoryDetails assets={assets} network={network} />
-                  </td>
-                </Motion>
-              )}
-            </AnimatePresence>
-          </>
-        ))}
+                  <TooltipWrapper
+                    bg="lowContainer"
+                    tooltipPosition="top"
+                    tooltipContent={
+                      <Typography variant="label" size="small">
+                        Details
+                      </Typography>
+                    }
+                  >
+                    <Button
+                      isIcon
+                      variant="tonal"
+                      borderRadius="full"
+                      disabled={!(assets.nfts.length + assets.balances.length)}
+                      onClick={() =>
+                        assets.nfts.length + assets.balances.length &&
+                        setDetailsIndex((i) => (i === index ? null : index))
+                      }
+                    >
+                      <InfoSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+                    </Button>
+                  </TooltipWrapper>
+                  <TooltipWrapper
+                    bg="lowContainer"
+                    tooltipPosition="top"
+                    tooltipContent={
+                      <Typography
+                        size="small"
+                        variant="label"
+                        textAlign="center"
+                      >
+                        Regenerate Link
+                      </Typography>
+                    }
+                  >
+                    <Button
+                      isIcon
+                      variant="tonal"
+                      disabled={claimed}
+                      borderRadius="full"
+                      onClick={() =>
+                        !claimed && regenerateLink(link, digest!, onSuccess)
+                      }
+                    >
+                      <ReloadSVG
+                        maxHeight="1rem"
+                        maxWidth="1rem"
+                        width="100%"
+                      />
+                    </Button>
+                  </TooltipWrapper>
+                  <TooltipWrapper
+                    bg="lowContainer"
+                    tooltipPosition="top"
+                    tooltipContent={
+                      <Typography variant="label" size="small">
+                        Explorer
+                      </Typography>
+                    }
+                  >
+                    <Button
+                      isIcon
+                      variant="tonal"
+                      borderRadius="full"
+                      onClick={() => gotoExplorer(digest!)}
+                    >
+                      <SendSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+                    </Button>
+                  </TooltipWrapper>
+                </Typography>
+              </Box>
+              <AnimatePresence>
+                {index === detailsIndex && (
+                  <Motion
+                    as="tr"
+                    key={v4()}
+                    bg="container"
+                    exit={{ scaleY: 0 }}
+                    style={{ originY: 0 }}
+                    initial={{ scaleY: 0 }}
+                    animate={{ scaleY: 1 }}
+                    transition={{
+                      duration: 0.1,
+                      ease: 'easeInOut',
+                    }}
+                  >
+                    <td colSpan={5}>
+                      <SendHistoryDetails
+                        index={index}
+                        assets={assets}
+                        network={network}
+                      />
+                    </td>
+                  </Motion>
+                )}
+              </AnimatePresence>
+            </>
+          )
+        )}
       </Motion>
     </Motion>
   );

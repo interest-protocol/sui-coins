@@ -4,7 +4,7 @@ import {
   CirclePlusSVG,
   DoubleChevronSVG,
   PoolSVG,
-  SendSVG,
+  UploadSVG,
 } from '@/svg';
 
 import { MenuItemProps } from './sidebar.types';
@@ -46,7 +46,7 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
   {
     name: 'send',
     disabled: false,
-    Icon: SendSVG,
+    Icon: UploadSVG,
     path: Routes[RoutesEnum.Send],
     networks: [Network.MAINNET],
   },

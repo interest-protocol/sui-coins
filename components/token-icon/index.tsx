@@ -82,30 +82,39 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
         width={`calc(${size} * 1.66)`}
         height={`calc(${size} * 1.66)`}
         borderRadius={rounded ? 'full' : 'xs'}
+        {...(!props.url && { bg: 'black', color: 'white' })}
       >
-        <Box
-          overflow="hidden"
-          width={`calc(${size} * 1.66)`}
-          height={`calc(${size} * 1.66)`}
-          borderRadius={rounded ? 'full' : 'xs'}
-        >
+        {props.url ? (
           <Box
-            display="flex"
-            position="absolute"
-            alignItems="center"
-            justifyContent="center"
+            overflow="hidden"
             width={`calc(${size} * 1.66)`}
             height={`calc(${size} * 1.66)`}
+            borderRadius={rounded ? 'full' : 'xs'}
           >
-            <ProgressIndicator size={loaderSize} variant="loading" />
+            <Box
+              display="flex"
+              position="absolute"
+              alignItems="center"
+              justifyContent="center"
+              width={`calc(${size} * 1.66)`}
+              height={`calc(${size} * 1.66)`}
+            >
+              <ProgressIndicator size={loaderSize} variant="loading" />
+            </Box>
+            <img
+              alt={symbol}
+              width="100%"
+              src={props.url}
+              style={{ position: 'relative' }}
+            />
           </Box>
-          <img
-            alt={symbol}
+        ) : (
+          <DefaultSVG
             width="100%"
-            src={props.url}
-            style={{ position: 'relative' }}
+            maxWidth={size ?? '1.5rem'}
+            maxHeight={size ?? '1.5rem'}
           />
-        </Box>
+        )}
       </Box>
     );
 

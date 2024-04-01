@@ -47,4 +47,5 @@ export interface NFTCollectionMetadata {
 export interface ZkSendLinkData {
   id: string;
   link: string;
+  digest: string;
 }

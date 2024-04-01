@@ -1,6 +1,7 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import { useSuiClient } from '@mysten/dapp-kit';
-import type { SuiObjectResponse } from '@mysten/sui.js/dist/cjs/client';
+import type { SuiObjectResponse } from '@mysten/sui.js/client';
+import { formatAddress } from '@mysten/sui.js/utils';
 import { LinkAssets } from '@mysten/zksend/dist/cjs/links/utils';
 import { FC } from 'react';
 import useSWR from 'swr';
@@ -15,14 +16,15 @@ import { getSymbolByType } from '@/utils';
 import { getAmountsMap } from './send-history-table.utils';
 
 const SendHistoryDetails: FC<{
+  index: number;
   network: Network;
   assets: LinkAssets;
-}> = ({ assets, network }) => {
+}> = ({ index, assets, network }) => {
   const suiClient = useSuiClient();
   const amountsMap = getAmountsMap(assets.balances);
 
   const { data: coins } = useSWR<ReadonlyArray<CoinMetadataWithType>>(
-    `coins-${network}-${assets.balances}`,
+    `coins-${network}-${index}`,
     () => {
       if (!assets.balances) return [];
 
@@ -38,14 +40,17 @@ const SendHistoryDetails: FC<{
   );
 
   const { data: nfts } = useSWR<ReadonlyArray<SuiObjectResponse['data']>>(
-    `nfts-${network}-${assets.nfts}`,
+    `nfts-${network}-${index}`,
     () => {
       if (!assets.nfts) return [];
 
       return Promise.all(
         assets.nfts.map(({ objectId }) =>
           suiClient
-            .getObject({ id: objectId, options: { showDisplay: true } })
+            .getObject({
+              id: objectId,
+              options: { showDisplay: true, showType: true },
+            })
             .then((object) => object.data)
         )
       );
@@ -64,10 +69,7 @@ const SendHistoryDetails: FC<{
             network={network}
           />
           <Typography variant="label" size="large">
-            {symbol}
-          </Typography>
-          <Typography variant="label" size="large">
-            {FixedPointMath.toNumber(amountsMap[type], decimals)}
+            {FixedPointMath.toNumber(amountsMap[type], decimals)} {symbol}
           </Typography>
         </Box>
       ))}
@@ -90,7 +92,7 @@ const SendHistoryDetails: FC<{
               {...(url ? { url } : { network, type })}
             />
             <Typography variant="label" size="large">
-              1 {displayName ?? symbol ?? type}
+              1 {displayName || symbol || formatAddress(type)}
             </Typography>
           </Box>
         );
