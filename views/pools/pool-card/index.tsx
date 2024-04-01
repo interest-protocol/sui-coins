@@ -15,7 +15,7 @@ const PoolCard: FC<PoolCardProps> = ({
   tokens,
   dex,
   poolObjectId,
-  algorithm,
+  stable,
   poolType,
 }) => {
   const Icon = DEX_MAP[dex].Icon;
@@ -49,7 +49,10 @@ const PoolCard: FC<PoolCardProps> = ({
         <PoolCardHeader
           objectId={poolObjectId}
           name={DEX_MAP[dex].name}
-          tags={[PoolTypeEnum[poolType], AlgorithmEnum[algorithm]]}
+          tags={[
+            PoolTypeEnum[poolType],
+            stable ? AlgorithmEnum.stable : AlgorithmEnum.volatile,
+          ]}
           dexUrl={DEX_MAP[dex].url}
           Logo={<Icon width="100%" maxWidth="1rem" maxHeight="1rem" />}
         />

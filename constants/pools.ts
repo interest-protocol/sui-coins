@@ -3,7 +3,6 @@ import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import { Network } from '@/constants/network';
 import { RegistryPool } from '@/interface';
 import {
-  AlgorithmEnum,
   PoolCardProps,
   PoolTypeEnum,
 } from '@/views/pools/pool-card/pool-card.types';
@@ -31,8 +30,7 @@ export const RECOMMENDED_POOLS: Record<
       tokens: [COINS[0], COINS[1], COINS[2]],
       poolObjectId: COINS[0].type,
       lpCoin: COINS[0],
-      stable: false,
-      algorithm: AlgorithmEnum.stable,
+      stable: true,
       poolType: PoolTypeEnum.amm,
     },
     {
@@ -41,7 +39,6 @@ export const RECOMMENDED_POOLS: Record<
       poolObjectId: COINS[1].type,
       lpCoin: COINS[1],
       stable: false,
-      algorithm: AlgorithmEnum.volatile,
       poolType: PoolTypeEnum.clamm,
     },
     {
@@ -50,7 +47,6 @@ export const RECOMMENDED_POOLS: Record<
       poolObjectId: COINS[2].type,
       lpCoin: COINS[2],
       stable: true,
-      algorithm: AlgorithmEnum.stable,
       poolType: PoolTypeEnum.clamm,
     },
   ],

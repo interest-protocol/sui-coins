@@ -36,9 +36,8 @@ export interface PoolCardTradeProps {
 
 export interface PoolCardProps {
   dex: DexName;
-  stable: boolean;
   poolType: PoolTypeEnum;
-  algorithm: AlgorithmEnum;
+  stable: boolean;
   lpCoin: CoinData;
   poolObjectId: string;
   tokens: ReadonlyArray<CoinData>;
