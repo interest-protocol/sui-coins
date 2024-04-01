@@ -25,17 +25,6 @@ export const POOL_TYPE = [
   },
 ];
 
-export const COIN_TYPE = [
-  {
-    type: FilterTypeEnum.COIN_TYPE,
-    description: 'Coin type 1',
-  },
-  {
-    type: FilterTypeEnum.COIN_TYPE,
-    description: 'Coin type 2',
-  },
-];
-
 export const FILTERS_DATA = [
   {
     Icon: IPXRoundedSVG,
@@ -47,12 +36,6 @@ export const FILTERS_DATA = [
     Icon: IPXRoundedSVG,
     label: 'Pool Type',
     data: POOL_TYPE,
-    type: FilterTypeEnum['POOL_TYPE'],
-  },
-  {
-    Icon: IPXRoundedSVG,
-    label: 'Coin Type',
-    data: COIN_TYPE,
     type: FilterTypeEnum['POOL_TYPE'],
   },
 ];

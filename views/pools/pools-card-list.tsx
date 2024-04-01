@@ -1,17 +1,37 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
 import { RECOMMENDED_POOLS } from '@/constants/pools';
 import { useNetwork } from '@/context/network';
 
 import PoolCard from './pool-card';
+import { PoolForm } from './pools.types';
 
 const PoolCardList = () => {
   const { network } = useNetwork();
-  // TODO: Need a logic to improve the filter
-  //const { control } = useFormContext<PoolForm>();
-  //const filterList = useWatch({ control, name: 'filterList' });
-  const filteredPools = RECOMMENDED_POOLS[network];
+
+  const { control } = useFormContext<PoolForm>();
+  const filterList = useWatch({ control, name: 'filterList' });
+
+  const filteredPools = RECOMMENDED_POOLS[network].filter((pool) =>
+    filterList?.length
+      ? filterList.every(({ type, description }) => {
+          if (
+            type === 'algorithmn' &&
+            (description === 'stable') === pool.stable
+          )
+            return true;
+
+          if (type === 'pool_type' && description === pool.poolType)
+            return true;
+
+          console.log({ type, description });
+
+          return false;
+        })
+      : true
+  );
 
   return (
     <Box

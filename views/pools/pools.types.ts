@@ -5,7 +5,6 @@ import { ISwapSettings } from '../swap/swap.types';
 export enum FilterTypeEnum {
   ALGORITHM = 'algorithmn',
   POOL_TYPE = 'pool_type',
-  COIN_TYPE = 'coin_type',
 }
 
 export enum PoolTabEnum {
