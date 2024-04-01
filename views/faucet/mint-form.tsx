@@ -143,7 +143,7 @@ const MintForm: FC = () => {
             px="xs"
             variant="outline"
             borderRadius="xs"
-            borderColor="onSurface"
+            borderColor="outlineVariant"
             onClick={openModal}
             nHover={{
               color: 'unset',
