@@ -19,7 +19,7 @@ const MintBalances: FC = () => {
       mx="auto"
       display="flex"
       borderRadius="2rem"
-      bg="lowestContainer"
+      bg="container"
       flexDirection="column"
       p={['xl', 'xl', 'xl', '7xl']}
       width={['100%', '100%', '100%', '39.75rem']}
@@ -31,7 +31,7 @@ const MintBalances: FC = () => {
         p="m"
         mt="s"
         gap="m"
-        bg="surface"
+        bg="lowestContainer"
         display="flex"
         borderRadius="s"
         flexDirection="column"

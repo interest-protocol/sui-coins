@@ -32,6 +32,9 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
           setValue(`${fieldName}.value`, parseInputEventToNumberString(v));
         },
       })}
+      fieldProps={{
+        bg: 'lowestContainer',
+      }}
       TokenIcon={
         Icon && (
           <Box
