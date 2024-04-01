@@ -25,7 +25,7 @@ const AirdropInput: FC<AirdropProgressProps> = ({ setIsProgressView }) => {
       gap="3xl"
       display="flex"
       borderRadius="xs"
-      bg="lowContainer"
+      bg="container"
       flexDirection="column"
     >
       {method === 'csv' && <AirdropUploadFile />}

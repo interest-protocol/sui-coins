@@ -16,7 +16,7 @@ const PoolAdditionalInfo: FC = () => {
   };
 
   return (
-    <Box width="100%" color="onSurface" borderRadius="xs" bg="lowestContainer">
+    <Box width="100%" color="onSurface" borderRadius="xs" bg="container">
       <DetailTabs
         onChangeTab={handleTabChange}
         defaultTabIndex={poolDetailsView}

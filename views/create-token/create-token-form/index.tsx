@@ -120,7 +120,7 @@ const CreateTokenForm: FC = () => {
       borderRadius="m"
       overflow="hidden"
       color="onSurface"
-      bg="lowestContainer"
+      bg="container"
       width={['100%', '100%', '100%', '26rem']}
       boxShadow="0px 24px 46px -10px rgba(13, 16, 23, 0.16)"
     >

@@ -88,7 +88,7 @@ const PoolWithdraw: FC<PoolFormProps> = ({ poolOptionView }) => {
         <Typography variant="body" size="large" mb="m">
           Manage your slippage
         </Typography>
-        <Box bg="container" borderRadius="xs">
+        <Box bg="lowestContainer" borderRadius="xs">
           <ManageSlippage />
         </Box>
       </Box>
