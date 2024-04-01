@@ -1,26 +1,27 @@
 import { IPXRoundedSVG } from '@/svg';
 
+import { AlgorithmEnum, PoolTypeEnum } from '../pool-card/pool-card.types';
 import { FilterItemProps, FilterTypeEnum } from '../pools.types';
 
 export const ALGORITHM_TYPE: Array<FilterItemProps> = [
   {
     type: FilterTypeEnum.ALGORITHM,
-    description: 'Stable',
+    description: AlgorithmEnum.stable,
   },
   {
     type: FilterTypeEnum.ALGORITHM,
-    description: 'Volatile',
+    description: AlgorithmEnum.volatile,
   },
 ];
 
 export const POOL_TYPE = [
   {
     type: FilterTypeEnum.POOL_TYPE,
-    description: 'CLAMM',
+    description: PoolTypeEnum.clamm,
   },
   {
     type: FilterTypeEnum.POOL_TYPE,
-    description: 'AMM',
+    description: PoolTypeEnum.amm,
   },
 ];
 
@@ -40,18 +41,18 @@ export const FILTERS_DATA = [
     Icon: IPXRoundedSVG,
     label: 'Algorithm',
     data: ALGORITHM_TYPE,
-    type: FilterTypeEnum.ALGORITHM,
+    type: FilterTypeEnum['ALGORITHM'],
   },
   {
     Icon: IPXRoundedSVG,
     label: 'Pool Type',
     data: POOL_TYPE,
-    type: FilterTypeEnum.POOL_TYPE,
+    type: FilterTypeEnum['POOL_TYPE'],
   },
   {
     Icon: IPXRoundedSVG,
     label: 'Coin Type',
     data: COIN_TYPE,
-    type: FilterTypeEnum.COIN_TYPE,
+    type: FilterTypeEnum['POOL_TYPE'],
   },
 ];

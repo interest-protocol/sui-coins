@@ -6,12 +6,18 @@ import { v4 } from 'uuid';
 import { Routes, RoutesEnum } from '@/constants';
 
 import { DEX_MAP, LINES } from './pool-card.data';
-import { PoolCardProps } from './pool-card.types';
+import { AlgorithmEnum, PoolCardProps, PoolTypeEnum } from './pool-card.types';
 import PoolCardHeader from './pool-card-header';
 import PoolCardInfo from './pool-card-info';
 import PoolCardTrade from './pool-card-trade';
 
-const PoolCard: FC<PoolCardProps> = ({ tokens, dex, poolObjectId }) => {
+const PoolCard: FC<PoolCardProps> = ({
+  tokens,
+  dex,
+  poolObjectId,
+  algorithm,
+  poolType,
+}) => {
   const Icon = DEX_MAP[dex].Icon;
 
   // TODO: should be updated with real value
@@ -43,7 +49,7 @@ const PoolCard: FC<PoolCardProps> = ({ tokens, dex, poolObjectId }) => {
         <PoolCardHeader
           objectId={poolObjectId}
           name={DEX_MAP[dex].name}
-          tags={DEX_MAP[dex].tags}
+          tags={[PoolTypeEnum[poolType], AlgorithmEnum[algorithm]]}
           dexUrl={DEX_MAP[dex].url}
           Logo={<Icon width="100%" maxWidth="1rem" maxHeight="1rem" />}
         />

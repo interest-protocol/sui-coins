@@ -3,9 +3,9 @@ import { TOKEN_SYMBOL } from '@/lib';
 import { ISwapSettings } from '../swap/swap.types';
 
 export enum FilterTypeEnum {
-  ALGORITHM,
-  POOL_TYPE,
-  COIN_TYPE,
+  ALGORITHM = 'algorithmn',
+  POOL_TYPE = 'pool_type',
+  COIN_TYPE = 'coin_type',
 }
 
 export enum PoolTabEnum {
