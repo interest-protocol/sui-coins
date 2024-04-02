@@ -5,7 +5,7 @@ import {
   Typography,
 } from '@interest-protocol/ui-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
-import { FC, useMemo } from 'react';
+import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
 import useSWR from 'swr';
 
@@ -16,29 +16,50 @@ import { ErrorSVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 
 import { useReclaimLink } from './send-link.hooks';
+import { SendLinkProps } from './send-link.types';
 
-const SendLink: FC<{ id: string }> = ({ id }) => {
+const SendLink: FC<SendLinkProps> = ({ id }) => {
   const network = useNetwork();
+  const reclaim = useReclaimLink();
+  const [isReclaiming, setReclaiming] = useState(false);
 
   const { data, isLoading, error } = useSWR<ZkSendLinkData>(
     `${id}-${network}`,
     () =>
-      fetch(`/api/v1/zksend?network=${network}&id=${id}`).then((response) =>
-        response.json?.()
+      fetch(`/api/v1/zksend?network=${network}&id=${id}`).then(
+        (response) => response.json?.()
       )
   );
 
-  const url = useMemo(() => `${location.origin}/send/claim/${id}`, []);
-
-  const reclaim = useReclaimLink();
+  const url = `${location.origin}/send/claim/${id}`;
 
   const handleCopyLink = () => {
+    if (isReclaiming || isLoading || error || !linkToClaim) return;
+
     window.navigator.clipboard.writeText(url);
     toast('Copied to clipboard');
   };
 
   const onSuccess = (tx: SuiTransactionBlockResponse) => {
     showTXSuccessToast(tx, network);
+  };
+
+  const linkToClaim = data?.links[0];
+
+  const onReclaim = async () => {
+    if (!linkToClaim || !id) return;
+
+    const toasterId = toast.loading('Reclaiming...');
+    setReclaiming(true);
+    try {
+      await reclaim(linkToClaim, id, onSuccess);
+      toast.success('Something went wrong');
+    } catch {
+      toast.error('Something went wrong');
+    } finally {
+      setReclaiming(false);
+      toast.dismiss(toasterId);
+    }
   };
 
   return (
@@ -114,14 +135,14 @@ const SendLink: FC<{ id: string }> = ({ id }) => {
           <Button
             variant="filled"
             onClick={handleCopyLink}
-            disabled={!data || isLoading || error}
+            disabled={isReclaiming || isLoading || error || !linkToClaim}
           >
             Copy Link
           </Button>
           <Button
             variant="outline"
-            disabled={!data || isLoading || error}
-            onClick={() => reclaim(data?.link, onSuccess)}
+            onClick={onReclaim}
+            disabled={isReclaiming || isLoading || error || !linkToClaim}
           >
             Reclaim
           </Button>

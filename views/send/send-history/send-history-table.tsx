@@ -35,7 +35,7 @@ const SendHistoryTable: FC = () => {
 
   const regenerateLink = useRegenerateLink();
 
-  const { data, error, mutate } = useSWR(
+  const { data, mutate } = useSWR(
     `${network}-${currentAccount?.address}-${suiClient}`,
     async () => {
       if (!currentAccount || !suiClient) return;
@@ -59,8 +59,6 @@ const SendHistoryTable: FC = () => {
       return hasNextPage;
     }
   );
-
-  console.log({ error });
 
   const onSuccess = (tx: SuiTransactionBlockResponse, id: string) => {
     showTXSuccessToast(tx, network);

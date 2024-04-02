@@ -3,6 +3,7 @@ import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
 import { Routes, RoutesEnum } from '@/constants';
 import { useNetwork } from '@/context/network';
@@ -30,24 +31,34 @@ const SendButton: FC = () => {
   const handleCreateLink = async () => {
     if (!object) return;
 
-    if (!isCoinObject(object as ObjectData))
-      return createLink({ id: object.objectId }, onSuccess);
+    const toasterId = toast.loading('Creating link...');
 
-    return createLink(
-      {
-        type: object.display!.type,
-        amount: BigInt(
-          FixedPointMath.toBigNumber(
-            object.value!,
-            Number(object.display!.decimals!)
-          )
-            .decimalPlaces(0)
-            .toString()
-        ),
-        quantity: null,
-      },
-      onSuccess
-    );
+    try {
+      if (!isCoinObject(object as ObjectData))
+        return createLink({ id: object.objectId }, onSuccess).then(() =>
+          toast.success('Link created successfully')
+        );
+
+      return createLink(
+        {
+          type: object.display!.type,
+          amount: BigInt(
+            FixedPointMath.toBigNumber(
+              object.value!,
+              Number(object.display!.decimals!)
+            )
+              .decimalPlaces(0)
+              .toString()
+          ),
+          quantity: null,
+        },
+        onSuccess
+      ).then(() => toast.success('Link created successfully'));
+    } catch {
+      toast.error('Something went wrong');
+    } finally {
+      toast.dismiss(toasterId);
+    }
   };
 
   return (

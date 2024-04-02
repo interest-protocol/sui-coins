@@ -25,6 +25,7 @@ const SendClaim: FC<SendClaimProps> = ({ id }) => {
   const claim = useClaimLink();
   const network = useNetwork();
   const [isOpen, setOpen] = useState(false);
+  const [isClaiming, setClaiming] = useState(false);
 
   const { data, isLoading, error } = useSWR<ZkSendLinkWithUrl>(
     `${id}-${network}`,
@@ -47,16 +48,17 @@ const SendClaim: FC<SendClaimProps> = ({ id }) => {
   ];
 
   const onClaim = async () => {
-    if (!data) return;
+    if (isClaiming || !data) return;
 
     const loadingId = toast.loading('Claiming...');
-
+    setClaiming(true);
     try {
       await claim(data, id, onSuccess);
       toast.success('Assets claimed');
     } catch {
       toast.error('Something went wrong');
     } finally {
+      setClaiming(false);
       toast.dismiss(loadingId);
     }
   };
@@ -152,7 +154,12 @@ const SendClaim: FC<SendClaimProps> = ({ id }) => {
             variant="filled"
             onClick={onClaim}
             disabled={
-              !data || !data.link || isLoading || error || data.link.claimed
+              isClaiming ||
+              !data ||
+              !data.link ||
+              isLoading ||
+              error ||
+              data.link.claimed
             }
           >
             {data?.link.claimed ? 'Claimed' : 'Claim'}
