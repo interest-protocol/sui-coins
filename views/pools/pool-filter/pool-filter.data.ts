@@ -1,35 +1,25 @@
+import { AlgorithmEnum, PoolTypeEnum } from '../pool-card/pool-card.types';
 import { FilterItemProps, FilterTypeEnum } from '../pools.types';
 
 export const ALGORITHM_TYPE: Array<FilterItemProps> = [
   {
     type: FilterTypeEnum.ALGORITHM,
-    description: 'Stable',
+    description: AlgorithmEnum.stable,
   },
   {
     type: FilterTypeEnum.ALGORITHM,
-    description: 'Volatile',
+    description: AlgorithmEnum.volatile,
   },
 ];
 
 export const POOL_TYPE = [
   {
     type: FilterTypeEnum.POOL_TYPE,
-    description: 'CLAMM',
+    description: PoolTypeEnum.clamm,
   },
   {
     type: FilterTypeEnum.POOL_TYPE,
-    description: 'AMM',
-  },
-];
-
-export const COIN_TYPE = [
-  {
-    type: FilterTypeEnum.COIN_TYPE,
-    description: 'Coin type 1',
-  },
-  {
-    type: FilterTypeEnum.COIN_TYPE,
-    description: 'Coin type 2',
+    description: PoolTypeEnum.amm,
   },
 ];
 
@@ -37,16 +27,11 @@ export const Filters_Data = [
   {
     label: 'Algorithm',
     data: ALGORITHM_TYPE,
-    type: FilterTypeEnum.ALGORITHM,
+    type: FilterTypeEnum['ALGORITHM'],
   },
   {
     label: 'Pool Type',
     data: POOL_TYPE,
-    type: FilterTypeEnum.POOL_TYPE,
-  },
-  {
-    label: 'Coin Type',
-    data: COIN_TYPE,
-    type: FilterTypeEnum.COIN_TYPE,
+    type: FilterTypeEnum['POOL_TYPE'],
   },
 ];

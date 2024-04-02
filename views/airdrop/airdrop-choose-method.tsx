@@ -21,7 +21,7 @@ const AirdropChooseMethod: FC = () => {
   if (!token) return null;
 
   return (
-    <Box p="xl" borderRadius="xs" bg="lowContainer" color="onSurface">
+    <Box p="xl" borderRadius="xs" bg="container" color="onSurface">
       <Box display="flex" flexDirection="column" mb="m">
         <Typography variant="body" size="large">
           2. Choose Delivery Method

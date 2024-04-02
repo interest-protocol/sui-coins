@@ -12,7 +12,6 @@ const ManageSlippage: FC = () => {
 
   return (
     <Box
-      bg="container"
       display="flex"
       color="onSurface"
       borderRadius="xs"

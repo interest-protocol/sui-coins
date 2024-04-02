@@ -124,6 +124,7 @@ const Dropdown: FC<DropdownProps> = ({ label, type, filterData, disabled }) => {
                       nHover={{
                         backgroundColor: 'lowestContainer',
                       }}
+                      textTransform="capitalize"
                     >
                       {value.description}
                       <RadioButton

@@ -41,7 +41,7 @@ const PoolCardHeader: FC<PoolCardHeaderProps> = ({
           </Typography>
         </Tag>
       </a>
-      {tags?.map(({ name }) => (
+      {tags?.map((tag) => (
         <Tag
           key={v4()}
           px="0"
@@ -53,7 +53,7 @@ const PoolCardHeader: FC<PoolCardHeaderProps> = ({
           variant="outline"
         >
           <Typography size="small" variant="label">
-            {name}
+            {tag}
           </Typography>
         </Tag>
       ))}

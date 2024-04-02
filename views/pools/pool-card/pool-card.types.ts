@@ -3,14 +3,20 @@ import { ReactNode } from 'react';
 import { DexName } from '@/constants/pools';
 import { CoinData } from '@/interface';
 
-export interface PoolCardHeaderTagProps {
-  name: string;
+export enum PoolTypeEnum {
+  'clamm' = 'clamm',
+  'amm' = 'amm',
+}
+
+export enum AlgorithmEnum {
+  'stable' = 'stable',
+  'volatile' = 'volatile',
 }
 
 export interface PoolCardHeaderProps {
   name: string;
   dexUrl: string;
-  tags?: ReadonlyArray<PoolCardHeaderTagProps>;
+  tags?: ReadonlyArray<string>;
   Logo: ReactNode;
   objectId: string;
 }
@@ -30,6 +36,7 @@ export interface PoolCardTradeProps {
 
 export interface PoolCardProps {
   dex: DexName;
+  poolType: PoolTypeEnum;
   stable: boolean;
   lpCoin: CoinData;
   poolObjectId: string;

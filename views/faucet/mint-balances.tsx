@@ -15,13 +15,13 @@ const MintBalances: FC = () => {
 
   return (
     <Box
+      p="xl"
       mb="4xl"
       mx="auto"
       display="flex"
-      borderRadius="2rem"
-      bg="lowestContainer"
+      borderRadius="xs"
+      bg="container"
       flexDirection="column"
-      p={['xl', 'xl', 'xl', '7xl']}
       width={['100%', '100%', '100%', '39.75rem']}
     >
       <Typography variant="body" size="large" color="onSurface">
@@ -31,7 +31,7 @@ const MintBalances: FC = () => {
         p="m"
         mt="s"
         gap="m"
-        bg="surface"
+        bg="lowestContainer"
         display="flex"
         borderRadius="s"
         flexDirection="column"

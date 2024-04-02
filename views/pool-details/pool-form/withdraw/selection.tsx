@@ -21,7 +21,7 @@ const Selection: FC = () => {
       <Box
         pt="m"
         display="flex"
-        bg="container"
+        bg="lowestContainer"
         borderRadius="xs"
         border="1px solid"
         flexDirection="column"
