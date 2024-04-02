@@ -2,7 +2,6 @@ import { CoinData } from '@/interface';
 
 export interface ISwapSettings {
   slippage: string;
-  speed: 'normal' | 'fast' | 'instant';
 }
 
 export interface SwapToken extends CoinData {

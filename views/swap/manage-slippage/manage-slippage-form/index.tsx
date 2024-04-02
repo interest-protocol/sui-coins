@@ -24,7 +24,6 @@ const ManageSlippageForm: FC<ManageSlippageFormProps> = ({
     formTmpSettings.setValue('slippage', value);
 
   const onConfirm = () => {
-    setValue('settings.speed', formTmpSettings.getValues('speed'));
     setValue('settings.slippage', formTmpSettings.getValues('slippage'));
     handleManageView?.();
   };

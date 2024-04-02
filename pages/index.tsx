@@ -27,7 +27,6 @@ const SwapPage: NextPage = () => {
       },
       settings: {
         slippage: '0.1',
-        speed: 'instant',
       },
     },
   });
