@@ -63,12 +63,13 @@ const FindPoolDialog: FC<FindPoolDialogProps> = ({
         borderRadius="50%"
         bg="highContainer"
         alignItems="center"
-        boxShadow="rgba(0, 0, 0, 0.1) 0px 10px 50px"
+        boxShadow="rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px"
       >
         <PlusSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
       </Box>
       <Typography
-        mt="l"
+        mt="s"
+        p="2xs"
         size="medium"
         lineHeight="m"
         variant="body"
