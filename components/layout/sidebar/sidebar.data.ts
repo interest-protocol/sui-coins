@@ -26,10 +26,6 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     name: 'Pool',
     path: Routes[RoutesEnum.Pools],
     disabled: false,
-    relatedPages: [
-      Routes[RoutesEnum.PoolCreate],
-      Routes[RoutesEnum.PoolDetails],
-    ],
   },
   {
     Icon: CirclePlusSVG,

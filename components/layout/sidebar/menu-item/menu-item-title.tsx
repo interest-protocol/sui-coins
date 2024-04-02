@@ -10,6 +10,8 @@ import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
+import { Routes, RoutesEnum } from '@/constants';
+
 import { MenuItemTitleContentProps } from '../sidebar.types';
 import CollapseIcon from './collapsible-icon';
 
@@ -36,15 +38,15 @@ const MenuItemTitleContent: FC<MenuItemTitleContentProps> = ({
   disabled,
   isCollapsed,
   accordionList,
-  relatedPages,
 }) => {
-  const { asPath, push, pathname } = useRouter();
+  const { asPath, push } = useRouter();
   const { colors } = useTheme() as Theme;
 
   const isSelected =
-    asPath === path ||
-    relatedPages?.includes(pathname) ||
-    accordionList?.some(({ path }) => path === asPath);
+    path === Routes[RoutesEnum.Swap]
+      ? asPath === path
+      : asPath.startsWith(path!) ||
+        accordionList?.some(({ path }) => path === asPath);
 
   const onClick = () => {
     if (accordionList || disabled || !path) return;
@@ -92,7 +94,6 @@ const MenuItemTitle: FC<MenuItemTitleContentProps> = ({
   disabled,
   isCollapsed,
   accordionList,
-  relatedPages,
 }) => {
   if (isCollapsed)
     return (
@@ -118,7 +119,6 @@ const MenuItemTitle: FC<MenuItemTitleContentProps> = ({
           path={path}
           disabled={disabled}
           isCollapsed={isCollapsed}
-          relatedPages={relatedPages}
           accordionList={accordionList}
         />
       </TooltipWrapper>
@@ -131,7 +131,6 @@ const MenuItemTitle: FC<MenuItemTitleContentProps> = ({
       path={path}
       disabled={disabled}
       isCollapsed={isCollapsed}
-      relatedPages={relatedPages}
       accordionList={accordionList}
     />
   );

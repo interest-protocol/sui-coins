@@ -12,7 +12,6 @@ export interface MenuItemTitleContentProps extends MenuItemCollapsibleProps {
   disabled: boolean;
   Icon: FC<SVGProps>;
   isCollapsed: boolean;
-  relatedPages?: ReadonlyArray<string>;
 }
 
 export interface MenuItemProps extends MenuItemTitleContentProps {
