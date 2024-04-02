@@ -14,16 +14,18 @@ const FindPoolDialog: FC<FindPoolDialogProps> = ({
   <Box
     width="25rem"
     display="flex"
-    maxWidth="95%"
+    maxWidth="100%"
     borderRadius="xs"
     bg="lowContainer"
+    height="18.063rem"
     alignItems="center"
     flexDirection="column"
     justifyContent="center"
     ml={['-1rem', 0, 0, 0]}
   >
     <Box
-      p="m"
+      pt="3xl"
+      px="3xl"
       display="flex"
       minWidth="100%"
       color="onSurface"
@@ -44,9 +46,8 @@ const FindPoolDialog: FC<FindPoolDialogProps> = ({
       <TimesSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
     </Box>
     <Box
-      pt="xl"
+      mt="l"
       p="m"
-      gap="m"
       display="flex"
       maxWidth="22rem"
       minWidth="100%"
@@ -62,10 +63,12 @@ const FindPoolDialog: FC<FindPoolDialogProps> = ({
         borderRadius="50%"
         bg="highContainer"
         alignItems="center"
+        boxShadow="rgba(0, 0, 0, 0.1) 0px 10px 50px"
       >
-        <PlusSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+        <PlusSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
       </Box>
       <Typography
+        mt="l"
         size="medium"
         lineHeight="m"
         variant="body"
@@ -75,15 +78,9 @@ const FindPoolDialog: FC<FindPoolDialogProps> = ({
         {description}
       </Typography>
     </Box>
+    <Box width="100%" borderTop="1px solid" borderColor="outlineVariant" />
     <Box
-      mt="m"
-      width="100%"
-      borderTop="1px solid"
-      borderColor="outlineVariant"
-    />
-    <Box
-      p="m"
-      mt="s"
+      p="xl"
       display="flex"
       minWidth="100%"
       flexDirection="row"
