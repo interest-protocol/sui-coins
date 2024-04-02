@@ -1,4 +1,4 @@
-import { Box, Typography } from '@interest-protocol/ui-kit';
+import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -47,22 +47,15 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
           alignItems="center"
           justifyContent="space-between"
         >
-          <ArrowLeftSVG
-            maxWidth="1.5rem"
-            maxHeight="1.5rem"
-            width="100%"
-            onClick={handleGoback}
-          />
+          <Button variant="text" isIcon onClick={handleGoback} mr="-0.5rem">
+            <ArrowLeftSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+          </Button>
           <Typography size="large" variant="title" color="onSurface">
             Swap
           </Typography>
-          <TimesSVG
-            onClick={onClose}
-            width="100%"
-            maxWidth="1rem"
-            cursor="pointer"
-            maxHeight="1rem"
-          />
+          <Button variant="text" isIcon onClick={onClose} mr="-0.5rem">
+            <TimesSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+          </Button>
         </Box>
         <Box display="flex" flexDirection="column" gap="m">
           <Box
