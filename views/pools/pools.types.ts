@@ -3,7 +3,7 @@ import { TOKEN_SYMBOL } from '@/lib';
 import { ISwapSettings } from '../swap/swap.types';
 
 export enum FilterTypeEnum {
-  ALGORITHM = 'algorithmn',
+  ALGORITHM = 'algorithm',
   POOL_TYPE = 'pool_type',
 }
 
