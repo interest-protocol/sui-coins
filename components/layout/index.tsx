@@ -19,7 +19,7 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({ title, children }) => (
           maxHeight="100vh"
           variant="container"
           flexDirection="column"
-          px={['m', 'm', 'm', 'm']}
+          px={['m', 'l', 'l', 'xl']}
           mt="unset"
         >
           <Box as="main" flex="1" mb="10xl">

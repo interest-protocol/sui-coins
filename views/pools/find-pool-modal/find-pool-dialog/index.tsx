@@ -1,15 +1,17 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import { PlusSVG, TimesSVG } from '@/svg';
+import { TimesSVG } from '@/svg';
 
 import { FindPoolDialogProps } from './find-pool-dialog.types';
 
 const FindPoolDialog: FC<FindPoolDialogProps> = ({
   title,
   description,
+  Icon,
   onClose,
   onCreatePool,
+  withoutButton,
 }) => (
   <Box
     width="25rem"
@@ -20,7 +22,6 @@ const FindPoolDialog: FC<FindPoolDialogProps> = ({
     height="18.063rem"
     alignItems="center"
     flexDirection="column"
-    justifyContent="center"
     ml={['-1rem', 0, 0, 0]}
   >
     <Box
@@ -66,7 +67,7 @@ const FindPoolDialog: FC<FindPoolDialogProps> = ({
         alignItems="center"
         boxShadow="#FFFFFF1B 0px 0px 2px 0px, #FFFFFF1B 0px 0px 0px 2px"
       >
-        <PlusSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+        {Icon}
       </Box>
       <Typography
         mt="s"
@@ -80,36 +81,40 @@ const FindPoolDialog: FC<FindPoolDialogProps> = ({
         {description}
       </Typography>
     </Box>
-    <Box width="100%" borderTop="1px solid" borderColor="outlineVariant" />
-    <Box
-      p="xl"
-      display="flex"
-      minWidth="100%"
-      flexDirection="row"
-      justifyContent="space-between"
-    >
-      <Button
-        flex="1"
-        marginRight="s"
-        variant="outline"
-        color="onSurface"
-        borderRadius="xs"
-        justifyContent="center"
-        borderColor="outlineVariant"
-        onClick={onClose}
-      >
-        Close
-      </Button>
-      <Button
-        flex="3"
-        variant="filled"
-        borderRadius="xs"
-        justifyContent="center"
-        onClick={onCreatePool}
-      >
-        Create Pool
-      </Button>
-    </Box>
+    {!withoutButton && (
+      <>
+        <Box width="100%" borderTop="1px solid" borderColor="outlineVariant" />
+        <Box
+          p="xl"
+          display="flex"
+          minWidth="100%"
+          flexDirection="row"
+          justifyContent="space-between"
+        >
+          <Button
+            flex="1"
+            marginRight="s"
+            variant="outline"
+            color="onSurface"
+            borderRadius="xs"
+            justifyContent="center"
+            borderColor="outlineVariant"
+            onClick={onClose}
+          >
+            Close
+          </Button>
+          <Button
+            flex="3"
+            variant="filled"
+            borderRadius="xs"
+            justifyContent="center"
+            onClick={onCreatePool}
+          >
+            Create Pool
+          </Button>
+        </Box>
+      </>
+    )}
   </Box>
 );
 

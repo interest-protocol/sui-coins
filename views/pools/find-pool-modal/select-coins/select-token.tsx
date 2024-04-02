@@ -1,6 +1,6 @@
 import { Box, Modal, Motion, Typography } from '@interest-protocol/ui-kit';
 import { FC, useState } from 'react';
-import { useForm, useWatch } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import TokenIcon from '@/components/token-icon';
 import { useNetwork } from '@/context/network';
@@ -8,23 +8,24 @@ import { CoinData } from '@/interface';
 import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
 import SelectTokenModal from '@/views/components/select-token-modal';
 
-import { FindPoolForm, SelectTokenProps } from '../find-pool-modal.types';
+import { PoolForm } from '../../pools.types';
+import { SelectTokenProps } from '../find-pool-modal.types';
 
 const SelectToken: FC<SelectTokenProps> = ({ index }) => {
   const { network } = useNetwork();
   const [isOpen, setIsOpen] = useState(false);
 
-  const { setValue, control, getValues } = useForm<FindPoolForm>();
+  const { setValue, control, getValues } = useFormContext<PoolForm>();
 
   const currentSymbol = useWatch({
     control,
-    name: `tokens.${index}.symbol`,
+    name: `tokenList.${index}.symbol`,
   });
 
   const onSelect = async ({ type, decimals, symbol }: CoinData) => {
-    if (getValues('tokens')?.some((token) => token.type === type)) return;
+    if (getValues('tokenList')?.some((token) => token.type === type)) return;
 
-    setValue(`tokens.${index}`, {
+    setValue(`tokenList.${index}`, {
       type,
       symbol,
       decimals,

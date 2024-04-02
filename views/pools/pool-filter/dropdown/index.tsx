@@ -1,10 +1,4 @@
-import {
-  Box,
-  Button,
-  Motion,
-  RadioButton,
-  Typography,
-} from '@interest-protocol/ui-kit';
+import { Box, Button, Motion, RadioButton } from '@interest-protocol/ui-kit';
 import { FC, useEffect, useId, useState } from 'react';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
@@ -15,13 +9,7 @@ import { ArrowDownSVG, ArrowUpSVG } from '@/svg';
 import { FilterItemProps, PoolForm } from '../../pools.types';
 import { DropdownProps } from './dropdown.types';
 
-const Dropdown: FC<DropdownProps> = ({
-  Icon,
-  label,
-  type,
-  filterData,
-  disabled,
-}) => {
+const Dropdown: FC<DropdownProps> = ({ label, type, filterData, disabled }) => {
   const { control } = useFormContext<PoolForm>();
   const fields = useWatch({ control, name: 'filterList' });
   const { replace } = useFieldArray({
@@ -45,7 +33,7 @@ const Dropdown: FC<DropdownProps> = ({
     )
       return;
 
-    setOpen(false);
+    setOpen(!false);
   };
 
   useEffect(() => {
@@ -76,35 +64,23 @@ const Dropdown: FC<DropdownProps> = ({
       <Box>
         <Button
           py="s"
+          my="xs"
+          mx={['unset', 'unset', 'unset', 'xs']}
           variant="filled"
           color="onSurface"
-          width={[
-            'fill-available',
-            '5rem',
-            'fill-available',
-            'fill-available',
-            'fill-available',
-          ]}
+          bg={isOpen ? 'onPrimary' : 'surface'}
+          width={['fill-available', 'fill-available', 'fill-available', '8rem']}
           onClick={() => setOpen(!isOpen)}
           nHover={{
             backgroundColor: 'container',
           }}
-          bg={isOpen ? 'onPrimary' : 'surface'}
-          PrefixIcon={
-            <Box
-              justifyContent="center"
-              display={['flex', 'flex', 'none', 'none', 'none']}
-            >
-              <Icon maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
-            </Box>
-          }
           SuffixIcon={
             <Box display="flex" justifyContent="center">
               {isOpen ? (
                 <ArrowDownSVG
-                  width="100%"
                   maxWidth="1.5rem"
                   maxHeight="1.5rem"
+                  width="100%"
                 />
               ) : (
                 <ArrowUpSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
@@ -112,13 +88,7 @@ const Dropdown: FC<DropdownProps> = ({
             </Box>
           }
         >
-          <Typography
-            size="large"
-            variant="label"
-            display={['none', 'none', 'block', 'block', 'block']}
-          >
-            {label}
-          </Typography>
+          {label}
         </Button>
         {!disabled && isOpen && (
           <Motion
@@ -126,24 +96,18 @@ const Dropdown: FC<DropdownProps> = ({
             initial={{ scale: 0.85 }}
             transition={{ duration: 0.3 }}
           >
-            <Box
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-ignore
-              ref={dropdownRef}
-            >
+            <div ref={dropdownRef}>
               <Box
                 mx="s"
                 my="xs"
                 zIndex="1"
                 bg="surface"
-                display="flex"
                 color="onSurface"
-                borderRadius="xs"
-                border="1px solid"
+                display="flex"
+                minWidth={['8rem', '8rem', '8rem', '15rem']}
                 position="absolute"
+                borderRadius="xs"
                 flexDirection="column"
-                borderColor="outlineVariant"
-                minWidth={['8rem', '8rem', '8rem', '8rem', '15rem']}
                 cursor={disabled ? 'not-allowed' : 'pointer'}
               >
                 {filterData.map((value) => {
@@ -152,10 +116,10 @@ const Dropdown: FC<DropdownProps> = ({
                       p="l"
                       gap="xs"
                       key={v4()}
-                      display="flex"
                       color="onSurface"
-                      borderRadius="xs"
+                      display="flex"
                       justifyContent="space-between"
+                      borderRadius="xs"
                       onClick={() => handleSelect(value)}
                       nHover={{
                         backgroundColor: 'lowestContainer',
@@ -172,7 +136,7 @@ const Dropdown: FC<DropdownProps> = ({
                   );
                 })}
               </Box>
-            </Box>
+            </div>
           </Motion>
         )}
       </Box>

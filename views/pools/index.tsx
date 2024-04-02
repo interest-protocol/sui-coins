@@ -4,9 +4,9 @@ import { FC, useState } from 'react';
 import Layout from '@/components/layout';
 
 import Header from './header';
+import PoolCardList from './pool-card-list';
 import PoolFilter from './pool-filter';
 import { PoolTabEnum } from './pools.types';
-import PoolCardList from './pools-card-list';
 
 const Pools: FC = () => {
   const [tab, setTab] = useState<PoolTabEnum>(PoolTabEnum.Pools);

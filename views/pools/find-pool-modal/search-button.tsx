@@ -1,82 +1,73 @@
-import { Box, Button, Motion } from '@interest-protocol/ui-kit';
-import { useRouter } from 'next/router';
-import { FC } from 'react';
+import { Box, Button, Typography } from '@interest-protocol/ui-kit';
+import { FC, useState } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
-import { Routes, RoutesEnum } from '@/constants';
-import { useModal } from '@/hooks/use-modal';
+import { CoinData, PoolForm } from '../pools.types';
+import { FindPoolModalProps } from './find-pool-modal.types';
 
-import FindPoolDialog from './find-pool-dialog';
-import { FindPoolForm, FindPoolModalProps } from './find-pool-modal.types';
-
-const SearchButton: FC<Pick<FindPoolModalProps, 'handleSearch'>> = ({
-  handleSearch,
-}) => {
-  const { control } = useFormContext<FindPoolForm>();
-  const { setModal, handleClose } = useModal();
-  const { push } = useRouter();
-  const { fields } = useFieldArray({
+const SearchButton: FC<FindPoolModalProps> = ({ closeModal }) => {
+  const { setValue, getValues, control } = useFormContext<PoolForm>();
+  const [isError, setError] = useState(false);
+  useFieldArray({
     control,
-    name: 'tokens',
+    name: 'tokenList',
+    rules: { maxLength: 5 },
   });
 
-  const handleFindPool = () => {
-    //This condition (!field) is used only to show pool doesn't exist modal
-    if (!fields) {
-      handleSearch(fields);
-      handleClose();
-    } else {
-      openModal();
-    }
-  };
+  const tokenListData = getValues('tokenList');
 
-  const handleCreatePool = () => {
-    push(Routes[RoutesEnum.PoolCreate]);
-    handleClose();
-  };
+  const handleSearch = () => setValue('isFindingPool', true);
 
-  const openModal = () => {
-    setModal(
-      <Motion
-        animate={{ scale: 1 }}
-        initial={{ scale: 0.85 }}
-        transition={{ duration: 0.3 }}
-      >
-        <Box
-          display="flex"
-          width="100%"
-          height="100%"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <FindPoolDialog
-            title="Pool doesn't exist"
-            description="If you like, you can create this pool"
-            onClose={handleClose}
-            onCreatePool={handleCreatePool}
-          />
-        </Box>
-      </Motion>,
-      {
-        isOpen: true,
-        custom: true,
-        opaque: false,
-        allowClose: true,
-      }
+  const hasEmptyKeys = (token: [] | readonly CoinData[]) => {
+    return token.some((obj) =>
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      Object.entries(obj).some(([key, value]) => !value)
     );
   };
 
+  const handleFindPool = () => {
+    const listOfToken = hasEmptyKeys(tokenListData);
+    if (!listOfToken) {
+      handleSearch();
+      closeModal();
+    } else {
+      setError(true);
+      const timeout = setTimeout(() => {
+        setError(false);
+      }, 3000);
+      return () => clearTimeout(timeout);
+    }
+  };
+
   return (
-    <Button
+    <Box
       display="flex"
-      variant="filled"
-      minWidth="17rem"
-      borderRadius="xs"
+      flexDirection="column"
       justifyContent="center"
-      onClick={handleFindPool}
+      alignItems="center"
     >
-      Search
-    </Button>
+      {isError && (
+        <Typography
+          p="2xs"
+          color="error"
+          size="medium"
+          variant="body"
+          textAlign="center"
+        >
+          Token cannot be empty, please select a token
+        </Typography>
+      )}
+      <Button
+        display="flex"
+        variant="filled"
+        minWidth="17rem"
+        borderRadius="xs"
+        justifyContent="center"
+        onClick={handleFindPool}
+      >
+        Search
+      </Button>
+    </Box>
   );
 };
 

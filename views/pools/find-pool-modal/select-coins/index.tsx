@@ -4,14 +4,14 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { PlusSVG } from '@/svg';
 
-import { FindPoolForm } from '../find-pool-modal.types';
+import { PoolForm } from '../../pools.types';
 import SelectToken from './select-token';
 
 const SelectCoins: FC = () => {
-  const { control } = useFormContext<FindPoolForm>();
+  const { control } = useFormContext<PoolForm>();
   const { fields, append } = useFieldArray({
     control,
-    name: 'tokens',
+    name: 'tokenList',
     rules: { maxLength: 5 },
   });
 
