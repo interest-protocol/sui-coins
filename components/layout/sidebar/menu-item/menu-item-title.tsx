@@ -36,12 +36,15 @@ const MenuItemTitleContent: FC<MenuItemTitleContentProps> = ({
   disabled,
   isCollapsed,
   accordionList,
+  relatedPages,
 }) => {
-  const { asPath, push } = useRouter();
+  const { asPath, push, pathname } = useRouter();
   const { colors } = useTheme() as Theme;
 
   const isSelected =
-    asPath === path || accordionList?.some(({ path }) => path === asPath);
+    asPath === path ||
+    relatedPages?.includes(pathname) ||
+    accordionList?.some(({ path }) => path === asPath);
 
   const onClick = () => {
     if (accordionList || disabled || !path) return;
@@ -89,6 +92,7 @@ const MenuItemTitle: FC<MenuItemTitleContentProps> = ({
   disabled,
   isCollapsed,
   accordionList,
+  relatedPages,
 }) => {
   if (isCollapsed)
     return (
@@ -114,6 +118,7 @@ const MenuItemTitle: FC<MenuItemTitleContentProps> = ({
           path={path}
           disabled={disabled}
           isCollapsed={isCollapsed}
+          relatedPages={relatedPages}
           accordionList={accordionList}
         />
       </TooltipWrapper>
@@ -126,6 +131,7 @@ const MenuItemTitle: FC<MenuItemTitleContentProps> = ({
       path={path}
       disabled={disabled}
       isCollapsed={isCollapsed}
+      relatedPages={relatedPages}
       accordionList={accordionList}
     />
   );
