@@ -141,6 +141,10 @@ const CreateTokenForm: FC = () => {
                 borderRadius: 'xs',
                 py: 'xl',
               }}
+              nPlaceholder={{
+                color: 'onSurface',
+                opacity: 0.5,
+              }}
             />
             <TextField
               label="Coin Symbol"
@@ -151,6 +155,10 @@ const CreateTokenForm: FC = () => {
               fieldProps={{
                 borderRadius: 'xs',
                 py: 'xl',
+              }}
+              nPlaceholder={{
+                color: 'onSurface',
+                opacity: 0.5,
               }}
             />
             <TextField
@@ -163,6 +171,10 @@ const CreateTokenForm: FC = () => {
                 borderRadius: 'xs',
                 py: 'xl',
               }}
+              nPlaceholder={{
+                color: 'onSurface',
+                opacity: 0.5,
+              }}
             />
             <TextField
               type="link"
@@ -174,6 +186,10 @@ const CreateTokenForm: FC = () => {
               fieldProps={{
                 borderRadius: 'xs',
                 py: 'xl',
+              }}
+              nPlaceholder={{
+                color: 'onSurface',
+                opacity: 0.5,
               }}
             />
             <Typography size="large" variant="body" textAlign="center">
@@ -197,6 +213,10 @@ const CreateTokenForm: FC = () => {
                 borderRadius: 'xs',
                 py: 'xl',
               }}
+              nPlaceholder={{
+                color: 'onSurface',
+                opacity: 0.5,
+              }}
             />
             <TextField
               label="Total Supply"
@@ -214,6 +234,10 @@ const CreateTokenForm: FC = () => {
               fieldProps={{
                 borderRadius: 'xs',
                 py: 'xl',
+              }}
+              nPlaceholder={{
+                color: 'onSurface',
+                opacity: 0.5,
               }}
             />
             <Box
