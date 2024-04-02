@@ -2,7 +2,6 @@ import { CoinData } from '@/interface';
 
 export interface ISwapSettings {
   slippage: string;
-  deadline: string;
   speed: 'normal' | 'fast' | 'instant';
 }
 

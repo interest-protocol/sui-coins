@@ -43,7 +43,6 @@ const PoolDetailsPage: NextPage<PoolPageProps> = ({ objectId }) => {
         value: '0',
       },
       settings: {
-        deadline: '3',
         slippage: '0.1',
         speed: 'instant',
       },
