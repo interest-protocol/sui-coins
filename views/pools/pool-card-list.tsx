@@ -48,7 +48,7 @@ const PoolCardList: FC = () => {
       filterList?.length
         ? filterList.every(({ type, description }) => {
             if (
-              type === 'algorithmn' &&
+              type === 'algorithm' &&
               (description === 'stable') === pool.stable
             )
               return true;
