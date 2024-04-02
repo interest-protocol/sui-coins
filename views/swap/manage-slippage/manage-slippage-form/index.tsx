@@ -3,7 +3,7 @@ import { ChangeEvent, FC } from 'react';
 import { useForm, useFormContext } from 'react-hook-form';
 import { v4 } from 'uuid';
 
-import { ClockSVG, PercentageSVG } from '@/svg';
+import { PercentageSVG } from '@/svg';
 import { parseInputEventToNumberString } from '@/utils';
 
 import { ISwapSettings } from '../../swap.types';
@@ -24,9 +24,7 @@ const ManageSlippageForm: FC<ManageSlippageFormProps> = ({
     formTmpSettings.setValue('slippage', value);
 
   const onConfirm = () => {
-    setValue('settings.speed', formTmpSettings.getValues('speed'));
     setValue('settings.slippage', formTmpSettings.getValues('slippage'));
-    setValue('settings.deadline', formTmpSettings.getValues('deadline'));
     handleManageView?.();
   };
 
@@ -82,36 +80,6 @@ const ManageSlippageForm: FC<ManageSlippageFormProps> = ({
               </Typography>
             </Button>
           ))}
-        </Box>
-      </Box>
-      <Box>
-        <Typography variant="body" size="small" mb="0.5rem">
-          Transaction deadline
-        </Typography>
-        <Box>
-          <TextField
-            fontSize="1rem"
-            placeholder="3min"
-            lineHeight="1.75rem"
-            fontFamily="Satoshi"
-            {...formTmpSettings.register('deadline', {
-              onChange: (v: ChangeEvent<HTMLInputElement>) => {
-                formTmpSettings.setValue?.(
-                  'deadline',
-                  parseInputEventToNumberString(v)
-                );
-              },
-            })}
-            fieldProps={{
-              borderRadius: 'xs',
-              width: ['100%', '100%', '100%', '10rem'],
-            }}
-            Suffix={
-              <Box display="flex">
-                <ClockSVG maxHeight="1.25rem" maxWidth="1.25rem" width="100%" />
-              </Box>
-            }
-          />
         </Box>
       </Box>
       <Box display="flex" gap="0.5rem" justifyContent="flex-end">

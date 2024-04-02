@@ -26,9 +26,7 @@ const SwapPage: NextPage = () => {
         ...(COINS_MAP[query.from as string] ?? COINS_MAP[ETH_TYPE]),
       },
       settings: {
-        deadline: '3',
         slippage: '0.1',
-        speed: 'instant',
       },
     },
   });
