@@ -17,7 +17,6 @@ import {
 
 export enum DexName {
   Interest = 'interest',
-  Suicoins = 'suicoins',
 }
 
 export const RECOMMENDED_POOLS: Record<
@@ -42,7 +41,7 @@ export const RECOMMENDED_POOLS: Record<
       poolType: PoolTypeEnum.clamm,
     },
     {
-      dex: DexName.Suicoins,
+      dex: DexName.Interest,
       tokens: [COINS[2], COINS[0]],
       poolObjectId: COINS[2].type,
       lpCoin: COINS[2],

@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { SVGProps } from '@/components/svg/svg.types';
 import { DexName } from '@/constants/pools';
-import { IPXRoundedSVG, SuiCoinsSVG } from '@/svg';
+import { IPXRoundedSVG } from '@/svg';
 
 export const LINES = [
   {
@@ -34,10 +34,5 @@ export const DEX_MAP: Record<
     name: 'Interest',
     Icon: IPXRoundedSVG,
     url: 'https://interestprotocol.com',
-  },
-  [DexName.Suicoins]: {
-    name: 'Sui Coins',
-    Icon: SuiCoinsSVG,
-    url: 'https://suicoins.com',
   },
 };
