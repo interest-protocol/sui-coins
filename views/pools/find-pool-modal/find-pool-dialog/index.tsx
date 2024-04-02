@@ -11,6 +11,7 @@ const FindPoolDialog: FC<FindPoolDialogProps> = ({
   Icon,
   onClose,
   onCreatePool,
+  withoutButton,
 }) => (
   <Box
     width="25rem"
@@ -21,7 +22,6 @@ const FindPoolDialog: FC<FindPoolDialogProps> = ({
     height="18.063rem"
     alignItems="center"
     flexDirection="column"
-    justifyContent="center"
     ml={['-1rem', 0, 0, 0]}
   >
     <Box
@@ -81,36 +81,40 @@ const FindPoolDialog: FC<FindPoolDialogProps> = ({
         {description}
       </Typography>
     </Box>
-    <Box width="100%" borderTop="1px solid" borderColor="outlineVariant" />
-    <Box
-      p="xl"
-      display="flex"
-      minWidth="100%"
-      flexDirection="row"
-      justifyContent="space-between"
-    >
-      <Button
-        flex="1"
-        marginRight="s"
-        variant="outline"
-        color="onSurface"
-        borderRadius="xs"
-        justifyContent="center"
-        borderColor="outlineVariant"
-        onClick={onClose}
-      >
-        Close
-      </Button>
-      <Button
-        flex="3"
-        variant="filled"
-        borderRadius="xs"
-        justifyContent="center"
-        onClick={onCreatePool}
-      >
-        Create Pool
-      </Button>
-    </Box>
+    {!withoutButton && (
+      <>
+        <Box width="100%" borderTop="1px solid" borderColor="outlineVariant" />
+        <Box
+          p="xl"
+          display="flex"
+          minWidth="100%"
+          flexDirection="row"
+          justifyContent="space-between"
+        >
+          <Button
+            flex="1"
+            marginRight="s"
+            variant="outline"
+            color="onSurface"
+            borderRadius="xs"
+            justifyContent="center"
+            borderColor="outlineVariant"
+            onClick={onClose}
+          >
+            Close
+          </Button>
+          <Button
+            flex="3"
+            variant="filled"
+            borderRadius="xs"
+            justifyContent="center"
+            onClick={onCreatePool}
+          >
+            Create Pool
+          </Button>
+        </Box>
+      </>
+    )}
   </Box>
 );
 
