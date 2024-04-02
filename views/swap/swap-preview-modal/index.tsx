@@ -47,13 +47,13 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
           alignItems="center"
           justifyContent="space-between"
         >
-          <Button variant="text" isIcon onClick={handleGoback} mr="-0.5rem">
+          <Button variant="text" isIcon onClick={handleGoback}>
             <ArrowLeftSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
           </Button>
           <Typography size="large" variant="title" color="onSurface">
             Swap
           </Typography>
-          <Button variant="text" isIcon onClick={onClose} mr="-0.5rem">
+          <Button variant="text" isIcon onClick={onClose}>
             <TimesSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
           </Button>
         </Box>
