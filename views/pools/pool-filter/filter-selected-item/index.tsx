@@ -8,7 +8,7 @@ import { TimesSVG } from '@/svg';
 import { FilterItemProps, PoolForm } from '../../pools.types';
 
 const FilterSelectedItem: FC = () => {
-  const { control, resetField } = useFormContext<PoolForm>();
+  const { control, resetField, setValue } = useFormContext<PoolForm>();
   const isFindingPool = useWatch({ control, name: 'isFindingPool' });
   const tokens = useWatch({ control, name: 'tokenList' });
   const fields = useWatch({ control, name: 'filterList' });
@@ -22,6 +22,11 @@ const FilterSelectedItem: FC = () => {
       (field) => filter.description != field.description
     );
     replace(tmpFilters);
+  };
+
+  const resetPoolPairFilter = () => {
+    setValue('isFindingPool', false);
+    resetField('tokenList');
   };
 
   const erase = () => {
@@ -78,7 +83,7 @@ const FilterSelectedItem: FC = () => {
             pl="xs"
             variant="outline"
             borderRadius="full"
-            onClick={() => resetField('tokenList')}
+            onClick={resetPoolPairFilter}
             PrefixIcon={
               <Box
                 width="1.125rem"

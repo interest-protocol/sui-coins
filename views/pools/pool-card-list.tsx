@@ -1,6 +1,6 @@
-import { Box, Motion } from '@interest-protocol/ui-kit';
+import { Box, Motion, Typography } from '@interest-protocol/ui-kit';
 import { useRouter } from 'next/router';
-import { FC } from 'react';
+import { FC /*, useEffect, useState*/ } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import useSWR from 'swr';
@@ -14,13 +14,19 @@ import { PlusSVG } from '@/svg';
 
 import FindPoolDialog from './find-pool-modal/find-pool-dialog';
 import PoolCard from './pool-card';
+//import { PoolCardProps } from './pool-card/pool-card.types';
 import { PoolForm } from './pools.types';
 
 const PoolCardList: FC = () => {
   const { push } = useRouter();
   const { network } = useNetwork();
   const { setModal, handleClose } = useModal();
-  const { control, getValues } = useFormContext<PoolForm>();
+  const { control } = useFormContext<PoolForm>();
+  //const filterList = useWatch({ control, name: 'filterList' });
+  const tokenList = useWatch({ control, name: 'tokenList' });
+  /*const [listPools, setListPools] = useState<
+    ReadonlyArray<PoolCardProps> | undefined
+  >();*/
 
   const handleCreatePool = () => {
     push(Routes[RoutesEnum.PoolCreate]);
@@ -30,8 +36,6 @@ const PoolCardList: FC = () => {
   const isFindingPool = useWatch({ control, name: 'isFindingPool' });
 
   const { data: pools } = useSWR(`${isFindingPool}`, async () => {
-    const tokenList = getValues('tokenList');
-
     if (!isFindingPool) return RECOMMENDED_POOLS[network];
 
     const filteredPools = RECOMMENDED_POOLS[network].filter(
@@ -94,7 +98,15 @@ const PoolCardList: FC = () => {
       p={['s', 's', 's', 'l']}
       gridTemplateColumns={['1fr', '1fr', '1fr 1fr', '1fr 1fr 1fr']}
     >
-      {pools?.map((pool) => <PoolCard key={v4()} {...pool} />)}
+      {pools?.length ? (
+        pools.map((pool) => <PoolCard key={v4()} {...pool} />)
+      ) : (
+        <Box width="100%" color="white">
+          <Typography size="small" variant="display">
+            Nenhum pool encontrado
+          </Typography>
+        </Box>
+      )}
     </Box>
   );
 };
