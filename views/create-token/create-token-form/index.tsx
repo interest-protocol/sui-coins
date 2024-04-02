@@ -117,20 +117,15 @@ const CreateTokenForm: FC = () => {
 
   return (
     <Box
-      borderRadius="m"
+      borderRadius="xs"
       overflow="hidden"
       color="onSurface"
       bg="container"
-      width={['100%', '100%', '100%', '26rem']}
+      width={['100%', '100%', '100%', '37rem']}
       boxShadow="0px 24px 46px -10px rgba(13, 16, 23, 0.16)"
     >
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Box
-          p="xl"
-          fontSize="l"
-          borderBottom="1px solid"
-          borderColor="outlineVariant"
-        >
+        <Box p="xl" fontSize="l">
           Coin Generator
         </Box>
         <Box p="xl" display="flex" flexDirection="column" gap="m">
@@ -142,6 +137,10 @@ const CreateTokenForm: FC = () => {
               placeholder="Eg. Mov"
               status={errors.name && 'error'}
               supportingText={errors.name?.message}
+              fieldProps={{
+                borderRadius: 'xs',
+                py: 'xl',
+              }}
             />
             <TextField
               label="Coin Symbol"
@@ -149,6 +148,10 @@ const CreateTokenForm: FC = () => {
               {...register('symbol')}
               status={errors.symbol && 'error'}
               supportingText={errors.symbol?.message}
+              fieldProps={{
+                borderRadius: 'xs',
+                py: 'xl',
+              }}
             />
             <TextField
               label="Description"
@@ -156,6 +159,10 @@ const CreateTokenForm: FC = () => {
               status={errors.description && 'error'}
               placeholder="Eg. Some description about the coin"
               supportingText={errors.description?.message}
+              fieldProps={{
+                borderRadius: 'xs',
+                py: 'xl',
+              }}
             />
             <TextField
               type="link"
@@ -164,6 +171,10 @@ const CreateTokenForm: FC = () => {
               status={errors.imageUrl && 'error'}
               supportingText={errors.imageUrl?.message}
               placeholder="Eg. https://www.interestprotocol.com/logo.png"
+              fieldProps={{
+                borderRadius: 'xs',
+                py: 'xl',
+              }}
             />
             <Typography size="large" variant="body" textAlign="center">
               or
@@ -182,6 +193,10 @@ const CreateTokenForm: FC = () => {
                 errors.decimals?.message ||
                 "Insert the decimal precision of your token. If you don't know what to insert, use 9"
               }
+              fieldProps={{
+                borderRadius: 'xs',
+                py: 'xl',
+              }}
             />
             <TextField
               label="Total Supply"
@@ -196,6 +211,10 @@ const CreateTokenForm: FC = () => {
                   setValue('totalSupply', parseInputEventToNumberString(v));
                 },
               })}
+              fieldProps={{
+                borderRadius: 'xs',
+                py: 'xl',
+              }}
             />
             <Box
               p="m"
@@ -218,7 +237,7 @@ const CreateTokenForm: FC = () => {
                 variant="filled"
                 color="onPrimary"
                 fontFamily="Proto"
-                borderRadius="full"
+                borderRadius="xs"
                 disabled={!currentAccount || loading}
               >
                 Create coin

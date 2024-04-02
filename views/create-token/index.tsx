@@ -4,17 +4,15 @@ import { FC } from 'react';
 import Layout from '@/components/layout';
 
 import CreateTokenForm from './create-token-form';
-import Hero from './hero';
 
 const CreateToken: FC = () => (
-  <Layout>
+  <Layout title="Create Coin">
     <Box
       my="3xl"
       display="flex"
       justifyContent="space-around"
       flexDirection={['column', 'column', 'column', 'row']}
     >
-      <Hero />
       <CreateTokenForm />
     </Box>
   </Layout>
