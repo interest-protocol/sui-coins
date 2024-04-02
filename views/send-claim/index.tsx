@@ -8,40 +8,58 @@ import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { ZkSendLink } from '@mysten/zksend';
 import { not } from 'ramda';
 import { FC, useState } from 'react';
+import toast from 'react-hot-toast';
 import useSWR from 'swr';
 
 import Layout from '@/components/layout';
 import { useNetwork } from '@/context/network';
+import { ZkSendLinkData } from '@/interface';
 import { AssetSVG, ChevronDownSVG, ErrorSVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 
-import SendHistoryDetails from '../send/send-history/send-history-table/send-history-details';
+import SendHistoryDetails from '../components/send-asset-details';
 import { useClaimLink } from './send-claim.hooks';
+import { SendClaimProps, ZkSendLinkWithUrl } from './send-claim.types';
 
-const SendClaim: FC<{ id: string }> = ({ id }) => {
+const SendClaim: FC<SendClaimProps> = ({ id }) => {
+  const claim = useClaimLink();
   const network = useNetwork();
   const [isOpen, setOpen] = useState(false);
 
-  const {
-    data: link,
-    isLoading,
-    error,
-  } = useSWR<ZkSendLink>(`${id}-${network}`, () =>
-    fetch(`/api/v1/zksend?network=${network}&id=${id}`)
-      .then((response) => response.json?.())
-      .then((data) => ZkSendLink.fromUrl(data.link))
+  const { data, isLoading, error } = useSWR<ZkSendLinkWithUrl>(
+    `${id}-${network}`,
+    () =>
+      fetch(`/api/v1/zksend?network=${network}&id=${id}`)
+        .then((response) => response.json?.())
+        .then(async (data: ZkSendLinkData) => ({
+          url: data.links[0],
+          link: await ZkSendLink.fromUrl(data.links[0]),
+        }))
   );
-
-  const claim = useClaimLink();
 
   const onSuccess = (tx: SuiTransactionBlockResponse) => {
     showTXSuccessToast(tx, network);
   };
 
   const items = [
-    ...(link?.assets?.nfts ?? []),
-    ...(link?.assets?.balances ?? []),
+    ...(data?.link.assets?.nfts ?? []),
+    ...(data?.link.assets?.balances ?? []),
   ];
+
+  const onClaim = async () => {
+    if (!data) return;
+
+    const loadingId = toast.loading('Claiming...');
+
+    try {
+      await claim(data, id, onSuccess);
+      toast.success('Assets claimed');
+    } catch {
+      toast.error('Something went wrong');
+    } finally {
+      toast.dismiss(loadingId);
+    }
+  };
 
   return (
     <Layout title="Claim your assets" noSidebar>
@@ -59,7 +77,9 @@ const SendClaim: FC<{ id: string }> = ({ id }) => {
         px={['2xs', 'xl', 'xl', '7xl']}
       >
         <Typography variant="title" size="large" textAlign="center">
-          Assets ready to be claim
+          {!isLoading && !data
+            ? 'Nothing to claim'
+            : 'Assets ready to be claim'}
         </Typography>
         <Typography
           size="large"
@@ -84,7 +104,7 @@ const SendClaim: FC<{ id: string }> = ({ id }) => {
           justifyContent="center"
           borderColor="outlineVariant"
         >
-          {link ? (
+          {data ? (
             <>
               <Box
                 bg="black"
@@ -118,22 +138,24 @@ const SendClaim: FC<{ id: string }> = ({ id }) => {
             <ErrorSVG maxWidth="4rem" maxHeight="4rem" width="100%" />
           )}
         </Box>
-        {link?.assets && isOpen && (
+        {data?.link.assets && isOpen && (
           <Box minWidth="25rem" bg="lowContainer" borderRadius="s">
             <SendHistoryDetails
               index={0}
               network={network}
-              assets={link.assets}
+              assets={data.link.assets}
             />
           </Box>
         )}
         <Box display="flex" justifyContent="center">
           <Button
             variant="filled"
-            onClick={() => claim(link, onSuccess)}
-            disabled={!link || isLoading || error || link.claimed}
+            onClick={onClaim}
+            disabled={
+              !data || !data.link || isLoading || error || data.link.claimed
+            }
           >
-            {link?.claimed ? 'Claimed' : 'Claim'}
+            {data?.link.claimed ? 'Claimed' : 'Claim'}
           </Button>
         </Box>
       </Box>

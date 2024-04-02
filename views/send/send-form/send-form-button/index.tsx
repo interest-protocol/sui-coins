@@ -30,23 +30,24 @@ const SendButton: FC = () => {
   const handleCreateLink = async () => {
     if (!object) return;
 
-    if (isCoinObject(object as ObjectData))
-      return createLink(
-        {
-          type: object.display!.type,
-          amount: BigInt(
-            FixedPointMath.toBigNumber(
-              object.value!,
-              Number(object.display!.decimals!)
-            )
-              .decimalPlaces(0)
-              .toString()
-          ),
-        },
-        onSuccess
-      );
+    if (!isCoinObject(object as ObjectData))
+      return createLink({ id: object.objectId }, onSuccess);
 
-    return createLink({ id: object.objectId }, onSuccess);
+    return createLink(
+      {
+        type: object.display!.type,
+        amount: BigInt(
+          FixedPointMath.toBigNumber(
+            object.value!,
+            Number(object.display!.decimals!)
+          )
+            .decimalPlaces(0)
+            .toString()
+        ),
+        quantity: null,
+      },
+      onSuccess
+    );
   };
 
   return (

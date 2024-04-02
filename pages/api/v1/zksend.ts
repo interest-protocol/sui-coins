@@ -3,11 +3,13 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { Network } from '@/constants';
 import { ZkSendLinkData } from '@/interface';
 import dbConnect from '@/server';
-import ZkSendLinkModelMainnet from '@/server/model/zksend-link';
+import ZkSendLinkModelMainnet, {
+  ZkSendLinkModel,
+} from '@/server/model/zksend-link';
 import ZkSendLinkModelTestnet from '@/server/model/zksend-link-testnet';
 import { isInvalidNetwork } from '@/utils';
 
-const ZkSendLinkModel = {
+const zkSendLinkModel = {
   [Network.TESTNET]: ZkSendLinkModelTestnet,
   [Network.MAINNET]: ZkSendLinkModelMainnet,
 };
@@ -25,7 +27,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const id = req.query.id as string;
 
       if (id) {
-        const doc = await ZkSendLinkModel[network].findOne({ id });
+        const doc = await zkSendLinkModel[network].findOne({ id });
 
         if (!doc)
           return res.status(204).json({ data: { message: 'Nothing found!' } });
@@ -39,7 +41,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
       const body: ZkSendLinkData = JSON.parse(req.body);
 
-      const doc = await ZkSendLinkModel[network].create(body);
+      const doc = await zkSendLinkModel[network].create(body);
 
       doc.save();
 
@@ -51,12 +53,35 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const body: ZkSendLinkData = JSON.parse(req.body);
 
       if (digest) {
-        const doc = await ZkSendLinkModel[network].findOneAndUpdate(
+        const doc = await zkSendLinkModel[network].findOneAndUpdate(
           { digest },
           body
         );
 
-        if (!doc) (await ZkSendLinkModel[network].create(body)).save();
+        if (!doc) (await zkSendLinkModel[network].create(body)).save();
+
+        return res.status(200).send('Link updated successfully!');
+      }
+
+      return res.status(400).send({ message: 'Missing param: digest' });
+    }
+
+    if (req.method === 'DELETE') {
+      const id = req.query.id as string;
+      const url = req.query.link as string;
+
+      if (id) {
+        const doc = (await zkSendLinkModel[network].findOne({
+          id,
+        })) as ZkSendLinkModel;
+
+        if (!doc) return res.status(200).send('Link does not exist!');
+
+        await zkSendLinkModel[network].updateOne({
+          id: doc.id,
+          digest: doc.digest,
+          links: doc.links.filter((link) => link !== url),
+        });
 
         return res.status(200).send('Link updated successfully!');
       }

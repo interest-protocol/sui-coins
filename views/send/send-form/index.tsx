@@ -2,6 +2,8 @@ import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import PoweredByZkSend from '@/views/components/powered-by-zksend';
+
 import { ZkSendForm } from './send-form.types';
 import SendButton from './send-form-button';
 import SendSelectObject from './send-form-select-object';
@@ -32,6 +34,7 @@ const SendForm: FC = () => {
         </Typography>
         <SendSelectObject />
         <SendButton />
+        <PoweredByZkSend />
       </Box>
     </FormProvider>
   );

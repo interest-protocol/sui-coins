@@ -44,6 +44,7 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     networks: [Network.MAINNET, Network.TESTNET],
   },
   {
+    beta: true,
     name: 'send',
     disabled: false,
     Icon: UploadSVG,

@@ -93,3 +93,4 @@ export { default as WalletSVG } from './wallet';
 export { default as WarningSVG } from './warning';
 export { default as XSVG } from './x';
 export { default as XCirlceSVG } from './x-circle';
+export { default as ZkSendSVG } from './zksend';

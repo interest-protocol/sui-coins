@@ -5,7 +5,6 @@ import SendHistoryTable from './send-history-table';
 
 const SendHistory: FC = () => (
   <Box
-    gap="xl"
     mx="auto"
     width="100%"
     display="flex"

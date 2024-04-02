@@ -2,8 +2,8 @@ import mongoose, { Document, Schema } from 'mongoose';
 
 export interface ZkSendLinkModel extends Document {
   id: string;
-  link: string;
-  sender: string;
+  digest: string;
+  links: ReadonlyArray<string>;
 }
 
 const modelName = 'ZkSendLink';
@@ -19,8 +19,8 @@ export const ZkSendLinkSchema = new Schema({
     type: String,
     required: true,
   },
-  link: {
-    type: String,
+  links: {
+    type: [String],
     required: true,
   },
 });

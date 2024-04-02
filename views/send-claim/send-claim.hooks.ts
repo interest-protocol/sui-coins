@@ -5,17 +5,21 @@ import {
 } from '@mysten/dapp-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { ZkSendLink } from '@mysten/zksend';
 
+import { useNetwork } from '@/context/network';
 import { throwTXIfNotSuccessful } from '@/utils';
 
+import { ZkSendLinkWithUrl } from './send-claim.types';
+
 export const useClaimLink = () => {
+  const network = useNetwork();
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
   const signTransactionBlock = useSignTransactionBlock();
 
   return async (
-    link: ZkSendLink | undefined,
+    { url, link }: ZkSendLinkWithUrl,
+    id: string,
     onSuccess: (tx: SuiTransactionBlockResponse) => void
   ) => {
     if (!currentAccount || !link || !link.keypair) return;
@@ -42,6 +46,10 @@ export const useClaimLink = () => {
     });
 
     throwTXIfNotSuccessful(tx);
+
+    fetch(`/api/v1/zksend?network=${network}&id=${id}&link=${url}`, {
+      method: 'DELETE',
+    });
 
     onSuccess(tx);
   };

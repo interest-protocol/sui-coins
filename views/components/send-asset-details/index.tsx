@@ -2,24 +2,23 @@ import { Box, Typography } from '@interest-protocol/ui-kit';
 import { useSuiClient } from '@mysten/dapp-kit';
 import type { SuiObjectResponse } from '@mysten/sui.js/client';
 import { formatAddress } from '@mysten/sui.js/utils';
-import { LinkAssets } from '@mysten/zksend/dist/cjs/links/utils';
 import { FC } from 'react';
 import useSWR from 'swr';
 import { v4 } from 'uuid';
 
 import { TokenIcon } from '@/components';
-import { Network } from '@/constants';
 import { CoinMetadataWithType } from '@/interface';
 import { FixedPointMath } from '@/lib';
 import { getSymbolByType } from '@/utils';
 
-import { getAmountsMap } from './send-history-table.utils';
+import { SendAssetDetailsProps } from './send-asset-details.types';
+import { getAmountsMap } from './send-asset-details.utils';
 
-const SendHistoryDetails: FC<{
-  index: number;
-  network: Network;
-  assets: LinkAssets;
-}> = ({ index, assets, network }) => {
+const SendAssetDetails: FC<SendAssetDetailsProps> = ({
+  index,
+  assets,
+  network,
+}) => {
   const suiClient = useSuiClient();
   const amountsMap = getAmountsMap(assets.balances);
 
@@ -101,4 +100,4 @@ const SendHistoryDetails: FC<{
   );
 };
 
-export default SendHistoryDetails;
+export default SendAssetDetails;
