@@ -24,7 +24,7 @@ const FindPoolDialog: FC<FindPoolDialogProps> = ({
     ml={['-1rem', 0, 0, 0]}
   >
     <Box
-      pt="3xl"
+      pt="2xl"
       px="2xl"
       display="flex"
       minWidth="100%"
