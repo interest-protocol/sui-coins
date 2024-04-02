@@ -15,23 +15,24 @@ const FindPoolDialog: FC<FindPoolDialogProps> = ({
   <Box
     width="25rem"
     display="flex"
-    maxWidth="95%"
+    maxWidth="100%"
     borderRadius="xs"
     bg="lowContainer"
+    height="18.063rem"
     alignItems="center"
     flexDirection="column"
     justifyContent="center"
     ml={['-1rem', 0, 0, 0]}
   >
     <Box
-      p="m"
+      pt="2xl"
+      px="2xl"
       display="flex"
       minWidth="100%"
       color="onSurface"
       position="relative"
       alignItems="center"
       justifyContent="flex-end"
-      onClick={onClose}
     >
       <Typography
         flex="1"
@@ -42,12 +43,13 @@ const FindPoolDialog: FC<FindPoolDialogProps> = ({
       >
         {title}
       </Typography>
-      <TimesSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+      <Button variant="text" isIcon onClick={onClose} mr="-0.5rem">
+        <TimesSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+      </Button>
     </Box>
     <Box
-      pt="xl"
+      mt="l"
       p="m"
-      gap="m"
       display="flex"
       maxWidth="22rem"
       minWidth="100%"
@@ -63,10 +65,13 @@ const FindPoolDialog: FC<FindPoolDialogProps> = ({
         borderRadius="50%"
         bg="highContainer"
         alignItems="center"
+        boxShadow="#FFFFFF1B 0px 0px 2px 0px, #FFFFFF1B 0px 0px 0px 2px"
       >
         {Icon}
       </Box>
       <Typography
+        mt="s"
+        p="2xs"
         size="medium"
         lineHeight="m"
         variant="body"
@@ -76,15 +81,9 @@ const FindPoolDialog: FC<FindPoolDialogProps> = ({
         {description}
       </Typography>
     </Box>
+    <Box width="100%" borderTop="1px solid" borderColor="outlineVariant" />
     <Box
-      mt="m"
-      width="100%"
-      borderTop="1px solid"
-      borderColor="outlineVariant"
-    />
-    <Box
-      p="m"
-      mt="s"
+      p="xl"
       display="flex"
       minWidth="100%"
       flexDirection="row"
