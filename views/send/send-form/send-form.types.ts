@@ -8,3 +8,7 @@ export type ObjectField = ObjectData & {
 export interface ZkSendForm {
   object: ObjectField;
 }
+
+export interface SendFormProps {
+  isBulk: boolean;
+}

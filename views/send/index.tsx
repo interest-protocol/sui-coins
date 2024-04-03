@@ -1,6 +1,6 @@
 import { Box, Tabs, Typography } from '@interest-protocol/ui-kit';
 import { useRouter } from 'next/router';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { v4 } from 'uuid';
 
 import Layout from '@/components/layout';
@@ -9,9 +9,12 @@ import { ClockSVG, UploadSVG } from '@/svg';
 
 import SendForm from './send-form';
 import SendHistory from './send-history';
+import SendSelectType from './send-select-type';
 
 const Send: FC = () => {
   const { push, pathname } = useRouter();
+  const [isBulk, setBulk] = useState(false);
+  const [initial, setInitial] = useState(true);
   const onChangeTab = (index: number) => {
     push(
       index ? Routes[RoutesEnum.SendHistory] : Routes[RoutesEnum.Send],
@@ -57,8 +60,15 @@ const Send: FC = () => {
       </Box>
       {Routes[RoutesEnum.SendHistory] === pathname ? (
         <SendHistory />
+      ) : initial ? (
+        <SendSelectType
+          onSelectType={(index: number) => {
+            setInitial(false);
+            setBulk(Boolean(index));
+          }}
+        />
       ) : (
-        <SendForm />
+        <SendForm isBulk={isBulk} />
       )}
     </Layout>
   );

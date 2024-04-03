@@ -4,11 +4,11 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import PoweredByZkSend from '@/views/components/powered-by-zksend';
 
-import { ZkSendForm } from './send-form.types';
+import { SendFormProps, ZkSendForm } from './send-form.types';
 import SendButton from './send-form-button';
 import SendSelectObject from './send-form-select-object';
 
-const SendForm: FC = () => {
+const SendForm: FC<SendFormProps> = () => {
   const form = useForm<ZkSendForm>();
 
   return (
