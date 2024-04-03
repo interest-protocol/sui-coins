@@ -33,12 +33,12 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
       minHeight="30rem"
       maxHeight="90vh"
       color="onSurface"
+      bg="lowContainer"
       alignItems="center"
       display="inline-flex"
       justifyContent="space-between"
       flexDirection="column"
       boxShadow="dropShadow.2xl"
-      backgroundColor="lowestContainer"
     >
       <Box width="100%">
         <Box
@@ -68,8 +68,8 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
               FROM
             </Typography>
             <Box
-              bg="surface"
               p="s"
+              bg="surface"
               borderRadius="xs"
               display="flex"
               alignItems="center"
