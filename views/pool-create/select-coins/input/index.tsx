@@ -24,7 +24,6 @@ const Input: FC<InputProps> = ({ index }) => {
       <HeaderInfo index={index} />
       <SelectToken index={index} />
       <Box
-        ml="2xs"
         display="flex"
         justifyContent="flex-end"
         alignItems="flex-end"

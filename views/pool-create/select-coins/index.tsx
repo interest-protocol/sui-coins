@@ -61,7 +61,7 @@ const SelectCoins: FC = () => {
               </Box>
             ))}
           </Box>
-          {fields.length < (isStable ? 5 : 3) && (
+          {fields.length < 3 && (
             <Button
               mt="xl"
               mx="auto"
