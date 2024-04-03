@@ -41,7 +41,10 @@ const SwapFormFieldSlider: FC = () => {
         onChange={(value: number) => {
           setValue('lock', false);
           setValue('maxValue', value === 100);
-          setValue('from.value', `${(value / 100) * balance}`);
+          setValue(
+            'from.value',
+            `${(Number(value / 100) * balance).toFixed(6)}`
+          );
         }}
       />
     </Box>
