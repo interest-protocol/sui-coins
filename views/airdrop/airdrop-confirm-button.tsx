@@ -236,7 +236,7 @@ const AirdropConfirmButton: FC<AirdropProgressProps> = ({
         display="flex"
         variant="filled"
         onClick={handleSend}
-        disabled={isDisabled}
+        disabled={!isDisabled}
         borderRadius="0.5rem"
         justifyContent="center"
       >

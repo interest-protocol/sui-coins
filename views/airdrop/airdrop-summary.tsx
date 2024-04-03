@@ -21,7 +21,7 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
 
   return (
     <Box display="flex" flexDirection="column" mb="m" color="onSurface">
-      <Box bg="lowestContainer" px="m" py="2xs" borderRadius="xs">
+      <Box bg="surface" px="m" py="2xs" borderRadius="xs">
         <Box
           py="m"
           display="flex"
@@ -88,7 +88,7 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
           justifyContent="space-between"
         >
           <Typography variant="body" size="medium" opacity="0.80">
-            Total SUI fee
+            Total MOV fee
           </Typography>
           <Box textAlign="right">
             <Typography size="medium" variant="body">
