@@ -15,11 +15,13 @@ const itemVariants = {
 };
 
 const OptionItem: FC<PropsWithChildren<OptionItemProps>> = ({
+  index,
   onClick,
   disabled,
   children,
   selected,
   mobileOnly,
+  totalItems,
   withSubmenu,
   withBorderTop,
 }) => (
@@ -31,10 +33,14 @@ const OptionItem: FC<PropsWithChildren<OptionItemProps>> = ({
     initial={itemVariants.closed}
     justifyContent="space-between"
     onClick={!disabled ? onClick : undefined}
+    borderTopLeftRadius={index === 0 ? 'm' : ''}
+    borderTopRightRadius={index === 0 ? 'm' : ''}
     cursor={disabled ? 'not-allowed' : 'pointer'}
     bg={selected ? 'rgba(0, 83, 219, 0.08)' : 'unset'}
     borderColor={withBorderTop ? 'outlineVariant' : 'transparent'}
     display={mobileOnly ? ['flex', 'flex', 'flex', 'none'] : 'flex'}
+    borderBottomLeftRadius={index && index + 1 === totalItems ? 'm' : ''}
+    borderBottomRightRadius={index && index + 1 === totalItems ? 'm' : ''}
     nHover={{
       bg: disabled ? 'unset' : 'rgba(0, 83, 219, 0.08)',
     }}
