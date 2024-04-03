@@ -37,7 +37,6 @@ export interface DCAModel extends Document {
 }
 
 export const DCASchema = new Schema({
-  _id: Schema.Types.ObjectId,
   objectId: {
     type: String,
     required: true,

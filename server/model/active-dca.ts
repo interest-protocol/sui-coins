@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-const modelName = 'DCA';
+const modelName = 'ActiveDCA';
 
 interface ActiveDCA {
   cooldown: string;
