@@ -2,7 +2,16 @@ import mongoose, { Document, Schema } from 'mongoose';
 
 const modelName = 'DCA';
 
+interface Order {
+  input: string;
+  output: string;
+  fee: string;
+  timestamp: string;
+}
+
 export interface DCAModel extends Document {
+  adapter: string;
+  objectId: string;
   owner: string;
   delegatee: string;
   startTimestamp: string;
@@ -19,9 +28,12 @@ export interface DCAModel extends Document {
   min: string;
   max: string;
   active: boolean;
+  destroyed: boolean;
+  remainingInitialBalance: string;
   ownerOutputBalance: string;
   delegateOutputBalance: string;
   feePercent: string;
+  orders: readonly Order[];
 }
 
 export const DCASchema = new Schema({
@@ -30,6 +42,10 @@ export const DCASchema = new Schema({
     type: String,
     required: true,
     index: true,
+  },
+  adapter: {
+    type: String,
+    required: true,
   },
   owner: {
     type: String,
@@ -49,10 +65,6 @@ export const DCASchema = new Schema({
     required: true,
   },
   every: {
-    type: String,
-    required: true,
-  },
-  totalOrders: {
     type: String,
     required: true,
   },
@@ -96,6 +108,14 @@ export const DCASchema = new Schema({
     type: Boolean,
     required: true,
   },
+  destroyed: {
+    type: Boolean,
+    required: true,
+  },
+  remainingInitialBalance: {
+    type: String,
+    required: true,
+  },
   ownerOutputBalance: {
     type: String,
     required: true,
@@ -108,6 +128,14 @@ export const DCASchema = new Schema({
     type: String,
     required: true,
   },
+  orders: [
+    {
+      input: String,
+      output: String,
+      fee: String,
+      timestamp: String,
+    },
+  ],
 });
 
 export default mongoose.models[modelName] ||

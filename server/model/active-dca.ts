@@ -22,6 +22,7 @@ export const ActiveDCASchema = new Schema({
       objectId: {
         type: String,
         required: true,
+        index: true,
       },
       owner: {
         type: String,
