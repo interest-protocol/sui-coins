@@ -35,24 +35,24 @@ const SelectCoins: FC = () => {
           <Typography variant="body" size="small" color="onSurface">
             Select Token & Deposit
           </Typography>
-          <Box display="grid">
-            {fields.slice(0, isStable ? 5 : 3).map(({ id }, index) => (
-              <Box key={id} display="flex" my="2xs" alignItems="center" gap="s">
+          <Box>
+            {fields.map(({ id }, index) => (
+              <Box key={id} my="s" display="flex" gap="s" alignItems="center">
                 <Input index={index} />
                 {fields.length > 2 && (
                   <Box
-                    color="onSurface"
-                    bg="container"
-                    nHover={{
-                      bg: 'surface',
-                    }}
                     display="flex"
                     minWidth="2rem"
                     minHeight="2rem"
                     cursor="pointer"
+                    bg="lowContainer"
+                    color="onSurface"
                     alignItems="center"
                     borderRadius="full"
                     justifyContent="center"
+                    nHover={{
+                      bg: 'lowestContainer',
+                    }}
                     onClick={() => handleRemoveField(index)}
                   >
                     <MinusSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
