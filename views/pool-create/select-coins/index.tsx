@@ -36,7 +36,7 @@ const SelectCoins: FC = () => {
             Select Token & Deposit
           </Typography>
           <Box>
-            {fields.map(({ id }, index) => (
+            {fields.slice(0, isStable ? 5 : 3).map(({ id }, index) => (
               <Box key={id} my="s" display="flex" gap="s" alignItems="center">
                 <Input index={index} />
                 {fields.length > 2 && (
@@ -44,8 +44,8 @@ const SelectCoins: FC = () => {
                     display="flex"
                     minWidth="2rem"
                     minHeight="2rem"
-                    cursor="pointer"
                     bg="lowContainer"
+                    cursor="pointer"
                     color="onSurface"
                     alignItems="center"
                     borderRadius="full"
@@ -61,7 +61,7 @@ const SelectCoins: FC = () => {
               </Box>
             ))}
           </Box>
-          {fields.length < 3 && (
+          {fields.length < (isStable ? 5 : 3) && (
             <Button
               mt="xl"
               mx="auto"
