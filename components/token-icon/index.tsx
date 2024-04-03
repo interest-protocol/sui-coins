@@ -106,11 +106,13 @@ const TokenIcon: FC<TokenIconProps> = ({
           borderRadius={rounded ? 'full' : 'xs'}
         >
           {isLoading && (
-            <Box position="absolute" top="-0.5rem">
+            <Box position="absolute" top="-0.5rem" left="0.9rem">
               <ProgressIndicator size={16} variant="loading" />
             </Box>
           )}
-          <img src={TokenIcon ?? iconSrc} width="100%" alt={symbol} />
+          {(iconSrc || TokenIcon) && (
+            <img src={TokenIcon ?? iconSrc} width="100%" alt={symbol} />
+          )}
         </Box>
         {ChainIcon && (
           <Box position="absolute" bottom="-0.3rem" right="-0.5rem">

@@ -8,7 +8,7 @@ import { ClockSVG, PercentageSVG } from '@/svg';
 import { parseInputEventToNumberString } from '@/utils';
 
 import { ISwapSettings, SwapForm } from '../../swap.types';
-import { ManageSlippageProps } from '../manage-slippage-form.types';
+import { ManageSlippageProps } from './manage-slippage-form.types';
 
 const SLIPPAGE_BUTTONS = ['0.1', '0.5', '1'];
 

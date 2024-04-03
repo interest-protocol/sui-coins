@@ -1,18 +1,23 @@
 import { Box, TextField } from '@interest-protocol/ui-kit';
 import { ChangeEvent, FC } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
+import { FixedPointMath } from '@/lib';
 import { parseInputEventToNumberString } from '@/utils';
 
 import { SwapForm } from '../swap.types';
 import AmountInDollar from './dollar-value';
 import HeaderInfo from './header-info';
-import { InputProps } from './input.types';
+import { InputFieldProps } from './input.types';
 import SelectToken from './select-token';
-import SwapFormFieldSlider from './swap-manager-slider';
 
-const Input: FC<InputProps> = ({ label }) => {
-  const { register, setValue } = useFormContext<SwapForm>();
+const Input: FC<InputFieldProps> = ({ label, slider }) => {
+  const { register, setValue, getValues, control } = useFormContext<SwapForm>();
+
+  const swapping = useWatch({
+    control,
+    name: 'swapping',
+  });
 
   return (
     <Box>
@@ -33,7 +38,7 @@ const Input: FC<InputProps> = ({ label }) => {
             color="onSurface"
             textAlign="right"
             fontFamily="Satoshi"
-            disabled={label === 'to'}
+            disabled={label === 'to' || swapping}
             fieldProps={{
               width: '100%',
               borderRadius: 'xs',
@@ -43,22 +48,25 @@ const Input: FC<InputProps> = ({ label }) => {
               nFocus: { border: 'none !important' },
               nActive: { border: 'none !important' },
             }}
-            {...register(`${label}.value`, {
+            {...register(`${label}.display`, {
               onChange: (v: ChangeEvent<HTMLInputElement>) => {
-                setValue?.(`${label}.value`, parseInputEventToNumberString(v));
+                const value = parseInputEventToNumberString(v);
+                setValue(`${label}.display`, value);
+                if (label === 'from')
+                  setValue(
+                    'from.value',
+                    FixedPointMath.toBigNumber(
+                      value,
+                      getValues('from.decimals')
+                    )
+                  );
               },
             })}
           />
           <AmountInDollar label={label} />
         </Box>
       </Box>
-      <Box pb={label === 'to' ? '2xl' : 's'}>
-        {label === 'from' && (
-          <Box px="s">
-            <SwapFormFieldSlider />
-          </Box>
-        )}
-      </Box>
+      <Box pb={label === 'to' ? '2xl' : 's'}>{slider}</Box>
     </Box>
   );
 };

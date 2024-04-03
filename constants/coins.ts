@@ -24,6 +24,9 @@ import {
 
 import { Network } from '.';
 
+export const SUI_TYPE_ARG_LONG =
+  '0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI';
+
 export const COIN_METADATA = {
   [SUI_TYPE_ARG]: {
     name: 'Sui',
@@ -31,9 +34,6 @@ export const COIN_METADATA = {
     symbol: TOKEN_SYMBOL.SUI,
   },
 };
-
-export const SUI_TYPE_ARG_LONG =
-  '0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI';
 
 export const TESTNET_BASE_COINS: Record<string, `0x${string}`> = {
   SUI: SUI_TYPE_ARG,

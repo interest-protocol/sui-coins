@@ -5,8 +5,6 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import TokenIcon from '@/components/token-icon';
-import { Network } from '@/constants';
-import { TOKEN_ICONS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
 import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
@@ -21,8 +19,6 @@ const SelectToken: FC<InputProps> = ({ label }) => {
   const { pathname } = useRouter();
   const { setModal, handleClose } = useModal();
 
-  const isMainnet = Network.MAINNET === network;
-
   const { setValue, control } = useFormContext<SwapForm>();
 
   const currentToken = useWatch({
@@ -30,16 +26,22 @@ const SelectToken: FC<InputProps> = ({ label }) => {
     name: label,
   });
 
+  const swapping = useWatch({
+    control,
+    name: 'swapping',
+  });
+
   const { symbol: currentSymbol, type: currentType } = currentToken ?? {
     symbol: undefined,
     type: undefined,
   };
 
-  const Icon = TOKEN_ICONS[network][isMainnet ? currentType : currentSymbol];
-
-  const changeURL = (type: string) => {
+  const changeURL = (type: string, oppositeType?: string) => {
     const searchParams = new URLSearchParams(location.search);
     searchParams.set(label, type);
+
+    if (oppositeType)
+      searchParams.set(label === 'to' ? 'from' : 'to', oppositeType);
 
     updateURL(
       `${pathname}?from=${searchParams.get('from')}&to=${searchParams.get(
@@ -61,29 +63,33 @@ const SelectToken: FC<InputProps> = ({ label }) => {
         decimals: currentToken.decimals,
         usdPrice: currentToken.usdPrice,
         chain: currentToken.chain,
-        value: '',
+        display: '',
       });
     }
 
-    const usdPrice = await fetch(`/api/v1/coin-price?symbol=${symbol}`)
-      .then((response) => response.json())
-      .then((data) => data[symbol][0].quote.USD.price)
-      .catch(() => null);
-
     setValue(label, {
       type,
-      symbol,
-      usdPrice,
-      decimals,
       chain,
-      value: '',
+      symbol,
+      decimals,
+      display: '',
+      usdPrice: null,
     });
-    setValue(`${label === 'from' ? 'to' : 'from'}.value`, '');
 
-    changeURL(type);
+    fetch(`/api/v1/coin-price?symbol=${symbol}`)
+      .then((response) => response.json())
+      .then((data) =>
+        setValue(`${label}.usdPrice`, data[symbol][0].quote.USD.price)
+      )
+      .catch(() => null);
+
+    if (label === 'from') setValue('to.display', '');
+
+    changeURL(type, type === oppositeType ? currentToken.type : undefined);
   };
 
   const openModal = () =>
+    !swapping &&
     setModal(
       <Motion
         animate={{ scale: 1 }}
@@ -111,9 +117,11 @@ const SelectToken: FC<InputProps> = ({ label }) => {
         width="100%"
         variant="tonal"
         borderRadius="xs"
-        bg="highestContainer"
+        disabled={swapping}
         onClick={openModal}
-        {...(Icon && {
+        bg="highestContainer"
+        opacity={swapping ? 0.7 : 1}
+        {...(currentType && {
           PrefixIcon: (
             <TokenIcon
               withBg
@@ -125,10 +133,13 @@ const SelectToken: FC<InputProps> = ({ label }) => {
         })}
       >
         <Typography
-          p="xs"
+          m="xs"
           size="large"
           variant="label"
-          display={['none', 'block']}
+          overflow="hidden"
+          whiteSpace="nowrap"
+          width={['0px', 'auto']}
+          display={[currentType ? 'none' : 'block', 'block']}
         >
           {currentSymbol ?? 'Select Token'}
         </Typography>

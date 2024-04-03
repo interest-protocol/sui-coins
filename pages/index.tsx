@@ -19,8 +19,8 @@ import Swap from '@/views/swap';
 import { ISwapSettings, SwapForm, SwapToken } from '@/views/swap/swap.types';
 
 const SwapPage: NextPage = () => {
-  const { coinsMap } = useWeb3();
   const network = useNetwork();
+  const { coinsMap } = useWeb3();
   const {
     query: { to, from },
     pathname,
@@ -38,6 +38,12 @@ const SwapPage: NextPage = () => {
     },
   });
 
+  useEffect(() => {
+    form.reset();
+    form.setValue('settings', settings);
+    updateURL(pathname);
+  }, [network]);
+
   const setDefaultToken = async (
     value: `0x${string}`,
     field: 'to' | 'from'
@@ -46,26 +52,29 @@ const SwapPage: NextPage = () => {
       const { type, symbol, decimals } =
         COIN_TYPE_TO_COIN[network][SUI_TYPE_ARG];
 
-      const usdPrice = await fetch(`/api/v1/coin-price?symbol=${symbol}`)
-        .then((response) => response.json())
-        .then((data) => data[symbol][0].quote.USD.price)
-        .catch(() => null);
-
       const token: SwapToken = {
         type,
         symbol,
         decimals,
-        usdPrice,
-        value: '',
+        display: '',
+        usdPrice: null,
       };
 
       form.setValue(field, token);
+
+      fetch(`/api/v1/coin-price?symbol=${symbol}`)
+        .then((response) => response.json())
+        .then((data) =>
+          form.setValue(`${field}.usdPrice`, data[symbol][0].quote.USD.price)
+        )
+        .catch(() => null);
 
       return type;
     }
 
     if (
       typeof value === 'string' &&
+      value.startsWith('0x') &&
       isValidSuiAddress(normalizeSuiAddress(value).split('::')[0])
     ) {
       const { type, symbol, decimals } = await getCoin(
@@ -74,20 +83,22 @@ const SwapPage: NextPage = () => {
         coinsMap
       );
 
-      const usdPrice = await fetch(`/api/v1/coin-price?symbol=${symbol}`)
-        .then((response) => response.json?.())
-        .then((data) => data[symbol][0].quote.USD.price)
-        .catch(console.log);
-
       const token: SwapToken = {
         type,
         symbol,
         decimals,
-        usdPrice,
-        value: '',
+        display: '',
+        usdPrice: null,
       };
 
       form.setValue(field, token);
+
+      fetch(`/api/v1/coin-price?symbol=${symbol}`)
+        .then((response) => response.json?.())
+        .then((data) =>
+          form.setValue(`${field}.usdPrice`, data[symbol][0].quote.USD.price)
+        )
+        .catch(console.log);
 
       return type;
     }
@@ -99,22 +110,26 @@ const SwapPage: NextPage = () => {
 
   useEffect(() => {
     (async () => {
-      const searchParams = new URLSearchParams(asPath);
+      const searchParams = new URLSearchParams(
+        asPath.replace('/', '').replace('?', '')
+      );
+
       const [fromType, toType] = await Promise.all([
         setDefaultToken(from as `0x${string}`, 'from'),
-        setDefaultToken(to as `0x${string}`, 'to'),
+        from !== to ? setDefaultToken(to as `0x${string}`, 'to') : undefined,
       ]);
 
-      searchParams.set('from', fromType ?? '');
-      searchParams.set('to', toType ?? '');
+      searchParams.delete('from');
+      searchParams.delete('to');
+
+      fromType && searchParams.set('from', fromType);
+      toType && searchParams.set('to', toType);
 
       form.setValue('loading', false);
 
-      updateURL(
-        `${pathname}?from=${searchParams.get('from')}&to=${searchParams.get(
-          'to'
-        )}`
-      );
+      const params = searchParams.toString();
+
+      updateURL(`${pathname}${params ? `?${params}` : ''}`);
     })();
   }, []);
 

@@ -1,10 +1,13 @@
+import { useSignTransactionBlock } from '@mysten/dapp-kit/dist/esm';
+import { SuiClient } from '@mysten/sui.js/client';
+import { SuiTransactionBlockResponseOptions } from '@mysten/sui.js/client';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { WalletAccount } from '@wallet-standard/base';
 
-import { CoinsMap } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
-
-export interface CreateVectorParameterArgs {
+export interface SignAndExecuteArgs {
+  suiClient: SuiClient;
+  currentAccount: WalletAccount;
   txb: TransactionBlock;
-  coinsMap: CoinsMap;
-  type: string;
-  amount: string;
+  signTransactionBlock: ReturnType<typeof useSignTransactionBlock>;
+  options?: SuiTransactionBlockResponseOptions;
 }

@@ -1,5 +1,6 @@
 import { Token } from '@interest-protocol/sui-tokens';
-import { RouterCompleteTradeRoute, RouterTradePath } from 'aftermath-ts-sdk';
+import { RouterCompleteTradeRoute } from 'aftermath-ts-sdk';
+import BigNumber from 'bignumber.js';
 
 export interface ISwapSettings {
   slippage: string;
@@ -7,19 +8,22 @@ export interface ISwapSettings {
 }
 
 export interface SwapToken extends Token {
-  value: string;
+  display: string;
   usdPrice: number | null;
 }
 
 export interface SwapForm {
   to: SwapToken;
-  from: SwapToken;
   loading: boolean;
+  swapping: boolean;
+  explorerLink: string;
   error: string | null;
+  readyToSwap: boolean;
+  fetchingPrices: boolean;
   settings: ISwapSettings;
+  lastFetchDate: number | null;
+  from: SwapToken & { value: BigNumber };
   route: RouterCompleteTradeRoute | null;
-  swapPath: ReadonlyArray<RouterTradePath>;
-  swapStatus: 'loading' | 'success' | 'error' | null;
 }
 
 export interface SwapPreviewModalProps {

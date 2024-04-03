@@ -1,4 +1,6 @@
 import { Token } from '@interest-protocol/sui-tokens';
+import { CoinStruct } from '@mysten/sui.js/client';
+import { TransactionResult } from '@mysten/sui.js/transactions';
 import { formatAddress, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
 import { propOr } from 'ramda';
@@ -18,8 +20,14 @@ import {
 } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { CoinData, CoinMetadataWithType } from '@/interface';
 
+import { isSameAddress } from '../address';
+import { ZERO_BIG_NUMBER } from '../big-number';
 import { getBasicCoinMetadata } from '../fn';
-import { CreateVectorParameterArgs } from './coin.types';
+import {
+  CreateVectorParameterArgs,
+  GetCoinOfValueArgs,
+  GetCoinsArgs,
+} from './coin.types';
 
 export const isSymbol = (text: string): boolean =>
   new RegExp(/^[A-Z-]+$/g).test(text);
@@ -79,9 +87,7 @@ export const processSafeAmount = (
 
   if (!object) return amount;
 
-  return amount.gt(BigNumber(object.balance))
-    ? BigNumber(object.balance)
-    : amount;
+  return amount.gt(object.balance) ? object.balance : amount;
 };
 
 export const getCoinsFromLpCoinType = (poolType: string) => {
@@ -129,7 +135,7 @@ export const normalizeSuiType = (x: string) => {
 
 export const coinDataToCoinObject = (coinData: CoinData): CoinObject => ({
   ...coinData,
-  balance: '0',
+  balance: ZERO_BIG_NUMBER,
   coinObjectId: '',
   metadata: { name: formatAddress(coinData.type), description: '' },
   objects: [],
@@ -181,3 +187,66 @@ export const getCoin = async (
       )
       .catch(() => resolve({ type, ...getBasicCoinMetadata(type) }));
   });
+
+export const getCoins = async ({
+  suiClient,
+  coinType,
+  cursor,
+  account,
+}: GetCoinsArgs): Promise<CoinStruct[]> => {
+  const { data, nextCursor, hasNextPage } = await suiClient.getCoins({
+    owner: account,
+    cursor,
+    coinType,
+  });
+
+  if (!hasNextPage) return data;
+
+  const newData = await getCoins({
+    suiClient,
+    coinType,
+    account,
+    cursor: nextCursor,
+  });
+
+  return [...data, ...newData];
+};
+
+export function removeLeadingZeros(address: string): string {
+  return address.replaceAll(/0x0+/g, '0x');
+}
+
+export async function getCoinOfValue({
+  suiClient,
+  coinValue,
+  coinType,
+  txb,
+  account,
+}: GetCoinOfValueArgs): Promise<TransactionResult> {
+  let coinOfValue: TransactionResult;
+  coinType = removeLeadingZeros(coinType);
+  if (coinType === '0x2::sui::SUI') {
+    coinOfValue = txb.splitCoins(txb.gas, [txb.pure(coinValue)]);
+  } else {
+    const paginatedCoins = await getCoins({
+      suiClient,
+      coinType,
+      cursor: null,
+      account,
+    });
+
+    // Merge all coins into one
+    const [firstCoin, ...otherCoins] = paginatedCoins;
+    const firstCoinInput = txb.object(firstCoin.coinObjectId);
+    if (otherCoins.length > 0) {
+      txb.mergeCoins(
+        firstCoinInput,
+        otherCoins.map((coin) => coin.coinObjectId)
+      );
+    }
+    coinOfValue = txb.splitCoins(firstCoinInput, [txb.pure(coinValue)]);
+  }
+  return coinOfValue;
+}
+
+export const isSui = (type: string) => isSameAddress(type, SUI_TYPE_ARG);

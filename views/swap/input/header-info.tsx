@@ -1,10 +1,10 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
-import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
+import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { SwapForm } from '../swap.types';
 import { InputProps } from './input.types';
@@ -18,7 +18,7 @@ const HeaderInfo: FC<InputProps> = ({ label }) => {
   const decimals = useWatch({ control, name: `${label}.decimals` });
 
   const balance = FixedPointMath.toNumber(
-    BigNumber(coinsMap[type]?.balance || '0'),
+    coinsMap[type]?.balance ?? ZERO_BIG_NUMBER,
     coinsMap[type]?.decimals ?? decimals
   );
 

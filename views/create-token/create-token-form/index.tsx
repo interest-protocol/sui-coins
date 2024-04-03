@@ -1,8 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Form, Typography } from '@interest-protocol/ui-kit';
-import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
+import {
+  useCurrentAccount,
+  useSignTransactionBlock,
+  useSuiClient,
+} from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-import BigNumber from 'bignumber.js';
+import { normalizeSuiAddress } from '@mysten/sui.js/utils';
 import { ChangeEvent, FC } from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -10,15 +14,15 @@ import toast from 'react-hot-toast';
 
 import { TextField } from '@/components';
 import { useNetwork } from '@/context/network';
-import useSignTxb from '@/hooks/use-sign-txb';
 import { parseInputEventToNumberString, showTXSuccessToast } from '@/utils';
 import { throwTXIfNotSuccessful } from '@/utils';
 
 import { ICreateTokenForm } from '../create-token.types';
-import { getTokenByteCode } from './api';
 import { Blacklist } from './blacklist';
 import { validationSchema } from './create-token-form.validation';
 import FixedSupplyToggle from './fixed-supply-toggle';
+import initMoveByteCodeTemplate from './move-bytecode-template';
+import { getBytecode } from './template';
 import UploadImage from './upload-image';
 
 const CreateTokenForm: FC = () => {
@@ -42,7 +46,7 @@ const CreateTokenForm: FC = () => {
   const suiClient = useSuiClient();
   const network = useNetwork();
   const currentAccount = useCurrentAccount();
-  const signTransactionBlock = useSignTxb();
+  const signTransactionBlock = useSignTransactionBlock();
 
   const createToken = async () => {
     try {
@@ -50,15 +54,7 @@ const CreateTokenForm: FC = () => {
 
       if (!currentAccount) return;
 
-      const {
-        decimals,
-        name,
-        fixedSupply,
-        totalSupply,
-        symbol,
-        imageUrl,
-        description,
-      } = getValues();
+      const { name, symbol } = getValues();
 
       if (
         Blacklist.includes(name.toUpperCase().trim()) ||
@@ -67,30 +63,29 @@ const CreateTokenForm: FC = () => {
         throw new Error('Nice try :)');
       }
 
-      const { dependencies, modules } = await getTokenByteCode({
-        name,
-        symbol,
-        fixedSupply,
-        url: imageUrl ?? '',
-        decimals: decimals ?? 9,
-        description: description ?? '',
-        mintAmount: BigNumber(totalSupply)
-          .multipliedBy(BigNumber(10).pow(decimals ? decimals : 9))
-          .toString(),
-      });
+      await initMoveByteCodeTemplate('/move_bytecode_template_bg.wasm');
 
       const txb = new TransactionBlock();
 
-      const [upgradeCap] = txb.publish({ modules, dependencies });
+      const [upgradeCap] = txb.publish({
+        modules: [
+          [
+            ...getBytecode({
+              ...getValues(),
+              recipient: currentAccount.address,
+            }),
+          ],
+        ],
+        dependencies: [normalizeSuiAddress('0x1'), normalizeSuiAddress('0x2')],
+      });
 
       txb.transferObjects([upgradeCap], txb.pure(currentAccount.address));
 
-      const { signature, transactionBlockBytes } = await signTransactionBlock({
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        transactionBlock: txb,
-        account: currentAccount,
-      });
+      const { signature, transactionBlockBytes } =
+        await signTransactionBlock.mutateAsync({
+          transactionBlock: txb,
+          account: currentAccount,
+        });
 
       const tx = await suiClient.executeTransactionBlock({
         signature,
@@ -100,20 +95,22 @@ const CreateTokenForm: FC = () => {
 
       throwTXIfNotSuccessful(tx);
 
-      await showTXSuccessToast(tx, network);
+      showTXSuccessToast(tx, network);
     } finally {
       setLoading(false);
     }
   };
 
   const onSubmit = async () => {
-    await toast
-      .promise(createToken(), {
-        loading: 'Generating new coin...',
-        success: 'Coin Generated',
-        error: (e) => e.message || 'Something went wrong',
-      })
-      .catch(console.log);
+    const loading = toast.loading('Generating new coin...');
+    try {
+      await createToken();
+      toast.success('Coin Generated!');
+    } catch (e) {
+      toast.error((e as Error).message || 'Something went wrong');
+    } finally {
+      toast.dismiss(loading);
+    }
   };
 
   return (

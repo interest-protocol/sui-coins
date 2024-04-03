@@ -8,9 +8,7 @@ import Head from 'next/head';
 import NextProgress from 'next-progress';
 import { ReactNode, StrictMode } from 'react';
 
-import { ModalProvider } from '@/context/modal';
-
-const Web3Provider = dynamic(() => import('@/components/web3-provider'), {
+const Provider = dynamic(() => import('@/components/provider'), {
   ssr: false,
 });
 
@@ -25,11 +23,9 @@ const MyApp = ({ Component, pageProps }: AppProps<NextPage>): ReactNode => (
     </Head>
     <NextProgress options={{ showSpinner: false }} />
     <StrictMode>
-      <Web3Provider>
-        <ModalProvider>
-          <Component {...pageProps} />
-        </ModalProvider>
-      </Web3Provider>
+      <Provider>
+        <Component {...pageProps} />
+      </Provider>
     </StrictMode>
     <VercelAnalytics />
   </>

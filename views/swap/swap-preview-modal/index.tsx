@@ -5,6 +5,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { TokenIcon } from '@/components';
 import { useNetwork } from '@/context/network';
 import { ArrowLeftSVG, TimesSVG } from '@/svg';
+import { formatDollars } from '@/utils';
 
 import { SwapForm, SwapPreviewModalProps } from '../swap.types';
 import SwapButton from '../swap-button';
@@ -19,7 +20,7 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
 
   return (
     <Box
-      maxWidth="95%"
+      maxWidth="100%"
       overflow="auto"
       borderRadius="xs"
       width="26.875rem"
@@ -36,6 +37,7 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
         <Box
           p="xl"
           display="flex"
+          cursor="pointer"
           alignItems="center"
           justifyContent="space-between"
         >
@@ -67,10 +69,10 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
               FROM
             </Typography>
             <Box
-              bg="surface"
               p="s"
-              borderRadius="xs"
+              bg="surface"
               display="flex"
+              borderRadius="xs"
               alignItems="center"
               justifyContent="space-between"
             >
@@ -87,11 +89,15 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
               </Box>
               <Box textAlign="right">
                 <Typography variant="body" size="medium">
-                  {tokenFrom.value || 0}
+                  {tokenFrom.display || 0}
                 </Typography>
                 <Typography variant="body" size="small" color="#000000A3">
                   {tokenFrom.usdPrice
-                    ? Number(tokenFrom.value || 0) * tokenFrom.usdPrice
+                    ? formatDollars(
+                        +(
+                          Number(tokenFrom.display || 0) * tokenFrom.usdPrice
+                        ).toFixed(3)
+                      )
                     : '--'}{' '}
                   USD
                 </Typography>
@@ -131,11 +137,15 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
                 </Box>
                 <Box textAlign="right">
                   <Typography variant="body" size="medium">
-                    {tokenTo.value || 0}
+                    {tokenTo.display || 0}
                   </Typography>
                   <Typography variant="body" size="small" color="#000000A3">
                     {tokenTo.usdPrice
-                      ? Number(tokenTo.value || 0) * tokenTo.usdPrice
+                      ? formatDollars(
+                          +(
+                            Number(tokenTo.display || 0) * tokenTo.usdPrice
+                          ).toFixed(3)
+                        )
                       : '--'}{' '}
                     USD
                   </Typography>
@@ -147,7 +157,7 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
       </Box>
       <Box width="100%" p="xl" display="flex" flexDirection="column">
         <SwapPreviewModalSummary />
-        <SwapButton onClose={onClose} />
+        <SwapButton />
       </Box>
     </Box>
   );

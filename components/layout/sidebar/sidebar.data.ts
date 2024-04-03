@@ -10,12 +10,12 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
   >
 > = [
   {
-    Icon: DoubleChevronSVG,
-    name: 'swap',
+    name: 'Trade',
     disabled: false,
+    Icon: DoubleChevronSVG,
     accordionList: [
       {
-        name: 'Trade',
+        name: 'Swap',
         disabled: false,
         path: Routes[RoutesEnum.Swap],
         networks: [Network.MAINNET, Network.TESTNET],
@@ -30,24 +30,24 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     networks: [Network.MAINNET, Network.TESTNET],
   },
   {
-    Icon: PoolSVG,
     name: 'pool',
-    path: Routes[RoutesEnum.Pools],
+    Icon: PoolSVG,
     disabled: true,
+    path: Routes[RoutesEnum.Pools],
     networks: [Network.MAINNET, Network.TESTNET],
   },
   {
+    disabled: false,
     Icon: CirclePlusSVG,
     name: 'create token',
     path: Routes[RoutesEnum.CreateCoin],
-    disabled: false,
     networks: [Network.MAINNET, Network.TESTNET],
   },
   {
-    Icon: AirdropSVG,
     name: 'airdrop',
-    path: Routes[RoutesEnum.Airdrop],
     disabled: false,
+    Icon: AirdropSVG,
+    path: Routes[RoutesEnum.Airdrop],
     networks: [Network.MAINNET, Network.TESTNET],
   },
 ];
