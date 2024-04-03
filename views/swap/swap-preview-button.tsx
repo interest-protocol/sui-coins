@@ -35,7 +35,7 @@ const SwapPreviewButton: FC = () => {
         : ZERO_BIG_NUMBER
     );
 
-  const handlePreview = () =>
+  const handlePreview = () => {
     setModal(
       <FormProvider {...form}>
         <SwapPreviewModal onClose={handleClose} />
@@ -44,6 +44,7 @@ const SwapPreviewButton: FC = () => {
         custom: true,
       }
     );
+  };
 
   const isEnabled =
     coinsExist &&
