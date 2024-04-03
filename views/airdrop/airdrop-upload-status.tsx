@@ -30,7 +30,7 @@ const AirdropUploadStatus: FC = () => {
       gap="xl"
       display="flex"
       borderRadius="xs"
-      bg="lowContainer"
+      bg="container"
       flexDirection="column"
     >
       <Box display="flex" justifyContent="space-between">

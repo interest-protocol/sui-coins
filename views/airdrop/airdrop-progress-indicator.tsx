@@ -35,7 +35,7 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
       display="flex"
       borderRadius="xs"
       color="onSurface"
-      bg="lowContainer"
+      bg="container"
       flexDirection="column"
     >
       <Typography
