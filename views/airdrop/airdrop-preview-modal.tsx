@@ -104,7 +104,7 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
                 >
                   <TokenIcon
                     network={network.network}
-                    tokenId={network.network === Network.DEVNET ? type : symbol}
+                    tokenId={network.network === Network.DEVNET ? symbol : type}
                   />
                 </Box>
                 <Typography size="small" variant="title">
