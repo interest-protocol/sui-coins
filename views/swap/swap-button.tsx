@@ -13,6 +13,7 @@ import { REGISTRY_POOLS } from '@/constants/coins';
 import { PACKAGES } from '@/constants/packages';
 import { useNetwork } from '@/context/network';
 import { useMovementClient, useWeb3 } from '@/hooks';
+import { useModal } from '@/hooks/use-modal';
 import { FixedPointMath } from '@/lib';
 import {
   createObjectsParameter,
@@ -31,6 +32,7 @@ const SwapButton = () => {
   const { signTransactionBlock } = useWalletKit();
   const { account, coinsMap, mutate } = useWeb3();
   const client = useMovementClient();
+  const { handleClose } = useModal();
 
   const resetInput = () => {
     formSwap.setValue('from.value', '0');
@@ -145,6 +147,7 @@ const SwapButton = () => {
     } finally {
       resetInput();
       setLoading(false);
+      handleClose();
       await mutate();
     }
   };
