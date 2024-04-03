@@ -84,8 +84,9 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
               You will send
             </Typography>
             <Box
-              bg="onSurface"
               p="s"
+              bg="lowestContainer"
+              color="onSurface"
               borderRadius="xs"
               display="flex"
               alignItems="center"
@@ -93,8 +94,6 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
             >
               <Box display="flex" alignItems="center" gap="m">
                 <Box
-                  bg="lowestContainer"
-                  color="onSurface"
                   width="2.5rem"
                   height="2.5rem"
                   borderRadius="xs"
@@ -115,7 +114,7 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
                 <Typography size="medium" variant="body">
                   {formatMoney(total)} {symbol}
                 </Typography>
-                <Typography variant="body" size="small" color="#000000A3">
+                <Typography variant="body" size="small" color="outlineVariant">
                   {usdPrice ? formatMoney(usdPrice * total) : '--'} USD
                 </Typography>
               </Box>
