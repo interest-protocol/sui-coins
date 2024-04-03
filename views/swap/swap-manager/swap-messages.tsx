@@ -18,67 +18,60 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
   isFetchingSwapAmountOut,
 }) => {
   const { setValue } = useFormContext();
-  const tokenIn = useWatch({ control: control, name: 'from' });
-  const tokenOut = useWatch({ control: control, name: 'to' });
+  const from = useWatch({ control: control, name: 'from' });
+  const to = useWatch({ control: control, name: 'to' });
   const [toastState, setToastState] = useState<boolean>(false);
 
-  const tokenInValue = +(propOr('0', 'value', tokenIn) as string);
-  const tokenOutValue = +(propOr('0', 'value', tokenOut) as string);
+  const fromValue = +(propOr('0', 'value', from) as string);
+  const toValue = +(propOr('0', 'value', to) as string);
 
   useEffect(() => {
     setValue(
       'readyToSwap',
-      !(error && tokenInValue > 0) &&
-        !(error && tokenOutValue > 0) &&
+      !(error && fromValue > 0) &&
+        !(error && toValue > 0) &&
         !isFetchingSwapAmountOut &&
-        !(isZeroSwapAmountOut && !!tokenInValue && !isFetchingSwapAmountOut) &&
+        !(isZeroSwapAmountOut && !!fromValue && !isFetchingSwapAmountOut) &&
         !isFetchingSwapAmountIn &&
-        !(isZeroSwapAmountIn && !!tokenOutValue && !isFetchingSwapAmountIn) &&
-        !(propOr('', 'type', tokenIn) === propOr('', 'type', tokenOut)) &&
+        !(isZeroSwapAmountIn && !!toValue && !isFetchingSwapAmountIn) &&
+        !(propOr('', 'type', from) === propOr('', 'type', to)) &&
         !hasNoMarket
     );
   }, [
     error,
-    tokenInValue,
-    tokenOutValue,
+    fromValue,
+    toValue,
     isFetchingSwapAmountOut,
     isFetchingSwapAmountIn,
     isZeroSwapAmountIn,
-    tokenIn,
-    tokenOut,
+    from,
+    to,
     hasNoMarket,
   ]);
 
   const amountNotEnough =
-    (isZeroSwapAmountIn && !!tokenInValue && !isFetchingSwapAmountIn) ||
-    (isZeroSwapAmountOut && !!tokenOutValue && !isFetchingSwapAmountOut);
+    (isZeroSwapAmountIn && !!fromValue && !isFetchingSwapAmountIn) ||
+    (isZeroSwapAmountOut && !!toValue && !isFetchingSwapAmountOut);
 
   const errorMessage = pathOr(null, ['to', 'message'], errors);
 
   // Clear errors
   useEffect(() => {
     // If there is no error or both tokens are not selected - do nothing
-    if (!errorMessage || !tokenIn?.type || !tokenOut?.type) return;
+    if (!errorMessage || !from?.type || !to?.type) return;
 
-    const name = tokenInValue ? 'from' : 'to';
+    const name = fromValue ? 'from' : 'to';
 
     if (!amountNotEnough && errors[name]?.message === 'increaseAmount')
       setError(name, {});
 
-    if (tokenIn?.type !== tokenOut?.type && errorMessage === 'sameTokens')
+    if (from?.type !== to?.type && errorMessage === 'sameTokens')
       setError(name, {});
 
     if (!error && errorMessage === 'error') setError(name, {});
 
     if (!hasNoMarket && errorMessage === 'noMarket') setError(name, {});
-  }, [
-    error,
-    amountNotEnough,
-    hasNoMarket,
-    errorMessage,
-    tokenIn?.type,
-    tokenOut?.type,
-  ]);
+  }, [error, amountNotEnough, hasNoMarket, errorMessage, from?.type, to?.type]);
 
   useEffect(() => {
     if ((isFetchingSwapAmountIn || isFetchingSwapAmountOut) && !toastState)
@@ -87,14 +80,14 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
 
   useEffect(() => {
     if (toastState) {
-      setValue('loading', true);
+      setValue('swapping', true);
       toast.loading('Fetching prices');
     }
   }, [toastState]);
 
   useEffect(() => {
     if (!(isFetchingSwapAmountIn || isFetchingSwapAmountOut) && toastState) {
-      setValue('loading', false);
+      setValue('swapping', false);
       setToastState(false);
       toast.dismiss();
     }
@@ -103,7 +96,7 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
   // Set Error
   useEffect(() => {
     // If there is already an error or both tokens are not selected -> do nothing
-    if (!!errorMessage || !tokenIn?.type || !tokenOut?.type) return;
+    if (!!errorMessage || !from?.type || !to?.type) return;
     if (error)
       if (errors.to?.message !== 'error')
         setError('to', { type: 'custom', message: 'error' });
@@ -112,26 +105,19 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
       if (errors.to?.message !== 'noMarket')
         setError('to', { type: 'custom', message: 'noMarket' });
 
-    if (tokenIn?.type === tokenOut?.type)
+    if (from?.type === to?.type)
       if (errors.to?.message !== 'sameTokens')
         setError('to', { type: 'custom', message: 'sameTokens' });
 
     if (amountNotEnough) {
-      const name = tokenInValue ? 'from' : 'to';
+      const name = fromValue ? 'from' : 'to';
       if (errors[name]?.message !== 'increaseAmount')
         setError(name, {
           type: 'custom',
           message: 'increaseAmount',
         });
     }
-  }, [
-    error,
-    amountNotEnough,
-    hasNoMarket,
-    tokenIn?.type,
-    tokenOut?.type,
-    errorMessage,
-  ]);
+  }, [error, amountNotEnough, hasNoMarket, from?.type, to?.type, errorMessage]);
 
   return null;
 };

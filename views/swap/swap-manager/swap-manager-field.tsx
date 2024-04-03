@@ -32,27 +32,24 @@ const SwapManagerField: FC<SwapManagerProps> = ({
 }) => {
   const { network } = useNetwork();
   const client = useMovementClient();
-  const [tokenIn] = useDebounce(useWatch({ control, name }), 900);
+  const [from] = useDebounce(useWatch({ control, name }), 900);
 
   const lock = useWatch({ control, name: 'lock' });
   const decimals = useWatch({ control, name: 'to.decimals' });
 
   const { error } = useSWR(
     makeSWRKey(
-      [account, type, prop('value', tokenIn), prop('type', tokenIn)],
+      [account, type, prop('value', from), prop('type', from)],
       client.devInspectTransactionBlock.name
     ),
     async () => {
       setValue(`${name}.locked`, true);
 
-      const amount = FixedPointMath.toBigNumber(
-        tokenIn.value,
-        tokenIn.decimals
-      );
+      const amount = FixedPointMath.toBigNumber(from.value, from.decimals);
 
       const safeAmount = amount.decimalPlaces(0, BigNumber.ROUND_DOWN);
 
-      if (!tokenIn || !+tokenIn.value || lock || hasNoMarket) return;
+      if (!from || !+from.value || lock || hasNoMarket) return;
 
       setIsFetchingSwapAmount(true);
 
@@ -124,12 +121,12 @@ const SwapManagerField: FC<SwapManagerProps> = ({
   useEffect(() => {
     setValue(
       'disabled',
-      !!(error && +tokenIn?.value > 0) ||
+      !!(error && +from?.value > 0) ||
         isFetchingSwapAmount ||
-        tokenIn?.type === type ||
+        from?.type === type ||
         hasNoMarket
     );
-  }, [error, tokenIn, hasNoMarket, tokenIn?.type, type, isFetchingSwapAmount]);
+  }, [error, from, hasNoMarket, from?.type, type, isFetchingSwapAmount]);
 
   return null;
 };

@@ -1,6 +1,7 @@
 import { Button } from '@interest-protocol/ui-kit';
+import { SUI_TYPE_ARG } from '@mysten/sui.js/src/utils';
 import BigNumber from 'bignumber.js';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { FormProvider, useFormContext, useWatch } from 'react-hook-form';
 
 import { useWeb3 } from '@/hooks';
@@ -9,6 +10,7 @@ import { FixedPointMath } from '@/lib';
 import { ZERO_BIG_NUMBER } from '@/utils';
 import { SwapForm } from '@/views/swap/swap.types';
 
+import { SwapMessages } from './swap-manager/swap-messages';
 import SwapPreviewModal from './swap-preview-modal';
 
 const SwapPreviewButton: FC = () => {
@@ -16,24 +18,69 @@ const SwapPreviewButton: FC = () => {
   const { setModal, handleClose } = useModal();
   const form = useFormContext<SwapForm>();
 
-  const { getValues, control } = form;
+  const { getValues, setValue, control } = form;
 
   const coinsExist = coinsMap[getValues('from.type')];
 
   const loading = useWatch({ control: control, name: 'loading' });
-  const tokenIn = useWatch({ control: control, name: 'from' });
-  const tokenOut = useWatch({ control: control, name: 'to' });
+  const from = useWatch({ control: control, name: 'from' });
+  const to = useWatch({ control: control, name: 'to' });
 
-  const notEnoughBalance = FixedPointMath.toBigNumber(
-    tokenIn.value,
-    tokenIn.decimals
-  )
+  const fromValue = from?.value ?? ZERO_BIG_NUMBER;
+
+  const fromBalance =
+    from && coinsMap[from.type] ? coinsMap[from.type].balance : ZERO_BIG_NUMBER;
+
+  const oneCoin = from
+    ? FixedPointMath.toBigNumber(1, from.decimals)
+    : ZERO_BIG_NUMBER;
+
+  const isGreaterThanBalance = fromBalance.lt(fromValue);
+
+  const isGreaterThanAllowedWhenSui = fromBalance.minus(oneCoin).lt(fromValue);
+
+  const notEnoughBalance = FixedPointMath.toBigNumber(from.value, from.decimals)
     .decimalPlaces(0, BigNumber.ROUND_DOWN)
     .gt(
-      coinsMap[tokenIn.type]
-        ? BigNumber(coinsMap[tokenIn.type].balance)
+      coinsMap[from.type]
+        ? BigNumber(coinsMap[from.type].balance)
         : ZERO_BIG_NUMBER
     );
+
+  const ableToSwap =
+    from &&
+    to &&
+    from.type &&
+    to.type &&
+    !loading &&
+    !from.value?.isZero() &&
+    Number(to.display) &&
+    coinsMap[from.type] &&
+    (from.type === SUI_TYPE_ARG
+      ? !isGreaterThanAllowedWhenSui
+      : !isGreaterThanBalance);
+
+  useEffect(() => {
+    if (
+      from &&
+      Number(from.value) &&
+      from.type &&
+      String(from.decimals) &&
+      coinsMap[from.type]
+    ) {
+      if (from.type === SUI_TYPE_ARG)
+        if (isGreaterThanAllowedWhenSui) {
+          setValue('error', 'You must have at least 1 SUI on your wallet');
+          return;
+        }
+
+      if (isGreaterThanBalance) {
+        setValue('error', 'You do not have enough tokens.');
+        return;
+      }
+    }
+    setValue('error', null);
+  }, [from]);
 
   const handlePreview = () =>
     setModal(
@@ -49,25 +96,28 @@ const SwapPreviewButton: FC = () => {
     coinsExist &&
     !loading &&
     !notEnoughBalance &&
-    Number(tokenIn.value) &&
-    Number(tokenOut.value);
+    Number(from.value) &&
+    Number(to.value);
 
   return (
-    <Button
-      py="s"
-      px="xl"
-      fontSize="s"
-      type="button"
-      borderRadius="xs"
-      disabled={!isEnabled}
-      onClick={handlePreview}
-      variant={isEnabled ? 'filled' : 'tonal'}
-      cursor={isEnabled ? 'pointer' : 'not-allowed'}
-      bg={isEnabled ? 'filled' : 'outlineContainer'}
-      color={isEnabled ? 'surface' : 'outlineVariant'}
-    >
-      Preview swap
-    </Button>
+    <>
+      <SwapMessages />
+      <Button
+        py="s"
+        px="xl"
+        fontSize="s"
+        type="button"
+        borderRadius="xs"
+        disabled={!ableToSwap}
+        onClick={handlePreview}
+        variant={isEnabled ? 'filled' : 'tonal'}
+        cursor={isEnabled ? 'pointer' : 'not-allowed'}
+        bg={isEnabled ? 'filled' : 'outlineContainer'}
+        color={isEnabled ? 'surface' : 'outlineVariant'}
+      >
+        Preview swap
+      </Button>
+    </>
   );
 };
 

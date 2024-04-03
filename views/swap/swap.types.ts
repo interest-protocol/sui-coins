@@ -22,19 +22,12 @@ export interface SwapForm {
   from: SwapToken;
   settings: ISwapSettings;
   lock: boolean;
+  error?: string | null;
   loading: boolean;
   maxValue: boolean;
   disabled: boolean;
   swapPath: SwapPath;
   readyToSwap: boolean;
-}
-
-export interface SwapForm {
-  to: SwapToken;
-  lock: boolean;
-  from: SwapToken;
-  disabled: boolean;
-  maxValue: boolean;
 }
 
 export interface SwapPreviewModalProps {
