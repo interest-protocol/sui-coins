@@ -1,12 +1,15 @@
 import { Button, Typography } from '@interest-protocol/ui-kit';
-import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
+import {
+  useCurrentAccount,
+  useSignTransactionBlock,
+  useSuiClient,
+} from '@mysten/dapp-kit';
 import { useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { EXPLORER_URL } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useDialog } from '@/hooks/use-dialog';
-import useSignTxb from '@/hooks/use-sign-txb';
 import { useWeb3 } from '@/hooks/use-web3';
 import { throwTXIfNotSuccessful } from '@/utils';
 import { SwapForm } from '@/views/swap/swap.types';
@@ -23,11 +26,11 @@ const SwapButton = () => {
   const [loading, setLoading] = useState(false);
   const { mutate } = useWeb3();
 
-  const signTransactionBlock = useSignTxb();
+  const signTransactionBlock = useSignTransactionBlock();
 
   const resetInput = () => {
-    formSwap.setValue('from.value', '0');
-    formSwap.setValue('to.value', '0');
+    formSwap.setValue('from.display', '0');
+    formSwap.setValue('to.display', '0');
   };
 
   const [explorerLink, setExplorerLink] = useState('');
@@ -53,9 +56,10 @@ const SwapButton = () => {
         slippage: Number(slippage),
       });
 
-      const { signature, transactionBlockBytes } = await signTransactionBlock({
-        transactionBlock: txb,
-      });
+      const { signature, transactionBlockBytes } =
+        await signTransactionBlock.mutateAsync({
+          transactionBlock: txb,
+        });
 
       const tx = await client.executeTransactionBlock({
         transactionBlock: transactionBlockBytes,
@@ -82,7 +86,6 @@ const SwapButton = () => {
           'We are confirming the DCA, and you will let you know when it is done',
       },
       success: {
-        onClose: handleClose,
         title: 'DCA confirmed successfully',
         message:
           'Your DCA setup was successfully, and you can check it on the Explorer',
@@ -96,7 +99,6 @@ const SwapButton = () => {
         },
       },
       error: {
-        onClose: handleClose,
         title: 'DCA Failed',
         message:
           'Your DCA failed, please try again or contact the support team',
