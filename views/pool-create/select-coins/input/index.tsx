@@ -15,6 +15,7 @@ const Input: FC<InputProps> = ({ index }) => {
   return (
     <Box
       display="flex"
+      width="100%"
       borderRadius="xs"
       border="1px solid"
       position="relative"

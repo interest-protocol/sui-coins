@@ -4,4 +4,6 @@ export interface FindPoolModalProps {
 
 export interface SelectTokenProps {
   index: number;
+  canRemove: boolean;
+  handleRemoveSelectToken: (index: number) => void;
 }
