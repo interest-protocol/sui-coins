@@ -1,5 +1,5 @@
 import { Button } from '@interest-protocol/ui-kit';
-import { SUI_TYPE_ARG } from '@mysten/sui.js/src/utils';
+import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
 import { FC, useEffect } from 'react';
 import { FormProvider, useFormContext, useWatch } from 'react-hook-form';
@@ -10,7 +10,7 @@ import { FixedPointMath } from '@/lib';
 import { ZERO_BIG_NUMBER } from '@/utils';
 import { SwapForm } from '@/views/swap/swap.types';
 
-import { SwapMessages } from './swap-manager/swap-messages';
+import SwapMessages from './swap-messages';
 import SwapPreviewModal from './swap-preview-modal';
 
 const SwapPreviewButton: FC = () => {
@@ -70,7 +70,7 @@ const SwapPreviewButton: FC = () => {
     ) {
       if (from.type === SUI_TYPE_ARG)
         if (isGreaterThanAllowedWhenSui) {
-          setValue('error', 'You must have at least 1 SUI on your wallet');
+          setValue('error', 'You must have at least 1 MOV on your wallet');
           return;
         }
 

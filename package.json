@@ -16,7 +16,7 @@
     "@emotion/react": "^11.11.1",
     "@hookform/resolvers": "^3.3.2",
     "@interest-protocol/ui-kit": "^0.2.25-alpha",
-    "@mysten/sui.js": "^0.45.1",
+    "@mysten/sui.js": "^0.51.2",
     "@mysten/suins-toolkit": "^0.3.13",
     "@mysten/wallet-kit": "^0.8.2",
     "@stylin.js/react": "^1.0.4-alpha.0",

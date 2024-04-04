@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@0no-co/graphql.web@^1.0.4":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@0no-co/graphql.web/-/graphql.web-1.0.6.tgz#3def68bbaf654a301bd910ce3744506cad97ab9a"
+  integrity sha512-KZ7TnwMcQJcFgzjoY623AVxtlDQonkqp3rSz0wb15/jHPyU1v5gynUibEpuutDeoyGJ5Tp+FwxjGyDGDwq3vIw==
+
 "@aashutoshrathi/word-wrap@^1.2.3":
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/@aashutoshrathi/word-wrap/-/word-wrap-1.2.6.tgz#bd9154aec9983f77b3a034ecaa015c2e4201f6cf"
@@ -716,6 +721,26 @@
   dependencies:
     "@gitmoji/gitmoji-regex" "1.0.0"
 
+"@gql.tada/cli-utils@0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@gql.tada/cli-utils/-/cli-utils-0.3.1.tgz#5d86c409c371506a96e59ead710020d76d760207"
+  integrity sha512-Eq7lV0059AqqdM8TL53k3gtxKWQ+aPAG3Nn8ZyTZUM5DNniwqH3CHnHg+pTR67Q51rX8CXRpyAXEHlJvS8GvqQ==
+  dependencies:
+    "@gql.tada/internal" "0.1.1"
+    graphql "^16.8.1"
+
+"@gql.tada/internal@0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@gql.tada/internal/-/internal-0.1.1.tgz#e1b08db928c1591dd97e3ade222215c5d26980c6"
+  integrity sha512-2TrWcoluLySDBKKoGAGWQzXhiF2Vaz9xyfqsAP25Uz/xKmuFm+Nxpma6oLlwRec7lArNiRu9u7Vi1GjLik1UfA==
+  dependencies:
+    graphql "^16.8.1"
+
+"@graphql-typed-document-node/core@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@graphql-typed-document-node/core/-/core-3.2.0.tgz#5f3d96ec6b2354ad6d8a28bf216a1d97b5426861"
+  integrity sha512-mB9oAsNCm9aM3/SOv4YtBMqZbYj10R7dkq8byBqxGY/ncFwhf2oQzMV+LCRlWoDSEBJ3COiR1yeDvMtsoOsuFQ==
+
 "@headlessui/react@^1.7.15":
   version "1.7.17"
   resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-1.7.17.tgz#a0ec23af21b527c030967245fd99776aa7352bc6"
@@ -1044,6 +1069,13 @@
     semver "^7.3.5"
     tar "^6.1.11"
 
+"@mysten/bcs@0.11.1":
+  version "0.11.1"
+  resolved "https://registry.yarnpkg.com/@mysten/bcs/-/bcs-0.11.1.tgz#0cc0b0f5960f60cfe5cf6a8c229affa59cd09b1b"
+  integrity sha512-xP85isNSYUCHd3O/g+TmZYmg4wK6cU8q/n/MebkIGP4CYVJZz2wU/G24xIZ3wI+0iTop4dfgA5kYrg/DQKCUzA==
+  dependencies:
+    bs58 "^5.0.0"
+
 "@mysten/bcs@0.7.3":
   version "0.7.3"
   resolved "https://registry.yarnpkg.com/@mysten/bcs/-/bcs-0.7.3.tgz#b2e4558a8feb9fd3a0dc2ff4e94c37e1f8a7c7e5"
@@ -1058,7 +1090,7 @@
   dependencies:
     bs58 "^5.0.0"
 
-"@mysten/sui.js@0.45.1", "@mysten/sui.js@^0.45.1":
+"@mysten/sui.js@0.45.1":
   version "0.45.1"
   resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.45.1.tgz#df609856e067060f8fc71d6c8fd8858f8055b329"
   integrity sha512-B6RKfBAR1yr3EvHyQzXgkyOGOXE7jUbgblyitK/25CGp4Uba4VHEZ/N5DCbiuTJdt2k1H42sSXqIGfYqHN+6Cw==
@@ -1103,6 +1135,24 @@
     "@scure/bip39" "^1.2.1"
     "@suchipi/femver" "^1.0.0"
     events "^3.3.0"
+    superstruct "^1.0.3"
+    tweetnacl "^1.0.3"
+
+"@mysten/sui.js@^0.51.2":
+  version "0.51.2"
+  resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.51.2.tgz#40c54bf1df57fdeaf27ad11efddeaa20ff5e6a7b"
+  integrity sha512-RRG/VHhVvkQlWqodFZagRxVDo3SbXh4e3xTBplhPNNyybugbWj/V+wGrNv5/KtxfVxHBw6jTCoB798ijqPBq7g==
+  dependencies:
+    "@graphql-typed-document-node/core" "^3.2.0"
+    "@mysten/bcs" "0.11.1"
+    "@noble/curves" "^1.1.0"
+    "@noble/hashes" "^1.3.1"
+    "@scure/bip32" "^1.3.1"
+    "@scure/bip39" "^1.2.1"
+    "@suchipi/femver" "^1.0.0"
+    bech32 "^2.0.0"
+    gql.tada "^1.4.1"
+    graphql "^16.8.1"
     superstruct "^1.0.3"
     tweetnacl "^1.0.3"
 
@@ -2795,6 +2845,11 @@ base64-js@^1.3.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.5.1.tgz#1b1b440160a5bf7ad40b650f095963481903930a"
   integrity sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==
+
+bech32@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/bech32/-/bech32-2.0.0.tgz#078d3686535075c8c79709f054b1b226a133b355"
+  integrity sha512-LcknSilhIGatDAsY1ak2I8VtGaHNhgMSYVxFrGLXv+xLHytaKZKcaUJJUE7qmBr7h33o5YQwP55pMI0xmkpJwg==
 
 big-integer@^1.6.44:
   version "1.6.52"
@@ -4877,6 +4932,15 @@ gopd@^1.0.1:
   dependencies:
     get-intrinsic "^1.1.3"
 
+gql.tada@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/gql.tada/-/gql.tada-1.4.1.tgz#d25f6d4941c146651b85191b4d54bad183183fac"
+  integrity sha512-AnDA26jbbyc4COiNzovgEwI1XKmRz4F5XoFFSI8Gh6TQqqzulOVNafv/1l8/C5S/iIqV9uwQmy33AJ89peCLBg==
+  dependencies:
+    "@0no-co/graphql.web" "^1.0.4"
+    "@gql.tada/cli-utils" "0.3.1"
+    "@gql.tada/internal" "0.1.1"
+
 graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0, graceful-fs@^4.2.11, graceful-fs@^4.2.6, graceful-fs@^4.2.9:
   version "4.2.11"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.11.tgz#4183e4e8bf08bb6e05bbb2f7d2e0c8f712ca40e3"
@@ -4886,6 +4950,11 @@ graphemer@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/graphemer/-/graphemer-1.4.0.tgz#fb2f1d55e0e3a1849aeffc90c4fa0dd53a0e66c6"
   integrity sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==
+
+graphql@^16.8.1:
+  version "16.8.1"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.8.1.tgz#1930a965bef1170603702acdb68aedd3f3cf6f07"
+  integrity sha512-59LZHPdGZVh695Ud9lRzPBVTtlX9ZCV150Er2W43ro37wVof0ctenSaskPPjN7lVTIN8mSZt8PHUNKZuNQUuxw==
 
 hard-rejection@^2.1.0:
   version "2.1.0"
