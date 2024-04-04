@@ -1,6 +1,11 @@
-import { Box, Button, Typography } from '@interest-protocol/ui-kit';
+import {
+  Box,
+  Button,
+  ProgressIndicator,
+  Typography,
+} from '@interest-protocol/ui-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import Layout from '@/components/layout';
@@ -22,6 +27,14 @@ const SendClaim: FC<SendClaimProps> = ({ id }) => {
   const onSuccess = (tx: SuiTransactionBlockResponse) => {
     showTXSuccessToast(tx, network);
   };
+
+  const [url, setUrl] = useState('');
+
+  useEffect(() => {
+    if (url || !data || !data.url) return;
+
+    setUrl(data.url);
+  }, [data]);
 
   const onClaim = async () => {
     if (
@@ -65,7 +78,7 @@ const SendClaim: FC<SendClaimProps> = ({ id }) => {
         <Typography variant="title" size="large" textAlign="center">
           {!isLoading && !data
             ? 'Nothing to claim'
-            : data && !data.url
+            : !isLoading && data && data.url !== url
               ? 'Assets already claimed'
               : 'Funds ready to be claim'}
         </Typography>
@@ -92,6 +105,8 @@ const SendClaim: FC<SendClaimProps> = ({ id }) => {
               assets={data.link.assets}
             />
           </Box>
+        ) : isLoading ? (
+          <ProgressIndicator size={36} variant="loading" />
         ) : (
           <Box color="success" my="xl">
             <CheckmarkSVG
@@ -113,10 +128,11 @@ const SendClaim: FC<SendClaimProps> = ({ id }) => {
               !data.link ||
               isLoading ||
               error ||
+              data.url !== url ||
               (data && !data.link)
             }
           >
-            {data && !data.link ? 'Claimed' : 'Claim'}
+            {data && data.url !== url ? 'Claimed' : 'Claim'}
           </Button>
         </Box>
       </Box>

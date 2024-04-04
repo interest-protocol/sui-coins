@@ -7,13 +7,13 @@ import { useModal } from '@/hooks/use-modal';
 import { MinusSVG, PlusSVG } from '@/svg';
 import SelectObjectModal from '@/views/components/select-object-modal';
 
-import SendFormSelectObject from './send-form-select-object';
-import { SendSimpleForm } from './send-form-simple.types';
-import SendButton from './send-simple-form-button';
+import SendFormSelectObject from './send-select-object';
+import { ISendSimpleForm } from './send-simple.types';
+import SendButton from './send-simple-button';
 
 const SendSimpleFormFields = () => {
   const { setModal, handleClose } = useModal();
-  const { control } = useFormContext<SendSimpleForm>();
+  const { control } = useFormContext<ISendSimpleForm>();
 
   const { fields, append, remove } = useFieldArray({
     control,

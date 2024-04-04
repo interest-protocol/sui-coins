@@ -9,14 +9,14 @@ import { Routes, RoutesEnum } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { showTXSuccessToast } from '@/utils';
 
-import { SendSimpleForm } from '../send-form-simple.types';
+import { ISendSimpleForm } from '../send-simple.types';
 import useCreateLink from './send-button.hooks';
 
 const SendButton: FC = () => {
   const { push } = useRouter();
   const network = useNetwork();
   const createLink = useCreateLink();
-  const { control } = useFormContext<SendSimpleForm>();
+  const { control } = useFormContext<ISendSimpleForm>();
   const objects = useWatch({ control, name: 'objects' });
 
   const onSuccess = (tx: SuiTransactionBlockResponse, id: string) => {

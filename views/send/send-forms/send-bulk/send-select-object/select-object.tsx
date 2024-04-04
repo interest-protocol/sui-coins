@@ -6,21 +6,20 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import TokenIcon from '@/components/token-icon';
 import { useNetwork } from '@/context/network';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
-import { ObjectData } from '@/hooks/use-get-all-objects/use-get-all-objects.types';
 import { useModal } from '@/hooks/use-modal';
-import SelectObjectModal from '@/views/components/select-object-modal';
+import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
+import SelectTokenModal from '@/views/components/select-token-modal';
 
-import { SendSimpleForm } from '../send-form-simple.types';
-import { SendFormSelectObjectProps } from './send-from-select-object.types';
+import { ISendBulkForm } from '../send-bulk.types';
 
-const SelectObject: FC<SendFormSelectObjectProps> = ({ index }) => {
+const SelectObject: FC = () => {
   const network = useNetwork();
 
-  const { setValue, control } = useFormContext<SendSimpleForm>();
+  const { setValue, control } = useFormContext<ISendBulkForm>();
 
   const object = useWatch({
     control,
-    name: `objects.${index}`,
+    name: 'object',
   });
 
   const { type } = object ?? {
@@ -29,16 +28,11 @@ const SelectObject: FC<SendFormSelectObjectProps> = ({ index }) => {
 
   const { setModal, handleClose } = useModal();
 
-  const onSelect = async (object: ObjectData) => {
-    const balance = (object.display as CoinObject)?.balance;
-    const editable = balance && !balance.isZero();
-
-    setValue(`objects.${index}`, {
+  const onSelect = async (object: CoinObject) =>
+    setValue('object', {
       ...object,
-      editable,
-      value: !editable && !balance ? '1' : '',
+      value: '',
     });
-  };
 
   const openModal = () =>
     setModal(
@@ -47,7 +41,7 @@ const SelectObject: FC<SendFormSelectObjectProps> = ({ index }) => {
         initial={{ scale: 0.85 }}
         transition={{ duration: 0.3 }}
       >
-        <SelectObjectModal closeModal={handleClose} onSelect={onSelect} />
+        <SelectTokenModal simple closeModal={handleClose} onSelect={onSelect} />
       </Motion>,
       {
         isOpen: true,
@@ -57,15 +51,9 @@ const SelectObject: FC<SendFormSelectObjectProps> = ({ index }) => {
       }
     );
 
-  const displayName = object?.display
-    ? (object.display as Record<string, string>).name ??
-      object.display.symbol ??
-      type
-    : type;
+  const displayName = object ? object.symbol ?? type : type;
 
-  const url = (object?.display as Record<string, string>)?.image_url || '';
-
-  const { symbol, type: coinType } = (object?.display as CoinObject) ?? {
+  const { symbol, type: coinType } = object ?? {
     type,
     symbol: '',
   };
@@ -73,8 +61,9 @@ const SelectObject: FC<SendFormSelectObjectProps> = ({ index }) => {
   return (
     <Box position="relative">
       <Button
-        px="xs"
+        px="s"
         py="2xs"
+        gap="2xs"
         ml="-0.7rem"
         width="100%"
         fontSize="s"
@@ -88,8 +77,9 @@ const SelectObject: FC<SendFormSelectObjectProps> = ({ index }) => {
             <TokenIcon
               withBg
               size="1rem"
+              type={coinType}
               symbol={symbol}
-              {...(url ? { url } : { network, type: coinType })}
+              network={network}
             />
           ),
         })}
@@ -97,15 +87,22 @@ const SelectObject: FC<SendFormSelectObjectProps> = ({ index }) => {
         <Typography
           size="large"
           variant="label"
-          pr={['0', 'xs']}
           overflow="hidden"
           whiteSpace="nowrap"
           width={['0px', 'auto']}
           display={[type ? 'none' : 'block', 'block']}
         >
-          {symbol ||
-            (type && type === displayName ? formatAddress(type) : displayName)}
+          {(symbol ||
+            (type && type === displayName
+              ? formatAddress(type)
+              : displayName)) ??
+            'Select Token'}
         </Typography>
+        {symbol ? (
+          <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+        ) : (
+          <ChevronRightSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+        )}
       </Button>
     </Box>
   );

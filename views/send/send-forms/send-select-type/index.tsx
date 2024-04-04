@@ -19,7 +19,7 @@ const SendSelectType: FC<SendSelectTypeProps> = ({ onSelectType }) => (
         Create a link to send
       </Typography>
       <Typography variant="body" size="large" textAlign="center">
-        It simple Create a link and send coins, NFT and more. Shares the link
+        It simple Create a link and send coins, NFTs and more. Shares the link
         with the recipient via email, direct message, or any other channel.
       </Typography>
     </Box>

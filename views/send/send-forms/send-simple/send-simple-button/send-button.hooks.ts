@@ -13,7 +13,7 @@ import { FixedPointMath } from '@/lib';
 import { isSui, throwTXIfNotSuccessful } from '@/utils';
 import { isCoinObject } from '@/views/components/select-object-modal/select-object-modal.utils';
 
-import { ObjectField } from '../send-form-simple.types';
+import { ObjectField } from '../send-simple.types';
 
 const useCreateLink = () => {
   const network = useNetwork();
@@ -69,7 +69,7 @@ const useCreateLink = () => {
 
     const id = v4();
 
-    fetch(`/api/v1/zksend?network=${network}`, {
+    await fetch(`/api/v1/zksend?network=${network}`, {
       method: 'POST',
       body: JSON.stringify({
         id,

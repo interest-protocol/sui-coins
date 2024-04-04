@@ -6,13 +6,13 @@ import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { FixedPointMath } from '@/lib';
 import { parseInputEventToNumberString, ZERO_BIG_NUMBER } from '@/utils';
 
-import { SendSimpleForm } from '../send-form-simple.types';
+import { ISendSimpleForm } from '../send-simple.types';
 import SelectObject from './select-object';
-import { SendFormSelectObjectProps } from './send-from-select-object.types';
+import { SendFormSelectObjectProps } from './send-select-object.types';
 import SendSelectObjectHeader from './send-select-object-header';
 
 const SendFormSelectObject: FC<SendFormSelectObjectProps> = ({ index }) => {
-  const { register, control, setValue } = useFormContext<SendSimpleForm>();
+  const { register, control, setValue } = useFormContext<ISendSimpleForm>();
 
   const display = useWatch({ control, name: `objects.${index}.display` });
   const editable = useWatch({ control, name: `objects.${index}.editable` });

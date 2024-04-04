@@ -5,7 +5,7 @@ export const SEND_SELECT_TYPE_CARDS = [
   {
     title: 'Simple link',
     illustration: <SimpleSendIllustration />,
-    description: 'Create one link and send coins, NFT and more',
+    description: 'Create one link and send coins, NFTs and more',
   },
   {
     title: 'Bulk link',

@@ -5,11 +5,11 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 
-import { SendSimpleForm } from '../send-form-simple.types';
-import { SendFormSelectObjectProps } from './send-from-select-object.types';
+import { ISendSimpleForm } from '../send-simple.types';
+import { SendFormSelectObjectProps } from './send-select-object.types';
 
 const SendSelectObjectHeader: FC<SendFormSelectObjectProps> = ({ index }) => {
-  const { control } = useFormContext<SendSimpleForm>();
+  const { control } = useFormContext<ISendSimpleForm>();
 
   const object = useWatch({
     control,

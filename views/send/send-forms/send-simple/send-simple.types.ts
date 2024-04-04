@@ -5,6 +5,6 @@ export type ObjectField = ObjectData & {
   editable: boolean;
 };
 
-export interface SendSimpleForm {
+export interface ISendSimpleForm {
   objects: ReadonlyArray<ObjectField>;
 }

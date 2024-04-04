@@ -2,17 +2,15 @@ import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { LOCAL_STORAGE_VERSION } from '@/constants';
 import { ErrorSVG, TimesSVG } from '@/svg';
 import PoweredByZkSend from '@/views/components/powered-by-zksend';
 
-import { SendSimpleForm } from './send-form-simple.types';
-import SendSimpleFormFields from './send-simple-form-fields';
+import { LOCAL_STORAGE_TOP_KEY } from '../../send.data';
+import { ISendSimpleForm } from './send-simple.types';
+import SendSimpleFormFields from './send-simple-fields';
 
-const LOCAL_STORAGE_TOP_KEY = `${LOCAL_STORAGE_VERSION}-simple-send-tip-state`;
-
-const SendFormSimple: FC = () => {
-  const form = useForm<SendSimpleForm>();
+const SendSimple: FC = () => {
+  const form = useForm<ISendSimpleForm>();
 
   const [isTipHidden, setTipHidden] = useState(false);
 
@@ -101,4 +99,4 @@ const SendFormSimple: FC = () => {
   );
 };
 
-export default SendFormSimple;
+export default SendSimple;
