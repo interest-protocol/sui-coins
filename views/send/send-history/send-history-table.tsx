@@ -12,7 +12,7 @@ import { v4 } from 'uuid';
 
 import { EXPLORER_URL, Routes, RoutesEnum } from '@/constants';
 import { useNetwork } from '@/context/network';
-import { AssetSVG, InfoSVG, ReloadSVG, SendSVG } from '@/svg';
+import { DefaultAssetSVG, InfoSVG, ReloadSVG, SendSVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 import PoweredByZkSend from '@/views/components/powered-by-zksend';
 
@@ -101,7 +101,11 @@ const SendHistoryTable: FC = () => {
                       alignItems="center"
                       justifyContent="center"
                     >
-                      <AssetSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+                      <DefaultAssetSVG
+                        width="100%"
+                        maxWidth="1rem"
+                        maxHeight="1rem"
+                      />
                     </Box>
                     <Typography as="span" size="medium" variant="body">
                       {assets.nfts.length + assets.balances.length} Asset
@@ -221,7 +225,6 @@ const SendHistoryTable: FC = () => {
                     </TooltipWrapper>
                   </Typography>
                 </Box>
-
                 {index === detailsIndex && (
                   <Motion
                     as="tr"

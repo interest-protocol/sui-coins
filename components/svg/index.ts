@@ -32,6 +32,7 @@ export { default as CoinsSVG } from './coins';
 export { default as ComputerEyesSVG } from './computer-eyes';
 export { default as CopySVG } from './copy';
 export { default as DefaultSVG } from './default';
+export { default as DefaultAssetSVG } from './default-asset';
 export { default as DefaultTokenSVG } from './default-token';
 export { default as DiedComputerSVG } from './died-computer';
 export { default as DiscordSVG } from './discord';
