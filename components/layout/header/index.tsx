@@ -1,12 +1,16 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
+import Link from 'next/link';
 import { FC } from 'react';
 
 import MenuMobile from '@/components/menu-mobile';
 import Mint from '@/components/mint';
 import Wallet from '@/components/wallet';
+import { Routes, RoutesEnum } from '@/constants';
 import { LogoSVG } from '@/svg';
 
-const Header: FC<{ withLogo?: boolean }> = ({ withLogo }) => (
+import { HeaderProps } from './header.types';
+
+const Header: FC<HeaderProps> = ({ withLogo }) => (
   <>
     <Box
       py="m"
@@ -28,33 +32,35 @@ const Header: FC<{ withLogo?: boolean }> = ({ withLogo }) => (
     >
       <Wallet />
       {withLogo && (
-        <Box
-          display="flex"
-          overflow="hidden"
-          textAlign="center"
-          alignItems="center"
-        >
+        <Link href={Routes[RoutesEnum.Swap]}>
           <Box
             display="flex"
-            minWidth="2.5rem"
-            minHeight="2.5rem"
+            overflow="hidden"
+            textAlign="center"
             alignItems="center"
-            justifyContent="center"
           >
-            <LogoSVG width="100%" maxWidth="2.5rem" maxHeight="2.5rem" />
-          </Box>
-          <Box ml="m">
-            <Typography
-              size="medium"
-              variant="title"
-              fontWeight="700"
-              color="onSurface"
-              width="max-content"
+            <Box
+              display="flex"
+              minWidth="2.5rem"
+              minHeight="2.5rem"
+              alignItems="center"
+              justifyContent="center"
             >
-              SUI COINS
-            </Typography>
+              <LogoSVG width="100%" maxWidth="2.5rem" maxHeight="2.5rem" />
+            </Box>
+            <Box ml="m">
+              <Typography
+                size="medium"
+                variant="title"
+                fontWeight="700"
+                color="onSurface"
+                width="max-content"
+              >
+                SUI COINS
+              </Typography>
+            </Box>
           </Box>
-        </Box>
+        </Link>
       )}
     </Box>
     <Box
