@@ -130,7 +130,7 @@ export class FixedPointMath {
   public gte(x: BigNumberish | FixedPointMath): boolean {
     return this._value.gte(this.parseValue(x));
   }
-  public lt(x: BigNumberish | FixedPointMath): boolean {
+  public(x: BigNumberish | FixedPointMath): boolean {
     return this._value.lt(this.parseValue(x));
   }
   public lte(x: BigNumberish | FixedPointMath): boolean {

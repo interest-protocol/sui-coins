@@ -63,10 +63,10 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
     const name = fromValue ? 'from' : 'to';
 
     if (!amountNotEnough && errors[name]?.message === 'increaseAmount')
-      setError(name, {});
+      setValue('error', "You doesn't have enough balance");
 
     if (from?.type !== to?.type && errorMessage === 'sameTokens')
-      setError(name, {});
+      setValue('error', "You can't swap the same coin");
 
     if (!error && errorMessage === 'error') setError(name, {});
 
@@ -96,28 +96,31 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
   // Set Error
   useEffect(() => {
     // If there is already an error or both tokens are not selected -> do nothing
-    if (!!errorMessage || !from?.type || !to?.type) return;
-    if (error)
-      if (errors.to?.message !== 'error')
-        setError('to', { type: 'custom', message: 'error' });
+    if (error) {
+      setValue('error', 'Something went wrong');
+      return;
+    }
 
-    if (hasNoMarket)
-      if (errors.to?.message !== 'noMarket')
-        setError('to', { type: 'custom', message: 'noMarket' });
+    if (hasNoMarket) {
+      setValue('error', 'Has no market for this coin');
+      return;
+    }
 
-    if (from?.type === to?.type)
-      if (errors.to?.message !== 'sameTokens')
-        setError('to', { type: 'custom', message: 'sameTokens' });
+    if (from?.type === to?.type) {
+      setValue('error', "You can't swap the same coin");
+      return;
+    }
+
+    if (from?.balance < fromValue) {
+      setValue('error', "Price value can't be greater than balance");
+      return;
+    }
 
     if (amountNotEnough) {
-      const name = fromValue ? 'from' : 'to';
-      if (errors[name]?.message !== 'increaseAmount')
-        setError(name, {
-          type: 'custom',
-          message: 'increaseAmount',
-        });
+      setValue('error', "You don't have enough balance to swap");
+      return;
     }
+    setValue('error', null);
   }, [error, amountNotEnough, hasNoMarket, from?.type, to?.type, errorMessage]);
-
   return null;
 };
