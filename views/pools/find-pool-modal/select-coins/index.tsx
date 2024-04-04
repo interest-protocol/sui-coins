@@ -9,11 +9,15 @@ import SelectToken from './select-token';
 
 const SelectCoins: FC = () => {
   const { control } = useFormContext<PoolForm>();
-  const { fields, append } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: 'tokenList',
     rules: { maxLength: 5 },
   });
+
+  const onRemoveSelectToken = (index: number) => {
+    remove(index);
+  };
 
   return (
     <Box my="2xs" height="73%">
@@ -23,7 +27,12 @@ const SelectCoins: FC = () => {
         </Typography>
         <Box display="grid" gap="s" my="s">
           {fields.slice(0, 5).map(({ id }, index) => (
-            <SelectToken key={id} index={index} />
+            <SelectToken
+              key={id}
+              index={index}
+              canRemove={fields.length > 2}
+              handleRemoveSelectToken={onRemoveSelectToken}
+            />
           ))}
         </Box>
         {fields.length < 5 && (

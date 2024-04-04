@@ -1,9 +1,11 @@
-import { Box, Modal, Typography } from '@interest-protocol/ui-kit';
+import { Box, Button, Modal, Typography } from '@interest-protocol/ui-kit';
 import BigNumber from 'bignumber.js';
+import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { TokenIcon } from '@/components';
+import { Routes, RoutesEnum } from '@/constants';
 import { Network } from '@/constants/network';
 import { useNetwork } from '@/context/network';
 import { FixedPointMath } from '@/lib';
@@ -22,6 +24,7 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
 }) => {
   const network = useNetwork();
   const { control } = useFormContext<IAirdropForm>();
+  const { push } = useRouter();
 
   const { symbol, decimals, type } = useWatch({ control, name: 'token' });
   const usdPrice = useWatch({ control, name: 'tokenUSDPrice' });
@@ -37,20 +40,25 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
       )
     : 0;
 
+  const handleGoBackToAirdrop = () => {
+    push(Routes[RoutesEnum.Airdrop]);
+  };
+
   return (
     <Modal custom isOpen={isOpen}>
       <Box
         maxWidth="100%"
+        maxHeight="90vh"
         borderRadius="xs"
         width="26.875rem"
         minHeight="30rem"
-        maxHeight="90vh"
+        color="onSurface"
         alignItems="center"
         display="inline-flex"
-        justifyContent="space-between"
+        bg="lowContainer"
         flexDirection="column"
         boxShadow="dropShadow.2xl"
-        backgroundColor="container"
+        justifyContent="space-between"
       >
         <Box width="100%">
           <Box
@@ -58,19 +66,16 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
             display="flex"
             alignItems="center"
             justifyContent="space-between"
-            color="onSurface"
           >
-            <ArrowLeftSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+            <Button variant="text" isIcon onClick={handleGoBackToAirdrop}>
+              <ArrowLeftSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+            </Button>
             <Typography size="large" variant="title">
               Airdrop
             </Typography>
-            <TimesSVG
-              onClick={onClose}
-              width="100%"
-              maxWidth="1rem"
-              cursor="pointer"
-              maxHeight="1rem"
-            />
+            <Button variant="text" isIcon onClick={onClose}>
+              <TimesSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+            </Button>
           </Box>
           <Box
             px="xl"
@@ -84,17 +89,16 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
               You will send
             </Typography>
             <Box
-              bg="onSurface"
               p="s"
-              borderRadius="xs"
               display="flex"
+              color="onSurface"
+              borderRadius="xs"
               alignItems="center"
+              bg="surface"
               justifyContent="space-between"
             >
               <Box display="flex" alignItems="center" gap="m">
                 <Box
-                  bg="lowestContainer"
-                  color="onSurface"
                   width="2.5rem"
                   height="2.5rem"
                   borderRadius="xs"
@@ -104,7 +108,7 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
                 >
                   <TokenIcon
                     network={network.network}
-                    tokenId={network.network === Network.DEVNET ? type : symbol}
+                    tokenId={network.network === Network.DEVNET ? symbol : type}
                   />
                 </Box>
                 <Typography size="small" variant="title">
@@ -115,7 +119,7 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
                 <Typography size="medium" variant="body">
                   {formatMoney(total)} {symbol}
                 </Typography>
-                <Typography variant="body" size="small" color="#000000A3">
+                <Typography variant="body" size="small" color="outlineVariant">
                   {usdPrice ? formatMoney(usdPrice * total) : '--'} USD
                 </Typography>
               </Box>

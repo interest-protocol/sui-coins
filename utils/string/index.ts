@@ -28,12 +28,14 @@ const treatMoneyDecimals = (money: number, maxDecimals: number) => {
     integralDigits > 12
       ? `${integralPart.slice(0, -12)}.${integralPart.slice(-12, -10)}`
       : integralDigits > 9
-      ? `${integralPart.slice(0, -9)}.${integralPart.slice(-9, -7)}`
-      : integralDigits > 6
-      ? `${integralPart.slice(0, -6)}.${integralPart.slice(-6, -4)}`
-      : `${integralPart}.${
-          +integralPart >= 10 ? decimalPart?.slice(0, 2) ?? 0 : decimalPart ?? 0
-        }`
+        ? `${integralPart.slice(0, -9)}.${integralPart.slice(-9, -7)}`
+        : integralDigits > 6
+          ? `${integralPart.slice(0, -6)}.${integralPart.slice(-6, -4)}`
+          : `${integralPart}.${
+              +integralPart >= 10
+                ? decimalPart?.slice(0, 2) ?? 0
+                : decimalPart ?? 0
+            }`
   );
 
   const newMoneyString = isExponential(newMoney)
@@ -77,10 +79,10 @@ export const formatMoney = (money: number, maxFractionDigits = 20): string => {
     integralDigits > 12
       ? 'T'
       : integralDigits > 9
-      ? 'B'
-      : integralDigits > 6
-      ? 'M'
-      : ''
+        ? 'B'
+        : integralDigits > 6
+          ? 'M'
+          : ''
   }`.slice(1);
 };
 
