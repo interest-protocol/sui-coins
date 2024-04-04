@@ -67,7 +67,7 @@ export const useClaimLink = () => {
 
     throwTXIfNotSuccessful(tx);
 
-    fetch(`/api/v1/zksend?network=${network}&id=${id}`, {
+    await fetch(`/api/v1/zksend?network=${network}&id=${id}`, {
       method: 'PATCH',
       body: JSON.stringify({
         link: encodeURI(url),
