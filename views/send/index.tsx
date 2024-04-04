@@ -7,9 +7,9 @@ import Layout from '@/components/layout';
 import { Routes, RoutesEnum } from '@/constants';
 import { ClockSVG, UploadSVG } from '@/svg';
 
+import SendSelectType from './send-forms/send-select-type';
 import SendFormSimple from './send-forms/send-simple-form';
 import SendHistory from './send-history';
-import SendSelectType from './send-select-type';
 
 const Send: FC = () => {
   const { push, pathname } = useRouter();

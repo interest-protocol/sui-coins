@@ -31,6 +31,8 @@ const useCreateLink = () => {
     const link = new ZkSendLinkBuilder({
       client: suiClient,
       sender: currentAccount.address,
+      path: '/send/claim',
+      host: location.origin,
     });
 
     objects.forEach((object) => {
@@ -51,7 +53,7 @@ const useCreateLink = () => {
       link.addClaimableBalance(object.display!.type, amount);
     });
 
-    const txb = await link?.createSendTransaction();
+    const txb = await link.createSendTransaction();
 
     const { transactionBlockBytes, signature } =
       await signTransactionBlock.mutateAsync({
