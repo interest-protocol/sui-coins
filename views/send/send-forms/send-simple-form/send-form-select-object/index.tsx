@@ -19,7 +19,7 @@ const SendFormSelectObject: FC<SendFormSelectObjectProps> = ({ index }) => {
 
   return (
     <Box flex="1">
-      <SendSelectObjectHeader />
+      <SendSelectObjectHeader index={index} />
       <TextField
         placeholder="0"
         textAlign="right"
