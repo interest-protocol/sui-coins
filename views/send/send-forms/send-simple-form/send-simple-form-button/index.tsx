@@ -7,20 +7,17 @@ import toast from 'react-hot-toast';
 
 import { Routes, RoutesEnum } from '@/constants';
 import { useNetwork } from '@/context/network';
-import { ObjectData } from '@/hooks/use-get-all-objects/use-get-all-objects.types';
-import { FixedPointMath } from '@/lib';
 import { showTXSuccessToast } from '@/utils';
-import { isCoinObject } from '@/views/components/select-object-modal/select-object-modal.utils';
 
-import { ZkSendForm } from '../send-form.types';
+import { SendSimpleForm } from '../send-form-simple.types';
 import useCreateLink from './send-button.hooks';
 
 const SendButton: FC = () => {
   const { push } = useRouter();
   const network = useNetwork();
   const createLink = useCreateLink();
-  const { control } = useFormContext<ZkSendForm>();
-  const object = useWatch({ control, name: 'object' });
+  const { control } = useFormContext<SendSimpleForm>();
+  const objects = useWatch({ control, name: 'objects' });
 
   const onSuccess = (tx: SuiTransactionBlockResponse, id: string) => {
     showTXSuccessToast(tx, network);
@@ -29,31 +26,18 @@ const SendButton: FC = () => {
   };
 
   const handleCreateLink = async () => {
-    if (!object) return;
+    if (
+      !objects ||
+      !objects.length ||
+      !objects.every(({ value }) => Number(value))
+    )
+      return;
 
     const toasterId = toast.loading('Creating link...');
 
     try {
-      if (!isCoinObject(object as ObjectData))
-        return createLink({ id: object.objectId }, onSuccess).then(() =>
-          toast.success('Link created successfully')
-        );
-
-      return createLink(
-        {
-          type: object.display!.type,
-          amount: BigInt(
-            FixedPointMath.toBigNumber(
-              object.value!,
-              Number(object.display!.decimals!)
-            )
-              .decimalPlaces(0)
-              .toString()
-          ),
-          quantity: null,
-        },
-        onSuccess
-      ).then(() => toast.success('Link created successfully'));
+      await createLink(objects, onSuccess);
+      toast.success('Link created successfully');
     } catch {
       toast.error('Something went wrong');
     } finally {
@@ -66,7 +50,11 @@ const SendButton: FC = () => {
       <Button
         variant="filled"
         onClick={handleCreateLink}
-        disabled={!object || !Number(object.value)}
+        disabled={
+          !objects ||
+          !objects.length ||
+          !objects.every(({ value }) => Number(value))
+        }
       >
         Create Link
       </Button>

@@ -1,54 +1,38 @@
-import {
-  Box,
-  Button,
-  ProgressIndicator,
-  Typography,
-} from '@interest-protocol/ui-kit';
+import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
-import { ZkSendLink } from '@mysten/zksend';
-import { not } from 'ramda';
 import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
-import useSWR from 'swr';
 
 import Layout from '@/components/layout';
 import { useNetwork } from '@/context/network';
-import { ZkSendLinkData } from '@/interface';
-import { AssetSVG, ChevronDownSVG, ErrorSVG } from '@/svg';
+import { CheckmarkSVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 
 import SendHistoryDetails from '../components/send-asset-details';
-import { useClaimLink } from './send-claim.hooks';
-import { SendClaimProps, ZkSendLinkWithUrl } from './send-claim.types';
+import { useClaimLink, useLinkWithUrl } from './send-claim.hooks';
+import { SendClaimProps } from './send-claim.types';
 
 const SendClaim: FC<SendClaimProps> = ({ id }) => {
   const claim = useClaimLink();
   const network = useNetwork();
-  const [isOpen, setOpen] = useState(false);
   const [isClaiming, setClaiming] = useState(false);
 
-  const { data, isLoading, error } = useSWR<ZkSendLinkWithUrl>(
-    `${id}-${network}`,
-    () =>
-      fetch(`/api/v1/zksend?network=${network}&id=${id}`)
-        .then((response) => response.json?.())
-        .then(async (data: ZkSendLinkData) => ({
-          url: data.links[0],
-          link: await ZkSendLink.fromUrl(data.links[0]),
-        }))
-  );
+  const { data, isLoading, error } = useLinkWithUrl(id, isClaiming);
 
   const onSuccess = (tx: SuiTransactionBlockResponse) => {
     showTXSuccessToast(tx, network);
   };
 
-  const items = [
-    ...(data?.link.assets?.nfts ?? []),
-    ...(data?.link.assets?.balances ?? []),
-  ];
-
   const onClaim = async () => {
-    if (isClaiming || !data) return;
+    if (
+      isClaiming ||
+      !data ||
+      !data.link ||
+      isLoading ||
+      error ||
+      data.link.claimed
+    )
+      return;
 
     const loadingId = toast.loading('Claiming...');
     setClaiming(true);
@@ -81,7 +65,9 @@ const SendClaim: FC<SendClaimProps> = ({ id }) => {
         <Typography variant="title" size="large" textAlign="center">
           {!isLoading && !data
             ? 'Nothing to claim'
-            : 'Assets ready to be claim'}
+            : data && !data.url
+              ? 'Assets already claimed'
+              : 'Funds ready to be claim'}
         </Typography>
         <Typography
           size="large"
@@ -93,62 +79,30 @@ const SendClaim: FC<SendClaimProps> = ({ id }) => {
           The person who shared this link with you is attempting to send you the
           following assets
         </Typography>
-        <Box
-          gap="m"
-          width="12rem"
-          height="12rem"
-          display="flex"
-          borderRadius="xs"
-          overflow="hidden"
-          border="1px solid"
-          alignItems="center"
-          flexDirection="column"
-          justifyContent="center"
-          borderColor="outlineVariant"
-        >
-          {data ? (
-            <>
-              <Box
-                bg="black"
-                width="6rem"
-                height="6rem"
-                color="white"
-                display="flex"
-                borderRadius="m"
-                alignItems="center"
-                justifyContent="center"
-              >
-                <AssetSVG maxWidth="3rem" maxHeight="3rem" width="100%" />
-              </Box>
-              <Button
-                variant="tonal"
-                onClick={() => setOpen(not)}
-                SuffixIcon={
-                  <ChevronDownSVG
-                    width="100%"
-                    maxWidth="1rem"
-                    maxHeight="1rem"
-                  />
-                }
-              >
-                {items.length} Asset{items.length === 1 ? '' : 's'}
-              </Button>
-            </>
-          ) : isLoading ? (
-            <ProgressIndicator variant="loading" size={32} />
-          ) : (
-            <ErrorSVG maxWidth="4rem" maxHeight="4rem" width="100%" />
-          )}
-        </Box>
-        {data?.link.assets && isOpen && (
-          <Box minWidth="25rem" bg="lowContainer" borderRadius="s">
+        {data?.link?.assets ? (
+          <Box
+            minWidth="25rem"
+            borderRadius="s"
+            border="1px solid"
+            borderColor="outlineVariant"
+          >
             <SendHistoryDetails
               index={0}
               network={network}
               assets={data.link.assets}
             />
           </Box>
+        ) : (
+          <Box color="success" my="xl">
+            <CheckmarkSVG
+              filled
+              width="100%"
+              maxWidth="6rem"
+              maxHeight="6rem"
+            />
+          </Box>
         )}
+
         <Box display="flex" justifyContent="center">
           <Button
             variant="filled"
@@ -159,10 +113,10 @@ const SendClaim: FC<SendClaimProps> = ({ id }) => {
               !data.link ||
               isLoading ||
               error ||
-              data.link.claimed
+              (data && !data.link)
             }
           >
-            {data?.link.claimed ? 'Claimed' : 'Claim'}
+            {data && !data.link ? 'Claimed' : 'Claim'}
           </Button>
         </Box>
       </Box>

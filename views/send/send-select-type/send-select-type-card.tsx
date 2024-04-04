@@ -12,7 +12,7 @@ const SendSelectTypeCard: FC<SendSelectTypeCardProps> = ({
   <Box
     p="2xl"
     gap="xl"
-    width="16rem"
+    width="19rem"
     display="flex"
     bg="lowestContainer"
     cursor="pointer"

@@ -100,7 +100,7 @@ const SimpleSendIllustration: FC = () => {
         top="1rem"
         left="0rem"
         scale="0.9"
-        bg="#0053DB88"
+        bg="#0053DB99"
         position="absolute"
         backdropFilter="blur(10px)"
         clipPath={`url(#${circleId})`}
@@ -121,7 +121,7 @@ const SimpleSendIllustration: FC = () => {
       <Motion
         bottom="0"
         scale="0.9"
-        bg="#0053DB44"
+        bg="#0053DB22"
         position="absolute"
         backdropFilter="blur(15px) "
         clipPath={`url(#${triangleId})`}

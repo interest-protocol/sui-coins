@@ -8,31 +8,32 @@ import { useNetwork } from '@/context/network';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { ObjectData } from '@/hooks/use-get-all-objects/use-get-all-objects.types';
 import { useModal } from '@/hooks/use-modal';
-import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
 import SelectObjectModal from '@/views/components/select-object-modal';
 
-import { ZkSendForm } from '../send-form.types';
+import { SendSimpleForm } from '../send-form-simple.types';
+import { SendFormSelectObjectProps } from './send-from-select-object.types';
 
-const SelectObject: FC = () => {
+const SelectObject: FC<SendFormSelectObjectProps> = ({ index }) => {
   const network = useNetwork();
-  const { setModal, handleClose } = useModal();
 
-  const { setValue, control } = useFormContext<ZkSendForm>();
+  const { setValue, control } = useFormContext<SendSimpleForm>();
 
   const object = useWatch({
     control,
-    name: 'object',
+    name: `objects.${index}`,
   });
 
   const { type } = object ?? {
     type: undefined,
   };
 
+  const { setModal, handleClose } = useModal();
+
   const onSelect = async (object: ObjectData) => {
     const balance = (object.display as CoinObject)?.balance;
     const editable = balance && !balance.isZero();
 
-    setValue('object', {
+    setValue(`objects.${index}`, {
       ...object,
       editable,
       value: !editable && !balance ? '1' : '',
@@ -72,18 +73,21 @@ const SelectObject: FC = () => {
   return (
     <Box position="relative">
       <Button
-        p="2xs"
+        px="xs"
+        py="2xs"
         ml="-0.7rem"
-        fontSize="s"
         width="100%"
+        fontSize="s"
+        height="2rem"
         variant="tonal"
+        bg="lowContainer"
         borderRadius="xs"
         onClick={openModal}
-        bg="highestContainer"
         {...(type && {
           PrefixIcon: (
             <TokenIcon
               withBg
+              size="1rem"
               symbol={symbol}
               {...(url ? { url } : { network, type: coinType })}
             />
@@ -91,7 +95,6 @@ const SelectObject: FC = () => {
         })}
       >
         <Typography
-          m="xs"
           size="large"
           variant="label"
           pr={['0', 'xs']}
@@ -101,16 +104,8 @@ const SelectObject: FC = () => {
           display={[type ? 'none' : 'block', 'block']}
         >
           {symbol ||
-            (type && type === displayName
-              ? formatAddress(type)
-              : displayName) ||
-            'Select Item'}
+            (type && type === displayName ? formatAddress(type) : displayName)}
         </Typography>
-        {type ? (
-          <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-        ) : (
-          <ChevronRightSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-        )}
       </Button>
     </Box>
   );

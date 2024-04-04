@@ -59,16 +59,33 @@ const SendAssetDetails: FC<SendAssetDetailsProps> = ({
   return (
     <Box px="2xl" py="l" display="flex" gap="s" flexDirection="column">
       {coins?.map(({ type, symbol, decimals }) => (
-        <Box key={v4()} display="flex" alignItems="center" gap="s">
-          <TokenIcon
-            withBg
-            size="1rem"
-            type={type}
-            symbol={symbol}
-            network={network}
-          />
-          <Typography variant="label" size="large">
-            {FixedPointMath.toNumber(amountsMap[type], decimals)} {symbol}
+        <Box
+          key={v4()}
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          <Box gap="s" display="flex" alignItems="center">
+            <TokenIcon
+              withBg
+              size="1rem"
+              type={type}
+              symbol={symbol}
+              network={network}
+            />
+            <Typography variant="body" size="medium">
+              {symbol}
+            </Typography>
+          </Box>
+          <Typography
+            px="s"
+            py="xs"
+            size="medium"
+            variant="body"
+            bg="container"
+            borderRadius="xs"
+          >
+            {FixedPointMath.toNumber(amountsMap[type], decimals)}
           </Typography>
         </Box>
       ))}
@@ -81,17 +98,29 @@ const SendAssetDetails: FC<SendAssetDetailsProps> = ({
         const url = display?.image_url || '';
 
         return (
-          <Box key={v4()} display="flex" alignItems="center" gap="s">
-            <TokenIcon
-              withBg
-              size="1rem"
-              loaderSize={12}
-              symbol={symbol}
-              network={network}
-              {...(url ? { url } : { network, type })}
-            />
-            <Typography variant="label" size="large">
-              1 {displayName || symbol || formatAddress(type)}
+          <Box key={v4()} display="flex" alignItems="center">
+            <Box gap="s" display="flex" alignItems="center">
+              <TokenIcon
+                withBg
+                size="1rem"
+                loaderSize={12}
+                symbol={symbol}
+                network={network}
+                {...(url ? { url } : { network, type })}
+              />
+              <Typography variant="label" size="large">
+                {displayName || symbol || formatAddress(type)}
+              </Typography>
+            </Box>
+            <Typography
+              px="s"
+              py="xs"
+              size="medium"
+              bg="container"
+              variant="body"
+              borderRadius="xs"
+            >
+              1
             </Typography>
           </Box>
         );

@@ -79,13 +79,12 @@ const Web3Manager: FC<Web3ManagerProps> = ({ children }) => {
         error: !!coinsError || nftsError || objectsError,
         isFetchingCoinBalances:
           fetchingAllCoins || fetchingAllObjects || isLoadingNfts,
-        coinsObjects:
-          objects?.coinsObjects?.map(({ type, ...rest }) => ({
-            type,
-            ...rest,
-            display:
-              coins?.[type.split('0x2::coin::Coin<')[1].split('>')[0]] ?? {},
-          })) ?? [],
+        coinsObjects: values(coins ?? {}).map((coin) => ({
+          ...(objects?.coinsObjects ?? [])!.find(({ type }) =>
+            type.includes(coin.type)
+          )!,
+          display: coin,
+        })),
       }}
     >
       {children}

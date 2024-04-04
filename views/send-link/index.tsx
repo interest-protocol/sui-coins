@@ -7,15 +7,13 @@ import {
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
-import useSWR from 'swr';
 
 import Layout from '@/components/layout';
 import { useNetwork } from '@/context/network';
-import { ZkSendLinkData } from '@/interface';
 import { ErrorSVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 
-import { useReclaimLink } from './send-link.hooks';
+import { useLinkData, useReclaimLink } from './send-link.hooks';
 import { SendLinkProps } from './send-link.types';
 
 const SendLink: FC<SendLinkProps> = ({ id }) => {
@@ -23,13 +21,7 @@ const SendLink: FC<SendLinkProps> = ({ id }) => {
   const reclaim = useReclaimLink();
   const [isReclaiming, setReclaiming] = useState(false);
 
-  const { data, isLoading, error } = useSWR<ZkSendLinkData>(
-    `${id}-${network}`,
-    () =>
-      fetch(`/api/v1/zksend?network=${network}&id=${id}`).then(
-        (response) => response.json?.()
-      )
-  );
+  const { data, isLoading, error } = useLinkData(id);
 
   const url = `${location.origin}/send/claim/${id}`;
 

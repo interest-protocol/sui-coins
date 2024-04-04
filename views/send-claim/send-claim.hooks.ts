@@ -5,11 +5,31 @@ import {
 } from '@mysten/dapp-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { ZkSendLink } from '@mysten/zksend';
+import useSWR from 'swr';
 
 import { useNetwork } from '@/context/network';
+import { ZkSendLinkData } from '@/interface';
 import { throwTXIfNotSuccessful } from '@/utils';
 
 import { ZkSendLinkWithUrl } from './send-claim.types';
+
+export const useLinkWithUrl = (id: string, isClaiming: boolean) => {
+  const network = useNetwork();
+
+  return useSWR<ZkSendLinkWithUrl>(`${id}-${network}-${isClaiming}`, () =>
+    fetch(`/api/v1/zksend?network=${network}&id=${id}`)
+      .then((response) => response.json?.())
+      .then(async (data: ZkSendLinkData) =>
+        data.links[0]
+          ? {
+              url: data.links[0],
+              link: await ZkSendLink.fromUrl(data.links[0]),
+            }
+          : { url: undefined, link: null }
+      )
+  );
+};
 
 export const useClaimLink = () => {
   const network = useNetwork();
@@ -47,8 +67,11 @@ export const useClaimLink = () => {
 
     throwTXIfNotSuccessful(tx);
 
-    fetch(`/api/v1/zksend?network=${network}&id=${id}&link=${url}`, {
-      method: 'DELETE',
+    fetch(`/api/v1/zksend?network=${network}&id=${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        link: encodeURI(url),
+      }),
     });
 
     onSuccess(tx);

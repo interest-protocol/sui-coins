@@ -6,3 +6,7 @@ export interface SendSelectTypeCardProps {
   onSelect: () => void;
   illustration: ReactNode;
 }
+
+export interface SendSelectTypeProps {
+  onSelectType: (index: number) => void;
+}

@@ -4,7 +4,9 @@ export interface SendClaimProps {
   id: string;
 }
 
-export interface ZkSendLinkWithUrl {
-  url: string;
-  link: ZkSendLink;
-}
+export type ZkSendLinkWithUrl =
+  | {
+      url: string;
+      link: ZkSendLink;
+    }
+  | { url: undefined; link: null };

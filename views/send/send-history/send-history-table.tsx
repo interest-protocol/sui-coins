@@ -5,60 +5,46 @@ import {
   TooltipWrapper,
   Typography,
 } from '@interest-protocol/ui-kit';
-import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
-import { AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { FC, useState } from 'react';
-import useSWR from 'swr';
 import { v4 } from 'uuid';
 
-import { EXPLORER_URL, Network, Routes, RoutesEnum } from '@/constants';
+import { EXPLORER_URL, Routes, RoutesEnum } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { AssetSVG, InfoSVG, ReloadSVG, SendSVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
-import { listCreatedLinks } from '@/utils/zksend';
 import PoweredByZkSend from '@/views/components/powered-by-zksend';
 
 import SendHistoryDetails from '../../components/send-asset-details';
-import { useRegenerateLink } from './send-history.hooks';
+import { useLinkList, useRegenerateLink } from './send-history.hooks';
 import { ZkSendLinkItem } from './send-history.types';
 
 const SendHistoryTable: FC = () => {
   const { push } = useRouter();
   const network = useNetwork();
-  const suiClient = useSuiClient();
-  const currentAccount = useCurrentAccount();
   const [currentCursor, setCursor] = useState<string>('');
   const [detailsIndex, setDetailsIndex] = useState<number | null>(null);
   const [linkList, setLinkList] = useState<ReadonlyArray<ZkSendLinkItem>>([]);
 
   const regenerateLink = useRegenerateLink();
 
-  const { data, mutate } = useSWR(
-    `${network}-${currentAccount?.address}-${suiClient}`,
-    async () => {
-      if (!currentAccount || !suiClient) return;
+  const updateLinkInfo = (
+    links: ReadonlyArray<ZkSendLinkItem>,
+    hasNextPage: boolean,
+    cursor: string | null
+  ) => {
+    if (hasNextPage) setCursor(cursor ?? '');
 
-      const { links, hasNextPage, cursor } = await listCreatedLinks({
-        client: suiClient,
-        address: currentAccount.address,
-        network: network === Network.MAINNET ? 'mainnet' : 'testnet',
-        ...(currentCursor && { cursor: currentCursor }),
-      });
+    setLinkList([
+      ...linkList,
+      ...links.filter((item) =>
+        linkList.every(({ digest }) => digest !== item.digest)
+      ),
+    ]);
+  };
 
-      if (hasNextPage) setCursor(cursor ?? '');
-
-      setLinkList([
-        ...linkList,
-        ...links.filter((item) =>
-          linkList.every(({ digest }) => digest !== item.digest)
-        ),
-      ]);
-
-      return hasNextPage;
-    }
-  );
+  const { data, mutate } = useLinkList(currentCursor, updateLinkInfo);
 
   const onSuccess = (tx: SuiTransactionBlockResponse, id: string) => {
     showTXSuccessToast(tx, network);
@@ -235,44 +221,45 @@ const SendHistoryTable: FC = () => {
                     </TooltipWrapper>
                   </Typography>
                 </Box>
-                <AnimatePresence>
-                  {index === detailsIndex && (
-                    <Motion
-                      as="tr"
-                      key={v4()}
-                      bg="container"
-                      exit={{ scaleY: 0 }}
-                      style={{ originY: 0 }}
-                      initial={{ scaleY: 0 }}
-                      animate={{ scaleY: 1 }}
-                      transition={{
-                        duration: 0.1,
-                        ease: 'easeInOut',
-                      }}
-                    >
-                      <td colSpan={5}>
-                        <SendHistoryDetails
-                          index={index}
-                          assets={assets}
-                          network={network}
-                        />
-                      </td>
-                    </Motion>
-                  )}
-                </AnimatePresence>
+
+                {index === detailsIndex && (
+                  <Motion
+                    as="tr"
+                    key={v4()}
+                    bg="container"
+                    exit={{ scaleY: 0 }}
+                    style={{ originY: 0 }}
+                    initial={{ scaleY: 0 }}
+                    animate={{ scaleY: 1 }}
+                    transition={{
+                      duration: 0.1,
+                      ease: 'easeInOut',
+                    }}
+                  >
+                    <td colSpan={5}>
+                      <SendHistoryDetails
+                        index={index}
+                        assets={assets}
+                        network={network}
+                      />
+                    </td>
+                  </Motion>
+                )}
               </>
             )
           )}
         </Motion>
       </Motion>
-      <Button
-        mx="auto"
-        disabled={!data}
-        variant="outline"
-        onClick={() => mutate()}
-      >
-        View More
-      </Button>
+      {data && (
+        <Button
+          mx="auto"
+          disabled={!data}
+          variant="outline"
+          onClick={() => mutate()}
+        >
+          View More
+        </Button>
+      )}
       <PoweredByZkSend />
     </Box>
   );

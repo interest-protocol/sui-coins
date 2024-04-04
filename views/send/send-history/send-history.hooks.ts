@@ -4,11 +4,46 @@ import {
   useSuiClient,
 } from '@mysten/dapp-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/dist/cjs/client';
-import { ZkSendLink } from '@mysten/zksend';
+import { listCreatedLinks, ZkSendLink } from '@mysten/zksend';
+import useSWR from 'swr';
 import { v4 } from 'uuid';
 
+import { Network } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { throwTXIfNotSuccessful } from '@/utils';
+
+import { ZkSendLinkItem } from './send-history.types';
+
+export const useLinkList = (
+  currentCursor: string,
+  updateList: (
+    links: ReadonlyArray<ZkSendLinkItem>,
+    hasNextPage: boolean,
+    cursor: string | null
+  ) => void
+) => {
+  const network = useNetwork();
+  const suiClient = useSuiClient();
+  const currentAccount = useCurrentAccount();
+
+  return useSWR(
+    `${network}-${currentAccount?.address}-${suiClient}`,
+    async () => {
+      if (!currentAccount || !suiClient) return;
+
+      const { links, hasNextPage, cursor } = await listCreatedLinks({
+        client: suiClient,
+        address: currentAccount.address,
+        network: network === Network.MAINNET ? 'mainnet' : 'testnet',
+        ...(currentCursor && { cursor: currentCursor }),
+      });
+
+      updateList(links, hasNextPage, cursor);
+
+      return hasNextPage;
+    }
+  );
+};
 
 export const useRegenerateLink = () => {
   const network = useNetwork();
@@ -43,7 +78,7 @@ export const useRegenerateLink = () => {
       method: 'PUT',
       body: JSON.stringify({
         id,
-        link: url,
+        link: [url],
         digest: tx.digest,
       }),
     });

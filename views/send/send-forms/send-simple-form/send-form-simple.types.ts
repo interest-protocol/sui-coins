@@ -5,10 +5,6 @@ export type ObjectField = ObjectData & {
   editable: boolean;
 };
 
-export interface ZkSendForm {
-  object: ObjectField;
-}
-
-export interface SendFormProps {
-  isBulk: boolean;
+export interface SendSimpleForm {
+  objects: ReadonlyArray<ObjectField>;
 }

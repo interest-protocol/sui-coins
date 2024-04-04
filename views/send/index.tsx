@@ -7,7 +7,7 @@ import Layout from '@/components/layout';
 import { Routes, RoutesEnum } from '@/constants';
 import { ClockSVG, UploadSVG } from '@/svg';
 
-import SendForm from './send-form';
+import SendFormSimple from './send-forms/send-simple-form';
 import SendHistory from './send-history';
 import SendSelectType from './send-select-type';
 
@@ -67,8 +67,8 @@ const Send: FC = () => {
             setBulk(Boolean(index));
           }}
         />
-      ) : (
-        <SendForm isBulk={isBulk} />
+      ) : isBulk ? null : (
+        <SendFormSimple />
       )}
     </Layout>
   );

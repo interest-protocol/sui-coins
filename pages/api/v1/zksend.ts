@@ -66,9 +66,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(400).send({ message: 'Missing param: digest' });
     }
 
-    if (req.method === 'DELETE') {
+    if (req.method === 'PATCH') {
       const id = req.query.id as string;
-      const url = req.query.link as string;
+      const { link } = JSON.parse(req.body);
 
       if (id) {
         const doc = (await zkSendLinkModel[network].findOne({
@@ -77,10 +77,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
         if (!doc) return res.status(200).send('Link does not exist!');
 
-        await zkSendLinkModel[network].updateOne({
+        await doc.updateOne({
           id: doc.id,
           digest: doc.digest,
-          links: doc.links.filter((link) => link !== url),
+          links: doc.links.filter((url) => encodeURI(url) !== link),
         });
 
         return res.status(200).send('Link updated successfully!');

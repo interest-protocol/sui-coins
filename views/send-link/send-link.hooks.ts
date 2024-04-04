@@ -5,9 +5,21 @@ import {
 } from '@mysten/dapp-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/dist/cjs/client';
 import { ZkSendLink } from '@mysten/zksend';
+import useSWR from 'swr';
 
 import { useNetwork } from '@/context/network';
+import { ZkSendLinkData } from '@/interface';
 import { throwTXIfNotSuccessful } from '@/utils';
+
+export const useLinkData = (id: string) => {
+  const network = useNetwork();
+
+  return useSWR<ZkSendLinkData>(`${id}-${network}`, () =>
+    fetch(`/api/v1/zksend?network=${network}&id=${id}`).then((response) =>
+      response.json?.()
+    )
+  );
+};
 
 export const useReclaimLink = () => {
   const network = useNetwork();
@@ -39,8 +51,11 @@ export const useReclaimLink = () => {
 
     throwTXIfNotSuccessful(tx);
 
-    fetch(`/api/v1/zksend?network=${network}&id=${id}&link=${url}`, {
-      method: 'DELETE',
+    fetch(`/api/v1/zksend?network=${network}&id=${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        link: encodeURI(url),
+      }),
     });
 
     onSuccess(tx);
