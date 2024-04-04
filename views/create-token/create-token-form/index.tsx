@@ -1,5 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Box, Button, TextField, Typography } from '@interest-protocol/ui-kit';
+import {
+  Box,
+  Button,
+  Form,
+  TextField,
+  Typography,
+} from '@interest-protocol/ui-kit';
 import {
   useCurrentAccount,
   useSignTransactionBlock,
@@ -121,7 +127,7 @@ const CreateTokenForm: FC = () => {
       width={['100%', '100%', '100%', '37rem']}
       boxShadow="0px 24px 46px -10px rgba(13, 16, 23, 0.16)"
     >
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         <Box p="xl" fontSize="l">
           Coin Generator
         </Box>
@@ -266,7 +272,7 @@ const CreateTokenForm: FC = () => {
             </Box>
           </Box>
         </Box>
-      </form>
+      </Form>
     </Box>
   );
 };

@@ -1,5 +1,4 @@
 import { createNetworkConfig, SuiClientProvider } from '@mysten/dapp-kit';
-import { getFullnodeUrl } from '@mysten/sui.js/client';
 import {
   createContext,
   FC,
@@ -23,10 +22,10 @@ const networkContext = createContext<INetworkContext>({} as INetworkContext);
 
 const { networkConfig } = createNetworkConfig({
   [Network.TESTNET]: {
-    url: RPC_URL[Network.TESTNET] || getFullnodeUrl('testnet'),
+    url: RPC_URL[Network.TESTNET],
   },
   [Network.DEVNET]: {
-    url: RPC_URL[Network.DEVNET] || getFullnodeUrl('devnet'),
+    url: RPC_URL[Network.DEVNET],
   },
 });
 
