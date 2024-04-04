@@ -1,7 +1,11 @@
 import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
+import {
+  useCurrentAccount,
+  useSignTransactionBlock,
+  useSuiClient,
+} from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
-import { useWalletKit } from '@mysten/wallet-kit';
 import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -9,7 +13,7 @@ import { CONTROLLERS_MAP } from '@/constants';
 import { COINS } from '@/constants/coins';
 import { MINT_MODULE_NAME_MAP, PACKAGES } from '@/constants/packages';
 import { useNetwork } from '@/context/network';
-import { useMovementClient, useUserMintEpoch, useWeb3 } from '@/hooks';
+import { useUserMintEpoch, useWeb3 } from '@/hooks';
 import { useModal } from '@/hooks/use-modal';
 import { useSuiSystemState } from '@/hooks/use-sui-system-state';
 import { TOKEN_ICONS, TOKEN_SYMBOL } from '@/lib';
@@ -23,10 +27,11 @@ import { CoinDataWithChainInfo } from '../components/select-token-modal/select-t
 const MintForm: FC = () => {
   const [selected, setSelected] = useState(COINS[0]);
   const { network } = useNetwork();
-  const client = useMovementClient();
   const { account, mutate } = useWeb3();
   const { setModal, handleClose } = useModal();
-  const { signTransactionBlock } = useWalletKit();
+  const client = useSuiClient();
+  const signTransactionBlock = useSignTransactionBlock();
+  const currentAccount = useCurrentAccount();
 
   const SelectedIcon = TOKEN_ICONS[network][selected.symbol];
 
@@ -42,7 +47,7 @@ const MintForm: FC = () => {
   const handleMint = async () => {
     try {
       if (!selected) throw new Error('Token not found');
-      if (!account) throw new Error('Not account found');
+      if (!account || !currentAccount) throw new Error('Not account found');
 
       const transactionBlock = new TransactionBlock();
 
@@ -57,9 +62,11 @@ const MintForm: FC = () => {
 
       transactionBlock.transferObjects([minted_coin], account);
 
-      const { transactionBlockBytes, signature } = await signTransactionBlock({
-        transactionBlock,
-      });
+      const { transactionBlockBytes, signature } =
+        await signTransactionBlock.mutateAsync({
+          transactionBlock,
+          account: currentAccount,
+        });
 
       const tx = await client.executeTransactionBlock({
         transactionBlock: transactionBlockBytes,

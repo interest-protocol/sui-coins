@@ -1,6 +1,6 @@
 import 'react-loading-skeleton/dist/skeleton.css';
 
-import { WalletKitProvider } from '@mysten/wallet-kit';
+import { WalletProvider } from '@mysten/dapp-kit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { FC, PropsWithChildren } from 'react';
 
@@ -15,9 +15,9 @@ const Web3Provider: FC<PropsWithChildren> = ({ children }) => (
   <ThemeManager>
     <NetworkProvider>
       <QueryClientProvider client={queryClient}>
-        <WalletKitProvider>
+        <WalletProvider autoConnect>
           <Web3Manager>{children}</Web3Manager>
-        </WalletKitProvider>
+        </WalletProvider>
       </QueryClientProvider>
     </NetworkProvider>
   </ThemeManager>

@@ -1,5 +1,5 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
-import { useWalletKit } from '@mysten/wallet-kit';
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import { FC } from 'react';
 
 import { UserSVG } from '@/svg';
@@ -7,7 +7,7 @@ import { UserSVG } from '@/svg';
 import { AvatarProps } from './account-info.types';
 
 const Avatar: FC<AvatarProps> = ({ withNameOrAddress, account, isLarge }) => {
-  const { currentAccount } = useWalletKit();
+  const currentAccount = useCurrentAccount();
   const address = account?.address ?? (currentAccount?.address || '');
 
   const SIZE = isLarge ? '2.2rem' : '1.5rem';

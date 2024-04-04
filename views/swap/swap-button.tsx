@@ -1,9 +1,13 @@
 import { Button, Typography } from '@interest-protocol/ui-kit';
 import {
+  useCurrentAccount,
+  useSignTransactionBlock,
+  useSuiClient,
+} from '@mysten/dapp-kit';
+import {
   TransactionBlock,
   TransactionResult,
 } from '@mysten/sui.js/transactions';
-import { useWalletKit } from '@mysten/wallet-kit';
 import BigNumber from 'bignumber.js';
 import { useState } from 'react';
 import { useFormContext, UseFormReturn } from 'react-hook-form';
@@ -12,7 +16,7 @@ import toast from 'react-hot-toast';
 import { REGISTRY_POOLS } from '@/constants/coins';
 import { PACKAGES } from '@/constants/packages';
 import { useNetwork } from '@/context/network';
-import { useMovementClient, useWeb3 } from '@/hooks';
+import { useWeb3 } from '@/hooks';
 import { FixedPointMath } from '@/lib';
 import {
   createObjectsParameter,
@@ -28,9 +32,10 @@ const SwapButton = () => {
   const { network } = useNetwork();
   const formSwap: UseFormReturn<SwapForm> = useFormContext();
   const [loading, setLoading] = useState(false);
-  const { signTransactionBlock } = useWalletKit();
   const { account, coinsMap, mutate } = useWeb3();
-  const client = useMovementClient();
+  const client = useSuiClient();
+  const signTransactionBlock = useSignTransactionBlock();
+  const currentAccount = useCurrentAccount();
 
   const resetInput = () => {
     formSwap.setValue('from.value', '0');
@@ -47,7 +52,7 @@ const SwapButton = () => {
 
       if (!to.type || !from.type) throw new Error('No tokens selected');
 
-      if (!account) throw new Error('No account');
+      if (!account || !currentAccount) throw new Error('No account');
 
       if (!+from.value) throw new Error('Cannot swap zero coins');
 
@@ -128,9 +133,11 @@ const SwapButton = () => {
 
       txb.transferObjects([nextCoin!], account);
 
-      const { signature, transactionBlockBytes } = await signTransactionBlock({
-        transactionBlock: txb,
-      });
+      const { signature, transactionBlockBytes } =
+        await signTransactionBlock.mutateAsync({
+          transactionBlock: txb,
+          account: currentAccount,
+        });
 
       const tx = await client.executeTransactionBlock({
         transactionBlock: transactionBlockBytes,

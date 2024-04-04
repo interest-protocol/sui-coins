@@ -1,7 +1,11 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
+import {
+  useCurrentAccount,
+  useSignTransactionBlock,
+  useSuiClient,
+} from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { normalizeSuiAddress, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
-import { useWalletKit } from '@mysten/wallet-kit';
 import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -9,7 +13,7 @@ import toast from 'react-hot-toast';
 
 import { EXPLORER_URL, PACKAGES } from '@/constants';
 import { useNetwork } from '@/context/network';
-import { useMovementClient, useWeb3 } from '@/hooks';
+import { useWeb3 } from '@/hooks';
 import { FixedPointMath } from '@/lib';
 import {
   createObjectsParameter,
@@ -24,12 +28,13 @@ import { AirdropProgressProps, IAirdropForm } from './airdrop.types';
 
 const AirdropButton: FC<AirdropProgressProps> = ({ setIsProgressView }) => {
   const { control, getValues, setValue } = useFormContext<IAirdropForm>();
-  const { currentAccount } = useWalletKit();
   const { coinsMap } = useWeb3();
   const { airdropList, token } = useWatch({ control });
   const { network } = useNetwork();
-  const suiClient = useMovementClient();
-  const { signTransactionBlock } = useWalletKit();
+  const suiClient = useSuiClient();
+  const signTransactionBlock = useSignTransactionBlock();
+  const currentAccount = useCurrentAccount();
+
   const isDisabled =
     !airdropList ||
     !token?.balance ||
@@ -48,7 +53,8 @@ const AirdropButton: FC<AirdropProgressProps> = ({ setIsProgressView }) => {
     try {
       const { airdropList, token } = getValues();
 
-      if (!airdropList || !coinsMap || !coinsMap[token.type]) return;
+      if (!currentAccount || !airdropList || !coinsMap || !coinsMap[token.type])
+        return;
 
       const contractPackageId = PACKAGES[network].AIRDROP;
 
@@ -79,8 +85,9 @@ const AirdropButton: FC<AirdropProgressProps> = ({ setIsProgressView }) => {
             ],
           });
           const { signature, transactionBlockBytes } =
-            await signTransactionBlock({
+            await signTransactionBlock.mutateAsync({
               transactionBlock: txb,
+              account: currentAccount,
             });
 
           const tx = await suiClient.executeTransactionBlock({
@@ -133,11 +140,11 @@ const AirdropButton: FC<AirdropProgressProps> = ({ setIsProgressView }) => {
           ],
         });
 
-        const { signature, transactionBlockBytes } = await signTransactionBlock(
-          {
+        const { signature, transactionBlockBytes } =
+          await signTransactionBlock.mutateAsync({
             transactionBlock: txb,
-          }
-        );
+            account: currentAccount,
+          });
 
         const tx = await suiClient.executeTransactionBlock({
           transactionBlock: transactionBlockBytes,
@@ -175,11 +182,11 @@ const AirdropButton: FC<AirdropProgressProps> = ({ setIsProgressView }) => {
             txb.pure(batch.map((x) => x.amount)),
           ],
         });
-        const { signature, transactionBlockBytes } = await signTransactionBlock(
-          {
+        const { signature, transactionBlockBytes } =
+          await signTransactionBlock.mutateAsync({
             transactionBlock: txb,
-          }
-        );
+            account: currentAccount,
+          });
 
         const tx = await suiClient.executeTransactionBlock({
           transactionBlock: transactionBlockBytes,
