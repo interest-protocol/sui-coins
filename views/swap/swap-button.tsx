@@ -17,6 +17,7 @@ import { REGISTRY_POOLS } from '@/constants/coins';
 import { PACKAGES } from '@/constants/packages';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks';
+import { useModal } from '@/hooks/use-modal';
 import { FixedPointMath } from '@/lib';
 import {
   createObjectsParameter,
@@ -36,6 +37,7 @@ const SwapButton = () => {
   const client = useSuiClient();
   const signTransactionBlock = useSignTransactionBlock();
   const currentAccount = useCurrentAccount();
+  const { handleClose } = useModal();
 
   const resetInput = () => {
     formSwap.setValue('from.value', '0');
@@ -152,6 +154,7 @@ const SwapButton = () => {
     } finally {
       resetInput();
       setLoading(false);
+      handleClose();
       await mutate();
     }
   };

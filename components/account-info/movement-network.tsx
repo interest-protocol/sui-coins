@@ -13,6 +13,7 @@ import { DISPLAY_NETWORK } from '@/constants/network';
 import { Network } from '@/constants/network';
 import { wrapperVariants } from '@/constants/wrapper-variants';
 import { useNetwork } from '@/context/network';
+import { useIsFirstRender } from '@/hooks';
 import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
 import { ChevronDownSVG, MovementLogoSVG } from '@/svg';
 
@@ -22,6 +23,7 @@ const BOX_ID = 'network-box-id';
 
 const MovementNetwork: FC = () => {
   const { colors } = useTheme() as Theme;
+  const isFirstRender = useIsFirstRender();
   const [isOpen, setIsOpen] = useState(false);
   const { network, changeNetwork } = useNetwork();
 
@@ -92,33 +94,39 @@ const MovementNetwork: FC = () => {
           <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
         </Box>
       </Box>
-      <Motion
-        right="0"
-        top="3rem"
-        zIndex={4}
-        width="14.5rem"
-        borderRadius="m"
-        position="absolute"
-        bg="container"
-        variants={wrapperVariants}
-        textTransform="capitalize"
-        initial={isOpen ? 'closed' : 'open'}
-        animate={isOpen ? 'open' : 'closed'}
-        pointerEvents={isOpen ? 'auto' : 'none'}
-        boxShadow="0px 2px 4px -2px rgba(13, 16, 23, 0.04), 0px 4px 8px -2px rgba(13, 16, 23, 0.12);"
-      >
-        {toPairs(DISPLAY_NETWORK).map(([networkKey, displayNetwork]) => (
-          <OptionItem
-            key={v4()}
-            selected={networkKey === network}
-            disabled={networkKey === Network.TESTNET}
-            onClick={() => changeNetwork(networkKey as Network)}
-          >
-            <MovementLogoSVG maxWidth="2rem" maxHeight="2rem" />
-            <Box>M2 {displayNetwork}</Box>
-          </OptionItem>
-        ))}
-      </Motion>
+      {!isFirstRender && (
+        <Motion
+          right="0"
+          top="3rem"
+          zIndex={4}
+          bg="container"
+          width="14.5rem"
+          borderRadius="m"
+          position="absolute"
+          variants={wrapperVariants}
+          textTransform="capitalize"
+          initial={isOpen ? 'closed' : 'open'}
+          animate={isOpen ? 'open' : 'closed'}
+          pointerEvents={isOpen ? 'auto' : 'none'}
+          boxShadow="0px 2px 4px -2px rgba(13, 16, 23, 0.04), 0px 4px 8px -2px rgba(13, 16, 23, 0.12);"
+        >
+          {toPairs(DISPLAY_NETWORK).map(
+            ([networkKey, displayNetwork], index) => (
+              <OptionItem
+                key={v4()}
+                index={index}
+                selected={networkKey === network}
+                disabled={networkKey === Network.TESTNET}
+                totalItems={toPairs(DISPLAY_NETWORK).length}
+                onClick={() => changeNetwork(networkKey as Network)}
+              >
+                <MovementLogoSVG maxWidth="2rem" maxHeight="2rem" />
+                <Box>M2 {displayNetwork}</Box>
+              </OptionItem>
+            )
+          )}
+        </Motion>
+      )}
     </Box>
   );
 };

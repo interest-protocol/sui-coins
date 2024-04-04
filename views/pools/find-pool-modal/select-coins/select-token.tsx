@@ -5,13 +5,17 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import TokenIcon from '@/components/token-icon';
 import { useNetwork } from '@/context/network';
 import { CoinData } from '@/interface';
-import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
+import { ChevronDownSVG, ChevronRightSVG, MinusSVG } from '@/svg';
 import SelectTokenModal from '@/views/components/select-token-modal';
 
 import { PoolForm } from '../../pools.types';
 import { SelectTokenProps } from '../find-pool-modal.types';
 
-const SelectToken: FC<SelectTokenProps> = ({ index }) => {
+const SelectToken: FC<SelectTokenProps> = ({
+  index,
+  canRemove,
+  handleRemoveSelectToken,
+}) => {
   const { network } = useNetwork();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -37,36 +41,62 @@ const SelectToken: FC<SelectTokenProps> = ({ index }) => {
 
   return (
     <>
-      <Box
-        p="2xs"
-        width="100%"
-        display="flex"
-        color="onSurface"
-        borderRadius="xs"
-        border="1px solid"
-        alignItems="center"
-        onClick={openModal}
-        borderColor="outlineVariant"
-        justifyContent="space-between"
-      >
-        {currentSymbol ? (
-          <Box display="flex" alignItems="center" gap="m" p="xs">
-            <TokenIcon network={network} tokenId={currentSymbol} />
-            <Typography variant="body" size="medium">
-              {currentSymbol}
+      <Box display="flex" alignItems="center" gap="s">
+        <Box
+          p="2xs"
+          width="100%"
+          display="flex"
+          cursor="pointer"
+          color="onSurface"
+          borderRadius="xs"
+          border="1px solid"
+          alignItems="center"
+          onClick={openModal}
+          nHover={{
+            bg: 'container',
+            borderColor: 'onSurface',
+          }}
+          borderColor="outlineVariant"
+          justifyContent="space-between"
+        >
+          {currentSymbol ? (
+            <Box display="flex" alignItems="center" gap="m" p="xs">
+              <TokenIcon network={network} tokenId={currentSymbol} />
+              <Typography variant="body" size="medium">
+                {currentSymbol}
+              </Typography>
+            </Box>
+          ) : (
+            <Typography size="large" variant="body" p="xs">
+              Select Token
             </Typography>
+          )}
+          {currentSymbol ? (
+            <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+          ) : (
+            <ChevronRightSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+          )}
+        </Box>
+        {canRemove && (
+          <Box
+            bg="container"
+            nHover={{
+              bg: 'surface',
+            }}
+            display="flex"
+            minWidth="2rem"
+            minHeight="2rem"
+            cursor="pointer"
+            alignItems="center"
+            borderRadius="full"
+            justifyContent="center"
+            onClick={() => handleRemoveSelectToken(index)}
+          >
+            <MinusSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
           </Box>
-        ) : (
-          <Typography size="large" variant="body" p="xs">
-            Select Token
-          </Typography>
-        )}
-        {currentSymbol ? (
-          <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-        ) : (
-          <ChevronRightSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
         )}
       </Box>
+
       <Modal
         {...{
           isOpen,
