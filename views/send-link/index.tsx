@@ -4,6 +4,7 @@ import {
   ProgressIndicator,
   Typography,
 } from '@interest-protocol/ui-kit';
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -13,17 +14,21 @@ import { useNetwork } from '@/context/network';
 import { ErrorSVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 
-import { useLinkData, useReclaimLink } from './send-link.hooks';
+import SendClaim from '../send-claim';
+import { LOCAL_STORAGE_CLAIM_URL } from '../send-claim/send-claim.data';
+import { useLinkWithUrl, useReclaimLink } from './send-link.hooks';
 import { SendLinkProps } from './send-link.types';
 
 const SendLink: FC<SendLinkProps> = ({ id }) => {
   const network = useNetwork();
   const reclaim = useReclaimLink();
+  const claimingState = useState(false);
+  const currentAccount = useCurrentAccount();
   const [isReclaiming, setReclaiming] = useState(false);
 
-  const { data, isLoading, error } = useLinkData(id);
+  const { data, isLoading, error } = useLinkWithUrl(id, claimingState[0]);
 
-  const url = `${location.origin}/send/claim/${id}`;
+  const url = `${location.origin}/send/link/${id}`;
 
   const handleCopyLink = () => {
     if (isReclaiming || isLoading || error || !linkToClaim) return;
@@ -36,7 +41,7 @@ const SendLink: FC<SendLinkProps> = ({ id }) => {
     showTXSuccessToast(tx, network);
   };
 
-  const linkToClaim = data?.links[0];
+  const linkToClaim = data?.url;
 
   const onReclaim = async () => {
     if (!linkToClaim || !id) return;
@@ -53,6 +58,24 @@ const SendLink: FC<SendLinkProps> = ({ id }) => {
       toast.dismiss(toasterId);
     }
   };
+
+  if (
+    (data && !data.link) ||
+    !currentAccount ||
+    localStorage.getItem(`${LOCAL_STORAGE_CLAIM_URL}-${id}`) ||
+    sessionStorage.getItem(`${LOCAL_STORAGE_CLAIM_URL}-${id}`) ||
+    (data?.link?.creatorAddress &&
+      data?.link?.creatorAddress !== currentAccount.address)
+  )
+    return (
+      <SendClaim
+        id={id}
+        data={data}
+        error={error}
+        isLoading={isLoading}
+        claimingState={claimingState}
+      />
+    );
 
   return (
     <Layout title="Claim link">

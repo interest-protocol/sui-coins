@@ -7,12 +7,11 @@ import {
   TooltipWrapper,
   Typography,
 } from '@interest-protocol/ui-kit';
-import { useCurrentAccount } from '@mysten/dapp-kit';
 import type { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import type { ZkSendLink } from '@mysten/zksend';
 import type { LinkAssets } from '@mysten/zksend/dist/cjs/links/utils';
 import { useRouter } from 'next/router';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
 import { v4 } from 'uuid';
 
@@ -43,7 +42,6 @@ const SendHistoryTable: FC = () => {
   const network = useNetwork();
   const reclaimLink = useReclaimByLink();
   const regenerateLink = useRegenerateLink();
-  const currentAccount = useCurrentAccount();
   const { setModal, handleClose } = useModal();
   const [currentCursor, setCursor] = useState<string>('');
   const [linkList, setLinkList] = useState<ReadonlyArray<ZkSendLinkItem>>([]);
@@ -67,13 +65,6 @@ const SendHistoryTable: FC = () => {
     currentCursor,
     updateLinkInfo
   );
-
-  useEffect(() => {
-    if (currentAccount?.address) {
-      setLinkList([]);
-      setCursor('');
-    }
-  }, [currentAccount?.address]);
 
   const onSuccessReclaim = (tx: SuiTransactionBlockResponse) => {
     showTXSuccessToast(tx, network);
@@ -145,248 +136,260 @@ const SendHistoryTable: FC = () => {
   };
 
   return (
-    <Box my="l" display="grid" gap="l" overflowX="auto">
-      <Motion as="table" rowGap="l">
-        <Box as="thead">
-          <Box as="tr">
-            {['ID', 'Date', 'Status'].map((item, index) => (
-              <Typography
-                as="th"
-                key={v4()}
-                size="small"
-                color="outline"
-                variant="label"
-                textAlign="left"
-                {...(!index && { pl: 'xl' })}
-                {...(index === 2 && { pr: 'xl' })}
-              >
-                {item}
-              </Typography>
-            ))}
-          </Box>
-        </Box>
-        <Motion as="tbody">
-          {linkList.map(
-            ({ link, assets, createdAt, claimed, digest }, index) => (
-              <>
-                <Box as="tr" key={v4()}>
+    <Box my="l" display="grid" gap="l">
+      <Box overflowX="auto">
+        {!!linkList.length && (
+          <Motion as="table" rowGap="l">
+            <Box as="thead">
+              <Box as="tr">
+                {['ID', 'Date', 'Status'].map((item, index) => (
                   <Typography
-                    pl="xl"
-                    pr="m"
-                    my="xs"
-                    as="td"
-                    gap="s"
+                    as="th"
+                    key={v4()}
                     size="small"
-                    display="flex"
+                    color="outline"
                     variant="label"
-                    alignItems="center"
+                    textAlign="left"
+                    {...(!index && { pl: 'xl' })}
+                    {...(index === 2 && { pr: 'xl' })}
                   >
-                    <Box
-                      bg="black"
-                      color="white"
-                      display="flex"
-                      width="2.2rem"
-                      height="2.2rem"
-                      borderRadius="xs"
-                      alignItems="center"
-                      justifyContent="center"
-                    >
-                      <DefaultAssetSVG
-                        width="100%"
-                        maxWidth="1rem"
-                        maxHeight="1rem"
-                      />
-                    </Box>
-                    <Box>
+                    {item}
+                  </Typography>
+                ))}
+              </Box>
+            </Box>
+            <Motion as="tbody">
+              {linkList.map(
+                ({ link, assets, createdAt, claimed, digest }, index) => (
+                  <>
+                    <Box as="tr" key={v4()}>
                       <Typography
-                        size="medium"
-                        variant="body"
-                        whiteSpace="nowrap"
+                        pl="xl"
+                        pr="m"
+                        my="xs"
+                        as="td"
+                        gap="s"
+                        size="small"
+                        display="flex"
+                        variant="label"
+                        alignItems="center"
                       >
-                        ID {index + 1}
+                        <Box
+                          bg="black"
+                          color="white"
+                          display="flex"
+                          width="2.2rem"
+                          height="2.2rem"
+                          borderRadius="xs"
+                          alignItems="center"
+                          justifyContent="center"
+                        >
+                          <DefaultAssetSVG
+                            width="100%"
+                            maxWidth="1rem"
+                            maxHeight="1rem"
+                          />
+                        </Box>
+                        <Box>
+                          <Typography
+                            size="medium"
+                            variant="body"
+                            whiteSpace="nowrap"
+                          >
+                            ID {index + 1}
+                          </Typography>
+                          <Typography
+                            as="span"
+                            size="small"
+                            variant="body"
+                            color="outline"
+                            whiteSpace="nowrap"
+                          >
+                            Assets:{' '}
+                            {assets.nfts.length + assets.balances.length}
+                          </Typography>
+                        </Box>
                       </Typography>
                       <Typography
-                        as="span"
+                        pr="m"
+                        as="td"
                         size="small"
                         variant="body"
-                        color="outline"
                         whiteSpace="nowrap"
                       >
-                        Assets: {assets.nfts.length + assets.balances.length}
+                        {new Date(createdAt!).toLocaleString(undefined, {
+                          day: 'numeric',
+                          month: 'short',
+                          year: 'numeric',
+                          hour: 'numeric',
+                          minute: 'numeric',
+                        })}
+                      </Typography>
+                      <Typography pr="m" as="td" size="small" variant="label">
+                        <Typography
+                          p="xs"
+                          as="span"
+                          size="medium"
+                          variant="label"
+                          borderRadius="full"
+                          bg={`${claimed ? 'primary' : 'success'}Container`}
+                          color={`on${claimed ? 'Primary' : 'Success'}Container`}
+                        >
+                          {claimed ? 'Claimed' : 'Unclaimed'}
+                        </Typography>
+                      </Typography>
+                      <Typography
+                        as="td"
+                        pr="xl"
+                        gap="xs"
+                        size="small"
+                        display="flex"
+                        variant="label"
+                        justifyContent="flex-end"
+                      >
+                        <TooltipWrapper
+                          bg="lowContainer"
+                          tooltipPosition="top"
+                          tooltipContent={
+                            <Typography
+                              size="small"
+                              variant="label"
+                              textAlign="center"
+                            >
+                              Regenerate Link
+                            </Typography>
+                          }
+                        >
+                          <Button
+                            isIcon
+                            bg="container"
+                            variant="tonal"
+                            disabled={claimed}
+                            borderRadius="full"
+                            onClick={() =>
+                              onRegenerateLink(claimed, link, digest!)
+                            }
+                          >
+                            <ReloadSVG
+                              maxHeight="1rem"
+                              maxWidth="1rem"
+                              width="100%"
+                            />
+                          </Button>
+                        </TooltipWrapper>
+                        <TooltipWrapper
+                          bg="lowContainer"
+                          tooltipPosition="top"
+                          tooltipContent={
+                            <Typography
+                              size="small"
+                              variant="label"
+                              textAlign="center"
+                            >
+                              Reclaim
+                            </Typography>
+                          }
+                        >
+                          <Button
+                            isIcon
+                            bg="container"
+                            variant="tonal"
+                            disabled={claimed}
+                            borderRadius="full"
+                            onClick={() => handleReclaimLink(link)}
+                          >
+                            <DownloadSVG
+                              maxHeight="1rem"
+                              maxWidth="1rem"
+                              width="100%"
+                            />
+                          </Button>
+                        </TooltipWrapper>
+                        <TooltipWrapper
+                          bg="lowContainer"
+                          tooltipPosition="top"
+                          tooltipContent={
+                            <Typography variant="label" size="small">
+                              Explorer
+                            </Typography>
+                          }
+                        >
+                          <Button
+                            isIcon
+                            bg="container"
+                            variant="tonal"
+                            borderRadius="full"
+                            onClick={() => gotoExplorer(digest!)}
+                          >
+                            <SendSVG
+                              maxHeight="1rem"
+                              maxWidth="1rem"
+                              width="100%"
+                            />
+                          </Button>
+                        </TooltipWrapper>
+                        <TooltipWrapper
+                          bg="lowContainer"
+                          tooltipPosition="top"
+                          tooltipContent={
+                            <Typography variant="label" size="small">
+                              Details
+                            </Typography>
+                          }
+                        >
+                          <Button
+                            isIcon
+                            bg="container"
+                            variant="tonal"
+                            borderRadius="full"
+                            disabled={
+                              !(assets.nfts.length + assets.balances.length)
+                            }
+                            onClick={() =>
+                              assets.nfts.length + assets.balances.length &&
+                              openDetails(assets)
+                            }
+                          >
+                            <InfoSVG
+                              width="100%"
+                              maxWidth="1rem"
+                              maxHeight="1rem"
+                            />
+                          </Button>
+                        </TooltipWrapper>
                       </Typography>
                     </Box>
-                  </Typography>
-                  <Typography
-                    pr="m"
-                    as="td"
-                    size="small"
-                    variant="body"
-                    whiteSpace="nowrap"
-                  >
-                    {new Date(createdAt!).toLocaleString(undefined, {
-                      day: 'numeric',
-                      month: 'short',
-                      year: 'numeric',
-                      hour: 'numeric',
-                      minute: 'numeric',
-                    })}
-                  </Typography>
-                  <Typography pr="m" as="td" size="small" variant="label">
-                    <Typography
-                      p="xs"
-                      as="span"
-                      size="medium"
-                      variant="label"
-                      borderRadius="full"
-                      bg={`${claimed ? 'primary' : 'success'}Container`}
-                      color={`on${claimed ? 'Primary' : 'Success'}Container`}
-                    >
-                      {claimed ? 'Claimed' : 'Unclaimed'}
-                    </Typography>
-                  </Typography>
-                  <Typography
-                    as="td"
-                    pr="xl"
-                    gap="xs"
-                    size="small"
-                    display="flex"
-                    variant="label"
-                    justifyContent="flex-end"
-                  >
-                    <TooltipWrapper
-                      bg="lowContainer"
-                      tooltipPosition="top"
-                      tooltipContent={
-                        <Typography
-                          size="small"
-                          variant="label"
-                          textAlign="center"
-                        >
-                          Regenerate Link
-                        </Typography>
-                      }
-                    >
-                      <Button
-                        isIcon
-                        bg="container"
-                        variant="tonal"
-                        disabled={claimed}
-                        borderRadius="full"
-                        onClick={() => onRegenerateLink(claimed, link, digest!)}
-                      >
-                        <ReloadSVG
-                          maxHeight="1rem"
-                          maxWidth="1rem"
-                          width="100%"
-                        />
-                      </Button>
-                    </TooltipWrapper>
-                    <TooltipWrapper
-                      bg="lowContainer"
-                      tooltipPosition="top"
-                      tooltipContent={
-                        <Typography
-                          size="small"
-                          variant="label"
-                          textAlign="center"
-                        >
-                          Reclaim
-                        </Typography>
-                      }
-                    >
-                      <Button
-                        isIcon
-                        bg="container"
-                        variant="tonal"
-                        disabled={claimed}
-                        borderRadius="full"
-                        onClick={() => handleReclaimLink(link)}
-                      >
-                        <DownloadSVG
-                          maxHeight="1rem"
-                          maxWidth="1rem"
-                          width="100%"
-                        />
-                      </Button>
-                    </TooltipWrapper>
-                    <TooltipWrapper
-                      bg="lowContainer"
-                      tooltipPosition="top"
-                      tooltipContent={
-                        <Typography variant="label" size="small">
-                          Explorer
-                        </Typography>
-                      }
-                    >
-                      <Button
-                        isIcon
-                        bg="container"
-                        variant="tonal"
-                        borderRadius="full"
-                        onClick={() => gotoExplorer(digest!)}
-                      >
-                        <SendSVG
-                          maxHeight="1rem"
-                          maxWidth="1rem"
-                          width="100%"
-                        />
-                      </Button>
-                    </TooltipWrapper>
-                    <TooltipWrapper
-                      bg="lowContainer"
-                      tooltipPosition="top"
-                      tooltipContent={
-                        <Typography variant="label" size="small">
-                          Details
-                        </Typography>
-                      }
-                    >
-                      <Button
-                        isIcon
-                        bg="container"
-                        variant="tonal"
-                        borderRadius="full"
-                        disabled={
-                          !(assets.nfts.length + assets.balances.length)
-                        }
-                        onClick={() =>
-                          assets.nfts.length + assets.balances.length &&
-                          openDetails(assets)
-                        }
-                      >
-                        <InfoSVG
-                          width="100%"
-                          maxWidth="1rem"
-                          maxHeight="1rem"
-                        />
-                      </Button>
-                    </TooltipWrapper>
-                  </Typography>
-                </Box>
-              </>
-            )
-          )}
-        </Motion>
-      </Motion>
-      {isLoading ? (
-        <Box mx="auto">
-          <ProgressIndicator size={40} variant="loading" />
-        </Box>
-      ) : linkList.length ? null : (
-        <Box
-          py="xl"
-          mx="auto"
-          display="flex"
-          color="disable"
-          alignItems="center"
-          flexDirection="column"
-        >
-          <EmptyBoxSVG maxWidth="8rem" maxHeight="8rem" width="100%" />
-          <Typography variant="title" size="medium">
-            Nothing found!
-          </Typography>
-        </Box>
-      )}
+                  </>
+                )
+              )}
+            </Motion>
+          </Motion>
+        )}
+        {isLoading ? (
+          <Box
+            mx="auto"
+            display="flex"
+            alignItems="center"
+            flexDirection="column"
+          >
+            <ProgressIndicator size={40} variant="loading" />
+          </Box>
+        ) : linkList.length ? null : (
+          <Box
+            py="xl"
+            mx="auto"
+            display="flex"
+            color="disable"
+            alignItems="center"
+            flexDirection="column"
+          >
+            <EmptyBoxSVG maxWidth="8rem" maxHeight="8rem" width="100%" />
+            <Typography variant="title" size="medium">
+              Nothing found!
+            </Typography>
+          </Box>
+        )}
+      </Box>
       {data && (
         <Button
           mx="auto"

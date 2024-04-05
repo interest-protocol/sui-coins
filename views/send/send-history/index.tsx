@@ -12,7 +12,7 @@ const SendHistory: FC = () => (
     bg="lowestContainer"
     flexDirection="column"
     width={['auto', 'auto', '100%']}
-    maxWidth={['95vw', '95vw', '50rem']}
+    maxWidth={['calc(100vw - 3rem)', 'calc(100vw - 3rem)', '50rem']}
   >
     <Typography p="xl" size="large" fontSize="5xl" variant="title">
       Transaction history
