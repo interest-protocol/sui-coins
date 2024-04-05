@@ -39,9 +39,7 @@ const SendButton: FC = () => {
       await createLink(objects, onSuccess);
       toast.success('Link created successfully');
     } catch (e) {
-      console.log({ e });
-
-      toast.error('Something went wrong');
+      toast.error((e as any).message ?? 'Something went wrong');
     } finally {
       toast.dismiss(toasterId);
     }
