@@ -1,6 +1,6 @@
 import { SuiClient, SuiObjectResponse } from '@mysten/sui.js/client';
 
-import { CoinObject } from '../use-get-all-coins/use-get-all-coins.types';
+import { CoinObject } from '../../hooks/use-get-all-coins/use-get-all-coins.types';
 
 export type TGetAllObjects = (
   provider: SuiClient,

@@ -4,10 +4,10 @@ import { createContext, FC } from 'react';
 
 import { useGetAllCoins } from '@/hooks/use-get-all-coins';
 import { CoinsMap } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
-import { useGetAllObjects } from '@/hooks/use-get-all-objects';
 import useNftsMetadata from '@/hooks/use-nfts-metadata';
 import { noop } from '@/utils';
 
+import { useAllObjects } from '../all-objects';
 import { Web3ManagerProps, Web3ManagerState } from './web3-manager.types';
 
 const CONTEXT_DEFAULT_STATE = {
@@ -47,7 +47,7 @@ const Web3Manager: FC<Web3ManagerProps> = ({ children }) => {
     error: objectsError,
     mutate: mutateObjects,
     isLoading: fetchingAllObjects,
-  } = useGetAllObjects();
+  } = useAllObjects();
 
   const {
     data: nfts,

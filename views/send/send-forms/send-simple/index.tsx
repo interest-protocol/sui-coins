@@ -53,7 +53,7 @@ const SendSimple: FC = () => {
             maxWidth="17rem"
             textAlign="center"
           >
-            Add your items and create a link to send
+            Add items and create a link
           </Typography>
           {!isTipHidden && (
             <Box

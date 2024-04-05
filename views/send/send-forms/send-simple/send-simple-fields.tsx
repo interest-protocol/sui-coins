@@ -1,8 +1,8 @@
 import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
+import { ObjectData } from '@/context/all-objects/all-objects.types';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
-import { ObjectData } from '@/hooks/use-get-all-objects/use-get-all-objects.types';
 import { useModal } from '@/hooks/use-modal';
 import { MinusSVG, PlusSVG } from '@/svg';
 import SelectObjectModal from '@/views/components/select-object-modal';
@@ -106,7 +106,7 @@ const SendSimpleFormFields = () => {
             <PlusSVG maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
           </Box>
           <Typography variant="title" size="large">
-            Add Coin, Nft, or Other
+            Add Coin, NFT, or other
           </Typography>
         </Box>
       )}

@@ -16,11 +16,11 @@ const SendSelectType: FC<SendSelectTypeProps> = ({ onSelectType }) => (
   >
     <Box display="flex" flexDirection="column" gap="l">
       <Typography variant="display" size="small" textAlign="center">
-        Create a link to send
+        Zksend
       </Typography>
       <Typography variant="body" size="large" textAlign="center">
-        It simple Create a link and send coins, NFTs and more. Shares the link
-        with the recipient via email, direct message, or any other channel.
+        Effortlessly Send & Claim digital assets on Sui in stealth mode, all
+        within seconds.
       </Typography>
     </Box>
     <Box

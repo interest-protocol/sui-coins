@@ -7,8 +7,8 @@ import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { ZkSendLinkBuilder } from '@mysten/zksend';
 import { v4 } from 'uuid';
 
+import { ObjectData } from '@/context/all-objects/all-objects.types';
 import { useNetwork } from '@/context/network';
-import { ObjectData } from '@/hooks/use-get-all-objects/use-get-all-objects.types';
 import { FixedPointMath } from '@/lib';
 import { isSui, throwTXIfNotSuccessful } from '@/utils';
 import { isCoinObject } from '@/views/components/select-object-modal/select-object-modal.utils';

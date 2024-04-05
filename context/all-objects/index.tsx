@@ -1,10 +1,14 @@
 import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
-import useSWR from 'swr';
+import { createContext, FC, PropsWithChildren, useContext, useId } from 'react';
+import useSWR, { SWRResponse } from 'swr';
 
 import { useNetwork } from '@/context/network';
 import { makeSWRKey } from '@/utils';
 
-import { ObjectData, TGetAllObjects } from './use-get-all-objects.types';
+import {
+  ObjectData,
+  TGetAllObjects,
+} from '../../context/all-objects/all-objects.types';
 
 const getAllObjects: TGetAllObjects = async (
   provider,
@@ -14,7 +18,7 @@ const getAllObjects: TGetAllObjects = async (
   const { data, nextCursor, hasNextPage } = await provider.getOwnedObjects({
     owner: account,
     cursor,
-    options: { showDisplay: true, showContent: true },
+    options: { showContent: true, showType: true },
   });
 
   if (!hasNextPage) return data;
@@ -24,18 +28,35 @@ const getAllObjects: TGetAllObjects = async (
   return [...data, ...newData];
 };
 
-export const useGetAllObjects = () => {
+interface AllCoins {
+  coinsObjects: ReadonlyArray<ObjectData>;
+  ownedNfts: ReadonlyArray<ObjectData>;
+  otherObjects: ReadonlyArray<ObjectData>;
+}
+
+const allObjectsContext = createContext<SWRResponse<AllCoins>>(
+  {} as SWRResponse<AllCoins>
+);
+
+export const AllObjectsProvider: FC<PropsWithChildren> = ({ children }) => {
+  const id = useId();
   const network = useNetwork();
   const suiClient = useSuiClient();
+  const { Provider } = allObjectsContext;
   const currentAccount = useCurrentAccount();
 
-  return useSWR(
+  const data = useSWR<AllCoins>(
     makeSWRKey(
-      [network, currentAccount?.address],
+      [id, network, currentAccount?.address],
       suiClient.getOwnedObjects.name
     ),
     async () => {
-      if (!currentAccount) return {};
+      if (!currentAccount)
+        return {
+          coinsObjects: [],
+          ownedNfts: [],
+          otherObjects: [],
+        };
 
       const objectsRaw = await getAllObjects(suiClient, currentAccount.address);
 
@@ -57,7 +78,12 @@ export const useGetAllObjects = () => {
         [] as ReadonlyArray<ObjectData>
       );
 
-      if (!objects.length) return {};
+      if (!objects.length)
+        return {
+          coinsObjects: [],
+          ownedNfts: [],
+          otherObjects: [],
+        };
 
       const [coinsObjects, ownedNfts, otherObjects] = [
         objects.filter((object) => object.type.startsWith('0x2::coin::Coin<')),
@@ -80,4 +106,10 @@ export const useGetAllObjects = () => {
       refreshInterval: 10000,
     }
   );
+
+  return <Provider value={data}>{children}</Provider>;
 };
+
+export const useAllObjects = () => useContext(allObjectsContext);
+
+export default allObjectsContext;

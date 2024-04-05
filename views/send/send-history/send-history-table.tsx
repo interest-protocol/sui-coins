@@ -7,11 +7,12 @@ import {
   TooltipWrapper,
   Typography,
 } from '@interest-protocol/ui-kit';
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import type { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import type { ZkSendLink } from '@mysten/zksend';
 import type { LinkAssets } from '@mysten/zksend/dist/cjs/links/utils';
 import { useRouter } from 'next/router';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { v4 } from 'uuid';
 
@@ -35,6 +36,7 @@ import SendHistoryDetailsModal from './send-history-details';
 const SendHistoryTable: FC = () => {
   const { push } = useRouter();
   const network = useNetwork();
+  const currentAccount = useCurrentAccount();
   const { setModal, handleClose } = useModal();
   const [currentCursor, setCursor] = useState<string>('');
   const [linkList, setLinkList] = useState<ReadonlyArray<ZkSendLinkItem>>([]);
@@ -60,6 +62,13 @@ const SendHistoryTable: FC = () => {
     currentCursor,
     updateLinkInfo
   );
+
+  useEffect(() => {
+    if (currentAccount?.address) {
+      setLinkList([]);
+      setCursor('');
+    }
+  }, [currentAccount?.address]);
 
   const onSuccess = (tx: SuiTransactionBlockResponse, id: string) => {
     showTXSuccessToast(tx, network);

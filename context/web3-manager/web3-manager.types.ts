@@ -3,11 +3,11 @@ import { PaginatedCoins } from '@mysten/sui.js/client';
 import { WalletAccount } from '@wallet-standard/base';
 import { ReactNode } from 'react';
 
+import { ObjectData } from '@/context/all-objects/all-objects.types';
 import {
   CoinObject,
   CoinsMap,
 } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
-import { ObjectData } from '@/hooks/use-get-all-objects/use-get-all-objects.types';
 import { LocalTokenMetadataRecord, NFTCollectionMetadata } from '@/interface';
 
 export interface Web3ManagerState {
