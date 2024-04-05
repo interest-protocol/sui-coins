@@ -115,8 +115,8 @@ const SendHistoryTable: FC = () => {
   };
 
   return (
-    <Box my="l" display="grid" gap="l">
-      <Motion as="table" rowGap="l" width="100%">
+    <Box my="l" display="grid" gap="l" overflowX="auto">
+      <Motion as="table" rowGap="l">
         <Box as="thead">
           <Box as="tr">
             {['ID', 'Date', 'Status'].map((item, index) => (
@@ -142,6 +142,7 @@ const SendHistoryTable: FC = () => {
                 <Box as="tr" key={v4()}>
                   <Typography
                     pl="xl"
+                    pr="m"
                     my="xs"
                     as="td"
                     gap="s"
@@ -167,7 +168,11 @@ const SendHistoryTable: FC = () => {
                       />
                     </Box>
                     <Box>
-                      <Typography size="medium" variant="body">
+                      <Typography
+                        size="medium"
+                        variant="body"
+                        whiteSpace="nowrap"
+                      >
                         ID {index + 1}
                       </Typography>
                       <Typography
@@ -175,12 +180,19 @@ const SendHistoryTable: FC = () => {
                         size="small"
                         variant="body"
                         color="outline"
+                        whiteSpace="nowrap"
                       >
                         Assets: {assets.nfts.length + assets.balances.length}
                       </Typography>
                     </Box>
                   </Typography>
-                  <Typography as="td" size="small" variant="body">
+                  <Typography
+                    pr="m"
+                    as="td"
+                    size="small"
+                    variant="body"
+                    whiteSpace="nowrap"
+                  >
                     {new Date(createdAt!).toLocaleString(undefined, {
                       day: 'numeric',
                       month: 'short',
@@ -189,7 +201,7 @@ const SendHistoryTable: FC = () => {
                       minute: 'numeric',
                     })}
                   </Typography>
-                  <Typography as="td" size="small" variant="label">
+                  <Typography pr="m" as="td" size="small" variant="label">
                     <Typography
                       p="xs"
                       as="span"

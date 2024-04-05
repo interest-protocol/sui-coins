@@ -56,10 +56,10 @@ const SendSimpleFormFields = () => {
             <SendFormSelectObject index={index} />
             <Button
               isIcon
-              my="2xs"
               variant="tonal"
               bg="lowContainer"
               borderRadius="50%"
+              mt={['3xl', '2xs']}
               onClick={() => remove(index)}
             >
               <MinusSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />

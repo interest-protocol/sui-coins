@@ -6,13 +6,13 @@ import SendHistoryTable from './send-history-table';
 const SendHistory: FC = () => (
   <Box
     mx="auto"
-    width="100%"
     display="flex"
-    maxWidth="50rem"
     borderRadius="s"
     overflow="hidden"
     bg="lowestContainer"
     flexDirection="column"
+    width={['auto', 'auto', '100%']}
+    maxWidth={['95vw', '95vw', '50rem']}
   >
     <Typography p="xl" size="large" fontSize="5xl" variant="title">
       Transaction history
