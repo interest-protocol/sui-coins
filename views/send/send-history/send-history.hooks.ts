@@ -78,7 +78,7 @@ export const useRegenerateLink = () => {
       method: 'PUT',
       body: JSON.stringify({
         id,
-        link: [url],
+        links: [url],
         digest: tx.digest,
       }),
     });

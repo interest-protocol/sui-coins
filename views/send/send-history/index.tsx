@@ -8,20 +8,13 @@ const SendHistory: FC = () => (
     mx="auto"
     width="100%"
     display="flex"
+    maxWidth="50rem"
     borderRadius="s"
     overflow="hidden"
-    maxWidth="39.75rem"
     bg="lowestContainer"
     flexDirection="column"
   >
-    <Typography
-      p="xl"
-      size="large"
-      fontSize="5xl"
-      variant="title"
-      borderBottom="1px solid"
-      borderColor="container"
-    >
+    <Typography p="xl" size="large" fontSize="5xl" variant="title">
       Transaction history
     </Typography>
     <SendHistoryTable />

@@ -99,11 +99,7 @@ const SendClaim: FC<SendClaimProps> = ({ id }) => {
             border="1px solid"
             borderColor="outlineVariant"
           >
-            <SendHistoryDetails
-              index={0}
-              network={network}
-              assets={data.link.assets}
-            />
+            <SendHistoryDetails network={network} assets={data.link.assets} />
           </Box>
         ) : isLoading ? (
           <ProgressIndicator size={36} variant="loading" />

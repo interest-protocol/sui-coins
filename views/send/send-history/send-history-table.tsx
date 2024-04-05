@@ -1,30 +1,42 @@
 import {
   Box,
   Button,
+  Dialog,
   Motion,
+  ProgressIndicator,
   TooltipWrapper,
   Typography,
 } from '@interest-protocol/ui-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
+import type { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
+import type { ZkSendLink } from '@mysten/zksend';
+import type { LinkAssets } from '@mysten/zksend/dist/cjs/links/utils';
 import { useRouter } from 'next/router';
 import { FC, useState } from 'react';
+import toast from 'react-hot-toast';
 import { v4 } from 'uuid';
 
 import { EXPLORER_URL, Routes, RoutesEnum } from '@/constants';
 import { useNetwork } from '@/context/network';
-import { DefaultAssetSVG, InfoSVG, ReloadSVG, SendSVG } from '@/svg';
+import { useModal } from '@/hooks/use-modal';
+import {
+  DefaultAssetSVG,
+  EmptyBoxSVG,
+  InfoSVG,
+  ReloadSVG,
+  SendSVG,
+} from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 import PoweredByZkSend from '@/views/components/powered-by-zksend';
 
-import SendHistoryDetails from '../../components/send-asset-details';
 import { useLinkList, useRegenerateLink } from './send-history.hooks';
 import { ZkSendLinkItem } from './send-history.types';
+import SendHistoryDetailsModal from './send-history-details';
 
 const SendHistoryTable: FC = () => {
   const { push } = useRouter();
   const network = useNetwork();
+  const { setModal, handleClose } = useModal();
   const [currentCursor, setCursor] = useState<string>('');
-  const [detailsIndex, setDetailsIndex] = useState<number | null>(null);
   const [linkList, setLinkList] = useState<ReadonlyArray<ZkSendLinkItem>>([]);
 
   const regenerateLink = useRegenerateLink();
@@ -44,7 +56,10 @@ const SendHistoryTable: FC = () => {
     ]);
   };
 
-  const { data, mutate } = useLinkList(currentCursor, updateLinkInfo);
+  const { data, mutate, isLoading } = useLinkList(
+    currentCursor,
+    updateLinkInfo
+  );
 
   const onSuccess = (tx: SuiTransactionBlockResponse, id: string) => {
     showTXSuccessToast(tx, network);
@@ -52,15 +67,59 @@ const SendHistoryTable: FC = () => {
     push(`${Routes[RoutesEnum.SendLink]}/${id}`);
   };
 
+  const openDetails = (assets: LinkAssets) =>
+    setModal(
+      <SendHistoryDetailsModal closeModal={handleClose} assets={assets} />
+    );
+
   const gotoExplorer = (digest: string) =>
     window.open(`${EXPLORER_URL[network]}/tx/${digest}`);
+
+  const handleRegenerateLink = async (link: ZkSendLink, digest: string) => {
+    const toastId = toast.loading('Regenerating...');
+    try {
+      await regenerateLink(link, digest!, onSuccess);
+      toast.success('Link regenerated successfully!');
+    } catch (e) {
+      toast.error((e as any).message ?? 'Link regenerating failed!');
+    } finally {
+      toast.dismiss(toastId);
+    }
+  };
+
+  const onRegenerateLink = (
+    claimed: boolean,
+    link: ZkSendLink,
+    digest: string
+  ) => {
+    if (claimed) return;
+
+    setModal(
+      <Dialog
+        title="Caution"
+        status="warning"
+        message="Regenerated links cannot be listed on the history page. Once you lose the link again, you cannot regenerate again."
+        primaryButton={{
+          label: 'Continue anyway',
+          onClick: () => {
+            handleClose();
+            handleRegenerateLink(link, digest);
+          },
+        }}
+        secondaryButton={{
+          label: 'Cancel',
+          onClick: handleClose,
+        }}
+      />
+    );
+  };
 
   return (
     <Box my="l" display="grid" gap="l">
       <Motion as="table" rowGap="l" width="100%">
         <Box as="thead">
           <Box as="tr">
-            {['Asset', 'Date', 'Status'].map((item, index) => (
+            {['ID', 'Date', 'Status'].map((item, index) => (
               <Typography
                 as="th"
                 key={v4()}
@@ -93,10 +152,10 @@ const SendHistoryTable: FC = () => {
                   >
                     <Box
                       bg="black"
-                      width="2rem"
                       color="white"
-                      height="2rem"
                       display="flex"
+                      width="2.2rem"
+                      height="2.2rem"
                       borderRadius="xs"
                       alignItems="center"
                       justifyContent="center"
@@ -107,10 +166,19 @@ const SendHistoryTable: FC = () => {
                         maxHeight="1rem"
                       />
                     </Box>
-                    <Typography as="span" size="medium" variant="body">
-                      {assets.nfts.length + assets.balances.length} Asset
-                      {assets.nfts.length + assets.balances.length !== 1 && 's'}
-                    </Typography>
+                    <Box>
+                      <Typography size="medium" variant="body">
+                        ID {index + 1}
+                      </Typography>
+                      <Typography
+                        as="span"
+                        size="small"
+                        variant="body"
+                        color="outline"
+                      >
+                        Assets: {assets.nfts.length + assets.balances.length}
+                      </Typography>
+                    </Box>
                   </Typography>
                   <Typography as="td" size="small" variant="body">
                     {new Date(createdAt!).toLocaleString(undefined, {
@@ -128,13 +196,12 @@ const SendHistoryTable: FC = () => {
                       size="medium"
                       variant="label"
                       borderRadius="full"
-                      bg={`${claimed ? 'warning' : 'success'}Container`}
-                      color={`on${claimed ? 'Warning' : 'Success'}Container`}
+                      bg={`${claimed ? 'primary' : 'success'}Container`}
+                      color={`on${claimed ? 'Primary' : 'Success'}Container`}
                     >
-                      {claimed ? 'Claimed' : 'Active'}
+                      {claimed ? 'Claimed' : 'Unclaimed'}
                     </Typography>
                   </Typography>
-
                   <Typography
                     as="td"
                     pr="xl"
@@ -144,34 +211,6 @@ const SendHistoryTable: FC = () => {
                     variant="label"
                     justifyContent="flex-end"
                   >
-                    <TooltipWrapper
-                      bg="lowContainer"
-                      tooltipPosition="top"
-                      tooltipContent={
-                        <Typography variant="label" size="small">
-                          Details
-                        </Typography>
-                      }
-                    >
-                      <Button
-                        isIcon
-                        variant="tonal"
-                        borderRadius="full"
-                        disabled={
-                          !(assets.nfts.length + assets.balances.length)
-                        }
-                        onClick={() =>
-                          assets.nfts.length + assets.balances.length &&
-                          setDetailsIndex((i) => (i === index ? null : index))
-                        }
-                      >
-                        <InfoSVG
-                          maxHeight="1rem"
-                          maxWidth="1rem"
-                          width="100%"
-                        />
-                      </Button>
-                    </TooltipWrapper>
                     <TooltipWrapper
                       bg="lowContainer"
                       tooltipPosition="top"
@@ -187,12 +226,11 @@ const SendHistoryTable: FC = () => {
                     >
                       <Button
                         isIcon
+                        bg="container"
                         variant="tonal"
                         disabled={claimed}
                         borderRadius="full"
-                        onClick={() =>
-                          !claimed && regenerateLink(link, digest!, onSuccess)
-                        }
+                        onClick={() => onRegenerateLink(claimed, link, digest!)}
                       >
                         <ReloadSVG
                           maxHeight="1rem"
@@ -212,6 +250,7 @@ const SendHistoryTable: FC = () => {
                     >
                       <Button
                         isIcon
+                        bg="container"
                         variant="tonal"
                         borderRadius="full"
                         onClick={() => gotoExplorer(digest!)}
@@ -223,36 +262,61 @@ const SendHistoryTable: FC = () => {
                         />
                       </Button>
                     </TooltipWrapper>
+                    <TooltipWrapper
+                      bg="lowContainer"
+                      tooltipPosition="top"
+                      tooltipContent={
+                        <Typography variant="label" size="small">
+                          Details
+                        </Typography>
+                      }
+                    >
+                      <Button
+                        isIcon
+                        bg="container"
+                        variant="tonal"
+                        borderRadius="full"
+                        disabled={
+                          !(assets.nfts.length + assets.balances.length)
+                        }
+                        onClick={() =>
+                          assets.nfts.length + assets.balances.length &&
+                          openDetails(assets)
+                        }
+                      >
+                        <InfoSVG
+                          width="100%"
+                          maxWidth="1rem"
+                          maxHeight="1rem"
+                        />
+                      </Button>
+                    </TooltipWrapper>
                   </Typography>
                 </Box>
-                {index === detailsIndex && (
-                  <Motion
-                    as="tr"
-                    key={v4()}
-                    bg="container"
-                    exit={{ scaleY: 0 }}
-                    style={{ originY: 0 }}
-                    initial={{ scaleY: 0 }}
-                    animate={{ scaleY: 1 }}
-                    transition={{
-                      duration: 0.1,
-                      ease: 'easeInOut',
-                    }}
-                  >
-                    <td colSpan={5}>
-                      <SendHistoryDetails
-                        index={index}
-                        assets={assets}
-                        network={network}
-                      />
-                    </td>
-                  </Motion>
-                )}
               </>
             )
           )}
         </Motion>
       </Motion>
+      {isLoading ? (
+        <Box mx="auto">
+          <ProgressIndicator size={40} variant="loading" />
+        </Box>
+      ) : linkList.length ? null : (
+        <Box
+          py="xl"
+          mx="auto"
+          display="flex"
+          color="disable"
+          alignItems="center"
+          flexDirection="column"
+        >
+          <EmptyBoxSVG maxWidth="8rem" maxHeight="8rem" width="100%" />
+          <Typography variant="title" size="medium">
+            Nothing found!
+          </Typography>
+        </Box>
+      )}
       {data && (
         <Button
           mx="auto"

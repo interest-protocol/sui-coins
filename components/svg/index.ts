@@ -40,6 +40,7 @@ export { default as DOGESVG } from './doge';
 export { default as DotErrorSVG } from './dot-error';
 export { default as DotSuccessSVG } from './dot-success';
 export { default as DoubleChevronSVG } from './double-chevron';
+export { default as EmptyBoxSVG } from './empty-box';
 export { default as ErrorSVG } from './error';
 export { default as ETHSVG } from './eth';
 export { default as ETHChainSVG } from './eth-chain';

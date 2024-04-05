@@ -1,60 +1,21 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
-import { useSuiClient } from '@mysten/dapp-kit';
-import type { SuiObjectResponse } from '@mysten/sui.js/client';
 import { formatAddress } from '@mysten/sui.js/utils';
 import { FC } from 'react';
-import useSWR from 'swr';
 import { v4 } from 'uuid';
 
 import { TokenIcon } from '@/components';
-import { CoinMetadataWithType } from '@/interface';
 import { FixedPointMath } from '@/lib';
 import { getSymbolByType } from '@/utils';
 
+import { useAssetsBalances, useAssetsNFTs } from './send-asset-details.hooks';
 import { SendAssetDetailsProps } from './send-asset-details.types';
 import { getAmountsMap } from './send-asset-details.utils';
 
-const SendAssetDetails: FC<SendAssetDetailsProps> = ({
-  index,
-  assets,
-  network,
-}) => {
-  const suiClient = useSuiClient();
+const SendAssetDetails: FC<SendAssetDetailsProps> = ({ assets, network }) => {
   const amountsMap = getAmountsMap(assets.balances);
 
-  const { data: coins } = useSWR<ReadonlyArray<CoinMetadataWithType>>(
-    `coins-${network}-${index}`,
-    () => {
-      if (!assets.balances) return [];
-
-      return fetch(
-        encodeURI(
-          `/api/v1/coin-metadata?network=${network}&type_list=${assets.balances.reduce(
-            (acc, { coinType }) => `${acc},${coinType}`,
-            ''
-          )}`
-        )
-      ).then((response) => response.json?.());
-    }
-  );
-
-  const { data: nfts } = useSWR<ReadonlyArray<SuiObjectResponse['data']>>(
-    `nfts-${network}-${index}`,
-    () => {
-      if (!assets.nfts) return [];
-
-      return Promise.all(
-        assets.nfts.map(({ objectId }) =>
-          suiClient
-            .getObject({
-              id: objectId,
-              options: { showDisplay: true, showType: true },
-            })
-            .then((object) => object.data)
-        )
-      );
-    }
-  );
+  const { data: nfts } = useAssetsNFTs(assets.nfts);
+  const { data: coins } = useAssetsBalances(assets.balances);
 
   return (
     <Box px="2xl" py="l" display="flex" gap="s" flexDirection="column">
