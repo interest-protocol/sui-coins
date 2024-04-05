@@ -8,6 +8,7 @@ import { ObjectData } from '@/context/all-objects/all-objects.types';
 import { useNetwork } from '@/context/network';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { useModal } from '@/hooks/use-modal';
+import { useWeb3 } from '@/hooks/use-web3';
 import SelectObjectModal from '@/views/components/select-object-modal';
 
 import { ISendSimpleForm } from '../send-simple.types';
@@ -15,6 +16,7 @@ import { SendFormSelectObjectProps } from './send-select-object.types';
 
 const SelectObject: FC<SendFormSelectObjectProps> = ({ index }) => {
   const network = useNetwork();
+  const { coinsMap } = useWeb3();
 
   const { setValue, control } = useFormContext<ISendSimpleForm>();
 
@@ -30,7 +32,7 @@ const SelectObject: FC<SendFormSelectObjectProps> = ({ index }) => {
   const { setModal, handleClose } = useModal();
 
   const onSelect = async (object: ObjectData) => {
-    const balance = (object.display as CoinObject)?.balance;
+    const balance = coinsMap[(object.display as CoinObject)?.type].balance;
     const editable = balance && !balance.isZero();
 
     setValue(`objects.${index}`, {

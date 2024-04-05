@@ -2,6 +2,7 @@ import { Box, TextField } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import { parseInputEventToNumberString, ZERO_BIG_NUMBER } from '@/utils';
 
@@ -11,8 +12,10 @@ import SendSelectObjectHeader from './send-select-object-header';
 
 const SendSelectObject: FC = () => {
   const { register, control, setValue } = useFormContext<ISendBulkForm>();
+  const { coinsMap } = useWeb3();
+  const type = useWatch({ control, name: 'object.type' });
+  const balance = coinsMap[type]?.balance;
 
-  const balance = useWatch({ control, name: 'object.balance' });
   const decimals = useWatch({ control, name: 'object.decimals' });
 
   return (

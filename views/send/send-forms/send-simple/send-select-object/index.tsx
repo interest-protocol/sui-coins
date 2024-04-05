@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import { parseInputEventToNumberString, ZERO_BIG_NUMBER } from '@/utils';
 
@@ -12,8 +13,11 @@ import { SendFormSelectObjectProps } from './send-select-object.types';
 import SendSelectObjectHeader from './send-select-object-header';
 
 const SendFormSelectObject: FC<SendFormSelectObjectProps> = ({ index }) => {
+  const { coinsMap } = useWeb3();
   const { register, control, setValue } = useFormContext<ISendSimpleForm>();
 
+  const type = useWatch({ control, name: `objects.${index}.type` });
+  const balance = coinsMap[type]?.balance;
   const display = useWatch({ control, name: `objects.${index}.display` });
   const editable = useWatch({ control, name: `objects.${index}.editable` });
 
@@ -37,7 +41,7 @@ const SendFormSelectObject: FC<SendFormSelectObjectProps> = ({ index }) => {
                 : parseInputEventToNumberString(
                     v,
                     FixedPointMath.toNumber(
-                      (display as CoinObject)?.balance ?? ZERO_BIG_NUMBER,
+                      balance ?? ZERO_BIG_NUMBER,
                       (display as CoinObject)?.decimals ?? 0
                     )
                   )
