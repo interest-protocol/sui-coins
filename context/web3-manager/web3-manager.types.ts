@@ -2,8 +2,8 @@ import { SuiClient } from '@mysten/sui.js/client';
 import { PaginatedCoins } from '@mysten/sui.js/client';
 import { WalletAccount } from '@wallet-standard/base';
 import { ReactNode } from 'react';
-import { KeyedMutator } from 'swr';
 
+import { ObjectData } from '@/context/all-objects/all-objects.types';
 import {
   CoinObject,
   CoinsMap,
@@ -14,11 +14,14 @@ export interface Web3ManagerState {
   error: boolean;
   connected: boolean;
   coinsMap: CoinsMap;
+  mutate: () => void;
   account: null | string;
-  mutate: KeyedMutator<CoinsMap>;
   isFetchingCoinBalances: boolean;
   coins: ReadonlyArray<CoinObject>;
   walletAccount: null | WalletAccount;
+  ownedNfts: ReadonlyArray<ObjectData>;
+  coinsObjects: ReadonlyArray<ObjectData>;
+  otherObjects: ReadonlyArray<ObjectData>;
   nfts: ReadonlyArray<NFTCollectionMetadata>;
   nftsMap: Record<string, NFTCollectionMetadata>;
 }

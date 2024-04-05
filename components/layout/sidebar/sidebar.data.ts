@@ -1,5 +1,11 @@
 import { Network, Routes, RoutesEnum } from '@/constants';
-import { AirdropSVG, CirclePlusSVG, DoubleChevronSVG, PoolSVG } from '@/svg';
+import {
+  AirdropSVG,
+  CirclePlusSVG,
+  DoubleChevronSVG,
+  PoolSVG,
+  UploadSVG,
+} from '@/svg';
 
 import { MenuItemProps } from './sidebar.types';
 
@@ -36,5 +42,13 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     Icon: AirdropSVG,
     path: Routes[RoutesEnum.Airdrop],
     networks: [Network.MAINNET, Network.TESTNET],
+  },
+  {
+    beta: true,
+    name: 'zksend',
+    disabled: false,
+    Icon: UploadSVG,
+    path: Routes[RoutesEnum.Send],
+    networks: [Network.MAINNET],
   },
 ];

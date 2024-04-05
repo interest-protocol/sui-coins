@@ -3,3 +3,7 @@ export enum DeviceMenuType {
   Desktop = 'desktop',
   Both = 'both',
 }
+
+export interface HeaderProps {
+  withLogo?: boolean;
+}
