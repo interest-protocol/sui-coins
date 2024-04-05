@@ -1,4 +1,4 @@
-import { Box, Button } from '@interest-protocol/ui-kit';
+import { Box, Button, Dialog } from '@interest-protocol/ui-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 
 import { Routes, RoutesEnum } from '@/constants';
 import { useNetwork } from '@/context/network';
+import { useModal } from '@/hooks/use-modal';
 import { showTXSuccessToast } from '@/utils';
 
 import { ISendBulkForm } from '../send-bulk.types';
@@ -16,6 +17,7 @@ const SendBulkFormButton: FC = () => {
   const { push } = useRouter();
   const network = useNetwork();
   const createLink = useCreateLink();
+  const { setModal, handleClose } = useModal();
   const { control } = useFormContext<ISendBulkForm>();
   const object = useWatch({ control, name: 'object' });
   const quantity = useWatch({ control, name: 'quantity' });
@@ -27,8 +29,6 @@ const SendBulkFormButton: FC = () => {
   };
 
   const handleCreateLink = async () => {
-    if (!object || !Number(object.value) || !Number(quantity)) return;
-
     const toasterId = toast.loading('Creating link...');
 
     try {
@@ -41,11 +41,34 @@ const SendBulkFormButton: FC = () => {
     }
   };
 
+  const onCreateLink = () => {
+    if (!object || !Number(object.value) || !Number(quantity)) return;
+
+    setModal(
+      <Dialog
+        title="Caution"
+        status="warning"
+        message="Bulk links will be claimed in the same link, but the history page will only show the first item from the list"
+        primaryButton={{
+          label: 'Continue anyway',
+          onClick: () => {
+            handleClose();
+            handleCreateLink();
+          },
+        }}
+        secondaryButton={{
+          label: 'Cancel',
+          onClick: handleClose,
+        }}
+      />
+    );
+  };
+
   return (
     <Box display="flex" justifyContent="center">
       <Button
         variant="filled"
-        onClick={handleCreateLink}
+        onClick={onCreateLink}
         disabled={!object || !Number(object.value) || !Number(quantity)}
       >
         Create Link
