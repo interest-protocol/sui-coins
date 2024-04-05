@@ -1,3 +1,3 @@
 export interface SendFormsProps {
-  isBulk: boolean;
+  goBack: () => void;
 }

@@ -69,9 +69,9 @@ const Send: FC = () => {
           }}
         />
       ) : isBulk ? (
-        <SendBulk />
+        <SendBulk goBack={() => setInitial(true)} />
       ) : (
-        <SendSimple />
+        <SendSimple goBack={() => setInitial(true)} />
       )}
     </Layout>
   );
