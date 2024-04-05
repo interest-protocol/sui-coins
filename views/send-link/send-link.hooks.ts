@@ -3,7 +3,7 @@ import {
   useSignTransactionBlock,
   useSuiClient,
 } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui.js/dist/cjs/client';
+import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { ZkSendLink } from '@mysten/zksend';
 import useSWR from 'swr';
 
@@ -11,13 +11,22 @@ import { useNetwork } from '@/context/network';
 import { ZkSendLinkData } from '@/interface';
 import { throwTXIfNotSuccessful } from '@/utils';
 
-export const useLinkData = (id: string) => {
+import { ZkSendLinkWithUrl } from './send-link.types';
+
+export const useLinkWithUrl = (id: string, isClaiming: boolean) => {
   const network = useNetwork();
 
-  return useSWR<ZkSendLinkData>(`${id}-${network}`, () =>
-    fetch(`/api/v1/zksend?network=${network}&id=${id}`).then((response) =>
-      response.json?.()
-    )
+  return useSWR<ZkSendLinkWithUrl>(`${id}-${network}-${isClaiming}`, () =>
+    fetch(`/api/v1/zksend?network=${network}&id=${id}`)
+      .then((response) => response.json?.())
+      .then(async (data: ZkSendLinkData) =>
+        data.links[0]
+          ? {
+              url: data.links[0],
+              link: await ZkSendLink.fromUrl(data.links[0]),
+            }
+          : { url: undefined, link: null }
+      )
   );
 };
 

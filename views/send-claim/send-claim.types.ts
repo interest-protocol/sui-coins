@@ -1,12 +1,11 @@
-import { ZkSendLink } from '@mysten/zksend';
+import { Dispatch, SetStateAction } from 'react';
+
+import { ZkSendLinkWithUrl } from '../send-link/send-link.types';
 
 export interface SendClaimProps {
   id: string;
+  error: any;
+  isLoading: boolean;
+  data: ZkSendLinkWithUrl | undefined;
+  claimingState: [boolean, Dispatch<SetStateAction<boolean>>];
 }
-
-export type ZkSendLinkWithUrl =
-  | {
-      url: string;
-      link: ZkSendLink;
-    }
-  | { url: undefined; link: null };

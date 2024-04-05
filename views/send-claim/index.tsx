@@ -2,9 +2,12 @@ import {
   Box,
   Button,
   ProgressIndicator,
+  TextField,
   Typography,
 } from '@interest-protocol/ui-kit';
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
+import { isValidSuiAddress } from '@mysten/sui.js/utils';
 import { FC, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -14,17 +17,22 @@ import { CheckmarkSVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 
 import SendHistoryDetails from '../components/send-asset-details';
-import { LOCAL_STORAGE_CLAIM_URL } from './send-calim.data';
-import { useClaimLink, useLinkWithUrl } from './send-claim.hooks';
+import { LOCAL_STORAGE_CLAIM_URL } from './send-claim.data';
+import { useClaim } from './send-claim.hooks';
 import { SendClaimProps } from './send-claim.types';
 
-const SendClaim: FC<SendClaimProps> = ({ id }) => {
-  const claim = useClaimLink();
+const SendClaim: FC<SendClaimProps> = ({
+  id,
+  data,
+  error,
+  isLoading,
+  claimingState: [isClaiming, setClaiming],
+}) => {
+  const claim = useClaim();
   const network = useNetwork();
   const [url, setUrl] = useState('');
-  const [isClaiming, setClaiming] = useState(false);
-
-  const { data, isLoading, error } = useLinkWithUrl(id, isClaiming);
+  const [address, setAddress] = useState('');
+  const currentAccount = useCurrentAccount();
 
   const onSuccess = (tx: SuiTransactionBlockResponse) => {
     showTXSuccessToast(tx, network);
@@ -53,17 +61,20 @@ const SendClaim: FC<SendClaimProps> = ({ id }) => {
       !data.link ||
       isLoading ||
       error ||
-      data.link.claimed
+      data.link.claimed ||
+      (!currentAccount && !isValidSuiAddress(address))
     )
       return;
 
     const loadingId = toast.loading('Claiming...');
     setClaiming(true);
     try {
-      await claim(data, id, onSuccess);
+      await claim(data, id, address, onSuccess);
       toast.success('Assets claimed');
-    } catch {
-      toast.error('Something went wrong');
+    } catch (e) {
+      console.log({ e });
+
+      toast.error((e as any).message ?? 'Something went wrong');
     } finally {
       setClaiming(false);
       toast.dismiss(loadingId);
@@ -71,7 +82,7 @@ const SendClaim: FC<SendClaimProps> = ({ id }) => {
   };
 
   return (
-    <Layout title="Claim your assets" noSidebar>
+    <Layout title="Claim assets" noSidebar>
       <Box
         p="2xl"
         gap="xl"
@@ -99,9 +110,23 @@ const SendClaim: FC<SendClaimProps> = ({ id }) => {
           maxWidth="27rem"
           textAlign="center"
         >
-          The person who shared this link with you is attempting to send you the
-          following assets
+          The person who shared this link with you is attempting to send you
+          assets
         </Typography>
+        {data?.link?.assets && !currentAccount && (
+          <Box minWidth="25rem">
+            <Typography variant="body" size="medium" mb="xs">
+              1. Recipient Address
+            </Typography>
+            <TextField
+              width="100"
+              nPlaceholder={{ opacity: 0.7 }}
+              placeholder="Type the recipient address"
+              onChange={(e) => setAddress(e.target.value)}
+              fieldProps={{ borderRadius: 'xs' }}
+            />
+          </Box>
+        )}
         {data?.link?.assets ? (
           <Box
             minWidth="25rem"
@@ -123,7 +148,6 @@ const SendClaim: FC<SendClaimProps> = ({ id }) => {
             />
           </Box>
         )}
-
         <Box display="flex" justifyContent="center">
           <Button
             variant="filled"
@@ -135,7 +159,8 @@ const SendClaim: FC<SendClaimProps> = ({ id }) => {
               isLoading ||
               error ||
               data.url !== url ||
-              (data && !data.link)
+              (data && !data.link) ||
+              (!currentAccount && !isValidSuiAddress(address))
             }
           >
             {data && data.url !== url ? 'Claimed' : 'Claim'}

@@ -33,7 +33,7 @@ const useCreateLink = () => {
     const link = new ZkSendLinkBuilder({
       client: suiClient,
       sender: currentAccount.address,
-      path: '/send/claim',
+      path: '/send/link',
       host: location.origin,
     });
 
