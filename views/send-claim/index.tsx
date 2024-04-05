@@ -14,12 +14,14 @@ import { CheckmarkSVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 
 import SendHistoryDetails from '../components/send-asset-details';
+import { LOCAL_STORAGE_CLAIM_URL } from './send-calim.data';
 import { useClaimLink, useLinkWithUrl } from './send-claim.hooks';
 import { SendClaimProps } from './send-claim.types';
 
 const SendClaim: FC<SendClaimProps> = ({ id }) => {
   const claim = useClaimLink();
   const network = useNetwork();
+  const [url, setUrl] = useState('');
   const [isClaiming, setClaiming] = useState(false);
 
   const { data, isLoading, error } = useLinkWithUrl(id, isClaiming);
@@ -28,12 +30,20 @@ const SendClaim: FC<SendClaimProps> = ({ id }) => {
     showTXSuccessToast(tx, network);
   };
 
-  const [url, setUrl] = useState('');
+  useEffect(() => {
+    setUrl(
+      localStorage.getItem(`${LOCAL_STORAGE_CLAIM_URL}-${id}`) ??
+        sessionStorage.getItem(`${LOCAL_STORAGE_CLAIM_URL}-${id}`) ??
+        ''
+    );
+  }, []);
 
   useEffect(() => {
     if (url || !data || !data.url) return;
 
     setUrl(data.url);
+    localStorage.setItem(`${LOCAL_STORAGE_CLAIM_URL}-${id}`, data.url);
+    sessionStorage.setItem(`${LOCAL_STORAGE_CLAIM_URL}-${id}`, data.url);
   }, [data]);
 
   const onClaim = async () => {
