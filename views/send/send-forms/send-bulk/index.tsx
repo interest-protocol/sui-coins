@@ -1,7 +1,9 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import { FC, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { useNetwork } from '@/context/network';
 import { ArrowLeftSVG, ErrorSVG, TimesSVG } from '@/svg';
 import PoweredByZkSend from '@/views/components/powered-by-zksend';
 
@@ -14,9 +16,14 @@ import SendInputQuantity from './send-input-quantity';
 import SendSelectObject from './send-select-object';
 
 const SendBulk: FC<SendFormsProps> = ({ goBack }) => {
+  const network = useNetwork();
   const form = useForm<ISendBulkForm>();
-
+  const currentAccount = useCurrentAccount();
   const [isTipHidden, setTipHidden] = useState(true);
+
+  useEffect(() => {
+    form.reset();
+  }, [network, currentAccount]);
 
   useEffect(() => {
     setTipHidden(
