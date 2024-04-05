@@ -4,7 +4,6 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 import { ObjectData } from '@/context/all-objects/all-objects.types';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { useModal } from '@/hooks/use-modal';
-import { useWeb3 } from '@/hooks/use-web3';
 import { MinusSVG, PlusSVG } from '@/svg';
 import SelectObjectModal from '@/views/components/select-object-modal';
 
@@ -13,7 +12,6 @@ import { ISendSimpleForm } from './send-simple.types';
 import SendButton from './send-simple-button';
 
 const SendSimpleFormFields = () => {
-  const { coinsMap } = useWeb3();
   const { setModal, handleClose } = useModal();
   const { control } = useFormContext<ISendSimpleForm>();
 
@@ -23,7 +21,7 @@ const SendSimpleFormFields = () => {
   });
 
   const onSelect = async (object: ObjectData) => {
-    const balance = coinsMap[(object.display as CoinObject)?.type].balance;
+    const balance = (object.display as CoinObject)?.balance;
     const editable = balance && !balance.isZero();
 
     append({
