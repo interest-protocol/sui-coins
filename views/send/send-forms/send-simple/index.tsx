@@ -13,13 +13,11 @@ import SendSimpleFormFields from './send-simple-fields';
 const SendSimple: FC<SendFormsProps> = ({ goBack }) => {
   const form = useForm<ISendSimpleForm>();
 
-  const [isTipHidden, setTipHidden] = useState(false);
+  const [isTipHidden, setTipHidden] = useState(true);
 
   useEffect(() => {
     setTipHidden(
-      JSON.parse(
-        localStorage.getItem(LOCAL_STORAGE_TOP_KEY) as 'true' | 'false'
-      )
+      Boolean(localStorage.getItem(LOCAL_STORAGE_TOP_KEY) as 'true' | 'false')
     );
   }, []);
 

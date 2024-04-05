@@ -86,3 +86,33 @@ export const useRegenerateLink = () => {
     onSuccess(tx, id);
   };
 };
+
+export const useReclaimByLink = () => {
+  const suiClient = useSuiClient();
+  const currentAccount = useCurrentAccount();
+  const signTransactionBlock = useSignTransactionBlock();
+
+  return async (
+    link: ZkSendLink,
+    onSuccess: (tx: SuiTransactionBlockResponse) => void
+  ) => {
+    if (!currentAccount) return;
+
+    const transactionBlock = link.createClaimTransaction(
+      currentAccount.address,
+      { reclaim: true }
+    );
+
+    const { transactionBlockBytes, signature } =
+      await signTransactionBlock.mutateAsync({ transactionBlock });
+
+    const tx = await suiClient.executeTransactionBlock({
+      transactionBlock: transactionBlockBytes,
+      signature,
+    });
+
+    throwTXIfNotSuccessful(tx);
+
+    onSuccess(tx);
+  };
+};

@@ -25,6 +25,8 @@ const useCreateLink = () => {
     objects: ReadonlyArray<ObjectField>,
     onSuccess: (tx: SuiTransactionBlockResponse, id: string) => void
   ) => {
+    console.log({ objects, origin: location.origin });
+
     if (!suiClient) throw new Error('Provider not found');
     if (!currentAccount) throw new Error('There is not an account');
 

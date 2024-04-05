@@ -10,7 +10,7 @@ const SendInputQuantity: FC = () => {
   return (
     <Box flex="1">
       <Typography variant="body" size="large" mb="s">
-        2. Amount of links
+        2. Number of links (Max: 300)
       </Typography>
       <TextField
         nPlaceholder={{ opacity: 0.7 }}

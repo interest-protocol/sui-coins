@@ -34,15 +34,23 @@ const SendBulkFormButton: FC = () => {
     try {
       await createLink(object, Number(quantity), onSuccess);
       toast.success('Link created successfully');
-    } catch {
+    } catch (e) {
+      console.log({ e });
+
       toast.error('Something went wrong');
     } finally {
       toast.dismiss(toasterId);
     }
   };
 
+  const isDisabled =
+    !object ||
+    !Number(object.value) ||
+    !Number(quantity) ||
+    Number(quantity) > 300;
+
   const onCreateLink = () => {
-    if (!object || !Number(object.value) || !Number(quantity)) return;
+    if (isDisabled) return;
 
     setModal(
       <Dialog
@@ -66,11 +74,7 @@ const SendBulkFormButton: FC = () => {
 
   return (
     <Box display="flex" justifyContent="center">
-      <Button
-        variant="filled"
-        onClick={onCreateLink}
-        disabled={!object || !Number(object.value) || !Number(quantity)}
-      >
+      <Button variant="filled" onClick={onCreateLink} disabled={isDisabled}>
         Create Link
       </Button>
     </Box>

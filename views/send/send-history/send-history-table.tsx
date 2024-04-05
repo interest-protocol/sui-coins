@@ -21,6 +21,7 @@ import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
 import {
   DefaultAssetSVG,
+  DownloadSVG,
   EmptyBoxSVG,
   InfoSVG,
   ReloadSVG,
@@ -29,19 +30,23 @@ import {
 import { showTXSuccessToast } from '@/utils';
 import PoweredByZkSend from '@/views/components/powered-by-zksend';
 
-import { useLinkList, useRegenerateLink } from './send-history.hooks';
+import {
+  useLinkList,
+  useReclaimByLink,
+  useRegenerateLink,
+} from './send-history.hooks';
 import { ZkSendLinkItem } from './send-history.types';
 import SendHistoryDetailsModal from './send-history-details';
 
 const SendHistoryTable: FC = () => {
   const { push } = useRouter();
   const network = useNetwork();
+  const reclaimLink = useReclaimByLink();
+  const regenerateLink = useRegenerateLink();
   const currentAccount = useCurrentAccount();
   const { setModal, handleClose } = useModal();
   const [currentCursor, setCursor] = useState<string>('');
   const [linkList, setLinkList] = useState<ReadonlyArray<ZkSendLinkItem>>([]);
-
-  const regenerateLink = useRegenerateLink();
 
   const updateLinkInfo = (
     links: ReadonlyArray<ZkSendLinkItem>,
@@ -70,7 +75,11 @@ const SendHistoryTable: FC = () => {
     }
   }, [currentAccount?.address]);
 
-  const onSuccess = (tx: SuiTransactionBlockResponse, id: string) => {
+  const onSuccessReclaim = (tx: SuiTransactionBlockResponse) => {
+    showTXSuccessToast(tx, network);
+  };
+
+  const onSuccessRegenerate = (tx: SuiTransactionBlockResponse, id: string) => {
     showTXSuccessToast(tx, network);
 
     push(`${Routes[RoutesEnum.SendLink]}/${id}`);
@@ -84,10 +93,22 @@ const SendHistoryTable: FC = () => {
   const gotoExplorer = (digest: string) =>
     window.open(`${EXPLORER_URL[network]}/tx/${digest}`);
 
+  const handleReclaimLink = async (link: ZkSendLink) => {
+    const toastId = toast.loading('Reclaiming...');
+    try {
+      await reclaimLink(link, onSuccessReclaim);
+      toast.success('Link reclaimed successfully!');
+    } catch (e) {
+      toast.error((e as any).message ?? 'Link reclaiming failed!');
+    } finally {
+      toast.dismiss(toastId);
+    }
+  };
+
   const handleRegenerateLink = async (link: ZkSendLink, digest: string) => {
     const toastId = toast.loading('Regenerating...');
     try {
-      await regenerateLink(link, digest!, onSuccess);
+      await regenerateLink(link, digest!, onSuccessRegenerate);
       toast.success('Link regenerated successfully!');
     } catch (e) {
       toast.error((e as any).message ?? 'Link regenerating failed!');
@@ -254,6 +275,34 @@ const SendHistoryTable: FC = () => {
                         onClick={() => onRegenerateLink(claimed, link, digest!)}
                       >
                         <ReloadSVG
+                          maxHeight="1rem"
+                          maxWidth="1rem"
+                          width="100%"
+                        />
+                      </Button>
+                    </TooltipWrapper>
+                    <TooltipWrapper
+                      bg="lowContainer"
+                      tooltipPosition="top"
+                      tooltipContent={
+                        <Typography
+                          size="small"
+                          variant="label"
+                          textAlign="center"
+                        >
+                          Reclaim
+                        </Typography>
+                      }
+                    >
+                      <Button
+                        isIcon
+                        bg="container"
+                        variant="tonal"
+                        disabled={claimed}
+                        borderRadius="full"
+                        onClick={() => handleReclaimLink(link)}
+                      >
+                        <DownloadSVG
                           maxHeight="1rem"
                           maxWidth="1rem"
                           width="100%"
