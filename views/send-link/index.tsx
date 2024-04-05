@@ -45,7 +45,7 @@ const SendLink: FC<SendLinkProps> = ({ id }) => {
     setReclaiming(true);
     try {
       await reclaim(linkToClaim, id, onSuccess);
-      toast.success('Something went wrong');
+      toast.success('Link reclaimed successfully');
     } catch {
       toast.error('Something went wrong');
     } finally {
