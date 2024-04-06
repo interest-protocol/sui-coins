@@ -34,6 +34,7 @@ export const useClaim = () => {
 
     const { data } = await fetch('/api/v1/sponsor', {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         sender: link.address,
         transactionBlockKindBytes,
@@ -44,6 +45,7 @@ export const useClaim = () => {
 
     await fetch(`/api/v1/zksend?network=${network}&id=${id}`, {
       method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         link: encodeURI(url),
       }),
