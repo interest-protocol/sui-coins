@@ -4,15 +4,18 @@ import {
   ProgressIndicator,
   Typography,
 } from '@interest-protocol/ui-kit';
+import { useRouter } from 'next/router';
 import { FC, useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import useSWR from 'swr';
 import { v4 } from 'uuid';
 
+import { Routes, RoutesEnum } from '@/constants';
 import { RECOMMENDED_POOLS } from '@/constants/pools';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
+import { PlusSVG } from '@/svg';
 
 import FindPoolDialog from './find-pool-modal/find-pool-dialog';
 import PoolCard from './pool-card';
@@ -20,6 +23,7 @@ import { PoolCardProps } from './pool-card/pool-card.types';
 import { PoolForm } from './pools.types';
 
 const PoolCardList: FC = () => {
+  const { push } = useRouter();
   const { network } = useNetwork();
   const { setModal, handleClose } = useModal();
   const { control, setValue } = useFormContext<PoolForm>();
@@ -32,6 +36,11 @@ const PoolCardList: FC = () => {
   const onClose = () => {
     setValue('isFindingPool', false);
     handleClose();
+  };
+
+  const handleCreatePool = () => {
+    push(Routes[RoutesEnum.PoolCreate]);
+    onClose();
   };
 
   const sortedPoolList = (poolList?: ReadonlyArray<PoolCardProps>) =>
@@ -72,9 +81,42 @@ const PoolCardList: FC = () => {
       setTimeout(() => resolve([]), 2000 + Math.random() * 3000)
     ).finally(() => {
       toast.dismiss();
+      poolPairFailedModal();
     });
     return [];
   });
+
+  const poolPairFailedModal = () => {
+    setModal(
+      <Motion
+        animate={{ scale: 1 }}
+        initial={{ scale: 0.85 }}
+        transition={{ duration: 0.3 }}
+      >
+        <Box
+          display="flex"
+          width="100%"
+          height="100%"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <FindPoolDialog
+            title="Pool doesn't exist"
+            description="If you like, you can create this pool"
+            Icon={<PlusSVG maxWidth="1rem" maxHeight="1rem" width="100%" />}
+            onClose={onClose}
+            onCreatePool={handleCreatePool}
+          />
+        </Box>
+      </Motion>,
+      {
+        isOpen: true,
+        custom: true,
+        opaque: false,
+        allowClose: true,
+      }
+    );
+  };
 
   const poolPairLoadingModal = () => {
     setModal(
