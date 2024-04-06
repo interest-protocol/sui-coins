@@ -15,7 +15,7 @@ const Provider: FC<PropsWithChildren> = ({ children }) => (
   <ThemeManager>
     <QueryClientProvider client={queryClient}>
       <NetworkProvider>
-        <WalletProvider autoConnect>
+        <WalletProvider autoConnect zkSend={{ name: 'Sui Coins' }}>
           <SuiNsProvider>{children}</SuiNsProvider>
         </WalletProvider>
       </NetworkProvider>

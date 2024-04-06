@@ -10,6 +10,8 @@ import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
+import { Routes, RoutesEnum } from '@/constants';
+
 import { MenuItemTitleContentProps } from '../sidebar.types';
 import CollapseIcon from './collapsible-icon';
 
@@ -33,6 +35,7 @@ const MenuItemTitleContent: FC<MenuItemTitleContentProps> = ({
   Icon,
   name,
   path,
+  beta,
   disabled,
   isCollapsed,
   accordionList,
@@ -41,7 +44,10 @@ const MenuItemTitleContent: FC<MenuItemTitleContentProps> = ({
   const { colors } = useTheme() as Theme;
 
   const isSelected =
-    asPath === path || accordionList?.some(({ path }) => path === asPath);
+    path === Routes[RoutesEnum.Swap]
+      ? asPath === path
+      : asPath.startsWith(path!) ||
+        accordionList?.some(({ path }) => path === asPath);
 
   const onClick = () => {
     if (accordionList || disabled || !path) return;
@@ -77,6 +83,31 @@ const MenuItemTitleContent: FC<MenuItemTitleContentProps> = ({
           {name}
         </Typography>
       </Box>
+      {beta &&
+        (isCollapsed ? (
+          <Box
+            bg="error"
+            top="0.75rem"
+            width="0.5rem"
+            left="1.75rem"
+            height="0.5rem"
+            position="absolute"
+            borderRadius="50%"
+          />
+        ) : (
+          <Typography
+            px="xs"
+            py="2xs"
+            size="small"
+            variant="label"
+            border="1px solid"
+            borderRadius="2xs"
+            bg="errorContainer"
+            color="onErrorContainer"
+          >
+            Beta
+          </Typography>
+        ))}
       {!isCollapsed && accordionList && <CollapseIcon />}
     </Motion>
   );
@@ -86,6 +117,7 @@ const MenuItemTitle: FC<MenuItemTitleContentProps> = ({
   Icon,
   name,
   path,
+  beta,
   disabled,
   isCollapsed,
   accordionList,
@@ -112,6 +144,7 @@ const MenuItemTitle: FC<MenuItemTitleContentProps> = ({
           Icon={Icon}
           name={name}
           path={path}
+          beta={beta}
           disabled={disabled}
           isCollapsed={isCollapsed}
           accordionList={accordionList}
@@ -124,6 +157,7 @@ const MenuItemTitle: FC<MenuItemTitleContentProps> = ({
       Icon={Icon}
       name={name}
       path={path}
+      beta={beta}
       disabled={disabled}
       isCollapsed={isCollapsed}
       accordionList={accordionList}

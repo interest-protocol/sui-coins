@@ -23,7 +23,8 @@ import {
 
 import FTMChain from '../svg/ftm-chain';
 import { SVGProps } from '../svg/svg.types';
-import { TokenIconProps } from './token-icon.types';
+import { TokenIconProps, TypeBasedIcon } from './token-icon.types';
+import { isTypeBased } from './token-icons.utils';
 
 const CHAIN_ICON: Record<Chain, FC<SVGProps>> = {
   BSC: BSCChainSVG,
@@ -36,21 +37,32 @@ const CHAIN_ICON: Record<Chain, FC<SVGProps>> = {
   MATIC: MATICChainSVG,
 };
 
-const TokenIcon: FC<TokenIconProps> = ({
-  type,
-  symbol,
-  withBg,
-  network,
-  rounded,
-  size = '1.5rem',
-}) => {
+const TokenIcon: FC<TokenIconProps> = (props) => {
+  const {
+    type,
+    symbol,
+    withBg,
+    network,
+    rounded,
+    size = '1.5rem',
+    loaderSize = 16,
+  } = {
+    type: '',
+    withBg: '',
+    network: '',
+    rounded: '',
+    loaderSize: 16,
+    size: '1.5rem',
+    ...props,
+  } as TypeBasedIcon;
+
   const isMainnet = network === Network.MAINNET;
-  const TokenIcon = TOKEN_ICONS[network][isMainnet ? type : symbol] ?? null;
+  const TokenIcon = TOKEN_ICONS[network]?.[isMainnet ? type : symbol] ?? null;
 
   const { data: iconSrc, isLoading } = useSWR(
     `${network}-${type}`,
     async () => {
-      if (TokenIcon && isMainnet) return null;
+      if ((TokenIcon && isMainnet) || !isTypeBased(props)) return null;
 
       const data = await fetch(
         `/api/v1/coin-metadata?network=${network}&type=${type}`
@@ -59,6 +71,52 @@ const TokenIcon: FC<TokenIconProps> = ({
       return data.iconUrl;
     }
   );
+
+  if (!isTypeBased(props))
+    return (
+      <Box
+        display="flex"
+        position="relative"
+        alignItems="center"
+        justifyContent="center"
+        width={`calc(${size} * 1.66)`}
+        height={`calc(${size} * 1.66)`}
+        borderRadius={rounded ? 'full' : 'xs'}
+        {...(!props.url && { bg: 'black', color: 'white' })}
+      >
+        {props.url ? (
+          <Box
+            overflow="hidden"
+            width={`calc(${size} * 1.66)`}
+            height={`calc(${size} * 1.66)`}
+            borderRadius={rounded ? 'full' : 'xs'}
+          >
+            <Box
+              display="flex"
+              position="absolute"
+              alignItems="center"
+              justifyContent="center"
+              width={`calc(${size} * 1.66)`}
+              height={`calc(${size} * 1.66)`}
+            >
+              <ProgressIndicator size={loaderSize} variant="loading" />
+            </Box>
+            <img
+              alt={symbol}
+              width="100%"
+              src={props.url}
+              style={{ position: 'relative' }}
+            />
+          </Box>
+        ) : (
+          <DefaultSVG
+            width="100%"
+            maxWidth={size ?? '1.5rem'}
+            maxHeight={size ?? '1.5rem'}
+          />
+        )}
+      </Box>
+    );
 
   const chain =
     STRICT_TOKENS_MAP[network][type]?.chain ??
