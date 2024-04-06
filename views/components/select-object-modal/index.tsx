@@ -8,7 +8,9 @@ import {
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { Network } from '@/constants';
 import { ObjectData } from '@/context/all-objects/all-objects.types';
+import { useNetwork } from '@/context/network';
 import { SearchSVG, TimesSVG } from '@/svg';
 
 import {
@@ -23,6 +25,7 @@ const SelectObjectModal: FC<SelectObjectModalProps> = ({
   onSelect,
   closeModal,
 }) => {
+  const network = useNetwork();
   const { control, register, setValue } = useForm<SearchObjectForm>({
     defaultValues: {
       search: '',
@@ -91,6 +94,33 @@ const SelectObjectModal: FC<SelectObjectModalProps> = ({
           control={control}
           handleSelectObject={handleSelectObject}
         />
+      </Box>
+
+      <Box p="s">
+        <Typography variant="body" size="small" textAlign="center">
+          Cannot see your wallet objects? Make sure it is transferable
+          {network === Network.MAINNET && (
+            <>
+              {' '}
+              and it is not being blocked by the{' '}
+              <a
+                href="https://guardians.suiet.app/object-list.json"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Typography
+                  as="span"
+                  variant="body"
+                  size="small"
+                  color="primary"
+                >
+                  Suiet Guardians
+                </Typography>
+              </a>
+            </>
+          )}
+          .
+        </Typography>
       </Box>
     </Motion>
   );
