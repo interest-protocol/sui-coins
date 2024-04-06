@@ -1,19 +1,26 @@
-import { Box, Button } from '@interest-protocol/ui-kit';
+import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { useRouter } from 'next/router';
-import { FC } from 'react';
+import { toPairs } from 'ramda';
+import { FC, useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { Routes, RoutesEnum } from '@/constants';
 import { useNetwork } from '@/context/network';
+import { useWeb3 } from '@/hooks/use-web3';
+import { DotErrorSVG, PlusSVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
+import { getAmountsMapFromObjects } from '@/views/components/send-asset-details/send-asset-details.utils';
 
 import { ISendSimpleForm } from '../send-simple.types';
 import useCreateLink from './send-button.hooks';
+import { AmountListProps, FormSendButtonProps } from './send-button.types';
 
-const SendButton: FC = () => {
+const FormSendButton: FC<FormSendButtonProps> = ({ openModal }) => {
   const { push } = useRouter();
+  const [amountList, setAmountList] = useState<AmountListProps[] | null>();
+  const { coinsMap } = useWeb3();
   const network = useNetwork();
   const createLink = useCreateLink();
   const { control } = useFormContext<ISendSimpleForm>();
@@ -24,6 +31,17 @@ const SendButton: FC = () => {
 
     push(`${Routes[RoutesEnum.SendLink]}/${id}`);
   };
+
+  useEffect(() => {
+    setAmountList(
+      toPairs(getAmountsMapFromObjects(objects))
+        .map(([type, amount]) => ({
+          symbol: coinsMap[type].symbol,
+          isGreater: coinsMap[type].balance.isLessThan(amount),
+        }))
+        .filter((item) => item.isGreater)
+    );
+  }, [objects]);
 
   const handleCreateLink = async () => {
     if (
@@ -46,20 +64,55 @@ const SendButton: FC = () => {
   };
 
   return (
-    <Box display="flex" justifyContent="center">
-      <Button
-        variant="filled"
-        onClick={handleCreateLink}
-        disabled={
-          !objects ||
-          !objects.length ||
-          !objects.every(({ value }) => Number(value))
-        }
-      >
-        Create Link
-      </Button>
-    </Box>
+    <>
+      {amountList?.length ? (
+        <Box
+          p="s"
+          gap="s"
+          display="flex"
+          borderRadius="xs"
+          border="1px solid"
+          bg="errorContainer"
+          color="onErrorContainer"
+          borderColor="onErrorContainer"
+        >
+          {amountList?.map((item) => (
+            <>
+              <DotErrorSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+              <Typography variant="label" size="medium">
+                {`You don't have enough ${item.symbol} for this operation`}
+              </Typography>
+            </>
+          ))}
+        </Box>
+      ) : null}
+      <Box display="flex" justifyContent="center" gap="xs">
+        <Button
+          variant="outline"
+          onClick={openModal}
+          borderColor="outlineVariant"
+          SuffixIcon={
+            <PlusSVG maxWidth="1.2rem" maxHeight="1.2rem" width="100%" />
+          }
+        >
+          Add more
+        </Button>
+        <Button
+          variant="filled"
+          onClick={handleCreateLink}
+          disabled={
+            !objects ||
+            !objects.length ||
+            !objects.every(({ value }) => Number(value)) ||
+            !amountList ||
+            Boolean(amountList.length)
+          }
+        >
+          Create Link
+        </Button>
+      </Box>
+    </>
   );
 };
 
-export default SendButton;
+export default FormSendButton;

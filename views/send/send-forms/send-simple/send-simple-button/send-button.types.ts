@@ -9,3 +9,12 @@ export interface SendObject {
 }
 
 export type SendArguments = SendCoin | SendObject;
+
+export interface FormSendButtonProps {
+  openModal: () => void;
+}
+
+export interface AmountListProps {
+  symbol: string;
+  isGreater: boolean;
+}
