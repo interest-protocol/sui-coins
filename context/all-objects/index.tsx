@@ -20,7 +20,7 @@ const getAllObjects: TGetAllObjects = async (
   const { data, nextCursor, hasNextPage } = await provider.getOwnedObjects({
     owner: account,
     cursor,
-    options: { showContent: true, showType: true },
+    options: { showContent: true, showType: true, showDisplay: true },
   });
 
   if (!hasNextPage) return data;
@@ -61,7 +61,7 @@ export const AllObjectsProvider: FC<PropsWithChildren> = ({ children }) => {
           if (!objectRaw.data?.content?.dataType) return acc;
           if (objectRaw.data.content.dataType !== 'moveObject') return acc;
           if (!objectRaw.data.content.hasPublicTransfer) return acc;
-          if (OBJECT_GUARDIANS_BLOCKLIST.includes(objectRaw.data.content.type))
+          if (OBJECT_GUARDIANS_BLOCKLIST.includes(objectRaw.data.type!))
             return acc;
 
           return [
@@ -104,8 +104,6 @@ export const AllObjectsProvider: FC<PropsWithChildren> = ({ children }) => {
       refreshInterval: 10000,
     }
   );
-
-  console.log({ error: data.error });
 
   return <Provider value={data}>{children}</Provider>;
 };
