@@ -4,7 +4,9 @@ import { WalletProvider } from '@mysten/dapp-kit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { FC, PropsWithChildren } from 'react';
 
+import { ModalProvider } from '@/context/modal';
 import { NetworkProvider } from '@/context/network';
+import Web3Manager from '@/context/web3-manager';
 
 import ThemeManager from '../theme-manager';
 
@@ -14,8 +16,10 @@ const Provider: FC<PropsWithChildren> = ({ children }) => (
   <ThemeManager>
     <QueryClientProvider client={queryClient}>
       <NetworkProvider>
-        <WalletProvider autoConnect zkSend={{ name: 'Sui Coins' }}>
-          {children}
+        <WalletProvider autoConnect>
+          <Web3Manager>
+            <ModalProvider>{children}</ModalProvider>
+          </Web3Manager>
         </WalletProvider>
       </NetworkProvider>
     </QueryClientProvider>

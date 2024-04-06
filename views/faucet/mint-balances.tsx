@@ -58,9 +58,7 @@ const MintBalances: FC = () => {
               </Box>
               <Typography variant="body" size="large" color="onSurface">
                 {FixedPointMath.toNumber(
-                  coinsMap[type]?.balance
-                    ? coinsMap[type].balance
-                    : ZERO_BIG_NUMBER,
+                  coinsMap[type]?.balance ?? ZERO_BIG_NUMBER,
                   coinsMap[type]?.decimals || 0
                 )}
               </Typography>
