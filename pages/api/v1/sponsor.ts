@@ -3,12 +3,10 @@ import { NextApiRequest, NextApiResponse } from 'next';
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     if (req.method === 'POST') {
-      const { claimer, sender, network, transactionBlockKindBytes } =
-        JSON.parse(req.body);
+      const { claimer, sender, network, transactionBlockKindBytes } = req.body;
 
       const data = await fetch(process.env.SPONSOR!, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           sender,
           claimer,

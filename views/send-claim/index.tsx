@@ -54,17 +54,19 @@ const SendClaim: FC<SendClaimProps> = ({
     sessionStorage.setItem(`${LOCAL_STORAGE_CLAIM_URL}-${id}`, data.url);
   }, [data]);
 
+  const isClaimed = data?.link?.claimed || (data && !data.link);
+
+  const isDisabled =
+    isClaiming ||
+    !data ||
+    !data.link ||
+    isLoading ||
+    error ||
+    isClaimed ||
+    (!currentAccount && !isValidSuiAddress(address));
+
   const onClaim = async () => {
-    if (
-      isClaiming ||
-      !data ||
-      !data.link ||
-      isLoading ||
-      error ||
-      data.link.claimed ||
-      (!currentAccount && !isValidSuiAddress(address))
-    )
-      return;
+    if (isDisabled) return;
 
     const loadingId = toast.loading('Claiming...');
     setClaiming(true);
@@ -72,8 +74,6 @@ const SendClaim: FC<SendClaimProps> = ({
       await claim(data, id, address, onSuccess);
       toast.success('Assets claimed');
     } catch (e) {
-      console.log({ e });
-
       toast.error((e as any).message ?? 'Something went wrong');
     } finally {
       setClaiming(false);
@@ -97,9 +97,9 @@ const SendClaim: FC<SendClaimProps> = ({
         px={['2xs', 'xl', 'xl', '7xl']}
       >
         <Typography variant="title" size="large" textAlign="center">
-          {!isLoading && !data
+          {!data && !isLoading
             ? 'Nothing to claim'
-            : !isLoading && data && data.url !== url
+            : isClaimed
               ? 'Assets already claimed'
               : 'Funds ready to be claim'}
         </Typography>
@@ -127,25 +127,7 @@ const SendClaim: FC<SendClaimProps> = ({
             />
           </Box>
         )}
-        {data?.link?.assets ? (
-          <Box>
-            {data?.link?.assets && !currentAccount && (
-              <Typography variant="body" size="medium" mb="xs">
-                2. Assets to claim
-              </Typography>
-            )}
-            <Box
-              minWidth="25rem"
-              borderRadius="s"
-              border="1px solid"
-              borderColor="outlineVariant"
-            >
-              <SendHistoryDetails network={network} assets={data.link.assets} />
-            </Box>
-          </Box>
-        ) : isLoading ? (
-          <ProgressIndicator size={36} variant="loading" />
-        ) : (
+        {isClaimed ? (
           <Box color="success" my="xl">
             <CheckmarkSVG
               filled
@@ -154,23 +136,33 @@ const SendClaim: FC<SendClaimProps> = ({
               maxHeight="6rem"
             />
           </Box>
+        ) : isLoading ? (
+          <ProgressIndicator size={36} variant="loading" />
+        ) : (
+          data?.link?.assets && (
+            <Box>
+              {data?.link?.assets && !currentAccount && (
+                <Typography variant="body" size="medium" mb="xs">
+                  2. Assets to claim
+                </Typography>
+              )}
+              <Box
+                minWidth="25rem"
+                borderRadius="s"
+                border="1px solid"
+                borderColor="outlineVariant"
+              >
+                <SendHistoryDetails
+                  network={network}
+                  assets={data.link.assets}
+                />
+              </Box>
+            </Box>
+          )
         )}
         <Box display="flex" justifyContent="center">
-          <Button
-            variant="filled"
-            onClick={onClaim}
-            disabled={
-              isClaiming ||
-              !data ||
-              !data.link ||
-              isLoading ||
-              error ||
-              data.url !== url ||
-              (data && !data.link) ||
-              (!currentAccount && !isValidSuiAddress(address))
-            }
-          >
-            {data && data.url !== url ? 'Claimed' : 'Claim'}
+          <Button variant="filled" onClick={onClaim} disabled={isDisabled}>
+            {isClaimed ? 'Claimed' : 'Claim'}
           </Button>
         </Box>
       </Box>
