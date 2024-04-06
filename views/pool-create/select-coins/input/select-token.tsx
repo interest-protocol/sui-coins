@@ -14,7 +14,7 @@ import { CreatePoolForm } from '../../pool-create.types';
 import { InputProps } from './input.types';
 
 const SelectToken: FC<InputProps> = ({ index }) => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const { setModal, handleClose } = useModal();
 
   const { setValue, control, getValues } = useFormContext<CreatePoolForm>();

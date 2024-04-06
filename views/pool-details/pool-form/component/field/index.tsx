@@ -10,7 +10,7 @@ import { PoolOption } from '@/views/pools/pools.types';
 import { PoolFieldsProps } from './field.types';
 
 const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const { register, setValue, getValues } = useFormContext();
 
   const fieldName =

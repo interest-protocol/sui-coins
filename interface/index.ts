@@ -1,3 +1,4 @@
+import { CoinMetadata } from '@mysten/sui.js/client';
 import BigNumber from 'bignumber.js';
 
 export type BigNumberish = BigNumber | bigint | string | number;
@@ -26,4 +27,8 @@ export interface PoolPageProps {
 export interface RegistryPool {
   poolId: string;
   lpCoinType: string;
+}
+
+export interface CoinMetadataWithType extends CoinMetadata {
+  type: `0x${string}`;
 }

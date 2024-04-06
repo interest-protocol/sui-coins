@@ -1,13 +1,11 @@
-import { CoinMetadata } from '@mysten/sui.js/client';
-import { useWalletKit } from '@mysten/wallet-kit';
+import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 import BigNumber from 'bignumber.js';
 import useSWR from 'swr';
 
-import { COINS_MAP } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
-import { makeSWRKey, normalizeSuiType } from '@/utils';
+import { CoinMetadataWithType } from '@/interface';
+import { makeSWRKey, normalizeSuiType, ZERO_BIG_NUMBER } from '@/utils';
 
-import { useMovementClient } from '../use-movement-client';
 import { CoinsMap, TGetAllCoins } from './use-get-all-coins.types';
 
 const getAllCoins: TGetAllCoins = async (provider, account, cursor = null) => {
@@ -24,35 +22,42 @@ const getAllCoins: TGetAllCoins = async (provider, account, cursor = null) => {
 };
 
 export const useGetAllCoins = () => {
-  const { network } = useNetwork();
-  const suiClient = useMovementClient();
-  const { currentAccount } = useWalletKit();
+  const network = useNetwork();
+  const suiClient = useSuiClient();
+  const currentAccount = useCurrentAccount();
 
   return useSWR(
-    makeSWRKey([network, currentAccount?.address], suiClient?.getAllCoins.name),
+    makeSWRKey([network, currentAccount?.address], suiClient.getAllCoins.name),
     async () => {
-      if (!currentAccount || !suiClient) return null;
+      if (!currentAccount) return {} as CoinsMap;
+
       const coinsRaw = await getAllCoins(suiClient, currentAccount.address);
 
-      const coinsMetadata: ReadonlyArray<CoinMetadata | null> =
-        await Promise.all(
-          coinsRaw.map(({ coinType }) =>
-            suiClient.getCoinMetadata({ coinType })
-          )
+      if (!coinsRaw.length) return {} as CoinsMap;
+
+      const coinsType = coinsRaw.map(({ coinType }) => coinType);
+
+      const dbCoinsMetadata: Record<string, CoinMetadataWithType> = await fetch(
+        encodeURI(
+          `/api/v1/coin-metadata?network=${network}&type_list=${coinsType.join(
+            ','
+          )}`
+        )
+      )
+        .then((res) => res.json())
+        .then((data: ReadonlyArray<CoinMetadataWithType>) =>
+          data.reduce((acc, item) => ({ ...acc, [item.type]: item }), {})
         );
 
-      return coinsRaw.reduce((acc, { coinType, ...coinRaw }, index) => {
-        const type = normalizeSuiType(coinType);
-        const { symbol, decimals, ...metadata } = {
-          ...{
-            name: '',
-            symbol: '',
-            decimals: 0,
-            description: '',
-          },
-          ...coinsMetadata[index],
-          ...COINS_MAP[coinType],
-        };
+      const filteredCoinsRaw = coinsRaw.filter(
+        ({ coinType }) => dbCoinsMetadata[coinType]
+      );
+
+      if (!filteredCoinsRaw.length) return {} as CoinsMap;
+
+      return filteredCoinsRaw.reduce((acc, { coinType, ...coinRaw }) => {
+        const type = normalizeSuiType(coinType) as `0x${string}`;
+        const { symbol, decimals, ...metadata } = dbCoinsMetadata[coinType];
 
         return {
           ...acc,
@@ -63,17 +68,17 @@ export const useGetAllCoins = () => {
             symbol,
             decimals,
             metadata,
-            balance: BigNumber(coinRaw.balance)
-              .plus(BigNumber(acc[type]?.balance || '0'))
-              .toString(),
+            balance: BigNumber(coinRaw.balance).plus(
+              acc[type]?.balance ?? ZERO_BIG_NUMBER
+            ),
             objects: (acc[type]?.objects ?? []).concat([{ ...coinRaw, type }]),
           },
         };
-      }, {} as CoinsMap);
+      }, {} as CoinsMap) as unknown as CoinsMap;
     },
     {
-      revalidateOnMount: true,
       revalidateOnFocus: false,
+      revalidateOnMount: true,
       refreshWhenHidden: false,
       refreshInterval: 15000,
     }

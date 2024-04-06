@@ -21,7 +21,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   control,
   handleSelectToken: onSelectToken,
 }) => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const { coins, isFetchingCoinBalances } = useWeb3();
   const favoriteTokenTypes = useReadLocalStorage<ReadonlyArray<string>>(
     `${LOCAL_STORAGE_VERSION}-movement-${network}-favorite-tokens`

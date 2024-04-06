@@ -10,7 +10,6 @@ import { ReactNode, StrictMode } from 'react';
 
 import { ThemeManager } from '@/components';
 import { ModalProvider } from '@/context/modal';
-import { NetworkProvider } from '@/context/network';
 
 const Provider = dynamic(() => import('@/components/web3-provider'), {
   ssr: false,
@@ -26,17 +25,16 @@ const MyApp = ({ Component, pageProps }: AppProps<NextPage>): ReactNode => (
       />
     </Head>
     <NextProgress options={{ showSpinner: false }} />
-    <NetworkProvider>
-      <Provider>
-        <ThemeManager>
-          <StrictMode>
-            <ModalProvider>
-              <Component {...pageProps} />
-            </ModalProvider>
-          </StrictMode>
-        </ThemeManager>
-      </Provider>
-    </NetworkProvider>
+    <Provider>
+      <ThemeManager>
+        <StrictMode>
+          <ModalProvider>
+            <Component {...pageProps} />
+          </ModalProvider>
+        </StrictMode>
+      </ThemeManager>
+    </Provider>
+
     <VercelAnalytics />
   </>
 );

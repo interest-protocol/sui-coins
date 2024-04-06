@@ -1,4 +1,5 @@
 export const Blacklist = [
+  'MOV',
   'SUI',
   'ETH',
   'USDC',

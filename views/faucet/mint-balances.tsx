@@ -1,5 +1,4 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
-import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
@@ -11,7 +10,7 @@ import { ZERO_BIG_NUMBER } from '@/utils';
 
 const MintBalances: FC = () => {
   const { coinsMap } = useWeb3();
-  const { network } = useNetwork();
+  const network = useNetwork();
 
   return (
     <Box
@@ -60,7 +59,7 @@ const MintBalances: FC = () => {
               <Typography variant="body" size="large" color="onSurface">
                 {FixedPointMath.toNumber(
                   coinsMap[type]?.balance
-                    ? BigNumber(coinsMap[type]?.balance)
+                    ? coinsMap[type].balance
                     : ZERO_BIG_NUMBER,
                   coinsMap[type]?.decimals || 0
                 )}

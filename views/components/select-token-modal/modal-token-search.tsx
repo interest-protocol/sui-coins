@@ -14,7 +14,7 @@ const ModalTokenSearch: FC<ModalTokenSearchProps> = ({
   handleSelectToken,
 }) => {
   const id = useId();
-  const { network } = useNetwork();
+  const network = useNetwork();
   const {
     error,
     isLoading,

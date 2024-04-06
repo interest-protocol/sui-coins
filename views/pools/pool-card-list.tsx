@@ -20,7 +20,7 @@ import { PoolCardProps } from './pool-card/pool-card.types';
 import { PoolForm } from './pools.types';
 
 const PoolCardList: FC = () => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const { setModal, handleClose } = useModal();
   const { control, setValue } = useFormContext<PoolForm>();
   const filterList = useWatch({ control, name: 'filterList' });
