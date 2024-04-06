@@ -9,7 +9,7 @@ import SelectObjectModal from '@/views/components/select-object-modal';
 
 import SendFormSelectObject from './send-select-object';
 import { ISendSimpleForm } from './send-simple.types';
-import SendButton from './send-simple-button';
+import FormSendButton from './send-simple-button';
 
 const SendSimpleFormFields = () => {
   const { setModal, handleClose } = useModal();
@@ -68,19 +68,7 @@ const SendSimpleFormFields = () => {
         ))}
       </Box>
       {fields.length ? (
-        <Box display="flex" justifyContent="center" gap="xs">
-          <Button
-            variant="outline"
-            onClick={openModal}
-            borderColor="outlineVariant"
-            SuffixIcon={
-              <PlusSVG maxWidth="1.2rem" maxHeight="1.2rem" width="100%" />
-            }
-          >
-            Add more
-          </Button>
-          <SendButton />
-        </Box>
+        <FormSendButton openModal={openModal} />
       ) : (
         <Box
           p="xl"
