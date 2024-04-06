@@ -8,6 +8,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       const data = await fetch(process.env.SPONSOR!, {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           sender,
           claimer,
@@ -16,7 +17,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }),
       }).then((response) => response.json?.());
 
-      res.status(200).json(data);
+      return res.status(200).json(data);
     }
     return res.status(405).send('Method not allowed!');
   } catch (e) {
