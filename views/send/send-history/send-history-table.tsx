@@ -136,10 +136,10 @@ const SendHistoryTable: FC = () => {
   };
 
   return (
-    <Box my="l" display="grid" gap="l">
+    <Box mb="l" display="grid" gap="l">
       <Box overflowX="auto">
         {!!linkList.length && (
-          <Motion as="table" rowGap="l">
+          <Motion as="table" rowGap="l" width="100%" mt="l">
             <Box as="thead">
               <Box as="tr">
                 {['ID', 'Date', 'Status'].map((item, index) => (
@@ -233,7 +233,9 @@ const SendHistoryTable: FC = () => {
                           variant="label"
                           borderRadius="full"
                           bg={`${claimed ? 'primary' : 'success'}Container`}
-                          color={`on${claimed ? 'Primary' : 'Success'}Container`}
+                          color={`on${
+                            claimed ? 'Primary' : 'Success'
+                          }Container`}
                         >
                           {claimed ? 'Claimed' : 'Unclaimed'}
                         </Typography>
@@ -256,7 +258,7 @@ const SendHistoryTable: FC = () => {
                               variant="label"
                               textAlign="center"
                             >
-                              Regenerate Link
+                              Regenerate
                             </Typography>
                           }
                         >
