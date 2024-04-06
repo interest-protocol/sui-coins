@@ -128,13 +128,20 @@ const SendClaim: FC<SendClaimProps> = ({
           </Box>
         )}
         {data?.link?.assets ? (
-          <Box
-            minWidth="25rem"
-            borderRadius="s"
-            border="1px solid"
-            borderColor="outlineVariant"
-          >
-            <SendHistoryDetails network={network} assets={data.link.assets} />
+          <Box>
+            {data?.link?.assets && !currentAccount && (
+              <Typography variant="body" size="medium" mb="xs">
+                2. Assets to claim
+              </Typography>
+            )}
+            <Box
+              minWidth="25rem"
+              borderRadius="s"
+              border="1px solid"
+              borderColor="outlineVariant"
+            >
+              <SendHistoryDetails network={network} assets={data.link.assets} />
+            </Box>
           </Box>
         ) : isLoading ? (
           <ProgressIndicator size={36} variant="loading" />
