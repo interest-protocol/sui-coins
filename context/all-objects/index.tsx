@@ -6,9 +6,11 @@ import { useNetwork } from '@/context/network';
 import { makeSWRKey } from '@/utils';
 
 import {
+  AllCoins,
   ObjectData,
   TGetAllObjects,
 } from '../../context/all-objects/all-objects.types';
+import { OBJECT_GUARDIANS_BLOCKLIST } from './all-objects.data';
 
 const getAllObjects: TGetAllObjects = async (
   provider,
@@ -27,12 +29,6 @@ const getAllObjects: TGetAllObjects = async (
 
   return [...data, ...newData];
 };
-
-interface AllCoins {
-  coinsObjects: ReadonlyArray<ObjectData>;
-  ownedNfts: ReadonlyArray<ObjectData>;
-  otherObjects: ReadonlyArray<ObjectData>;
-}
 
 const allObjectsContext = createContext<SWRResponse<AllCoins>>(
   {} as SWRResponse<AllCoins>
@@ -65,6 +61,8 @@ export const AllObjectsProvider: FC<PropsWithChildren> = ({ children }) => {
           if (!objectRaw.data?.content?.dataType) return acc;
           if (objectRaw.data.content.dataType !== 'moveObject') return acc;
           if (!objectRaw.data.content.hasPublicTransfer) return acc;
+          if (OBJECT_GUARDIANS_BLOCKLIST.includes(objectRaw.data.content.type))
+            return acc;
 
           return [
             ...acc,
@@ -106,6 +104,8 @@ export const AllObjectsProvider: FC<PropsWithChildren> = ({ children }) => {
       refreshInterval: 10000,
     }
   );
+
+  console.log({ error: data.error });
 
   return <Provider value={data}>{children}</Provider>;
 };

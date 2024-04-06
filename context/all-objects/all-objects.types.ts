@@ -14,6 +14,12 @@ interface BaseObjectData {
   display?: Record<string, string> | undefined | null;
 }
 
+export interface AllCoins {
+  coinsObjects: ReadonlyArray<ObjectData>;
+  ownedNfts: ReadonlyArray<ObjectData>;
+  otherObjects: ReadonlyArray<ObjectData>;
+}
+
 export interface CoinObjectData extends Omit<BaseObjectData, 'display'> {
   display: CoinObject;
 }
