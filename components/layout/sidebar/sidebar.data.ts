@@ -45,7 +45,7 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
   },
   {
     beta: true,
-    name: 'zksend',
+    name: 'zkSend',
     disabled: false,
     Icon: UploadSVG,
     path: Routes[RoutesEnum.Send],

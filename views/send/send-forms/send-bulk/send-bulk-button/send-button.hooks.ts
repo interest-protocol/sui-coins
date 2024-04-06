@@ -7,6 +7,7 @@ import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { ZkSendLinkBuilder } from '@mysten/zksend';
 import { v4 } from 'uuid';
 
+import { Network } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { FixedPointMath } from '@/lib';
 import { isSui, throwTXIfNotSuccessful } from '@/utils';
@@ -39,6 +40,7 @@ const useCreateLink = () => {
         sender: currentAccount.address,
         path: '/send/link',
         host: location.origin,
+        network: network === Network.MAINNET ? 'mainnet' : 'testnet',
       });
 
       if (isSui(object.type)) link.addClaimableMist(amount);
@@ -49,6 +51,7 @@ const useCreateLink = () => {
 
     const txb = await ZkSendLinkBuilder.createLinks({
       links,
+      network: network === Network.MAINNET ? 'mainnet' : 'testnet',
     });
 
     const { transactionBlockBytes, signature } =

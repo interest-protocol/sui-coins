@@ -7,6 +7,7 @@ import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { ZkSendLinkBuilder } from '@mysten/zksend';
 import { v4 } from 'uuid';
 
+import { Network } from '@/constants';
 import { ObjectData } from '@/context/all-objects/all-objects.types';
 import { useNetwork } from '@/context/network';
 import { FixedPointMath } from '@/lib';
@@ -35,6 +36,7 @@ const useCreateLink = () => {
       sender: currentAccount.address,
       path: '/send/link',
       host: location.origin,
+      network: network === Network.MAINNET ? 'mainnet' : 'testnet',
     });
 
     objects.forEach((object) => {
