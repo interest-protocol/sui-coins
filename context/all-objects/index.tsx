@@ -20,7 +20,7 @@ const getAllObjects: TGetAllObjects = async (
   const { data, nextCursor, hasNextPage } = await provider.getOwnedObjects({
     owner: account,
     cursor,
-    options: { showContent: true, showType: true },
+    options: { showContent: true, showType: true, showDisplay: true },
   });
 
   if (!hasNextPage) return data;
@@ -85,10 +85,12 @@ export const AllObjectsProvider: FC<PropsWithChildren> = ({ children }) => {
 
       const [coinsObjects, ownedNfts, otherObjects] = [
         objects.filter((object) => object.type.startsWith('0x2::coin::Coin<')),
-        objects.filter(
-          (object) =>
-            !object.type.startsWith('0x2::coin::Coin<') && object.display
-        ),
+        objects.filter((object) => {
+          if (!object.type.startsWith('0x2::coin::Coin<'))
+            console.log(object.display);
+
+          return !object.type.startsWith('0x2::coin::Coin<') && object.display;
+        }),
         objects.filter(
           (object) =>
             !object.type.startsWith('0x2::coin::Coin<') && !object.display
