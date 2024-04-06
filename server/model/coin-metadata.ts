@@ -10,7 +10,7 @@ export interface CoinMetadataModel extends Document {
   iconUrl?: string | null;
 }
 
-const modelName = 'CoinMetadata';
+const modelName = 'MovementCoinMetadataDevnet';
 
 export const CoinMetadataSchema = new Schema({
   type: {
