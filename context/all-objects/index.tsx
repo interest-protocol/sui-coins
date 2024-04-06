@@ -61,13 +61,6 @@ export const AllObjectsProvider: FC<PropsWithChildren> = ({ children }) => {
           if (!objectRaw.data?.content?.dataType) return acc;
           if (objectRaw.data.content.dataType !== 'moveObject') return acc;
           if (!objectRaw.data.content.hasPublicTransfer) return acc;
-          if (OBJECT_GUARDIANS_BLOCKLIST.includes(objectRaw.data.type!)) {
-            console.log('>> blocked ::', {
-              type: objectRaw.data.type,
-              contentType: objectRaw.data.content.type,
-            });
-            return acc;
-          }
 
           return [
             ...acc,
