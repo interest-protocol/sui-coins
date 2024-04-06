@@ -1,7 +1,13 @@
 import { Token } from '@interest-protocol/sui-tokens';
-import { RouterCompleteTradeRoute } from 'aftermath-ts-sdk';
 
-export type Period = 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month';
+export enum Period {
+  Second,
+  Minute,
+  Hour,
+  Day,
+  Week,
+  Month,
+}
 
 export interface DCASettings {
   minPrice?: number;
@@ -19,10 +25,8 @@ export interface DCAToken extends Token {
 export interface DCAForm {
   to: DCAToken;
   from: DCAToken;
-  loading: boolean;
   error: string | null;
   settings: DCASettings;
-  route: RouterCompleteTradeRoute | null;
 }
 
 export interface DCAPreviewModalProps {

@@ -12,6 +12,7 @@ import Input from './dca-input';
 import DCAManager from './dca-manager';
 import DCAPeriodicityDropdown from './dca-periodicity-dropdown';
 import DCAPreviewButton from './dca-preview-button';
+import DCAPriceStrategy from './dca-price-strategy';
 import DCASelectToken from './dca-select-token';
 
 const DCA: FC = () => {
@@ -119,6 +120,7 @@ const DCA: FC = () => {
               />
             </Box>
           </Box>
+          <DCAPriceStrategy />
           <DCAPreviewButton />
         </Box>
         <DCAManager />
