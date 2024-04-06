@@ -100,7 +100,7 @@ const CreateTokenForm: FC = () => {
 
       throwTXIfNotSuccessful(tx);
 
-      showTXSuccessToast(tx, network.network);
+      showTXSuccessToast(tx, network);
     } finally {
       setLoading(false);
     }
@@ -120,10 +120,11 @@ const CreateTokenForm: FC = () => {
 
   return (
     <Box
-      borderRadius="xs"
+      mx="auto"
+      bg="container"
       overflow="hidden"
       color="onSurface"
-      bg="container"
+      borderRadius="xs"
       width={['100%', '100%', '100%', '37rem']}
       boxShadow="0px 24px 46px -10px rgba(13, 16, 23, 0.16)"
     >
@@ -265,6 +266,7 @@ const CreateTokenForm: FC = () => {
                 color="onPrimary"
                 fontFamily="Proto"
                 borderRadius="xs"
+                onClick={onSubmit}
                 disabled={!currentAccount || loading}
               >
                 Create coin
