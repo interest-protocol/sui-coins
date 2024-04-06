@@ -30,8 +30,6 @@ const Web3Manager: FC<Web3ManagerProps> = ({ children }) => {
 
   const { data, error, mutate, isLoading } = useGetAllCoins();
 
-  console.log({ error });
-
   return (
     <Provider
       value={{
