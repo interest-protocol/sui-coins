@@ -30,7 +30,7 @@ import { SwapForm } from '@/views/swap/swap.types';
 import { getAmountMinusSlippage } from './swap.utils';
 
 const SwapButton = () => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const formSwap: UseFormReturn<SwapForm> = useFormContext();
   const [loading, setLoading] = useState(false);
   const { account, coinsMap, mutate } = useWeb3();

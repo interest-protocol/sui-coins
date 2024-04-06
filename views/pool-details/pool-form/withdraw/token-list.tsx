@@ -10,7 +10,7 @@ import { PoolToken } from '@/views/pools/pools.types';
 import { SelectionFieldValues, TokenListProps } from './withdraw.types';
 
 const SelectionTokenList: FC<TokenListProps> = ({ type }) => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const { getValues } = useFormContext();
 
   const tokenList = getValues(`tokenList`) as Array<PoolToken>;

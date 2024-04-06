@@ -22,7 +22,7 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
   onClick,
   selected,
 }) => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const { colors } = useTheme() as Theme;
   const [isLoading, setLoading] = useState(false);
   const [favoriteTokens, setFavoriteTokens] = useLocalStorage<

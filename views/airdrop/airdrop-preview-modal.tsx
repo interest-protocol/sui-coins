@@ -6,7 +6,6 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 import { TokenIcon } from '@/components';
 import { Routes, RoutesEnum } from '@/constants';
-import { Network } from '@/constants/network';
 import { useNetwork } from '@/context/network';
 import { FixedPointMath } from '@/lib';
 import { ArrowLeftSVG, TimesSVG } from '@/svg';
@@ -26,7 +25,7 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
   const { control } = useFormContext<IAirdropForm>();
   const { push } = useRouter();
 
-  const { symbol, decimals, type } = useWatch({ control, name: 'token' });
+  const { symbol, decimals } = useWatch({ control, name: 'token' });
   const usdPrice = useWatch({ control, name: 'tokenUSDPrice' });
   const airdropList = useWatch({ control, name: 'airdropList' });
 
@@ -106,10 +105,7 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
                   display="inline-flex"
                   justifyContent="center"
                 >
-                  <TokenIcon
-                    network={network.network}
-                    tokenId={network.network === Network.DEVNET ? symbol : type}
-                  />
+                  <TokenIcon network={network} tokenId={symbol} />
                 </Box>
                 <Typography size="small" variant="title">
                   {symbol}

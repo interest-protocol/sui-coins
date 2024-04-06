@@ -30,7 +30,7 @@ const AirdropButton: FC<AirdropProgressProps> = ({ setIsProgressView }) => {
   const { control, getValues, setValue } = useFormContext<IAirdropForm>();
   const { coinsMap } = useWeb3();
   const { airdropList, token } = useWatch({ control });
-  const { network } = useNetwork();
+  const network = useNetwork();
   const suiClient = useSuiClient();
   const signTransactionBlock = useSignTransactionBlock();
   const currentAccount = useCurrentAccount();

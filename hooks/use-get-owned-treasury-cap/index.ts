@@ -44,7 +44,7 @@ const getOwned: TGetOwned = async (provider, account, cursor = null) => {
 };
 
 export const useGetOwnedTreasuryCap = () => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const suiClient = useMovementClient();
   const currentAccount = useCurrentAccount();
   return useSWR(

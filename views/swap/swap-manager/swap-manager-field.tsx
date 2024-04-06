@@ -30,7 +30,7 @@ const SwapManagerField: FC<SwapManagerProps> = ({
   setIsFetchingSwapAmount,
   setValueName,
 }) => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const client = useMovementClient();
   const [tokenIn] = useDebounce(useWatch({ control, name }), 900);
 

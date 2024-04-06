@@ -16,7 +16,7 @@ const SelectToken: FC<SelectTokenProps> = ({
   canRemove,
   handleRemoveSelectToken,
 }) => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const [isOpen, setIsOpen] = useState(false);
 
   const { setValue, control, getValues } = useFormContext<PoolForm>();

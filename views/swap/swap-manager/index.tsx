@@ -11,7 +11,7 @@ import { SwapMessages } from './swap-messages';
 
 const SwapManager: FC = () => {
   const { account } = useWeb3();
-  const { network } = useNetwork();
+  const network = useNetwork();
   const formSwap: UseFormReturn<SwapForm> = useFormContext();
 
   const [error, setError] = useState(false);

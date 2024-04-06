@@ -17,7 +17,7 @@ import { PoolForm, PoolOption } from '@/views/pools/pools.types';
 
 const PoolDetailsPage: NextPage<PoolPageProps> = ({ objectId }) => {
   const { coinsMap } = useWeb3();
-  const { network } = useNetwork();
+  const network = useNetwork();
   const [poolOptionView, setPoolOptionView] = useState<PoolOption>(
     PoolOption.Deposit
   );

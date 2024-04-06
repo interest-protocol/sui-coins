@@ -47,7 +47,7 @@ const getLastMintEpoch = async (
 export const useUserMintEpoch = () => {
   const { account } = useWeb3();
   const client = useMovementClient();
-  const { network } = useNetwork();
+  const network = useNetwork();
 
   const { data } = useSWR(
     makeSWRKey([account], ''),

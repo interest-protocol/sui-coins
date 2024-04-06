@@ -20,7 +20,7 @@ const PoolDetails: FC<PoolDetailsProps> = ({
   handleOptionTab,
 }) => {
   const { push } = useRouter();
-  const { network } = useNetwork();
+  const network = useNetwork();
 
   const pool = RECOMMENDED_POOLS[network].find(
     ({ poolObjectId }) => poolObjectId === objectId

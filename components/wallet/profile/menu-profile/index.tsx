@@ -20,7 +20,7 @@ const MenuProfile: FC<MenuProfileProps> = ({
   handleOpenSwitch,
   handleCloseProfile,
 }) => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const firstRender = useIsFirstRender();
   const { breakpoints } = useTheme() as Theme;
   const [isDesktop, setIsDesktop] = useState(false);

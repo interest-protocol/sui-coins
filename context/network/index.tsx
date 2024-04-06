@@ -11,14 +11,9 @@ import {
 import { RPC_URL } from '@/constants';
 import { Network } from '@/constants/network';
 
-interface INetworkContext {
-  network: Network;
-  changeNetwork: (network: Network) => void;
-}
-
 const LOCAL_NETWORK_KEY = 'movement:network';
 
-const networkContext = createContext<INetworkContext>({} as INetworkContext);
+const networkContext = createContext<Network>('' as Network);
 
 const { networkConfig } = createNetworkConfig({
   [Network.TESTNET]: {
@@ -53,7 +48,7 @@ export const NetworkProvider: FC<PropsWithChildren> = ({ children }) => {
         changeNetwork(network);
       }}
     >
-      <Provider value={{ network, changeNetwork }}>{children}</Provider>
+      <Provider value={network}>{children}</Provider>
     </SuiClientProvider>
   );
 };

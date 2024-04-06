@@ -17,7 +17,7 @@ import { CreatePoolForm } from '../pool-create.types';
 
 const PoolSummary: FC = () => {
   const { push } = useRouter();
-  const { network } = useNetwork();
+  const network = useNetwork();
   const { dialog, handleClose } = useDialog();
   const { getValues } = useFormContext<CreatePoolForm>();
   const { type, isStable, tokens, dex } = getValues();

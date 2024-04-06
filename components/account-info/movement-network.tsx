@@ -5,6 +5,7 @@ import {
   Typography,
   useTheme,
 } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { not, toPairs } from 'ramda';
 import { FC, useState } from 'react';
 import { v4 } from 'uuid';
@@ -25,7 +26,8 @@ const MovementNetwork: FC = () => {
   const { colors } = useTheme() as Theme;
   const isFirstRender = useIsFirstRender();
   const [isOpen, setIsOpen] = useState(false);
-  const { network, changeNetwork } = useNetwork();
+  const network = useNetwork();
+  const { selectNetwork } = useSuiClientContext();
 
   const closeNetworkDropdown = (event: any) => {
     if (
@@ -118,7 +120,7 @@ const MovementNetwork: FC = () => {
                 selected={networkKey === network}
                 disabled={networkKey === Network.TESTNET}
                 totalItems={toPairs(DISPLAY_NETWORK).length}
-                onClick={() => changeNetwork(networkKey as Network)}
+                onClick={() => selectNetwork(networkKey as Network)}
               >
                 <MovementLogoSVG maxWidth="2rem" maxHeight="2rem" />
                 <Box>M2 {displayNetwork}</Box>

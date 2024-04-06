@@ -26,7 +26,7 @@ import { CoinDataWithChainInfo } from '../components/select-token-modal/select-t
 
 const MintForm: FC = () => {
   const [selected, setSelected] = useState(COINS[0]);
-  const { network } = useNetwork();
+  const network = useNetwork();
   const { account, mutate } = useWeb3();
   const { setModal, handleClose } = useModal();
   const client = useSuiClient();
