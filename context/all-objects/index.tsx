@@ -85,12 +85,10 @@ export const AllObjectsProvider: FC<PropsWithChildren> = ({ children }) => {
 
       const [coinsObjects, ownedNfts, otherObjects] = [
         objects.filter((object) => object.type.startsWith('0x2::coin::Coin<')),
-        objects.filter((object) => {
-          if (!object.type.startsWith('0x2::coin::Coin<'))
-            console.log(object.display);
-
-          return !object.type.startsWith('0x2::coin::Coin<') && object.display;
-        }),
+        objects.filter(
+          (object) =>
+            !object.type.startsWith('0x2::coin::Coin<') && object.display
+        ),
         objects.filter(
           (object) =>
             !object.type.startsWith('0x2::coin::Coin<') && !object.display
