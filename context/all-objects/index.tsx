@@ -105,8 +105,6 @@ export const AllObjectsProvider: FC<PropsWithChildren> = ({ children }) => {
     }
   );
 
-  console.log({ error: data.error });
-
   return <Provider value={data}>{children}</Provider>;
 };
 
