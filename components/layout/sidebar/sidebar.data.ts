@@ -49,6 +49,6 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     disabled: false,
     Icon: UploadSVG,
     path: Routes[RoutesEnum.Send],
-    networks: [Network.MAINNET, Network.TESTNET],
+    networks: [Network.MAINNET],
   },
 ];
