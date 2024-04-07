@@ -1254,6 +1254,13 @@
     picocolors "^1.0.0"
     tslib "^2.6.0"
 
+"@polymedia/suits@^0.0.39":
+  version "0.0.39"
+  resolved "https://registry.yarnpkg.com/@polymedia/suits/-/suits-0.0.39.tgz#26b16233f8dbc41515fdcc79266b1f54295c1549"
+  integrity sha512-UR904waKIDXwDATxlERdas4gVRfCLwFxe/Gp5AeUUzk2+yBuhx0PAgKef/EUSjlA942iDZkm0z5Nx8zZ4kpMLw==
+  dependencies:
+    "@mysten/sui.js" "^0.51.2"
+
 "@radix-ui/primitive@1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@radix-ui/primitive/-/primitive-1.0.1.tgz#e46f9958b35d10e9f6dc71c497305c22e3e55dbd"

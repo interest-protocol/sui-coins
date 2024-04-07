@@ -4,9 +4,10 @@ import { FC } from 'react';
 import { v4 } from 'uuid';
 
 import { Routes, RoutesEnum } from '@/constants';
+import { PoolTypeEnum } from '@/interface';
 
 import { DEX_MAP, LINES } from './pool-card.data';
-import { AlgorithmEnum, PoolCardProps, PoolTypeEnum } from './pool-card.types';
+import { AlgorithmEnum, PoolCardProps } from './pool-card.types';
 import PoolCardHeader from './pool-card-header';
 import PoolCardInfo from './pool-card-info';
 import PoolCardTrade from './pool-card-trade';

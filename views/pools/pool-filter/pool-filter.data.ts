@@ -1,4 +1,6 @@
-import { AlgorithmEnum, PoolTypeEnum } from '../pool-card/pool-card.types';
+import { PoolTypeEnum } from '@/interface';
+
+import { AlgorithmEnum } from '../pool-card/pool-card.types';
 import { FilterItemProps, FilterTypeEnum } from '../pools.types';
 
 export const ALGORITHM_TYPE: Array<FilterItemProps> = [

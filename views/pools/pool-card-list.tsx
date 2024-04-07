@@ -10,9 +10,13 @@ import toast from 'react-hot-toast';
 import useSWR from 'swr';
 import { v4 } from 'uuid';
 
+import { POOLS_ARRAY } from '@/constants/coins';
 import { RECOMMENDED_POOLS } from '@/constants/pools';
 import { useNetwork } from '@/context/network';
+import useGetMultipleTokenPriceBySymbol from '@/hooks/use-get-multiple-token-price-by-symbol';
 import { useModal } from '@/hooks/use-modal';
+import { usePools } from '@/hooks/use-pools';
+import { getAllSymbols } from '@/views/pools/pools.utils';
 
 import FindPoolDialog from './find-pool-modal/find-pool-dialog';
 import PoolCard from './pool-card';
@@ -22,6 +26,14 @@ import { PoolForm } from './pools.types';
 const PoolCardList: FC = () => {
   const network = useNetwork();
   const { setModal, handleClose } = useModal();
+
+  const { data: pools, isLoading: arePoolsLoading } = usePools(POOLS_ARRAY);
+
+  const symbols = getAllSymbols(pools || []);
+
+  const { data: pricesRecord, isLoading: arePricesLoading } =
+    useGetMultipleTokenPriceBySymbol(symbols);
+
   const { control, setValue } = useFormContext<PoolForm>();
   const filterList = useWatch({ control, name: 'filterList' });
   const tokenList = useWatch({ control, name: 'tokenList' });
@@ -56,7 +68,7 @@ const PoolCardList: FC = () => {
 
   const isFindingPool = useWatch({ control, name: 'isFindingPool' });
 
-  const { data: pools } = useSWR(`${isFindingPool}`, async () => {
+  const { data: _pools } = useSWR(`${isFindingPool}`, async () => {
     if (!isFindingPool) return RECOMMENDED_POOLS[network];
 
     const filteredPools = RECOMMENDED_POOLS[network].filter(
@@ -109,8 +121,18 @@ const PoolCardList: FC = () => {
   };
 
   useEffect(() => {
-    setListPools(sortedPoolList(pools));
-  }, [filterList, pools]);
+    setListPools(sortedPoolList(_pools));
+  }, [filterList, _pools]);
+
+  console.log({
+    pools,
+    arePoolsLoading,
+    pricesRecord,
+    arePricesLoading,
+  });
+
+  if (!pools || arePoolsLoading || !pricesRecord || arePricesLoading)
+    return <div>loading</div>;
 
   return (
     <Box

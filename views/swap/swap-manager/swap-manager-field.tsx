@@ -40,7 +40,7 @@ const SwapManagerField: FC<SwapManagerProps> = ({
   const { error } = useSWR(
     makeSWRKey(
       [account, type, prop('value', tokenIn), prop('type', tokenIn)],
-      client.devInspectTransactionBlock.name
+      client.devInspectTransactionBlock.name + SwapManagerField.name
     ),
     async () => {
       setValue(`${name}.locked`, true);
