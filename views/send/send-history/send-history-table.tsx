@@ -11,7 +11,7 @@ import type { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import type { ZkSendLink } from '@mysten/zksend';
 import type { LinkAssets } from '@mysten/zksend/dist/cjs/links/utils';
 import { useRouter } from 'next/router';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { v4 } from 'uuid';
 
@@ -19,6 +19,8 @@ import { EXPLORER_URL, Routes, RoutesEnum } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
 import {
+  ChevronLeftSVG,
+  ChevronRightSVG,
   DefaultAssetSVG,
   DownloadSVG,
   EmptyBoxSVG,
@@ -34,7 +36,6 @@ import {
   useReclaimByLink,
   useRegenerateLink,
 } from './send-history.hooks';
-import { ZkSendLinkItem } from './send-history.types';
 import SendHistoryDetailsModal from './send-history-details';
 
 const SendHistoryTable: FC = () => {
@@ -43,31 +44,41 @@ const SendHistoryTable: FC = () => {
   const reclaimLink = useReclaimByLink();
   const regenerateLink = useRegenerateLink();
   const { setModal, handleClose } = useModal();
-  const [currentCursor, setCursor] = useState<string>('');
-  const [linkList, setLinkList] = useState<ReadonlyArray<ZkSendLinkItem>>([]);
+  const [currentCursor, setCursor] = useState<string | null>(null);
+  const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [previousCursors, setPreviousCursors] = useState<
+    ReadonlyArray<string | null>
+  >([]);
 
-  const updateLinkInfo = (
-    links: ReadonlyArray<ZkSendLinkItem>,
-    hasNextPage: boolean,
-    cursor: string | null
-  ) => {
-    if (hasNextPage) setCursor(cursor ?? '');
+  const { data, isLoading, mutate } = useLinkList(currentCursor);
 
-    setLinkList([
-      ...linkList,
-      ...links.filter((item) =>
-        linkList.every(({ digest }) => digest !== item.digest)
-      ),
-    ]);
+  useEffect(() => {
+    if (data && data.cursor && data.cursor !== nextCursor) {
+      setNextCursor(data.cursor);
+    }
+  }, [data]);
+
+  const next = () => {
+    if (data && data.hasNextPage && currentCursor !== nextCursor) {
+      setPreviousCursors([currentCursor, ...(previousCursors ?? [])]);
+      setCursor(nextCursor);
+    }
   };
 
-  const { data, mutate, isLoading } = useLinkList(
-    currentCursor,
-    updateLinkInfo
-  );
+  const previous = () => {
+    if (
+      data &&
+      previousCursors.length &&
+      previousCursors[0] !== currentCursor
+    ) {
+      setCursor(previousCursors[0]);
+      setPreviousCursors(([, ...tail]) => tail);
+    }
+  };
 
   const onSuccessReclaim = (tx: SuiTransactionBlockResponse) => {
     showTXSuccessToast(tx, network);
+    mutate();
   };
 
   const onSuccessRegenerate = (tx: SuiTransactionBlockResponse, id: string) => {
@@ -138,7 +149,7 @@ const SendHistoryTable: FC = () => {
   return (
     <Box mb="l" display="grid" gap="l">
       <Box overflowX="auto">
-        {!!linkList.length && (
+        {!!data?.links.length && (
           <Motion as="table" rowGap="l" width="100%" mt="l">
             <Box as="thead">
               <Box as="tr">
@@ -159,7 +170,7 @@ const SendHistoryTable: FC = () => {
               </Box>
             </Box>
             <Motion as="tbody">
-              {linkList.map(
+              {data?.links.map(
                 ({ link, assets, createdAt, claimed, digest }, index) => (
                   <>
                     <Box as="tr" key={v4()}>
@@ -196,7 +207,7 @@ const SendHistoryTable: FC = () => {
                             variant="body"
                             whiteSpace="nowrap"
                           >
-                            ID {index + 1}
+                            ID {index + 1 + 10 * previousCursors.length}
                           </Typography>
                           <Typography
                             as="span"
@@ -232,12 +243,26 @@ const SendHistoryTable: FC = () => {
                           size="medium"
                           variant="label"
                           borderRadius="full"
-                          bg={`${claimed ? 'primary' : 'success'}Container`}
+                          bg={`${
+                            !(assets.nfts.length + assets.balances.length)
+                              ? 'warning'
+                              : claimed
+                                ? 'primary'
+                                : 'success'
+                          }Container`}
                           color={`on${
-                            claimed ? 'Primary' : 'Success'
+                            !(assets.nfts.length + assets.balances.length)
+                              ? 'Warning'
+                              : claimed
+                                ? 'Primary'
+                                : 'Success'
                           }Container`}
                         >
-                          {claimed ? 'Claimed' : 'Unclaimed'}
+                          {!(assets.nfts.length + assets.balances.length)
+                            ? 'Reclaimed'
+                            : claimed
+                              ? 'Claimed'
+                              : 'Unclaimed'}
                         </Typography>
                       </Typography>
                       <Typography
@@ -376,7 +401,7 @@ const SendHistoryTable: FC = () => {
           >
             <ProgressIndicator size={40} variant="loading" />
           </Box>
-        ) : linkList.length ? null : (
+        ) : data?.links.length ? null : (
           <Box
             py="xl"
             mx="auto"
@@ -392,16 +417,37 @@ const SendHistoryTable: FC = () => {
           </Box>
         )}
       </Box>
-      {data && (
-        <Button
-          mx="auto"
-          disabled={!data}
-          variant="outline"
-          onClick={() => mutate()}
-        >
-          View More
-        </Button>
-      )}
+      <Box
+        px="l"
+        gap="s"
+        display="grid"
+        alignItems="center"
+        gridTemplateColumns="1fr 1fr 1fr"
+      >
+        <Box>
+          {!!previousCursors.length && (
+            <Button mr="auto" variant="outline" onClick={previous}>
+              <ChevronLeftSVG
+                width="100%"
+                maxWidth="0.8rem"
+                maxHeight="0.8rem"
+              />
+              Previous
+            </Button>
+          )}
+        </Box>
+        <Typography variant="body" size="medium" mx="auto">
+          Page: {previousCursors.length + 1}
+        </Typography>
+        <Box>
+          {data?.hasNextPage && (
+            <Button ml="auto" onClick={next} disabled={!data} variant="outline">
+              Next
+              <ChevronRightSVG width="100%" maxWidth="1rem" maxHeight="1rem" />
+            </Button>
+          )}
+        </Box>
+      </Box>
       <PoweredByZkSend />
     </Box>
   );

@@ -12,22 +12,13 @@ import { Network } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { throwTXIfNotSuccessful } from '@/utils';
 
-import { ZkSendLinkItem } from './send-history.types';
-
-export const useLinkList = (
-  currentCursor: string,
-  updateList: (
-    links: ReadonlyArray<ZkSendLinkItem>,
-    hasNextPage: boolean,
-    cursor: string | null
-  ) => void
-) => {
+export const useLinkList = (currentCursor: string | null) => {
   const network = useNetwork();
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
 
   return useSWR(
-    `${network}-${currentAccount?.address}-${suiClient}`,
+    `${network}-${currentAccount?.address}-${suiClient}-${currentCursor}`,
     async () => {
       if (!currentAccount || !suiClient) return;
 
@@ -38,9 +29,7 @@ export const useLinkList = (
         ...(currentCursor && { cursor: currentCursor }),
       });
 
-      updateList(links, hasNextPage, cursor);
-
-      return hasNextPage;
+      return { links, hasNextPage, cursor };
     }
   );
 };
