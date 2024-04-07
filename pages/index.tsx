@@ -18,12 +18,14 @@ const SwapPage: NextPage = () => {
       to: {
         value: '',
         locked: false,
-        ...(COINS_MAP[query.to as string] ?? COINS_MAP[USDC_TYPE]),
+        ...(COINS_MAP[query.to as keyof typeof COINS_MAP] ??
+          COINS_MAP[USDC_TYPE]),
       },
       from: {
         value: '',
         locked: false,
-        ...(COINS_MAP[query.from as string] ?? COINS_MAP[ETH_TYPE]),
+        ...(COINS_MAP[query.from as keyof typeof COINS_MAP] ??
+          COINS_MAP[ETH_TYPE]),
       },
       settings: {
         slippage: '0.1',
@@ -32,11 +34,16 @@ const SwapPage: NextPage = () => {
   });
 
   useEffect(() => {
-    if (!COINS_MAP[query.to as string] || !COINS_MAP[query.from as string]) {
+    if (
+      !COINS_MAP[query.to as keyof typeof COINS_MAP] ||
+      !COINS_MAP[query.from as keyof typeof COINS_MAP]
+    ) {
       const searchParams = new URLSearchParams(asPath);
 
-      if (!COINS_MAP[query.from as string]) searchParams.set('from', ETH_TYPE);
-      if (!COINS_MAP[query.to as string]) searchParams.set('to', USDC_TYPE);
+      if (!COINS_MAP[query.from as keyof typeof COINS_MAP])
+        searchParams.set('from', ETH_TYPE);
+      if (!COINS_MAP[query.to as keyof typeof COINS_MAP])
+        searchParams.set('to', USDC_TYPE);
 
       updateURL(
         `${pathname}?from=${searchParams.get('from')}&to=${searchParams.get(

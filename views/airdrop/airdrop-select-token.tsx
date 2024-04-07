@@ -16,7 +16,7 @@ import { IAirdropForm } from './airdrop.types';
 const BOX_ID = 'dropdown-id';
 
 const AirdropSelectToken: FC = () => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const { setModal, handleClose } = useModal();
   const { control, setValue } = useFormContext<IAirdropForm>();
   const token = useWatch({ control, name: 'token' });

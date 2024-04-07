@@ -2,6 +2,7 @@ import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import { FC } from 'react';
 
 import { SVGProps } from '@/components/svg/svg.types';
+import { LocalCoinMetadata } from '@/interface';
 import { TOKEN_SYMBOL } from '@/lib';
 import { ETHSVG, MOVSVG, USDCSVG } from '@/svg';
 
@@ -62,7 +63,7 @@ export const COINS_MAP = {
     symbol: TOKEN_SYMBOL.USDC,
     type: USDC_TYPE,
   },
-};
+} as Record<string, LocalCoinMetadata>;
 
 export const COIN_METADATA = {
   [ETH_TYPE]: {
@@ -102,16 +103,29 @@ export interface RegistryPool {
   lpCoinType: string;
 }
 
+const MOV_ETH_POOL_ID =
+  '0x02f381358cd60a96665076b60cfc74c71d675d0b042e24436a7f6ae2fef59ab9';
+
+const USDC_ETH_POOL_ID =
+  '0x21c4561fe02ca4ac4e9b1c705e9b1f9c052f7423f7d18053acca382749bb9a4f';
+
+const MOV_ETH_STATE_ID =
+  '0x58122defa03f590a88d8dd165c65e3ccfda7e8c660976f595ecb1c62d6f27281';
+
+const USDC_ETH_STATE_ID =
+  '0x21c4561fe02ca4ac4e9b1c705e9b1f9c052f7423f7d18053acca382749bb9a4f';
+
 export const REGISTRY_POOLS = {
   [ETH_TYPE]: {
     [SUI_TYPE_ARG]: {
-      poolId:
-        '0x02f381358cd60a96665076b60cfc74c71d675d0b042e24436a7f6ae2fef59ab9',
+      poolId: MOV_ETH_POOL_ID,
       lpCoinType: SC_V_MOV_ETH,
+      stateKey: MOV_ETH_STATE_ID,
     },
     [USDC_TYPE]: {
       poolId:
         '0x55f1e9bde96624a0c150ccb9b075bed7461ed652bb5c7b94c10fab32a1325dd3',
+      stateKey: USDC_ETH_STATE_ID,
       lpCoinType: SC_V_ETH_USDC,
     },
   },
@@ -119,17 +133,28 @@ export const REGISTRY_POOLS = {
     [ETH_TYPE]: {
       poolId:
         '0x55f1e9bde96624a0c150ccb9b075bed7461ed652bb5c7b94c10fab32a1325dd3',
+      stateKey: USDC_ETH_STATE_ID,
       lpCoinType: SC_V_ETH_USDC,
     },
   },
   [SUI_TYPE_ARG]: {
     [ETH_TYPE]: {
-      poolId:
-        '0x02f381358cd60a96665076b60cfc74c71d675d0b042e24436a7f6ae2fef59ab9',
+      poolId: MOV_ETH_POOL_ID,
       lpCoinType: SC_V_MOV_ETH,
+      stateKey: MOV_ETH_STATE_ID,
     },
   },
 } as Record<string, Record<string, RegistryPool>>;
+
+export const POOLS_ARRAY = [MOV_ETH_STATE_ID, USDC_ETH_STATE_ID];
+
+export const POOL_ID_TO_SYMBOL = {};
+
+export const STATE_KEY_TO_POOL_ID = {
+  '0x55f1e9bde96624a0c150ccb9b075bed7461ed652bb5c7b94c10fab32a1325dd3':
+    USDC_ETH_POOL_ID,
+  MOV_ETH_STATE_ID: MOV_ETH_POOL_ID,
+} as Record<string, string>;
 
 export const COINS_SVG_MAP_V2 = {
   [ETH_TYPE]: ETHSVG,

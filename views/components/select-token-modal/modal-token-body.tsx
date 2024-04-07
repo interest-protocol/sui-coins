@@ -1,7 +1,10 @@
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
-import { ModalTokenBodyProps } from './select-token-modal.types';
+import {
+  CoinDataWithChainInfo,
+  ModalTokenBodyProps,
+} from './select-token-modal.types';
 import TokenModalItem from './token-modal-item';
 
 const ModalTokenBody: FC<ModalTokenBodyProps> = ({
@@ -13,7 +16,7 @@ const ModalTokenBody: FC<ModalTokenBodyProps> = ({
       <TokenModalItem
         key={v4()}
         selected={false}
-        onClick={() => handleSelectToken(token)}
+        onClick={() => handleSelectToken(token as CoinDataWithChainInfo)}
         {...token}
       />
     ))}

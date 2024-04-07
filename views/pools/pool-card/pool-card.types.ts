@@ -2,11 +2,7 @@ import { ReactNode } from 'react';
 
 import { DexName } from '@/constants/pools';
 import { CoinData } from '@/interface';
-
-export enum PoolTypeEnum {
-  'clamm' = 'clamm',
-  'amm' = 'amm',
-}
+import { PoolTypeEnum } from '@/interface';
 
 export enum AlgorithmEnum {
   'stable' = 'stable',

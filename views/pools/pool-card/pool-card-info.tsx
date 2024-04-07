@@ -9,7 +9,7 @@ import { DefaultTokenSVG } from '@/svg';
 import { PoolCardTokenInfoProps } from './pool-card.types';
 
 const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({ coins, apr }) => {
-  const { network } = useNetwork();
+  const network = useNetwork();
 
   return (
     <Box>

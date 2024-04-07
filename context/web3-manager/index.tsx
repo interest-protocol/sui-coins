@@ -1,4 +1,4 @@
-import { useWalletKit } from '@mysten/wallet-kit';
+import { useCurrentAccount, useCurrentWallet } from '@mysten/dapp-kit';
 import { values } from 'ramda';
 import { createContext, FC } from 'react';
 
@@ -25,7 +25,8 @@ export const Web3ManagerContext = createContext<Web3ManagerState>(
 
 const Web3Manager: FC<Web3ManagerProps> = ({ children }) => {
   const { Provider } = Web3ManagerContext;
-  const { isError, currentAccount, isConnected } = useWalletKit();
+  const currentAccount = useCurrentAccount();
+  const { isConnected } = useCurrentWallet();
 
   const { data, error, mutate, isLoading } = useGetAllCoins();
 
@@ -36,7 +37,7 @@ const Web3Manager: FC<Web3ManagerProps> = ({ children }) => {
         connected: isConnected,
         coinsMap: data ?? ({} as CoinsMap),
         walletAccount: currentAccount || null,
-        error: isError || !!error,
+        error: !!error,
         coins: values(data ?? ({} as CoinsMap)),
         account: currentAccount?.address || null,
         isFetchingCoinBalances: isLoading,

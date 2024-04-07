@@ -31,5 +31,6 @@ export const EXPLORER_URL = {
 
 export const TOAST_DURATION = 10000;
 
+export * from './network';
 export * from './packages';
 export * from './routes';

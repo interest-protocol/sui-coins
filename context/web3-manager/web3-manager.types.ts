@@ -18,7 +18,7 @@ export interface Web3ManagerState {
   isFetchingCoinBalances: boolean;
   coins: ReadonlyArray<CoinObject>;
   walletAccount: null | WalletAccount;
-  mutate: KeyedMutator<CoinsMap | null>;
+  mutate: KeyedMutator<CoinsMap>;
 }
 
 export interface Web3ManagerProps {

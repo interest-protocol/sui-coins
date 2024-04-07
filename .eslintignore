@@ -2,3 +2,4 @@
 commitlint.config.js
 next.config.js
 jest.config.js
+move-bytecode-template.js

@@ -13,9 +13,9 @@ import SwapButton from '../swap-button';
 import SwapPreviewModalSummary from './swap-preview-modal-summary';
 
 const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
-  const { network } = useNetwork();
-  const { control } = useFormContext<SwapForm>();
+  const network = useNetwork();
   const { push } = useRouter();
+  const { control } = useFormContext<SwapForm>();
 
   const handleGoBack = () => {
     push(Routes[RoutesEnum.Swap]);

@@ -16,7 +16,7 @@ import { SwapForm } from '../swap.types';
 import { InputProps } from './input.types';
 
 const SelectToken: FC<InputProps> = ({ label }) => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const { pathname } = useRouter();
   const { setModal, handleClose } = useModal();
 
