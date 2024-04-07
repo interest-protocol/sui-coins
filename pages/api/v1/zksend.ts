@@ -39,7 +39,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     if (req.method === 'POST') {
-      const body: ZkSendLinkData = JSON.parse(req.body);
+      const body: ZkSendLinkData = req.body;
 
       const doc = await zkSendLinkModel[network].create(body);
 
@@ -50,7 +50,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     if (req.method === 'PUT') {
       const digest = req.query.digest as string;
-      const body: ZkSendLinkData = JSON.parse(req.body);
+      const body: ZkSendLinkData = req.body;
 
       if (digest) {
         const doc = await zkSendLinkModel[network].findOneAndUpdate(
@@ -68,7 +68,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     if (req.method === 'PATCH') {
       const id = req.query.id as string;
-      const { link } = JSON.parse(req.body);
+      const { link } = req.body;
 
       if (id) {
         const doc = (await zkSendLinkModel[network].findOne({

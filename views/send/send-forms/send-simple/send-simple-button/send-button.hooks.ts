@@ -73,6 +73,7 @@ const useCreateLink = () => {
 
     await fetch(`/api/v1/zksend?network=${network}`, {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         id,
         digest: tx.digest,

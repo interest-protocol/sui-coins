@@ -76,6 +76,7 @@ export const useRegenerateLink = () => {
 
     await fetch(`/api/v1/zksend?network=${network}&digest=${digest}`, {
       method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         id,
         links: [url],
