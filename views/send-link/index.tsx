@@ -4,29 +4,22 @@ import {
   ProgressIndicator,
   Typography,
 } from '@interest-protocol/ui-kit';
-import { useCurrentAccount } from '@mysten/dapp-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import Layout from '@/components/layout';
 import { useNetwork } from '@/context/network';
-import { ErrorSVG } from '@/svg';
+import { CheckmarkSVG, ErrorSVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 
-import SendClaim from '../send-claim';
-import { LOCAL_STORAGE_CLAIM_URL } from '../send-claim/send-claim.data';
-import { useLinkWithUrl, useReclaimLink } from './send-link.hooks';
+import { useReclaimLink } from './send-link.hooks';
 import { SendLinkProps } from './send-link.types';
 
-const SendLink: FC<SendLinkProps> = ({ id }) => {
+const SendLink: FC<SendLinkProps> = ({ id, data, error, isLoading }) => {
   const network = useNetwork();
   const reclaim = useReclaimLink();
-  const claimingState = useState(false);
-  const currentAccount = useCurrentAccount();
   const [isReclaiming, setReclaiming] = useState(false);
-
-  const { data, isLoading, error } = useLinkWithUrl(id, claimingState[0]);
 
   const url = `${location.origin}/send/link/${id}`;
 
@@ -59,22 +52,52 @@ const SendLink: FC<SendLinkProps> = ({ id }) => {
     }
   };
 
-  if (
-    (data && !data.link) ||
-    !currentAccount ||
-    localStorage.getItem(`${LOCAL_STORAGE_CLAIM_URL}-${id}`) ||
-    sessionStorage.getItem(`${LOCAL_STORAGE_CLAIM_URL}-${id}`) ||
-    (data?.link?.creatorAddress &&
-      data?.link?.creatorAddress !== currentAccount.address)
-  )
+  const isClaimed = data?.link?.claimed || (data && !data.link);
+
+  if (isClaimed)
     return (
-      <SendClaim
-        id={id}
-        data={data}
-        error={error}
-        isLoading={isLoading}
-        claimingState={claimingState}
-      />
+      <Layout title="Claim link">
+        <Box
+          p="2xl"
+          gap="xl"
+          mx="auto"
+          width="100%"
+          display="flex"
+          borderRadius="s"
+          alignItems="center"
+          maxWidth="39.75rem"
+          bg="lowestContainer"
+          flexDirection="column"
+          px={['2xs', 'xl', 'xl', '7xl']}
+        >
+          <Typography variant="title" size="large" textAlign="center">
+            Assets already claimed
+          </Typography>
+          <Typography
+            size="large"
+            variant="body"
+            color="outline"
+            maxWidth="27rem"
+            textAlign="center"
+          >
+            The person who shared this link with you is attempting to send you
+            assets
+          </Typography>
+          <Box color="success" my="xl">
+            <CheckmarkSVG
+              filled
+              width="100%"
+              maxWidth="6rem"
+              maxHeight="6rem"
+            />
+          </Box>
+          <Box display="flex" justifyContent="center">
+            <Button variant="filled" disabled={true}>
+              Claimed
+            </Button>
+          </Box>
+        </Box>
+      </Layout>
     );
 
   return (

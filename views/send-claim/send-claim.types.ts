@@ -6,6 +6,10 @@ export interface SendClaimProps {
   id: string;
   error: any;
   isLoading: boolean;
-  data: ZkSendLinkWithUrl | undefined;
+  data?: ZkSendLinkWithUrl;
   claimingState: [boolean, Dispatch<SetStateAction<boolean>>];
+}
+
+export interface IClaimForm {
+  address: string;
 }

@@ -9,7 +9,9 @@ import { useCurrentAccount } from '@mysten/dapp-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { isValidSuiAddress } from '@mysten/sui.js/utils';
 import { FC, useEffect, useState } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { useDebounce } from 'use-debounce';
 
 import Layout from '@/components/layout';
 import { useNetwork } from '@/context/network';
@@ -19,7 +21,7 @@ import { showTXSuccessToast } from '@/utils';
 import SendHistoryDetails from '../components/send-asset-details';
 import { LOCAL_STORAGE_CLAIM_URL } from './send-claim.data';
 import { useClaim } from './send-claim.hooks';
-import { SendClaimProps } from './send-claim.types';
+import { IClaimForm, SendClaimProps } from './send-claim.types';
 
 const SendClaim: FC<SendClaimProps> = ({
   id,
@@ -31,8 +33,11 @@ const SendClaim: FC<SendClaimProps> = ({
   const claim = useClaim();
   const network = useNetwork();
   const [url, setUrl] = useState('');
-  const [address, setAddress] = useState('');
   const currentAccount = useCurrentAccount();
+
+  const { control, register } = useFormContext<IClaimForm>();
+
+  const [address] = useDebounce(useWatch({ control, name: 'address' }), 800);
 
   const onSuccess = (tx: SuiTransactionBlockResponse) => {
     showTXSuccessToast(tx, network);
@@ -81,6 +86,52 @@ const SendClaim: FC<SendClaimProps> = ({
     }
   };
 
+  if (isClaimed)
+    return (
+      <Layout title="Claim assets" noSidebar>
+        <Box
+          p="2xl"
+          gap="xl"
+          mx="auto"
+          width="100%"
+          display="flex"
+          borderRadius="s"
+          alignItems="center"
+          maxWidth="39.75rem"
+          bg="lowestContainer"
+          flexDirection="column"
+          px={['2xs', 'xl', 'xl', '7xl']}
+        >
+          <Typography variant="title" size="large" textAlign="center">
+            Assets already claimed
+          </Typography>
+          <Typography
+            size="large"
+            variant="body"
+            color="outline"
+            maxWidth="27rem"
+            textAlign="center"
+          >
+            The person who shared this link with you is attempting to send you
+            assets
+          </Typography>
+          <Box color="success" my="xl">
+            <CheckmarkSVG
+              filled
+              width="100%"
+              maxWidth="6rem"
+              maxHeight="6rem"
+            />
+          </Box>
+          <Box display="flex" justifyContent="center">
+            <Button variant="filled" disabled={true}>
+              Claimed
+            </Button>
+          </Box>
+        </Box>
+      </Layout>
+    );
+
   return (
     <Layout title="Claim assets" noSidebar>
       <Box
@@ -97,11 +148,7 @@ const SendClaim: FC<SendClaimProps> = ({
         px={['2xs', 'xl', 'xl', '7xl']}
       >
         <Typography variant="title" size="large" textAlign="center">
-          {!data && !isLoading
-            ? 'Nothing to claim'
-            : isClaimed
-              ? 'Assets already claimed'
-              : 'Funds ready to be claim'}
+          {!data && !isLoading ? 'Nothing to claim' : 'Funds ready to be claim'}
         </Typography>
         <Typography
           size="large"
@@ -122,21 +169,12 @@ const SendClaim: FC<SendClaimProps> = ({
               width="100"
               nPlaceholder={{ opacity: 0.7 }}
               placeholder="Type the recipient address"
-              onChange={(e) => setAddress(e.target.value)}
+              {...register('address')}
               fieldProps={{ borderRadius: 'xs' }}
             />
           </Box>
         )}
-        {isClaimed ? (
-          <Box color="success" my="xl">
-            <CheckmarkSVG
-              filled
-              width="100%"
-              maxWidth="6rem"
-              maxHeight="6rem"
-            />
-          </Box>
-        ) : isLoading ? (
+        {!data && isLoading ? (
           <ProgressIndicator size={36} variant="loading" />
         ) : (
           data?.link?.assets && (
@@ -162,7 +200,7 @@ const SendClaim: FC<SendClaimProps> = ({
         )}
         <Box display="flex" justifyContent="center">
           <Button variant="filled" onClick={onClaim} disabled={isDisabled}>
-            {isClaimed ? 'Claimed' : 'Claim'}
+            Claim
           </Button>
         </Box>
       </Box>
