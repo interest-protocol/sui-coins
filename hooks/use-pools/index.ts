@@ -1,4 +1,4 @@
-import { SuiObjectResponse } from '@mysten/sui.js/src/client';
+import { SuiObjectResponse } from '@mysten/sui.js/client';
 import { getSuiObjectResponseFields } from '@polymedia/suits';
 import BigNumber from 'bignumber.js';
 import { pathOr } from 'ramda';
