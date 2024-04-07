@@ -136,11 +136,11 @@ const PoolCardList: FC = () => {
 
   return (
     <Box
-      gap="m"
-      display={listPools?.length ? 'grid' : 'flex'}
+      gap="xs"
       borderRadius="xs"
       p={['s', 's', 's', 'l']}
-      gridTemplateColumns={['1fr', '1fr', '1fr 1fr', '1fr 1fr 1fr']}
+      display={listPools?.length ? 'grid' : 'flex'}
+      gridTemplateColumns={['1fr', '1fr', '1fr 1fr', '1fr 1fr', '1fr 1fr 1fr']}
     >
       {listPools?.length ? (
         listPools.map((pool) => <PoolCard key={v4()} {...pool} />)
