@@ -436,7 +436,7 @@ const SendHistoryTable: FC = () => {
             </Button>
           )}
         </Box>
-        {!isLoading || data?.links.length ? null : (
+        {!isLoading || !data?.links.length ? null : (
           <Typography variant="body" size="medium" mx="auto">
             Page: {previousCursors.length + 1}
           </Typography>
