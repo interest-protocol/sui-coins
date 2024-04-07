@@ -6,7 +6,7 @@ export interface ISwapSettings {
 
 export interface SwapToken extends CoinData {
   value: string;
-  locked: boolean;
+  usdPrice: number | null;
 }
 
 interface SwapTypeArgs {
