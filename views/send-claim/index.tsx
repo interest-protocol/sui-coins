@@ -27,21 +27,16 @@ const SendClaim: FC<SendClaimProps> = ({
   id,
   data,
   error,
+  mutate,
   isLoading,
-  claimingState: [isClaiming, setClaiming],
 }) => {
   const claim = useClaim();
   const network = useNetwork();
   const [url, setUrl] = useState('');
   const currentAccount = useCurrentAccount();
-
+  const [isClaiming, setClaiming] = useState(false);
   const { control, register } = useFormContext<IClaimForm>();
-
   const [address] = useDebounce(useWatch({ control, name: 'address' }), 800);
-
-  const onSuccess = (tx: SuiTransactionBlockResponse) => {
-    showTXSuccessToast(tx, network);
-  };
 
   useEffect(() => {
     setUrl(
@@ -58,6 +53,10 @@ const SendClaim: FC<SendClaimProps> = ({
     localStorage.setItem(`${LOCAL_STORAGE_CLAIM_URL}-${id}`, data.url);
     sessionStorage.setItem(`${LOCAL_STORAGE_CLAIM_URL}-${id}`, data.url);
   }, [data]);
+
+  const onSuccess = (tx: SuiTransactionBlockResponse) => {
+    showTXSuccessToast(tx, network);
+  };
 
   const isClaimed = data?.link?.claimed || (data && !data.link);
 
@@ -81,7 +80,7 @@ const SendClaim: FC<SendClaimProps> = ({
     } catch (e) {
       toast.error((e as any).message ?? 'Something went wrong');
     } finally {
-      setClaiming(false);
+      mutate();
       toast.dismiss(loadingId);
     }
   };

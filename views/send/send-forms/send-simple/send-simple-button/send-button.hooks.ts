@@ -8,6 +8,7 @@ import { ZkSendLinkBuilder } from '@mysten/zksend';
 import { v4 } from 'uuid';
 
 import { Network } from '@/constants';
+import { zkBagContract } from '@/constants/zksend';
 import { ObjectData } from '@/context/all-objects/all-objects.types';
 import { useNetwork } from '@/context/network';
 import { FixedPointMath } from '@/lib';
@@ -31,9 +32,10 @@ const useCreateLink = () => {
 
     const link = new ZkSendLinkBuilder({
       client: suiClient,
-      sender: currentAccount.address,
       path: '/send/link',
       host: location.origin,
+      sender: currentAccount.address,
+      contract: network === Network.TESTNET ? zkBagContract : null,
       network: network === Network.MAINNET ? 'mainnet' : 'testnet',
     });
 

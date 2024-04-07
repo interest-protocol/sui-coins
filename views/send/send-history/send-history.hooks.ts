@@ -9,6 +9,7 @@ import useSWR from 'swr';
 import { v4 } from 'uuid';
 
 import { Network } from '@/constants';
+import { zkBagContract } from '@/constants/zksend';
 import { useNetwork } from '@/context/network';
 import { throwTXIfNotSuccessful } from '@/utils';
 
@@ -24,8 +25,11 @@ export const useLinkList = (currentCursor: string | null) => {
 
       const { links, hasNextPage, cursor } = await listCreatedLinks({
         client: suiClient,
+        host: '/send/link',
+        path: location.origin,
         address: currentAccount.address,
         network: network === Network.MAINNET ? 'mainnet' : 'testnet',
+        contract: network === Network.TESTNET ? zkBagContract : undefined,
         ...(currentCursor && { cursor: currentCursor }),
       });
 
