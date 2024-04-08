@@ -15,10 +15,12 @@ const itemVariants = {
 };
 
 const OptionItem: FC<PropsWithChildren<OptionItemProps>> = ({
+  index,
   onClick,
   disabled,
   children,
   selected,
+  totalItems,
   mobileOnly,
   withSubmenu,
   withBorderTop,
@@ -31,10 +33,14 @@ const OptionItem: FC<PropsWithChildren<OptionItemProps>> = ({
     variants={itemVariants}
     initial={itemVariants.closed}
     justifyContent="space-between"
+    borderTopLeftRadius={index === 0 ? 's' : ''}
+    borderTopRightRadius={index === 0 ? 's' : ''}
     cursor={disabled ? 'not-allowed' : 'pointer'}
     bg={selected ? 'rgba(0, 83, 219, 0.08)' : 'unset'}
     borderColor={withBorderTop ? 'outlineVariant' : 'transparent'}
     display={mobileOnly ? ['flex', 'flex', 'flex', 'none'] : 'flex'}
+    borderBottomLeftRadius={index && index + 1 === totalItems ? 's' : ''}
+    borderBottomRightRadius={index && index + 1 === totalItems ? 's' : ''}
     nHover={{
       bg: disabled ? 'unset' : 'rgba(0, 83, 219, 0.08)',
     }}
@@ -49,6 +55,7 @@ const OptionItem: FC<PropsWithChildren<OptionItemProps>> = ({
       fontFamily="Satoshi !important"
     >
       {children}
+      {totalItems}
     </Box>
     {selected && (
       <Box color="primary">
