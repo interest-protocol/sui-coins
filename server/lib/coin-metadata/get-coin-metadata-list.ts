@@ -14,7 +14,9 @@ const getCoinMetadataList = async (
   const Model = COIN_METADATA_MODEL_MAP[network];
   const suiClient = SUI_CLIENT_PROVIDER_MAP[network];
 
-  const docs: Array<CoinMetadataModel> = await Model.find({ type: typeList });
+  const uniqueType = [...new Set(typeList)];
+
+  const docs: Array<CoinMetadataModel> = await Model.find({ type: uniqueType });
 
   const docsMap = docs.reduce(
     (acc, curr) => ({ ...acc, [curr.type]: curr }),
@@ -22,7 +24,7 @@ const getCoinMetadataList = async (
   );
 
   const missingCoinsType = Array.from(
-    new Set(typeList.filter((type) => !docsMap[type]))
+    new Set(uniqueType.filter((type) => !docsMap[type]))
   );
 
   const missingCoinsTypeBatches = chunk<string>(missingCoinsType, 7);
