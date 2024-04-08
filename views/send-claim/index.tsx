@@ -18,7 +18,7 @@ import { useNetwork } from '@/context/network';
 import { CheckmarkSVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 
-import SendHistoryDetails from '../components/send-asset-details';
+import SendAssetDetails from '../components/send-asset-details';
 import { LOCAL_STORAGE_CLAIM_URL } from './send-claim.data';
 import { useClaim } from './send-claim.hooks';
 import { IClaimForm, SendClaimProps } from './send-claim.types';
@@ -189,10 +189,7 @@ const SendClaim: FC<SendClaimProps> = ({
                 border="1px solid"
                 borderColor="outlineVariant"
               >
-                <SendHistoryDetails
-                  network={network}
-                  assets={data.link.assets}
-                />
+                <SendAssetDetails network={network} assets={data.link.assets} />
               </Box>
             </Box>
           )
