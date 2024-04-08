@@ -31,6 +31,8 @@ export const EXPLORER_URL = {
 
 export const TOAST_DURATION = 10000;
 
+export const EXCHANGE_FEE = 0.002;
+
 export * from './network';
 export * from './packages';
 export * from './routes';
