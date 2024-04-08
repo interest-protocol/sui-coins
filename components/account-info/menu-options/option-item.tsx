@@ -55,7 +55,6 @@ const OptionItem: FC<PropsWithChildren<OptionItemProps>> = ({
       fontFamily="Satoshi !important"
     >
       {children}
-      {totalItems}
     </Box>
     {selected && (
       <Box color="primary">
