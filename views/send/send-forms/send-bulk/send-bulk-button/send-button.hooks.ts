@@ -59,7 +59,7 @@ const useCreateLink = () => {
     });
 
     const [gasBudget] = txb.splitCoins(txb.gas, [
-      txb.pure(String(ZK_SEND_GAS_BUDGET * 0.1)),
+      txb.pure(String(ZK_SEND_GAS_BUDGET * quantity)),
     ]);
 
     txb.transferObjects([gasBudget], txb.pure.address(SPONSOR_WALLET[network]));
