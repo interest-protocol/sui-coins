@@ -14,8 +14,6 @@ const SendLinkPage: NextPage = () => {
   const currentAccount = useCurrentAccount();
   const { data, isLoading, error, mutate } = useLinkWithUrl(query.id as string);
 
-  console.log({ data });
-
   if (
     !currentAccount ||
     (data?.link?.creatorAddress &&

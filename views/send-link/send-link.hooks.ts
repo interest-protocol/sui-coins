@@ -8,7 +8,7 @@ import { ZkSendLink } from '@mysten/zksend';
 import useSWR from 'swr';
 
 import { Network } from '@/constants';
-import { zkBagContract } from '@/constants/zksend';
+import { testnetZKBagContract } from '@/constants/zksend';
 import { useNetwork } from '@/context/network';
 import { ZkSendLinkData } from '@/interface';
 import { throwTXIfNotSuccessful } from '@/utils';
@@ -32,7 +32,9 @@ export const useLinkWithUrl = (id: string) => {
                 path: location.origin,
                 network: network === Network.MAINNET ? 'mainnet' : 'testnet',
                 contract:
-                  network === Network.TESTNET ? zkBagContract : undefined,
+                  network === Network.TESTNET
+                    ? testnetZKBagContract
+                    : undefined,
               }),
             }
           : { url: undefined, link: null }
@@ -58,7 +60,7 @@ export const useReclaimLink = () => {
       host: '/send/link',
       path: location.origin,
       network: network === Network.MAINNET ? 'mainnet' : 'testnet',
-      contract: network === Network.TESTNET ? zkBagContract : undefined,
+      contract: network === Network.TESTNET ? testnetZKBagContract : undefined,
     });
 
     const transactionBlock = link.createClaimTransaction(

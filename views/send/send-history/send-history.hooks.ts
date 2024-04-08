@@ -9,7 +9,7 @@ import useSWR from 'swr';
 import { v4 } from 'uuid';
 
 import { Network } from '@/constants';
-import { zkBagContract } from '@/constants/zksend';
+import { testnetZKBagContract } from '@/constants/zksend';
 import { useNetwork } from '@/context/network';
 import { throwTXIfNotSuccessful } from '@/utils';
 
@@ -29,7 +29,8 @@ export const useLinkList = (currentCursor: string | null) => {
         path: location.origin,
         address: currentAccount.address,
         network: network === Network.MAINNET ? 'mainnet' : 'testnet',
-        contract: network === Network.TESTNET ? zkBagContract : undefined,
+        contract:
+          network === Network.TESTNET ? testnetZKBagContract : undefined,
         ...(currentCursor && { cursor: currentCursor }),
       });
 

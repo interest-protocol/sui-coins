@@ -8,7 +8,7 @@ import { ZkSendLinkBuilder } from '@mysten/zksend';
 import { v4 } from 'uuid';
 
 import { Network } from '@/constants';
-import { zkBagContract } from '@/constants/zksend';
+import { testnetZKBagContract } from '@/constants/zksend';
 import { useNetwork } from '@/context/network';
 import { FixedPointMath } from '@/lib';
 import { isSui, throwTXIfNotSuccessful } from '@/utils';
@@ -42,7 +42,7 @@ const useCreateLink = () => {
         host: location.origin,
         sender: currentAccount.address,
         network: network === Network.MAINNET ? 'mainnet' : 'testnet',
-        contract: network === Network.TESTNET ? zkBagContract : null,
+        contract: network === Network.TESTNET ? testnetZKBagContract : null,
       });
 
       if (isSui(object.type)) link.addClaimableMist(amount);
@@ -55,7 +55,7 @@ const useCreateLink = () => {
       links,
       client: suiClient,
       network: network === Network.MAINNET ? 'mainnet' : 'testnet',
-      contract: network === Network.TESTNET ? zkBagContract : undefined,
+      contract: network === Network.TESTNET ? testnetZKBagContract : undefined,
     });
 
     const { transactionBlockBytes, signature } =

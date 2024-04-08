@@ -1,9 +1,11 @@
+import { toB64 } from '@mysten/bcs';
 import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 
 import { Network } from '@/constants';
 import { useNetwork } from '@/context/network';
+import { throwTXIfNotSuccessful } from '@/utils';
 
 import { ZkSendLinkWithUrl } from '../send-link/send-link.types';
 
@@ -25,51 +27,36 @@ export const useClaim = () => {
       currentAccount?.address ?? address
     );
 
-    const built = await transactionBlock.build({
+    const txbBytes = await transactionBlock.build({
       client: suiClient,
       onlyTransactionKind: true,
     });
 
-    const transactionBlockKindBytes = btoa(
-      built.reduce((data, byte) => data + String.fromCharCode(byte), '')
-    );
-
-    const sponsoringResponse = await fetch('/api/v1/sponsor', {
+    const sponsoredResponse = await fetch('/api/v1/sponsor/shinami', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        sender: link.address,
-        transactionBlockKindBytes,
-        claimer: currentAccount?.address ?? address,
-        network: network === Network.MAINNET ? 'mainnet' : 'testnet',
+        sender: link.keypair.toSuiAddress(),
+        txbBytes: toB64(txbBytes),
+        isMainnet: network === Network.MAINNET,
       }),
     }).then((response) => response.json?.());
 
-    if (sponsoringResponse?.error) throw new Error(sponsoringResponse?.error);
+    const { signature: senderSignature } =
+      await link.keypair.signTransactionBlock(
+        await TransactionBlock.from(sponsoredResponse.txBytes).build()
+      );
 
-    const { signature } = await link.keypair.signTransactionBlock(
-      await TransactionBlock.from(sponsoringResponse.data.bytes).build()
-    );
-
-    const data = await fetch(
-      `/api/v1/sponsor/${sponsoringResponse.data.digest}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ signature }),
-      }
-    ).then((response) => response.json?.());
-
-    if (data?.error) throw new Error(data?.error);
-
-    await fetch(`/api/v1/zksend?network=${network}&id=${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        link: encodeURI(url),
-      }),
+    const tx = await suiClient.executeTransactionBlock({
+      signature: [sponsoredResponse.signature, senderSignature],
+      transactionBlock: sponsoredResponse.txBytes,
+      options: {
+        showEffects: true,
+      },
     });
 
-    onSuccess(data);
+    throwTXIfNotSuccessful(tx);
+
+    onSuccess(tx);
   };
 };

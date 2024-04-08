@@ -1,6 +1,6 @@
 import { ZkBagContractOptions } from '@mysten/zksend';
 
-export const zkBagContract: ZkBagContractOptions = {
+export const testnetZKBagContract: ZkBagContractOptions = {
   packageId:
     '0x7175344e5bb8a85560018f4c54eef10c97a4d0f3a72cb1d938d7ef0f52d19254',
   bagStoreId:
@@ -8,3 +8,5 @@ export const zkBagContract: ZkBagContractOptions = {
   bagStoreTableId:
     '0xb0cbc8d39962f36fa65e9d1d1393be10956fb1f46b52b3c952c1df0194fcf5b4',
 };
+
+export const ZK_SEND_GAS_BUDGET = 10000000;
