@@ -57,6 +57,14 @@ export const useClaim = () => {
 
     throwTXIfNotSuccessful(tx);
 
+    await fetch(`/api/v1/zksend?network=${network}&id=${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        link: encodeURI(url),
+      }),
+    });
+
     onSuccess(tx);
   };
 };
