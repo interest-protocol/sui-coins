@@ -7,13 +7,12 @@ import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { ZkSendLinkBuilder } from '@mysten/zksend';
 import { v4 } from 'uuid';
 
-import { Network } from '@/constants';
-import { testnetZKBagContract } from '@/constants/zksend';
+import { Network, SPONSOR_WALLET } from '@/constants';
+import { ZK_BAG_CONTRACT_IDS, ZK_SEND_GAS_BUDGET } from '@/constants/zksend';
 import { ObjectData } from '@/context/all-objects/all-objects.types';
 import { useNetwork } from '@/context/network';
 import { FixedPointMath } from '@/lib';
 import { isSui, throwTXIfNotSuccessful } from '@/utils';
-import { MAINNET_CONTRACT_IDS } from '@/utils/zk-send';
 import { isCoinObject } from '@/views/components/select-object-modal/select-object-modal.utils';
 
 import { ObjectField } from '../send-simple.types';
@@ -36,10 +35,7 @@ const useCreateLink = () => {
       path: '/send/link',
       host: location.origin,
       sender: currentAccount.address,
-      contract:
-        network === Network.TESTNET
-          ? testnetZKBagContract
-          : MAINNET_CONTRACT_IDS,
+      contract: ZK_BAG_CONTRACT_IDS[network],
       network: network === Network.MAINNET ? 'mainnet' : 'testnet',
     });
 
@@ -62,6 +58,12 @@ const useCreateLink = () => {
     });
 
     const txb = await link.createSendTransaction();
+
+    const [gasBudget] = txb.splitCoins(txb.gas, [
+      txb.pure(String(ZK_SEND_GAS_BUDGET)),
+    ]);
+
+    txb.transferObjects([gasBudget], txb.pure.address(SPONSOR_WALLET[network]));
 
     const { transactionBlockBytes, signature } =
       await signTransactionBlock.mutateAsync({

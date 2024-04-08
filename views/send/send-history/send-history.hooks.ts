@@ -9,9 +9,10 @@ import useSWR from 'swr';
 import { v4 } from 'uuid';
 
 import { Network } from '@/constants';
-import { testnetZKBagContract } from '@/constants/zksend';
+import { ZK_BAG_CONTRACT_IDS } from '@/constants/zksend';
 import { useNetwork } from '@/context/network';
 import { throwTXIfNotSuccessful } from '@/utils';
+import { createClaimTransaction } from '@/utils/zk-send';
 
 export const useLinkList = (currentCursor: string | null) => {
   const network = useNetwork();
@@ -28,9 +29,8 @@ export const useLinkList = (currentCursor: string | null) => {
         host: '/send/link',
         path: location.origin,
         address: currentAccount.address,
+        contract: ZK_BAG_CONTRACT_IDS[network],
         network: network === Network.MAINNET ? 'mainnet' : 'testnet',
-        contract:
-          network === Network.TESTNET ? testnetZKBagContract : undefined,
         ...(currentCursor && { cursor: currentCursor }),
       });
 
@@ -83,6 +83,7 @@ export const useRegenerateLink = () => {
 };
 
 export const useReclaimByLink = () => {
+  const network = useNetwork();
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
   const signTransactionBlock = useSignTransactionBlock();
@@ -93,10 +94,15 @@ export const useReclaimByLink = () => {
   ) => {
     if (!currentAccount) return;
 
-    const transactionBlock = link.createClaimTransaction(
-      currentAccount.address,
-      { reclaim: true }
-    );
+    const transactionBlock = createClaimTransaction({
+      reclaim: true,
+      address: currentAccount.address,
+      sender: link.keypair!.toSuiAddress(),
+      assets: link.assets,
+      ...(network === Network.TESTNET && {
+        contracts: ZK_BAG_CONTRACT_IDS[network],
+      }),
+    });
 
     const { transactionBlockBytes, signature } =
       await signTransactionBlock.mutateAsync({ transactionBlock });

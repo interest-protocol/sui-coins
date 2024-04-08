@@ -4,6 +4,7 @@ import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 
 import { Network } from '@/constants';
+import { ZK_BAG_CONTRACT_IDS } from '@/constants/zksend';
 import { useNetwork } from '@/context/network';
 import { throwTXIfNotSuccessful } from '@/utils';
 import { createClaimTransaction } from '@/utils/zk-send';
@@ -29,6 +30,9 @@ export const useClaim = () => {
       address: currentAccount?.address || address,
       sender: link.keypair!.toSuiAddress(),
       assets: link.assets,
+      ...(network === Network.TESTNET && {
+        contracts: ZK_BAG_CONTRACT_IDS[network],
+      }),
     });
 
     const txbBytes = await transactionBlock.build({

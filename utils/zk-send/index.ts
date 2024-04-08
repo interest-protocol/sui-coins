@@ -4,20 +4,10 @@ import {
   TransactionObjectArgument,
 } from '@mysten/sui.js/transactions';
 
-export interface ZkBagContractOptions {
-  packageId: string;
-  bagStoreId: string;
-  bagStoreTableId: string;
-}
+import { Network } from '@/constants';
+import { ZK_BAG_CONTRACT_IDS } from '@/constants/zksend';
 
-export const MAINNET_CONTRACT_IDS: ZkBagContractOptions = {
-  packageId:
-    '0x5bb7d0bb3240011336ca9015f553b2646302a4f05f821160344e9ec5a988f740',
-  bagStoreId:
-    '0x65b215a3f2a951c94313a89c43f0adbd2fd9ea78a0badf81e27d1c9868a8b6fe',
-  bagStoreTableId:
-    '0x616db54ca564660cd58e36a4548be68b289371ef2611485c62c374a60960084e',
-};
+import { CreateClaimTransactionArgs } from './zk-send.types';
 
 export class ZkBag<IDs> {
   #package: string;
@@ -177,25 +167,16 @@ export class ZkBag<IDs> {
   }
 }
 
-interface CreateClaimTransactionArgs {
-  address: string;
-  assets: any;
-  sender: string;
-  reclaim: boolean;
-}
-
 export const createClaimTransaction = ({
   address,
   assets,
   sender,
   reclaim,
+  contracts = ZK_BAG_CONTRACT_IDS[Network.MAINNET],
 }: CreateClaimTransactionArgs) => {
   const txb = new TransactionBlock();
 
-  const contract = new ZkBag(
-    MAINNET_CONTRACT_IDS.packageId,
-    MAINNET_CONTRACT_IDS
-  );
+  const contract = new ZkBag(contracts.packageId, contracts);
 
   txb.setSender(sender);
 
