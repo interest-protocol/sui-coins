@@ -28,8 +28,8 @@ export const useClaim = () => {
     );
 
     const txbBytes = await transactionBlock.build({
-      client: suiClient,
       onlyTransactionKind: true,
+      client: suiClient,
     });
 
     const sponsoredResponse = await fetch('/api/v1/sponsor/shinami', {

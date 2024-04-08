@@ -1939,6 +1939,14 @@
     "@noble/hashes" "~1.3.2"
     "@scure/base" "~1.1.4"
 
+"@shinami/clients@^0.7.3":
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/@shinami/clients/-/clients-0.7.3.tgz#ce34192c40e40ad1b90223036e542511926f284f"
+  integrity sha512-YLWrqE+s70v00kyJ+Py+burb7UQcY1gXpsk6SVxenMa+cPPrc24L9Ao1obAlJiVqxbAuLQT29DzD0o6eAI7BKg==
+  dependencies:
+    "@open-rpc/client-js" "^1.8.1"
+    superstruct "^1.0.3"
+
 "@sigstore/bundle@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@sigstore/bundle/-/bundle-1.1.0.tgz#17f8d813b09348b16eeed66a8cf1c3d6bd3d04f1"
@@ -9347,11 +9355,6 @@ typed-array-length@^1.0.5:
     has-proto "^1.0.3"
     is-typed-array "^1.1.13"
     possible-typed-array-names "^1.0.0"
-
-typed-rpc@^5.0.2:
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/typed-rpc/-/typed-rpc-5.0.2.tgz#a92feb9a791a375d1157e3276aef765546621a4f"
-  integrity sha512-3x9TGxjEn99WgFm6NwODkJZIcKQsFpqtQORrPXRnvncysd+z+uSD7SzvPvHu2Z4zcVP1YxHYvuX6EXvy5Woh0w==
 
 types-ramda@^0.29.9:
   version "0.29.9"

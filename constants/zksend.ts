@@ -9,4 +9,4 @@ export const testnetZKBagContract: ZkBagContractOptions = {
     '0xb0cbc8d39962f36fa65e9d1d1393be10956fb1f46b52b3c952c1df0194fcf5b4',
 };
 
-export const ZK_SEND_GAS_BUDGET = 10000000;
+export const ZK_SEND_GAS_BUDGET = 2_500_000;

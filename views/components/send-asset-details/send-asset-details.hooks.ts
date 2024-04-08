@@ -34,7 +34,7 @@ export const useAssetsNFTs = (nfts: LinkAssets['nfts']) => {
 export const useAssetsBalances = (balances: LinkAssets['balances']) => {
   const network = useNetwork();
   const typeList = balances.reduce(
-    (acc, { coinType }) => `${acc},${coinType}`,
+    (acc, { coinType }) => (acc ? `${acc},${coinType}` : coinType),
     ''
   );
 
