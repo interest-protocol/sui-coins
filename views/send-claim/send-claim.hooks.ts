@@ -6,6 +6,7 @@ import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { Network } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { throwTXIfNotSuccessful } from '@/utils';
+import { createClaimTransaction } from '@/utils/zk-send';
 
 import { ZkSendLinkWithUrl } from '../send-link/send-link.types';
 
@@ -23,9 +24,12 @@ export const useClaim = () => {
     if ((!currentAccount && !address) || !link || !link.keypair)
       throw new Error('Checking params');
 
-    const transactionBlock = link.createClaimTransaction(
-      currentAccount?.address ?? address
-    );
+    const transactionBlock = createClaimTransaction({
+      reclaim: false,
+      address: currentAccount?.address || address,
+      sender: link.keypair!.toSuiAddress(),
+      assets: link.assets,
+    });
 
     const txbBytes = await transactionBlock.build({
       onlyTransactionKind: true,
@@ -54,6 +58,8 @@ export const useClaim = () => {
         showEffects: true,
       },
     });
+
+    console.log(tx);
 
     throwTXIfNotSuccessful(tx);
 

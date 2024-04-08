@@ -10,3 +10,6 @@ export const testnetZKBagContract: ZkBagContractOptions = {
 };
 
 export const ZK_SEND_GAS_BUDGET = 2_500_000;
+
+export const SPONSOR_WALLET =
+  '0x2bbb58d6300439abfcc9ad13dd12b04e6ea6fce1c3604de7507a0a39d8573b19';

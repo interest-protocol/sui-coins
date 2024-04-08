@@ -12,6 +12,7 @@ import { testnetZKBagContract } from '@/constants/zksend';
 import { useNetwork } from '@/context/network';
 import { ZkSendLinkData } from '@/interface';
 import { throwTXIfNotSuccessful } from '@/utils';
+import { MAINNET_CONTRACT_IDS } from '@/utils/zk-send';
 
 import { ZkSendLinkWithUrl } from './send-link.types';
 
@@ -34,7 +35,7 @@ export const useLinkWithUrl = (id: string) => {
                 contract:
                   network === Network.TESTNET
                     ? testnetZKBagContract
-                    : undefined,
+                    : MAINNET_CONTRACT_IDS,
               }),
             }
           : { url: undefined, link: null }
@@ -60,7 +61,10 @@ export const useReclaimLink = () => {
       host: '/send/link',
       path: location.origin,
       network: network === Network.MAINNET ? 'mainnet' : 'testnet',
-      contract: network === Network.TESTNET ? testnetZKBagContract : undefined,
+      contract:
+        network === Network.TESTNET
+          ? testnetZKBagContract
+          : MAINNET_CONTRACT_IDS,
     });
 
     const transactionBlock = link.createClaimTransaction(

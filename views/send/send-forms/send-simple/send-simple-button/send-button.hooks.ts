@@ -13,6 +13,7 @@ import { ObjectData } from '@/context/all-objects/all-objects.types';
 import { useNetwork } from '@/context/network';
 import { FixedPointMath } from '@/lib';
 import { isSui, throwTXIfNotSuccessful } from '@/utils';
+import { MAINNET_CONTRACT_IDS } from '@/utils/zk-send';
 import { isCoinObject } from '@/views/components/select-object-modal/select-object-modal.utils';
 
 import { ObjectField } from '../send-simple.types';
@@ -35,7 +36,10 @@ const useCreateLink = () => {
       path: '/send/link',
       host: location.origin,
       sender: currentAccount.address,
-      contract: network === Network.TESTNET ? testnetZKBagContract : null,
+      contract:
+        network === Network.TESTNET
+          ? testnetZKBagContract
+          : MAINNET_CONTRACT_IDS,
       network: network === Network.MAINNET ? 'mainnet' : 'testnet',
     });
 
