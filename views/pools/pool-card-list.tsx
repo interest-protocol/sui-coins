@@ -132,7 +132,11 @@ const PoolCardList: FC = () => {
   });
 
   if (!pools || arePoolsLoading || !pricesRecord || arePricesLoading)
-    return <div>loading</div>;
+    return (
+      <Box pt="3xl" width="100%" display="flex" justifyContent="center">
+        <ProgressIndicator variant="loading" />
+      </Box>
+    );
 
   return (
     <Box
