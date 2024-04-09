@@ -4,6 +4,9 @@ import { useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
+import { useWeb3 } from '@/hooks';
+import { FixedPointMath } from '@/lib';
+
 import { SwapMessagesProps } from './swap-manager.types';
 
 export const SwapMessages: FC<SwapMessagesProps> = ({
@@ -18,6 +21,7 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
   isFetchingSwapAmountOut,
 }) => {
   const { setValue } = useFormContext();
+  const { coinsMap } = useWeb3();
   const from = useWatch({ control: control, name: 'from' });
   const to = useWatch({ control: control, name: 'to' });
   const [toastState, setToastState] = useState<boolean>(false);
@@ -63,7 +67,7 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
     const name = fromValue ? 'from' : 'to';
 
     if (!amountNotEnough && errors[name]?.message === 'increaseAmount')
-      setValue('error', "You doesn't have enough balance");
+      setValue('error', "You don't have enough balance");
 
     if (from?.type !== to?.type && errorMessage === 'sameTokens')
       setValue('error', "You can't swap the same coin");
@@ -111,7 +115,11 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
       return;
     }
 
-    if (from?.balance < fromValue) {
+    if (
+      coinsMap[from.type].balance.lt(
+        FixedPointMath.toBigNumber(fromValue, from.decimals)
+      )
+    ) {
       setValue('error', "Price value can't be greater than balance");
       return;
     }
@@ -121,6 +129,14 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
       return;
     }
     setValue('error', null);
-  }, [error, amountNotEnough, hasNoMarket, from?.type, to?.type, errorMessage]);
+  }, [
+    error,
+    amountNotEnough,
+    hasNoMarket,
+    from?.type,
+    to?.type,
+    fromValue,
+    errorMessage,
+  ]);
   return null;
 };
