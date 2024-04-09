@@ -116,7 +116,7 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
     }
 
     if (
-      coinsMap[from.type].balance.lt(
+      coinsMap[from.type]?.balance.lt(
         FixedPointMath.toBigNumber(fromValue, from.decimals)
       )
     ) {
