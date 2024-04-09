@@ -18,7 +18,7 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
   const { push } = useRouter();
   const { control } = useFormContext<SwapForm>();
 
-  const handleGoback = () => {
+  const handleGoBack = () => {
     push(Routes[RoutesEnum.Swap]);
     onClose();
   };
@@ -48,7 +48,7 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
           alignItems="center"
           justifyContent="space-between"
         >
-          <Button variant="text" isIcon onClick={handleGoback}>
+          <Button variant="text" isIcon onClick={handleGoBack}>
             <ArrowLeftSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
           </Button>
           <Typography size="large" variant="title" color="onSurface">

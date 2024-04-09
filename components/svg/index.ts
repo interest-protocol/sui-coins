@@ -27,6 +27,8 @@ export { default as DefaultTokenSVG } from './default';
 export { default as DefaultSVG } from './default';
 export { default as DiedComputerSVG } from './died-computer';
 export { default as DiscordSVG } from './discord';
+export { default as DotErrorSVG } from './dot-error';
+export { default as DotSuccessSVG } from './dot-success';
 export { default as DotsSVG } from './dots';
 export { default as DoubleChevronSVG } from './double-chevron';
 export { default as ErrorSVG } from './error';
