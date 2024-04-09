@@ -19,15 +19,15 @@ export const GlobalStyles = css`
 
   @font-face {
     font-family: 'Proto';
-    src: url('../fonts/proto/ProtoMono-Medium.eot');
+    src: url('/fonts/proto/ProtoMono-Medium.eot');
     src:
       local('Proto Mono Medium'),
       local('ProtoMono-Medium'),
-      url('../fonts/proto/ProtoMono-Medium.eot?#iefix')
+      url('/fonts/proto/ProtoMono-Medium.eot?#iefix')
         format('embedded-opentype'),
-      url('../fonts/proto/ProtoMono-Medium.woff2') format('woff2'),
-      url('../fonts/proto/ProtoMono-Medium.woff') format('woff'),
-      url('../fonts/proto/ProtoMono-Medium.ttf') format('truetype');
+      url('/fonts/proto/ProtoMono-Medium.woff2') format('woff2'),
+      url('/fonts/proto/ProtoMono-Medium.woff') format('woff'),
+      url('/fonts/proto/ProtoMono-Medium.ttf') format('truetype');
     font-weight: 500;
     font-style: normal;
     font-display: swap;

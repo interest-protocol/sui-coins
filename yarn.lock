@@ -820,6 +820,21 @@
     "@urql/introspection" "^1.0.3"
     graphql "^16.8.1"
 
+"@gql.tada/cli-utils@0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@gql.tada/cli-utils/-/cli-utils-0.3.1.tgz#5d86c409c371506a96e59ead710020d76d760207"
+  integrity sha512-Eq7lV0059AqqdM8TL53k3gtxKWQ+aPAG3Nn8ZyTZUM5DNniwqH3CHnHg+pTR67Q51rX8CXRpyAXEHlJvS8GvqQ==
+  dependencies:
+    "@gql.tada/internal" "0.1.1"
+    graphql "^16.8.1"
+
+"@gql.tada/internal@0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@gql.tada/internal/-/internal-0.1.1.tgz#e1b08db928c1591dd97e3ade222215c5d26980c6"
+  integrity sha512-2TrWcoluLySDBKKoGAGWQzXhiF2Vaz9xyfqsAP25Uz/xKmuFm+Nxpma6oLlwRec7lArNiRu9u7Vi1GjLik1UfA==
+  dependencies:
+    graphql "^16.8.1"
+
 "@graphql-typed-document-node/core@^3.2.0":
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/@graphql-typed-document-node/core/-/core-3.2.0.tgz#5f3d96ec6b2354ad6d8a28bf216a1d97b5426861"
@@ -1179,14 +1194,14 @@
   dependencies:
     bs58 "^5.0.0"
 
-"@mysten/dapp-kit@^0.12.5":
-  version "0.12.5"
-  resolved "https://registry.yarnpkg.com/@mysten/dapp-kit/-/dapp-kit-0.12.5.tgz#740e9cca1d2d0a4a75c301545f47eca43f5822a2"
-  integrity sha512-16jkaCSOWMisQ+K4cuY563HiB433Q4Dn0jnjrHyN7i29PU1s2ZeLEkZZ1aJ/N624d+F3ptCKxtvTp9GV2WCsIQ==
+"@mysten/dapp-kit@^0.12.9":
+  version "0.12.9"
+  resolved "https://registry.yarnpkg.com/@mysten/dapp-kit/-/dapp-kit-0.12.9.tgz#e93c6e142ec2443b5a33e2fc9170d99124b74e57"
+  integrity sha512-M61Afb9mocbnjIqqofUu1yP22018IiQti2Mvw800mACVKO909eXYJv72yW5iAGI0Z6FVZpZBmTdc7dQAGnetJg==
   dependencies:
-    "@mysten/sui.js" "0.51.0"
-    "@mysten/wallet-standard" "0.11.0"
-    "@mysten/zksend" "0.3.1"
+    "@mysten/sui.js" "0.51.2"
+    "@mysten/wallet-standard" "0.11.2"
+    "@mysten/zksend" "0.4.3"
     "@radix-ui/react-dialog" "^1.0.4"
     "@radix-ui/react-dropdown-menu" "^2.0.5"
     "@radix-ui/react-slot" "^1.0.2"
@@ -1196,7 +1211,7 @@
     clsx "^2.0.0"
     zustand "^4.4.1"
 
-"@mysten/sui.js@0.51.0", "@mysten/sui.js@^0.51.0":
+"@mysten/sui.js@0.51.0":
   version "0.51.0"
   resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.51.0.tgz#b1716f2cb1e0766f057eefb175caa16fdaec1e27"
   integrity sha512-/D/JDE+dgL1Nc6/Ju32bIrTr5XYcYdYMHzhgRk+f8nGf3eZRGaWIphN9VEBXjn+4F8M9/t3BKLfITWrQ2o3++w==
@@ -1210,6 +1225,24 @@
     "@suchipi/femver" "^1.0.0"
     bech32 "^2.0.0"
     gql.tada "^1.2.0"
+    graphql "^16.8.1"
+    superstruct "^1.0.3"
+    tweetnacl "^1.0.3"
+
+"@mysten/sui.js@0.51.2", "@mysten/sui.js@^0.51.2":
+  version "0.51.2"
+  resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.51.2.tgz#40c54bf1df57fdeaf27ad11efddeaa20ff5e6a7b"
+  integrity sha512-RRG/VHhVvkQlWqodFZagRxVDo3SbXh4e3xTBplhPNNyybugbWj/V+wGrNv5/KtxfVxHBw6jTCoB798ijqPBq7g==
+  dependencies:
+    "@graphql-typed-document-node/core" "^3.2.0"
+    "@mysten/bcs" "0.11.1"
+    "@noble/curves" "^1.1.0"
+    "@noble/hashes" "^1.3.1"
+    "@scure/bip32" "^1.3.1"
+    "@scure/bip39" "^1.2.1"
+    "@suchipi/femver" "^1.0.0"
+    bech32 "^2.0.0"
+    gql.tada "^1.4.1"
     graphql "^16.8.1"
     superstruct "^1.0.3"
     tweetnacl "^1.0.3"
@@ -1253,21 +1286,21 @@
   dependencies:
     "@mysten/sui.js" "0.51.0"
 
-"@mysten/wallet-standard@0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@mysten/wallet-standard/-/wallet-standard-0.11.0.tgz#476256b4c578b74743946fc15e12654b81952047"
-  integrity sha512-SzofHHjyZcc/6dqCHEiZoPJpKWVMu35ynjgBbl7dXbdHRlkO7Vb2p5NZ3LA0h3wo6+4gFZ8/IQmxuOhE/EF4Ng==
+"@mysten/wallet-standard@0.11.2":
+  version "0.11.2"
+  resolved "https://registry.yarnpkg.com/@mysten/wallet-standard/-/wallet-standard-0.11.2.tgz#39e71ce3baffe7f4e5c0b8e74f3766119047f22f"
+  integrity sha512-wDuXHwmdYS+9ewH6w4Fg67QwDpYN6JTKPWC/fuEWRuHy4uS77DfrIG6KHtU0tReMGapevXovKpw6WoSHJHDDHg==
   dependencies:
-    "@mysten/sui.js" "0.51.0"
+    "@mysten/sui.js" "0.51.2"
     "@wallet-standard/core" "1.0.3"
 
-"@mysten/zksend@0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@mysten/zksend/-/zksend-0.3.1.tgz#c23248a71acad241b5262e698422091fc0dce5fa"
-  integrity sha512-BopD+TXm5Gu3tPJj/iOTJaJht5KCzvsoZnnbJKKQM7EJPlSMa8U+fje1JQVXN4kXc3e8xBJXNX/7qn1IzPm1vw==
+"@mysten/zksend@0.4.3", "@mysten/zksend@^0.4.3":
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/@mysten/zksend/-/zksend-0.4.3.tgz#4615c539c820f454cb6da3bd32e1742f10d07350"
+  integrity sha512-pBLErRWrQLtH3nxfHIMGEiLbAmwEeYorhWvxlb6xXXCNagp8/yAeka3gFcWGvXsadAnmorqyb2CzKVWwlpcKjQ==
   dependencies:
-    "@mysten/sui.js" "0.51.0"
-    "@mysten/wallet-standard" "0.11.0"
+    "@mysten/sui.js" "0.51.2"
+    "@mysten/wallet-standard" "0.11.2"
     mitt "^3.0.1"
     nanostores "^0.9.3"
     valibot "^0.25.0"
@@ -1905,6 +1938,14 @@
   dependencies:
     "@noble/hashes" "~1.3.2"
     "@scure/base" "~1.1.4"
+
+"@shinami/clients@^0.7.3":
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/@shinami/clients/-/clients-0.7.3.tgz#ce34192c40e40ad1b90223036e542511926f284f"
+  integrity sha512-YLWrqE+s70v00kyJ+Py+burb7UQcY1gXpsk6SVxenMa+cPPrc24L9Ao1obAlJiVqxbAuLQT29DzD0o6eAI7BKg==
+  dependencies:
+    "@open-rpc/client-js" "^1.8.1"
+    superstruct "^1.0.3"
 
 "@sigstore/bundle@^1.1.0":
   version "1.1.0"
@@ -5021,6 +5062,13 @@ framer-motion@^10.11.2:
   optionalDependencies:
     "@emotion/is-prop-valid" "^0.8.2"
 
+framer-motion@^11.0.24:
+  version "11.0.24"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-11.0.24.tgz#d6ac88cd7d627e2ce57eb9bac05c60469fca6223"
+  integrity sha512-l2iM8NR53qtcujgAqYvGPJJGModPNWEVUaATRDLfnaLvUoFpImovBm0AHalSSsY8tW6knP8mfJTW4WYGbnAe4w==
+  dependencies:
+    tslib "^2.4.0"
+
 fs-extra@11.1.0:
   version "11.1.0"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-11.1.0.tgz#5784b102104433bb0e090f48bfc4a30742c357ed"
@@ -5331,6 +5379,15 @@ gql.tada@^1.2.0:
   dependencies:
     "@0no-co/graphql.web" "^1.0.4"
     "@gql.tada/cli-utils" "0.2.0"
+
+gql.tada@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/gql.tada/-/gql.tada-1.4.1.tgz#d25f6d4941c146651b85191b4d54bad183183fac"
+  integrity sha512-AnDA26jbbyc4COiNzovgEwI1XKmRz4F5XoFFSI8Gh6TQqqzulOVNafv/1l8/C5S/iIqV9uwQmy33AJ89peCLBg==
+  dependencies:
+    "@0no-co/graphql.web" "^1.0.4"
+    "@gql.tada/cli-utils" "0.3.1"
+    "@gql.tada/internal" "0.1.1"
 
 graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0, graceful-fs@^4.2.11, graceful-fs@^4.2.6, graceful-fs@^4.2.9:
   version "4.2.11"
@@ -8800,16 +8857,7 @@ string-length@^4.0.1:
     char-regex "^1.0.2"
     strip-ansi "^6.0.0"
 
-"string-width-cjs@npm:string-width@^4.2.0":
-  version "4.2.3"
-  resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
-  integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
-  dependencies:
-    emoji-regex "^8.0.0"
-    is-fullwidth-code-point "^3.0.0"
-    strip-ansi "^6.0.1"
-
-"string-width@^1.0.2 || 2 || 3 || 4", string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
+"string-width-cjs@npm:string-width@^4.2.0", "string-width@^1.0.2 || 2 || 3 || 4", string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -8889,14 +8937,7 @@ string_decoder@^1.1.1:
   dependencies:
     safe-buffer "~5.2.0"
 
-"strip-ansi-cjs@npm:strip-ansi@^6.0.1":
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
-  integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
-  dependencies:
-    ansi-regex "^5.0.1"
-
-strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+"strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
@@ -9703,16 +9744,8 @@ wide-align@^1.1.2, wide-align@^1.1.5:
   dependencies:
     string-width "^1.0.2 || 2 || 3 || 4"
 
-"wrap-ansi-cjs@npm:wrap-ansi@^7.0.0":
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
-  integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
-  dependencies:
-    ansi-styles "^4.0.0"
-    string-width "^4.1.0"
-    strip-ansi "^6.0.0"
-
-wrap-ansi@^7.0.0:
+"wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@^7.0.0:
+  name wrap-ansi-cjs
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==

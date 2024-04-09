@@ -17,8 +17,7 @@ const networkContext = createContext<Network>('' as Network);
 
 const { networkConfig } = createNetworkConfig({
   [Network.TESTNET]: {
-    url:
-      process.env.NEXT_PUBLIC_SUI_TESTNET_RPC_URL || getFullnodeUrl('testnet'),
+    url: getFullnodeUrl('testnet'),
   },
   [Network.MAINNET]: {
     url:

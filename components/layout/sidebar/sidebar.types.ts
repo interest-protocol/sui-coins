@@ -10,13 +10,14 @@ export interface MenuItemCollapsibleProps {
 export interface MenuItemTitleContentProps extends MenuItemCollapsibleProps {
   name: string;
   path?: string;
+  beta?: boolean;
   disabled: boolean;
   Icon: FC<SVGProps>;
   isCollapsed: boolean;
 }
 
 export interface MenuItemProps extends MenuItemTitleContentProps {
-  alpha?: boolean;
+  beta?: boolean;
   networks: ReadonlyArray<Network>;
   setIsCollapsed: (value: boolean) => void;
   setTemporarilyOpen: Dispatch<SetStateAction<boolean>>;

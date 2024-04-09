@@ -81,9 +81,3 @@ export interface SendAirdropArgs {
 export interface AirdropPreviewButtonProps {
   handleOpenSummaryModal: () => void;
 }
-
-export interface CreatedCoinInfo {
-  digest: string;
-  version: string;
-  objectId: string;
-}

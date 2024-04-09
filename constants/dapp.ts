@@ -69,6 +69,12 @@ export const OBJECT_RECORD: Record<Network, Record<string, `0x${string}`>> = {
   },
 };
 
+export const SPONSOR_WALLET = {
+  [Network.MAINNET]:
+    '0x2bbb58d6300439abfcc9ad13dd12b04e6ea6fce1c3604de7507a0a39d8573b19',
+  [Network.TESTNET]:
+    '0x5e7197d38ea9d838835462dadc447770cde842537cfb528f6b36478f4c968164',
+};
 export const VOLATILE = {
   [Network.TESTNET]: `${
     OBJECT_RECORD[Network.TESTNET].DEX_PACKAGE_ID

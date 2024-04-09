@@ -37,7 +37,7 @@ const getCoinMetadataList = async (
     CoinMetadataWithType & { hasMetadata: boolean }
   > = [];
 
-  for await (const batch of missingCoinsTypeBatches) {
+  for (const batch of missingCoinsTypeBatches) {
     const data = await Promise.all(
       batch.map((coinType) =>
         suiClient
