@@ -5,7 +5,9 @@ import { v4 } from 'uuid';
 
 import { ErrorSVG } from '@/svg';
 
-const SendBulkLinks: FC<{ links: ReadonlyArray<string> }> = ({ links }) => {
+import { SendBulkLinksProps } from './send-bulk.types';
+
+const SendBulkLinks: FC<SendBulkLinksProps> = ({ links }) => {
   const copyLinks = () => {
     navigator.clipboard.writeText(links.join(`\n`));
 

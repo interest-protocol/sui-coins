@@ -9,3 +9,7 @@ export interface ISendBulkForm {
   object: ObjectField;
   links: ReadonlyArray<string>;
 }
+
+export interface SendBulkLinksProps {
+  links: ReadonlyArray<string>;
+}
