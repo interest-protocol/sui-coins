@@ -10,8 +10,6 @@ export const throwTXIfNotSuccessful = (
   tx: SuiTransactionBlockResponse,
   callback?: () => void
 ) => {
-  console.log({ tx });
-
   if (!!tx.effects?.status && tx.effects.status.status !== 'success') {
     callback?.();
     throw new Error('Transaction failed');
