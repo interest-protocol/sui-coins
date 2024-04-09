@@ -41,8 +41,6 @@ const SendLink: FC<SendLinkProps> = ({ data, error, isLoading, mutate }) => {
   const onReclaim = async () => {
     const gasCoin = coinsMap[SUI_TYPE_ARG] ?? coinsMap[SUI_TYPE_ARG_LONG];
 
-    console.log({ gasCoin, coinsMap });
-
     if (!data || !gasCoin) return toast.error('Something went wrong');
 
     const gasObject = {

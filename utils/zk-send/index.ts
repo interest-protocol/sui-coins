@@ -171,7 +171,7 @@ export const createClaimTransaction = ({
   address,
   assets,
   sender,
-  reclaim,
+  reclaimAddress,
   contracts = ZK_BAG_CONTRACT_IDS[Network.MAINNET],
 }: CreateClaimTransactionArgs) => {
   const txb = new TransactionBlock();
@@ -182,8 +182,8 @@ export const createClaimTransaction = ({
 
   const store = txb.object(contract.ids.bagStoreId);
 
-  const [bag, proof] = reclaim
-    ? contract.reclaim(txb, { arguments: [store, address] })
+  const [bag, proof] = reclaimAddress
+    ? contract.reclaim(txb, { arguments: [store, reclaimAddress] })
     : contract.init_claim(txb, { arguments: [store] });
 
   const objectsToTransfer = [];

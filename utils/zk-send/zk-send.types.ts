@@ -4,6 +4,6 @@ export interface CreateClaimTransactionArgs {
   address: string;
   assets: any;
   sender: string;
-  reclaim: boolean;
+  reclaimAddress?: string;
   contracts?: ZkBagContractOptions;
 }

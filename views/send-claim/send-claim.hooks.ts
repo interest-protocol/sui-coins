@@ -24,7 +24,6 @@ export const useClaim = () => {
       throw new Error('Checking params');
 
     const transactionBlock = createClaimTransaction({
-      reclaim: false,
       address: currentAccount?.address || address,
       sender: link.keypair!.toSuiAddress(),
       assets: link.assets,

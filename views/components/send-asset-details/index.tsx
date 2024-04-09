@@ -59,7 +59,12 @@ const SendAssetDetails: FC<SendAssetDetailsProps> = ({ assets, network }) => {
         const url = display?.image_url || '';
 
         return (
-          <Box key={v4()} display="flex" alignItems="center">
+          <Box
+            key={v4()}
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+          >
             <Box gap="s" display="flex" alignItems="center">
               <TokenIcon
                 withBg

@@ -45,10 +45,10 @@ export const useReclaimLink = () => {
     if (!currentAccount) throw new Error('Error on current account');
 
     const transactionBlock = createClaimTransaction({
-      reclaim: true,
-      address: link.address,
-      sender: currentAccount.address,
       assets: link.assets,
+      reclaimAddress: link.address,
+      sender: currentAccount.address,
+      address: currentAccount.address,
       ...(network === Network.TESTNET && {
         contracts: ZK_BAG_CONTRACT_IDS[network],
       }),
