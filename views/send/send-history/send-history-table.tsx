@@ -433,9 +433,11 @@ const SendHistoryTable: FC = () => {
             </Button>
           )}
         </Box>
-        <Typography variant="body" size="medium" mx="auto">
-          Page: {previousCursors.length + 1}
-        </Typography>
+        {!isLoading || !data?.links.length ? null : (
+          <Typography variant="body" size="medium" mx="auto">
+            Page: {previousCursors.length + 1}
+          </Typography>
+        )}
         <Box>
           {data?.hasNextPage && (
             <Button ml="auto" onClick={next} disabled={!data} variant="outline">
