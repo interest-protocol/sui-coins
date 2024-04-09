@@ -7,6 +7,7 @@ import { TokenIcon } from '@/components';
 import { Routes, RoutesEnum } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { ArrowLeftSVG, TimesSVG } from '@/svg';
+import { formatDollars } from '@/utils';
 
 import { SwapForm, SwapPreviewModalProps } from '../swap.types';
 import SwapButton from '../swap-button';
@@ -96,6 +97,16 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
                 <Typography variant="body" size="medium" color="onSurface">
                   {tokenFrom.value || 0}
                 </Typography>
+                <Typography variant="body" size="small" color="outlineVariant">
+                  {tokenFrom.usdPrice
+                    ? formatDollars(
+                        +(
+                          Number(tokenFrom.value || 0) * tokenFrom.usdPrice
+                        ).toFixed(3)
+                      )
+                    : '--'}{' '}
+                  USD
+                </Typography>
               </Box>
             </Box>
           </Box>
@@ -144,6 +155,20 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
                 <Box textAlign="right">
                   <Typography variant="body" size="medium" color="onSurface">
                     {tokenTo.value || 0}
+                  </Typography>
+                  <Typography
+                    variant="body"
+                    size="small"
+                    color="outlineVariant"
+                  >
+                    {tokenTo.usdPrice
+                      ? formatDollars(
+                          +(
+                            Number(tokenTo.value || 0) * tokenTo.usdPrice
+                          ).toFixed(3)
+                        )
+                      : '--'}{' '}
+                    USD
                   </Typography>
                 </Box>
               </Box>

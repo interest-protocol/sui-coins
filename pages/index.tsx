@@ -17,13 +17,11 @@ const SwapPage: NextPage = () => {
     defaultValues: {
       to: {
         value: '',
-        locked: false,
         ...(COINS_MAP[query.to as keyof typeof COINS_MAP] ??
           COINS_MAP[USDC_TYPE]),
       },
       from: {
         value: '',
-        locked: false,
         ...(COINS_MAP[query.from as keyof typeof COINS_MAP] ??
           COINS_MAP[ETH_TYPE]),
       },

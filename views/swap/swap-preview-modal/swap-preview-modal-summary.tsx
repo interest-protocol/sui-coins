@@ -1,16 +1,60 @@
-import { Box, Typography } from '@interest-protocol/ui-kit';
+import { Box, ProgressIndicator, Typography } from '@interest-protocol/ui-kit';
+import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 import BigNumber from 'bignumber.js';
+import { values } from 'ramda';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+import useSWR from 'swr';
 
-import { AIRDROP_SUI_FEE_PER_ADDRESS } from '@/constants/fees';
+import { EXCHANGE_FEE } from '@/constants';
 import { FixedPointMath } from '@/lib';
-import { BATCH_SIZE } from '@/views/airdrop/airdrop.constants';
+import { ZERO_BIG_NUMBER } from '@/utils';
+
+import { useSwap } from '../swap.hooks';
 
 const SwapPreviewModalSummary: FC = () => {
   const { control } = useFormContext();
+  const swap = useSwap();
 
-  const airdropList = useWatch({ control, name: 'airdropList' });
+  const client = useSuiClient();
+  const currentAccount = useCurrentAccount();
+  const fromValue = useWatch({ control, name: 'from.value' });
+  const fromUSDPrice = useWatch({ control, name: 'from.usdPrice' });
+  const toValue = useWatch({ control, name: 'to.display' });
+  const toUSDPrice = useWatch({ control, name: 'to.usdPrice' });
+  const route = useWatch({ control, name: 'route' });
+  const slippage = useWatch({ control, name: 'settings.slippage' });
+  const { data: fees, isLoading } = useSWR(
+    `network-fee-${route?.spotPrice}-${currentAccount?.address}-${slippage}`,
+    async () => {
+      if (!currentAccount) return;
+
+      const txb = swap();
+
+      const inspect = await client.devInspectTransactionBlock({
+        transactionBlock: txb,
+        sender: currentAccount.address,
+      });
+      const { storageRebate, ...gasStructure } = inspect.effects.gasUsed;
+
+      return [
+        FixedPointMath.toNumber(
+          values(gasStructure).reduce(
+            (acc, value) => acc.plus(BigNumber(value)),
+            ZERO_BIG_NUMBER
+          )
+        ),
+        FixedPointMath.toNumber(BigNumber(storageRebate)),
+      ];
+    }
+  );
+  const toUSD = toUSDPrice ? +toValue * toUSDPrice : null;
+  const fromUSD = fromUSDPrice ? +fromValue * fromUSDPrice : null;
+
+  const differenceBetween = fromUSD && toUSD ? toUSD - fromUSD : null;
+
+  const priceImpact =
+    differenceBetween && fromUSD ? (differenceBetween * 100) / fromUSD : null;
 
   return (
     <Box display="flex" flexDirection="column" mb="m">
@@ -28,7 +72,7 @@ const SwapPreviewModalSummary: FC = () => {
             opacity="0.80"
             color="onSurface"
           >
-            Exchange Rate
+            Price impact
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center">
             <Typography
@@ -37,7 +81,9 @@ const SwapPreviewModalSummary: FC = () => {
               color="onSurface"
               mr="0.5rem"
             >
-              --
+              {priceImpact
+                ? `${priceImpact > 0.1 ? priceImpact.toFixed(2) : '< 0.1'}%`
+                : '--'}
             </Typography>
           </Box>
         </Box>
@@ -57,7 +103,7 @@ const SwapPreviewModalSummary: FC = () => {
               color="onSurface"
               mr="0.5rem"
             >
-              {airdropList ? Math.ceil(airdropList.length / BATCH_SIZE) : '--'}
+              {EXCHANGE_FEE * 100}%
             </Typography>
           </Box>
         </Box>
@@ -78,13 +124,54 @@ const SwapPreviewModalSummary: FC = () => {
           </Typography>
           <Box textAlign="right">
             <Typography size="medium" variant="body" color="onSurface">
-              {airdropList
-                ? FixedPointMath.toNumber(
-                    new BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS).times(
-                      airdropList.length
-                    )
-                  ).toString()
-                : '0'}
+              {isLoading ? (
+                <Box width="1rem" height="1rem" mt="-1.2rem">
+                  <ProgressIndicator variant="loading" size={16} />
+                </Box>
+              ) : (
+                <Typography
+                  variant="body"
+                  size="medium"
+                  color="onSurface"
+                  mr="0.5rem"
+                >
+                  {fees ? `~${fees[0] ?? 0} SUI` : '--'}
+                </Typography>
+              )}
+            </Typography>
+          </Box>
+        </Box>
+        <Box
+          py="m"
+          display="flex"
+          borderTop="1px solid"
+          borderColor="outlineVariant"
+          justifyContent="space-between"
+        >
+          <Typography
+            variant="body"
+            size="medium"
+            opacity="0.80"
+            color="onSurface"
+          >
+            Storage rebate
+          </Typography>
+          <Box textAlign="right">
+            <Typography size="medium" variant="body" color="onSurface">
+              {isLoading ? (
+                <Box width="1rem" height="1rem" mt="-1.2rem">
+                  <ProgressIndicator variant="loading" size={16} />
+                </Box>
+              ) : (
+                <Typography
+                  variant="body"
+                  size="medium"
+                  color="onSurface"
+                  mr="0.5rem"
+                >
+                  {fees ? `~${fees[1] ?? 0} SUI` : '--'}
+                </Typography>
+              )}
             </Typography>
           </Box>
         </Box>

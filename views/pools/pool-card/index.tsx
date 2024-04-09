@@ -30,13 +30,14 @@ const PoolCard: FC<PoolCardProps> = ({
         p="m"
         flex="1"
         gap="xs"
+        height="100%"
         display="flex"
         borderRadius="xs"
         bg="lowestContainer"
         flexDirection="column"
-        justifyContent="center"
         border="0.063rem solid"
         borderColor="outlineVariant"
+        justifyContent="space-between"
         transition="all 300ms ease-in-out"
         nHover={{
           cursor: 'pointer',

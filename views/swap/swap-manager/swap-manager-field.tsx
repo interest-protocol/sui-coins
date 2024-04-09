@@ -43,8 +43,6 @@ const SwapManagerField: FC<SwapManagerProps> = ({
       client.devInspectTransactionBlock.name
     ),
     async () => {
-      setValue(`${name}.locked`, true);
-
       const amount = FixedPointMath.toBigNumber(from.value, from.decimals);
 
       const safeAmount = amount.decimalPlaces(0, BigNumber.ROUND_DOWN);
@@ -83,7 +81,6 @@ const SwapManagerField: FC<SwapManagerProps> = ({
       onError: () => {
         setError(false);
         setIsFetchingSwapAmount(false);
-        setValue(`${name}.locked`, false);
         setValue('lock', true);
         setValue('swapPath', []);
       },
@@ -91,7 +88,6 @@ const SwapManagerField: FC<SwapManagerProps> = ({
         if (!response) {
           setError(false);
           setIsFetchingSwapAmount(false);
-          setValue(`${name}.locked`, false);
           setValue('lock', true);
           return;
         }
@@ -108,7 +104,6 @@ const SwapManagerField: FC<SwapManagerProps> = ({
         setValue('swapPath', swapPaths[response.swapPathIndex]);
 
         setError(false);
-        setValue(`${name}.locked`, false);
         setIsFetchingSwapAmount(false);
         setValue('lock', true);
       },

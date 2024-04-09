@@ -133,18 +133,18 @@ const PoolCardList: FC = () => {
 
   if (!pools || arePoolsLoading || !pricesRecord || arePricesLoading)
     return (
-      <Typography variant="body" size="medium" color="onSurface">
-        loading...
-      </Typography>
+      <Box pt="3xl" width="100%" display="flex" justifyContent="center">
+        <ProgressIndicator variant="loading" />
+      </Box>
     );
 
   return (
     <Box
-      gap="m"
-      display={listPools?.length ? 'grid' : 'flex'}
+      gap="xs"
       borderRadius="xs"
       p={['s', 's', 's', 'l']}
-      gridTemplateColumns={['1fr', '1fr', '1fr 1fr', '1fr 1fr 1fr']}
+      display={listPools?.length ? 'grid' : 'flex'}
+      gridTemplateColumns={['1fr', '1fr', '1fr 1fr', '1fr 1fr', '1fr 1fr 1fr']}
     >
       {listPools?.length ? (
         listPools.map((pool) => <PoolCard key={v4()} {...pool} />)
