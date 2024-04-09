@@ -6,7 +6,6 @@ import {
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/dist/cjs/client';
 import { listCreatedLinks, ZkSendLink } from '@mysten/zksend';
 import useSWR from 'swr';
-import { v4 } from 'uuid';
 
 import { Network } from '@/constants';
 import { ZK_BAG_CONTRACT_IDS } from '@/constants/zksend';
@@ -39,15 +38,13 @@ export const useLinkList = (currentCursor: string | null) => {
 };
 
 export const useRegenerateLink = () => {
-  const network = useNetwork();
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
   const signTransactionBlock = useSignTransactionBlock();
 
   return async (
     link: ZkSendLink,
-    digest: string,
-    onSuccess: (tx: SuiTransactionBlockResponse, id: string) => void
+    onSuccess: (tx: SuiTransactionBlockResponse, url: string) => void
   ) => {
     if (!currentAccount) return;
 
@@ -65,18 +62,6 @@ export const useRegenerateLink = () => {
 
     throwTXIfNotSuccessful(tx);
 
-    const id = v4();
-
-    await fetch(`/api/v1/zksend?network=${network}&digest=${digest}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        id,
-        links: [url],
-        digest: tx.digest,
-      }),
-    });
-
-    onSuccess(tx, id);
+    onSuccess(tx, url);
   };
 };

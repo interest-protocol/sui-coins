@@ -7,7 +7,11 @@ import {
   TooltipWrapper,
   Typography,
 } from '@interest-protocol/ui-kit';
-import type { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
+import type {
+  SuiObjectRef,
+  SuiTransactionBlockResponse,
+} from '@mysten/sui.js/client';
+import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import type { ZkSendLink } from '@mysten/zksend';
 import type { LinkAssets } from '@mysten/zksend/dist/cjs/links/utils';
 import { useRouter } from 'next/router';
@@ -16,8 +20,10 @@ import toast from 'react-hot-toast';
 import { v4 } from 'uuid';
 
 import { EXPLORER_URL, Routes, RoutesEnum } from '@/constants';
+import { SUI_TYPE_ARG_LONG } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
+import { useWeb3 } from '@/hooks/use-web3';
 import {
   ChevronLeftSVG,
   ChevronRightSVG,
@@ -29,6 +35,7 @@ import {
   SendSVG,
 } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
+import { findNextVersionAndDigest } from '@/views/airdrop/airdrop-form/txb-utils';
 import PoweredByZkSend from '@/views/components/powered-by-zksend';
 import { useReclaimLink } from '@/views/send-link/send-link.hooks';
 
@@ -38,11 +45,13 @@ import SendHistoryDetailsModal from './send-history-details';
 const SendHistoryTable: FC = () => {
   const { push } = useRouter();
   const network = useNetwork();
+  const { coinsMap } = useWeb3();
   const reclaimLink = useReclaimLink();
   const regenerateLink = useRegenerateLink();
   const { setModal, handleClose } = useModal();
   const [currentCursor, setCursor] = useState<string | null>(null);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [gasObject, setGasObject] = useState<SuiObjectRef | null>(null);
   const [previousCursors, setPreviousCursors] = useState<
     ReadonlyArray<string | null>
   >([]);
@@ -54,6 +63,17 @@ const SendHistoryTable: FC = () => {
       setNextCursor(data.cursor);
     }
   }, [data]);
+
+  useEffect(() => {
+    const suiCoin = coinsMap[SUI_TYPE_ARG] ?? coinsMap[SUI_TYPE_ARG_LONG];
+
+    if (!gasObject && suiCoin)
+      setGasObject({
+        digest: suiCoin.digest!,
+        version: suiCoin.version!,
+        objectId: suiCoin.coinObjectId,
+      });
+  }, [coinsMap]);
 
   const next = () => {
     if (data && data.hasNextPage && currentCursor !== nextCursor) {
@@ -75,13 +95,25 @@ const SendHistoryTable: FC = () => {
 
   const onSuccessReclaim = (tx: SuiTransactionBlockResponse) => {
     showTXSuccessToast(tx, network);
+
+    const [digest, version] = findNextVersionAndDigest(tx, gasObject!.objectId);
+
+    setGasObject({
+      digest,
+      version,
+      objectId: gasObject!.objectId,
+    });
+
     mutate();
   };
 
-  const onSuccessRegenerate = (tx: SuiTransactionBlockResponse, id: string) => {
+  const onSuccessRegenerate = (
+    tx: SuiTransactionBlockResponse,
+    url: string
+  ) => {
     showTXSuccessToast(tx, network);
 
-    push(`${Routes[RoutesEnum.SendLink]}/${id}`);
+    push(`${Routes[RoutesEnum.SendLink]}#${url.split('#')[1]}`);
   };
 
   const openDetails = (assets: LinkAssets) =>
@@ -93,9 +125,11 @@ const SendHistoryTable: FC = () => {
     window.open(`${EXPLORER_URL[network]}/tx/${digest}`);
 
   const handleReclaimLink = async (link: ZkSendLink) => {
+    if (!gasObject) return;
+
     const toastId = toast.loading('Reclaiming...');
     try {
-      await reclaimLink(link, onSuccessReclaim);
+      await reclaimLink(link, gasObject, onSuccessReclaim);
       toast.success('Link reclaimed successfully!');
     } catch (e) {
       toast.error((e as any).message ?? 'Link reclaiming failed!');
@@ -104,10 +138,10 @@ const SendHistoryTable: FC = () => {
     }
   };
 
-  const handleRegenerateLink = async (link: ZkSendLink, digest: string) => {
+  const handleRegenerateLink = async (link: ZkSendLink) => {
     const toastId = toast.loading('Regenerating...');
     try {
-      await regenerateLink(link, digest!, onSuccessRegenerate);
+      await regenerateLink(link, onSuccessRegenerate);
       toast.success('Link regenerated successfully!');
     } catch (e) {
       toast.error((e as any).message ?? 'Link regenerating failed!');
@@ -116,11 +150,7 @@ const SendHistoryTable: FC = () => {
     }
   };
 
-  const onRegenerateLink = (
-    claimed: boolean,
-    link: ZkSendLink,
-    digest: string
-  ) => {
+  const onRegenerateLink = (claimed: boolean, link: ZkSendLink) => {
     if (claimed) return;
 
     setModal(
@@ -132,7 +162,7 @@ const SendHistoryTable: FC = () => {
           label: 'Continue anyway',
           onClick: () => {
             handleClose();
-            handleRegenerateLink(link, digest);
+            handleRegenerateLink(link);
           },
         }}
         secondaryButton={{
@@ -290,9 +320,7 @@ const SendHistoryTable: FC = () => {
                             variant="tonal"
                             disabled={claimed}
                             borderRadius="full"
-                            onClick={() =>
-                              onRegenerateLink(claimed, link, digest!)
-                            }
+                            onClick={() => onRegenerateLink(claimed, link)}
                           >
                             <ReloadSVG
                               maxHeight="1rem"

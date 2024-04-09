@@ -3,12 +3,15 @@ import {
   useSignTransactionBlock,
   useSuiClient,
 } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
+import {
+  SuiObjectRef,
+  SuiTransactionBlockResponse,
+} from '@mysten/sui.js/client';
 import { ZkSendLink } from '@mysten/zksend';
 import useSWR from 'swr';
 
 import { Network } from '@/constants';
-import { ZK_BAG_CONTRACT_IDS } from '@/constants/zksend';
+import { ZK_BAG_CONTRACT_IDS, ZK_SEND_GAS_BUDGET } from '@/constants/zksend';
 import { useNetwork } from '@/context/network';
 import { throwTXIfNotSuccessful } from '@/utils';
 import { createClaimTransaction } from '@/utils/zk-send';
@@ -36,22 +39,28 @@ export const useReclaimLink = () => {
 
   return async (
     link: ZkSendLink,
+    gasObject: SuiObjectRef,
     onSuccess: (tx: SuiTransactionBlockResponse) => void
   ) => {
-    if (!currentAccount) return;
+    if (!currentAccount) throw new Error('Error on current account');
 
     const transactionBlock = createClaimTransaction({
       reclaim: true,
       address: currentAccount.address,
-      sender: link.keypair!.toSuiAddress(),
+      sender: currentAccount.address,
       assets: link.assets,
       ...(network === Network.TESTNET && {
         contracts: ZK_BAG_CONTRACT_IDS[network],
       }),
     });
 
+    transactionBlock.setGasPayment([gasObject]);
+    transactionBlock.setGasBudget(BigInt(ZK_SEND_GAS_BUDGET));
+
     const { transactionBlockBytes, signature } =
-      await signTransactionBlock.mutateAsync({ transactionBlock });
+      await signTransactionBlock.mutateAsync({
+        transactionBlock,
+      });
 
     const tx = await suiClient.executeTransactionBlock({
       transactionBlock: transactionBlockBytes,

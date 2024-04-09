@@ -5,7 +5,6 @@ import {
 } from '@mysten/dapp-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { ZkSendLinkBuilder } from '@mysten/zksend';
-import { v4 } from 'uuid';
 
 import { Network, SPONSOR_WALLET } from '@/constants';
 import { ZK_BAG_CONTRACT_IDS, ZK_SEND_GAS_BUDGET } from '@/constants/zksend';
@@ -77,19 +76,7 @@ const useCreateLink = () => {
 
     throwTXIfNotSuccessful(tx);
 
-    const id = v4();
-
-    await fetch(`/api/v1/zksend?network=${network}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        id,
-        digest: tx.digest,
-        links: [link.getLink()],
-      }),
-    });
-
-    onSuccess(tx, id);
+    onSuccess(tx, link.getLink());
   };
 };
 

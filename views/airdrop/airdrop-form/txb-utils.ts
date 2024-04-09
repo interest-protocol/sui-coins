@@ -1,5 +1,6 @@
 import {
   SuiObjectChangeCreated,
+  SuiObjectRef,
   SuiObjectResponse,
   SuiTransactionBlockResponse,
 } from '@mysten/sui.js/client';
@@ -8,10 +9,7 @@ import BigNumber from 'bignumber.js';
 import { pathOr, prop } from 'ramda';
 
 import { isSameAddress, signAndExecute } from '@/utils';
-import {
-  CreatedCoinInfo,
-  SendAirdropArgs,
-} from '@/views/airdrop/airdrop.types';
+import { SendAirdropArgs } from '@/views/airdrop/airdrop.types';
 
 export const findNextVersionAndDigest = (
   tx: SuiTransactionBlockResponse,
@@ -66,9 +64,9 @@ export const sendAirdrop = async ({
 export const suiObjectReducer =
   (address: string) =>
   (
-    acc: ReadonlyArray<CreatedCoinInfo>,
+    acc: ReadonlyArray<SuiObjectRef>,
     object: SuiObjectChangeCreated
-  ): ReadonlyArray<CreatedCoinInfo> => {
+  ): ReadonlyArray<SuiObjectRef> => {
     if (!object.objectType.includes(SUI_TYPE_ARG)) return acc;
 
     if (!isSameAddress(pathOr('', ['owner', 'AddressOwner'], object), address))
@@ -86,7 +84,7 @@ export const suiObjectReducer =
 
 export const getCreatedCoinInfo = (
   object: SuiObjectResponse
-): CreatedCoinInfo => ({
+): SuiObjectRef => ({
   objectId: pathOr('', ['data', 'objectId'], object),
   version: pathOr('', ['data', 'version'], object),
   digest: pathOr('', ['data', 'digest'], object),

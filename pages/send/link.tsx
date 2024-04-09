@@ -2,6 +2,7 @@ import { useCurrentAccount } from '@mysten/dapp-kit';
 import { NextPage } from 'next';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import Layout from '@/components/layout';
 import SendClaim from '@/views/send-claim';
 import { IClaimForm } from '@/views/send-claim/send-claim.types';
 import SendLink from '@/views/send-link';
@@ -27,7 +28,16 @@ const SendLinkPage: NextPage = () => {
       </FormProvider>
     );
 
-  return <SendLink data={data} error={error} isLoading={isLoading} />;
+  return (
+    <Layout title="Claim link">
+      <SendLink
+        data={data}
+        error={error}
+        mutate={mutate}
+        isLoading={isLoading}
+      />
+    </Layout>
+  );
 };
 
 export default SendLinkPage;

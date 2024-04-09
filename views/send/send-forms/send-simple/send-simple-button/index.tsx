@@ -26,10 +26,10 @@ const FormSendButton: FC<FormSendButtonProps> = ({ openModal }) => {
   const { control } = useFormContext<ISendSimpleForm>();
   const objects = useWatch({ control, name: 'objects' });
 
-  const onSuccess = (tx: SuiTransactionBlockResponse, id: string) => {
+  const onSuccess = (tx: SuiTransactionBlockResponse, url: string) => {
     showTXSuccessToast(tx, network);
 
-    push(`${Routes[RoutesEnum.SendLink]}/${id}`);
+    push(`${Routes[RoutesEnum.SendLink]}#${url.split('#')[1]}`);
   };
 
   useEffect(() => {
