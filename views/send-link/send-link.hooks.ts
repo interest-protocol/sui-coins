@@ -46,7 +46,7 @@ export const useReclaimLink = () => {
 
     const transactionBlock = createClaimTransaction({
       reclaim: true,
-      address: currentAccount.address,
+      address: link.address,
       sender: currentAccount.address,
       assets: link.assets,
       ...(network === Network.TESTNET && {
@@ -65,6 +65,11 @@ export const useReclaimLink = () => {
     const tx = await suiClient.executeTransactionBlock({
       transactionBlock: transactionBlockBytes,
       signature,
+      requestType: 'WaitForLocalExecution',
+      options: {
+        showEffects: true,
+        showObjectChanges: true,
+      },
     });
 
     throwTXIfNotSuccessful(tx);

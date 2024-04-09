@@ -72,6 +72,10 @@ const useCreateLink = () => {
     const tx = await suiClient.executeTransactionBlock({
       transactionBlock: transactionBlockBytes,
       signature,
+      requestType: 'WaitForLocalExecution',
+      options: {
+        showEffects: true,
+      },
     });
 
     throwTXIfNotSuccessful(tx);

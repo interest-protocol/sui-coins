@@ -56,6 +56,7 @@ export const useClaim = () => {
     const tx = await suiClient.executeTransactionBlock({
       signature: [sponsoredResponse.signature, senderSignature],
       transactionBlock: sponsoredResponse.txBytes,
+      requestType: 'WaitForLocalExecution',
       options: {
         showEffects: true,
       },
