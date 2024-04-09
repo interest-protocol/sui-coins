@@ -30,18 +30,15 @@ import {
 } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 import PoweredByZkSend from '@/views/components/powered-by-zksend';
+import { useReclaimLink } from '@/views/send-link/send-link.hooks';
 
-import {
-  useLinkList,
-  useReclaimByLink,
-  useRegenerateLink,
-} from './send-history.hooks';
+import { useLinkList, useRegenerateLink } from './send-history.hooks';
 import SendHistoryDetailsModal from './send-history-details';
 
 const SendHistoryTable: FC = () => {
   const { push } = useRouter();
   const network = useNetwork();
-  const reclaimLink = useReclaimByLink();
+  const reclaimLink = useReclaimLink();
   const regenerateLink = useRegenerateLink();
   const { setModal, handleClose } = useModal();
   const [currentCursor, setCursor] = useState<string | null>(null);

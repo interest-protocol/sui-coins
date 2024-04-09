@@ -8,7 +8,7 @@ import {
 import { useCurrentAccount } from '@mysten/dapp-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { isValidSuiAddress } from '@mysten/sui.js/utils';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useDebounce } from 'use-debounce';
@@ -19,51 +19,26 @@ import { CheckmarkSVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 
 import SendAssetDetails from '../components/send-asset-details';
-import { LOCAL_STORAGE_CLAIM_URL } from './send-claim.data';
 import { useClaim } from './send-claim.hooks';
 import { IClaimForm, SendClaimProps } from './send-claim.types';
 
-const SendClaim: FC<SendClaimProps> = ({
-  id,
-  data,
-  error,
-  mutate,
-  isLoading,
-}) => {
+const SendClaim: FC<SendClaimProps> = ({ data, error, mutate, isLoading }) => {
   const claim = useClaim();
   const network = useNetwork();
-  const [url, setUrl] = useState('');
   const currentAccount = useCurrentAccount();
   const [isClaiming, setClaiming] = useState(false);
   const { control, register } = useFormContext<IClaimForm>();
   const [address] = useDebounce(useWatch({ control, name: 'address' }), 800);
 
-  useEffect(() => {
-    setUrl(
-      localStorage.getItem(`${LOCAL_STORAGE_CLAIM_URL}-${id}`) ??
-        sessionStorage.getItem(`${LOCAL_STORAGE_CLAIM_URL}-${id}`) ??
-        ''
-    );
-  }, []);
-
-  useEffect(() => {
-    if (url || !data || !data.url) return;
-
-    setUrl(data.url);
-    localStorage.setItem(`${LOCAL_STORAGE_CLAIM_URL}-${id}`, data.url);
-    sessionStorage.setItem(`${LOCAL_STORAGE_CLAIM_URL}-${id}`, data.url);
-  }, [data]);
-
   const onSuccess = (tx: SuiTransactionBlockResponse) => {
     showTXSuccessToast(tx, network);
   };
 
-  const isClaimed = data?.link?.claimed || (data && !data.link);
+  const isClaimed = !!data?.claimed;
 
   const isDisabled =
     isClaiming ||
     !data ||
-    !data.link ||
     isLoading ||
     error ||
     isClaimed ||
@@ -75,7 +50,7 @@ const SendClaim: FC<SendClaimProps> = ({
     const loadingId = toast.loading('Claiming...');
     setClaiming(true);
     try {
-      await claim(data, id, address, onSuccess);
+      await claim(data, address, onSuccess);
       toast.success('Assets claimed');
     } catch (e) {
       toast.error((e as any).message ?? 'Something went wrong');
@@ -159,7 +134,7 @@ const SendClaim: FC<SendClaimProps> = ({
           The person who shared this link with you is attempting to send you
           assets
         </Typography>
-        {data?.link?.assets && !currentAccount && (
+        {data?.assets && !currentAccount && (
           <Box minWidth="25rem">
             <Typography variant="body" size="medium" mb="xs">
               1. Recipient Address
@@ -176,9 +151,9 @@ const SendClaim: FC<SendClaimProps> = ({
         {!data && isLoading ? (
           <ProgressIndicator size={36} variant="loading" />
         ) : (
-          data?.link?.assets && (
+          data?.assets && (
             <Box>
-              {data?.link?.assets && !currentAccount && (
+              {data?.assets && !currentAccount && (
                 <Typography variant="body" size="medium" mb="xs">
                   2. Assets to claim
                 </Typography>
@@ -189,7 +164,7 @@ const SendClaim: FC<SendClaimProps> = ({
                 border="1px solid"
                 borderColor="outlineVariant"
               >
-                <SendAssetDetails network={network} assets={data.link.assets} />
+                <SendAssetDetails network={network} assets={data.assets} />
               </Box>
             </Box>
           )

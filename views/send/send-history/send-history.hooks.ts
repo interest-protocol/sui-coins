@@ -12,7 +12,6 @@ import { Network } from '@/constants';
 import { ZK_BAG_CONTRACT_IDS } from '@/constants/zksend';
 import { useNetwork } from '@/context/network';
 import { throwTXIfNotSuccessful } from '@/utils';
-import { createClaimTransaction } from '@/utils/zk-send';
 
 export const useLinkList = (currentCursor: string | null) => {
   const network = useNetwork();
@@ -79,41 +78,5 @@ export const useRegenerateLink = () => {
     });
 
     onSuccess(tx, id);
-  };
-};
-
-export const useReclaimByLink = () => {
-  const network = useNetwork();
-  const suiClient = useSuiClient();
-  const currentAccount = useCurrentAccount();
-  const signTransactionBlock = useSignTransactionBlock();
-
-  return async (
-    link: ZkSendLink,
-    onSuccess: (tx: SuiTransactionBlockResponse) => void
-  ) => {
-    if (!currentAccount) return;
-
-    const transactionBlock = createClaimTransaction({
-      reclaim: true,
-      address: currentAccount.address,
-      sender: link.keypair!.toSuiAddress(),
-      assets: link.assets,
-      ...(network === Network.TESTNET && {
-        contracts: ZK_BAG_CONTRACT_IDS[network],
-      }),
-    });
-
-    const { transactionBlockBytes, signature } =
-      await signTransactionBlock.mutateAsync({ transactionBlock });
-
-    const tx = await suiClient.executeTransactionBlock({
-      transactionBlock: transactionBlockBytes,
-      signature,
-    });
-
-    throwTXIfNotSuccessful(tx);
-
-    onSuccess(tx);
   };
 };

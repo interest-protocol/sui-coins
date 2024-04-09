@@ -20,7 +20,6 @@ export const sponsorTx = async ({
   sender,
   isMainnet,
 }: SponsorTxArgs) => {
-  console.log(isMainnet);
   const rpc = isMainnet ? mainnetGasStationClient : testnetGasStationClient;
   const sponsoredResponse = await rpc.sponsorTransactionBlock(
     txbBytes,

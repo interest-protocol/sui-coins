@@ -1,13 +1,11 @@
+import { ZkSendLink } from '@mysten/zksend';
 import { KeyedMutator } from 'swr';
 
-import { ZkSendLinkWithUrl } from '../send-link/send-link.types';
-
 export interface SendClaimProps {
-  id: string;
   error: any;
+  data?: ZkSendLink;
   isLoading: boolean;
-  data?: ZkSendLinkWithUrl;
-  mutate: KeyedMutator<ZkSendLinkWithUrl>;
+  mutate: KeyedMutator<ZkSendLink>;
 }
 
 export interface IClaimForm {

@@ -16,17 +16,17 @@ import { showTXSuccessToast } from '@/utils';
 import { useReclaimLink } from './send-link.hooks';
 import { SendLinkProps } from './send-link.types';
 
-const SendLink: FC<SendLinkProps> = ({ id, data, error, isLoading }) => {
+const SendLink: FC<SendLinkProps> = ({ data, error, isLoading }) => {
   const network = useNetwork();
   const reclaim = useReclaimLink();
   const [isReclaiming, setReclaiming] = useState(false);
 
-  const url = `${location.origin}/send/link/${id}`;
+  const url = location.href;
 
   const handleCopyLink = () => {
-    if (isReclaiming || isLoading || error || !linkToClaim) return;
+    if (isReclaiming || isLoading || error || !data) return;
 
-    window.navigator.clipboard.writeText(url);
+    window.navigator.clipboard.writeText(location.href);
     toast('Copied to clipboard');
   };
 
@@ -34,15 +34,13 @@ const SendLink: FC<SendLinkProps> = ({ id, data, error, isLoading }) => {
     showTXSuccessToast(tx, network);
   };
 
-  const linkToClaim = data?.url;
-
   const onReclaim = async () => {
-    if (!linkToClaim || !id) return;
+    if (!data) return;
 
     const toasterId = toast.loading('Reclaiming...');
     setReclaiming(true);
     try {
-      await reclaim(linkToClaim, id, onSuccess);
+      await reclaim(data, onSuccess);
       toast.success('Link reclaimed successfully');
     } catch {
       toast.error('Something went wrong');
@@ -52,7 +50,7 @@ const SendLink: FC<SendLinkProps> = ({ id, data, error, isLoading }) => {
     }
   };
 
-  const isClaimed = data?.link?.claimed || (data && !data.link);
+  const isClaimed = !!data?.claimed;
 
   if (isClaimed)
     return (
@@ -100,6 +98,8 @@ const SendLink: FC<SendLinkProps> = ({ id, data, error, isLoading }) => {
       </Layout>
     );
 
+  const isDisabled = isReclaiming || isLoading || error || !data;
+
   return (
     <Layout title="Claim link">
       <Box
@@ -140,8 +140,9 @@ const SendLink: FC<SendLinkProps> = ({ id, data, error, isLoading }) => {
         >
           {data ? (
             <img
+              width="150"
               alt="QR Code"
-              src={`https://api.qrserver.com/v1/create-qr-code?data=${url}&size=120x120`}
+              src={`https://api.qrserver.com/v1/create-qr-code?data=${url}&size=150x150`}
             />
           ) : isLoading ? (
             <ProgressIndicator variant="loading" size={32} />
@@ -172,16 +173,12 @@ const SendLink: FC<SendLinkProps> = ({ id, data, error, isLoading }) => {
         <Box display="flex" justifyContent="center" gap="m">
           <Button
             variant="filled"
+            disabled={isDisabled}
             onClick={handleCopyLink}
-            disabled={isReclaiming || isLoading || error || !linkToClaim}
           >
             Copy Link
           </Button>
-          <Button
-            variant="outline"
-            onClick={onReclaim}
-            disabled={isReclaiming || isLoading || error || !linkToClaim}
-          >
+          <Button variant="outline" onClick={onReclaim} disabled={isDisabled}>
             Reclaim
           </Button>
         </Box>

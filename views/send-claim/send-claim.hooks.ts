@@ -2,6 +2,7 @@ import { toB64 } from '@mysten/bcs';
 import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { ZkSendLink } from '@mysten/zksend';
 
 import { Network } from '@/constants';
 import { ZK_BAG_CONTRACT_IDS } from '@/constants/zksend';
@@ -9,16 +10,13 @@ import { useNetwork } from '@/context/network';
 import { throwTXIfNotSuccessful } from '@/utils';
 import { createClaimTransaction } from '@/utils/zk-send';
 
-import { ZkSendLinkWithUrl } from '../send-link/send-link.types';
-
 export const useClaim = () => {
   const network = useNetwork();
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
 
   return async (
-    { url, link }: ZkSendLinkWithUrl,
-    id: string,
+    link: ZkSendLink,
     address: string,
     onSuccess: (tx: SuiTransactionBlockResponse) => void
   ) => {
@@ -63,17 +61,7 @@ export const useClaim = () => {
       },
     });
 
-    console.log(tx);
-
     throwTXIfNotSuccessful(tx);
-
-    await fetch(`/api/v1/zksend?network=${network}&id=${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        link: encodeURI(url),
-      }),
-    });
 
     onSuccess(tx);
   };

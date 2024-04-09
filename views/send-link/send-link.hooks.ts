@@ -10,32 +10,21 @@ import useSWR from 'swr';
 import { Network } from '@/constants';
 import { ZK_BAG_CONTRACT_IDS } from '@/constants/zksend';
 import { useNetwork } from '@/context/network';
-import { ZkSendLinkData } from '@/interface';
 import { throwTXIfNotSuccessful } from '@/utils';
+import { createClaimTransaction } from '@/utils/zk-send';
 
-import { ZkSendLinkWithUrl } from './send-link.types';
-
-export const useLinkWithUrl = (id: string) => {
+export const useLink = () => {
   const network = useNetwork();
   const suiClient = useSuiClient();
 
-  return useSWR<ZkSendLinkWithUrl>(`${id}-${network}`, () =>
-    fetch(`/api/v1/zksend?network=${network}&id=${id}`)
-      .then((response) => response.json?.())
-      .then(async (data: ZkSendLinkData) =>
-        data.links[0]
-          ? {
-              url: data.links[0],
-              link: await ZkSendLink.fromUrl(data.links[0], {
-                client: suiClient,
-                host: '/send/link',
-                path: location.origin,
-                contract: ZK_BAG_CONTRACT_IDS[network],
-                network: network === Network.MAINNET ? 'mainnet' : 'testnet',
-              }),
-            }
-          : { url: undefined, link: null }
-      )
+  return useSWR<ZkSendLink>(`${location}-${network}`, () =>
+    ZkSendLink.fromUrl(location.href, {
+      client: suiClient,
+      host: '/send/link',
+      path: location.origin,
+      contract: ZK_BAG_CONTRACT_IDS[network],
+      network: network === Network.MAINNET ? 'mainnet' : 'testnet',
+    })
   );
 };
 
@@ -46,24 +35,20 @@ export const useReclaimLink = () => {
   const signTransactionBlock = useSignTransactionBlock();
 
   return async (
-    url: string,
-    id: string,
+    link: ZkSendLink,
     onSuccess: (tx: SuiTransactionBlockResponse) => void
   ) => {
     if (!currentAccount) return;
 
-    const link = await ZkSendLink.fromUrl(url, {
-      client: suiClient,
-      host: '/send/link',
-      path: location.origin,
-      contract: ZK_BAG_CONTRACT_IDS[network],
-      network: network === Network.MAINNET ? 'mainnet' : 'testnet',
+    const transactionBlock = createClaimTransaction({
+      reclaim: true,
+      address: currentAccount.address,
+      sender: link.keypair!.toSuiAddress(),
+      assets: link.assets,
+      ...(network === Network.TESTNET && {
+        contracts: ZK_BAG_CONTRACT_IDS[network],
+      }),
     });
-
-    const transactionBlock = link.createClaimTransaction(
-      currentAccount.address,
-      { reclaim: true }
-    );
 
     const { transactionBlockBytes, signature } =
       await signTransactionBlock.mutateAsync({ transactionBlock });
@@ -74,14 +59,6 @@ export const useReclaimLink = () => {
     });
 
     throwTXIfNotSuccessful(tx);
-
-    await fetch(`/api/v1/zksend?network=${network}&id=${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        link: encodeURI(url),
-      }),
-    });
 
     onSuccess(tx);
   };

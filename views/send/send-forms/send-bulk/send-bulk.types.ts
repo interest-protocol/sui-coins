@@ -7,4 +7,5 @@ export interface ObjectField extends CoinObject {
 export interface ISendBulkForm {
   quantity: string;
   object: ObjectField;
+  links: ReadonlyArray<string>;
 }

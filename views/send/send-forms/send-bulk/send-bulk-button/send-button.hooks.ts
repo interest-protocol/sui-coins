@@ -5,7 +5,6 @@ import {
 } from '@mysten/dapp-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { ZkSendLinkBuilder } from '@mysten/zksend';
-import { v4 } from 'uuid';
 
 import { Network, SPONSOR_WALLET } from '@/constants';
 import { ZK_BAG_CONTRACT_IDS, ZK_SEND_GAS_BUDGET } from '@/constants/zksend';
@@ -24,7 +23,10 @@ const useCreateLink = () => {
   return async (
     object: ObjectField,
     quantity: number,
-    onSuccess: (tx: SuiTransactionBlockResponse, id: string) => void
+    onSuccess: (
+      tx: SuiTransactionBlockResponse,
+      links: ReadonlyArray<string>
+    ) => void
   ) => {
     if (!suiClient) throw new Error('Provider not found');
     if (!currentAccount) throw new Error('There is not an account');
@@ -76,19 +78,10 @@ const useCreateLink = () => {
 
     throwTXIfNotSuccessful(tx);
 
-    const id = v4();
-
-    await fetch(`/api/v1/zksend?network=${network}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        id,
-        digest: tx.digest,
-        links: links.map((link) => link.getLink()),
-      }),
-    });
-
-    onSuccess(tx, id);
+    onSuccess(
+      tx,
+      links.map((link) => link.getLink())
+    );
   };
 };
 
