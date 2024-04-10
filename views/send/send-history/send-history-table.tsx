@@ -20,7 +20,6 @@ import toast from 'react-hot-toast';
 import { v4 } from 'uuid';
 
 import { EXPLORER_URL, Routes, RoutesEnum } from '@/constants';
-import { SUI_TYPE_ARG_LONG } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
@@ -35,11 +34,11 @@ import {
   SendSVG,
 } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
-import { findNextVersionAndDigest } from '@/views/airdrop/airdrop-form/txb-utils';
 import PoweredByZkSend from '@/views/components/powered-by-zksend';
 import { useReclaimLink } from '@/views/send-link/send-link.hooks';
 
 import { useLinkList, useRegenerateLink } from './send-history.hooks';
+import { findNextGasCoin } from './send-history.utils';
 import SendHistoryDetailsModal from './send-history-details';
 
 const SendHistoryTable: FC = () => {
@@ -51,7 +50,7 @@ const SendHistoryTable: FC = () => {
   const { setModal, handleClose } = useModal();
   const [currentCursor, setCursor] = useState<string | null>(null);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
-  const [gasObject, setGasObject] = useState<SuiObjectRef | null>(null);
+  const [gasObjects, setGasObjects] = useState<Array<SuiObjectRef>>([]);
   const [previousCursors, setPreviousCursors] = useState<
     ReadonlyArray<string | null>
   >([]);
@@ -63,17 +62,6 @@ const SendHistoryTable: FC = () => {
       setNextCursor(data.cursor);
     }
   }, [data]);
-
-  useEffect(() => {
-    const suiCoin = coinsMap[SUI_TYPE_ARG] ?? coinsMap[SUI_TYPE_ARG_LONG];
-
-    if (!gasObject && suiCoin)
-      setGasObject({
-        digest: suiCoin.digest!,
-        version: suiCoin.version!,
-        objectId: suiCoin.coinObjectId,
-      });
-  }, [coinsMap]);
 
   const next = () => {
     if (data && data.hasNextPage && currentCursor !== nextCursor) {
@@ -96,13 +84,7 @@ const SendHistoryTable: FC = () => {
   const onSuccessReclaim = (tx: SuiTransactionBlockResponse) => {
     showTXSuccessToast(tx, network);
 
-    const [digest, version] = findNextVersionAndDigest(tx, gasObject!.objectId);
-
-    setGasObject({
-      digest,
-      version,
-      objectId: gasObject!.objectId,
-    });
+    setGasObjects(findNextGasCoin(tx));
 
     mutate();
   };
@@ -125,11 +107,19 @@ const SendHistoryTable: FC = () => {
     window.open(`${EXPLORER_URL[network]}/tx/${digest}`);
 
   const handleReclaimLink = async (link: ZkSendLink) => {
-    if (!gasObject) return;
+    const gasCoin = gasObjects.length
+      ? gasObjects
+      : coinsMap[SUI_TYPE_ARG].objects.map(
+          ({ coinObjectId, digest, version }) => ({
+            objectId: coinObjectId,
+            digest,
+            version,
+          })
+        );
 
     const toastId = toast.loading('Reclaiming...');
     try {
-      await reclaimLink(link, gasObject, onSuccessReclaim);
+      await reclaimLink(link, gasCoin, onSuccessReclaim);
       toast.success('Link reclaimed successfully!');
     } catch (e) {
       toast.error((e as any).message ?? 'Link reclaiming failed!');
