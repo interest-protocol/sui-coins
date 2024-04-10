@@ -5,11 +5,20 @@ import {
 } from '@mysten/sui.js/client';
 import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 
-export const findNextGasCoin = (tx: SuiTransactionBlockResponse) =>
+export const findNextGasCoin = (
+  tx: SuiTransactionBlockResponse,
+  owner: string
+) =>
   tx.objectChanges!.reduce(
     (acc: Array<SuiObjectRef>, objectChanged: SuiObjectChange) => {
-      if (objectChanged.type !== 'mutated') return acc;
+      const type = objectChanged.type;
+      if (type === 'wrapped' || type === 'deleted' || type === 'published')
+        return acc;
+
       if (!objectChanged.objectType.includes(SUI_TYPE_ARG)) return acc;
+      if ('owner' in objectChanged && objectChanged.owner !== owner) return acc;
+      if ('recipient' in objectChanged && objectChanged.recipient !== owner)
+        return acc;
 
       return [
         ...acc,

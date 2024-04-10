@@ -7,6 +7,7 @@ import {
   TooltipWrapper,
   Typography,
 } from '@interest-protocol/ui-kit';
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import type {
   SuiObjectRef,
   SuiTransactionBlockResponse,
@@ -54,6 +55,7 @@ const SendHistoryTable: FC = () => {
   const [previousCursors, setPreviousCursors] = useState<
     ReadonlyArray<string | null>
   >([]);
+  const currentAccount = useCurrentAccount();
 
   const { data, isLoading, mutate } = useLinkList(currentCursor);
 
@@ -82,9 +84,10 @@ const SendHistoryTable: FC = () => {
   };
 
   const onSuccessReclaim = (tx: SuiTransactionBlockResponse) => {
+    if (!currentAccount) return;
     showTXSuccessToast(tx, network);
 
-    setGasObjects(findNextGasCoin(tx));
+    setGasObjects(findNextGasCoin(tx, currentAccount.address));
 
     mutate();
   };
