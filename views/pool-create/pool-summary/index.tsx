@@ -6,12 +6,10 @@ import { v4 } from 'uuid';
 
 import { TokenIcon } from '@/components';
 import { Routes, RoutesEnum } from '@/constants';
-import { DexName } from '@/constants/pools';
 import { useNetwork } from '@/context/network';
 import { useDialog } from '@/hooks';
 import { CircleCheckSVG } from '@/svg';
 import { formatMoney } from '@/utils';
-import { DEX_MAP } from '@/views/pools/pool-card/pool-card.data';
 
 import { CreatePoolForm } from '../pool-create.types';
 
@@ -203,39 +201,6 @@ const PoolSummary: FC = () => {
           </Box>
         ))}
       </Box>
-      <Box
-        my="m"
-        display="flex"
-        alignItems="center"
-        justifyContent="space-between"
-      >
-        <Box display="flex" gap="s">
-          <Box color="success">
-            <CircleCheckSVG maxWidth="1.2rem" maxHeight="1.2rem" width="100%" />
-          </Box>
-          <Typography
-            size="medium"
-            variant="body"
-            opacity={0.64}
-            color="onSurface"
-          >
-            Dex
-          </Typography>
-        </Box>
-        <Box
-          px="m"
-          py="xs"
-          display="flex"
-          borderRadius="xs"
-          bg="lowContainer"
-          color="onSurface"
-          alignItems="center"
-          justifyContent="space-between"
-        >
-          {DEX_MAP[dex as DexName]?.name}
-        </Box>
-      </Box>
-
       <Box
         p="s"
         gap="s"
