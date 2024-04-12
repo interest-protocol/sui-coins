@@ -8,7 +8,7 @@ import { DefaultTokenSVG } from '@/svg';
 
 import { PoolCardTokenInfoProps } from './pool-card.types';
 
-const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({ coins, apr }) => {
+const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({ coins }) => {
   const network = useNetwork();
 
   return (
@@ -62,15 +62,6 @@ const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({ coins, apr }) => {
               (acc, { symbol }) => `${acc ? `${acc} • ` : ''}${symbol}`,
               ''
             )}
-          </Typography>
-          <Typography
-            textAlign="center"
-            textTransform="uppercase"
-            size="large"
-            variant="label"
-            color="primary"
-          >
-            {apr}% APR
           </Typography>
         </Box>
       </Box>

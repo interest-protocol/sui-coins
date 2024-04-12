@@ -23,8 +23,8 @@ const parsePool = (x: SuiObjectResponse): AmmPool => {
     ),
     balanceX: BigNumber(pathOr('0', ['value', 'fields', 'balance_x'], x)),
     balanceY: BigNumber(pathOr('0', ['value', 'fields', 'balance_y'], x)),
-    decimalsX: BigNumber(pathOr('0', ['value', 'fields', 'decimals_x'], x)),
-    decimalsY: BigNumber(pathOr('0', ['value', 'fields', 'decimals_y'], x)),
+    decimalsX: BigNumber(pathOr('0', ['value', 'fields', 'decimals_x'], x)).e!,
+    decimalsY: BigNumber(pathOr('0', ['value', 'fields', 'decimals_y'], x)).e!,
     fees: {
       feeIn: BigNumber(
         pathOr('0', ['value', 'fields', 'fees', 'fields', 'fee_in_percent'], x)
@@ -68,7 +68,8 @@ const parsePool = (x: SuiObjectResponse): AmmPool => {
 
 export const usePools = (poolAddresses: string[]) => {
   const client = useMovementClient();
-  return useSWR(
+
+  return useSWR<ReadonlyArray<AmmPool>>(
     makeSWRKey([], usePools.name + poolAddresses),
     async () => {
       const pools = await client.multiGetObjects({

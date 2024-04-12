@@ -6,7 +6,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { SEO } from '@/components';
 import { withObjectIdGuard } from '@/components/hoc';
 import { Routes, RoutesEnum } from '@/constants';
-import { RECOMMENDED_POOLS } from '@/constants/pools';
+import { RECOMMENDED_POOLS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks';
 import { PoolPageProps } from '@/interface';

@@ -55,8 +55,8 @@ export interface AmmPool {
   adminBalanceY: BigNumber;
   balanceX: BigNumber;
   balanceY: BigNumber;
-  decimalsX: BigNumber;
-  decimalsY: BigNumber;
+  decimalsX: number;
+  decimalsY: number;
   fees: AmmPoolFees;
   // 9 Decimals
   lpCoinSupply: BigNumber;

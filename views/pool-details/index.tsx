@@ -4,7 +4,7 @@ import { FC } from 'react';
 
 import Layout from '@/components/layout';
 import { Routes, RoutesEnum } from '@/constants';
-import { RECOMMENDED_POOLS } from '@/constants/pools';
+import { RECOMMENDED_POOLS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { TOKEN_ICONS } from '@/lib';
 

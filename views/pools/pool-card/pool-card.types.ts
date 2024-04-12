@@ -1,7 +1,4 @@
-import { ReactNode } from 'react';
-
-import { DexName } from '@/constants/pools';
-import { CoinData } from '@/interface';
+import { AmmPool, CoinData } from '@/interface';
 import { PoolTypeEnum } from '@/interface';
 
 export enum AlgorithmEnum {
@@ -10,15 +7,10 @@ export enum AlgorithmEnum {
 }
 
 export interface PoolCardHeaderProps {
-  name: string;
-  dexUrl: string;
   tags?: ReadonlyArray<string>;
-  Logo: ReactNode;
-  objectId: string;
 }
 
 export interface PoolCardTokenInfoProps {
-  apr: string;
   coins: ReadonlyArray<CoinData>;
 }
 
@@ -31,10 +23,11 @@ export interface PoolCardTradeProps {
 }
 
 export interface PoolCardProps {
-  dex: DexName;
-  poolType: PoolTypeEnum;
+  pool?: AmmPool;
   stable: boolean;
   lpCoin: CoinData;
   poolObjectId: string;
+  poolType: PoolTypeEnum;
+  prices?: ReadonlyArray<number>;
   tokens: ReadonlyArray<CoinData>;
 }

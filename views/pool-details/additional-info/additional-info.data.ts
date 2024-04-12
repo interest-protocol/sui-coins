@@ -29,10 +29,6 @@ export const POOL_STATISTICS: PoolDetailAccordionData = {
       content: '$1,317,690',
     },
     {
-      label: 'Volume (24h)',
-      content: '$602.59k',
-    },
-    {
       label: 'Transactions (24h)',
       content: '121',
     },

@@ -11,7 +11,7 @@ import useSWR from 'swr';
 import { v4 } from 'uuid';
 
 import { POOLS_ARRAY } from '@/constants/coins';
-import { RECOMMENDED_POOLS } from '@/constants/pools';
+import { RECOMMENDED_POOLS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import useGetMultipleTokenPriceBySymbol from '@/hooks/use-get-multiple-token-price-by-symbol';
 import { useModal } from '@/hooks/use-modal';
@@ -59,8 +59,6 @@ const PoolCardList: FC = () => {
             if (type === 'pool_type' && description === pool.poolType)
               return true;
 
-            console.log({ type, description });
-
             return false;
           })
         : true
@@ -77,15 +75,9 @@ const PoolCardList: FC = () => {
         tokenList.every(({ type }, index) => pool.tokens[index].type === type)
     );
 
-    if (filteredPools.length) return filteredPools;
-
+    toast.dismiss();
+    return filteredPools;
     poolPairLoadingModal();
-    await new Promise((resolve) =>
-      setTimeout(() => resolve([]), 2000 + Math.random() * 3000)
-    ).finally(() => {
-      toast.dismiss();
-    });
-    return [];
   });
 
   const poolPairLoadingModal = () => {
@@ -147,7 +139,19 @@ const PoolCardList: FC = () => {
       gridTemplateColumns={['1fr', '1fr', '1fr 1fr', '1fr 1fr', '1fr 1fr 1fr']}
     >
       {listPools?.length ? (
-        listPools.map((pool) => <PoolCard key={v4()} {...pool} />)
+        listPools.map((pool, index) => (
+          <PoolCard
+            key={v4()}
+            {...pool}
+            pool={pools[index]}
+            prices={
+              pricesRecord &&
+              pool.tokens.map(
+                ({ symbol }) => pricesRecord[symbol.toLocaleLowerCase()]
+              )
+            }
+          />
+        ))
       ) : (
         <Box width="100%" color="white">
           <Typography size="small" variant="display">

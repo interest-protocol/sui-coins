@@ -9,15 +9,25 @@ const useGetMultipleTokenPriceBySymbol = (
     () =>
       fetch(`/api/v1/coin-price?symbol=${symbols.toString()}`)
         .then((response) => response.json())
-        .then((data) =>
-          symbols.reduce(
+        .then((data) => {
+          const prices = symbols.reduce(
             (acc, symbol) => {
               const obj = data[symbol.toUpperCase()];
-              return obj ? acc : { ...acc, [symbol]: obj[0].quote.USD.price };
+
+              return {
+                ...acc,
+                ...(obj && {
+                  [symbol === 'sui' ? 'mov' : symbol]: obj[0].quote.USD.price,
+                }),
+              };
             },
             {} as Record<string, number>
-          )
-        ),
+          );
+
+          console.log({ prices, data });
+
+          return prices;
+        }),
     {
       revalidateOnMount: true,
       revalidateOnFocus: false,
