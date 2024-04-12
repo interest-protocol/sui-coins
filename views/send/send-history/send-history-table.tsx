@@ -110,7 +110,7 @@ const SendHistoryTable: FC = () => {
     window.open(`${EXPLORER_URL[network]}/tx/${digest}`);
 
   const handleReclaimLink = async (link: ZkSendLink) => {
-    const gasCoin = gasObjects.length
+    const gasCoins = gasObjects.length
       ? gasObjects
       : coinsMap[SUI_TYPE_ARG].objects.map(
           ({ coinObjectId, digest, version }) => ({
@@ -122,7 +122,7 @@ const SendHistoryTable: FC = () => {
 
     const toastId = toast.loading('Reclaiming...');
     try {
-      await reclaimLink(link, gasCoin, onSuccessReclaim);
+      await reclaimLink(link, gasCoins, onSuccessReclaim);
       toast.success('Link reclaimed successfully!');
     } catch (e) {
       toast.error((e as any).message ?? 'Link reclaiming failed!');
