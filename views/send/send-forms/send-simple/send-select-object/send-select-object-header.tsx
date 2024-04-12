@@ -39,10 +39,9 @@ const SendSelectObjectHeader: FC<SendFormSelectObjectProps> = ({ index }) => {
       width={['auto', '0px']}
       display={['block', 'none']}
     >
-      Sending:{' '}
       {symbol ||
         (type && type === displayName ? formatAddress(type) : displayName) ||
-        'Select Token'}
+        'Select Object'}
     </Typography>
   );
 };
