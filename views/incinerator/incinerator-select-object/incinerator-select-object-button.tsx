@@ -11,14 +11,16 @@ import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
 import SelectObjectModal from '@/views/components/select-object-modal';
 
-import { ISendSimpleForm } from '../send-simple.types';
-import { SendFormSelectObjectProps } from './send-select-object.types';
+import { IncineratorForm } from '../incinerator.types';
+import { IncineratorSelectObjectProps } from './incinerator-select-object.types';
 
-const SelectObject: FC<SendFormSelectObjectProps> = ({ index }) => {
+const IncineratorSelectObjectButton: FC<IncineratorSelectObjectProps> = ({
+  index,
+}) => {
   const network = useNetwork();
   const { coinsMap } = useWeb3();
 
-  const { setValue, control } = useFormContext<ISendSimpleForm>();
+  const { setValue, control } = useFormContext<IncineratorForm>();
 
   const object = useWatch({
     control,
@@ -113,4 +115,4 @@ const SelectObject: FC<SendFormSelectObjectProps> = ({ index }) => {
   );
 };
 
-export default SelectObject;
+export default IncineratorSelectObjectButton;
