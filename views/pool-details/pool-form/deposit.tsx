@@ -86,10 +86,7 @@ const PoolDeposit: FC<PoolFormProps> = ({ poolOptionView }) => {
           <PoolField key={v4()} index={index} poolOptionView={poolOptionView} />
         ))}
       </Box>
-      <PoolReceiveSection
-        symbol="LPs Coin"
-        balance={getValues('lpCoin.balance')}
-      />
+      <PoolReceiveSection />
       <Box>
         <Typography variant="body" size="large" mb="m">
           Manage your slippage

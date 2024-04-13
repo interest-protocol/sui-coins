@@ -4,7 +4,7 @@ import { useFormContext } from 'react-hook-form';
 
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks';
-import { TOKEN_ICONS } from '@/lib';
+import { FixedPointMath, TOKEN_ICONS } from '@/lib';
 import { parseInputEventToNumberString } from '@/utils';
 import { PoolOption } from '@/views/pools/pools.types';
 
@@ -22,8 +22,6 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
 
   const Icon = TOKEN_ICONS[network][token.symbol];
 
-  console.log({ coin: coinsMap, token });
-
   return (
     <TokenField
       placeholder="0"
@@ -31,11 +29,30 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
       labelPosition="right"
       tokenName={token.symbol}
       handleMax={() =>
-        setValue(`${fieldName}.value`, coinsMap[token.type].balance)
+        setValue(
+          `${fieldName}.value`,
+          coinsMap[token.type]
+            ? FixedPointMath.toNumber(
+                coinsMap[token.type].balance,
+                token.decimals
+              )
+            : 0
+        )
       }
       {...register(`${fieldName}.value`, {
         onChange: (v: ChangeEvent<HTMLInputElement>) => {
-          setValue(`${fieldName}.value`, parseInputEventToNumberString(v));
+          setValue(
+            `${fieldName}.value`,
+            parseInputEventToNumberString(
+              v,
+              coinsMap[token.type]
+                ? FixedPointMath.toNumber(
+                    coinsMap[token.type].balance,
+                    token.decimals
+                  )
+                : 0
+            )
+          );
         },
       })}
       fieldProps={{

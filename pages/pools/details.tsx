@@ -37,6 +37,7 @@ const PoolDetailsPage: NextPage<PoolPageProps> = ({ objectId }) => {
         ...token,
         value: '0',
       })),
+      lpCoin: pool?.lpCoin,
       settings: {
         slippage: '0.1',
       },
