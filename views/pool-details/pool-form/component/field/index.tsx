@@ -3,6 +3,7 @@ import { ChangeEvent, FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { useNetwork } from '@/context/network';
+import { useWeb3 } from '@/hooks';
 import { TOKEN_ICONS } from '@/lib';
 import { parseInputEventToNumberString } from '@/utils';
 import { PoolOption } from '@/views/pools/pools.types';
@@ -11,6 +12,7 @@ import { PoolFieldsProps } from './field.types';
 
 const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
   const network = useNetwork();
+  const { coinsMap } = useWeb3();
   const { register, setValue, getValues } = useFormContext();
 
   const fieldName =
@@ -20,13 +22,17 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
 
   const Icon = TOKEN_ICONS[network][token.symbol];
 
+  console.log({ coin: coinsMap, token });
+
   return (
     <TokenField
       placeholder="0"
       textAlign="right"
       labelPosition="right"
       tokenName={token.symbol}
-      onClick={() => setValue(`${fieldName}.value`, token.balance)}
+      handleMax={() =>
+        setValue(`${fieldName}.value`, coinsMap[token.type].balance)
+      }
       {...register(`${fieldName}.value`, {
         onChange: (v: ChangeEvent<HTMLInputElement>) => {
           setValue(`${fieldName}.value`, parseInputEventToNumberString(v));

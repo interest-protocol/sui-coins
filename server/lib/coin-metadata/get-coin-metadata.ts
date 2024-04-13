@@ -1,37 +1,17 @@
-import { SuiClient } from '@mysten/sui.js/client';
-
-import { Network, RPC_URL } from '@/constants';
-import CoinMetadata from '@/server/model/coin-metadata';
-import CoinMetadataTestnet from '@/server/model/coin-metadata-testnet';
+import { Network } from '@/constants';
 import { getBasicCoinMetadata } from '@/utils';
 
-const testnetClient = new SuiClient({
-  url: RPC_URL[Network.TESTNET],
-});
-
-const devnetClient = new SuiClient({
-  url: RPC_URL[Network.DEVNET],
-});
-
-const provider = {
-  [Network.DEVNET]: devnetClient,
-  [Network.TESTNET]: testnetClient,
-} as Record<Network, SuiClient>;
-
-const CoinMetadataModel = {
-  [Network.DEVNET]: CoinMetadata,
-  [Network.TESTNET]: CoinMetadataTestnet,
-} as Record<Network, ReturnType<typeof mongoose.model>>;
+import { COIN_METADATA_MODEL_MAP, MOV_CLIENT_PROVIDER_MAP } from '../utils';
 
 const getCoinMetadata = async (type: string, network: Network) => {
-  const Model = CoinMetadataModel[network];
+  const Model = COIN_METADATA_MODEL_MAP[network];
 
   const doc = await Model.findOne({ type });
 
   if (!doc) {
-    const suiClient = provider[network];
+    const movClient = MOV_CLIENT_PROVIDER_MAP[network];
 
-    const { hasMetadata, ...metadata } = await suiClient
+    const { hasMetadata, ...metadata } = await movClient
       .getCoinMetadata({ coinType: type })
       .then((metadata) => ({
         ...(metadata ?? getBasicCoinMetadata(type)),

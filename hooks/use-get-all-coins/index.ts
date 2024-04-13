@@ -35,7 +35,7 @@ export const useGetAllCoins = () => {
 
       if (!coinsRaw.length) return {} as CoinsMap;
 
-      const coinsType = coinsRaw.map(({ coinType }) => coinType);
+      const coinsType = [...new Set(coinsRaw.map(({ coinType }) => coinType))];
 
       const dbCoinsMetadata: Record<string, CoinMetadataWithType> = await fetch(
         encodeURI(
@@ -80,7 +80,6 @@ export const useGetAllCoins = () => {
       revalidateOnFocus: false,
       revalidateOnMount: true,
       refreshWhenHidden: false,
-      refreshInterval: 15000,
     }
   );
 };

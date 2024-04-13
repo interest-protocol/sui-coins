@@ -11,7 +11,8 @@ const testnetClient = new SuiClient({
 const devnetClient = new SuiClient({
   url: RPC_URL[Network.DEVNET],
 });
-export const SUI_CLIENT_PROVIDER_MAP = {
+
+export const MOV_CLIENT_PROVIDER_MAP = {
   [Network.DEVNET]: devnetClient,
   [Network.TESTNET]: testnetClient,
 } as Record<Network, SuiClient>;
