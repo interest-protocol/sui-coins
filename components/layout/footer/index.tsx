@@ -102,7 +102,7 @@ const Footer: FC = () => (
       borderColor="#C6C6CA"
       justifyContent="center"
     >
-      <a href="https://interestprotocol.com/" target="_blank" rel="noreferrer">
+      <a href="https://x.com/IPXSui" target="_blank" rel="noreferrer">
         <IPXSVG maxHeight="2.5rem" maxWidth="2.5rem" width="100%" />
       </a>
     </Box>
