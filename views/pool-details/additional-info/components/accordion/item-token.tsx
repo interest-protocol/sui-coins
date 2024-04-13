@@ -1,7 +1,7 @@
 import { Box, Tag, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import { PoolDetailAccordionItemCoinProps } from './accordion.type';
+import { PoolDetailAccordionItemCoinProps } from './accordion.types';
 
 const ItemCoin: FC<PoolDetailAccordionItemCoinProps> = ({
   coinName,

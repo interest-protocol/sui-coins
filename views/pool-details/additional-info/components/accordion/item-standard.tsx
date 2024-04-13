@@ -4,7 +4,7 @@ import { FC } from 'react';
 import { ClipboardSVG, InformationCircleSVG } from '@/svg';
 import { copyToClipboard } from '@/utils';
 
-import { PoolDetailAccordionItemStandardProps } from './accordion.type';
+import { PoolDetailAccordionItemStandardProps } from './accordion.types';
 
 const PoolDetailsCollapseItemStandard: FC<
   PoolDetailAccordionItemStandardProps

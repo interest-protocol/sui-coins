@@ -1,12 +1,14 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { FC, useState } from 'react';
 
+import { usePoolDetails } from '../pool-details.context';
 import { PoolDetailsTabOption } from '../pool-details.types';
 import PoolAdvanceDetail from './advance-detail';
 import DetailTabs from './components/detail-tabs';
 import PoolDetail from './pool-detail';
 
 const PoolAdditionalInfo: FC = () => {
+  const { pool } = usePoolDetails();
   const [poolDetailsView, setPoolDetailsView] = useState<PoolDetailsTabOption>(
     PoolDetailsTabOption.Detail
   );
@@ -20,13 +22,14 @@ const PoolAdditionalInfo: FC = () => {
       <DetailTabs
         onChangeTab={handleTabChange}
         defaultTabIndex={poolDetailsView}
-        items={['Pool Detail', 'Advance Details']}
+        items={['Pool Detail'].concat(
+          pool?.poolType === 'amm' ? [] : ['Advance Details']
+        )}
       />
-
       {poolDetailsView === PoolDetailsTabOption.Detail ? (
         <PoolDetail />
       ) : (
-        <PoolAdvanceDetail />
+        pool?.poolType !== 'amm' && <PoolAdvanceDetail />
       )}
     </Box>
   );

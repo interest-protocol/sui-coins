@@ -1,7 +1,7 @@
 import { Box, Motion, Typography } from '@interest-protocol/ui-kit';
 import { FC, useState } from 'react';
 
-import { PoolDetailAccordionProps } from './accordion.type';
+import { PoolDetailAccordionProps } from './accordion.types';
 import CollapseIcon from './accordion-icon';
 
 const variants = {

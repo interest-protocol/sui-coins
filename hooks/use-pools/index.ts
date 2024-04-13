@@ -66,12 +66,14 @@ const parsePool = (x: SuiObjectResponse): AmmPool => {
   };
 };
 
-export const usePools = (poolAddresses: string[]) => {
+export const usePools = (poolAddresses: Array<string>) => {
   const client = useMovementClient();
 
   return useSWR<ReadonlyArray<AmmPool>>(
     makeSWRKey([], usePools.name + poolAddresses),
     async () => {
+      if (!poolAddresses.length) return [];
+
       const pools = await client.multiGetObjects({
         ids: poolAddresses,
         options: {
@@ -85,7 +87,6 @@ export const usePools = (poolAddresses: string[]) => {
       revalidateOnFocus: false,
       revalidateOnMount: true,
       refreshWhenHidden: false,
-      refreshInterval: 10000,
       isPaused: () => !poolAddresses.length,
     }
   );

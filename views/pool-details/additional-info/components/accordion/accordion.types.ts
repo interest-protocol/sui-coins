@@ -8,12 +8,15 @@ export interface PoolDetailAccordionProps {
   children: ReactNode;
 }
 
-export interface PoolDetailAccordionItemStandardProps {
+export interface PoolDetailAccordionItemData {
   label: string;
   popupInfo?: string;
   labelColor?: string;
-  content: string | number;
   isCopyClipBoard?: boolean;
+}
+export interface PoolDetailAccordionItemStandardProps
+  extends PoolDetailAccordionItemData {
+  content: string | number;
 }
 
 export interface PoolDetailAccordionItemCoinProps {
@@ -28,6 +31,6 @@ export interface PoolDetailAccordionData {
   title: string;
   total?: string;
   data:
-    | Array<PoolDetailAccordionItemStandardProps>
+    | Array<PoolDetailAccordionItemData>
     | Array<PoolDetailAccordionItemCoinProps>;
 }

@@ -13,6 +13,7 @@ import { PoolPageProps } from '@/interface';
 import { FixedPointMath } from '@/lib';
 import { ZERO_BIG_NUMBER } from '@/utils';
 import PoolDetails from '@/views/pool-details';
+import { PoolDetailsProvider } from '@/views/pool-details/pool-details.context';
 import { PoolForm, PoolOption } from '@/views/pools/pools.types';
 
 const PoolDetailsPage: NextPage<PoolPageProps> = ({ objectId }) => {
@@ -36,12 +37,6 @@ const PoolDetailsPage: NextPage<PoolPageProps> = ({ objectId }) => {
         ...token,
         value: '0',
       })),
-      lpCoin: {
-        symbol: 'LP token',
-        decimals: 9,
-        type: `${ZERO_BIG_NUMBER}`,
-        value: '0',
-      },
       settings: {
         slippage: '0.1',
       },
@@ -76,11 +71,13 @@ const PoolDetailsPage: NextPage<PoolPageProps> = ({ objectId }) => {
   return (
     <FormProvider {...form}>
       <SEO pageTitle="Pool Details" />
-      <PoolDetails
-        objectId={objectId}
-        poolOptionView={poolOptionView}
-        handleOptionTab={handleOptionTab}
-      />
+      <PoolDetailsProvider value={{ pool }}>
+        <PoolDetails
+          objectId={objectId}
+          poolOptionView={poolOptionView}
+          handleOptionTab={handleOptionTab}
+        />
+      </PoolDetailsProvider>
     </FormProvider>
   );
 };

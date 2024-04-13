@@ -10,7 +10,7 @@ import Accordion from './components/accordion';
 import {
   PoolDetailAccordionItemCoinProps,
   PoolDetailAccordionItemStandardProps,
-} from './components/accordion/accordion.type';
+} from './components/accordion/accordion.types';
 import ItemStandard from './components/accordion/item-standard';
 import ItemToken from './components/accordion/item-token';
 
