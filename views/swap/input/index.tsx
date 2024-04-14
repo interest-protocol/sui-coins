@@ -2,9 +2,7 @@ import { Box, TextField } from '@interest-protocol/ui-kit';
 import { ChangeEvent, FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { useWeb3 } from '@/hooks';
-import { FixedPointMath } from '@/lib';
-import { parseInputEventToNumberString, ZERO_BIG_NUMBER } from '@/utils';
+import { parseInputEventToNumberString } from '@/utils';
 
 import { SwapForm } from '../swap.types';
 import AmountInDollar from './dollar-value';
@@ -14,8 +12,7 @@ import SelectToken from './select-token';
 import SwapFormFieldSlider from './swap-manager-slider';
 
 const Input: FC<InputProps> = ({ label }) => {
-  const { coinsMap } = useWeb3();
-  const { register, setValue, getValues } = useFormContext<SwapForm>();
+  const { register, setValue } = useFormContext<SwapForm>();
 
   return (
     <Box>
@@ -39,17 +36,8 @@ const Input: FC<InputProps> = ({ label }) => {
             fontFamily="Satoshi"
             {...register(`${label}.value`, {
               onChange: (v: ChangeEvent<HTMLInputElement>) => {
-                setValue?.(
-                  `${label}.value`,
-                  parseInputEventToNumberString(
-                    v,
-                    FixedPointMath.toNumber(
-                      coinsMap[getValues(`${label}.type`)]?.balance ??
-                        ZERO_BIG_NUMBER,
-                      coinsMap[getValues(`${label}.type`)]?.decimals ?? 0
-                    )
-                  )
-                );
+                setValue('lock', false);
+                setValue?.(`${label}.value`, parseInputEventToNumberString(v));
               },
             })}
             fieldProps={{
