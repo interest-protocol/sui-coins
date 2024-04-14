@@ -39,8 +39,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(405).send('Method not allowed!');
     return;
   } catch (e) {
-    console.log(e);
-
     res.status(500).send(e);
   }
 };

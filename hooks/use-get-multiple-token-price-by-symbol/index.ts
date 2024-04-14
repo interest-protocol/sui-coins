@@ -24,8 +24,6 @@ const useGetMultipleTokenPriceBySymbol = (
             {} as Record<string, number>
           );
 
-          console.log({ prices, data });
-
           return prices;
         }),
     {

@@ -8,8 +8,6 @@ import { PoolPreviewProps } from '../preview.types';
 const LpCoinField: FC<Omit<PoolPreviewProps, 'onSubmit'>> = ({ getValues }) => {
   const lpCoin = getValues('lpCoin');
 
-  console.log({ lpCoin });
-
   return (
     <Box>
       <Box py="xs" display="flex" justifyContent="space-between">

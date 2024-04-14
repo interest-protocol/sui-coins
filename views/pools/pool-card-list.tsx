@@ -116,13 +116,6 @@ const PoolCardList: FC = () => {
     setListPools(sortedPoolList(_pools));
   }, [filterList, _pools]);
 
-  console.log({
-    pools,
-    arePoolsLoading,
-    pricesRecord,
-    arePricesLoading,
-  });
-
   if (!pools || arePoolsLoading || !pricesRecord || arePricesLoading)
     return (
       <Box pt="3xl" width="100%" display="flex" justifyContent="center">
