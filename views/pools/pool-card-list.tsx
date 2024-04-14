@@ -155,7 +155,7 @@ const PoolCardList: FC = () => {
       ) : (
         <Box width="100%" color="white">
           <Typography size="small" variant="display">
-            Nenhum pool encontrado
+            Pool not found
           </Typography>
         </Box>
       )}
