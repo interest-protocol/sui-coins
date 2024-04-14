@@ -13,19 +13,19 @@ import { ZERO_BIG_NUMBER } from '@/utils';
 import { useSwap } from '../swap.hooks';
 
 const SwapPreviewModalSummary: FC = () => {
-  const { control } = useFormContext();
   const swap = useSwap();
-
   const client = useSuiClient();
+  const { control } = useFormContext();
   const currentAccount = useCurrentAccount();
-  const fromValue = useWatch({ control, name: 'from.value' });
-  const fromUSDPrice = useWatch({ control, name: 'from.usdPrice' });
+
   const toValue = useWatch({ control, name: 'to.display' });
+  const fromValue = useWatch({ control, name: 'from.value' });
   const toUSDPrice = useWatch({ control, name: 'to.usdPrice' });
-  const route = useWatch({ control, name: 'route' });
+  const fromUSDPrice = useWatch({ control, name: 'from.usdPrice' });
   const slippage = useWatch({ control, name: 'settings.slippage' });
+
   const { data: fees, isLoading } = useSWR(
-    `network-fee-${route?.spotPrice}-${currentAccount?.address}-${slippage}`,
+    `network-fee-${currentAccount?.address}-${slippage}`,
     async () => {
       if (!currentAccount) return;
 
@@ -48,6 +48,7 @@ const SwapPreviewModalSummary: FC = () => {
       ];
     }
   );
+
   const toUSD = toUSDPrice ? +toValue * toUSDPrice : null;
   const fromUSD = fromUSDPrice ? +fromValue * fromUSDPrice : null;
 

@@ -103,6 +103,7 @@ export const createObjectsParameter = ({
     ? coinsMap[type].objects.map((x) => txb.object(x.coinObjectId))
     : [];
 };
+
 export const normalizeSuiType = (x: string) => {
   if (x === SUI_TYPE_ARG) return x;
   const splitType = x.split('::');
