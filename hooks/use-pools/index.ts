@@ -66,7 +66,32 @@ const parsePool = (x: SuiObjectResponse): AmmPool => {
   };
 };
 
-export const usePools = (poolAddresses: Array<string>) => {
+export const usePool = (poolAddress: string) => {
+  const client = useMovementClient();
+
+  return useSWR<AmmPool | null>(
+    makeSWRKey([], usePool.name + poolAddress),
+    async () => {
+      if (!poolAddress.length) return null;
+
+      const pool = await client.getObject({
+        id: poolAddress,
+        options: {
+          showContent: true,
+        },
+      });
+
+      return parsePool(getSuiObjectResponseFields(pool));
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnMount: true,
+      refreshWhenHidden: false,
+    }
+  );
+};
+
+export const usePools = (poolAddresses: string[]) => {
   const client = useMovementClient();
 
   return useSWR<ReadonlyArray<AmmPool>>(
@@ -87,7 +112,6 @@ export const usePools = (poolAddresses: Array<string>) => {
       revalidateOnFocus: false,
       revalidateOnMount: true,
       refreshWhenHidden: false,
-      isPaused: () => !poolAddresses.length,
     }
   );
 };

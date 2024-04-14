@@ -1,15 +1,17 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { formatAddress } from '@mysten/sui.js/utils';
+import { propOr } from 'ramda';
 import { v4 } from 'uuid';
 
+import { useGetCoinMetadata } from '@/hooks/use-get-coin-metadata';
 import useGetMultipleTokenPriceBySymbol from '@/hooks/use-get-multiple-token-price-by-symbol';
-import { usePools } from '@/hooks/use-pools';
+import { usePool } from '@/hooks/use-pools';
+import { CoinMetadataWithType } from '@/interface';
 import { FixedPointMath } from '@/lib';
 import { formatDollars, formatMoney } from '@/utils';
 import { getLiquidity } from '@/views/pools/pool-card/pool-card.utils';
 import { getAllSymbols } from '@/views/pools/pools.utils';
 
-import { usePoolDetails } from '../pool-details.context';
 import {
   POOL_INFORMATION,
   POOL_STATISTICS,
@@ -21,45 +23,50 @@ import ItemStandard from './components/accordion/item-standard';
 import ItemToken from './components/accordion/item-token';
 
 const PoolDetail = () => {
-  const { pool } = usePoolDetails();
-
-  const { data: poolState } = usePools(pool ? [pool.stateKey] : []);
-
-  const symbols = getAllSymbols(poolState || []);
+  const { data: poolState } = usePool('');
+  const { data: coinMetadataMap } = useGetCoinMetadata(
+    poolState ? [poolState.coinTypes.coinX, poolState.coinTypes.coinY] : []
+  );
+  const symbols = getAllSymbols(poolState ? [poolState] : []);
 
   const { data: pricesRecord } = useGetMultipleTokenPriceBySymbol(symbols);
-  const infoData = pool
-    ? [
-        formatAddress(pool.poolObjectId),
-        pool.poolType,
-        pool.stable ? 'Stable' : 'Volatile',
-      ]
-    : ['', '', ''];
 
-  const liquidity =
-    poolState && pricesRecord && pool
-      ? getLiquidity(
-          poolState[0],
-          pool.tokens.map(
-            ({ symbol }) => pricesRecord[symbol.toLocaleLowerCase()]
-          )
-        )
-      : 0;
+  if (!poolState) return <div>pool not found</div>;
 
-  const virtualPrice =
-    poolState && pricesRecord && pool
-      ? FixedPointMath.toNumber(
-          FixedPointMath.toBigNumber(liquidity, 18).div(
-            poolState[0].lpCoinSupply
-          ),
-          18
-        )
-      : 0;
+  const infoData = [
+    formatAddress(poolState.poolId),
+    poolState.type,
+    poolState.isVolatile ? 'Volatile' : 'Stable',
+  ];
 
-  const statsData =
-    poolState && pricesRecord && pool
-      ? [formatDollars(liquidity), formatDollars(virtualPrice)]
-      : ['', ''];
+  const liquidity = getLiquidity(
+    poolState,
+    coinMetadataMap || {},
+    pricesRecord || {}
+  );
+
+  const virtualPrice = liquidity
+    ? FixedPointMath.toNumber(
+        FixedPointMath.toBigNumber(liquidity, 18).div(poolState.lpCoinSupply),
+        18
+      )
+    : 0;
+
+  const statsData = liquidity
+    ? [formatDollars(liquidity), formatDollars(virtualPrice)]
+    : ['', ''];
+
+  const coinXMetadata: CoinMetadataWithType = propOr(
+    {} as typeof coinMetadataMap,
+    poolState.coinTypes.coinX,
+    coinMetadataMap || {}
+  );
+
+  const coinYMetadata: CoinMetadataWithType = propOr(
+    {} as typeof coinMetadataMap,
+    poolState.coinTypes.coinY,
+    coinMetadataMap || {}
+  );
 
   return (
     <Box>
@@ -90,22 +97,22 @@ const PoolDetail = () => {
         ))}
       </Accordion>
       <Accordion title="Pool Composition" noBorder>
-        {poolState && pricesRecord && pool && (
+        {poolState && pricesRecord && (
           <>
             {[
               {
-                symbol: pool.tokens[0].symbol,
-                Icon: SVGMap[pool.tokens[0].symbol],
-                balance: poolState[0].balanceX,
-                decimals: poolState[0].decimalsX,
-                price: pricesRecord[pool.tokens[0].symbol.toLocaleLowerCase()],
+                symbol: coinXMetadata?.symbol,
+                Icon: SVGMap[coinXMetadata?.symbol],
+                balance: poolState.balanceX,
+                decimals: poolState.decimalsX,
+                price: pricesRecord[coinXMetadata?.symbol.toLocaleLowerCase()],
               },
               {
-                symbol: pool.tokens[1].symbol,
-                Icon: SVGMap[pool.tokens[1].symbol],
-                balance: poolState[0].balanceY,
-                decimals: poolState[0].decimalsY,
-                price: pricesRecord[pool.tokens[1].symbol.toLocaleLowerCase()],
+                symbol: coinYMetadata?.symbol,
+                Icon: SVGMap[coinYMetadata?.symbol],
+                balance: poolState.balanceY,
+                decimals: poolState.decimalsY,
+                price: pricesRecord[coinYMetadata?.symbol.toLocaleLowerCase()],
               },
             ].map(({ symbol, Icon, balance, decimals, price }) => (
               <ItemToken
@@ -123,7 +130,7 @@ const PoolDetail = () => {
               label="Total Supply"
               labelColor="outline"
               content={formatMoney(
-                FixedPointMath.toNumber(poolState[0].lpCoinSupply, 0)
+                FixedPointMath.toNumber(poolState.lpCoinSupply, 0)
               )}
             />
           </>

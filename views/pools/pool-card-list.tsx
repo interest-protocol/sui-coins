@@ -11,48 +11,82 @@ import useSWR from 'swr';
 import { v4 } from 'uuid';
 
 import { POOLS_ARRAY } from '@/constants/coins';
-import { RECOMMENDED_POOLS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
+import { useFindPoolsByCoinTypes } from '@/hooks/use-find-pools-by-coin-types';
+import { useGetCoinMetadata } from '@/hooks/use-get-coin-metadata';
 import useGetMultipleTokenPriceBySymbol from '@/hooks/use-get-multiple-token-price-by-symbol';
 import { useModal } from '@/hooks/use-modal';
 import { usePools } from '@/hooks/use-pools';
+import { AmmPool } from '@/interface';
 import { getAllSymbols } from '@/views/pools/pools.utils';
 
 import FindPoolDialog from './find-pool-modal/find-pool-dialog';
 import PoolCard from './pool-card';
-import { PoolCardProps } from './pool-card/pool-card.types';
-import { PoolForm } from './pools.types';
+import {
+  PoolCardListContentProps,
+  PoolCardListProps,
+  PoolCardListWrapper,
+  PoolForm,
+  PoolTabEnum,
+} from './pools.types';
 
-const PoolCardList: FC = () => {
-  const network = useNetwork();
-  const { setModal, handleClose } = useModal();
-
+const Pools: FC<PoolCardListWrapper> = ({ network }) => {
   const { data: pools, isLoading: arePoolsLoading } = usePools(POOLS_ARRAY);
 
-  const symbols = getAllSymbols(pools || []);
+  return (
+    <PoolCardListContent
+      network={network}
+      pools={pools || []}
+      arePoolsLoading={arePoolsLoading}
+    />
+  );
+};
+
+const Position: FC<PoolCardListWrapper> = ({ network }) => {
+  const { data, isLoading } = useFindPoolsByCoinTypes();
+
+  return (
+    <PoolCardListContent
+      network={network}
+      pools={data || []}
+      arePoolsLoading={isLoading}
+    />
+  );
+};
+
+const PoolCardListContent: FC<PoolCardListContentProps> = ({
+  arePoolsLoading,
+  pools,
+}) => {
+  const { setModal, handleClose } = useModal();
+
+  const symbols = getAllSymbols(pools);
 
   const { data: pricesRecord, isLoading: arePricesLoading } =
     useGetMultipleTokenPriceBySymbol(symbols);
 
+  const { data: coinMetadataMap, isLoading: isCoinMetadataLoading } =
+    useGetCoinMetadata([
+      ...new Set(pools.flatMap((x) => [x.coinTypes.coinX, x.coinTypes.coinY])),
+    ]);
+
   const { control, setValue } = useFormContext<PoolForm>();
   const filterList = useWatch({ control, name: 'filterList' });
   const tokenList = useWatch({ control, name: 'tokenList' });
-  const [listPools, setListPools] = useState<
-    ReadonlyArray<PoolCardProps> | undefined
-  >();
+  const [listPools, setListPools] = useState<readonly AmmPool[] | undefined>();
 
   const onClose = () => {
     setValue('isFindingPool', false);
     handleClose();
   };
 
-  const sortedPoolList = (poolList?: ReadonlyArray<PoolCardProps>) =>
+  const sortedPoolList = (poolList?: readonly AmmPool[]) =>
     poolList?.filter((pool) =>
       filterList?.length
         ? filterList.every(({ type, description }) => {
             if (
               type === 'algorithm' &&
-              (description === 'stable') === pool.stable
+              (description === 'stable') === !pool.isVolatile
             )
               return true;
 
@@ -66,19 +100,24 @@ const PoolCardList: FC = () => {
 
   const isFindingPool = useWatch({ control, name: 'isFindingPool' });
 
-  const { data: _pools } = useSWR(`${isFindingPool}`, async () => {
-    if (!isFindingPool) return RECOMMENDED_POOLS[network];
+  const { data: _pools, isLoading: isFilteredPoolsLoading } = useSWR(
+    `${isFindingPool}` +
+      pools.map((x) => x.poolId).toString() +
+      tokenList?.toString(),
+    async () => {
+      if (!isFindingPool) return pools;
 
-    const filteredPools = RECOMMENDED_POOLS[network].filter(
-      (pool) =>
-        tokenList.length === pool.tokens.length &&
-        tokenList.every(({ type }, index) => pool.tokens[index].type === type)
-    );
+      const filteredPools = pools.filter((pool) => {
+        const coinTypes = [pool.coinTypes.coinX, pool.coinTypes.coinY];
 
-    toast.dismiss();
-    return filteredPools;
-    poolPairLoadingModal();
-  });
+        return tokenList.every((x) => coinTypes.includes(x.type));
+      });
+
+      toast.dismiss();
+      return filteredPools;
+      poolPairLoadingModal();
+    }
+  );
 
   const poolPairLoadingModal = () => {
     setModal(
@@ -116,14 +155,14 @@ const PoolCardList: FC = () => {
     setListPools(sortedPoolList(_pools));
   }, [filterList, _pools]);
 
-  console.log({
-    pools,
-    arePoolsLoading,
-    pricesRecord,
-    arePricesLoading,
-  });
-
-  if (!pools || arePoolsLoading || !pricesRecord || arePricesLoading)
+  if (
+    arePoolsLoading ||
+    !pricesRecord ||
+    !coinMetadataMap ||
+    arePricesLoading ||
+    isCoinMetadataLoading ||
+    !!(isFindingPool && isFilteredPoolsLoading)
+  )
     return (
       <Box pt="3xl" width="100%" display="flex" justifyContent="center">
         <ProgressIndicator variant="loading" />
@@ -135,31 +174,45 @@ const PoolCardList: FC = () => {
       gap="xs"
       borderRadius="xs"
       p={['s', 's', 's', 'l']}
-      display={listPools?.length ? 'grid' : 'flex'}
+      display={listPools?.length || pools?.length ? 'grid' : 'flex'}
       gridTemplateColumns={['1fr', '1fr', '1fr 1fr', '1fr 1fr', '1fr 1fr 1fr']}
     >
-      {listPools?.length ? (
-        listPools.map((pool, index) => (
+      {isFindingPool ? (
+        listPools?.map((pool) => (
           <PoolCard
             key={v4()}
-            {...pool}
-            pool={pools[index]}
-            prices={
-              pricesRecord &&
-              pool.tokens.map(
-                ({ symbol }) => pricesRecord[symbol.toLocaleLowerCase()]
-              )
-            }
+            pool={pool}
+            prices={pricesRecord}
+            coinMetadata={coinMetadataMap || {}}
+          />
+        ))
+      ) : pools?.length ? (
+        pools.map((pool) => (
+          <PoolCard
+            key={v4()}
+            pool={pool}
+            prices={pricesRecord}
+            coinMetadata={coinMetadataMap || {}}
           />
         ))
       ) : (
         <Box width="100%" color="white">
           <Typography size="small" variant="display">
-            Nenhum pool encontrado
+            No pool found!
           </Typography>
         </Box>
       )}
     </Box>
+  );
+};
+
+const PoolCardList: FC<PoolCardListProps> = ({ tab }) => {
+  const network = useNetwork();
+
+  return tab === PoolTabEnum.Pools ? (
+    <Pools network={network} />
+  ) : (
+    <Position network={network} />
   );
 };
 

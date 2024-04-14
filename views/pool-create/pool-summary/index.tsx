@@ -18,14 +18,12 @@ const PoolSummary: FC = () => {
   const network = useNetwork();
   const { dialog, handleClose } = useDialog();
   const { getValues } = useFormContext<CreatePoolForm>();
-  const { type, isStable, tokens, dex } = getValues();
+  const { type, isStable, tokens } = getValues();
 
   // TODO: add fee
   const fee = 0;
 
-  const onCreatePool = async () => {
-    console.log({ type, isStable, tokens, dex });
-  };
+  const onCreatePool = async () => {};
 
   const createPool = () =>
     dialog.promise(onCreatePool(), {

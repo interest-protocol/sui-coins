@@ -6,32 +6,29 @@ const useGetMultipleTokenPriceBySymbol = (
 ) => {
   return useSWR(
     useGetMultipleTokenPriceBySymbol + symbols.toString(),
-    () =>
-      fetch(`/api/v1/coin-price?symbol=${symbols.toString()}`)
-        .then((response) => response.json())
-        .then((data) => {
-          const prices = symbols.reduce(
-            (acc, symbol) => {
-              const obj = data[symbol.toUpperCase()];
+    async () => {
+      if (!symbols.length) return {} as Record<string, number>;
 
-              return {
-                ...acc,
-                ...(obj && {
-                  [symbol === 'sui' ? 'mov' : symbol]: obj[0].quote.USD.price,
-                }),
-              };
-            },
-            {} as Record<string, number>
-          );
+      const res = await fetch(`/api/v1/coin-price?symbol=${symbols}`);
 
-          console.log({ prices, data });
+      const data = await res.json();
 
-          return prices;
-        }),
+      return symbols.reduce(
+        (acc, symbol) => {
+          const obj = data[symbol.toUpperCase()];
+          return {
+            ...acc,
+            ...(obj && {
+              [symbol === 'sui' ? 'mov' : symbol]: obj[0].quote.USD.price,
+            }),
+          };
+        },
+        {} as Record<string, number>
+      );
+    },
     {
       revalidateOnMount: true,
       revalidateOnFocus: false,
-      refreshInterval: 0,
       ...config,
     }
   );

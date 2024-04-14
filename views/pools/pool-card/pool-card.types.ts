@@ -1,5 +1,4 @@
-import { AmmPool, CoinData } from '@/interface';
-import { PoolTypeEnum } from '@/interface';
+import { AmmPool, CoinMetadataWithType } from '@/interface';
 
 export enum AlgorithmEnum {
   'stable' = 'stable',
@@ -11,7 +10,8 @@ export interface PoolCardHeaderProps {
 }
 
 export interface PoolCardTokenInfoProps {
-  coins: ReadonlyArray<CoinData>;
+  coinTypes: ReadonlyArray<string>;
+  coinMetadata: Record<string, CoinMetadataWithType>;
 }
 
 export interface PoolCardTradeProps {
@@ -23,11 +23,7 @@ export interface PoolCardTradeProps {
 }
 
 export interface PoolCardProps {
-  pool?: AmmPool;
-  stable: boolean;
-  lpCoin: CoinData;
-  poolObjectId: string;
-  poolType: PoolTypeEnum;
-  prices?: ReadonlyArray<number>;
-  tokens: ReadonlyArray<CoinData>;
+  pool: AmmPool;
+  prices: Record<string, number>;
+  coinMetadata: Record<string, CoinMetadataWithType>;
 }

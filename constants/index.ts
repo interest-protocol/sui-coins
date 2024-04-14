@@ -24,9 +24,9 @@ export const CONTROLLERS_MAP: Record<string, string> = {
 
 export const EXPLORER_URL = {
   [Network.DEVNET]: (path: string) =>
-    `https://explorer.devnet.m2.movementlabs.xyz/${path}?network=https://sui.devnet.m2.movementlabs.xyz`,
+    `https://explorer.devnet.m2.movementlabs.xyz/${path}?network=devnet`,
   [Network.TESTNET]: (path: string) =>
-    `https://explorer.testnet.m2.movementlabs.xyz/${path}?network=https://sui.testnet.m2.movementlabs.xyz`,
+    `https://explorer.testnet.m2.movementlabs.xyz/${path}?network=testnet`,
 } as Record<Network, (path: string) => string>;
 
 export const TOAST_DURATION = 10000;

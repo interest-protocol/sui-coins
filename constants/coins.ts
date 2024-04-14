@@ -20,6 +20,12 @@ export const SC_V_MOV_ETH =
 export const SC_V_ETH_USDC =
   '0x1f25cf55789981cd5b0b0c9f0449f4c8ae23c4c3f8f823a7cd06749017323162::ipx_v_eth_usdc::IPX_V_ETH_USDC';
 
+const MOV_ETH_POOL_ID =
+  '0x02f381358cd60a96665076b60cfc74c71d675d0b042e24436a7f6ae2fef59ab9';
+
+const USDC_ETH_POOL_ID =
+  '0x55f1e9bde96624a0c150ccb9b075bed7461ed652bb5c7b94c10fab32a1325dd3';
+
 export const COIN_TYPE_TO_SYMBOL: Record<Network, Record<string, string>> = {
   [Network.DEVNET]: {
     [SUI_TYPE_ARG]: TOKEN_SYMBOL.MOV,
@@ -103,12 +109,6 @@ export interface RegistryPool {
   lpCoinType: string;
 }
 
-const MOV_ETH_POOL_ID =
-  '0x02f381358cd60a96665076b60cfc74c71d675d0b042e24436a7f6ae2fef59ab9';
-
-const USDC_ETH_POOL_ID =
-  '0x21c4561fe02ca4ac4e9b1c705e9b1f9c052f7423f7d18053acca382749bb9a4f';
-
 const MOV_ETH_STATE_ID =
   '0x58122defa03f590a88d8dd165c65e3ccfda7e8c660976f595ecb1c62d6f27281';
 
@@ -123,16 +123,14 @@ export const REGISTRY_POOLS = {
       stateKey: MOV_ETH_STATE_ID,
     },
     [USDC_TYPE]: {
-      poolId:
-        '0x55f1e9bde96624a0c150ccb9b075bed7461ed652bb5c7b94c10fab32a1325dd3',
+      poolId: USDC_ETH_POOL_ID,
       stateKey: USDC_ETH_STATE_ID,
       lpCoinType: SC_V_ETH_USDC,
     },
   },
   [USDC_TYPE]: {
     [ETH_TYPE]: {
-      poolId:
-        '0x55f1e9bde96624a0c150ccb9b075bed7461ed652bb5c7b94c10fab32a1325dd3',
+      poolId: USDC_ETH_POOL_ID,
       stateKey: USDC_ETH_STATE_ID,
       lpCoinType: SC_V_ETH_USDC,
     },
@@ -148,12 +146,14 @@ export const REGISTRY_POOLS = {
 
 export const POOLS_ARRAY = [MOV_ETH_STATE_ID, USDC_ETH_STATE_ID];
 
-export const POOL_ID_TO_SYMBOL = {};
-
 export const STATE_KEY_TO_POOL_ID = {
-  '0x55f1e9bde96624a0c150ccb9b075bed7461ed652bb5c7b94c10fab32a1325dd3':
-    USDC_ETH_POOL_ID,
-  MOV_ETH_STATE_ID: MOV_ETH_POOL_ID,
+  [USDC_ETH_STATE_ID]: USDC_ETH_POOL_ID,
+  [MOV_ETH_STATE_ID]: MOV_ETH_POOL_ID,
+} as Record<string, string>;
+
+export const POOLS_MAP = {
+  [SC_V_MOV_ETH]: MOV_ETH_STATE_ID,
+  [SC_V_ETH_USDC]: USDC_ETH_STATE_ID,
 } as Record<string, string>;
 
 export const LP_COINS_MAP = {

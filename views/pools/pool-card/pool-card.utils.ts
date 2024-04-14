@@ -1,20 +1,34 @@
-import { AmmPool } from '@/interface';
+import { isEmpty } from 'ramda';
+
+import { AmmPool, CoinMetadataWithType } from '@/interface';
 import { FixedPointMath } from '@/lib';
 
 export const getLiquidity = (
   pool: AmmPool,
-  [priceX, priceY]: ReadonlyArray<number>
+  metadata: Record<string, CoinMetadataWithType>,
+  prices: Record<string, number>
 ): number => {
-  if (!priceX && !priceY) return 0;
+  if (isEmpty(prices)) return 0;
 
-  if (!priceX)
+  const priceX = metadata[pool.coinTypes.coinX]
+    ? prices[metadata[pool.coinTypes.coinX]?.symbol.toLowerCase()]
+    : null;
+
+  const priceY = metadata[pool.coinTypes.coinY]
+    ? prices[metadata[pool.coinTypes.coinY]?.symbol.toLowerCase()]
+    : null;
+
+  if (!priceX && !!priceY)
     return 2 * FixedPointMath.toNumber(pool.balanceY, pool.decimalsY) * priceY;
 
-  if (!priceY)
+  if (!priceY && !!priceX)
     return 2 * FixedPointMath.toNumber(pool.balanceX, pool.decimalsX) * priceX;
 
-  return (
-    FixedPointMath.toNumber(pool.balanceY, pool.decimalsY) * priceY +
-    FixedPointMath.toNumber(pool.balanceX, pool.decimalsX) * priceX
-  );
+  if (priceX && priceY)
+    return (
+      FixedPointMath.toNumber(pool.balanceY, pool.decimalsY) * priceY +
+      FixedPointMath.toNumber(pool.balanceX, pool.decimalsX) * priceX
+    );
+
+  return 0;
 };

@@ -1,3 +1,5 @@
+import { Network } from '@/constants';
+import { AmmPool } from '@/interface';
 import { TOKEN_SYMBOL } from '@/lib';
 
 import { ISwapSettings } from '../swap/swap.types';
@@ -15,6 +17,20 @@ export enum PoolTabEnum {
 export enum PoolOption {
   Deposit,
   Withdraw,
+}
+
+export interface PoolCardListProps {
+  tab: PoolTabEnum;
+}
+
+export interface PoolCardListWrapper {
+  network: Network;
+}
+
+export interface PoolCardListContentProps {
+  network: Network;
+  arePoolsLoading: boolean;
+  pools: readonly AmmPool[];
 }
 
 export interface CoinData {

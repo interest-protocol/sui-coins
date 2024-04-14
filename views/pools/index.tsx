@@ -28,7 +28,7 @@ const Pools: FC = () => {
         py={['s', 's', 's', '2xl']}
       >
         <PoolFilter />
-        <PoolCardList />
+        <PoolCardList tab={tab} />
       </Box>
     </Layout>
   );
