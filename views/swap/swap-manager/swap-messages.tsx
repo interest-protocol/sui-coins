@@ -1,4 +1,4 @@
-import { pathOr, propOr } from 'ramda';
+import { propOr } from 'ramda';
 import { FC, useState } from 'react';
 import { useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -11,9 +11,7 @@ import { SwapMessagesProps } from './swap-manager.types';
 
 export const SwapMessages: FC<SwapMessagesProps> = ({
   error,
-  errors,
   control,
-  setError,
   hasNoMarket,
   isZeroSwapAmountIn,
   isZeroSwapAmountOut,
@@ -57,26 +55,6 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
     (isZeroSwapAmountIn && !!fromValue && !isFetchingSwapAmountIn) ||
     (isZeroSwapAmountOut && !!toValue && !isFetchingSwapAmountOut);
 
-  const errorMessage = pathOr(null, ['to', 'message'], errors);
-
-  // Clear errors
-  useEffect(() => {
-    // If there is no error or both tokens are not selected - do nothing
-    if (!errorMessage || !from?.type || !to?.type) return;
-
-    const name = fromValue ? 'from' : 'to';
-
-    if (!amountNotEnough && errors[name]?.message === 'increaseAmount')
-      setValue('error', "You don't have enough balance");
-
-    if (from?.type !== to?.type && errorMessage === 'sameTokens')
-      setValue('error', "You can't swap the same coin");
-
-    if (!error && errorMessage === 'error') setError(name, {});
-
-    if (!hasNoMarket && errorMessage === 'noMarket') setError(name, {});
-  }, [error, amountNotEnough, hasNoMarket, errorMessage, from?.type, to?.type]);
-
   useEffect(() => {
     if ((isFetchingSwapAmountIn || isFetchingSwapAmountOut) && !toastState)
       setToastState(true);
@@ -99,6 +77,8 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
 
   // Set Error
   useEffect(() => {
+    if (!from?.type || !to?.type) return;
+
     // If there is already an error or both tokens are not selected -> do nothing
     if (error) {
       setValue('error', 'Something went wrong');
@@ -129,14 +109,6 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
       return;
     }
     setValue('error', null);
-  }, [
-    error,
-    amountNotEnough,
-    hasNoMarket,
-    from?.type,
-    to?.type,
-    fromValue,
-    errorMessage,
-  ]);
+  }, [error, amountNotEnough, hasNoMarket, from?.type, to?.type, fromValue]);
   return null;
 };
