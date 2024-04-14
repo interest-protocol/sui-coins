@@ -1,5 +1,5 @@
 import type { Token } from '@interest-protocol/sui-tokens';
-import { formatAddress, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
 import { propOr } from 'ramda';
 
@@ -14,6 +14,7 @@ import {
 } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { CoinMetadataWithType } from '@/interface';
 
+import { getBasicCoinMetadata } from '../fn';
 import { CreateVectorParameterArgs } from './coin.types';
 
 export const isSymbol = (text: string): boolean =>
@@ -118,14 +119,6 @@ export const normalizeSuiType = (x: string) => {
 
   return [paddedType, ...splitType.slice(1)].join('::');
 };
-
-export const getBasicCoinMetadata = (type: string) => ({
-  decimals: 0,
-  iconUrl: null,
-  description: '',
-  name: formatAddress(type),
-  symbol: getSymbolByType(type),
-});
 
 const coinObjectToToken = (coin: CoinObject): Token => ({
   name: coin.metadata.name,
