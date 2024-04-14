@@ -1,3 +1,8 @@
+import { WalletAccount } from '@wallet-standard/base';
+import { UseFormReturn } from 'react-hook-form';
+
+import { Network } from '@/constants';
+import { CoinsMap } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { CoinData } from '@/interface';
 
 export interface ISwapSettings {
@@ -32,4 +37,12 @@ export interface SwapForm {
 
 export interface SwapPreviewModalProps {
   onClose: () => void;
+}
+
+export interface SwapArgs {
+  currentAccount: WalletAccount | null;
+  coinsMap: CoinsMap;
+  formSwap: UseFormReturn<SwapForm>;
+  network: Network;
+  isZeroSwap?: boolean;
 }

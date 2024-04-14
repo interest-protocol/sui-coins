@@ -21,7 +21,7 @@ const SwapFormFieldSlider: FC = () => {
   const type = useWatch({ control, name: 'from.type' });
 
   const balance = FixedPointMath.toNumber(
-    BigNumber(coinsMap[type]?.balance || 0),
+    BigNumber(coinsMap[type]?.balance.toString() || 0),
     coinsMap[type]?.decimals ?? (getValues('from.decimals') || 0)
   );
 

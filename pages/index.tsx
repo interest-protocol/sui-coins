@@ -39,6 +39,7 @@ const SwapPage: NextPage = () => {
       settings,
     },
   });
+
   const setDefaultToken = async (
     value: `0x${string}`,
     field: 'to' | 'from'

@@ -27,7 +27,7 @@ export const useGetAllCoins = () => {
   const currentAccount = useCurrentAccount();
 
   return useSWR(
-    makeSWRKey([network, currentAccount?.address], suiClient.getAllCoins.name),
+    makeSWRKey([network, currentAccount?.address], useGetAllCoins.name),
     async () => {
       if (!currentAccount) return {} as CoinsMap;
 
