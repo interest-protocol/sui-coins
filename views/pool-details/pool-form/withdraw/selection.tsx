@@ -1,14 +1,14 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC, useState } from 'react';
 
-import { usePoolDetails } from '../../pool-details.context';
 import RadioField from './radio-field';
 import SelectionTokenList from './token-list';
 import { SelectionFieldValues } from './withdraw.types';
 
 const Selection: FC = () => {
-  const { pool } = usePoolDetails();
-
+  const pool = {
+    poolType: 'amm',
+  };
   const [currentSelected, setCurrentSelected] = useState<SelectionFieldValues>(
     SelectionFieldValues.None
   );
