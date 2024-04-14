@@ -31,20 +31,19 @@ const Input: FC<InputProps> = ({ label }) => {
             lineHeight="l"
             placeholder="0"
             color="onSurface"
-            disabled={label === 'to'}
             textAlign="right"
             fontFamily="Satoshi"
+            fieldProps={{
+              width: '100%',
+              borderRadius: 'xs',
+              borderColor: 'transparent',
+            }}
             {...register(`${label}.value`, {
               onChange: (v: ChangeEvent<HTMLInputElement>) => {
                 setValue('lock', false);
                 setValue?.(`${label}.value`, parseInputEventToNumberString(v));
               },
             })}
-            fieldProps={{
-              borderColor: 'transparent',
-              borderRadius: 'xs',
-              width: '100%',
-            }}
           />
           <AmountInDollar label={label} />
         </Box>
