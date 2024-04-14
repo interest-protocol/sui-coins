@@ -80,6 +80,7 @@ export const useGetAllCoins = () => {
       revalidateOnFocus: false,
       revalidateOnMount: true,
       refreshWhenHidden: false,
+      refreshInterval: 15000,
     }
   );
 };

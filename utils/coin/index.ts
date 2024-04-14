@@ -1,4 +1,5 @@
-import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import type { Token } from '@interest-protocol/sui-tokens';
+import { formatAddress, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
 import { propOr } from 'ramda';
 
@@ -6,6 +7,12 @@ import {
   Web3ManagerState,
   Web3ManagerSuiObject,
 } from '@/components/web3-provider/web3-manager.types';
+import { Network } from '@/constants';
+import {
+  CoinObject,
+  CoinsMap,
+} from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { CoinMetadataWithType } from '@/interface';
 
 import { CreateVectorParameterArgs } from './coin.types';
 
@@ -111,3 +118,41 @@ export const normalizeSuiType = (x: string) => {
 
   return [paddedType, ...splitType.slice(1)].join('::');
 };
+
+export const getBasicCoinMetadata = (type: string) => ({
+  decimals: 0,
+  iconUrl: null,
+  description: '',
+  name: formatAddress(type),
+  symbol: getSymbolByType(type),
+});
+
+const coinObjectToToken = (coin: CoinObject): Token => ({
+  name: coin.metadata.name,
+  symbol: coin.symbol,
+  decimals: coin.decimals,
+  type: coin.type,
+});
+
+const coinMetadataToToken = (coin: CoinMetadataWithType): Token => ({
+  name: coin.name,
+  symbol: coin.symbol,
+  decimals: coin.decimals,
+  type: coin.type,
+});
+
+export const getCoin = async (
+  type: `0x${string}`,
+  network: Network,
+  coinsMap: CoinsMap
+): Promise<Token> =>
+  new Promise((resolve) => {
+    if (coinsMap[type]) return resolve(coinObjectToToken(coinsMap[type]));
+
+    fetch(`/api/v1/coin-metadata?network=${network}&type=${type}`)
+      .then((res) => res.json())
+      .then((metadata: CoinMetadataWithType) =>
+        resolve(coinMetadataToToken(metadata))
+      )
+      .catch(() => resolve({ type, ...getBasicCoinMetadata(type) }));
+  });
