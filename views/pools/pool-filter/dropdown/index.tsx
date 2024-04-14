@@ -10,6 +10,7 @@ import { FilterItemProps, PoolForm } from '../../pools.types';
 import { DropdownProps } from './dropdown.types';
 
 const Dropdown: FC<DropdownProps> = ({ label, type, filterData, disabled }) => {
+  const boxId = useId();
   const { control } = useFormContext<PoolForm>();
   const fields = useWatch({ control, name: 'filterList' });
   const { replace } = useFieldArray({
@@ -17,7 +18,6 @@ const Dropdown: FC<DropdownProps> = ({ label, type, filterData, disabled }) => {
     name: 'filterList',
   });
 
-  const boxId = useId();
   const [isOpen, setOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<FilterItemProps>({
     type: type,

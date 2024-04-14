@@ -72,8 +72,6 @@ const SwapManager: FC = () => {
         error={error}
         hasNoMarket={hasNoMarket}
         control={formSwap.control}
-        setError={formSwap.setError}
-        errors={formSwap.formState.errors}
         isZeroSwapAmountIn={isZeroSwapAmountIn}
         isZeroSwapAmountOut={isZeroSwapAmountOut}
         isFetchingSwapAmountIn={isFetchingSwapAmountIn}

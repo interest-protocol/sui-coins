@@ -60,7 +60,6 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       decimals,
       value: '',
       usdPrice: currentToken.usdPrice,
-      balance: 0,
     });
 
     fetch(`/api/v1/coin-price?symbol=${symbol}`)

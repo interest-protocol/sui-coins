@@ -20,10 +20,11 @@ export const useSwap = () => {
   const network = useNetwork();
   const { coinsMap } = useWeb3();
   const currentAccount = useCurrentAccount();
-
   const formSwap = useFormContext<SwapForm>();
+
   return () => {
     const { settings, from, to, swapPath } = formSwap.getValues();
+
     if (!swapPath.length) throw new Error('There is no market');
 
     if (!to.type || !from.type) throw new Error('No tokens selected');
@@ -75,9 +76,7 @@ export const useSwap = () => {
             target: `${PACKAGES[network].UTILS}::utils::handle_coin_vector`,
             typeArguments: [from.type],
             arguments: [
-              txb.makeMoveVec({
-                objects: coinInList,
-              }),
+              txb.makeMoveVec({ objects: coinInList }),
               txb.pure(amount),
             ],
           });
@@ -106,6 +105,7 @@ export const useSwap = () => {
     );
 
     txb.transferObjects([nextCoin!], currentAccount.address);
+
     return txb;
   };
 };
