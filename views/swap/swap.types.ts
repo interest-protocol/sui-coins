@@ -12,6 +12,7 @@ export interface ISwapSettings {
 export interface SwapToken extends CoinData {
   value: string;
   usdPrice: number | null;
+  isFetchingSwap?: boolean;
 }
 
 interface SwapTypeArgs {

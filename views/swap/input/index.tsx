@@ -1,6 +1,6 @@
-import { Box, TextField } from '@interest-protocol/ui-kit';
+import { Box, ProgressIndicator, TextField } from '@interest-protocol/ui-kit';
 import { ChangeEvent, FC } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import { parseInputEventToNumberString } from '@/utils';
 
@@ -12,7 +12,9 @@ import SelectToken from './select-token';
 import SwapFormFieldSlider from './swap-manager-slider';
 
 const Input: FC<InputProps> = ({ label }) => {
-  const { register, setValue } = useFormContext<SwapForm>();
+  const { register, setValue, control } = useFormContext<SwapForm>();
+
+  const isFetching = useWatch({ control, name: `${label}.isFetchingSwap` });
 
   return (
     <Box>
@@ -33,6 +35,10 @@ const Input: FC<InputProps> = ({ label }) => {
             color="onSurface"
             textAlign="right"
             fontFamily="Satoshi"
+            disabled={isFetching}
+            Prefix={
+              isFetching && <ProgressIndicator variant="loading" size={16} />
+            }
             fieldProps={{
               width: '100%',
               borderRadius: 'xs',
