@@ -20,8 +20,8 @@ export const useSwap = () => {
   const network = useNetwork();
   const { coinsMap } = useWeb3();
   const currentAccount = useCurrentAccount();
-
   const formSwap = useFormContext<SwapForm>();
+
   return () => {
     const { settings, from, to, swapPath } = formSwap.getValues();
     if (!swapPath.length) throw new Error('There is no market');
@@ -106,6 +106,7 @@ export const useSwap = () => {
     );
 
     txb.transferObjects([nextCoin!], currentAccount.address);
+
     return txb;
   };
 };
