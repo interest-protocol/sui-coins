@@ -24,11 +24,11 @@ export interface SwapManagerProps {
   account: string | null;
   control: Control<SwapForm>;
   isFetchingSwapAmount: boolean;
+  swapPaths: ReadonlyArray<SwapPath>;
   setValue: UseFormSetValue<SwapForm>;
   setError: Dispatch<SetStateAction<boolean>>;
+  setIsFetchingSwapAmount: (value: boolean) => void;
   setIsZeroSwapAmount: Dispatch<SetStateAction<boolean>>;
-  setIsFetchingSwapAmount: Dispatch<SetStateAction<boolean>>;
-  swapPaths: ReadonlyArray<SwapPath>;
 }
 
 export interface FindSwapPathArgs {

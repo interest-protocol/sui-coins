@@ -42,6 +42,8 @@ const SwapPreviewButton: FC = () => {
   const isEnabled =
     from &&
     to &&
+    !from.isFetchingSwap &&
+    !to.isFetchingSwap &&
     coinsExist &&
     !loading &&
     !notEnoughBalance &&

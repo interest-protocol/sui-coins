@@ -110,5 +110,6 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
     }
     setValue('error', null);
   }, [error, amountNotEnough, hasNoMarket, from?.type, to?.type, fromValue]);
+
   return null;
 };
