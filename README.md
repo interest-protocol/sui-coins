@@ -65,7 +65,7 @@ Access [DApp](https://sui.interestprotocol.com/dapp/dex) and enjoy what has been
 
 ## Contact Us
 
-- X: [@interest_dinero](https://x.com/interest_dinero)
+- X: [@IPXSui](https://x.com/IPXSui)
 - Discord: https://discord.gg/interest
 - Telegram: https://t.me/interestprotocol
 - Email: [contact@interestprotocol.com](mailto:contact@interestprotocol.com)
