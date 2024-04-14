@@ -46,7 +46,7 @@ const PoolCard: FC<PoolCardProps> = ({
     >
       <PoolCardHeader
         tags={[
-          PoolTypeEnum[poolType],
+          PoolTypeEnum[poolType].toUpperCase(),
           stable ? AlgorithmEnum.stable : AlgorithmEnum.volatile,
         ]}
       />

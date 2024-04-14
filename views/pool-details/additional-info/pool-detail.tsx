@@ -31,7 +31,7 @@ const PoolDetail = () => {
   const infoData = pool
     ? [
         formatAddress(pool.poolObjectId),
-        pool.poolType,
+        pool.poolType.toUpperCase(),
         pool.stable ? 'Stable' : 'Volatile',
       ]
     : ['', '', ''];
