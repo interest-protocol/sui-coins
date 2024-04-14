@@ -138,27 +138,28 @@ const PoolCardList: FC = () => {
       display={listPools?.length ? 'grid' : 'flex'}
       gridTemplateColumns={['1fr', '1fr', '1fr 1fr', '1fr 1fr', '1fr 1fr 1fr']}
     >
-      {listPools?.length ? (
-        listPools.map((pool, index) => (
-          <PoolCard
-            key={v4()}
-            {...pool}
-            pool={pools[index]}
-            prices={
-              pricesRecord &&
-              pool.tokens.map(
-                ({ symbol }) => pricesRecord[symbol.toLocaleLowerCase()]
-              )
-            }
-          />
-        ))
-      ) : (
-        <Box width="100%" color="white">
-          <Typography size="small" variant="display">
-            Pool not found
-          </Typography>
-        </Box>
-      )}
+      {listPools &&
+        (listPools.length ? (
+          listPools.map((pool, index) => (
+            <PoolCard
+              key={v4()}
+              {...pool}
+              pool={pools[index]}
+              prices={
+                pricesRecord &&
+                pool.tokens.map(
+                  ({ symbol }) => pricesRecord[symbol.toLocaleLowerCase()]
+                )
+              }
+            />
+          ))
+        ) : (
+          <Box width="100%" color="white">
+            <Typography size="small" variant="display">
+              Pool not found
+            </Typography>
+          </Box>
+        ))}
     </Box>
   );
 };
