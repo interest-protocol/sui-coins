@@ -1,4 +1,4 @@
-import { DevInspectResults } from '@mysten/sui.js/src/client';
+import { DevInspectResults } from '@mysten/sui.js/client';
 import BigNumber from 'bignumber.js';
 
 import { FixedPointMath } from '@/lib';
