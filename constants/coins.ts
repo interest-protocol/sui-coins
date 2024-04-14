@@ -3,10 +3,16 @@ import { FC } from 'react';
 
 import { SVGProps } from '@/components/svg/svg.types';
 import { LocalCoinMetadata, PoolTypeEnum } from '@/interface';
-import { TOKEN_SYMBOL } from '@/lib';
 import { ETHSVG, MOVSVG, USDCSVG } from '@/svg';
 
 import { Network } from './network';
+
+export enum TOKEN_SYMBOL {
+  MOV = 'MOV',
+  USDC = 'USDC',
+  ETH = 'ETH',
+  SUI = 'SUI',
+}
 
 export const ETH_TYPE =
   '0x8e614b777730a3b481a5f30b53be062fc0c01f93c6fdfe9fb19ffbae7777b700::eth::ETH';

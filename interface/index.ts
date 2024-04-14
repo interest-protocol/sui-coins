@@ -24,6 +24,7 @@ export interface LocalCoinMetadata {
 
 export interface PoolPageProps {
   objectId: string;
+  stateId: string;
 }
 
 export interface RegistryPool {
@@ -51,6 +52,7 @@ export interface AmmPoolCoinTypes {
 export interface AmmPool {
   poolId: string;
   stateId: string;
+  // we do not use
   adminBalanceX: BigNumber;
   adminBalanceY: BigNumber;
   balanceX: BigNumber;

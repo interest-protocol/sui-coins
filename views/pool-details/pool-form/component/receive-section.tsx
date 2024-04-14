@@ -1,15 +1,37 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
-import { FC } from 'react';
+import { FC, useState } from 'react';
+import { useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { FixedPointMath } from '@/lib';
 import { PoolForm } from '@/views/pools/pools.types';
 
-const PoolReceiveSection: FC = () => {
-  const { control } = useFormContext<PoolForm>();
-  const symbol = useWatch({ control, name: 'lpCoin.symbol' });
+import { getAmmLpCoinAmount } from './../pool-form.utils';
 
-  // TODO: calculate the amount
-  const calculatedAmount = 0;
+const PoolReceiveSection: FC = () => {
+  const { control, getValues } = useFormContext<PoolForm>();
+  const symbol = useWatch({ control, name: 'lpCoin.symbol' });
+  const tokenList = useWatch({ control, name: 'tokenList' });
+  const [lpAmount, setLpAmount] = useState('0');
+
+  useEffect(() => {
+    const pool = getValues('pool');
+
+    if (!pool || !tokenList.length) return;
+
+    const coin0 = tokenList[0];
+    const coin1 = tokenList[1];
+
+    const lpAmount = getAmmLpCoinAmount(
+      FixedPointMath.toBigNumber(coin0.value, coin0.decimals),
+      FixedPointMath.toBigNumber(coin1.value, coin1.decimals),
+      pool.balanceX,
+      pool.balanceY,
+      pool.lpCoinSupply
+    );
+
+    setLpAmount(FixedPointMath.toNumber(lpAmount).toString());
+  }, [tokenList]);
 
   return (
     <Box>
@@ -28,7 +50,7 @@ const PoolReceiveSection: FC = () => {
             {symbol}
           </Typography>
           <Typography variant="body" ml="m" size="large">
-            {calculatedAmount}
+            {lpAmount}
           </Typography>
         </Box>
       </Box>

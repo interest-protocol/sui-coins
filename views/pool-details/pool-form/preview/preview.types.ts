@@ -1,7 +1,9 @@
-import { FieldValues, UseFormGetValues } from 'react-hook-form';
+import { UseFormGetValues } from 'react-hook-form';
+
+import { PoolForm } from '@/views/pools/pools.types';
 
 export interface PoolPreviewProps extends PoolPreviewWrapperProps {
-  getValues: UseFormGetValues<FieldValues>;
+  getValues: UseFormGetValues<PoolForm>;
 }
 
 export interface PoolPreviewWrapperProps {

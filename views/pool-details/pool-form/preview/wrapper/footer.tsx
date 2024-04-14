@@ -25,8 +25,8 @@ const PoolPreviewWrapperFooter: FC<PoolPreviewWrapperProps> = ({
         variant="filled"
         my="xl"
         width="fill-available"
-        onClick={() => {
-          onSubmit();
+        onClick={async () => {
+          await onSubmit();
           handleClose();
         }}
       >

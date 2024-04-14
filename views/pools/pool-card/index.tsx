@@ -17,9 +17,7 @@ import PoolCardTrade from './pool-card-trade';
 
 const PoolCard: FC<PoolCardProps> = ({ pool, coinMetadata, prices }) => {
   return (
-    <Link
-      href={`${Routes[RoutesEnum.PoolDetails]}?objectId=${pool.poolId}&stateId=${pool.stateId}`}
-    >
+    <Link href={`${Routes[RoutesEnum.PoolDetails]}?objectId=${pool.poolId}`}>
       <Box
         p="m"
         flex="1"

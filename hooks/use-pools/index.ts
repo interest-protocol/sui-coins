@@ -66,22 +66,36 @@ const parsePool = (x: SuiObjectResponse): AmmPool => {
   };
 };
 
-export const usePool = (poolAddress: string) => {
+export const usePool = (parentId: string) => {
   const client = useMovementClient();
 
   return useSWR<AmmPool | null>(
-    makeSWRKey([], usePool.name + poolAddress),
+    makeSWRKey([], usePool.name + parentId),
     async () => {
-      if (!poolAddress.length) return null;
+      if (!parentId) return null;
 
-      const pool = await client.getObject({
-        id: poolAddress,
-        options: {
-          showContent: true,
-        },
+      const { data } = await client.getDynamicFields({ parentId });
+
+      if (!data.length) return null;
+
+      const objectId = data[0].objectId;
+
+      const { data: poolData } = await client.getObject({
+        id: objectId,
+        options: { showContent: true, showType: true },
       });
 
-      return parsePool(getSuiObjectResponseFields(pool));
+      if (!poolData || !poolData.content) return null;
+
+      const fields: null | SuiObjectResponse = pathOr(
+        null,
+        ['content', 'fields'],
+        poolData
+      );
+
+      if (!fields) return null;
+
+      return parsePool(fields);
     },
     {
       revalidateOnFocus: false,

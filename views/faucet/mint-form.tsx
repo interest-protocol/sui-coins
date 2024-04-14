@@ -11,12 +11,13 @@ import toast from 'react-hot-toast';
 
 import { CONTROLLERS_MAP } from '@/constants';
 import { COINS } from '@/constants/coins';
+import { TOKEN_SYMBOL } from '@/constants/coins';
 import { MINT_MODULE_NAME_MAP, PACKAGES } from '@/constants/packages';
 import { useNetwork } from '@/context/network';
 import { useUserMintEpoch, useWeb3 } from '@/hooks';
 import { useModal } from '@/hooks/use-modal';
 import { useSuiSystemState } from '@/hooks/use-sui-system-state';
-import { TOKEN_ICONS, TOKEN_SYMBOL } from '@/lib';
+import { TOKEN_ICONS } from '@/lib';
 import { ChevronDownSVG } from '@/svg';
 import { showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
 import { requestMov } from '@/views/faucet/faucet.utils';

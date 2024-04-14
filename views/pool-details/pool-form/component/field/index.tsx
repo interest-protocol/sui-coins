@@ -15,12 +15,23 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
   const { coinsMap } = useWeb3();
   const { register, setValue, getValues } = useFormContext();
 
-  const fieldName =
-    poolOptionView === PoolOption.Deposit ? `tokenList.${index}` : 'lpCoin';
+  const isDeposit = poolOptionView === PoolOption.Deposit;
+
+  const fieldName = isDeposit ? `tokenList.${index}` : 'lpCoin';
 
   const token = getValues(fieldName);
 
   const Icon = TOKEN_ICONS[network][token.symbol];
+
+  const handleDepositLock = () => {
+    if ('tokenList.0' === fieldName) {
+      setValue('tokenList.0.locked', true);
+      setValue('tokenList.1.locked', false);
+    } else {
+      setValue('tokenList.1.locked', true);
+      setValue('tokenList.0.locked', false);
+    }
+  };
 
   return (
     <TokenField
@@ -28,7 +39,11 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
       textAlign="right"
       labelPosition="right"
       tokenName={token.symbol}
-      handleMax={() =>
+      handleMax={() => {
+        if (isDeposit) {
+          handleDepositLock();
+        }
+
         setValue(
           `${fieldName}.value`,
           coinsMap[token.type]
@@ -37,10 +52,14 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
                 token.decimals
               )
             : 0
-        )
-      }
+        );
+      }}
       {...register(`${fieldName}.value`, {
         onChange: (v: ChangeEvent<HTMLInputElement>) => {
+          if (isDeposit) {
+            handleDepositLock();
+          }
+
           setValue(
             `${fieldName}.value`,
             parseInputEventToNumberString(

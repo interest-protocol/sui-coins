@@ -1,6 +1,6 @@
 import { Network } from '@/constants';
+import { TOKEN_SYMBOL } from '@/constants/coins';
 import { AmmPool } from '@/interface';
-import { TOKEN_SYMBOL } from '@/lib';
 
 import { ISwapSettings } from '../swap/swap.types';
 
@@ -42,14 +42,16 @@ export interface CoinData {
 export interface PoolToken extends CoinData {
   value: string;
   balance: number | null;
+  locked: boolean;
 }
 
 export interface PoolForm {
   lpCoin: PoolToken;
   isFindingPool: boolean;
   settings: ISwapSettings;
-  tokenList: ReadonlyArray<CoinData>;
+  tokenList: ReadonlyArray<PoolToken>;
   filterList: ReadonlyArray<FilterItemProps>;
+  pool: AmmPool;
 }
 
 export interface FilterItemProps {

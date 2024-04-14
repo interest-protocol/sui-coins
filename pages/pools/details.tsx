@@ -1,23 +1,15 @@
-import BigNumber from 'bignumber.js';
 import { NextPage } from 'next';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { SEO } from '@/components';
 import { withObjectIdGuard } from '@/components/hoc';
 import { Routes, RoutesEnum } from '@/constants';
-import { RECOMMENDED_POOLS } from '@/constants/coins';
-import { useNetwork } from '@/context/network';
-import { useWeb3 } from '@/hooks';
 import { PoolPageProps } from '@/interface';
-import { FixedPointMath } from '@/lib';
-import { ZERO_BIG_NUMBER } from '@/utils';
 import PoolDetails from '@/views/pool-details';
 import { PoolForm, PoolOption } from '@/views/pools/pools.types';
 
 const PoolDetailsPage: NextPage<PoolPageProps> = ({ objectId }) => {
-  const { coinsMap } = useWeb3();
-  const network = useNetwork();
   const [poolOptionView, setPoolOptionView] = useState<PoolOption>(
     PoolOption.Deposit
   );
@@ -26,47 +18,14 @@ const PoolDetailsPage: NextPage<PoolPageProps> = ({ objectId }) => {
     setPoolOptionView(index);
   };
 
-  const pool = RECOMMENDED_POOLS[network].find(
-    ({ poolObjectId }) => poolObjectId === objectId
-  );
-
   const form = useForm<PoolForm>({
     defaultValues: {
-      tokenList: pool?.tokens.map((token) => ({
-        ...token,
-        value: '0',
-      })),
-      lpCoin: pool?.lpCoin,
+      tokenList: [],
       settings: {
         slippage: '0.1',
       },
     },
   });
-
-  useEffect(() => {
-    const tokenList = form.getValues('tokenList');
-    const lpCoinType = form.getValues('lpCoin.type');
-
-    form.setValue(
-      'tokenList',
-      tokenList.map((token) => ({
-        ...token,
-        balance: FixedPointMath.toNumber(
-          coinsMap[token.type]
-            ? BigNumber(coinsMap[token.type].balance)
-            : ZERO_BIG_NUMBER
-        ),
-      }))
-    );
-    form.setValue(
-      'lpCoin.balance',
-      FixedPointMath.toNumber(
-        coinsMap[lpCoinType]
-          ? BigNumber(coinsMap[lpCoinType].balance)
-          : ZERO_BIG_NUMBER
-      )
-    );
-  }, [coinsMap]);
 
   return (
     <FormProvider {...form}>

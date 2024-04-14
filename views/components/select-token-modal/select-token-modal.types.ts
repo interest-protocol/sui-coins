@@ -1,7 +1,7 @@
 import { Control, UseFormSetValue } from 'react-hook-form';
 
+import { TOKEN_SYMBOL } from '@/constants/coins';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
-import { TOKEN_SYMBOL } from '@/lib';
 
 export interface CoinDataWithChainInfo {
   type: string;
