@@ -1,14 +1,15 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { FC, useState } from 'react';
 
-import { usePoolDetails } from '../pool-details.context';
 import { PoolDetailsTabOption } from '../pool-details.types';
 import PoolAdvanceDetail from './advance-detail';
 import DetailTabs from './components/detail-tabs';
 import PoolDetail from './pool-detail';
 
 const PoolAdditionalInfo: FC = () => {
-  const { pool } = usePoolDetails();
+  const pool = {
+    poolType: 'amm',
+  };
   const [poolDetailsView, setPoolDetailsView] = useState<PoolDetailsTabOption>(
     PoolDetailsTabOption.Detail
   );
