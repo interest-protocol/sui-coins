@@ -28,15 +28,20 @@ const SwapPreviewButton: FC = () => {
   const from = useWatch({ control: control, name: 'from' });
   const to = useWatch({ control: control, name: 'to' });
 
-  const notEnoughBalance = FixedPointMath.toBigNumber(from.value, from.decimals)
+  const notEnoughBalance = FixedPointMath.toBigNumber(
+    from?.value ?? '0',
+    from?.decimals ?? 0
+  )
     .decimalPlaces(0, BigNumber.ROUND_DOWN)
     .gt(
-      coinsMap[from.type]
+      from && coinsMap[from.type]
         ? BigNumber(coinsMap[from.type].balance)
         : ZERO_BIG_NUMBER
     );
 
   const isEnabled =
+    from &&
+    to &&
     coinsExist &&
     !loading &&
     !notEnoughBalance &&

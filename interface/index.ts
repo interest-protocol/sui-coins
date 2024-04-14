@@ -65,3 +65,10 @@ export interface AmmPool {
   poolType: PoolTypeEnum;
   isVolatile: boolean;
 }
+
+export interface Token {
+  name?: string;
+  symbol: string;
+  decimals: number;
+  type: `0x${string}`;
+}

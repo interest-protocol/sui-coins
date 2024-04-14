@@ -17,15 +17,15 @@ import { SwapForm } from '@/views/swap/swap.types';
 import { useSwap } from './swap.hooks';
 
 const SwapButton = () => {
-  const network = useNetwork();
-  const formSwap: UseFormReturn<SwapForm> = useFormContext();
-  const [loading, setLoading] = useState(false);
-  const { mutate } = useWeb3();
   const swap = useSwap();
+  const network = useNetwork();
+  const { mutate } = useWeb3();
   const client = useSuiClient();
-  const signTransactionBlock = useSignTransactionBlock();
-  const currentAccount = useCurrentAccount();
   const { handleClose } = useModal();
+  const currentAccount = useCurrentAccount();
+  const [loading, setLoading] = useState(false);
+  const signTransactionBlock = useSignTransactionBlock();
+  const formSwap: UseFormReturn<SwapForm> = useFormContext();
 
   const resetInput = () => {
     formSwap.setValue('from.value', '0');
@@ -33,10 +33,13 @@ const SwapButton = () => {
   };
 
   const handleSwap = async () => {
+    const loadingToastId = toast.loading('Swapping...');
+
     try {
       setLoading(true);
 
       const txb = swap();
+
       const { signature, transactionBlockBytes } =
         await signTransactionBlock.mutateAsync({
           transactionBlock: txb,
@@ -44,16 +47,20 @@ const SwapButton = () => {
         });
 
       const tx = await client.executeTransactionBlock({
-        transactionBlock: transactionBlockBytes,
         signature,
         options: { showEffects: true },
         requestType: 'WaitForEffectsCert',
+        transactionBlock: transactionBlockBytes,
       });
 
       throwTXIfNotSuccessful(tx);
 
       await showTXSuccessToast(tx, network);
+      toast.success('Swapped successfully');
+    } catch (e) {
+      toast.error((e as Error).message ?? 'Failed to swap');
     } finally {
+      toast.dismiss(loadingToastId);
       resetInput();
       setLoading(false);
       handleClose();
@@ -61,16 +68,8 @@ const SwapButton = () => {
     }
   };
 
-  const onSwap = () => {
-    toast.promise(handleSwap(), {
-      loading: 'Loading',
-      success: `Swapped successfully`,
-      error: 'Failed to swap',
-    });
-  };
-
   return (
-    <Button variant="filled" onClick={onSwap} justifyContent="center">
+    <Button variant="filled" onClick={handleSwap} justifyContent="center">
       <Typography variant="label" size="large">
         {loading ? 'Swapping...' : 'Confirm Swap'}
       </Typography>

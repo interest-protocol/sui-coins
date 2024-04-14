@@ -17,11 +17,11 @@ export const ALGORITHM_TYPE: Array<FilterItemProps> = [
 export const POOL_TYPE = [
   {
     type: FilterTypeEnum.POOL_TYPE,
-    description: PoolTypeEnum.clamm,
+    description: PoolTypeEnum.clamm.toUpperCase(),
   },
   {
     type: FilterTypeEnum.POOL_TYPE,
-    description: PoolTypeEnum.amm,
+    description: PoolTypeEnum.amm.toUpperCase(),
   },
 ];
 
