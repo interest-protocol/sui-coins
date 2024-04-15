@@ -1,4 +1,9 @@
-import { Box, TokenField, Typography } from '@interest-protocol/ui-kit';
+import {
+  Box,
+  ProgressIndicator,
+  TokenField,
+  Typography,
+} from '@interest-protocol/ui-kit';
 import { ChangeEvent, FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
@@ -13,7 +18,7 @@ import { PoolFieldsProps } from './field.types';
 
 const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
   const network = useNetwork();
-  const { coinsMap } = useWeb3();
+  const { coinsMap, isFetchingCoinBalances } = useWeb3();
   const { register, setValue, getValues } = useFormContext();
 
   const isDeposit = poolOptionView === PoolOption.Deposit;
@@ -90,21 +95,31 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
         )
       }
       Label={
-        poolOptionView !== PoolOption.Deposit && (
-          <Typography
-            mb="xs"
-            size="medium"
-            variant="label"
-            color="onSurface"
-            textAlign="right"
-            textTransform="uppercase"
-          >
-            Balance:{' '}
-            <Typography size="medium" variant="label" color="primary" as="span">
-              {token?.balance}
-            </Typography>
+        <Typography
+          mb="xs"
+          size="medium"
+          variant="label"
+          color="onSurface"
+          textAlign="right"
+          display="inline-flex"
+          textTransform="uppercase"
+        >
+          Balance:{' '}
+          <Typography size="medium" variant="label" color="primary" as="span">
+            {isFetchingCoinBalances ? (
+              <Box mt="-1rem" ml="s">
+                <ProgressIndicator variant="loading" size={16} />
+              </Box>
+            ) : coinsMap[token.type] ? (
+              FixedPointMath.toNumber(
+                coinsMap[token.type].balance,
+                token.decimals
+              )
+            ) : (
+              0
+            )}
           </Typography>
-        )
+        </Typography>
       }
     />
   );
