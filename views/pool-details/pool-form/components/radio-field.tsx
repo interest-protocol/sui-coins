@@ -1,7 +1,7 @@
 import { Box, RadioButton, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import { RadioFieldProps, SelectionFieldValues } from './withdraw.types';
+import { RadioFieldProps, SelectionFieldValues } from '../pool-form.types';
 
 const RadioField: FC<RadioFieldProps> = ({
   label,

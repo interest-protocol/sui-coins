@@ -7,6 +7,7 @@ import { withObjectIdGuard } from '@/components/hoc';
 import { Routes, RoutesEnum } from '@/constants';
 import { PoolPageProps } from '@/interface';
 import PoolDetails from '@/views/pool-details';
+import { PoolDetailsProvider } from '@/views/pool-details/pool-details.context';
 import { PoolForm, PoolOption } from '@/views/pools/pools.types';
 
 const PoolDetailsPage: NextPage<PoolPageProps> = ({ objectId }) => {
@@ -14,9 +15,7 @@ const PoolDetailsPage: NextPage<PoolPageProps> = ({ objectId }) => {
     PoolOption.Deposit
   );
 
-  const handleOptionTab = (index: PoolOption) => {
-    setPoolOptionView(index);
-  };
+  const handleOptionTab = (index: PoolOption) => setPoolOptionView(index);
 
   const form = useForm<PoolForm>({
     defaultValues: {
@@ -29,12 +28,13 @@ const PoolDetailsPage: NextPage<PoolPageProps> = ({ objectId }) => {
 
   return (
     <FormProvider {...form}>
-      <SEO pageTitle="Pool Details" />
-      <PoolDetails
-        objectId={objectId}
-        poolOptionView={poolOptionView}
-        handleOptionTab={handleOptionTab}
-      />
+      <PoolDetailsProvider objectId={objectId}>
+        <SEO pageTitle="Pool Details" />
+        <PoolDetails
+          poolOptionView={poolOptionView}
+          handleOptionTab={handleOptionTab}
+        />
+      </PoolDetailsProvider>
     </FormProvider>
   );
 };

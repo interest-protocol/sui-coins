@@ -7,31 +7,24 @@ import { useFormContext } from 'react-hook-form';
 import Layout from '@/components/layout';
 import { Routes, RoutesEnum } from '@/constants';
 import { useWeb3 } from '@/hooks';
-import { useGetCoinMetadata } from '@/hooks/use-get-coin-metadata';
-import { usePool } from '@/hooks/use-pools';
 import { FixedPointMath } from '@/lib';
 import { ZERO_BIG_NUMBER } from '@/utils';
 import { PoolForm as PoolFormType } from '@/views/pools/pools.types';
 
 import PoolTitleBar from '../components/pool-title-bar';
-import PoolAdditionalInfo from './additional-info';
-import { PoolDetailsProps } from './pool-details.types';
+import { usePoolDetails } from './pool-details.context';
+import { PoolDetailsFormProps } from './pool-details.types';
 import PoolForm from './pool-form';
+import PoolInfo from './pool-info';
 
-const PoolDetails: FC<PoolDetailsProps> = ({
+const PoolDetails: FC<PoolDetailsFormProps> = ({
   poolOptionView,
   handleOptionTab,
-  objectId,
 }) => {
   const { push } = useRouter();
-
-  const { data: pool, isLoading } = usePool(objectId);
-
-  const { data: metadata, isLoading: isMetadataLoading } = useGetCoinMetadata(
-    pool ? Object.values(pool.coinTypes) : []
-  );
-
   const { coinsMap } = useWeb3();
+
+  const { pool, metadata } = usePoolDetails();
 
   const form = useFormContext<PoolFormType>();
 
@@ -75,9 +68,6 @@ const PoolDetails: FC<PoolDetailsProps> = ({
     form.setValue('pool', pool);
   }, [coinsMap, pool, metadata]);
 
-  if (isLoading || !pool || isMetadataLoading || !metadata)
-    return <div>loading...</div>;
-
   return (
     <Layout>
       <PoolTitleBar onBack={() => push(Routes[RoutesEnum.Pools])} />
@@ -88,14 +78,14 @@ const PoolDetails: FC<PoolDetailsProps> = ({
         overflow="hidden"
         alignItems="start"
         flexDirection="column"
-        gridTemplateColumns="62% 38%"
+        gridTemplateColumns="3fr 2fr"
         display={['flex', 'flex', 'flex', 'grid']}
       >
         <PoolForm
           poolOptionView={poolOptionView}
           handleOptionTab={handleOptionTab}
         />
-        <PoolAdditionalInfo />
+        <PoolInfo />
       </Box>
     </Layout>
   );

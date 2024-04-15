@@ -1,9 +1,9 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC, useState } from 'react';
 
+import { SelectionFieldValues } from '../pool-form.types';
 import RadioField from './radio-field';
 import SelectionTokenList from './token-list';
-import { SelectionFieldValues } from './withdraw.types';
 
 const Selection: FC = () => {
   const pool = {

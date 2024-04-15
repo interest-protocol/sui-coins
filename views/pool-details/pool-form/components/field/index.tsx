@@ -5,6 +5,7 @@ import { useFormContext } from 'react-hook-form';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks';
 import { FixedPointMath, TOKEN_ICONS } from '@/lib';
+import { DefaultTokenSVG } from '@/svg';
 import { parseInputEventToNumberString } from '@/utils';
 import { PoolOption } from '@/views/pools/pools.types';
 
@@ -21,7 +22,7 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
 
   const token = getValues(fieldName);
 
-  const Icon = TOKEN_ICONS[network][token.symbol];
+  const Icon = token ? TOKEN_ICONS[network][token.symbol] : DefaultTokenSVG;
 
   const handleDepositLock = () => {
     if ('tokenList.0' === fieldName) {
@@ -37,12 +38,12 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
     <TokenField
       placeholder="0"
       textAlign="right"
+      disabled={!token}
       labelPosition="right"
-      tokenName={token.symbol}
+      tokenName={token?.symbol ?? ''}
+      fieldProps={{ bg: 'lowestContainer' }}
       handleMax={() => {
-        if (isDeposit) {
-          handleDepositLock();
-        }
+        if (isDeposit) handleDepositLock();
 
         setValue(
           `${fieldName}.value`,
@@ -56,9 +57,7 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
       }}
       {...register(`${fieldName}.value`, {
         onChange: (v: ChangeEvent<HTMLInputElement>) => {
-          if (isDeposit) {
-            handleDepositLock();
-          }
+          if (isDeposit) handleDepositLock();
 
           setValue(
             `${fieldName}.value`,
@@ -74,9 +73,6 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
           );
         },
       })}
-      fieldProps={{
-        bg: 'lowestContainer',
-      }}
       TokenIcon={
         Icon && (
           <Box
@@ -105,7 +101,7 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
           >
             Balance:{' '}
             <Typography size="medium" variant="label" color="primary" as="span">
-              {token.balance}
+              {token?.balance}
             </Typography>
           </Typography>
         )

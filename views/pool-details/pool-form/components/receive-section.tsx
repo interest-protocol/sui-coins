@@ -6,7 +6,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { FixedPointMath } from '@/lib';
 import { PoolForm } from '@/views/pools/pools.types';
 
-import { getAmmLpCoinAmount } from './../pool-form.utils';
+import { getAmmLpCoinAmount } from '../pool-form.utils';
 
 const PoolReceiveSection: FC = () => {
   const { control, getValues } = useFormContext<PoolForm>();

@@ -6,7 +6,7 @@ import PoolAdvanceDetail from './advance-detail';
 import DetailTabs from './components/detail-tabs';
 import PoolDetail from './pool-detail';
 
-const PoolAdditionalInfo: FC = () => {
+const PoolInfo: FC = () => {
   const pool = {
     poolType: 'amm',
   };
@@ -14,12 +14,11 @@ const PoolAdditionalInfo: FC = () => {
     PoolDetailsTabOption.Detail
   );
 
-  const handleTabChange = (index: PoolDetailsTabOption) => {
+  const handleTabChange = (index: PoolDetailsTabOption) =>
     setPoolDetailsView(index);
-  };
 
   return (
-    <Box width="100%" color="onSurface" borderRadius="xs" bg="container">
+    <Box color="onSurface" borderRadius="xs" bg="container">
       <DetailTabs
         onChangeTab={handleTabChange}
         defaultTabIndex={poolDetailsView}
@@ -36,4 +35,4 @@ const PoolAdditionalInfo: FC = () => {
   );
 };
 
-export default PoolAdditionalInfo;
+export default PoolInfo;

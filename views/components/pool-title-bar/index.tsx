@@ -5,26 +5,29 @@ import { v4 } from 'uuid';
 
 import { useNetwork } from '@/context/network';
 import { TOKEN_ICONS } from '@/lib';
-import { ArrowLeftSVG } from '@/svg';
+import { ArrowLeftSVG, DefaultTokenSVG } from '@/svg';
 import { PoolForm as PoolFormType } from '@/views/pools/pools.types';
 
 import { PoolTitleBarProps } from './pool-title-bar.types';
 
 const PoolTitleBar: FC<PoolTitleBarProps> = ({ onBack, centerTile }) => {
-  const { control } = useFormContext<PoolFormType>();
   const network = useNetwork();
+  const { control } = useFormContext<PoolFormType>();
+
   const tokens = useWatch({
     control: control,
     name: 'tokenList',
   });
 
   const name = tokens.reduce(
-    (acc, { symbol }) => `${acc ? `${acc}•` : ''}${symbol}`,
+    (acc, token) => `${acc ? `${acc}•` : ''}${token?.symbol ?? ''}`,
     ''
   );
 
-  const iconTokenList = tokens.map(
-    (token) => TOKEN_ICONS[network][token.symbol]
+  const iconTokenList = tokens.map((token) =>
+    token
+      ? TOKEN_ICONS[network][token.symbol] ?? DefaultTokenSVG
+      : DefaultTokenSVG
   );
 
   return (

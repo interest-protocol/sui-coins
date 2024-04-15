@@ -5,19 +5,19 @@ import { useFormContext } from 'react-hook-form';
 
 import { useDialog } from '@/hooks';
 import { useModal } from '@/hooks/use-modal';
+import { PoolForm } from '@/views/pools/pools.types';
 import ManageSlippage from '@/views/swap/manage-slippage';
 
-import PoolField from '../component/field';
-import { PoolFormProps } from '../component/field/field.types';
-import PoolPreview from '../preview';
-import Selection from './selection';
+import PoolField from './components/field';
+import { PoolFormProps } from './components/field/field.types';
+import Selection from './components/selection';
+import PoolPreview from './pool-form-preview';
 
 const PoolWithdraw: FC<PoolFormProps> = ({ poolOptionView }) => {
   const { setModal } = useModal();
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const { dialog, handleClose } = useDialog();
-
-  const { getValues } = useFormContext();
+  const { getValues } = useFormContext<PoolForm>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleWithdraw = async () => {
     setTimeout(() => {}, 2000);

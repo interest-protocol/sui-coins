@@ -6,6 +6,7 @@ import { makeSWRKey } from '@/utils';
 
 export const useGetCoinMetadata = (coinsType: ReadonlyArray<string>) => {
   const network = useNetwork();
+
   return useSWR<Record<string, CoinMetadataWithType>>(
     makeSWRKey([], useGetCoinMetadata.name + coinsType + network),
     async () => {

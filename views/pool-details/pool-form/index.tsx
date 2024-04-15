@@ -4,8 +4,8 @@ import { FC } from 'react';
 import { PoolOption } from '@/views/pools/pools.types';
 
 import { PoolDetailsFormProps } from '../pool-details.types';
-import PoolDeposit from './deposit';
-import PoolWithdraw from './withdraw';
+import PoolDeposit from './pool-form-deposit';
+import PoolWithdraw from './pool-form-widraw';
 
 const PoolForm: FC<PoolDetailsFormProps> = ({
   handleOptionTab,
@@ -13,11 +13,10 @@ const PoolForm: FC<PoolDetailsFormProps> = ({
 }) => (
   <Box
     gap="xl"
-    width="100%"
+    bg="container"
     display="flex"
     borderRadius="xs"
     color="onSurface"
-    bg="container"
     flexDirection="column"
     p={['m', 'm', 'm', 'xl']}
   >

@@ -5,15 +5,16 @@ import { v4 } from 'uuid';
 
 import { useNetwork } from '@/context/network';
 import { TOKEN_ICONS } from '@/lib';
-import { PoolToken } from '@/views/pools/pools.types';
+import { DefaultTokenSVG } from '@/svg';
+import { PoolForm } from '@/views/pools/pools.types';
 
-import { SelectionFieldValues, TokenListProps } from './withdraw.types';
+import { SelectionFieldValues, TokenListProps } from '../pool-form.types';
 
 const SelectionTokenList: FC<TokenListProps> = ({ type }) => {
   const network = useNetwork();
-  const { getValues } = useFormContext();
+  const { getValues } = useFormContext<PoolForm>();
 
-  const tokenList = getValues(`tokenList`) as Array<PoolToken>;
+  const tokenList = getValues('tokenList');
 
   const [tokenSelected, setTokenSelected] = useState(tokenList[0].type);
 
@@ -22,7 +23,7 @@ const SelectionTokenList: FC<TokenListProps> = ({ type }) => {
   return (
     <Box py="xs" borderTop="2px solid" borderColor="lowestContainer">
       {tokenList.map((token) => {
-        const Icon = TOKEN_ICONS[network][token.symbol];
+        const Icon = TOKEN_ICONS[network][token.symbol] ?? DefaultTokenSVG;
 
         return (
           <Box
