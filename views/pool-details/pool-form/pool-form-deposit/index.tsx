@@ -1,12 +1,13 @@
 import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
 import { useCurrentAccount, useSignTransactionBlock } from '@mysten/dapp-kit';
 import { FC } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
 import { useNetwork } from '@/context/network';
-import { useDialog, useMovementClient } from '@/hooks';
+import { useDialog, useMovementClient, useWeb3 } from '@/hooks';
 import { useModal } from '@/hooks/use-modal';
+import { FixedPointMath } from '@/lib';
 import { showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
 import ManageSlippage from '@/views/swap/manage-slippage';
@@ -21,14 +22,15 @@ import DepositManager from './pool-form-deposit-manager';
 const PoolDeposit: FC<PoolFormProps> = ({ poolOptionView }) => {
   const network = useNetwork();
   const deposit = useDeposit();
+  const { coinsMap } = useWeb3();
   const { setModal } = useModal();
   const client = useMovementClient();
   const account = useCurrentAccount();
   const { dialog, handleClose } = useDialog();
-  const { getValues } = useFormContext<PoolForm>();
   const signTransactionBlock = useSignTransactionBlock();
+  const { getValues, control } = useFormContext<PoolForm>();
 
-  const tokenList = getValues('tokenList');
+  const tokenList = useWatch({ control, name: 'tokenList' });
 
   const handleDeposit = async () => {
     try {
@@ -83,7 +85,14 @@ const PoolDeposit: FC<PoolFormProps> = ({ poolOptionView }) => {
     });
   };
 
+  const disabled = tokenList.some(
+    ({ value, type, decimals }) =>
+      !Number(value) ||
+      coinsMap[type].balance.lt(FixedPointMath.toBigNumber(value, decimals))
+  );
+
   const addDeposit = () =>
+    !disabled &&
     setModal(
       <Motion
         animate={{ scale: 1 }}
@@ -142,6 +151,7 @@ const PoolDeposit: FC<PoolFormProps> = ({ poolOptionView }) => {
         mx="auto"
         variant="filled"
         width="max-content"
+        disabled={disabled}
         onClick={addDeposit}
       >
         Deposit
