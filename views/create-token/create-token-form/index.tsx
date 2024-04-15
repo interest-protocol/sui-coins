@@ -48,7 +48,7 @@ const CreateTokenForm: FC = () => {
   const network = useNetwork();
   const currentAccount = useCurrentAccount();
   const signTransactionBlock = useSignTransactionBlock();
-  const { coinsMap } = useWeb3();
+  const { coinsMap, mutate } = useWeb3();
 
   const createToken = async () => {
     try {
@@ -109,6 +109,7 @@ const CreateTokenForm: FC = () => {
       showTXSuccessToast(tx, network);
     } finally {
       setLoading(false);
+      mutate();
     }
   };
 
