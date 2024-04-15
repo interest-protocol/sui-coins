@@ -43,16 +43,18 @@ const SendLink: FC<SendLinkProps> = ({ data, error, isLoading, mutate }) => {
 
     if (!data || !gasCoin) return toast.error('Something went wrong');
 
-    const gasObject = {
-      digest: gasCoin.digest!,
-      version: gasCoin.version!,
-      objectId: gasCoin.coinObjectId,
-    };
+    const gasObjects = gasCoin.objects.map(
+      ({ digest, version, coinObjectId }) => ({
+        digest: digest!,
+        version: version!,
+        objectId: coinObjectId,
+      })
+    );
 
     const toasterId = toast.loading('Reclaiming...');
     setReclaiming(true);
     try {
-      await reclaim(data, gasObject, onSuccess);
+      await reclaim(data, gasObjects, onSuccess);
       toast.success('Link reclaimed successfully');
     } catch (e) {
       toast.error((e as Error).message ?? 'Something went wrong');
