@@ -1,14 +1,10 @@
 import { Box } from '@interest-protocol/ui-kit';
-import BigNumber from 'bignumber.js';
 import { useRouter } from 'next/router';
 import { FC, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import Layout from '@/components/layout';
 import { Routes, RoutesEnum } from '@/constants';
-import { useWeb3 } from '@/hooks';
-import { FixedPointMath } from '@/lib';
-import { ZERO_BIG_NUMBER } from '@/utils';
 import { PoolForm as PoolFormType } from '@/views/pools/pools.types';
 
 import PoolTitleBar from '../components/pool-title-bar';
@@ -22,51 +18,42 @@ const PoolDetails: FC<PoolDetailsFormProps> = ({
   handleOptionTab,
 }) => {
   const { push } = useRouter();
-  const { coinsMap } = useWeb3();
 
   const { pool, metadata } = usePoolDetails();
 
-  const form = useFormContext<PoolFormType>();
+  const { getValues, setValue } = useFormContext<PoolFormType>();
 
   useEffect(() => {
     if (!pool || !metadata) return;
 
-    const formTokenList = form.getValues('tokenList');
+    const formTokenList = getValues('tokenList');
 
-    if (formTokenList.length) return;
+    if (formTokenList.every(({ type }) => type)) return;
 
     const tokenList: string[] = Object.values(pool.coinTypes).slice(0, 2);
     const lpCoinType = pool.coinTypes.lpCoin;
 
-    form.setValue(
+    setValue(
       'tokenList',
       tokenList.map((tokenType) => ({
-        balance: FixedPointMath.toNumber(
-          coinsMap[tokenType]
-            ? BigNumber(coinsMap[tokenType].balance)
-            : ZERO_BIG_NUMBER
-        ),
-        type: tokenType,
-        symbol: metadata[tokenType].symbol.replace('SUI', 'MOV'),
-        decimals: metadata[tokenType].decimals,
         value: '0',
         locked: true,
+        type: tokenType,
+        decimals: metadata[tokenType].decimals,
+        symbol: metadata[tokenType].symbol.replace('SUI', 'MOV'),
       }))
     );
-    form.setValue('lpCoin', {
-      balance: FixedPointMath.toNumber(
-        coinsMap[pool.coinTypes.lpCoin]
-          ? BigNumber(coinsMap[pool.coinTypes.lpCoin].balance)
-          : ZERO_BIG_NUMBER
-      ),
-      symbol: metadata[lpCoinType].symbol.replace('SUI', 'MOV'),
-      decimals: 9,
-      type: lpCoinType,
+
+    setValue('lpCoin', {
       value: '0',
+      decimals: 9,
       locked: true,
+      type: lpCoinType,
+      symbol: metadata[lpCoinType].symbol.replace('SUI', 'MOV'),
     });
-    form.setValue('pool', pool);
-  }, [coinsMap, pool, metadata]);
+
+    setValue('pool', pool);
+  }, [pool, metadata]);
 
   return (
     <Layout>

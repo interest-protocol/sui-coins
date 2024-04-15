@@ -41,7 +41,6 @@ export interface CoinData {
 
 export interface PoolToken extends CoinData {
   value: string;
-  balance: number | null;
   locked: boolean;
 }
 

@@ -19,8 +19,18 @@ const ItemCoin: FC<PoolDetailAccordionItemCoinProps> = ({
     >
       <Box display="flex" alignItems="center" justifyContent="center">
         {Icon && (
-          <Box mr="0.5rem" display="flex" alignItems="center">
-            <Icon maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
+          <Box
+            mr="0.5rem"
+            bg="onSurface"
+            display="flex"
+            width="1.7rem"
+            height="1.7rem"
+            color="surface"
+            alignItems="center"
+            borderRadius="full"
+            justifyContent="center"
+          >
+            <Icon maxHeight="1.2rem" maxWidth="1.2rem" width="100%" />
           </Box>
         )}
         <Typography size="medium" variant="body" mr="0.5rem">

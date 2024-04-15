@@ -2,9 +2,9 @@ import { Box } from '@interest-protocol/ui-kit';
 import { FC, useState } from 'react';
 
 import { PoolDetailsTabOption } from '../pool-details.types';
-import PoolAdvanceDetail from './advance-detail';
 import DetailTabs from './components/detail-tabs';
-import PoolDetail from './pool-detail';
+import PoolInfoAdvanced from './pool-info-advanced';
+import PoolInfoDetail from './pool-info-detail';
 
 const PoolInfo: FC = () => {
   const pool = {
@@ -27,9 +27,9 @@ const PoolInfo: FC = () => {
         )}
       />
       {poolDetailsView === PoolDetailsTabOption.Detail ? (
-        <PoolDetail />
+        <PoolInfoDetail />
       ) : (
-        pool?.poolType !== 'amm' && <PoolAdvanceDetail />
+        pool?.poolType !== 'amm' && <PoolInfoAdvanced />
       )}
     </Box>
   );

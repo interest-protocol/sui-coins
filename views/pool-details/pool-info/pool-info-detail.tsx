@@ -9,15 +9,11 @@ import { formatDollars, formatMoney } from '@/utils';
 import { getLiquidity } from '@/views/pools/pool-card/pool-card.utils';
 
 import { usePoolDetails } from '../pool-details.context';
-import {
-  POOL_INFORMATION,
-  POOL_STATISTICS,
-  SVGMap,
-} from './additional-info.data';
 import Accordion from './components/accordion';
 import { PoolDetailAccordionItemStandardProps } from './components/accordion/accordion.types';
 import ItemStandard from './components/accordion/item-standard';
 import ItemToken from './components/accordion/item-token';
+import { POOL_INFORMATION, POOL_STATISTICS, SVGMap } from './pool-info.data';
 
 const PoolDetail = () => {
   const { pool, metadata, prices, loading } = usePoolDetails();

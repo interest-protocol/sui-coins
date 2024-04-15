@@ -1,11 +1,6 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { v4 } from 'uuid';
 
-import {
-  POOL_ORACLE_PRICE,
-  POOL_PARAMETERS,
-  POOL_PRICE,
-} from './additional-info.data';
 import Accordion from './components/accordion';
 import {
   PoolDetailAccordionItemCoinProps,
@@ -13,6 +8,11 @@ import {
 } from './components/accordion/accordion.types';
 import ItemStandard from './components/accordion/item-standard';
 import ItemToken from './components/accordion/item-token';
+import {
+  POOL_ORACLE_PRICE,
+  POOL_PARAMETERS,
+  POOL_PRICE,
+} from './pool-info.data';
 
 const AdvanceDetail = () => (
   <Box>
