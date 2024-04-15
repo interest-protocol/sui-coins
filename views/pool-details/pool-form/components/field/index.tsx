@@ -12,18 +12,20 @@ import { useWeb3 } from '@/hooks';
 import { FixedPointMath, TOKEN_ICONS } from '@/lib';
 import { DefaultTokenSVG } from '@/svg';
 import { parseInputEventToNumberString } from '@/utils';
-import { PoolOption } from '@/views/pools/pools.types';
+import { PoolForm, PoolOption } from '@/views/pools/pools.types';
 
 import { PoolFieldsProps } from './field.types';
 
 const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
   const network = useNetwork();
   const { coinsMap, isFetchingCoinBalances } = useWeb3();
-  const { register, setValue, getValues } = useFormContext();
+  const { register, setValue, getValues } = useFormContext<PoolForm>();
 
   const isDeposit = poolOptionView === PoolOption.Deposit;
 
-  const fieldName = isDeposit ? `tokenList.${index}` : 'lpCoin';
+  const fieldName: `tokenList.${number}` | 'lpCoin' = isDeposit
+    ? `tokenList.${index}`
+    : 'lpCoin';
 
   const token = getValues(fieldName);
 
@@ -33,9 +35,12 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
     if ('tokenList.0' === fieldName) {
       setValue('tokenList.0.locked', true);
       setValue('tokenList.1.locked', false);
-    } else {
+      return;
+    }
+    if ('tokenList.1' === fieldName) {
       setValue('tokenList.1.locked', true);
       setValue('tokenList.0.locked', false);
+      return;
     }
   };
 
@@ -52,12 +57,14 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
 
         setValue(
           `${fieldName}.value`,
-          coinsMap[token.type]
-            ? FixedPointMath.toNumber(
-                coinsMap[token.type].balance,
-                token.decimals
-              )
-            : 0
+          String(
+            coinsMap[token.type]
+              ? FixedPointMath.toNumber(
+                  coinsMap[token.type].balance,
+                  token.decimals
+                )
+              : 0
+          )
         );
       }}
       {...register(`${fieldName}.value`, {

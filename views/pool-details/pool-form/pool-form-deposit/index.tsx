@@ -1,7 +1,7 @@
 import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
 import { useCurrentAccount, useSignTransactionBlock } from '@mysten/dapp-kit';
 import { FC } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import { v4 } from 'uuid';
 
 import { useNetwork } from '@/context/network';
@@ -30,7 +30,7 @@ const PoolDeposit: FC<PoolFormProps> = ({ poolOptionView }) => {
   const signTransactionBlock = useSignTransactionBlock();
   const { getValues, control } = useFormContext<PoolForm>();
 
-  const tokenList = useWatch({ control, name: 'tokenList' });
+  const { fields } = useFieldArray({ control, name: 'tokenList' });
 
   const handleDeposit = async () => {
     try {
@@ -85,7 +85,7 @@ const PoolDeposit: FC<PoolFormProps> = ({ poolOptionView }) => {
     });
   };
 
-  const disabled = tokenList.some(
+  const disabled = getValues('tokenList').some(
     ({ value, type, decimals }) =>
       !Number(value) ||
       coinsMap[type].balance.lt(FixedPointMath.toBigNumber(value, decimals))
@@ -115,10 +115,10 @@ const PoolDeposit: FC<PoolFormProps> = ({ poolOptionView }) => {
         I would like to Deposit...
       </Typography>
       <Box display="flex" flexDirection="column" gap="m">
-        {tokenList.length
-          ? tokenList.map((_: any, index: number) => (
+        {fields.length
+          ? fields.map(({ id }, index) => (
               <PoolField
-                key={v4()}
+                key={id}
                 index={index}
                 poolOptionView={poolOptionView}
               />
