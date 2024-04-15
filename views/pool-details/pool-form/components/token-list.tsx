@@ -4,7 +4,8 @@ import { useFormContext } from 'react-hook-form';
 import { v4 } from 'uuid';
 
 import { useNetwork } from '@/context/network';
-import { TOKEN_ICONS } from '@/lib';
+import { useWeb3 } from '@/hooks';
+import { FixedPointMath, TOKEN_ICONS } from '@/lib';
 import { DefaultTokenSVG } from '@/svg';
 import { PoolForm } from '@/views/pools/pools.types';
 
@@ -12,6 +13,7 @@ import { SelectionFieldValues, TokenListProps } from '../pool-form.types';
 
 const SelectionTokenList: FC<TokenListProps> = ({ type }) => {
   const network = useNetwork();
+  const { coinsMap } = useWeb3();
   const { getValues } = useFormContext<PoolForm>();
 
   const tokenList = getValues('tokenList');
@@ -62,7 +64,12 @@ const SelectionTokenList: FC<TokenListProps> = ({ type }) => {
               </Typography>
             </Box>
             <Typography variant="body" ml="m" size="large">
-              {isOneCoin ? token.value : token.balance}
+              {isOneCoin
+                ? token.value
+                : FixedPointMath.toNumber(
+                    coinsMap[token.type].balance,
+                    token.decimals
+                  )}
             </Typography>
           </Box>
         );

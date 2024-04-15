@@ -4,11 +4,11 @@ import { FC } from 'react';
 import { useModal } from '@/hooks/use-modal';
 import { ArrowLeftSVG, TimesSVG } from '@/svg';
 
-import { PoolPreviewWrapperProps } from '../preview.types';
+import { PoolPreviewWrapperHeaderProps } from '../preview.types';
 
-const PoolPreviewWrapperHeader: FC<
-  Omit<PoolPreviewWrapperProps, 'onSubmit'>
-> = ({ isDeposit }) => {
+const PoolPreviewWrapperHeader: FC<PoolPreviewWrapperHeaderProps> = ({
+  isDeposit,
+}) => {
   const { handleClose } = useModal();
 
   return (

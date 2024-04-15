@@ -4,15 +4,12 @@ import { v4 } from 'uuid';
 
 import { useNetwork } from '@/context/network';
 import { TOKEN_ICONS } from '@/lib';
-import { PoolToken } from '@/views/pools/pools.types';
 
-import { PoolPreviewProps } from '../preview.types';
+import { FieldProps } from '../preview.types';
 
-const TokenListFields: FC<Omit<PoolPreviewProps, 'onSubmit'>> = ({
-  getValues,
-}) => {
+const TokenListFields: FC<FieldProps> = ({ getValues }) => {
   const network = useNetwork();
-  const tokenList = getValues(`tokenList`) as Array<PoolToken>;
+  const tokenList = getValues('tokenList');
 
   return (
     <Box>

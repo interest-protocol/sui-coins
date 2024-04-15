@@ -6,9 +6,10 @@ import PoolPreviewWrapperFooter from './footer';
 import PoolPreviewWrapperHeader from './header';
 
 const PoolPreviewWrapper: FC<PropsWithChildren<PoolPreviewWrapperProps>> = ({
-  isDeposit,
+  fees,
   onSubmit,
   children,
+  isDeposit,
 }) => (
   <Motion
     layout
@@ -33,7 +34,11 @@ const PoolPreviewWrapper: FC<PropsWithChildren<PoolPreviewWrapperProps>> = ({
       justifyContent="space-between"
     >
       {children}
-      <PoolPreviewWrapperFooter isDeposit={isDeposit} onSubmit={onSubmit} />
+      <PoolPreviewWrapperFooter
+        fees={fees}
+        onSubmit={onSubmit}
+        isDeposit={isDeposit}
+      />
     </Box>
   </Motion>
 );

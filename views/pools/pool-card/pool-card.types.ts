@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 import { AmmPool, CoinMetadataWithType } from '@/interface';
 
 export enum AlgorithmEnum {
@@ -16,8 +18,8 @@ export interface PoolCardTokenInfoProps {
 
 export interface PoolCardTradeProps {
   index: number;
-  amount: string;
   isInfo?: boolean;
+  amount: ReactNode;
   description: string;
   tooltipInfo: string;
 }

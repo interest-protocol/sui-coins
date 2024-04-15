@@ -110,7 +110,7 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
               <Box mt="-1rem" ml="s">
                 <ProgressIndicator variant="loading" size={16} />
               </Box>
-            ) : coinsMap[token.type] ? (
+            ) : token && coinsMap[token.type] ? (
               FixedPointMath.toNumber(
                 coinsMap[token.type].balance,
                 token.decimals
