@@ -33,6 +33,8 @@ const SelectToken: FC<SelectTokenProps> = ({
       type,
       symbol,
       decimals,
+      value: '',
+      locked: false,
     });
   };
 
