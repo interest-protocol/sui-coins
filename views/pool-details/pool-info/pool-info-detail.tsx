@@ -41,7 +41,8 @@ const PoolDetail = () => {
 
   const virtualPrice = liquidity
     ? FixedPointMath.toNumber(
-        FixedPointMath.toBigNumber(liquidity).div(pool.lpCoinSupply)
+        FixedPointMath.toBigNumber(liquidity).div(pool.lpCoinSupply),
+        0
       )
     : 0;
 
@@ -120,9 +121,9 @@ const PoolDetail = () => {
                 decimals: pool.decimalsY,
                 price:
                   prices[
-                    (coinXMetadata?.symbol === 'SUI'
+                    (coinYMetadata?.symbol === 'SUI'
                       ? 'MOV'
-                      : coinXMetadata.symbol
+                      : coinYMetadata.symbol
                     ).toLowerCase()
                   ] ?? 0,
               },
@@ -130,7 +131,13 @@ const PoolDetail = () => {
               <ItemToken
                 key={v4()}
                 Icon={Icon}
-                percentage="50%"
+                percentage={
+                  (+(
+                    (FixedPointMath.toNumber(balance.times(price), decimals) /
+                      liquidity) *
+                    100
+                  ).toFixed(2)).toPrecision() + '%'
+                }
                 coinName={symbol}
                 value={formatMoney(FixedPointMath.toNumber(balance, decimals))}
                 conversion={

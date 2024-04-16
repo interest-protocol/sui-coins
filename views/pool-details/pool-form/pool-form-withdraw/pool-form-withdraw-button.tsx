@@ -51,9 +51,6 @@ const PoolFormWithdrawButton: FC = () => {
       await showTXSuccessToast(tx, network);
 
       setValue('explorerLink', `${EXPLORER_URL[network]}/tx/${tx.digest}`);
-    } catch (e) {
-      console.log({ e });
-      throw e;
     } finally {
       await mutate();
     }

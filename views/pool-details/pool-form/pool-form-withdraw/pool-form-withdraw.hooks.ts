@@ -1,4 +1,3 @@
-import { useSignTransactionBlock, useSuiClient } from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { WalletAccount } from '@wallet-standard/base';
 
@@ -9,101 +8,70 @@ import { FixedPointMath } from '@/lib';
 import { createObjectsParameter, getAmountMinusSlippage } from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
 
-import { getAmmLpCoinAmount, getSafeValue } from '../pool-form.utils';
+import { getAmmXYAmount, getSafeValue } from '../pool-form.utils';
 
 export const useWithdraw = () => {
   const network = useNetwork();
   const { coinsMap } = useWeb3();
-  const suiClient = useSuiClient();
-  const signTxb = useSignTransactionBlock();
 
-  return async (
-    values: PoolForm,
-    account: WalletAccount | null,
-    isDev = false
-  ) => {
+  return async (values: PoolForm, account: WalletAccount | null) => {
     const { tokenList, pool, lpCoin, settings } = values;
 
-    if (!tokenList.length) throw new Error('No tokens ');
-
-    if (!account) throw new Error('No account found');
+    if (!+lpCoin.value || !tokenList.length) throw new Error('No tokens ');
 
     const coin0 = tokenList[0];
     const coin1 = tokenList[1];
 
-    if (!+coin0.value || !+coin1.value)
-      throw new Error('Check the coins value');
+    if (!account) throw new Error('No account found');
 
-    const walletCoin0 = coinsMap[coin0.type];
-    const walletCoin1 = coinsMap[coin1.type];
+    const lpCoinWallet = coinsMap[lpCoin.type];
 
-    if (!walletCoin0 || !walletCoin1) throw new Error('Check the wallet coins');
+    if (!lpCoinWallet) throw new Error('Check the wallet Lp coins');
 
     const txb = new TransactionBlock();
 
-    txb.setGasBudget(200_000_000n);
+    const amount = getSafeValue(lpCoin, lpCoinWallet.balance);
 
-    const amount0 = getSafeValue(coin0, walletCoin0.balance);
-
-    const amount1 = getSafeValue(coin1, walletCoin1.balance);
-
-    const coin0InList = await createObjectsParameter({
-      signTxb,
-      suiClient,
+    const lpCoinInList = createObjectsParameter({
       coinsMap,
       txb: txb,
-      type: coin0.type,
-      amount: amount0.toString(),
-      isDev,
+      type: lpCoin.type,
+      amount: amount.toString(),
     });
 
-    const coin1InList = await createObjectsParameter({
-      signTxb,
-      suiClient,
-      coinsMap,
-      txb: txb,
-      type: coin1.type,
-      amount: amount1.toString(),
-      isDev,
-    });
-
-    const coin0In = txb.moveCall({
+    const lpCoinIn = txb.moveCall({
       target: `${PACKAGES[network].UTILS}::utils::handle_coin_vector`,
-      typeArguments: [coin0.type],
-      arguments: [txb.makeMoveVec({ objects: coin0InList }), txb.pure(amount0)],
+      typeArguments: [lpCoin.type],
+      arguments: [txb.makeMoveVec({ objects: lpCoinInList }), txb.pure(amount)],
     });
 
-    const coin1In = txb.moveCall({
-      target: `${PACKAGES[network].UTILS}::utils::handle_coin_vector`,
-      typeArguments: [coin1.type],
-      arguments: [txb.makeMoveVec({ objects: coin1InList }), txb.pure(amount1)],
-    });
-
-    const lpAmount = getAmmLpCoinAmount(
-      FixedPointMath.toBigNumber(coin0.value, coin0.decimals),
-      FixedPointMath.toBigNumber(coin1.value, coin1.decimals),
+    const [expectedXAmount, expectedYAmount] = getAmmXYAmount(
+      FixedPointMath.toBigNumber(lpCoin.value),
       pool.balanceX,
       pool.balanceY,
       pool.lpCoinSupply
     );
+    const minimumXAmount = getAmountMinusSlippage(
+      expectedXAmount,
+      settings.slippage
+    );
+    const minimumYAmount = getAmountMinusSlippage(
+      expectedYAmount,
+      settings.slippage
+    );
 
-    const minimumAmount = getAmountMinusSlippage(lpAmount, settings.slippage);
-
-    const [lpCoinOut, coinXOut, coinYOut] = txb.moveCall({
-      target: `${PACKAGES[network].DEX}::interest_protocol_amm::add_liquidity`,
+    const [coinXOut, coinYOut] = txb.moveCall({
+      target: `${PACKAGES[network].DEX}::interest_protocol_amm::remove_liquidity`,
       typeArguments: [coin0.type, coin1.type, lpCoin.type],
       arguments: [
         txb.object(pool.poolId),
-        coin0In,
-        coin1In,
-        txb.pure(minimumAmount),
+        lpCoinIn,
+        txb.pure(minimumXAmount),
+        txb.pure(minimumYAmount),
       ],
     });
 
-    txb.transferObjects(
-      [lpCoinOut, coinXOut, coinYOut],
-      txb.pure(account.address)
-    );
+    txb.transferObjects([coinXOut, coinYOut], txb.pure(account.address));
 
     return txb;
   };

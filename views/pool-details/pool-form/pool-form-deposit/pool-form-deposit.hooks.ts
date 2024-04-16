@@ -1,4 +1,3 @@
-import { useSignTransactionBlock, useSuiClient } from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { WalletAccount } from '@wallet-standard/base';
 
@@ -14,14 +13,8 @@ import { getAmmLpCoinAmount, getSafeValue } from '../pool-form.utils';
 export const useDeposit = () => {
   const network = useNetwork();
   const { coinsMap } = useWeb3();
-  const suiClient = useSuiClient();
-  const signTxb = useSignTransactionBlock();
 
-  return async (
-    values: PoolForm,
-    account: WalletAccount | null,
-    isDev = false
-  ) => {
+  return async (values: PoolForm, account: WalletAccount | null) => {
     const { tokenList, pool, lpCoin, settings } = values;
 
     if (!tokenList.length) throw new Error('No tokens ');
@@ -41,30 +34,22 @@ export const useDeposit = () => {
 
     const txb = new TransactionBlock();
 
-    txb.setGasBudget(200_000_000n);
-
     const amount0 = getSafeValue(coin0, walletCoin0.balance);
 
     const amount1 = getSafeValue(coin1, walletCoin1.balance);
 
-    const coin0InList = await createObjectsParameter({
-      signTxb,
-      suiClient,
+    const coin0InList = createObjectsParameter({
       coinsMap,
       txb: txb,
       type: coin0.type,
       amount: amount0.toString(),
-      isDev,
     });
 
-    const coin1InList = await createObjectsParameter({
-      signTxb,
-      suiClient,
+    const coin1InList = createObjectsParameter({
       coinsMap,
       txb: txb,
       type: coin1.type,
       amount: amount1.toString(),
-      isDev,
     });
 
     const coin0In = txb.moveCall({

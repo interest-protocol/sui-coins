@@ -1,5 +1,4 @@
 import type { Token } from '@interest-protocol/sui-tokens';
-import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
 import { propOr } from 'ramda';
@@ -15,7 +14,6 @@ import {
 } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { CoinMetadataWithType } from '@/interface';
 
-import { chunk } from '../array';
 import { getBasicCoinMetadata } from '../fn';
 import { CreateVectorParameterArgs } from './coin.types';
 
@@ -90,57 +88,20 @@ export const getCoinsFromLpCoinType = (poolType: string) => {
   };
 };
 
-export const createObjectsParameter = async ({
+export const createObjectsParameter = ({
   txb,
   type,
-  isDev,
-  amount,
-  signTxb,
   coinsMap,
-  suiClient,
+  amount,
 }: CreateVectorParameterArgs) => {
   if (type === SUI_TYPE_ARG) {
     const [coin] = txb.splitCoins(txb.gas, [txb.pure(amount.toString())]);
     return [coin];
   }
 
-  if (!isDev && coinsMap[type].objects.slice(1).length >= 400) {
-    for (const objects of chunk(coinsMap[type].objects.slice(1), 400)) {
-      if (!objects.length) break;
-
-      const transactionBlock = new TransactionBlock();
-
-      transactionBlock.setGasBudget(200_000_000n);
-
-      transactionBlock.mergeCoins(
-        txb.object(coinsMap[type].objects[0].coinObjectId),
-        objects.map(({ coinObjectId }) => coinObjectId)
-      );
-
-      const { signature, transactionBlockBytes } = await signTxb.mutateAsync({
-        transactionBlock,
-      });
-
-      await suiClient.executeTransactionBlock({
-        signature,
-        transactionBlock: transactionBlockBytes,
-      });
-    }
-  } else {
-    txb.mergeCoins(
-      txb.object(coinsMap[type].objects[0].coinObjectId),
-      coinsMap[type].objects
-        .slice(1, 400)
-        .map(({ coinObjectId }) => coinObjectId)
-    );
-  }
-
-  const [coin] = txb.splitCoins(
-    txb.object(coinsMap[type].objects[0].coinObjectId),
-    [txb.pure(amount.toString())]
-  );
-
-  return [coin];
+  return coinsMap[type]
+    ? coinsMap[type].objects.map((x) => txb.object(x.coinObjectId))
+    : [];
 };
 
 export const normalizeSuiType = (x: string) => {

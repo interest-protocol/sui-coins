@@ -11,11 +11,19 @@ export const getLiquidity = (
   if (isEmpty(prices)) return 0;
 
   const priceX = metadata[pool.coinTypes.coinX]
-    ? prices[metadata[pool.coinTypes.coinX]?.symbol.toLowerCase()]
+    ? prices[
+        metadata[pool.coinTypes.coinX]?.symbol.toLowerCase() === 'sui'
+          ? 'mov'
+          : metadata[pool.coinTypes.coinX]?.symbol.toLowerCase()
+      ]
     : null;
 
   const priceY = metadata[pool.coinTypes.coinY]
-    ? prices[metadata[pool.coinTypes.coinY]?.symbol.toLowerCase()]
+    ? prices[
+        metadata[pool.coinTypes.coinY]?.symbol.toLowerCase() === ' sui'
+          ? 'move'
+          : metadata[pool.coinTypes.coinY]?.symbol.toLowerCase()
+      ]
     : null;
 
   if (!priceX && !!priceY)

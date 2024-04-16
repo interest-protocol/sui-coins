@@ -1,5 +1,3 @@
-import { useSignTransactionBlock } from '@mysten/dapp-kit';
-import { SuiClient } from '@mysten/sui.js/client';
 import { WalletAccount } from '@wallet-standard/base';
 import { UseFormReturn } from 'react-hook-form';
 
@@ -48,6 +46,4 @@ export interface SwapArgs {
   formSwap: UseFormReturn<SwapForm>;
   network: Network;
   isZeroSwap?: boolean;
-  suiClient: SuiClient;
-  signTxb: ReturnType<typeof useSignTransactionBlock>;
 }

@@ -29,7 +29,7 @@ export const POOL_STATISTICS: PoolDetailAccordionData = {
     },
     {
       label: 'Virtual Price',
-      popupInfo: 'sddsds',
+      popupInfo: 'Total $USD in the pool / total number of Lp Coins',
     },
   ],
 };
