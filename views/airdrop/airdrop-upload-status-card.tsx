@@ -48,21 +48,16 @@ const AirdropUploadStatusCard: FC<AirdropUploadStatusCardProps> = ({
           <FileSVG width="100%" maxWidth="1.5rem" maxHeight="1.5rem" />
         </Box>
         <Box>
-          <Typography variant="body" size="large" color="onSurface">
+          <Typography variant="body" size="large">
             Batch {index}
           </Typography>
-          <Typography
-            variant="body"
-            size="small"
-            opacity="0.48"
-            color="onSurface"
-          >
+          <Typography variant="body" size="small" opacity="0.48">
             {lastBatchSize ? lastBatchSize : BATCH_SIZE} addresses
           </Typography>
         </Box>
       </Box>
       <Tag variant="filled" {...COLORS[status]} nHover={COLORS[status]}>
-        <Typography as="span" variant="label" size="large" color="onSurface">
+        <Typography as="span" variant="label" size="large">
           {status}
         </Typography>
       </Tag>

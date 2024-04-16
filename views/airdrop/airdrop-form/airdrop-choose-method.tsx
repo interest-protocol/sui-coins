@@ -1,19 +1,12 @@
-import {
-  Box,
-  RadioButton,
-  Theme,
-  Typography,
-  useTheme,
-} from '@interest-protocol/ui-kit';
+import { Box, RadioButton, Typography } from '@interest-protocol/ui-kit';
 import { toPairs } from 'ramda';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { IAirdropForm } from './airdrop.types';
+import { IAirdropForm } from '../airdrop.types';
 import { METHODS_ICONS } from './airdrop-form.data';
 
 const AirdropChooseMethod: FC = () => {
-  const { colors } = useTheme() as Theme;
   const { control, setValue } = useFormContext<IAirdropForm>();
   const token = useWatch({ control, name: 'token' });
   const method = useWatch({ control, name: 'method' });
@@ -21,7 +14,7 @@ const AirdropChooseMethod: FC = () => {
   if (!token) return null;
 
   return (
-    <Box p="xl" borderRadius="xs" bg="container" color="onSurface">
+    <Box p="xl" borderRadius="xs" bg="container">
       <Box display="flex" flexDirection="column" mb="m">
         <Typography variant="body" size="large">
           2. Choose Delivery Method
@@ -34,7 +27,7 @@ const AirdropChooseMethod: FC = () => {
             padding="m"
             key={index}
             borderRadius="xs"
-            nHover={{ bg: `${colors.primary}29`, cursor: 'pointer' }}
+            nHover={{ bg: '#0053DB14', cursor: 'pointer' }}
             onClick={() => {
               setValue('method', key);
               setValue('asset', undefined);
@@ -50,11 +43,11 @@ const AirdropChooseMethod: FC = () => {
             >
               <Box display="flex" gap="m">
                 <Box
-                  color="onSurface"
                   display="flex"
                   width="2.5rem"
                   height="2.5rem"
-                  bg={`${colors.primary}29`}
+                  bg="highContainer"
+                  color="onSurface"
                   minWidth="2.5rem"
                   minHeight="2.5rem"
                   alignItems="center"

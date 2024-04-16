@@ -1,9 +1,7 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
-
-import { MinusSVG, PlusSVG } from '@/svg';
 
 import { BATCH_SIZE } from './airdrop.constants';
 import { IAirdropForm } from './airdrop.types';
@@ -11,7 +9,7 @@ import AirdropUploadStatusCard from './airdrop-upload-status-card';
 
 const AirdropUploadStatus: FC = () => {
   const { control } = useFormContext<IAirdropForm>();
-  const [showAccordion, setShowAccordion] = useState(true);
+
   const airdropList = useWatch({ control, name: 'airdropList' });
   const doneItems = useWatch({ control, name: 'done' });
   const failedItems = useWatch({ control, name: 'failed' });
@@ -20,54 +18,38 @@ const AirdropUploadStatus: FC = () => {
 
   const allBatches = Math.ceil((airdropList?.length ?? 0) / BATCH_SIZE);
 
-  const toogleAccordion = () => {
-    setShowAccordion(!showAccordion);
-  };
-
   return (
     <Box
       p="xl"
-      gap="xl"
+      gap="4xl"
       display="flex"
-      borderRadius="xs"
-      bg="container"
+      borderRadius="m"
+      bg="lowestContainer"
       flexDirection="column"
     >
-      <Box display="flex" justifyContent="space-between">
-        <Typography variant="title" size="medium" color="onSurface">
-          Progress Summary
-        </Typography>
-        <Box cursor="pointer" color="onSurface" onClick={toogleAccordion}>
-          {showAccordion ? (
-            <MinusSVG maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
-          ) : (
-            <PlusSVG maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
-          )}
-        </Box>
+      <Typography variant="title" size="medium">
+        Progress Summary
+      </Typography>
+      <Box display="flex" gap="m" flexDirection="column-reverse">
+        {Array.from({ length: allBatches }, (_, index) => (
+          <AirdropUploadStatusCard
+            key={v4()}
+            index={index + 1}
+            lastBatchSize={
+              allBatches === index + 1
+                ? (airdropList?.length || 0) % BATCH_SIZE
+                : 0
+            }
+            status={
+              error || failedItems.includes(index)
+                ? 'failed'
+                : doneItems.includes(index)
+                  ? 'complete'
+                  : 'pending'
+            }
+          />
+        ))}
       </Box>
-
-      {showAccordion && (
-        <Box display="flex" gap="m" flexDirection="column-reverse">
-          {Array.from({ length: allBatches }, (_, index) => (
-            <AirdropUploadStatusCard
-              key={v4()}
-              index={index + 1}
-              lastBatchSize={
-                allBatches === index + 1
-                  ? (airdropList?.length || 0) % BATCH_SIZE
-                  : 0
-              }
-              status={
-                error || failedItems.includes(index)
-                  ? 'failed'
-                  : doneItems.includes(index)
-                    ? 'complete'
-                    : 'pending'
-              }
-            />
-          ))}
-        </Box>
-      )}
     </Box>
   );
 };
