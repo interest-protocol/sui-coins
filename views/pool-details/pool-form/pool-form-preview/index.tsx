@@ -26,7 +26,7 @@ const PoolPreview: FC<PoolPreviewProps> = ({
   const action = (isDeposit ? useDeposit : useWithdraw)();
 
   const fees = useSWR(
-    `network-fee-${currentAccount?.address}-${slippage}`,
+    `network-fee-${currentAccount?.address}-${slippage}-${isDeposit}`,
     async () => {
       if (!currentAccount) return;
 
