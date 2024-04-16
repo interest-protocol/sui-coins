@@ -2,6 +2,7 @@ import { Control, UseFormSetValue } from 'react-hook-form';
 
 import { TOKEN_SYMBOL } from '@/constants/coins';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { CoinData } from '@/interface';
 
 export interface CoinDataWithChainInfo {
   type: string;
@@ -19,7 +20,7 @@ export interface TokenModalItemProps
 export interface SelectTokenModalProps {
   simple?: boolean;
   closeModal: () => void;
-  onSelect: (coin: CoinObject) => void;
+  onSelect: (coin: CoinData) => void;
 }
 
 export interface SelectTokenFilterProps {
@@ -39,12 +40,12 @@ export interface SearchTokenForm {
 
 export interface SelectTokenModalBodyProps {
   control: Control<SearchTokenForm>;
-  handleSelectToken: (coin: CoinDataWithChainInfo) => void;
+  handleSelectToken: (coin: CoinData) => void;
 }
 
 export interface ModalTokenBodyProps {
-  tokens: ReadonlyArray<CoinDataWithChainInfo | CoinObject>;
-  handleSelectToken: (coin: CoinDataWithChainInfo) => void;
+  tokens: ReadonlyArray<CoinObject | CoinObject>;
+  handleSelectToken: (coin: CoinData) => void;
 }
 
 export interface ModalTokenSearchProps {
