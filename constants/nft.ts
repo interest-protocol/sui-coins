@@ -8,4 +8,5 @@ export const NFT: ReadonlyArray<string> = [
   'e5385a7a-075e-4382-96dd-1caaf960bd13', // Enforcer Machin
   'fbb4e6bc-7c71-42a6-80c2-196f876198e0', // Gommies
   '07231735-96de-4710-8e11-52c61a482578', // Prime Machin
+  '200220c4-d7fa-41e8-a8be-63d208556336', // Unbound
 ];
