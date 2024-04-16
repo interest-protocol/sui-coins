@@ -1,7 +1,7 @@
-export interface ManageSlippageProps {
-  handleManageView: () => void;
+export interface ManageSlippageFormProps {
+  handleManageView?: () => void;
 }
 
-export interface SlippageInfoProps extends ManageSlippageProps {
+export interface SlippageInfoProps extends ManageSlippageFormProps {
   isOpen: boolean;
 }

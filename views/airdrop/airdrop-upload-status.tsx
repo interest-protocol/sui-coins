@@ -23,8 +23,8 @@ const AirdropUploadStatus: FC = () => {
       p="xl"
       gap="4xl"
       display="flex"
+      bg="container"
       borderRadius="m"
-      bg="lowestContainer"
       flexDirection="column"
     >
       <Typography variant="title" size="medium">

@@ -33,7 +33,9 @@
       "@/utils": ["./utils"],
       "@/utils/*": ["./utils/*"],
       "@/views/*": ["./views/*"],
-      "@/styles": ["./styles"],
+      "@/server": ["./server"],
+      "@/server/*": ["./server/*"],
+      "@/styles": ["./styles"]
     }
   },
   "exclude": ["node_modules"],

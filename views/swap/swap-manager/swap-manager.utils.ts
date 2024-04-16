@@ -92,6 +92,7 @@ export const quoteAmountIn = async ({
 };
 
 export const findSwapPaths = ({
+  network,
   coinInType,
   coinOutType,
 }: FindSwapPathArgs): ReadonlyArray<SwapPath> => {
@@ -116,7 +117,7 @@ export const findSwapPaths = ({
 
   const paths = [] as Array<SwapPath>;
 
-  for (const baseCoin of BASE_COINS) {
+  for (const baseCoin of BASE_COINS[network]) {
     const firstPool = pathOr<null | RegistryPool>(
       null,
       [coinInType, baseCoin],

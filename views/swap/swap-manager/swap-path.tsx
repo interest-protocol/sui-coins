@@ -15,45 +15,37 @@ const SwapPath: FC = () => {
   });
   const swapPath = useWatch({ control: formSwap.control, name: 'swapPath' });
 
-  if (!readyToSwap || !swapPath || !swapPath.length)
-    return (
-      <Box
-        p="l"
-        mt="xl"
-        gap="xl"
-        mx="auto"
-        height="4rem"
-        borderRadius="m"
-        color="onSurface"
-        alignItems="center"
-        bg="lowestContainer"
-        display="inline-flex"
-        justifyContent="center"
-      />
-    );
+  if (!readyToSwap || !swapPath || !swapPath.length) return null;
 
   const coinIn = swapPath[0].coinIn;
   const baseToken = swapPath.length == 2 ? swapPath[0].coinOut : '';
   const coinOut =
     swapPath.length == 1 ? swapPath[0].coinOut : swapPath[1].coinOut;
 
-  const CoinInIcon = COINS_SVG_MAP_V2[coinIn] ?? COINS_SVG_MAP_V2.default;
+  const CoinInIcon =
+    COINS_SVG_MAP_V2[coinIn as keyof typeof COINS_SVG_MAP_V2] ??
+    COINS_SVG_MAP_V2.default;
 
-  const CoinOutIcon = COINS_SVG_MAP_V2[coinOut] ?? COINS_SVG_MAP_V2.default;
+  const CoinOutIcon =
+    COINS_SVG_MAP_V2[coinOut as keyof typeof COINS_SVG_MAP_V2] ??
+    COINS_SVG_MAP_V2.default;
 
-  const BaseTokenIcon = COINS_SVG_MAP_V2[baseToken] ?? COINS_SVG_MAP_V2.default;
+  const BaseTokenIcon =
+    COINS_SVG_MAP_V2[baseToken as keyof typeof COINS_SVG_MAP_V2] ??
+    COINS_SVG_MAP_V2.default;
 
   return (
     <Box
       p="l"
-      mt="xl"
+      mt="xs"
       gap="xl"
       mx="auto"
-      bg="surface"
-      borderRadius="m"
+      width="100%"
+      display="flex"
+      bg="container"
       color="onSurface"
+      borderRadius="xs"
       alignItems="center"
-      display="inline-flex"
       justifyContent="center"
     >
       <CoinInIcon

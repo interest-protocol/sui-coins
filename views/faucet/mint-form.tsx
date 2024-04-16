@@ -1,30 +1,38 @@
-import { Box, Button, ListItem, Typography } from '@interest-protocol/ui-kit';
+import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
+import {
+  useCurrentAccount,
+  useSignTransactionBlock,
+  useSuiClient,
+} from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
-import { useWalletKit } from '@mysten/wallet-kit';
-import { not } from 'ramda';
 import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
-import { v4 } from 'uuid';
 
 import { CONTROLLERS_MAP } from '@/constants';
 import { COINS } from '@/constants/coins';
+import { TOKEN_SYMBOL } from '@/constants/coins';
 import { MINT_MODULE_NAME_MAP, PACKAGES } from '@/constants/packages';
 import { useNetwork } from '@/context/network';
-import { useMovementClient, useUserMintEpoch, useWeb3 } from '@/hooks';
+import { useUserMintEpoch, useWeb3 } from '@/hooks';
+import { useModal } from '@/hooks/use-modal';
 import { useSuiSystemState } from '@/hooks/use-sui-system-state';
-import { TOKEN_ICONS, TOKEN_SYMBOL } from '@/lib';
+import { CoinData } from '@/interface';
+import { TOKEN_ICONS } from '@/lib';
 import { ChevronDownSVG } from '@/svg';
 import { showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
 import { requestMov } from '@/views/faucet/faucet.utils';
 
+import SelectTokenModal from '../components/select-token-modal';
+
 const MintForm: FC = () => {
   const [selected, setSelected] = useState(COINS[0]);
-  const [isOpen, setIsOpen] = useState(false);
-  const { network } = useNetwork();
-  const client = useMovementClient();
+  const network = useNetwork();
   const { account, mutate } = useWeb3();
-  const { signTransactionBlock } = useWalletKit();
+  const { setModal, handleClose } = useModal();
+  const client = useSuiClient();
+  const signTransactionBlock = useSignTransactionBlock();
+  const currentAccount = useCurrentAccount();
 
   const SelectedIcon = TOKEN_ICONS[network][selected.symbol];
 
@@ -40,7 +48,7 @@ const MintForm: FC = () => {
   const handleMint = async () => {
     try {
       if (!selected) throw new Error('Token not found');
-      if (!account) throw new Error('Not account found');
+      if (!account || !currentAccount) throw new Error('Not account found');
 
       const transactionBlock = new TransactionBlock();
 
@@ -55,9 +63,11 @@ const MintForm: FC = () => {
 
       transactionBlock.transferObjects([minted_coin], account);
 
-      const { transactionBlockBytes, signature } = await signTransactionBlock({
-        transactionBlock,
-      });
+      const { transactionBlockBytes, signature } =
+        await signTransactionBlock.mutateAsync({
+          transactionBlock,
+          account: currentAccount,
+        });
 
       const tx = await client.executeTransactionBlock({
         transactionBlock: transactionBlockBytes,
@@ -78,6 +88,28 @@ const MintForm: FC = () => {
     }
   };
 
+  const onSelect = async ({ decimals, symbol, type }: CoinData) => {
+    setSelected({ symbol: symbol as TOKEN_SYMBOL, type, decimals });
+    handleClose();
+  };
+
+  const openModal = () =>
+    setModal(
+      <Motion
+        animate={{ scale: 1 }}
+        initial={{ scale: 0.85 }}
+        transition={{ duration: 0.3 }}
+      >
+        <SelectTokenModal closeModal={handleClose} onSelect={onSelect} />
+      </Motion>,
+      {
+        isOpen: true,
+        custom: true,
+        opaque: false,
+        allowClose: true,
+      }
+    );
+
   const onMint = () => {
     toast.promise(handleMint(), {
       loading: 'Loading',
@@ -89,34 +121,43 @@ const MintForm: FC = () => {
   return (
     <Box
       mb="s"
+      p="xl"
       mx="auto"
       display="flex"
-      borderRadius="2rem"
-      bg="lowestContainer"
+      borderRadius="xs"
+      bg="container"
       flexDirection="column"
-      p={['xl', 'xl', 'xl', '7xl']}
       width={['100%', '100%', '100%', '39.75rem']}
     >
-      <Typography size="large" fontSize="5xl" variant="title" fontWeight="500">
+      <Typography
+        size="large"
+        fontSize="5xl"
+        variant="title"
+        fontWeight="500"
+        color="onSurface"
+      >
         I would like to mint...
       </Typography>
       <Box my="6xl" display="flex" gap="s" flexDirection="column">
-        <Typography variant="body" size="small">
+        <Typography variant="body" size="large" color="onSurface">
           Choose coin to mint
         </Typography>
         <Box position="relative" display="flex" flexDirection="column">
           <Button
-            px="xs"
+            p="xs"
             variant="outline"
             borderRadius="xs"
-            onClick={() => setIsOpen(not)}
+            borderColor="outlineVariant"
+            onClick={openModal}
+            nHover={{
+              color: 'unset',
+            }}
             PrefixIcon={
               <Box
                 display="flex"
                 bg="onSurface"
-                color="surface"
                 width="2.5rem"
-                height="2.5rem"
+                height="2rem"
                 borderRadius="xs"
                 alignItems="center"
                 justifyContent="center"
@@ -124,22 +165,31 @@ const MintForm: FC = () => {
                 <SelectedIcon
                   width="100%"
                   maxWidth="1.5rem"
-                  maxHeight="1.5rem"
+                  maxHeight="1.25rem"
                 />
               </Box>
             }
             SuffixIcon={
               <Box
                 display="flex"
+                color="onSurface"
                 alignItems="center"
                 justifyContent="center"
-                rotate={isOpen ? '180deg' : '0deg'}
               >
-                <ChevronDownSVG width="100%" maxWidth="1rem" maxHeight="1rem" />
+                <ChevronDownSVG
+                  width="100%"
+                  maxWidth="1.5rem"
+                  maxHeight="1.5rem"
+                />
               </Box>
             }
           >
-            <Typography variant="body" size="large" width="100%">
+            <Typography
+              size="large"
+              width="100%"
+              variant="body"
+              color="onSurface"
+            >
               {selected.symbol}
             </Typography>
           </Button>
@@ -148,50 +198,15 @@ const MintForm: FC = () => {
               You cannot mint more {selected.symbol}
             </Typography>
           )}
-          {isOpen && (
-            <Box
-              top="4rem"
-              zIndex={1}
-              cursor="pointer"
-              bg="lowContainer"
-              borderRadius="xs"
-              position="absolute"
-              border="2px solid"
-              borderColor="outline"
-            >
-              {COINS.map(({ symbol, type, decimals }) => {
-                const Icon = TOKEN_ICONS[network][symbol];
-                return (
-                  <ListItem
-                    key={v4()}
-                    title={symbol}
-                    onClick={() => {
-                      setSelected({ symbol, type, decimals });
-                      setIsOpen(false);
-                    }}
-                    PrefixIcon={
-                      <Box
-                        display="flex"
-                        bg="onSurface"
-                        color="surface"
-                        minWidth="1.5rem"
-                        height="1.5rem"
-                        borderRadius="xs"
-                        alignItems="center"
-                        justifyContent="center"
-                      >
-                        <Icon width="100%" maxWidth="1rem" maxHeight="1rem" />
-                      </Box>
-                    }
-                  />
-                );
-              })}
-            </Box>
-          )}
         </Box>
       </Box>
       <Box display="flex" justifyContent="center">
-        <Button disabled={isSameEpoch} variant="filled" onClick={onMint}>
+        <Button
+          disabled={isSameEpoch}
+          variant="filled"
+          onClick={onMint}
+          color="surface"
+        >
           Mint
         </Button>
       </Box>

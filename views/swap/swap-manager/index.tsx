@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
-import { useFormContext, UseFormReturn, useWatch } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
+import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks';
 import { SwapForm } from '@/views/swap/swap.types';
 import { findSwapPaths } from '@/views/swap/swap-manager/swap-manager.utils';
@@ -9,14 +10,31 @@ import SwapManagerField from './swap-manager-field';
 import { SwapMessages } from './swap-messages';
 
 const SwapManager: FC = () => {
-  const formSwap: UseFormReturn<SwapForm> = useFormContext();
   const { account } = useWeb3();
+  const network = useNetwork();
+  const formSwap = useFormContext<SwapForm>();
 
   const [error, setError] = useState(false);
   const [isZeroSwapAmountIn, setIsZeroSwapAmountIn] = useState(false);
   const [isZeroSwapAmountOut, setIsZeroSwapAmountOut] = useState(false);
-  const [isFetchingSwapAmountIn, setIsFetchingSwapAmountIn] = useState(false);
-  const [isFetchingSwapAmountOut, setIsFetchingSwapAmountOut] = useState(false);
+
+  const isFetchingSwapAmountIn = useWatch({
+    control: formSwap.control,
+    name: 'from.isFetchingSwap',
+  });
+
+  const isFetchingSwapAmountOut = useWatch({
+    control: formSwap.control,
+    name: 'to.isFetchingSwap',
+  });
+
+  const setIsFetchingSwapAmountOut = (value: boolean) => {
+    formSwap.setValue('to.isFetchingSwap', value);
+  };
+
+  const setIsFetchingSwapAmountIn = (value: boolean) => {
+    formSwap.setValue('from.isFetchingSwap', value);
+  };
 
   const coinInType = useWatch({
     control: formSwap.control,
@@ -29,6 +47,7 @@ const SwapManager: FC = () => {
   });
 
   const swapPaths = findSwapPaths({
+    network,
     coinInType,
     coinOutType,
   });
@@ -48,7 +67,7 @@ const SwapManager: FC = () => {
         control={formSwap.control}
         setValue={formSwap.setValue}
         setIsZeroSwapAmount={setIsZeroSwapAmountOut}
-        isFetchingSwapAmount={isFetchingSwapAmountOut}
+        isFetchingSwapAmount={!!isFetchingSwapAmountOut}
         setIsFetchingSwapAmount={setIsFetchingSwapAmountOut}
       />
       <SwapManagerField
@@ -62,19 +81,17 @@ const SwapManager: FC = () => {
         control={formSwap.control}
         setValue={formSwap.setValue}
         setIsZeroSwapAmount={setIsZeroSwapAmountIn}
-        isFetchingSwapAmount={isFetchingSwapAmountIn}
+        isFetchingSwapAmount={!!isFetchingSwapAmountIn}
         setIsFetchingSwapAmount={setIsFetchingSwapAmountIn}
       />
       <SwapMessages
         error={error}
         hasNoMarket={hasNoMarket}
         control={formSwap.control}
-        setError={formSwap.setError}
-        errors={formSwap.formState.errors}
         isZeroSwapAmountIn={isZeroSwapAmountIn}
         isZeroSwapAmountOut={isZeroSwapAmountOut}
-        isFetchingSwapAmountIn={isFetchingSwapAmountIn}
-        isFetchingSwapAmountOut={isFetchingSwapAmountOut}
+        isFetchingSwapAmountIn={!!isFetchingSwapAmountIn}
+        isFetchingSwapAmountOut={!!isFetchingSwapAmountOut}
       />
     </>
   );

@@ -10,27 +10,27 @@ import { ZERO_BIG_NUMBER } from '@/utils';
 
 const MintBalances: FC = () => {
   const { coinsMap } = useWeb3();
-  const { network } = useNetwork();
+  const network = useNetwork();
 
   return (
     <Box
+      p="xl"
       mb="4xl"
       mx="auto"
       display="flex"
-      borderRadius="2rem"
-      bg="lowestContainer"
+      borderRadius="xs"
+      bg="container"
       flexDirection="column"
-      p={['xl', 'xl', 'xl', '7xl']}
       width={['100%', '100%', '100%', '39.75rem']}
     >
-      <Typography variant="body" size="large">
+      <Typography variant="body" size="large" color="onSurface">
         Balance minted
       </Typography>
       <Box
         p="m"
         mt="s"
         gap="m"
-        bg="surface"
+        bg="lowestContainer"
         display="flex"
         borderRadius="s"
         flexDirection="column"
@@ -52,13 +52,13 @@ const MintBalances: FC = () => {
                 >
                   <Icon width="100%" maxWidth="1.5rem" maxHeight="1.5rem" />
                 </Box>
-                <Typography variant="body" size="large">
+                <Typography variant="body" size="large" color="onSurface">
                   {symbol}
                 </Typography>
               </Box>
-              <Typography variant="body" size="large">
+              <Typography variant="body" size="large" color="onSurface">
                 {FixedPointMath.toNumber(
-                  coinsMap[type]?.totalBalance || ZERO_BIG_NUMBER,
+                  coinsMap[type]?.balance ?? ZERO_BIG_NUMBER,
                   coinsMap[type]?.decimals || 0
                 )}
               </Typography>

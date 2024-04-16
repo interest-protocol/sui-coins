@@ -1,28 +1,29 @@
-import { Theme, useTheme } from '@interest-protocol/ui-kit';
-import { ConnectButton } from '@mysten/wallet-kit';
-import stylin from '@stylin.js/react';
-import { FC } from 'react';
+import '@mysten/dapp-kit/dist/index.css';
 
-const CustomConnectWalletButton = stylin(ConnectButton as never)();
+import { Button } from '@interest-protocol/ui-kit';
+import { ConnectModal, useCurrentAccount } from '@mysten/dapp-kit';
+import { not } from 'ramda';
+import { FC, useState } from 'react';
 
 const ConnectWalletButton: FC = () => {
-  const { colors, radii } = useTheme() as Theme;
+  const [open, setOpen] = useState(false);
+  const currentAccount = useCurrentAccount();
 
   return (
-    <CustomConnectWalletButton
-      py="m"
-      px="xl"
-      fontSize="s"
-      fontFamily="Proto !important"
-      bg={`${colors.primary} !important`}
-      color={`${colors.onPrimary} !important`}
-      borderRadius={`${radii.full} !important`}
-      width="100%"
-      nHover={{
-        bg: 'accent',
-        transform: 'scale(1.03)',
-      }}
-      transition="all 0.3s ease-in-out"
+    <ConnectModal
+      trigger={
+        <Button
+          py="s"
+          variant="filled"
+          borderRadius="xs"
+          disabled={!!currentAccount}
+          onClick={() => setOpen(not)}
+        >
+          Connect Wallet
+        </Button>
+      }
+      open={open}
+      onOpenChange={(isOpen) => setOpen(isOpen)}
     />
   );
 };

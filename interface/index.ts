@@ -1,3 +1,4 @@
+import { CoinMetadata } from '@mysten/sui.js/client';
 import BigNumber from 'bignumber.js';
 
 export type BigNumberish = BigNumber | bigint | string | number;
@@ -10,10 +11,66 @@ export interface CoinData {
 
 export type LocalTokenMetadataRecord = Record<string, CoinData>;
 
-export type DexMarket = Record<string, Record<string, string>>;
+export enum PoolTypeEnum {
+  'clamm' = 'clamm',
+  'amm' = 'amm',
+}
 
-export interface FormattedNumber {
-  unit: string;
-  value: number;
-  toString: (unitSeparator?: string) => string;
+export interface LocalCoinMetadata {
+  decimals: number;
+  symbol: string;
+  type: string;
+}
+
+export interface PoolPageProps {
+  objectId: string;
+  stateId: string;
+}
+
+export interface RegistryPool {
+  poolId: string;
+  lpCoinType: string;
+}
+
+export interface CoinMetadataWithType extends CoinMetadata {
+  type: `0x${string}`;
+}
+
+export interface AmmPoolFees {
+  adminFee: BigNumber;
+  // 18 decimals
+  feeIn: BigNumber;
+  feeOut: BigNumber;
+}
+
+export interface AmmPoolCoinTypes {
+  coinX: string;
+  coinY: string;
+  lpCoin: string;
+}
+
+export interface AmmPool {
+  poolId: string;
+  stateId: string;
+  // we do not use
+  adminBalanceX: BigNumber;
+  adminBalanceY: BigNumber;
+  balanceX: BigNumber;
+  balanceY: BigNumber;
+  decimalsX: number;
+  decimalsY: number;
+  fees: AmmPoolFees;
+  // 9 Decimals
+  lpCoinSupply: BigNumber;
+  type: string;
+  coinTypes: AmmPoolCoinTypes;
+  poolType: PoolTypeEnum;
+  isVolatile: boolean;
+}
+
+export interface Token {
+  name?: string;
+  symbol: string;
+  decimals: number;
+  type: `0x${string}`;
 }

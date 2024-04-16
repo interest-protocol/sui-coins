@@ -1,30 +1,37 @@
 import { Box } from '@interest-protocol/ui-kit';
-import { useWalletKit } from '@mysten/wallet-kit';
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import { FC } from 'react';
 
-import AccountInfo from '../account-info';
 import MovementNetwork from '../account-info/movement-network';
 import ConnectWalletButton from './connect-wallet-button';
+import Profile from './profile';
 
 const Wallet: FC = () => {
-  const { isConnected } = useWalletKit();
+  const currentAccount = useCurrentAccount();
 
   return (
-    <Box display="flex" justifyContent="flex-end">
+    <Box
+      display="flex"
+      justifyContent="flex-end"
+      flexDirection={['row-reverse', 'row-reverse', 'row-reverse', 'row']}
+      alignItems="center"
+    >
       <Box display="flex" gap="m">
-        {isConnected && (
-          <Box
-            gap="l"
-            justifyContent="flex-end"
-            display={['none', 'none', 'none', 'flex']}
-          >
-            <MovementNetwork />
-          </Box>
+        {!!currentAccount && (
+          <>
+            <Box
+              gap="l"
+              justifyContent="flex-end"
+              display={['none', 'none', 'none', 'flex']}
+            >
+              <MovementNetwork />
+            </Box>
+            <Profile />
+          </>
         )}
-        <AccountInfo />
       </Box>
-      {!isConnected && (
-        <Box display={['none', 'none', 'none', 'flex']}>
+      {!currentAccount && (
+        <Box display="flex">
           <ConnectWalletButton />
         </Box>
       )}

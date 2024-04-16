@@ -11,14 +11,19 @@ import {
 } from '@/svg';
 
 const Footer: FC = () => (
-  <Box display="flex" flexDirection="column" textTransform="uppercase">
+  <Box
+    display="flex"
+    color="onSurface"
+    flexDirection="column"
+    textTransform="uppercase"
+  >
     <Box textAlign="center" mb="l">
-      <Typography variant="label" size="small">
+      <Typography variant="label" size="medium">
         The website is maintained &
       </Typography>
       <Typography
-        size="small"
-        gap="0.25rem"
+        gap="2xs"
+        size="medium"
         display="flex"
         variant="label"
         justifyContent="center"
@@ -28,14 +33,12 @@ const Footer: FC = () => (
         By Interest Protocol
       </Typography>
     </Box>
-    <Box textAlign="center" my="2xl" fontSize="inherit" fontFamily="inherit">
-      <Box fontFamily="Proto">Follow us</Box>
+    <Box textAlign="center" my="2xl">
+      <Typography variant="label" size="medium">
+        Follow us
+      </Typography>
       <Box display="flex" gap="xs" justifyContent="center" mt="s">
-        <a
-          href="https://discord.gg/interestprotocol"
-          target="_blank"
-          rel="noreferrer"
-        >
+        <a href="https://discord.gg/interest" target="_blank" rel="noreferrer">
           <Box
             p="xs"
             width="2.5rem"

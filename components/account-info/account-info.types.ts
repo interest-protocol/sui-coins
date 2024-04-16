@@ -1,13 +1,8 @@
 import { WalletAccount } from '@wallet-standard/base';
 
-export interface AccountInfoProps {
-  menuIsOpen: boolean;
-  handleOpenMenu: () => void;
-  handleCloseMenu: () => void;
-}
-
 export interface AvatarProps {
   account?: WalletAccount;
+  isLarge?: boolean;
   withNameOrAddress?: boolean;
 }
 

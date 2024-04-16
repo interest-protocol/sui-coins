@@ -9,13 +9,16 @@ import { updateURL } from '@/utils';
 
 import Input from './input';
 import ManageSlippage from './manage-slippage';
-import SwapButton from './swap-button';
+import { SwapForm } from './swap.types';
 import SwapManager from './swap-manager';
 import SwapPath from './swap-manager/swap-path';
+import SwapPreviewButton from './swap-preview-button';
 
 const Swap: FC = () => {
   const { pathname } = useRouter();
-  const { getValues, setValue } = useFormContext();
+  const form = useFormContext<SwapForm>();
+
+  const { getValues, setValue } = form;
 
   const flipToken = () => {
     const tmpTo = getValues('to');
@@ -27,37 +30,29 @@ const Swap: FC = () => {
   };
 
   return (
-    <Layout>
-      <>
-        <Box
-          my="2xl"
-          fontFamily="Proto"
-          textAlign="center"
-          fontSize={['5xl', '8xl']}
-        >
-          Swap
-        </Box>
-        <Box
-          mx="auto"
-          display="flex"
-          borderRadius="2rem"
-          bg="lowestContainer"
-          flexDirection="column"
-          p={['xl', 'xl', 'xl', '7xl']}
-          width={['100%', '100%', '100%', '39.75rem']}
-        >
+    <Layout title="Swap">
+      <Box
+        mx="auto"
+        display="flex"
+        borderRadius="2xl"
+        flexDirection="column"
+        px={['xl', 'xl', 'xl', '7xl']}
+        width={['100%', '100%', '100%', '39.75rem']}
+      >
+        <Box py="xl" px="m" my="xs" borderRadius="xs" bg="container">
           <Input label="from" />
           <Box my="0.25rem" position="relative">
             <Box
               left="45%"
-              top="-1.25rem"
-              borderRadius="full"
+              borderRadius="s"
               position="absolute"
-              bg="lowestContainer"
+              border="7px solid"
+              borderColor="surface"
             >
               <Button
                 isIcon
-                variant="outline"
+                bg="container"
+                variant="tonal"
                 color="primary"
                 onClick={flipToken}
               >
@@ -65,14 +60,24 @@ const Swap: FC = () => {
               </Button>
             </Box>
           </Box>
+        </Box>
+        <Box py="xl" px="m" borderRadius="xs" bg="container">
           <Input label="to" />
-          <ManageSlippage />
-          <SwapPath />
-          <Box mx="auto" mt="xl">
-            <SwapButton />
+          <Box
+            mt="l"
+            mb="l"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <SwapPreviewButton />
           </Box>
         </Box>
-      </>
+        <SwapPath />
+        <Box my="xs" bg="container" borderRadius="xs">
+          <ManageSlippage />
+        </Box>
+      </Box>
       <SwapManager />
     </Layout>
   );
