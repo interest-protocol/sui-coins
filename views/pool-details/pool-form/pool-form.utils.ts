@@ -69,6 +69,18 @@ export const getAmmLpCoinAmount = (
   return amount0.gt(amount1) ? amount1 : amount0;
 };
 
+export const getAmmXYAmount = (
+  lpAmount: BigNumber,
+  coinXReserves: BigNumber,
+  coinYReserves: BigNumber,
+  supply: BigNumber
+) => {
+  const optimalAmountX = lpAmount.multipliedBy(coinXReserves).dividedBy(supply);
+  const optimalAmountY = lpAmount.multipliedBy(coinYReserves).dividedBy(supply);
+
+  return [optimalAmountX, optimalAmountY];
+};
+
 export const getSafeValue = (coin: PoolToken, balance: BigNumber) => {
   const amount0 = FixedPointMath.toBigNumber(
     coin.value,

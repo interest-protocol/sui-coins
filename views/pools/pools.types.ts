@@ -45,6 +45,7 @@ export interface PoolToken extends CoinData {
 }
 
 export interface PoolForm {
+  error: string | null;
   lpCoin: PoolToken;
   explorerLink: string;
   isFindingPool: boolean;

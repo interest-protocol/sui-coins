@@ -1,9 +1,11 @@
+import { Box, Typography } from '@interest-protocol/ui-kit';
 import BigNumber from 'bignumber.js';
 import { FC, useEffect } from 'react';
-import { useFormContext } from 'react-hook-form';
 import { useWatch } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 import { FixedPointMath } from '@/lib';
+import { DotErrorSVG } from '@/svg';
 import {
   getAmmOptimalCoin0Value,
   getAmmOptimalCoin1Value,
@@ -78,7 +80,28 @@ const DepositManager: FC = () => {
     setValue('tokenList.0.value', roundedN.toString());
   }, [token1Amount, input0IsLocked]);
 
-  return null;
+  const error = useWatch({ control, name: 'error' });
+
+  if (!error) return null;
+
+  return (
+    <Box
+      p="s"
+      mx="xl"
+      gap="s"
+      display="flex"
+      borderRadius="xs"
+      border="1px solid"
+      bg="errorContainer"
+      color="onErrorContainer"
+      borderColor="onErrorContainer"
+    >
+      <DotErrorSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+      <Typography variant="label" size="medium">
+        {error}
+      </Typography>
+    </Box>
+  );
 };
 
 export default DepositManager;

@@ -12,11 +12,11 @@ import { showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
 
 import PoolPreview from '../pool-form-preview';
-import { useDeposit } from './pool-form-deposit.hooks';
+import { useWithdraw } from './pool-form-withdraw.hooks';
 
-const PoolFormDepositButton: FC = () => {
+const PoolFormWithdrawButton: FC = () => {
   const network = useNetwork();
-  const deposit = useDeposit();
+  const withdraw = useWithdraw();
   const client = useMovementClient();
   const account = useCurrentAccount();
   const { coinsMap, mutate } = useWeb3();
@@ -25,13 +25,13 @@ const PoolFormDepositButton: FC = () => {
   const { setModal, handleClose: closeModal } = useModal();
   const { getValues, control, setValue } = useFormContext<PoolForm>();
 
-  const tokenList = useWatch({ control, name: 'tokenList' });
+  const lpCoin = useWatch({ control, name: 'lpCoin' });
 
-  const handleDeposit = async () => {
+  const handleWithdraw = async () => {
     try {
       if (!account) return;
 
-      const txb = await deposit(getValues(), account);
+      const txb = await withdraw(getValues(), account);
 
       const { signature, transactionBlockBytes } =
         await signTransactionBlock.mutateAsync({
@@ -65,67 +65,53 @@ const PoolFormDepositButton: FC = () => {
     setValue('explorerLink', '');
   };
 
-  const onDeposit = () => {
+  const onWithdraw = () => {
     closeModal();
-    dialog.promise(handleDeposit(), {
+    dialog.promise(handleWithdraw(), {
       loading: {
-        title: 'Depositing...',
-        message: 'We are Depositing, and you will let you know when it is done',
+        title: 'Withdrawing...',
+        message:
+          'We are Withdrawing, and you will let you know when it is done',
       },
       success: {
-        title: 'Deposit Successfully',
+        title: 'Withdraw Successfully',
         message:
-          'Your deposit was successfully, and you can check it on the Explorer',
+          'Your withdraw was successfully, and you can check it on the Explorer',
         primaryButton: {
           label: 'See on Explorer',
           onClick: gotoExplorer,
         },
       },
       error: {
-        title: 'Deposit Failure',
+        title: 'Withdraw Failure',
         message:
-          'Your deposit failed, please try again or contact the support team',
+          'Your withdrawing failed, please try again or contact the support team',
         primaryButton: { label: 'Try again', onClick: handleClose },
       },
     });
   };
 
   useEffect(() => {
-    if (tokenList.length && coinsMap) {
-      const coin1 = tokenList[0];
-      const coin2 = tokenList[1];
-
+    if (lpCoin && coinsMap) {
       if (
-        !coinsMap[coin1.type]?.balance ||
-        FixedPointMath.toBigNumber(coin1.value, coin1.decimals).gt(
-          coinsMap[coin1.type].balance
+        !coinsMap[lpCoin.type]?.balance ||
+        FixedPointMath.toBigNumber(lpCoin.value, lpCoin.decimals).gt(
+          coinsMap[lpCoin.type].balance
         )
       ) {
         setValue(
           'error',
-          `The ${coin1.symbol} amount is superior than your balance, try to reduce`
-        );
-        return;
-      }
-      if (
-        !coinsMap[coin2.type]?.balance ||
-        FixedPointMath.toBigNumber(coin2.value, coin2.decimals).gt(
-          coinsMap[coin2.type].balance
-        )
-      ) {
-        setValue(
-          'error',
-          `The ${coin2.symbol} amount is superior than your balance, try to reduce`
+          `The ${lpCoin.symbol} amount is superior than your balance, try to reduce`
         );
         return;
       }
     }
     setValue('error', null);
-  }, [tokenList]);
+  }, [lpCoin]);
 
   const error = useWatch({ control, name: 'error' });
 
-  const addDeposit = () =>
+  const removeLiquidity = () =>
     !error &&
     setModal(
       <Motion
@@ -133,7 +119,7 @@ const PoolFormDepositButton: FC = () => {
         initial={{ scale: 0.85 }}
         transition={{ duration: 0.3 }}
       >
-        <PoolPreview getValues={getValues} onSubmit={onDeposit} isDeposit />
+        <PoolPreview getValues={getValues} onSubmit={onWithdraw} />
       </Motion>,
       {
         isOpen: true,
@@ -151,11 +137,11 @@ const PoolFormDepositButton: FC = () => {
       variant="filled"
       disabled={!!error}
       width="max-content"
-      onClick={addDeposit}
+      onClick={removeLiquidity}
     >
-      Deposit
+      Withdraw
     </Button>
   );
 };
 
-export default PoolFormDepositButton;
+export default PoolFormWithdrawButton;

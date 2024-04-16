@@ -1,22 +1,20 @@
 import { Box, RadioButton, Typography } from '@interest-protocol/ui-kit';
 import { FC, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
 import { useNetwork } from '@/context/network';
-import { useWeb3 } from '@/hooks';
-import { FixedPointMath, TOKEN_ICONS } from '@/lib';
+import { TOKEN_ICONS } from '@/lib';
 import { DefaultTokenSVG } from '@/svg';
 import { PoolForm } from '@/views/pools/pools.types';
 
-import { SelectionFieldValues, TokenListProps } from '../pool-form.types';
+import { SelectionFieldValues, TokenListProps } from '../../pool-form.types';
 
-const SelectionTokenList: FC<TokenListProps> = ({ type }) => {
+const PoolFormWithdrawReceiveTokens: FC<TokenListProps> = ({ type }) => {
   const network = useNetwork();
-  const { coinsMap } = useWeb3();
-  const { getValues } = useFormContext<PoolForm>();
+  const { control } = useFormContext<PoolForm>();
 
-  const tokenList = getValues('tokenList');
+  const tokenList = useWatch({ control, name: 'tokenList' });
 
   const [tokenSelected, setTokenSelected] = useState(tokenList[0].type);
 
@@ -29,18 +27,16 @@ const SelectionTokenList: FC<TokenListProps> = ({ type }) => {
 
         return (
           <Box
-            key={v4()}
             py="m"
             px="xl"
+            key={v4()}
             display="flex"
             cursor="pointer"
             alignItems="center"
             justifyContent="space-between"
+            nHover={{ bg: 'lowContainer' }}
             transition="all 350ms ease-in-out"
             onClick={() => setTokenSelected(token.type)}
-            nHover={{
-              bg: 'lowContainer',
-            }}
           >
             <Box display="flex" gap="xs" alignItems="center">
               {isOneCoin && (
@@ -64,12 +60,7 @@ const SelectionTokenList: FC<TokenListProps> = ({ type }) => {
               </Typography>
             </Box>
             <Typography variant="body" ml="m" size="large">
-              {isOneCoin
-                ? token.value
-                : FixedPointMath.toNumber(
-                    coinsMap[token.type].balance,
-                    token.decimals
-                  )}
+              {token.value}
             </Typography>
           </Box>
         );
@@ -78,4 +69,4 @@ const SelectionTokenList: FC<TokenListProps> = ({ type }) => {
   );
 };
 
-export default SelectionTokenList;
+export default PoolFormWithdrawReceiveTokens;

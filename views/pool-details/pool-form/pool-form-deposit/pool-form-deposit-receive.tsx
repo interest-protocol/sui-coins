@@ -8,7 +8,7 @@ import { PoolForm } from '@/views/pools/pools.types';
 
 import { getAmmLpCoinAmount } from '../pool-form.utils';
 
-const PoolReceiveSection: FC = () => {
+const PoolFormDepositReceive: FC = () => {
   const { control, getValues, setValue } = useFormContext<PoolForm>();
   const value = useWatch({ control, name: 'lpCoin.value' });
   const symbol = useWatch({ control, name: 'lpCoin.symbol' });
@@ -58,4 +58,4 @@ const PoolReceiveSection: FC = () => {
   );
 };
 
-export default PoolReceiveSection;
+export default PoolFormDepositReceive;

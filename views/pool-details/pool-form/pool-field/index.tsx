@@ -14,7 +14,7 @@ import { DefaultTokenSVG } from '@/svg';
 import { parseInputEventToNumberString } from '@/utils';
 import { PoolForm, PoolOption } from '@/views/pools/pools.types';
 
-import { PoolFieldsProps } from './field.types';
+import { PoolFieldsProps } from './pool-field.types';
 
 const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
   const network = useNetwork();

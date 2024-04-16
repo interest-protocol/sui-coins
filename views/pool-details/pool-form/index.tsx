@@ -5,7 +5,7 @@ import { PoolOption } from '@/views/pools/pools.types';
 
 import { PoolDetailsFormProps } from '../pool-details.types';
 import PoolDeposit from './pool-form-deposit';
-import PoolWithdraw from './pool-form-widraw';
+import PoolWithdraw from './pool-form-withdraw';
 
 const PoolForm: FC<PoolDetailsFormProps> = ({
   handleOptionTab,
