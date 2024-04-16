@@ -92,10 +92,23 @@ const PoolFormDepositButton: FC = () => {
       const coin1 = tokenList[0];
       const coin2 = tokenList[1];
 
+      console.log({
+        coin1,
+        coin2,
+        balance1: FixedPointMath.toNumber(
+          coinsMap[coin1.type].balance,
+          coinsMap[coin1.type].decimals
+        ),
+        balance2: FixedPointMath.toNumber(
+          coinsMap[coin2.type].balance,
+          coinsMap[coin2.type].decimals
+        ),
+      });
+
       if (
         !coinsMap[coin1.type]?.balance ||
-        Number(coin1.value).toFixed(5) >
-          FixedPointMath.toNumber(
+        +Number(coin1.value).toFixed(5) >
+          +FixedPointMath.toNumber(
             coinsMap[coin1.type].balance,
             coinsMap[coin1.type].decimals
           ).toFixed(5)
@@ -106,10 +119,11 @@ const PoolFormDepositButton: FC = () => {
         );
         return;
       }
+
       if (
         !coinsMap[coin2.type]?.balance ||
-        Number(coin2.value).toFixed(5) >
-          FixedPointMath.toNumber(
+        +Number(coin2.value).toFixed(5) >
+          +FixedPointMath.toNumber(
             coinsMap[coin2.type].balance,
             coinsMap[coin2.type].decimals
           ).toFixed(5)
