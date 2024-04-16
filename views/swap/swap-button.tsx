@@ -38,7 +38,7 @@ const SwapButton = () => {
     try {
       setLoading(true);
 
-      const txb = swap();
+      const txb = await swap();
 
       const { signature, transactionBlockBytes } =
         await signTransactionBlock.mutateAsync({
