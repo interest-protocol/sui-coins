@@ -26,6 +26,11 @@ const SelectToken: FC<SelectTokenProps> = ({
     name: `tokenList.${index}.symbol`,
   });
 
+  const currentType = useWatch({
+    control,
+    name: `tokenList.${index}.type`,
+  });
+
   const onSelect = async ({ type, decimals, symbol }: CoinData) => {
     if (getValues('tokenList')?.some((token) => token.type === type)) return;
 
@@ -63,7 +68,11 @@ const SelectToken: FC<SelectTokenProps> = ({
         >
           {currentSymbol ? (
             <Box display="flex" alignItems="center" gap="m" p="xs">
-              <TokenIcon network={network} tokenId={currentSymbol} />
+              <TokenIcon
+                network={network}
+                type={currentType}
+                symbol={currentSymbol}
+              />
               <Typography variant="body" size="medium">
                 {currentSymbol}
               </Typography>

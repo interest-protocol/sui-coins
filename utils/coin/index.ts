@@ -1,4 +1,5 @@
 import type { Token } from '@interest-protocol/sui-tokens';
+import { CoinStruct } from '@mysten/sui.js/dist/cjs/client';
 import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
 import { propOr } from 'ramda';
@@ -14,8 +15,9 @@ import {
 } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { CoinMetadataWithType } from '@/interface';
 
+import { isSameAddress } from '../address';
 import { getBasicCoinMetadata } from '../fn';
-import { CreateVectorParameterArgs } from './coin.types';
+import { CreateVectorParameterArgs, GetCoinsArgs } from './coin.types';
 
 export const isSymbol = (text: string): boolean =>
   new RegExp(/^[A-Z-]+$/g).test(text);
@@ -150,3 +152,29 @@ export const getCoin = async (
       )
       .catch(() => resolve({ type, ...getBasicCoinMetadata(type) }));
   });
+
+export const isSui = (type: string) => isSameAddress(type, SUI_TYPE_ARG);
+
+export const getCoins = async ({
+  suiClient,
+  coinType,
+  cursor,
+  account,
+}: GetCoinsArgs): Promise<CoinStruct[]> => {
+  const { data, nextCursor, hasNextPage } = await suiClient.getCoins({
+    owner: account,
+    cursor,
+    coinType,
+  });
+
+  if (!hasNextPage) return data;
+
+  const newData = await getCoins({
+    suiClient,
+    coinType,
+    account,
+    cursor: nextCursor,
+  });
+
+  return [...data, ...newData];
+};

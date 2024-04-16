@@ -87,7 +87,11 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
                   display="inline-flex"
                   justifyContent="center"
                 >
-                  <TokenIcon network={network} tokenId={tokenFrom.symbol} />
+                  <TokenIcon
+                    network={network}
+                    type={tokenFrom.type}
+                    symbol={tokenFrom.symbol}
+                  />
                 </Box>
                 <Typography size="small" variant="title">
                   {tokenFrom.symbol}
@@ -146,7 +150,11 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
                     display="inline-flex"
                     justifyContent="center"
                   >
-                    <TokenIcon network={network} tokenId={tokenTo.symbol} />
+                    <TokenIcon
+                      network={network}
+                      type={tokenTo.type}
+                      symbol={tokenTo.symbol}
+                    />
                   </Box>
                   <Typography size="small" variant="title" color="onSurface">
                     {tokenTo.symbol}

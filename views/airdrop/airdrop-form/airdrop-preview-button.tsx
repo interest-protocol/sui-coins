@@ -4,8 +4,9 @@ import { FC, useMemo } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { useWeb3 } from '@/hooks/use-web3';
+import { ZERO_BIG_NUMBER } from '@/utils';
 
-import { AirdropPreviewButtonProps, IAirdropForm } from './airdrop.types';
+import { AirdropPreviewButtonProps, IAirdropForm } from '../airdrop.types';
 
 const AirdropPreviewButton: FC<AirdropPreviewButtonProps> = ({
   handleOpenSummaryModal,
@@ -23,11 +24,11 @@ const AirdropPreviewButton: FC<AirdropPreviewButtonProps> = ({
         .reduce((acc, { amount }) => acc.plus(BigNumber(amount)), BigNumber(0))
         .isZero() ||
       !coinsMap[tokenType] ||
-      BigNumber(coinsMap[tokenType].balance ?? '0').isZero() ||
-      BigNumber(coinsMap[tokenType].balance).lt(
+      coinsMap[tokenType].balance.isZero() ||
+      coinsMap[tokenType].balance.lt(
         airdropList.reduce(
           (acc, { amount }) => acc.plus(BigNumber(amount ?? 0)),
-          BigNumber(0)
+          ZERO_BIG_NUMBER
         )
       ),
     [airdropList, coinsMap[tokenType]]

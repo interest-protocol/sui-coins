@@ -8,10 +8,10 @@ import {
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { CoinData } from '@/interface';
 import { SearchSVG, TimesSVG } from '@/svg';
 
 import {
-  CoinDataWithChainInfo,
   SearchTokenForm,
   SelectTokenModalProps,
   TokenOrigin,
@@ -31,7 +31,7 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
     },
   });
 
-  const handleSelectToken = (coin: CoinDataWithChainInfo) => {
+  const handleSelectToken = (coin: CoinData) => {
     onSelect(coin);
     closeModal();
   };

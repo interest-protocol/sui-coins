@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { SVGProps } from '@/components/svg/svg.types';
 import { FileSVG, WalletSVG } from '@/svg';
 
-import { TMethod } from './airdrop.types';
+import { TMethod } from '../airdrop.types';
 
 export const METHODS_ICONS: Record<
   TMethod,

@@ -6,7 +6,7 @@ import AirdropCustomAmountTextArea from './airdrop-custom-amount-text-area';
 
 const AirdropCustomAmountMethod: FC = () => (
   <Box>
-    <Box pb="m" color="onSurface">
+    <Box pb="m">
       <Typography variant="body" size="large" mb="m">
         3. Choose amount & who to send:
       </Typography>

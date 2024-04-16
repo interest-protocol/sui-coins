@@ -7,13 +7,13 @@ const AirdropChooseCoin: FC = () => (
   <Box
     p="xl"
     gap="s"
+    bg="container"
     display="flex"
     borderRadius="xs"
-    bg="container"
     flexDirection="column"
   >
     <Box display="flex" justifyContent="space-between">
-      <Typography variant="body" size="large" color="onSurface">
+      <Typography variant="body" size="large">
         1. Choose coin
       </Typography>
     </Box>

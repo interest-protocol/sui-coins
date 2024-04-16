@@ -39,12 +39,6 @@ export const csvToAirdrop = (
   }
 };
 
-export const getBridgeIdentifier = (bridge: 'celer' | 'wormhole' | null) => {
-  if (bridge === 'wormhole') return 'w';
-  if (bridge === 'celer') return 'c';
-  return '';
-};
-
 export const textToAirdrop = (
   text: string,
   commonAmount: string,
