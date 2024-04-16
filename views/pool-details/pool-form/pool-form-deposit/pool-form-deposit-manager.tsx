@@ -36,11 +36,13 @@ const DepositManager: FC = () => {
       return;
     }
 
-    const n = getAmmOptimalCoin1Value(
+    const optimalAmountY = getAmmOptimalCoin1Value(
       FixedPointMath.toBigNumber(token0Amount, coin0.decimals),
       pool.balanceX,
       pool.balanceY
-    ).dividedBy(new BigNumber(10).pow(coin1.decimals));
+    );
+
+    const n = optimalAmountY.dividedBy(new BigNumber(10).pow(coin1.decimals));
 
     const roundedN =
       n.lt(new BigNumber(1)) && !coin1.decimals
@@ -66,11 +68,13 @@ const DepositManager: FC = () => {
       return;
     }
 
-    const n = getAmmOptimalCoin0Value(
+    const optimalAmountX = getAmmOptimalCoin0Value(
       FixedPointMath.toBigNumber(token1Amount, coin1.decimals),
       pool.balanceX,
       pool.balanceY
-    ).dividedBy(new BigNumber(10).pow(coin0.decimals));
+    );
+
+    const n = optimalAmountX.dividedBy(new BigNumber(10).pow(coin0.decimals));
 
     const roundedN =
       n.lt(new BigNumber(1)) && !coin0.decimals

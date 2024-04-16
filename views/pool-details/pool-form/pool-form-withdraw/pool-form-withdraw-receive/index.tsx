@@ -38,6 +38,7 @@ const PoolFormWithdrawReceive: FC = () => {
       'tokenList',
       amounts.map((amount, index) => ({
         ...tokenList[index],
+        valueBN: amount,
         value: String(FixedPointMath.toNumber(amount)),
       }))
     );

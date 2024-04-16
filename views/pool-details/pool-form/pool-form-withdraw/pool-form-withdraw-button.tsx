@@ -1,13 +1,12 @@
 import { Button, Motion } from '@interest-protocol/ui-kit';
 import { useCurrentAccount, useSignTransactionBlock } from '@mysten/dapp-kit';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { EXPLORER_URL } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useDialog, useMovementClient, useWeb3 } from '@/hooks';
 import { useModal } from '@/hooks/use-modal';
-import { FixedPointMath } from '@/lib';
 import { showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
 
@@ -19,13 +18,13 @@ const PoolFormWithdrawButton: FC = () => {
   const withdraw = useWithdraw();
   const client = useMovementClient();
   const account = useCurrentAccount();
-  const { coinsMap, mutate } = useWeb3();
+  const { mutate } = useWeb3();
   const { dialog, handleClose } = useDialog();
   const signTransactionBlock = useSignTransactionBlock();
   const { setModal, handleClose: closeModal } = useModal();
   const { getValues, control, setValue } = useFormContext<PoolForm>();
 
-  const lpCoin = useWatch({ control, name: 'lpCoin' });
+  const error = useWatch({ control, name: 'error' });
 
   const handleWithdraw = async () => {
     try {
@@ -87,26 +86,6 @@ const PoolFormWithdrawButton: FC = () => {
       },
     });
   };
-
-  useEffect(() => {
-    if (lpCoin && coinsMap) {
-      if (
-        !coinsMap[lpCoin.type]?.balance ||
-        FixedPointMath.toBigNumber(lpCoin.value, lpCoin.decimals).gt(
-          coinsMap[lpCoin.type].balance
-        )
-      ) {
-        setValue(
-          'error',
-          `The ${lpCoin.symbol} amount is superior than your balance, try to reduce`
-        );
-        return;
-      }
-    }
-    setValue('error', null);
-  }, [lpCoin]);
-
-  const error = useWatch({ control, name: 'error' });
 
   const removeLiquidity = () =>
     !error &&

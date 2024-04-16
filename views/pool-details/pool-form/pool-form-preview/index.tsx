@@ -10,6 +10,7 @@ import { ZERO_BIG_NUMBER } from '@/utils';
 import slippage from '@/views/swap/manage-slippage/slippage';
 
 import { useDeposit } from '../pool-form-deposit/pool-form-deposit.hooks';
+import { useWithdraw } from '../pool-form-withdraw/pool-form-withdraw.hooks';
 import LpCoinField from './fields/lp-coin';
 import TokenListFields from './fields/token-list';
 import { PoolPreviewProps } from './preview.types';
@@ -20,18 +21,16 @@ const PoolPreview: FC<PoolPreviewProps> = ({
   getValues,
   isDeposit,
 }) => {
-  const deposit = useDeposit();
   const client = useSuiClient();
   const currentAccount = useCurrentAccount();
+  const action = (isDeposit ? useDeposit : useWithdraw)();
 
   const fees = useSWR(
     `network-fee-${currentAccount?.address}-${slippage}`,
     async () => {
       if (!currentAccount) return;
 
-      if (!isDeposit) return;
-
-      const txb = await deposit(getValues(), currentAccount);
+      const txb = await action(getValues(), currentAccount);
 
       const inspect = await client.devInspectTransactionBlock({
         transactionBlock: txb,

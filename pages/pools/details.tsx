@@ -1,5 +1,5 @@
 import { NextPage } from 'next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { SEO } from '@/components';
@@ -25,6 +25,12 @@ const PoolDetailsPage: NextPage<PoolPageProps> = ({ objectId }) => {
       },
     },
   });
+
+  useEffect(() => {
+    form.resetField('lpCoin.value');
+    form.resetField('tokenList.0.value');
+    form.resetField('tokenList.1.value');
+  }, [poolOptionView]);
 
   return (
     <FormProvider {...form}>

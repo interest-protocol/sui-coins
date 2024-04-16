@@ -94,9 +94,11 @@ const PoolFormDepositButton: FC = () => {
 
       if (
         !coinsMap[coin1.type]?.balance ||
-        FixedPointMath.toBigNumber(coin1.value, coin1.decimals).gt(
-          coinsMap[coin1.type].balance
-        )
+        Number(coin1.value).toFixed(5) >
+          FixedPointMath.toNumber(
+            coinsMap[coin1.type].balance,
+            coinsMap[coin1.type].decimals
+          ).toFixed(5)
       ) {
         setValue(
           'error',
@@ -106,9 +108,11 @@ const PoolFormDepositButton: FC = () => {
       }
       if (
         !coinsMap[coin2.type]?.balance ||
-        FixedPointMath.toBigNumber(coin2.value, coin2.decimals).gt(
-          coinsMap[coin2.type].balance
-        )
+        Number(coin2.value).toFixed(5) >
+          FixedPointMath.toNumber(
+            coinsMap[coin2.type].balance,
+            coinsMap[coin2.type].decimals
+          ).toFixed(5)
       ) {
         setValue(
           'error',

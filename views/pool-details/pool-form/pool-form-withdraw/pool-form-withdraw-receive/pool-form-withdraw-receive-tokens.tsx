@@ -1,5 +1,5 @@
-import { Box, RadioButton, Typography } from '@interest-protocol/ui-kit';
-import { FC, useState } from 'react';
+import { Box, Typography } from '@interest-protocol/ui-kit';
+import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
@@ -15,8 +15,6 @@ const PoolFormWithdrawReceiveTokens: FC<TokenListProps> = ({ type }) => {
   const { control } = useFormContext<PoolForm>();
 
   const tokenList = useWatch({ control, name: 'tokenList' });
-
-  const [tokenSelected, setTokenSelected] = useState(tokenList[0].type);
 
   const isOneCoin = type === SelectionFieldValues.OneCoin;
 
@@ -34,14 +32,13 @@ const PoolFormWithdrawReceiveTokens: FC<TokenListProps> = ({ type }) => {
             cursor="pointer"
             alignItems="center"
             justifyContent="space-between"
-            nHover={{ bg: 'lowContainer' }}
             transition="all 350ms ease-in-out"
-            onClick={() => setTokenSelected(token.type)}
+            nHover={isOneCoin && { bg: 'lowContainer' }}
           >
             <Box display="flex" gap="xs" alignItems="center">
-              {isOneCoin && (
+              {/* {isOneCoin && (
                 <RadioButton defaultValue={tokenSelected === token.type} />
-              )}
+              )} */}
               <Box
                 display="flex"
                 bg="onSurface"

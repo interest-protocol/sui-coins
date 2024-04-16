@@ -57,21 +57,24 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
 
         setValue(
           `${fieldName}.value`,
-          String(
+          (+(
             coinsMap[token.type]
               ? FixedPointMath.toNumber(
                   coinsMap[token.type].balance,
                   token.decimals
                 )
               : 0
-          )
+          ).toFixed(5)).toPrecision()
         );
       }}
       {...register(`${fieldName}.value`, {
         onChange: (v: ChangeEvent<HTMLInputElement>) => {
           if (isDeposit) handleDepositLock();
 
-          setValue(`${fieldName}.value`, parseInputEventToNumberString(v));
+          setValue(
+            `${fieldName}.value`,
+            (+Number(parseInputEventToNumberString(v)).toFixed(5)).toPrecision()
+          );
         },
       })}
       TokenIcon={
