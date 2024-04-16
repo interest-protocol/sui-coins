@@ -12,7 +12,6 @@ import FetchingToken from './fetching-token';
 import ModalTokenBody from './modal-token-body';
 import NotFound from './not-found';
 import {
-  CoinDataWithChainInfo,
   SelectTokenModalBodyProps,
   TokenOrigin,
 } from './select-token-modal.types';
@@ -34,12 +33,12 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
     return (
       <ModalTokenBody
         handleSelectToken={onSelectToken}
-        tokens={(COINS as Array<CoinDataWithChainInfo>)
-          ?.sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
-          .filter(
-            ({ symbol, type }) =>
-              type.includes(search) || symbol.toLowerCase().includes(search)
-          )}
+        tokens={COINS?.sort(({ type }) =>
+          favoriteTokenTypes?.includes(type) ? -1 : 1
+        ).filter(
+          ({ symbol, type }) =>
+            type.includes(search) || symbol.toLowerCase().includes(search)
+        )}
       />
     );
 

@@ -1,7 +1,6 @@
 import { Control, UseFormSetValue } from 'react-hook-form';
 
 import { TOKEN_SYMBOL } from '@/constants/coins';
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { CoinData } from '@/interface';
 
 export interface CoinDataWithChainInfo {
@@ -44,7 +43,7 @@ export interface SelectTokenModalBodyProps {
 }
 
 export interface ModalTokenBodyProps {
-  tokens: ReadonlyArray<CoinObject | CoinObject>;
+  tokens: ReadonlyArray<CoinData>;
   handleSelectToken: (coin: CoinData) => void;
 }
 
