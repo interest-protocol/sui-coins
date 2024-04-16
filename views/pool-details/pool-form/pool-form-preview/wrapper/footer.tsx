@@ -16,10 +16,9 @@ const PoolPreviewWrapperFooter: FC<PoolPreviewWrapperProps> = ({
   fees,
   onSubmit,
   isDeposit,
+  getValues,
 }) => {
   const { handleClose } = useModal();
-
-  console.log({ fees });
 
   return (
     <Box>
@@ -28,9 +27,9 @@ const PoolPreviewWrapperFooter: FC<PoolPreviewWrapperProps> = ({
           isInfo
           index={0}
           key={v4()}
-          amount=""
-          tooltipInfo=""
-          description="Slippage Loss (incl. pricing):"
+          description="Slippage"
+          tooltipInfo="Slippage Loss (incl. pricing)"
+          amount={`${getValues('settings.slippage')}%`}
         />
         <PoolCardTrade
           isInfo
@@ -40,7 +39,7 @@ const PoolPreviewWrapperFooter: FC<PoolPreviewWrapperProps> = ({
           tooltipInfo="Gas estimation"
           amount={
             fees.isLoading ? (
-              <Box as="span" mt="-2rem" display="inline-block">
+              <Box as="span" display="block" height="0" mt="-1.8rem">
                 <ProgressIndicator variant="loading" size={16} />
               </Box>
             ) : (
@@ -50,8 +49,8 @@ const PoolPreviewWrapperFooter: FC<PoolPreviewWrapperProps> = ({
         />
       </Box>
       <Button
-        variant="filled"
         my="xl"
+        variant="filled"
         width="fill-available"
         onClick={async () => {
           await onSubmit();

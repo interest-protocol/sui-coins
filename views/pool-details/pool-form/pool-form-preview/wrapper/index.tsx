@@ -9,6 +9,7 @@ const PoolPreviewWrapper: FC<PropsWithChildren<PoolPreviewWrapperProps>> = ({
   fees,
   onSubmit,
   children,
+  getValues,
   isDeposit,
 }) => (
   <Motion
@@ -37,6 +38,7 @@ const PoolPreviewWrapper: FC<PropsWithChildren<PoolPreviewWrapperProps>> = ({
       <PoolPreviewWrapperFooter
         fees={fees}
         onSubmit={onSubmit}
+        getValues={getValues}
         isDeposit={isDeposit}
       />
     </Box>

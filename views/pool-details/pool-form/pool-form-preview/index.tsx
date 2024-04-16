@@ -31,7 +31,7 @@ const PoolPreview: FC<PoolPreviewProps> = ({
 
       if (!isDeposit) return;
 
-      const txb = deposit(getValues(), currentAccount);
+      const txb = await deposit(getValues(), currentAccount, true);
 
       const inspect = await client.devInspectTransactionBlock({
         transactionBlock: txb,
@@ -53,7 +53,12 @@ const PoolPreview: FC<PoolPreviewProps> = ({
   );
 
   return (
-    <PoolPreviewWrapper isDeposit={isDeposit} onSubmit={onSubmit} fees={fees}>
+    <PoolPreviewWrapper
+      fees={fees}
+      onSubmit={onSubmit}
+      isDeposit={isDeposit}
+      getValues={getValues}
+    >
       <Box display="flex" flexDirection="column" gap="2xl">
         <Box display="flex" flexDirection="column" gap="xs">
           <Typography variant="label" size="small" textTransform="uppercase">

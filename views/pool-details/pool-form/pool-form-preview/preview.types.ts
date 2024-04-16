@@ -11,17 +11,12 @@ export interface PoolPreviewWrapperHeaderProps {
   isDeposit?: boolean;
 }
 
-interface WithSubmitFn {
+export interface PoolPreviewProps
+  extends PoolPreviewWrapperHeaderProps,
+    FieldProps {
   onSubmit: () => void;
 }
 
-export interface PoolPreviewProps
-  extends PoolPreviewWrapperHeaderProps,
-    WithSubmitFn,
-    FieldProps {}
-
-export interface PoolPreviewWrapperProps
-  extends PoolPreviewWrapperHeaderProps,
-    WithSubmitFn {
+export interface PoolPreviewWrapperProps extends PoolPreviewProps {
   fees: SWRResponse<Array<number> | undefined>;
 }

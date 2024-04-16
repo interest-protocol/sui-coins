@@ -120,7 +120,9 @@ const AirdropConfirmButton: FC<AirdropProgressProps> = ({
       if (coinsMap[token.type].objects.length > 1) {
         const txb = new TransactionBlock();
 
-        const coinInList = createObjectsParameter({
+        const coinInList = await createObjectsParameter({
+          signTxb: signTransactionBlock,
+          suiClient,
           coinsMap,
           txb: txb,
           type: token.type,

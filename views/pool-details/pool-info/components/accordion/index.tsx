@@ -16,7 +16,7 @@ const PoolDetailCollapse: FC<PoolDetailAccordionProps> = ({
   noBorder,
   children,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
 
   const handleCollapseClick = () => {
     setIsExpanded(!isExpanded);

@@ -1,3 +1,4 @@
+import { useSignTransactionBlock, useSuiClient } from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { WalletAccount } from '@wallet-standard/base';
 
@@ -13,8 +14,14 @@ import { getAmmLpCoinAmount, getSafeValue } from '../pool-form.utils';
 export const useDeposit = () => {
   const network = useNetwork();
   const { coinsMap } = useWeb3();
+  const suiClient = useSuiClient();
+  const signTxb = useSignTransactionBlock();
 
-  return (values: PoolForm, account: WalletAccount | null) => {
+  return async (
+    values: PoolForm,
+    account: WalletAccount | null,
+    isDev = false
+  ) => {
     const { tokenList, pool, lpCoin, settings } = values;
 
     if (!tokenList.length) throw new Error('No tokens ');
@@ -34,44 +41,42 @@ export const useDeposit = () => {
 
     const txb = new TransactionBlock();
 
+    txb.setGasBudget(200_000_000n);
+
     const amount0 = getSafeValue(coin0, walletCoin0.balance);
 
     const amount1 = getSafeValue(coin1, walletCoin1.balance);
 
-    const coin0InList = createObjectsParameter({
+    const coin0InList = await createObjectsParameter({
+      signTxb,
+      suiClient,
       coinsMap,
       txb: txb,
       type: coin0.type,
       amount: amount0.toString(),
+      isDev,
     });
 
-    const coin1InList = createObjectsParameter({
+    const coin1InList = await createObjectsParameter({
+      signTxb,
+      suiClient,
       coinsMap,
       txb: txb,
       type: coin1.type,
       amount: amount1.toString(),
+      isDev,
     });
 
     const coin0In = txb.moveCall({
       target: `${PACKAGES[network].UTILS}::utils::handle_coin_vector`,
       typeArguments: [coin0.type],
-      arguments: [
-        txb.makeMoveVec({
-          objects: coin0InList,
-        }),
-        txb.pure(amount0),
-      ],
+      arguments: [txb.makeMoveVec({ objects: coin0InList }), txb.pure(amount0)],
     });
 
     const coin1In = txb.moveCall({
       target: `${PACKAGES[network].UTILS}::utils::handle_coin_vector`,
       typeArguments: [coin1.type],
-      arguments: [
-        txb.makeMoveVec({
-          objects: coin1InList,
-        }),
-        txb.pure(amount1),
-      ],
+      arguments: [txb.makeMoveVec({ objects: coin1InList }), txb.pure(amount1)],
     });
 
     const lpAmount = getAmmLpCoinAmount(

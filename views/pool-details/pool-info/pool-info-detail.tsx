@@ -1,5 +1,4 @@
 import { Box } from '@interest-protocol/ui-kit';
-import { formatAddress } from '@mysten/sui.js/utils';
 import { propOr } from 'ramda';
 import { v4 } from 'uuid';
 
@@ -33,7 +32,7 @@ const PoolDetail = () => {
     );
 
   const infoData = [
-    formatAddress(pool.type),
+    pool.poolId,
     pool.poolType.toLocaleUpperCase(),
     pool.isVolatile ? 'Volatile' : 'Stable',
   ];
@@ -42,8 +41,7 @@ const PoolDetail = () => {
 
   const virtualPrice = liquidity
     ? FixedPointMath.toNumber(
-        FixedPointMath.toBigNumber(liquidity, 18).div(pool.lpCoinSupply),
-        18
+        FixedPointMath.toBigNumber(liquidity).div(pool.lpCoinSupply)
       )
     : 0;
 
@@ -132,7 +130,7 @@ const PoolDetail = () => {
               <ItemToken
                 key={v4()}
                 Icon={Icon}
-                percentage="10%"
+                percentage="50%"
                 coinName={symbol}
                 value={formatMoney(FixedPointMath.toNumber(balance, decimals))}
                 conversion={
@@ -147,9 +145,7 @@ const PoolDetail = () => {
             <ItemStandard
               label="Total Supply"
               labelColor="outline"
-              content={formatMoney(
-                FixedPointMath.toNumber(pool.lpCoinSupply, 0)
-              )}
+              content={formatMoney(FixedPointMath.toNumber(pool.lpCoinSupply))}
             />
           </>
         )}

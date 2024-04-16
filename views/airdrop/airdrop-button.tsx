@@ -117,7 +117,9 @@ const AirdropButton: FC<AirdropProgressProps> = ({ setIsProgressView }) => {
       if (coinsMap[token.type].objects.length > 1) {
         const txb = new TransactionBlock();
 
-        const coinInList = createObjectsParameter({
+        const coinInList = await createObjectsParameter({
+          suiClient,
+          signTxb: signTransactionBlock,
           coinsMap,
           txb: txb,
           type: token.type,
@@ -135,7 +137,7 @@ const AirdropButton: FC<AirdropProgressProps> = ({ setIsProgressView }) => {
           arguments: [
             txb.object(firstCoin.coinObjectId),
             txb.makeMoveVec({
-              objects: coinInList.slice(1),
+              objects: coinInList,
             }),
           ],
         });

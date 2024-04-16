@@ -1,4 +1,8 @@
-import { useCurrentAccount } from '@mysten/dapp-kit';
+import {
+  useCurrentAccount,
+  useSignTransactionBlock,
+  useSuiClient,
+} from '@mysten/dapp-kit';
 import {
   TransactionBlock,
   TransactionResult,
@@ -19,11 +23,15 @@ import { getAmountMinusSlippage } from './swap.utils';
 export const useSwap = () => {
   const network = useNetwork();
   const { coinsMap } = useWeb3();
+  const suiClient = useSuiClient();
+  const signTxb = useSignTransactionBlock();
   const currentAccount = useCurrentAccount();
   const formSwap = useFormContext<SwapForm>();
 
   return () =>
     swap({
+      suiClient,
+      signTxb,
       currentAccount,
       coinsMap,
       formSwap,
@@ -34,11 +42,15 @@ export const useSwap = () => {
 export const useZeroSwap = () => {
   const network = useNetwork();
   const { coinsMap } = useWeb3();
+  const suiClient = useSuiClient();
+  const signTxb = useSignTransactionBlock();
   const currentAccount = useCurrentAccount();
   const formSwap = useFormContext<SwapForm>();
 
   return () =>
     swap({
+      suiClient,
+      signTxb,
       currentAccount,
       coinsMap,
       formSwap,
@@ -47,11 +59,13 @@ export const useZeroSwap = () => {
     });
 };
 
-const swap = ({
+const swap = async ({
   currentAccount,
   coinsMap,
   formSwap,
   network,
+  suiClient,
+  signTxb,
   isZeroSwap = false,
 }: SwapArgs) => {
   const { settings, from, to, swapPath } = formSwap.getValues();
@@ -86,7 +100,9 @@ const swap = ({
 
   const txb = new TransactionBlock();
 
-  const coinInList = createObjectsParameter({
+  const coinInList = await createObjectsParameter({
+    suiClient,
+    signTxb,
     coinsMap,
     txb,
     type: from.type,
