@@ -33,8 +33,8 @@ const SwapPreviewModalSummary: FC = () => {
     async () => {
       if (!currentAccount) return;
 
-      const txb = swap();
-      const zeroSwapTxb = zeroSwap();
+      const txb = await swap();
+      const zeroSwapTxb = await zeroSwap();
 
       const [inspect, zeroInspect] = await Promise.all([
         client.devInspectTransactionBlock({
