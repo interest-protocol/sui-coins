@@ -31,7 +31,7 @@ const PoolPreview: FC<PoolPreviewProps> = ({
 
       if (!isDeposit) return;
 
-      const txb = await deposit(getValues(), currentAccount, true);
+      const txb = await deposit(getValues(), currentAccount);
 
       const inspect = await client.devInspectTransactionBlock({
         transactionBlock: txb,
