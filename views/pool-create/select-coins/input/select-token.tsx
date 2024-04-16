@@ -84,7 +84,11 @@ const SelectToken: FC<InputProps> = ({ index }) => {
               justifyContent="center"
               alignItems="center"
             >
-              <TokenIcon network={network} tokenId={currentSymbol} />
+              <TokenIcon
+                network={network}
+                symbol={currentSymbol}
+                type={currentToken.type}
+              />
             </Box>
           ),
         })}
