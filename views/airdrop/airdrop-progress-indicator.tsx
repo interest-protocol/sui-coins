@@ -32,9 +32,9 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
     <Box
       p="xl"
       gap="4xl"
+      bg="container"
       display="flex"
       borderRadius="m"
-      bg="lowestContainer"
       flexDirection="column"
     >
       <Typography
