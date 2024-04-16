@@ -1,17 +1,9 @@
 import { Control, UseFormSetValue } from 'react-hook-form';
 
-import { TOKEN_SYMBOL } from '@/constants/coins';
 import { CoinData } from '@/interface';
 
-export interface CoinDataWithChainInfo {
-  type: string;
-  decimals: number;
-  symbol: TOKEN_SYMBOL | string;
-  balance: number | string;
-}
-
 export interface TokenModalItemProps
-  extends Omit<CoinDataWithChainInfo, 'decimals' | 'balance'> {
+  extends Omit<CoinData, 'decimals' | 'balance'> {
   selected: boolean;
   onClick: () => void;
 }

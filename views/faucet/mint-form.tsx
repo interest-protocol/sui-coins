@@ -17,13 +17,13 @@ import { useNetwork } from '@/context/network';
 import { useUserMintEpoch, useWeb3 } from '@/hooks';
 import { useModal } from '@/hooks/use-modal';
 import { useSuiSystemState } from '@/hooks/use-sui-system-state';
+import { CoinData } from '@/interface';
 import { TOKEN_ICONS } from '@/lib';
 import { ChevronDownSVG } from '@/svg';
 import { showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
 import { requestMov } from '@/views/faucet/faucet.utils';
 
 import SelectTokenModal from '../components/select-token-modal';
-import { CoinDataWithChainInfo } from '../components/select-token-modal/select-token-modal.types';
 
 const MintForm: FC = () => {
   const [selected, setSelected] = useState(COINS[0]);
@@ -88,11 +88,7 @@ const MintForm: FC = () => {
     }
   };
 
-  const onSelect = async ({
-    decimals,
-    symbol,
-    type,
-  }: CoinDataWithChainInfo) => {
+  const onSelect = async ({ decimals, symbol, type }: CoinData) => {
     setSelected({ symbol: symbol as TOKEN_SYMBOL, type, decimals });
     handleClose();
   };
