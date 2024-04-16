@@ -7,6 +7,7 @@ import { useNetwork } from '@/context/network';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { useModal } from '@/hooks/use-modal';
 import useTokenPriceBySymbol from '@/hooks/use-token-price';
+import { CoinData } from '@/interface';
 import { ChevronRightSVG } from '@/svg';
 
 import SelectTokenModal from '../../components/select-token-modal';
@@ -29,8 +30,8 @@ const AirdropSelectToken: FC = () => {
     if (!isLoading && !error) setValue('tokenUSDPrice', usdPrice);
   }, [usdPrice, isLoading, error]);
 
-  const onSelect = (coin: CoinObject) => {
-    setValue('token', coin);
+  const onSelect = (coin: CoinData) => {
+    setValue('token', coin as CoinObject);
     setValue('tokenUSDPrice', undefined);
   };
 
