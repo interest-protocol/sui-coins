@@ -19,11 +19,11 @@ const WithdrawManager: FC = () => {
     if (lpCoin && coinsMap) {
       if (
         !coinsMap[lpCoin.type]?.balance ||
-        Number(lpCoin.value) >
-          FixedPointMath.toNumber(
+        +Number(lpCoin.value).toFixed(5) >
+          +FixedPointMath.toNumber(
             coinsMap[lpCoin.type].balance,
             coinsMap[lpCoin.type].decimals
-          )
+          ).toFixed(5)
       ) {
         setValue(
           'error',
