@@ -189,7 +189,7 @@ const PoolSummary: FC = () => {
                 bg="lowestContainer"
                 justifyContent="center"
               >
-                <TokenIcon tokenId={symbol} network={network} />
+                <TokenIcon symbol={symbol} type={type} network={network} />
               </Box>
               <Typography variant="body" size="medium">
                 {symbol}
