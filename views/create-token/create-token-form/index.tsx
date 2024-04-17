@@ -6,7 +6,7 @@ import {
   useSuiClient,
 } from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { normalizeSuiAddress } from '@mysten/sui.js/utils';
+import { normalizeSuiAddress, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import { ChangeEvent, FC } from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -14,6 +14,7 @@ import toast from 'react-hot-toast';
 
 import { TextField } from '@/components';
 import { useNetwork } from '@/context/network';
+import { useWeb3 } from '@/hooks/use-web3';
 import { parseInputEventToNumberString, showTXSuccessToast } from '@/utils';
 import { throwTXIfNotSuccessful } from '@/utils';
 
@@ -47,6 +48,7 @@ const CreateTokenForm: FC = () => {
   const network = useNetwork();
   const currentAccount = useCurrentAccount();
   const signTransactionBlock = useSignTransactionBlock();
+  const { coinsMap, mutate } = useWeb3();
 
   const createToken = async () => {
     try {
@@ -66,6 +68,15 @@ const CreateTokenForm: FC = () => {
       await initMoveByteCodeTemplate('/move_bytecode_template_bg.wasm');
 
       const txb = new TransactionBlock();
+      txb.setGasPayment(
+        coinsMap[SUI_TYPE_ARG].objects.map(
+          ({ coinObjectId, digest, version }) => ({
+            objectId: coinObjectId,
+            digest: digest!,
+            version: version!,
+          })
+        )
+      );
 
       const [upgradeCap] = txb.publish({
         modules: [
@@ -98,6 +109,7 @@ const CreateTokenForm: FC = () => {
       showTXSuccessToast(tx, network);
     } finally {
       setLoading(false);
+      mutate();
     }
   };
 
