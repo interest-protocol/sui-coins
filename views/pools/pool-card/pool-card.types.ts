@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { Pool, CoinMetadataWithType } from '@/interface';
+import { CoinMetadataWithType, Pool } from '@/interface';
 
 export enum AlgorithmEnum {
   'stable' = 'stable',

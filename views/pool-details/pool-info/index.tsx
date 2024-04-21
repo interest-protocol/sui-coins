@@ -4,7 +4,8 @@ import { FC, useState } from 'react';
 import { PoolDetailsTabOption } from '../pool-details.types';
 import DetailTabs from './components/detail-tabs';
 import PoolInfoAdvanced from './pool-info-advanced';
-import PoolInfoDetail from './pool-info-amm-detail';
+import PoolInfoAmmDetail from './pool-info-amm-detail';
+import PoolInfoClammDetail from './pool-info-clamm-detail';
 
 const PoolInfo: FC = () => {
   const pool = {
@@ -27,7 +28,11 @@ const PoolInfo: FC = () => {
         )}
       />
       {poolDetailsView === PoolDetailsTabOption.Detail ? (
-        <PoolInfoDetail />
+        pool?.poolType !== 'amm' ? (
+          <PoolInfoClammDetail />
+        ) : (
+          <PoolInfoAmmDetail />
+        )
       ) : (
         pool?.poolType !== 'amm' && <PoolInfoAdvanced />
       )}

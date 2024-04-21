@@ -25,7 +25,7 @@ export const POOL_TYPE = [
   },
 ];
 
-export const Filters_Data = [
+export const FILTERS_DATA = [
   {
     label: 'Algorithm',
     data: ALGORITHM_TYPE,

@@ -1,13 +1,11 @@
 import { Box } from '@interest-protocol/ui-kit';
-import { propOr } from 'ramda';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
 import { isClammPool } from '@/hooks/use-pools/use-pools.utils';
-import { AmmPool, CoinMetadataWithType } from '@/interface';
 import { FixedPointMath } from '@/lib';
 import { formatDollars, formatMoney } from '@/utils';
-import { getAmmLiquidity } from '@/views/pools/pool-card/pool-card.utils';
+import { getClammLiquidity } from '@/views/pools/pool-card/pool-card.utils';
 
 import { usePoolDetails } from '../pool-details.context';
 import Accordion from './components/accordion';
@@ -16,7 +14,7 @@ import ItemStandard from './components/accordion/item-standard';
 import ItemToken from './components/accordion/item-token';
 import { POOL_INFORMATION, POOL_STATISTICS } from './pool-info.data';
 
-const PoolInfoAmmDetail: FC = () => {
+const PoolInfoClammDetail: FC = () => {
   const { pool, metadata, prices, loading } = usePoolDetails();
 
   if (loading)
@@ -26,20 +24,16 @@ const PoolInfoAmmDetail: FC = () => {
       </Box>
     );
 
-  if (!pool || isClammPool(pool))
+  if (!pool || !isClammPool(pool))
     return (
       <Box p="xl" textAlign="center">
         Pool not found
       </Box>
     );
 
-  const infoData = [
-    pool.poolId,
-    pool.poolType.toLocaleUpperCase(),
-    !(pool as AmmPool).isVolatile ? 'Stable' : 'Volatile',
-  ];
+  const infoData = [pool.poolId, pool.poolType.toLocaleUpperCase(), 'Volatile'];
 
-  const liquidity = getAmmLiquidity(pool, metadata || {}, prices || {});
+  const liquidity = getClammLiquidity(pool);
 
   const virtualPrice = liquidity
     ? FixedPointMath.toNumber(
@@ -51,18 +45,6 @@ const PoolInfoAmmDetail: FC = () => {
   const statsData = liquidity
     ? [formatDollars(liquidity), formatDollars(virtualPrice, 9)]
     : ['', ''];
-
-  const coinXMetadata: CoinMetadataWithType = propOr(
-    {} as typeof metadata,
-    pool.coinTypes.coinX,
-    metadata || {}
-  );
-
-  const coinYMetadata: CoinMetadataWithType = propOr(
-    {} as typeof metadata,
-    pool.coinTypes.coinY,
-    metadata || {}
-  );
 
   return (
     <Box>
@@ -95,53 +77,40 @@ const PoolInfoAmmDetail: FC = () => {
       <Accordion title="Pool Composition" noBorder>
         {pool && prices && (
           <>
-            {[
-              {
-                symbol:
-                  coinXMetadata?.symbol === 'SUI'
-                    ? 'MOV'
-                    : coinXMetadata?.symbol,
-                balance: pool.balanceX,
-                decimals: pool.decimalsX,
-                price:
-                  prices[
-                    (coinXMetadata?.symbol === 'SUI'
-                      ? 'MOV'
-                      : coinXMetadata.symbol
-                    ).toLowerCase()
-                  ] ?? 0,
-                type: pool.coinTypes.coinX,
-              },
-              {
-                type: pool.coinTypes.coinX,
-                symbol: coinYMetadata?.symbol,
-                balance: pool.balanceY,
-                decimals: pool.decimalsY,
-                price:
-                  prices[
-                    (coinYMetadata?.symbol === 'SUI'
-                      ? 'MOV'
-                      : coinYMetadata.symbol
-                    ).toLowerCase()
-                  ] ?? 0,
-              },
-            ].map(({ type, symbol, balance, decimals, price }) => (
+            {pool.coinStates.map(({ type, index, decimalsScalar }) => (
               <ItemToken
                 key={v4()}
                 percentage={
                   (+(
-                    (FixedPointMath.toNumber(balance.times(price), decimals) /
+                    (FixedPointMath.toNumber(
+                      pool.balances[FixedPointMath.toNumber(index, 18)].times(
+                        prices[metadata?.[type].symbol ?? '']
+                      ),
+                      FixedPointMath.toNumber(decimalsScalar, 18)
+                    ) /
                       liquidity) *
                     100
                   ).toFixed(2)).toPrecision() + '%'
                 }
-                symbol={symbol}
+                symbol={metadata?.[type].symbol ?? ''}
                 type={type}
-                value={formatMoney(FixedPointMath.toNumber(balance, decimals))}
+                value={formatMoney(
+                  FixedPointMath.toNumber(
+                    pool.balances[FixedPointMath.toNumber(index, 18)].times(
+                      prices[metadata?.[type].symbol ?? '']
+                    ),
+                    FixedPointMath.toNumber(decimalsScalar, 18)
+                  )
+                )}
                 conversion={
-                  price
+                  prices[metadata?.[type].symbol ?? '']
                     ? formatDollars(
-                        FixedPointMath.toNumber(balance.times(price), decimals)
+                        FixedPointMath.toNumber(
+                          pool.balances[FixedPointMath.toNumber(index, 18)]
+                            .times(prices[metadata?.[type].symbol ?? ''])
+                            .times(prices[metadata?.[type].symbol ?? '']),
+                          FixedPointMath.toNumber(decimalsScalar, 18)
+                        )
                       )
                     : 'N/A'
                 }
@@ -159,4 +128,4 @@ const PoolInfoAmmDetail: FC = () => {
   );
 };
 
-export default PoolInfoAmmDetail;
+export default PoolInfoClammDetail;

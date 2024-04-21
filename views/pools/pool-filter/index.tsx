@@ -6,7 +6,7 @@ import { FilterSVG } from '@/svg';
 
 import Dropdown from './dropdown';
 import FilterSelectedItem from './filter-selected-item';
-import { Filters_Data } from './pool-filter.data';
+import { FILTERS_DATA } from './pool-filter.data';
 
 const PoolFilter: FC = () => (
   <Box
@@ -36,7 +36,7 @@ const PoolFilter: FC = () => (
       >
         <FilterSVG maxWidth="2rem" maxHeight="2rem" width="100%" />
       </Box>
-      {Filters_Data.map((filter) => (
+      {FILTERS_DATA.map((filter) => (
         <Dropdown
           key={v4()}
           type={filter.type}

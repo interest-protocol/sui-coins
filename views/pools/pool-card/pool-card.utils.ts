@@ -1,10 +1,11 @@
 import { isEmpty } from 'ramda';
 
-import { Pool, CoinMetadataWithType } from '@/interface';
+import { AmmPool, ClammPool, CoinMetadataWithType } from '@/interface';
 import { FixedPointMath } from '@/lib';
+import { ZERO_BIG_NUMBER } from '@/utils';
 
-export const getLiquidity = (
-  pool: Pool,
+export const getAmmLiquidity = (
+  pool: AmmPool,
   metadata: Record<string, CoinMetadataWithType>,
   prices: Record<string, number>
 ): number => {
@@ -40,3 +41,15 @@ export const getLiquidity = (
 
   return 0;
 };
+
+export const getClammLiquidity = (pool: ClammPool): number =>
+  FixedPointMath.toNumber(
+    pool.coinStates.reduce(
+      (acc, { index, price }) =>
+        acc.plus(
+          price.multipliedBy(pool.balances[FixedPointMath.toNumber(index, 18)])
+        ),
+      ZERO_BIG_NUMBER
+    ),
+    18
+  );
