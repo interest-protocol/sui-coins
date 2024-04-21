@@ -7,7 +7,7 @@ import { v4 } from 'uuid';
 import { TokenIcon } from '@/components';
 import { Routes, RoutesEnum } from '@/constants';
 import { useNetwork } from '@/context/network';
-import { useDialog } from '@/hooks';
+import { useDialog } from '@/hooks/use-dialog';
 import { CircleCheckSVG } from '@/svg';
 import { formatMoney } from '@/utils';
 
