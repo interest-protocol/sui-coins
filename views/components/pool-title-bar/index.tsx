@@ -35,33 +35,35 @@ const PoolTitleBar: FC<PoolTitleBarProps> = ({
     >
       {name}
     </Typography>
-    <Box
-      ml="auto"
-      gap="1rem"
-      alignItems="center"
-      display={['none', 'none', 'flex', 'flex']}
-    >
-      {iconTokenList.map((Icon) => (
-        <Box
-          bg="#000"
-          key={v4()}
-          display="flex"
-          width="2.5rem"
-          height="2.5rem"
-          borderRadius="xs"
-          overflow="hidden"
-          alignItems="center"
-          justifyContent="center"
-          color="lowestContainer"
-        >
-          {typeof Icon === 'string' ? (
-            <img src={Icon} alt="Token Icon" width="100%" />
-          ) : (
-            <Icon width="100%" maxWidth="1.6rem" maxHeight="1.6rem" />
-          )}
-        </Box>
-      ))}
-    </Box>
+    {iconTokenList && (
+      <Box
+        ml="auto"
+        gap="1rem"
+        alignItems="center"
+        display={['none', 'none', 'flex', 'flex']}
+      >
+        {iconTokenList.map((Icon) => (
+          <Box
+            bg="#000"
+            key={v4()}
+            display="flex"
+            width="2.5rem"
+            height="2.5rem"
+            borderRadius="xs"
+            overflow="hidden"
+            alignItems="center"
+            justifyContent="center"
+            color="lowestContainer"
+          >
+            {typeof Icon === 'string' ? (
+              <img src={Icon} alt="Token Icon" width="100%" />
+            ) : (
+              <Icon width="100%" maxWidth="1.6rem" maxHeight="1.6rem" />
+            )}
+          </Box>
+        ))}
+      </Box>
+    )}
   </Box>
 );
 

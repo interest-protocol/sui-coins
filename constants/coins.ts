@@ -718,3 +718,84 @@ export const STRICT_TOKENS_MAP: Record<Network, Record<string, Token>> = {
     {}
   ),
 };
+
+// TODO: Info Change
+const ETH_TYPE =
+  '0x8e614b777730a3b481a5f30b53be062fc0c01f93c6fdfe9fb19ffbae7777b700::eth::ETH';
+
+const USDC_TYPE =
+  '0x8e614b777730a3b481a5f30b53be062fc0c01f93c6fdfe9fb19ffbae7777b700::usdc::USDC';
+
+export const SC_V_SUI_ETH =
+  '0x1f25cf55789981cd5b0b0c9f0449f4c8ae23c4c3f8f823a7cd06749017323162::ipx_v_sui_eth::IPX_V_SUI_ETH';
+
+export const SC_V_ETH_USDC =
+  '0x1f25cf55789981cd5b0b0c9f0449f4c8ae23c4c3f8f823a7cd06749017323162::ipx_v_eth_usdc::IPX_V_ETH_USDC';
+
+const SUI_ETH_POOL_ID =
+  '0x02f381358cd60a96665076b60cfc74c71d675d0b042e24436a7f6ae2fef59ab9';
+
+const USDC_ETH_POOL_ID =
+  '0x55f1e9bde96624a0c150ccb9b075bed7461ed652bb5c7b94c10fab32a1325dd3';
+
+const SUI_ETH_STATE_ID =
+  '0x58122defa03f590a88d8dd165c65e3ccfda7e8c660976f595ecb1c62d6f27281';
+
+const USDC_ETH_STATE_ID =
+  '0x21c4561fe02ca4ac4e9b1c705e9b1f9c052f7423f7d18053acca382749bb9a4f';
+
+export const REGISTRY_POOLS = {
+  [ETH_TYPE]: {
+    [SUI_TYPE_ARG]: {
+      poolId: SUI_ETH_POOL_ID,
+      lpCoinType: SC_V_SUI_ETH,
+      stateKey: SUI_ETH_STATE_ID,
+    },
+    [USDC_TYPE]: {
+      poolId: USDC_ETH_POOL_ID,
+      stateKey: USDC_ETH_STATE_ID,
+      lpCoinType: SC_V_ETH_USDC,
+    },
+  },
+  [USDC_TYPE]: {
+    [ETH_TYPE]: {
+      poolId: USDC_ETH_POOL_ID,
+      stateKey: USDC_ETH_STATE_ID,
+      lpCoinType: SC_V_ETH_USDC,
+    },
+  },
+  [SUI_TYPE_ARG]: {
+    [ETH_TYPE]: {
+      poolId: SUI_ETH_POOL_ID,
+      lpCoinType: SC_V_SUI_ETH,
+      stateKey: SUI_ETH_STATE_ID,
+    },
+  },
+};
+
+export const POOLS_ARRAY = [SUI_ETH_STATE_ID, USDC_ETH_STATE_ID];
+
+export const STATE_KEY_TO_POOL_ID = {
+  [USDC_ETH_STATE_ID]: USDC_ETH_POOL_ID,
+  [SUI_ETH_STATE_ID]: SUI_ETH_POOL_ID,
+} as Record<string, string>;
+
+export const POOLS_MAP = {
+  [SC_V_SUI_ETH]: SUI_ETH_STATE_ID,
+  [SC_V_ETH_USDC]: USDC_ETH_STATE_ID,
+} as Record<string, string>;
+
+export const LP_COINS_MAP = {
+  [Network.TESTNET]: {
+    [SC_V_SUI_ETH]: {
+      decimals: 18,
+      type: SC_V_SUI_ETH,
+      symbol: 'sc-v-SUI/ETH',
+    },
+    [SC_V_ETH_USDC]: {
+      decimals: 18,
+      type: SC_V_ETH_USDC,
+      symbol: 'sc-v-ETH/USDC',
+    },
+  },
+};
