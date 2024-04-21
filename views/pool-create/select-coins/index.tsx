@@ -68,7 +68,12 @@ const SelectCoins: FC = () => {
               variant="outline"
               color="onSurface"
               onClick={() =>
-                append({ type: '', symbol: '', decimals: 0, value: '' })
+                append({
+                  type: '' as `0x${string}`,
+                  symbol: '',
+                  decimals: 0,
+                  value: '',
+                })
               }
               borderColor="outlineVariant"
               PrefixIcon={
