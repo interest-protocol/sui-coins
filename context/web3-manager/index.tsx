@@ -57,7 +57,7 @@ const Web3Manager: FC<Web3ManagerProps> = ({ children }) => {
 
   const mutate = () => {
     mutateCoins();
-    mutateObjects();
+    mutateObjects?.();
   };
 
   return (

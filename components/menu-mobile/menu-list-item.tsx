@@ -11,6 +11,7 @@ const MobileMenuListItem: FC<MenuMobileItemProps> = ({
   name,
   path,
   Icon,
+  beta,
   disabled,
 }) => {
   const { asPath, push } = useRouter();
@@ -35,17 +36,38 @@ const MobileMenuListItem: FC<MenuMobileItemProps> = ({
         alignItems="center"
         mx="auto"
       >
-        <Box display="flex" alignItems="center" justifyContent="center">
-          <Icon maxHeight="1rem" maxWidth="1rem" width="1.2rem" />
-          <Typography
-            ml="s"
-            size="small"
-            variant="title"
-            width="max-content"
-            textTransform="capitalize"
-          >
-            {name}
-          </Typography>
+        <Box
+          width="100%"
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          <Box display="flex" alignItems="center">
+            <Icon maxHeight="1rem" maxWidth="1rem" width="1.2rem" />
+            <Typography
+              ml="s"
+              size="small"
+              variant="title"
+              width="max-content"
+              textTransform="capitalize"
+            >
+              {name}
+            </Typography>
+          </Box>
+          {beta && (
+            <Typography
+              px="xs"
+              py="2xs"
+              size="small"
+              variant="label"
+              border="1px solid"
+              borderRadius="2xs"
+              bg="errorContainer"
+              color="onErrorContainer"
+            >
+              Beta
+            </Typography>
+          )}
         </Box>
       </Box>
     </Box>
