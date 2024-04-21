@@ -1584,6 +1584,13 @@
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.1.1.tgz#1ec17e2edbec25c8306d424ecfbf13c7de1aaa31"
   integrity sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==
 
+"@polymedia/suits@^0.0.39":
+  version "0.0.39"
+  resolved "https://registry.yarnpkg.com/@polymedia/suits/-/suits-0.0.39.tgz#26b16233f8dbc41515fdcc79266b1f54295c1549"
+  integrity sha512-UR904waKIDXwDATxlERdas4gVRfCLwFxe/Gp5AeUUzk2+yBuhx0PAgKef/EUSjlA942iDZkm0z5Nx8zZ4kpMLw==
+  dependencies:
+    "@mysten/sui.js" "^0.51.2"
+
 "@pythnetwork/price-service-client@*", "@pythnetwork/price-service-client@^1.8.2":
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/@pythnetwork/price-service-client/-/price-service-client-1.9.0.tgz#1503d67b1a7c14386d30bb420502df4857027e76"
