@@ -93,7 +93,7 @@
     "@typescript-eslint/parser": "^6.10.0",
     "babel-plugin-styled-components": "^2.1.4",
     "babel-plugin-transform-typescript-metadata": "^0.3.2",
-    "commitlint": "^18.4.3",
+    "commitlint": "^19.2.2",
     "commitlint-config-gitmoji": "^2.3.1",
     "eslint": "^8.53.0",
     "eslint-config-prettier": "^9.0.0",
