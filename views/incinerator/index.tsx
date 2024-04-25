@@ -1,11 +1,13 @@
 import { Box, TextField, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { v4 } from 'uuid';
 
 import Layout from '@/components/layout';
 import { SearchSVG } from '@/svg';
 
 import { IncineratorForm } from './incinerator.types';
+import IncineratorTabs from './incinerator-table-row';
 
 const Incinerator: FC = () => {
   const form = useForm<IncineratorForm>();
@@ -57,6 +59,20 @@ const Incinerator: FC = () => {
               />
             </Box>
           </Box>
+          {[1, 2, 3, 4].map((index) => {
+            return (
+              <IncineratorTabs
+                key={index}
+                coin="SUI"
+                qtyAvailable={3.2}
+                qtyToIncinerate={3.2}
+                isChecked={false}
+                denyEdition={() => {}}
+                approveEdition={() => {}}
+                index={index}
+              />
+            );
+          })}
         </Box>
       </FormProvider>
     </Layout>
