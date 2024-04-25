@@ -8,4 +8,5 @@ export type ObjectField = ObjectData & {
 export interface IncineratorForm {
   objects: ReadonlyArray<ObjectField>;
   searchAssets: string;
+  filter: number;
 }
