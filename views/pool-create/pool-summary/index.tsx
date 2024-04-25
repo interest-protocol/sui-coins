@@ -12,13 +12,14 @@ import { CircleCheckSVG } from '@/svg';
 import { formatMoney } from '@/utils';
 
 import { CreatePoolForm } from '../pool-create.types';
+import PoolSummaryFee from './pool-summary-fee';
 
 const PoolSummary: FC = () => {
   const { push } = useRouter();
   const network = useNetwork();
   const { dialog, handleClose } = useDialog();
   const { getValues } = useFormContext<CreatePoolForm>();
-  const { type, isStable, tokens } = getValues();
+  const { type: poolType, isStable, tokens, dex } = getValues();
 
   // TODO: add fee
   const fee = 0;
@@ -54,9 +55,9 @@ const PoolSummary: FC = () => {
       p="xl"
       mx="auto"
       gap="2rem"
-      bg="container"
       borderRadius="xs"
       maxWidth="27.25rem"
+      bg="lowestContainer"
     >
       <Typography
         mb="3xl"
@@ -96,7 +97,7 @@ const PoolSummary: FC = () => {
           alignItems="center"
           justifyContent="space-between"
         >
-          {type}
+          {poolType}
         </Box>
       </Box>
       <Box
@@ -165,14 +166,14 @@ const PoolSummary: FC = () => {
       </Box>
       <Box
         p="s"
-        gap="s"
+        gap="l"
         display="flex"
         bg="lowContainer"
         color="onSurface"
         borderRadius="xs"
         flexDirection="column"
       >
-        {tokens?.map(({ symbol, value }) => (
+        {tokens?.map(({ type, symbol, value }) => (
           <Box
             key={v4()}
             display="flex"
@@ -180,17 +181,7 @@ const PoolSummary: FC = () => {
             justifyContent="space-between"
           >
             <Box display="flex" alignItems="center" gap="s">
-              <Box
-                display="flex"
-                width="2.5rem"
-                height="2.5rem"
-                borderRadius="xs"
-                alignItems="center"
-                bg="lowestContainer"
-                justifyContent="center"
-              >
-                <TokenIcon symbol={symbol} type={type} network={network} />
-              </Box>
+              <TokenIcon withBg type={type} symbol={symbol} network={network} />
               <Typography variant="body" size="medium">
                 {symbol}
               </Typography>
@@ -200,19 +191,51 @@ const PoolSummary: FC = () => {
         ))}
       </Box>
       <Box
+        my="m"
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+      >
+        <Box display="flex" gap="s">
+          <Box color="success">
+            <CircleCheckSVG maxWidth="1.2rem" maxHeight="1.2rem" width="100%" />
+          </Box>
+          <Typography
+            size="medium"
+            variant="body"
+            opacity={0.64}
+            color="onSurface"
+          >
+            Dex
+          </Typography>
+        </Box>
+        <Box
+          px="m"
+          py="xs"
+          display="flex"
+          borderRadius="xs"
+          bg="lowContainer"
+          color="onSurface"
+          alignItems="center"
+          textTransform="capitalize"
+          justifyContent="space-between"
+        >
+          {dex}
+        </Box>
+      </Box>
+      <Box
         p="s"
         gap="s"
         display="flex"
         color="onSurface"
         borderRadius="xs"
-        bg="lowestContainer"
         justifyContent="space-between"
       >
         <Typography variant="body" size="small">
           Pool Creation Fee:
         </Typography>
         <Typography variant="body" size="small">
-          {fee} Sui
+          <PoolSummaryFee />
         </Typography>
       </Box>
       <Box display="flex" justifyContent="center" gap="s" mt="xl">

@@ -24,8 +24,8 @@ const SelectVolatilityCard: FC<SelectVolatilityCardProps> = ({
     nHover={{ boxShadow: '0 2rem 3rem #0004', scale: '1.02' }}
     bg={isSelected ? 'primary' : 'lowestContainer'}
   >
-    <Box color={isSelected ? '#0053DB' : 'primary'}>{illustration}</Box>
-    <Box color={isSelected ? '#00174B' : 'onSurface'}>
+    <Box color={isSelected ? 'onPrimary' : 'primary'}>{illustration}</Box>
+    <Box color={isSelected ? 'onPrimary' : 'onSurface'}>
       <Typography size="small" variant="headline" textAlign="center">
         {title}
       </Typography>

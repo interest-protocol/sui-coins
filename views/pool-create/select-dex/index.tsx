@@ -50,9 +50,9 @@ const SelectDex: FC = () => {
           p="2xl"
           mx="auto"
           gap="2rem"
-          bg="container"
           maxWidth="33rem"
           borderRadius="xs"
+          bg="lowestContainer"
         >
           <Typography variant="body" size="large" color="onSurface">
             Select Dex

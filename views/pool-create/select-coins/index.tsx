@@ -28,9 +28,9 @@ const SelectCoins: FC = () => {
           p="2xl"
           mx="auto"
           gap="2rem"
-          bg="container"
           maxWidth="33rem"
           borderRadius="xs"
+          bg="lowestContainer"
         >
           <Typography variant="body" size="small" color="onSurface">
             Select Token & Deposit
