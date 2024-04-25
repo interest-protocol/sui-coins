@@ -19,7 +19,7 @@ const useGetMultipleTokenPriceBySymbol = (
           return {
             ...acc,
             ...(obj && {
-              [symbol === 'sui' ? 'mov' : symbol]: obj[0].quote.USD.price,
+              [symbol === 'sui' ? 'move' : symbol]: obj[0].quote.USD.price,
             }),
           };
         },

@@ -3,12 +3,12 @@ import { FC } from 'react';
 
 import { SVGProps } from '@/components/svg/svg.types';
 import { LocalCoinMetadata, PoolTypeEnum } from '@/interface';
-import { ETHSVG, MOVSVG, USDCSVG } from '@/svg';
+import { ETHSVG, MOVESVG, USDCSVG } from '@/svg';
 
 import { Network } from './network';
 
 export enum TOKEN_SYMBOL {
-  MOV = 'MOV',
+  MOVE = 'MOVE',
   USDC = 'USDC',
   ETH = 'ETH',
   SUI = 'SUI',
@@ -20,13 +20,13 @@ export const ETH_TYPE =
 export const USDC_TYPE =
   '0x8e614b777730a3b481a5f30b53be062fc0c01f93c6fdfe9fb19ffbae7777b700::usdc::USDC';
 
-export const SC_V_MOV_ETH =
+export const SC_V_MOVE_ETH =
   '0x1f25cf55789981cd5b0b0c9f0449f4c8ae23c4c3f8f823a7cd06749017323162::ipx_v_sui_eth::IPX_V_SUI_ETH';
 
 export const SC_V_ETH_USDC =
   '0x1f25cf55789981cd5b0b0c9f0449f4c8ae23c4c3f8f823a7cd06749017323162::ipx_v_eth_usdc::IPX_V_ETH_USDC';
 
-const MOV_ETH_POOL_ID =
+const MOVE_ETH_POOL_ID =
   '0x02f381358cd60a96665076b60cfc74c71d675d0b042e24436a7f6ae2fef59ab9';
 
 const USDC_ETH_POOL_ID =
@@ -34,7 +34,7 @@ const USDC_ETH_POOL_ID =
 
 export const COIN_TYPE_TO_SYMBOL: Record<Network, Record<string, string>> = {
   [Network.DEVNET]: {
-    [SUI_TYPE_ARG]: TOKEN_SYMBOL.MOV,
+    [SUI_TYPE_ARG]: TOKEN_SYMBOL.MOVE,
     [ETH_TYPE]: TOKEN_SYMBOL.ETH,
     [USDC_TYPE]: TOKEN_SYMBOL.USDC,
   },
@@ -44,7 +44,7 @@ export const COIN_TYPE_TO_SYMBOL: Record<Network, Record<string, string>> = {
 export const COINS = [
   {
     decimals: 9,
-    symbol: TOKEN_SYMBOL.MOV,
+    symbol: TOKEN_SYMBOL.MOVE,
     type: SUI_TYPE_ARG,
   },
   {
@@ -62,7 +62,7 @@ export const COINS = [
 export const COINS_MAP = {
   [SUI_TYPE_ARG]: {
     decimals: 9,
-    symbol: TOKEN_SYMBOL.MOV,
+    symbol: TOKEN_SYMBOL.MOVE,
     type: SUI_TYPE_ARG,
   },
   [ETH_TYPE]: {
@@ -90,18 +90,18 @@ export const COIN_METADATA = {
   },
   [SUI_TYPE_ARG]: {
     decimals: 9,
-    name: 'MOV',
-    symbol: 'MOV',
+    name: 'MOVE',
+    symbol: 'MOVE',
   },
   [SC_V_ETH_USDC]: {
     decimals: 9,
     name: 'sc-v-ETH/USDC',
     symbol: 'sc-v-ETH/USDC',
   },
-  [SC_V_MOV_ETH]: {
+  [SC_V_MOVE_ETH]: {
     decimals: 9,
-    name: 'sc-v-MOV/ETH',
-    symbol: 'sc-v-MOV/ETH',
+    name: 'sc-v-MOVE/ETH',
+    symbol: 'sc-v-MOVE/ETH',
   },
 };
 
@@ -115,7 +115,7 @@ export interface RegistryPool {
   lpCoinType: string;
 }
 
-const MOV_ETH_STATE_ID =
+const MOVE_ETH_STATE_ID =
   '0x58122defa03f590a88d8dd165c65e3ccfda7e8c660976f595ecb1c62d6f27281';
 
 const USDC_ETH_STATE_ID =
@@ -124,9 +124,9 @@ const USDC_ETH_STATE_ID =
 export const REGISTRY_POOLS = {
   [ETH_TYPE]: {
     [SUI_TYPE_ARG]: {
-      poolId: MOV_ETH_POOL_ID,
-      lpCoinType: SC_V_MOV_ETH,
-      stateKey: MOV_ETH_STATE_ID,
+      poolId: MOVE_ETH_POOL_ID,
+      lpCoinType: SC_V_MOVE_ETH,
+      stateKey: MOVE_ETH_STATE_ID,
     },
     [USDC_TYPE]: {
       poolId: USDC_ETH_POOL_ID,
@@ -143,31 +143,31 @@ export const REGISTRY_POOLS = {
   },
   [SUI_TYPE_ARG]: {
     [ETH_TYPE]: {
-      poolId: MOV_ETH_POOL_ID,
-      lpCoinType: SC_V_MOV_ETH,
-      stateKey: MOV_ETH_STATE_ID,
+      poolId: MOVE_ETH_POOL_ID,
+      lpCoinType: SC_V_MOVE_ETH,
+      stateKey: MOVE_ETH_STATE_ID,
     },
   },
 } as Record<string, Record<string, RegistryPool>>;
 
-export const POOLS_ARRAY = [MOV_ETH_STATE_ID, USDC_ETH_STATE_ID];
+export const POOLS_ARRAY = [MOVE_ETH_STATE_ID, USDC_ETH_STATE_ID];
 
 export const STATE_KEY_TO_POOL_ID = {
   [USDC_ETH_STATE_ID]: USDC_ETH_POOL_ID,
-  [MOV_ETH_STATE_ID]: MOV_ETH_POOL_ID,
+  [MOVE_ETH_STATE_ID]: MOVE_ETH_POOL_ID,
 } as Record<string, string>;
 
 export const POOLS_MAP = {
-  [SC_V_MOV_ETH]: MOV_ETH_STATE_ID,
+  [SC_V_MOVE_ETH]: MOVE_ETH_STATE_ID,
   [SC_V_ETH_USDC]: USDC_ETH_STATE_ID,
 } as Record<string, string>;
 
 export const LP_COINS_MAP = {
   [Network.DEVNET]: {
-    [SC_V_MOV_ETH]: {
+    [SC_V_MOVE_ETH]: {
       decimals: 18,
-      type: SC_V_MOV_ETH,
-      symbol: 'sc-v-MOV/ETH',
+      type: SC_V_MOVE_ETH,
+      symbol: 'sc-v-MOVE/ETH',
     },
     [SC_V_ETH_USDC]: {
       decimals: 18,
@@ -182,9 +182,9 @@ export const RECOMMENDED_POOLS = {
     {
       stable: false,
       poolType: PoolTypeEnum.amm,
-      stateKey: MOV_ETH_STATE_ID,
-      poolObjectId: MOV_ETH_POOL_ID,
-      lpCoin: LP_COINS_MAP[Network.DEVNET][SC_V_MOV_ETH],
+      stateKey: MOVE_ETH_STATE_ID,
+      poolObjectId: MOVE_ETH_POOL_ID,
+      lpCoin: LP_COINS_MAP[Network.DEVNET][SC_V_MOVE_ETH],
       tokens: [COINS_MAP[ETH_TYPE], COINS_MAP[SUI_TYPE_ARG]],
     },
     {
@@ -202,8 +202,8 @@ export const RECOMMENDED_POOLS = {
 export const COINS_SVG_MAP_V2 = {
   [ETH_TYPE]: ETHSVG,
   [USDC_TYPE]: USDCSVG,
-  [SUI_TYPE_ARG]: MOVSVG,
-  default: MOVSVG,
+  [SUI_TYPE_ARG]: MOVESVG,
+  default: MOVESVG,
 };
 
 export const TOKEN_ICONS: Record<
@@ -213,11 +213,11 @@ export const TOKEN_ICONS: Record<
   [Network.TESTNET]: {
     ETH: ETHSVG,
     USDC: USDCSVG,
-    MOV: MOVSVG,
+    MOVE: MOVESVG,
   },
   [Network.DEVNET]: {
     ETH: ETHSVG,
     USDC: USDCSVG,
-    MOV: MOVSVG,
+    MOVE: MOVESVG,
   },
 };

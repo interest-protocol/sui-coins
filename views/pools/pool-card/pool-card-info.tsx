@@ -38,7 +38,7 @@ const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({
 
             const parsedSymbol =
               metadata?.symbol.toUpperCase() === 'SUI'
-                ? 'MOV'
+                ? 'MOVE'
                 : metadata?.symbol.toUpperCase();
             const Icon = !metadata
               ? DefaultTokenSVG
@@ -72,7 +72,7 @@ const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({
           >
             {coinTypes.reduce(
               (acc, type) =>
-                `${acc ? `${acc} • ` : ''}${pathOr('', [type, 'symbol'], coinMetadata).replace('SUI', 'MOV')}`,
+                `${acc ? `${acc} • ` : ''}${pathOr('', [type, 'symbol'], coinMetadata).replace('SUI', 'MOVE')}`,
               ''
             )}
           </Typography>

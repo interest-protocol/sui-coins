@@ -53,7 +53,7 @@ export { default as LogoSVG } from './logo';
 export { default as LogoutSVG } from './logout';
 export { default as MenuSVG } from './menu';
 export { default as MinusSVG } from './minus';
-export { default as MOVSVG } from './mov';
+export { default as MOVESVG } from './move';
 export { default as MovementLogoSVG } from './movement-logo';
 export { default as NoSearchSVG } from './no-search';
 export { default as PercentageSVG } from './percentage';

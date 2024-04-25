@@ -13,7 +13,7 @@ export const getLiquidity = (
   const priceX = metadata[pool.coinTypes.coinX]
     ? prices[
         metadata[pool.coinTypes.coinX]?.symbol.toLowerCase() === 'sui'
-          ? 'mov'
+          ? 'move'
           : metadata[pool.coinTypes.coinX]?.symbol.toLowerCase()
       ]
     : null;
@@ -21,7 +21,7 @@ export const getLiquidity = (
   const priceY = metadata[pool.coinTypes.coinY]
     ? prices[
         metadata[pool.coinTypes.coinY]?.symbol.toLowerCase() === ' sui'
-          ? 'mov'
+          ? 'move'
           : metadata[pool.coinTypes.coinY]?.symbol.toLowerCase()
       ]
     : null;

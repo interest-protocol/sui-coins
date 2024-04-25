@@ -40,7 +40,7 @@ const PoolDetails: FC<PoolDetailsFormProps> = ({
         locked: true,
         type: tokenType,
         decimals: metadata[tokenType].decimals,
-        symbol: metadata[tokenType].symbol.replace('SUI', 'MOV'),
+        symbol: metadata[tokenType].symbol.replace('SUI', 'MOVE'),
       }))
     );
 
@@ -49,7 +49,7 @@ const PoolDetails: FC<PoolDetailsFormProps> = ({
       decimals: 9,
       locked: true,
       type: lpCoinType,
-      symbol: metadata[lpCoinType].symbol.replace('SUI', 'MOV'),
+      symbol: metadata[lpCoinType].symbol.replace('SUI', 'MOVE'),
     });
 
     setValue('pool', pool);

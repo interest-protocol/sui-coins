@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import { SVGProps } from '@/components/svg/svg.types';
-import { BTCSVG, EthCircleSVG, ETHSVG, MOVSVG, USDCSVG, USDTSVG } from '@/svg';
+import { BTCSVG, EthCircleSVG, ETHSVG, MOVESVG, USDCSVG, USDTSVG } from '@/svg';
 
 import { PoolDetailAccordionData } from './components/accordion/accordion.types';
 
@@ -36,7 +36,7 @@ export const POOL_STATISTICS: PoolDetailAccordionData = {
 
 export const SVGMap: Record<string, FC<SVGProps>> = {
   USDC: USDCSVG,
-  MOV: MOVSVG,
+  MOVE: MOVESVG,
   ETH: ETHSVG,
 };
 

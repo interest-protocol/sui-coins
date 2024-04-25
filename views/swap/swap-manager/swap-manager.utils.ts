@@ -102,7 +102,7 @@ export const findSwapPaths = ({
     REGISTRY_POOLS
   );
 
-  // MOV -> ETH
+  // MOVE -> ETH
   if (pool) {
     return [
       [

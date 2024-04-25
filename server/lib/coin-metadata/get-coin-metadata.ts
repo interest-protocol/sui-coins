@@ -1,7 +1,7 @@
 import { Network } from '@/constants';
 import { getBasicCoinMetadata } from '@/utils';
 
-import { COIN_METADATA_MODEL_MAP, MOV_CLIENT_PROVIDER_MAP } from '../utils';
+import { COIN_METADATA_MODEL_MAP, MOVE_CLIENT_PROVIDER_MAP } from '../utils';
 
 const getCoinMetadata = async (type: string, network: Network) => {
   const Model = COIN_METADATA_MODEL_MAP[network];
@@ -9,7 +9,7 @@ const getCoinMetadata = async (type: string, network: Network) => {
   const doc = await Model.findOne({ type });
 
   if (!doc) {
-    const movClient = MOV_CLIENT_PROVIDER_MAP[network];
+    const movClient = MOVE_CLIENT_PROVIDER_MAP[network];
 
     const { hasMetadata, ...metadata } = await movClient
       .getCoinMetadata({ coinType: type })
