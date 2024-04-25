@@ -6,7 +6,6 @@ import Layout from '@/components/layout';
 import { SearchSVG } from '@/svg';
 
 import { IncineratorForm } from './incinerator.types';
-import IncineratorFields from './incinerator-fields';
 
 const Incinerator: FC = () => {
   const form = useForm<IncineratorForm>();
@@ -27,7 +26,7 @@ const Incinerator: FC = () => {
         >
           <Box
             gap="l"
-            p="1.5rem"
+            p="xl"
             display="flex"
             justifyContent="space-between"
             alignItems="center"
@@ -36,7 +35,7 @@ const Incinerator: FC = () => {
             <Typography
               variant="title"
               size="large"
-              fontSize="2rem"
+              fontSize="5xl"
               fontWeight="700"
             >
               Incinerator
