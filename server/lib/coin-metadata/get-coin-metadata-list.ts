@@ -5,14 +5,14 @@ import { CoinMetadataModel } from '@/server/model/coin-metadata';
 import { getBasicCoinMetadata } from '@/utils';
 import { chunk } from '@/utils';
 
-import { COIN_METADATA_MODEL_MAP, MOV_CLIENT_PROVIDER_MAP } from '../utils';
+import { COIN_METADATA_MODEL_MAP, MOVE_CLIENT_PROVIDER_MAP } from '../utils';
 
 const getCoinMetadataList = async (
   typeList: ReadonlyArray<string>,
   network: Network
 ) => {
   const Model = COIN_METADATA_MODEL_MAP[network];
-  const movClient = MOV_CLIENT_PROVIDER_MAP[network];
+  const movClient = MOVE_CLIENT_PROVIDER_MAP[network];
 
   const docs: Array<CoinMetadataModel> = await Model.find({ type: typeList });
 

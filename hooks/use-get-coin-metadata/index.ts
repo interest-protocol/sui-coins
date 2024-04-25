@@ -2,7 +2,7 @@ import useSWR from 'swr';
 
 import { useNetwork } from '@/context/network';
 import { CoinMetadataWithType } from '@/interface';
-import { makeSWRKey } from '@/utils';
+import { isSui, makeSWRKey } from '@/utils';
 
 export const useGetCoinMetadata = (coinsType: ReadonlyArray<string>) => {
   const network = useNetwork();
@@ -21,7 +21,16 @@ export const useGetCoinMetadata = (coinsType: ReadonlyArray<string>) => {
       )
         .then((res) => res.json())
         .then((data: ReadonlyArray<CoinMetadataWithType>) =>
-          data.reduce((acc, item) => ({ ...acc, [item.type]: item }), {})
+          data.reduce(
+            (acc, { symbol, ...item }) => ({
+              ...acc,
+              [item.type]: {
+                ...item,
+                symbol: isSui(item.type) ? 'MOVE' : symbol,
+              },
+            }),
+            {}
+          )
         );
     },
     {

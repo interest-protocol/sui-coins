@@ -11,7 +11,7 @@ export const getAllSymbols = (pools: ReadonlyArray<AmmPool>) => [
 
             const symbol = COINS_MAP[x].symbol.toLowerCase();
 
-            return symbol === 'mov' ? 'sui' : symbol;
+            return symbol === 'move' ? 'sui' : symbol;
           })
           .filter((x) => !!x) as string[]
     )

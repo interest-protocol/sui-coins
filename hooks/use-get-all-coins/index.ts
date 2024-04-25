@@ -4,7 +4,7 @@ import useSWR from 'swr';
 
 import { useNetwork } from '@/context/network';
 import { CoinMetadataWithType } from '@/interface';
-import { makeSWRKey, normalizeSuiType, ZERO_BIG_NUMBER } from '@/utils';
+import { isSui, makeSWRKey, normalizeSuiType, ZERO_BIG_NUMBER } from '@/utils';
 
 import { CoinsMap, TGetAllCoins } from './use-get-all-coins.types';
 
@@ -65,9 +65,9 @@ export const useGetAllCoins = () => {
             ...acc[type],
             ...coinRaw,
             type,
-            symbol,
             decimals,
             metadata,
+            symbol: isSui(type) ? 'MOVE' : symbol,
             balance: BigNumber(coinRaw.balance).plus(
               acc[type]?.balance ?? ZERO_BIG_NUMBER
             ),

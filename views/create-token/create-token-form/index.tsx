@@ -138,7 +138,7 @@ const CreateTokenForm: FC = () => {
             <TextField
               label="Name"
               {...register('name')}
-              placeholder="Eg. Mov"
+              placeholder="Eg. Move"
               status={errors.name && 'error'}
               supportingText={errors.name?.message}
               fieldProps={{
@@ -152,7 +152,7 @@ const CreateTokenForm: FC = () => {
             />
             <TextField
               label="Coin Symbol"
-              placeholder="Eg. MOV"
+              placeholder="Eg. MOVE"
               {...register('symbol')}
               status={errors.symbol && 'error'}
               supportingText={errors.symbol?.message}
