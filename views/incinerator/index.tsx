@@ -1,8 +1,9 @@
-import { Box, Typography } from '@interest-protocol/ui-kit';
+import { Box, TextField, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import Layout from '@/components/layout';
+import { SearchSVG } from '@/svg';
 
 import { IncineratorForm } from './incinerator.types';
 import IncineratorFields from './incinerator-fields';
@@ -11,45 +12,51 @@ const Incinerator: FC = () => {
   const form = useForm<IncineratorForm>();
 
   return (
-    <Layout title="Incinerator">
+    <Layout>
       <FormProvider {...form}>
-        <Box display="flex" flexDirection="column" gap="4xl">
+        <Box
+          mt="3xl"
+          gap="xl"
+          mx="auto"
+          width="100%"
+          display="flex"
+          borderRadius="s"
+          maxWidth="51rem"
+          bg="lowestContainer"
+          flexDirection="column"
+        >
           <Box
-            p="3xl"
-            pb="s"
-            gap="xl"
-            mx="auto"
-            width="100%"
+            gap="l"
+            p="1.5rem"
             display="flex"
-            borderRadius="s"
-            px={['2xs', 'xl']}
-            maxWidth="035rem"
-            bg="lowestContainer"
-            flexDirection="column"
+            justifyContent="space-between"
+            alignItems="center"
+            flexDirection={['column', 'column', 'column', 'row']}
           >
             <Typography
-              mx="auto"
-              size="large"
               variant="title"
-              maxWidth="17rem"
-              textAlign="center"
-            >
-              Burn your assets
-            </Typography>
-            <Typography
-              mx="auto"
               size="large"
-              variant="body"
-              maxWidth="27rem"
-              textAlign="center"
+              fontSize="2rem"
+              fontWeight="700"
             >
-              Burn your assets, sending to{' '}
-              <Typography variant="label" size="large" as="code">
-                0x0
-              </Typography>{' '}
-              (dead) address.
+              Incinerator
             </Typography>
-            <IncineratorFields />
+            <Box width={['100%', '100%', '100%', '25rem']}>
+              <TextField
+                fontSize="medium"
+                placeholder="Search"
+                {...form.register('searchAssets')}
+                nPlaceholder={{ opacity: 0.7 }}
+                fieldProps={{
+                  height: '2.5rem',
+                  width: '100%',
+                  borderRadius: 'full',
+                }}
+                Prefix={
+                  <SearchSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+                }
+              />
+            </Box>
           </Box>
         </Box>
       </FormProvider>
