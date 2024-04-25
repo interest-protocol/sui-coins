@@ -4,12 +4,12 @@ import { FC, useState } from 'react';
 import { NFTModalItemProps } from './select-nft-modal.types';
 
 const NFTModalItem: FC<NFTModalItemProps> = ({
-  img,
   name,
   total,
   onClick,
   selected,
   updatedAt,
+  id,
 }) => {
   const [isImageLoading, setImageLoading] = useState(true);
 
@@ -43,7 +43,7 @@ const NFTModalItem: FC<NFTModalItemProps> = ({
             </Box>
           )}
           <img
-            src={img}
+            src={`/images/nft/${id}.webp`}
             alt={name}
             width="100%"
             onLoad={() => setImageLoading(false)}

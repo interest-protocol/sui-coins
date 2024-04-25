@@ -112,8 +112,8 @@ const AirdropNftCoinsMethod: FC = () => {
                 >
                   <img
                     width="100%"
-                    src={(asset as NFTCollectionMetadata).img}
                     alt={(asset as NFTCollectionMetadata).name}
+                    src={`/images/nft/${(asset as NFTCollectionMetadata).id}.webp`}
                   />
                 </Box>
               )}
