@@ -8,7 +8,8 @@
     "sui",
     "web3",
     "move",
-    "mint"
+    "mint",
+    "movement"
   ],
   "version": "0.1.0",
   "private": false,

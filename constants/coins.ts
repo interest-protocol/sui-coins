@@ -90,7 +90,7 @@ export const COIN_METADATA = {
   },
   [SUI_TYPE_ARG]: {
     decimals: 9,
-    name: 'MOVE',
+    name: 'MOV',
     symbol: 'MOV',
   },
   [SC_V_ETH_USDC]: {
