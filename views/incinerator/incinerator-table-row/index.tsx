@@ -17,7 +17,7 @@ import { IncineratorTableRowProps } from './incinerator-table-row.types';
 const IncineratorTableRow: FC<IncineratorTableRowProps> = ({
   index,
   coin,
-  isChecked,
+  type,
   qtyAvailable,
   qtyToIncinerate,
   approveEdition,
@@ -25,6 +25,7 @@ const IncineratorTableRow: FC<IncineratorTableRowProps> = ({
 }) => {
   const network = useNetwork();
   const [isEditing, setIsEditing] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
 
   const { control } = useFormContext();
 
@@ -35,11 +36,18 @@ const IncineratorTableRow: FC<IncineratorTableRowProps> = ({
 
   const handleEditQtyToIncinerate = (index: number) => {
     setIsEditing(true);
+    setIsChecked(false);
+    return index;
+  };
+
+  const handleSelectCoinToIncinerate = (index: number) => {
+    setIsChecked(!isChecked);
     return index;
   };
 
   const handleCancelEdition = (index: number) => {
     setIsEditing(false);
+    setIsChecked(false);
     denyEdition(index);
   };
 
@@ -49,21 +57,26 @@ const IncineratorTableRow: FC<IncineratorTableRowProps> = ({
   };
   return (
     <Box
-      p="xs"
+      my="xs"
       px="m"
       gap="s"
       display="flex"
-      width="100%"
-      minWidth="51.188rem"
-      bg="lowestContainer"
+      overflowX="auto"
+      flexDirection="row"
       alignItems="center"
       justifyContent="center"
-      flexDirection={['column', 'column', 'column', 'row']}
+      width={['auto', 'auto', '100%']}
+      bg={isChecked ? 'lowContainer' : 'lowestContainer'}
+      maxWidth={['calc(100vw - 3rem)', 'calc(100vw - 3rem)', '51rem']}
       nHover={{
         bg: 'lowContainer',
       }}
     >
-      <Checkbox onClick={() => {}} defaultValue={isChecked} label="" />
+      <Checkbox
+        onClick={() => handleSelectCoinToIncinerate(index)}
+        defaultValue={isChecked}
+        label=""
+      />
       <Box>
         <TokenIcon
           withBg
@@ -74,39 +87,43 @@ const IncineratorTableRow: FC<IncineratorTableRowProps> = ({
       </Box>
       <Box
         display="flex"
-        flexDirection="column"
-        justifyContent="flex-start"
-        alignItems="flex-start"
         width="12.625rem"
+        flexDirection="column"
+        alignItems="flex-start"
+        justifyContent="flex-start"
       >
         <Typography variant="body" size="medium">
           {coin}
         </Typography>
         <Typography variant="body" size="small" color="outline">
-          Type: {currentType}
+          Type: {type}
         </Typography>
       </Box>
       <Typography p="s" variant="body" width="16.188rem" size="medium">
         {qtyAvailable}B
       </Typography>
-      {isEditing ? (
-        <Box maxWidth="16.188rem" mx="xs" ml="-2rem">
+      <Box width="12.688rem" mx="xs">
+        {isEditing ? (
           <TextField
-            px="xs"
-            fontSize="medium"
+            fontSize="0.875rem"
             placeholder="3.5B"
             fieldProps={{
               width: '100%',
               borderRadius: 'xs',
-              borderColor: 'transparent',
+              marginRight: '2rem',
+              borderColor: 'primary',
+              border: '2px solid',
+              nHover: { border: 'none' },
+              nFocus: { border: 'none' },
+              nActive: { border: 'none' },
             }}
           />
-        </Box>
-      ) : (
-        <Typography p="s" width="16.188rem" variant="body" size="medium">
-          {qtyToIncinerate}B
-        </Typography>
-      )}
+        ) : (
+          <Typography p="s" width="16.188rem" variant="body" size="medium">
+            {qtyToIncinerate}B
+          </Typography>
+        )}
+      </Box>
       <Box
         display="flex"
         width="3.5rem"
@@ -118,8 +135,8 @@ const IncineratorTableRow: FC<IncineratorTableRowProps> = ({
         {isEditing ? (
           <Box
             gap="m"
-            mr="s"
             display="flex"
+            overflowX="auto"
             minWidth="100%"
             alignItems="center"
             justifyContent="center"
@@ -141,12 +158,23 @@ const IncineratorTableRow: FC<IncineratorTableRowProps> = ({
             />
           </Box>
         ) : (
-          <PenSVG
-            width="100%"
-            maxHeight="1rem"
-            maxWidth="1rem"
-            onClick={() => handleEditQtyToIncinerate(index)}
-          />
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            nHover={{
+              padding: 'xs',
+              borderRadius: 'full',
+              background: 'outlineVariant',
+            }}
+          >
+            <PenSVG
+              width="100%"
+              maxHeight="1rem"
+              maxWidth="1rem"
+              onClick={() => handleEditQtyToIncinerate(index)}
+            />
+          </Box>
         )}
       </Box>
     </Box>

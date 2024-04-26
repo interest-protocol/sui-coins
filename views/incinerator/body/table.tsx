@@ -10,13 +10,13 @@ const IncineratorBody: FC = () => {
         return (
           <IncineratorTableRow
             key={index}
+            index={0}
             coin="SUI"
-            qtyAvailable={3.2}
-            qtyToIncinerate={3.2}
-            isChecked={false}
+            type="SUI"
+            qtyAvailable={3.5}
+            qtyToIncinerate={3.5}
             denyEdition={() => {}}
             approveEdition={() => {}}
-            index={index}
           />
         );
       })}

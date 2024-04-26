@@ -1,7 +1,7 @@
 export interface IncineratorTableRowProps {
   index: number;
   coin: string;
-  isChecked: boolean;
+  type: string;
   qtyAvailable: number | null;
   qtyToIncinerate: number | null;
   denyEdition: (index: number) => void;

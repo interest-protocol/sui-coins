@@ -1,7 +1,6 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { v4 } from 'uuid';
 
 import Layout from '@/components/layout';
 
