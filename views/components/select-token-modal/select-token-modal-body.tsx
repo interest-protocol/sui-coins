@@ -49,7 +49,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
     if (token) return onSelectToken(coinDataToCoinObject(token));
 
     const metadata = await fetch(
-      `/api/v1/coin-metadata?type=${type}&network=${network}`
+      `/api/auth/v1/coin-metadata?type=${type}&network=${network}`
     ).then((response) =>
       response.status === 200 ? response.json() : response
     );

@@ -45,7 +45,7 @@ export const useAssetsBalances = (balances: LinkAssets['balances']) => {
 
       return fetch(
         encodeURI(
-          `/api/v1/coin-metadata?network=${network}&type_list=${typeList}`
+          `/api/auth/v1/coin-metadata?network=${network}&type_list=${typeList}`
         )
       ).then((response) => response.json?.());
     }
