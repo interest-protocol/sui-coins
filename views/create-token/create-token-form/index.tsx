@@ -129,12 +129,12 @@ const CreateTokenForm: FC = () => {
   return (
     <Form
       as="form"
+      mx="auto"
       width="100%"
       maxWidth="37rem"
-      borderRadius="xs"
       overflow="hidden"
+      borderRadius="xs"
       bg="lowestContainer"
-      mx="auto"
       onSubmit={handleSubmit(onSubmit)}
     >
       <Typography variant="title" size="large" p="xl">
