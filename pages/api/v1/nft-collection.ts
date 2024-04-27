@@ -1,13 +1,21 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import NextCors from 'nextjs-cors';
 
 import { fetchAllHolders } from '@/api/indexer';
 import { NFTCollectionMetadata } from '@/interface';
 import dbConnect from '@/server';
 import NFTCollectionModel from '@/server/model/nft-collection';
+import { getOrigin } from '@/utils';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     await dbConnect();
+
+    await NextCors(req, res, {
+      methods: ['POST', 'GET'],
+      origin: getOrigin(),
+      optionsSuccessStatus: 200,
+    });
 
     if (req.method === 'GET') {
       const id = req.query.id;
@@ -44,7 +52,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       return res.status(200).send('Data created successfully!');
     }
-    return res.status(405).send('Method not allowed!');
   } catch (e) {
     res.status(500).send(e);
   }

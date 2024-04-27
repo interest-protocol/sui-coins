@@ -5,6 +5,7 @@ export * from './coin';
 export * from './fn';
 export * from './parse';
 export * from './promise';
+export * from './server';
 export * from './string';
 export * from './toast';
 export * from './tx';

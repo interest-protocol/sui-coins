@@ -1,28 +1,32 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import NextCors from 'nextjs-cors';
 
 import { apiRequestIndexer } from '@/api/indexer';
+import { getOrigin } from '@/utils';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
-  if (req.method === 'POST') {
-    try {
-      const query = req.body;
+  try {
+    await NextCors(req, res, {
+      methods: ['POST'],
+      origin: getOrigin(),
+      optionsSuccessStatus: 200,
+    });
 
-      if (!query) throw new Error('Missing an indexerQuery');
+    const query = req.body;
 
-      const result = await apiRequestIndexer({
-        query,
-        apiKey: process.env.INDEXER_API_KEY || '',
-        userApiKey: process.env.INDEXER_API_USER || '',
-      });
+    if (!query) throw new Error('Missing an indexerQuery');
 
-      res.status(200).json({ data: result });
-    } catch (e) {
-      res.status(400).send(e);
-    }
+    const result = await apiRequestIndexer({
+      query,
+      apiKey: process.env.INDEXER_API_KEY || '',
+      userApiKey: process.env.INDEXER_API_USER || '',
+    });
+
+    res.status(200).json({ data: result });
+  } catch (e) {
+    res.status(400).send(e);
   }
-
-  res.status(404).json({ message: 'Route not found' });
 }
