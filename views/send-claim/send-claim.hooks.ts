@@ -37,7 +37,7 @@ export const useClaim = () => {
       client: suiClient,
     });
 
-    const sponsoredResponse = await fetch('/api/v1/sponsor/shinami', {
+    const sponsoredResponse = await fetch('/api/auth/v1/sponsor/shinami', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

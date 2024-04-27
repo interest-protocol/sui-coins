@@ -56,7 +56,7 @@ const fetchNftHolder = async ({
         }
       `;
 
-    const response = await fetch(`${process.env.DOMAIN}/api/v1/indexer`, {
+    const response = await fetch(`${process.env.DOMAIN}/api/auth/v1/indexer`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -129,7 +129,7 @@ export const fetchNftMetadata = async (
       }
     `;
 
-    const response = await fetch(`${process.env.DOMAIN}/api/v1/indexer`, {
+    const response = await fetch(`${process.env.DOMAIN}/api/auth/v1/indexer`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -185,7 +185,7 @@ export const fetchAllNftMetadata = async (): Promise<
       }
     `;
 
-    const response = await fetch(`${process.env.DOMAIN}/api/v1/indexer`, {
+    const response = await fetch(`${process.env.DOMAIN}/api/auth/v1/indexer`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
