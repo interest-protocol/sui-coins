@@ -173,7 +173,8 @@ const CreateTokenForm: FC = () => {
           status={errors.imageUrl && 'error'}
           placeholder="Eg. https://sui.com/images/logo.png"
           supportingText={
-            errors.imageUrl?.message ?? 'Upload an image less than 250x250.'
+            errors.imageUrl?.message ??
+            'We recommend to upload an image with 250x250 pixels.'
           }
         />
         <Typography
