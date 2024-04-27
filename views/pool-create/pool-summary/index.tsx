@@ -7,47 +7,17 @@ import { v4 } from 'uuid';
 import { TokenIcon } from '@/components';
 import { Routes, RoutesEnum } from '@/constants';
 import { useNetwork } from '@/context/network';
-import { useDialog } from '@/hooks/use-dialog';
 import { CircleCheckSVG } from '@/svg';
 import { formatMoney } from '@/utils';
 
 import { CreatePoolForm } from '../pool-create.types';
-import PoolSummaryFee from './pool-summary-fee';
+import PoolSummaryButton from './pool-summary-button';
 
 const PoolSummary: FC = () => {
   const { push } = useRouter();
   const network = useNetwork();
-  const { dialog, handleClose } = useDialog();
   const { getValues } = useFormContext<CreatePoolForm>();
   const { type: poolType, isStable, tokens, dex } = getValues();
-
-  // TODO: add fee
-  const fee = 0;
-
-  const onCreatePool = async () => {};
-
-  const createPool = () =>
-    dialog.promise(onCreatePool(), {
-      loading: {
-        title: 'Create the pool...',
-        message: 'We are creating the pool, and you will know when it is done',
-      },
-      success: {
-        title: 'Pool created successfully',
-        message:
-          'Your pool was create successfully, and you can check it on the Explorer',
-        primaryButton: {
-          label: 'See on Explorer',
-          onClick: handleClose,
-        },
-      },
-      error: {
-        title: 'Pool creation failed',
-        message:
-          'Your pool was not created, please try again or contact the support team',
-        primaryButton: { label: 'Try again', onClick: handleClose },
-      },
-    });
 
   return (
     <Box
@@ -223,21 +193,6 @@ const PoolSummary: FC = () => {
           {dex}
         </Box>
       </Box>
-      <Box
-        p="s"
-        gap="s"
-        display="flex"
-        color="onSurface"
-        borderRadius="xs"
-        justifyContent="space-between"
-      >
-        <Typography variant="body" size="small">
-          Pool Creation Fee:
-        </Typography>
-        <Typography variant="body" size="small">
-          <PoolSummaryFee />
-        </Typography>
-      </Box>
       <Box display="flex" justifyContent="center" gap="s" mt="xl">
         <Button
           color="onSurface"
@@ -247,9 +202,7 @@ const PoolSummary: FC = () => {
         >
           Cancel
         </Button>
-        <Button variant="filled" onClick={createPool}>
-          Create Pool
-        </Button>
+        <PoolSummaryButton />
       </Box>
     </Box>
   );

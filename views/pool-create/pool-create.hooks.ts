@@ -1,23 +1,66 @@
-import { CLAMM, PRECISION } from '@interest-protocol/clamm';
-import { useCurrentAccount } from '@mysten/dapp-kit';
-import { TransactionBlock } from '@mysten/sui.js/dist/cjs/transactions';
+import { CLAMM } from '@interest-protocol/clamm-sdk';
+import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
+import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { normalizeSuiAddress } from '@mysten/sui.js/utils';
 
 import { useWeb3 } from '@/hooks/use-web3';
+import { FixedPointMath } from '@/lib';
+import { getLpCoinBytecode } from '@/lib/move-template/lp-coin';
+import initMoveByteCodeTemplate from '@/lib/move-template/move-bytecode-template';
 
 import { Token } from './pool-create.types';
-import { getLpCoin } from './pool-create.utils';
 
-export const useCreateStablePool = () => {
-  const { coinsMap } = useWeb3();
+export const useCreateLpCoin = () => {
   const currentAccount = useCurrentAccount();
 
   return async (tokens: ReadonlyArray<Token>) => {
     if (!currentAccount) throw new Error('No account');
 
-    const { treasuryCap, coinType } = await getLpCoin(
-      tokens,
-      currentAccount.address
-    );
+    const info = {
+      decimals: 9,
+      totalSupply: 0n,
+      recipient: currentAccount.address,
+      imageUrl: 'https://www.interestprotocol.com/logo.png',
+      name: `i${tokens.reduce(
+        (acc, { symbol }) => `${acc ? `${acc}/` : ''}${symbol.toUpperCase()}`,
+        ''
+      )}`,
+      symbol: `ipx-s-${tokens.reduce(
+        (acc, { symbol }) => `${acc ? `${acc}-` : ''}${symbol.toLowerCase()}`,
+        ''
+      )}`,
+      description: `CLAMM Interest Protocol LpCoin for ${tokens.reduce(
+        (acc, { symbol }) => `${acc ? `${acc}/` : ''}${symbol.toUpperCase()}`,
+        ''
+      )}`,
+    };
+
+    await initMoveByteCodeTemplate('/move_bytecode_template_bg.wasm');
+
+    const txb = new TransactionBlock();
+
+    const [upgradeCap] = txb.publish({
+      modules: [[...getLpCoinBytecode(info)]],
+      dependencies: [normalizeSuiAddress('0x1'), normalizeSuiAddress('0x2')],
+    });
+
+    txb.transferObjects([upgradeCap], txb.pure(currentAccount.address));
+
+    return txb;
+  };
+};
+
+export const useCreateStablePool = () => {
+  const client = useSuiClient();
+  const { coinsMap } = useWeb3();
+  const currentAccount = useCurrentAccount();
+
+  return async (
+    tokens: ReadonlyArray<Token>,
+    treasuryCap: string | null | undefined,
+    coinType: string
+  ) => {
+    if (!currentAccount) throw new Error('No account');
 
     if (!treasuryCap) throw new Error('No authorization to use this LP coin');
 
@@ -32,7 +75,13 @@ export const useCreateStablePool = () => {
 
     const typeArguments = [...tokens.map((token) => token.type), coinType];
 
-    const { pool, poolAdmin, lpCoin, txb } = await CLAMM.newStable({
+    const clamm = new CLAMM(
+      client,
+      process.env.CLAMM_PACKAGE_ID!,
+      process.env.CLAMM_SUI_TEARS_PACKAGE_ID!
+    );
+
+    const { pool, poolAdmin, lpCoin, txb } = await clamm.newStable({
       coins,
       txb: mergeTxb,
       lpCoinTreasuryCap: treasuryCap,
@@ -41,21 +90,21 @@ export const useCreateStablePool = () => {
 
     txb.transferObjects([poolAdmin, lpCoin], txb.pure(currentAccount.address));
 
-    return CLAMM.shareStablePool({ txb, pool });
+    return clamm.shareStablePool({ txb, pool });
   };
 };
 
 export const useCreateVolatilePool = () => {
+  const client = useSuiClient();
   const { coinsMap } = useWeb3();
   const currentAccount = useCurrentAccount();
 
-  return async (tokens: ReadonlyArray<Token>) => {
+  return async (
+    tokens: ReadonlyArray<Token>,
+    treasuryCap: string | null | undefined,
+    coinType: string
+  ) => {
     if (!currentAccount) throw new Error('No account');
-
-    const { treasuryCap, coinType } = await getLpCoin(
-      tokens,
-      currentAccount.address
-    );
 
     if (!treasuryCap) throw new Error('No authorization to use this LP coin');
 
@@ -70,18 +119,39 @@ export const useCreateVolatilePool = () => {
 
     const typeArguments = [...tokens.map((token) => token.type), coinType];
 
-    const price = BigInt(+tokens[0].value / +tokens[1].value);
+    const PRECISION = 18;
+    const price = FixedPointMath.toBigNumber(
+      FixedPointMath.toBigNumber(tokens[0].value, PRECISION)
+        .div(FixedPointMath.toBigNumber(tokens[1].value, PRECISION))
+        .toString(),
+      PRECISION
+    )
+      .decimalPlaces(0)
+      .toString();
 
-    const { pool, poolAdmin, lpCoin, txb } = await CLAMM.newVolatile({
+    const clamm = new CLAMM(
+      client,
+      process.env.CLAMM_PACKAGE_ID!,
+      process.env.CLAMM_SUI_TEARS_PACKAGE_ID!
+    );
+
+    console.log({
+      coins,
+      lpCoinTreasuryCap: treasuryCap,
+      typeArguments: typeArguments,
+      prices: [BigInt(price)],
+    });
+
+    const { pool, poolAdmin, lpCoin, txb } = await clamm.newVolatile({
       coins,
       txb: mergeTxb,
       lpCoinTreasuryCap: treasuryCap,
       typeArguments: typeArguments,
-      prices: [price * PRECISION],
+      prices: [BigInt(price)],
     });
 
     txb.transferObjects([poolAdmin, lpCoin], txb.pure(currentAccount.address));
 
-    return CLAMM.shareVolatilePool({ txb, pool });
+    return clamm.shareVolatilePool({ txb, pool });
   };
 };

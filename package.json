@@ -15,6 +15,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@hookform/resolvers": "^3.3.2",
+    "@interest-protocol/clamm-sdk": "^1.0.1-alpha",
     "@interest-protocol/sui-tokens": "^1.0.1",
     "@interest-protocol/ui-kit": "^0.2.26-alpha",
     "@mysten/dapp-kit": "^0.12.9",

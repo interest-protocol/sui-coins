@@ -11,3 +11,20 @@ export interface CreatePoolForm {
   type: 'CLAMM' | 'AMM';
   tokens: ReadonlyArray<Token>;
 }
+
+export interface GetByteCodeArgs {
+  decimals: number;
+  totalSupply: bigint;
+  name: string;
+  imageUrl: string;
+  symbol: string;
+  recipient: string;
+  description: string;
+}
+
+export interface ExtractedCoinData {
+  coinType: string;
+  coinObjectId: string;
+  treasuryCap: null | string;
+  coinMetadata: null | string;
+}
