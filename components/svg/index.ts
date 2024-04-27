@@ -47,6 +47,7 @@ export { default as ETHSVG } from './eth';
 export { default as ETHChainSVG } from './eth-chain';
 export { default as FavoriteSVG } from './favorite';
 export { default as FileSVG } from './file';
+export { default as FilterArrowDownSVG } from './filter-arrow-down';
 export { default as FindSVG } from './find';
 export { default as FireSVG } from './fire';
 export { default as FLOKISVG } from './floki';
