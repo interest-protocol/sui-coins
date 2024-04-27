@@ -68,6 +68,7 @@ const CreateTokenForm: FC = () => {
       await initMoveByteCodeTemplate('/move_bytecode_template_bg.wasm');
 
       const txb = new TransactionBlock();
+
       txb.setGasPayment(
         coinsMap[SUI_TYPE_ARG].objects.map(
           ({ coinObjectId, digest, version }) => ({
@@ -170,8 +171,10 @@ const CreateTokenForm: FC = () => {
           label="Coin Image URL"
           {...register('imageUrl')}
           status={errors.imageUrl && 'error'}
-          supportingText={errors.imageUrl?.message}
           placeholder="Eg. https://sui.com/images/logo.png"
+          supportingText={
+            errors.imageUrl?.message ?? 'Upload an image less than 250x250.'
+          }
         />
         <Typography
           size="large"
