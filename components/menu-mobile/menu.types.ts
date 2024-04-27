@@ -14,6 +14,7 @@ export interface MainMenuMobileProps {
 export interface MenuMobileItemProps {
   name: string;
   path?: string;
+  beta?: boolean;
   disabled?: boolean;
   Icon: FC<SVGProps>;
 }
