@@ -4,9 +4,11 @@ import {
   ProgressIndicator,
   Typography,
 } from '@interest-protocol/ui-kit';
+import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { Routes, RoutesEnum } from '@/constants';
 import { CheckSVG, WarningSVG } from '@/svg';
 
 import { BATCH_SIZE } from './airdrop.constants';
@@ -15,6 +17,7 @@ import { AirdropProgressIndicatorProps, IAirdropForm } from './airdrop.types';
 const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
   goBack,
 }) => {
+  const { push } = useRouter();
   const { control } = useFormContext<IAirdropForm>();
   const airdropList = useWatch({ control, name: 'airdropList' });
   const doneItems = useWatch({ control, name: 'done' });
@@ -127,18 +130,40 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
             Close
           </Button>
         )}
-        {(error || finished === 100) && (
+        {error && (
           <Button
             flex="1"
+            bg="error"
+            color="onError"
             variant="filled"
             onClick={goBack}
-            justifyContent="center"
             borderRadius="xs"
-            bg={error || failedItems.length ? 'error' : 'primary'}
-            color={error || failedItems.length ? 'onError' : 'onPrimary'}
+            justifyContent="center"
           >
             {error ? 'Resend Failed batches' : 'Got it'}
           </Button>
+        )}
+        {finished === 100 && (
+          <>
+            <Button
+              flex="1"
+              onClick={goBack}
+              variant="outline"
+              borderRadius="xs"
+              justifyContent="center"
+            >
+              Got it
+            </Button>
+            <Button
+              flex="1"
+              variant="filled"
+              borderRadius="xs"
+              justifyContent="center"
+              onClick={() => push(Routes[RoutesEnum.PoolCreate])}
+            >
+              Create Pool
+            </Button>
+          </>
         )}
       </Box>
     </Box>
