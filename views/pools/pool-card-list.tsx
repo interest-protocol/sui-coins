@@ -10,7 +10,6 @@ import toast from 'react-hot-toast';
 import useSWR from 'swr';
 import { v4 } from 'uuid';
 
-import { POOLS_ARRAY } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useFindPoolsByCoinTypes } from '@/hooks/use-find-pools-by-coin-types';
 import { useGetCoinMetadata } from '@/hooks/use-get-coin-metadata';
@@ -31,7 +30,7 @@ import {
 } from './pools.types';
 
 const Pools: FC<PoolCardListWrapper> = ({ network }) => {
-  const { data: pools, isLoading: arePoolsLoading } = usePools(POOLS_ARRAY);
+  const { data: pools, isLoading: arePoolsLoading } = usePools();
 
   return (
     <PoolCardListContent
