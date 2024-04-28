@@ -180,7 +180,7 @@ export const getCoin = async (
 
     if (coinsMap[type]) return resolve(coinObjectToToken(coinsMap[type]));
 
-    fetch(`/api/v1/coin-metadata?network=${network}&type=${type}`)
+    fetch(`/api/auth/v1/coin-metadata?network=${network}&type=${type}`)
       .then((res) => res.json())
       .then((metadata: CoinMetadataWithType) =>
         resolve(coinMetadataToToken(metadata))
