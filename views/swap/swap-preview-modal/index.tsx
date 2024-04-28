@@ -7,17 +7,18 @@ import { TokenIcon } from '@/components';
 import { Routes, RoutesEnum } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { ArrowLeftSVG, TimesSVG } from '@/svg';
+import { formatDollars } from '@/utils';
 
 import { SwapForm, SwapPreviewModalProps } from '../swap.types';
 import SwapButton from '../swap-button';
 import SwapPreviewModalSummary from './swap-preview-modal-summary';
 
 const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
-  const { network } = useNetwork();
-  const { control } = useFormContext<SwapForm>();
+  const network = useNetwork();
   const { push } = useRouter();
+  const { control } = useFormContext<SwapForm>();
 
-  const handleGoback = () => {
+  const handleGoBack = () => {
     push(Routes[RoutesEnum.Swap]);
     onClose();
   };
@@ -47,7 +48,7 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
           alignItems="center"
           justifyContent="space-between"
         >
-          <Button variant="text" isIcon onClick={handleGoback}>
+          <Button variant="text" isIcon onClick={handleGoBack}>
             <ArrowLeftSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
           </Button>
           <Typography size="large" variant="title" color="onSurface">
@@ -86,7 +87,11 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
                   display="inline-flex"
                   justifyContent="center"
                 >
-                  <TokenIcon network={network} tokenId={tokenFrom.symbol} />
+                  <TokenIcon
+                    network={network}
+                    type={tokenFrom.type}
+                    symbol={tokenFrom.symbol}
+                  />
                 </Box>
                 <Typography size="small" variant="title">
                   {tokenFrom.symbol}
@@ -95,6 +100,16 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
               <Box textAlign="right">
                 <Typography variant="body" size="medium" color="onSurface">
                   {tokenFrom.value || 0}
+                </Typography>
+                <Typography variant="body" size="small" color="outlineVariant">
+                  {tokenFrom.usdPrice
+                    ? formatDollars(
+                        +(
+                          Number(tokenFrom.value || 0) * tokenFrom.usdPrice
+                        ).toFixed(3)
+                      )
+                    : '--'}{' '}
+                  USD
                 </Typography>
               </Box>
             </Box>
@@ -135,7 +150,11 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
                     display="inline-flex"
                     justifyContent="center"
                   >
-                    <TokenIcon network={network} tokenId={tokenTo.symbol} />
+                    <TokenIcon
+                      network={network}
+                      type={tokenTo.type}
+                      symbol={tokenTo.symbol}
+                    />
                   </Box>
                   <Typography size="small" variant="title" color="onSurface">
                     {tokenTo.symbol}
@@ -144,6 +163,20 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
                 <Box textAlign="right">
                   <Typography variant="body" size="medium" color="onSurface">
                     {tokenTo.value || 0}
+                  </Typography>
+                  <Typography
+                    variant="body"
+                    size="small"
+                    color="outlineVariant"
+                  >
+                    {tokenTo.usdPrice
+                      ? formatDollars(
+                          +(
+                            Number(tokenTo.value || 0) * tokenTo.usdPrice
+                          ).toFixed(3)
+                        )
+                      : '--'}{' '}
+                    USD
                   </Typography>
                 </Box>
               </Box>

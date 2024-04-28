@@ -1,5 +1,5 @@
 import { SuiClient } from '@mysten/sui.js/client';
-import { CoinStruct, PaginatedCoins } from '@mysten/sui.js/src/client';
+import { CoinStruct, PaginatedCoins } from '@mysten/sui.js/client';
 import { WalletAccount } from '@wallet-standard/base';
 import BigNumber from 'bignumber.js';
 import { ReactNode } from 'react';

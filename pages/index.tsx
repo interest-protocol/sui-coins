@@ -1,49 +1,127 @@
+import {
+  isValidSuiAddress,
+  normalizeSuiAddress,
+  SUI_TYPE_ARG,
+} from '@mysten/sui.js/utils';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useReadLocalStorage } from 'usehooks-ts';
 
 import { SEO } from '@/components';
-import { COINS_MAP, ETH_TYPE, USDC_TYPE } from '@/constants/coins';
+import { LOCAL_STORAGE_VERSION } from '@/constants';
+import { COINS_MAP } from '@/constants/coins';
 import { ModalProvider } from '@/context/modal';
+import { useNetwork } from '@/context/network';
+import { useWeb3 } from '@/hooks';
+import { getCoin } from '@/utils';
 import { updateURL } from '@/utils/url';
 import Swap from '@/views/swap';
-import { SwapForm } from '@/views/swap/swap.types';
+import { ISwapSettings, SwapForm, SwapToken } from '@/views/swap/swap.types';
 
 const SwapPage: NextPage = () => {
-  const { query, asPath, pathname } = useRouter();
+  const network = useNetwork();
+  const { coinsMap } = useWeb3();
+  const {
+    query: { to, from },
+    pathname,
+    asPath,
+  } = useRouter();
+
+  const settings = useReadLocalStorage<ISwapSettings>(
+    `${LOCAL_STORAGE_VERSION}-movement-coins-settings`
+  ) ?? { interval: '10', slippage: '0.1' };
 
   const form = useForm<SwapForm>({
     defaultValues: {
-      to: {
-        value: '',
-        locked: false,
-        ...(COINS_MAP[query.to as string] ?? COINS_MAP[USDC_TYPE]),
-      },
-      from: {
-        value: '',
-        locked: false,
-        ...(COINS_MAP[query.from as string] ?? COINS_MAP[ETH_TYPE]),
-      },
-      settings: {
-        slippage: '0.1',
-      },
+      loading: true,
+      settings,
     },
   });
 
-  useEffect(() => {
-    if (!COINS_MAP[query.to as string] || !COINS_MAP[query.from as string]) {
-      const searchParams = new URLSearchParams(asPath);
+  const setDefaultToken = async (
+    value: `0x${string}`,
+    field: 'to' | 'from'
+  ) => {
+    if (value === SUI_TYPE_ARG) {
+      const { type, symbol, decimals } = COINS_MAP[SUI_TYPE_ARG];
 
-      if (!COINS_MAP[query.from as string]) searchParams.set('from', ETH_TYPE);
-      if (!COINS_MAP[query.to as string]) searchParams.set('to', USDC_TYPE);
+      const token: SwapToken = {
+        type,
+        symbol,
+        decimals,
+        value: '',
+        usdPrice: null,
+      };
 
-      updateURL(
-        `${pathname}?from=${searchParams.get('from')}&to=${searchParams.get(
-          'to'
-        )}`
-      );
+      form.setValue(field, token);
+
+      fetch(`/api/auth/v1/coin-price?symbol=${symbol}`)
+        .then((response) => response.json())
+        .then((data) =>
+          form.setValue(`${field}.usdPrice`, data[symbol][0].quote.USD.price)
+        )
+        .catch(() => null);
+
+      return type;
     }
+
+    if (
+      typeof value === 'string' &&
+      value.startsWith('0x') &&
+      isValidSuiAddress(normalizeSuiAddress(value).split('::')[0])
+    ) {
+      const { type, symbol, decimals } = await getCoin(
+        value,
+        network,
+        coinsMap
+      );
+
+      const token: SwapToken = {
+        type,
+        symbol,
+        decimals,
+        value: '',
+        usdPrice: null,
+      };
+
+      form.setValue(field, token);
+
+      fetch(`/api/auth/v1/coin-price?symbol=${symbol}`)
+        .then((response) => response.json?.())
+        .then((data) =>
+          form.setValue(`${field}.usdPrice`, data[symbol][0].quote.USD.price)
+        )
+        .catch(console.log);
+
+      return type;
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      const searchParams = new URLSearchParams(
+        asPath.replace('/', '').replace('?', '')
+      );
+
+      const [fromType, toType] = await Promise.all([
+        setDefaultToken(from as `0x${string}`, 'from'),
+        from !== to ? setDefaultToken(to as `0x${string}`, 'to') : undefined,
+      ]);
+
+      searchParams.delete('from');
+      searchParams.delete('to');
+
+      fromType && searchParams.set('from', fromType);
+      toType && searchParams.set('to', toType);
+
+      form.setValue('loading', false);
+
+      const params = searchParams.toString();
+
+      updateURL(`${pathname}${params ? `?${params}` : ''}`);
+    })();
   }, []);
 
   return (

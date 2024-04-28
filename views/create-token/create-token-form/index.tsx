@@ -1,23 +1,33 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Box, Button, TextField, Typography } from '@interest-protocol/ui-kit';
+import {
+  Box,
+  Button,
+  Form,
+  TextField,
+  Typography,
+} from '@interest-protocol/ui-kit';
+import {
+  useCurrentAccount,
+  useSignTransactionBlock,
+  useSuiClient,
+} from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { useWalletKit } from '@mysten/wallet-kit';
-import BigNumber from 'bignumber.js';
+import { normalizeSuiAddress } from '@mysten/sui.js/utils';
 import { ChangeEvent, FC } from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { useNetwork } from '@/context/network';
-import { useMovementClient } from '@/hooks';
 import { parseInputEventToNumberString, showTXSuccessToast } from '@/utils';
 import { throwTXIfNotSuccessful } from '@/utils';
 
 import { ICreateTokenForm } from '../create-token.types';
-import { getTokenByteCode } from './api';
 import { Blacklist } from './blacklist';
 import { validationSchema } from './create-token-form.validation';
 import FixedSupplyToggle from './fixed-supply-toggle';
+import initMoveByteCodeTemplate from './move-bytecode-template';
+import { getBytecode } from './template';
 import UploadImage from './upload-image';
 
 const CreateTokenForm: FC = () => {
@@ -38,9 +48,10 @@ const CreateTokenForm: FC = () => {
     reValidateMode: 'onBlur',
   });
 
-  const { network } = useNetwork();
-  const suiClient = useMovementClient();
-  const { currentAccount, signTransactionBlock } = useWalletKit();
+  const suiClient = useSuiClient();
+  const network = useNetwork();
+  const currentAccount = useCurrentAccount();
+  const signTransactionBlock = useSignTransactionBlock();
 
   const createToken = async () => {
     try {
@@ -48,15 +59,7 @@ const CreateTokenForm: FC = () => {
 
       if (!currentAccount) return;
 
-      const {
-        decimals,
-        name,
-        fixedSupply,
-        totalSupply,
-        symbol,
-        imageUrl,
-        description,
-      } = getValues();
+      const { name, symbol } = getValues();
 
       if (
         Blacklist.includes(name.toUpperCase().trim()) ||
@@ -65,66 +68,67 @@ const CreateTokenForm: FC = () => {
         throw new Error('Nice try :)');
       }
 
-      const { dependencies, modules } = await getTokenByteCode({
-        name,
-        symbol,
-        fixedSupply,
-        url: imageUrl ?? '',
-        decimals: decimals ?? 9,
-        description: description ?? '',
-        mintAmount: BigNumber(totalSupply)
-          .multipliedBy(BigNumber(10).pow(decimals ? decimals : 9))
-          .toString(),
-      });
+      await initMoveByteCodeTemplate('/move_bytecode_template_bg.wasm');
 
       const txb = new TransactionBlock();
 
-      const [upgradeCap] = txb.publish({ modules, dependencies });
+      const [upgradeCap] = txb.publish({
+        modules: [
+          [
+            ...getBytecode({
+              ...getValues(),
+              recipient: currentAccount.address,
+            }),
+          ],
+        ],
+        dependencies: [normalizeSuiAddress('0x1'), normalizeSuiAddress('0x2')],
+      });
 
       txb.transferObjects([upgradeCap], txb.pure(currentAccount.address));
 
-      const { signature, transactionBlockBytes } = await signTransactionBlock({
-        transactionBlock: txb,
-        account: currentAccount,
-      });
+      const { signature, transactionBlockBytes } =
+        await signTransactionBlock.mutateAsync({
+          transactionBlock: txb,
+          account: currentAccount,
+        });
 
       const tx = await suiClient.executeTransactionBlock({
         signature,
         transactionBlock: transactionBlockBytes,
         requestType: 'WaitForEffectsCert',
-        options: {
-          showEffects: true,
-        },
       });
 
       throwTXIfNotSuccessful(tx);
 
-      await showTXSuccessToast(tx, network);
+      showTXSuccessToast(tx, network);
     } finally {
       setLoading(false);
     }
   };
 
   const onSubmit = async () => {
-    await toast
-      .promise(createToken(), {
-        loading: 'Generating new coin...',
-        success: 'Coin Generated',
-        error: (e) => e.message || 'Something went wrong',
-      })
-      .catch(console.log);
+    const loading = toast.loading('Generating new coin...');
+    try {
+      await createToken();
+      toast.success('Coin Generated!');
+    } catch (e) {
+      toast.error((e as Error).message || 'Something went wrong');
+    } finally {
+      toast.dismiss(loading);
+    }
   };
 
   return (
     <Box
-      borderRadius="xs"
+      mx="auto"
+      bg="container"
       overflow="hidden"
       color="onSurface"
-      bg="container"
+      borderRadius="xs"
       width={['100%', '100%', '100%', '37rem']}
       boxShadow="0px 24px 46px -10px rgba(13, 16, 23, 0.16)"
     >
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         <Box p="xl" fontSize="l">
           Coin Generator
         </Box>
@@ -134,7 +138,7 @@ const CreateTokenForm: FC = () => {
             <TextField
               label="Name"
               {...register('name')}
-              placeholder="Eg. Mov"
+              placeholder="Eg. Move"
               status={errors.name && 'error'}
               supportingText={errors.name?.message}
               fieldProps={{
@@ -148,7 +152,7 @@ const CreateTokenForm: FC = () => {
             />
             <TextField
               label="Coin Symbol"
-              placeholder="Eg. MOV"
+              placeholder="Eg. MOVE"
               {...register('symbol')}
               status={errors.symbol && 'error'}
               supportingText={errors.symbol?.message}
@@ -262,6 +266,7 @@ const CreateTokenForm: FC = () => {
                 color="onPrimary"
                 fontFamily="Proto"
                 borderRadius="xs"
+                onClick={onSubmit}
                 disabled={!currentAccount || loading}
               >
                 Create coin
@@ -269,7 +274,7 @@ const CreateTokenForm: FC = () => {
             </Box>
           </Box>
         </Box>
-      </form>
+      </Form>
     </Box>
   );
 };

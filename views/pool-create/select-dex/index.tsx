@@ -4,16 +4,22 @@ import { FC, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
-import { DexName } from '@/constants/pools';
 import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
 import { ChevronDownSVG } from '@/svg';
-import { DEX_MAP } from '@/views/pools/pool-card/pool-card.data';
 
 import { CreatePoolForm } from '../pool-create.types';
 import PoolCreateButton from '../pool-create-button';
 import { DATA } from './select-dex.data';
 
 const BOX_ID = 'select-dex';
+
+enum DexName {
+  Interest = 'interest',
+}
+
+const DEX_MAP = {
+  [DexName.Interest]: { name: 'Interest' },
+};
 
 const SelectDex: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -93,8 +99,8 @@ const SelectDex: FC = () => {
                       py="s"
                       key={v4()}
                       bg="surface"
-                      onClick={() => setValue('dex', value)}
                       nHover={{ bg: 'container' }}
+                      onClick={() => setValue('dex', value)}
                     >
                       {title}
                     </Box>

@@ -14,7 +14,7 @@ import { SearchSVG } from '@/svg';
 import FindPoolModal from '../find-pool-modal';
 import { PoolForm } from '../pools.types';
 
-const FinPoolButton: FC = () => {
+const FindPoolButton: FC = () => {
   const { colors } = useTheme() as Theme;
   const { setModal, handleClose } = useModal();
 
@@ -22,8 +22,8 @@ const FinPoolButton: FC = () => {
 
   const openModal = () => {
     form.setValue('tokenList', [
-      { symbol: '', type: '', decimals: 0 },
-      { symbol: '', type: '', decimals: 0 },
+      { symbol: '', type: '', decimals: 0, value: '', locked: false },
+      { symbol: '', type: '', decimals: 0, value: '', locked: false },
     ]);
 
     setModal(
@@ -98,4 +98,4 @@ const FinPoolButton: FC = () => {
   );
 };
 
-export default FinPoolButton;
+export default FindPoolButton;

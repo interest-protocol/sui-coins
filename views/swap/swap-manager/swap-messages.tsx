@@ -1,16 +1,17 @@
-import { pathOr, propOr } from 'ramda';
+import { propOr } from 'ramda';
 import { FC, useState } from 'react';
 import { useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
+import { useWeb3 } from '@/hooks';
+import { FixedPointMath } from '@/lib';
+
 import { SwapMessagesProps } from './swap-manager.types';
 
 export const SwapMessages: FC<SwapMessagesProps> = ({
   error,
-  errors,
   control,
-  setError,
   hasNoMarket,
   isZeroSwapAmountIn,
   isZeroSwapAmountOut,
@@ -18,67 +19,41 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
   isFetchingSwapAmountOut,
 }) => {
   const { setValue } = useFormContext();
-  const tokenIn = useWatch({ control: control, name: 'from' });
-  const tokenOut = useWatch({ control: control, name: 'to' });
+  const { coinsMap } = useWeb3();
+  const from = useWatch({ control: control, name: 'from' });
+  const to = useWatch({ control: control, name: 'to' });
   const [toastState, setToastState] = useState<boolean>(false);
 
-  const tokenInValue = +(propOr('0', 'value', tokenIn) as string);
-  const tokenOutValue = +(propOr('0', 'value', tokenOut) as string);
+  const fromValue = +(propOr('0', 'value', from) as string);
+  const toValue = +(propOr('0', 'value', to) as string);
 
   useEffect(() => {
     setValue(
       'readyToSwap',
-      !(error && tokenInValue > 0) &&
-        !(error && tokenOutValue > 0) &&
+      !(error && fromValue > 0) &&
+        !(error && toValue > 0) &&
         !isFetchingSwapAmountOut &&
-        !(isZeroSwapAmountOut && !!tokenInValue && !isFetchingSwapAmountOut) &&
+        !(isZeroSwapAmountOut && !!fromValue && !isFetchingSwapAmountOut) &&
         !isFetchingSwapAmountIn &&
-        !(isZeroSwapAmountIn && !!tokenOutValue && !isFetchingSwapAmountIn) &&
-        !(propOr('', 'type', tokenIn) === propOr('', 'type', tokenOut)) &&
+        !(isZeroSwapAmountIn && !!toValue && !isFetchingSwapAmountIn) &&
+        !(propOr('', 'type', from) === propOr('', 'type', to)) &&
         !hasNoMarket
     );
   }, [
     error,
-    tokenInValue,
-    tokenOutValue,
+    fromValue,
+    toValue,
     isFetchingSwapAmountOut,
     isFetchingSwapAmountIn,
     isZeroSwapAmountIn,
-    tokenIn,
-    tokenOut,
+    from,
+    to,
     hasNoMarket,
   ]);
 
   const amountNotEnough =
-    (isZeroSwapAmountIn && !!tokenInValue && !isFetchingSwapAmountIn) ||
-    (isZeroSwapAmountOut && !!tokenOutValue && !isFetchingSwapAmountOut);
-
-  const errorMessage = pathOr(null, ['to', 'message'], errors);
-
-  // Clear errors
-  useEffect(() => {
-    // If there is no error or both tokens are not selected - do nothing
-    if (!errorMessage || !tokenIn?.type || !tokenOut?.type) return;
-
-    const name = tokenInValue ? 'from' : 'to';
-
-    if (!amountNotEnough && errors[name]?.message === 'increaseAmount')
-      setError(name, {});
-
-    if (tokenIn?.type !== tokenOut?.type && errorMessage === 'sameTokens')
-      setError(name, {});
-
-    if (!error && errorMessage === 'error') setError(name, {});
-
-    if (!hasNoMarket && errorMessage === 'noMarket') setError(name, {});
-  }, [
-    error,
-    amountNotEnough,
-    hasNoMarket,
-    errorMessage,
-    tokenIn?.type,
-    tokenOut?.type,
-  ]);
+    (isZeroSwapAmountIn && !!fromValue && !isFetchingSwapAmountIn) ||
+    (isZeroSwapAmountOut && !!toValue && !isFetchingSwapAmountOut);
 
   useEffect(() => {
     if ((isFetchingSwapAmountIn || isFetchingSwapAmountOut) && !toastState)
@@ -87,14 +62,14 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
 
   useEffect(() => {
     if (toastState) {
-      setValue('loading', true);
+      setValue('swapping', true);
       toast.loading('Fetching prices');
     }
   }, [toastState]);
 
   useEffect(() => {
     if (!(isFetchingSwapAmountIn || isFetchingSwapAmountOut) && toastState) {
-      setValue('loading', false);
+      setValue('swapping', false);
       setToastState(false);
       toast.dismiss();
     }
@@ -102,36 +77,39 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
 
   // Set Error
   useEffect(() => {
+    if (!from?.type || !to?.type) return;
+
     // If there is already an error or both tokens are not selected -> do nothing
-    if (!!errorMessage || !tokenIn?.type || !tokenOut?.type) return;
-    if (error)
-      if (errors.to?.message !== 'error')
-        setError('to', { type: 'custom', message: 'error' });
+    if (error) {
+      setValue('error', 'Something went wrong');
+      return;
+    }
 
-    if (hasNoMarket)
-      if (errors.to?.message !== 'noMarket')
-        setError('to', { type: 'custom', message: 'noMarket' });
+    if (hasNoMarket) {
+      setValue('error', 'Has no market for this coin');
+      return;
+    }
 
-    if (tokenIn?.type === tokenOut?.type)
-      if (errors.to?.message !== 'sameTokens')
-        setError('to', { type: 'custom', message: 'sameTokens' });
+    if (from?.type === to?.type) {
+      setValue('error', "You can't swap the same coin");
+      return;
+    }
+
+    if (
+      coinsMap[from.type]?.balance.lt(
+        FixedPointMath.toBigNumber(fromValue, from.decimals)
+      )
+    ) {
+      setValue('error', "Price value can't be greater than balance");
+      return;
+    }
 
     if (amountNotEnough) {
-      const name = tokenInValue ? 'from' : 'to';
-      if (errors[name]?.message !== 'increaseAmount')
-        setError(name, {
-          type: 'custom',
-          message: 'increaseAmount',
-        });
+      setValue('error', "You don't have enough balance to swap");
+      return;
     }
-  }, [
-    error,
-    amountNotEnough,
-    hasNoMarket,
-    tokenIn?.type,
-    tokenOut?.type,
-    errorMessage,
-  ]);
+    setValue('error', null);
+  }, [error, amountNotEnough, hasNoMarket, from?.type, to?.type, fromValue]);
 
   return null;
 };

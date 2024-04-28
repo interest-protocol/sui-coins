@@ -15,7 +15,8 @@
           ["@/utils", "./utils"],
           ["@/views", "./views"],
           ["@/api", "./api"],
-          ["@/state", "./state"]
+          ["@/state", "./state"],
+          ["@/server", "./server"]
         ],
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }

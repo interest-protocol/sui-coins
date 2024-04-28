@@ -5,10 +5,10 @@ import useSWR from 'swr';
 
 import { CONTROLLERS_MAP } from '@/constants';
 import { ETH_TYPE, USDC_TYPE } from '@/constants/coins';
+import { TOKEN_SYMBOL } from '@/constants/coins';
 import { Network } from '@/constants/network';
 import { MINT_MODULE_NAME_MAP, PACKAGES } from '@/constants/packages';
 import { useNetwork } from '@/context/network';
-import { TOKEN_SYMBOL } from '@/lib';
 import { makeSWRKey } from '@/utils';
 import { getReturnValuesFromInspectResults } from '@/utils';
 
@@ -47,7 +47,7 @@ const getLastMintEpoch = async (
 export const useUserMintEpoch = () => {
   const { account } = useWeb3();
   const client = useMovementClient();
-  const { network } = useNetwork();
+  const network = useNetwork();
 
   const { data } = useSWR(
     makeSWRKey([account], ''),

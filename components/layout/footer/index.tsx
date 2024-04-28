@@ -38,7 +38,11 @@ const Footer: FC = () => (
         Follow us
       </Typography>
       <Box display="flex" gap="xs" justifyContent="center" mt="s">
-        <a href="https://discord.gg/interest" target="_blank" rel="noreferrer">
+        <a
+          href="https://discord.com/invite/interestprotocol"
+          target="_blank"
+          rel="noreferrer"
+        >
           <Box
             p="xs"
             width="2.5rem"
@@ -82,11 +86,7 @@ const Footer: FC = () => (
             <TelegramSVG maxHeight="100%" maxWidth="100%" width="100%" />
           </Box>
         </a>
-        <a
-          href="https://x.com/interest_dinero"
-          target="_blank"
-          rel="noreferrer"
-        >
+        <a href="https://x.com/IPXSui" target="_blank" rel="noreferrer">
           <Box
             p="xs"
             width="2.5rem"

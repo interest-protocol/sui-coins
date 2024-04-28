@@ -4,6 +4,8 @@ import {
 } from '@mysten/sui.js/client';
 import { head, propOr } from 'ramda';
 
+import { SignAndExecuteArgs } from './tx.types';
+
 export const throwTXIfNotSuccessful = (
   tx: SuiTransactionBlockResponse,
   callback?: () => void
@@ -28,4 +30,28 @@ export const getReturnValuesFromInspectResults = (
   const returnValues = firstElem?.returnValues;
 
   return returnValues ? returnValues : null;
+};
+
+export const signAndExecute = async ({
+  suiClient,
+  currentAccount,
+  txb,
+  signTransactionBlock,
+  options,
+}: SignAndExecuteArgs) => {
+  const { signature, transactionBlockBytes } =
+    await signTransactionBlock.mutateAsync({
+      transactionBlock: txb,
+      account: currentAccount,
+    });
+
+  return suiClient.executeTransactionBlock({
+    transactionBlock: transactionBlockBytes,
+    signature,
+    options: {
+      showEffects: true,
+      ...options,
+    },
+    requestType: 'WaitForLocalExecution',
+  });
 };

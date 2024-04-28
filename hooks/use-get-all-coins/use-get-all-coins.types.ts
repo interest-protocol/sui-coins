@@ -1,10 +1,11 @@
 import { CoinMetadata, CoinStruct, SuiClient } from '@mysten/sui.js/client';
+import BigNumber from 'bignumber.js';
 
 export interface CoinObject extends Pick<CoinMetadata, 'symbol' | 'decimals'> {
   digest?: string;
   version?: string;
-  type: string;
-  balance: string;
+  balance: BigNumber;
+  type: `0x${string}`;
   coinObjectId: string;
   previousTransaction?: string;
   lockedUntilEpoch?: number | null | undefined;

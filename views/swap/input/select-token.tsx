@@ -16,7 +16,7 @@ import { SwapForm } from '../swap.types';
 import { InputProps } from './input.types';
 
 const SelectToken: FC<InputProps> = ({ label }) => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const { pathname } = useRouter();
   const { setModal, handleClose } = useModal();
 
@@ -59,8 +59,15 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       symbol,
       decimals,
       value: '',
-      locked: false,
+      usdPrice: currentToken.usdPrice,
     });
+
+    fetch(`/api/auth/v1/coin-price?symbol=${symbol}`)
+      .then((response) => response.json())
+      .then((data) =>
+        setValue(`${label}.usdPrice`, data[symbol][0].quote.USD.price)
+      )
+      .catch(() => null);
     setValue(`${label === 'from' ? 'to' : 'from'}.value`, '');
 
     changeURL(type);
@@ -110,7 +117,11 @@ const SelectToken: FC<InputProps> = ({ label }) => {
               justifyContent="center"
               alignItems="center"
             >
-              <TokenIcon network={network} tokenId={currentSymbol} />
+              <TokenIcon
+                network={network}
+                symbol={currentSymbol}
+                type={currentToken.type}
+              />
             </Box>
           ),
         })}

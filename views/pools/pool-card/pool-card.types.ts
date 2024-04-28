@@ -1,12 +1,6 @@
 import { ReactNode } from 'react';
 
-import { DexName } from '@/constants/pools';
-import { CoinData } from '@/interface';
-
-export enum PoolTypeEnum {
-  'clamm' = 'clamm',
-  'amm' = 'amm',
-}
+import { AmmPool, CoinMetadataWithType } from '@/interface';
 
 export enum AlgorithmEnum {
   'stable' = 'stable',
@@ -14,31 +8,24 @@ export enum AlgorithmEnum {
 }
 
 export interface PoolCardHeaderProps {
-  name: string;
-  dexUrl: string;
   tags?: ReadonlyArray<string>;
-  Logo: ReactNode;
-  objectId: string;
 }
 
 export interface PoolCardTokenInfoProps {
-  apr: string;
-  coins: ReadonlyArray<CoinData>;
+  coinTypes: ReadonlyArray<string>;
+  coinMetadata: Record<string, CoinMetadataWithType>;
 }
 
 export interface PoolCardTradeProps {
   index: number;
-  amount: string;
   isInfo?: boolean;
+  amount: ReactNode;
   description: string;
   tooltipInfo: string;
 }
 
 export interface PoolCardProps {
-  dex: DexName;
-  poolType: PoolTypeEnum;
-  stable: boolean;
-  lpCoin: CoinData;
-  poolObjectId: string;
-  tokens: ReadonlyArray<CoinData>;
+  pool: AmmPool;
+  prices: Record<string, number>;
+  coinMetadata: Record<string, CoinMetadataWithType>;
 }

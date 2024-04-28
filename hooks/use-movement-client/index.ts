@@ -14,7 +14,7 @@ const client = {
 };
 
 export const useMovementClient = (): SuiClient => {
-  const { network } = useNetwork();
+  const network = useNetwork();
 
   return client[network];
 };

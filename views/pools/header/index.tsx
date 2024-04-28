@@ -4,7 +4,8 @@ import { v4 } from 'uuid';
 
 import useEventListener from '@/hooks/use-event-listener';
 
-import FinPoolButton from './find-pool-button';
+import CreatePoolButton from './create-pool-button';
+import FindPoolButton from './find-pool-button';
 import { HeaderProps } from './header.types';
 
 const Header: FC<HeaderProps> = ({ currentTab, setTab }) => {
@@ -48,7 +49,10 @@ const Header: FC<HeaderProps> = ({ currentTab, setTab }) => {
             </Typography>
           ))}
         />
-        <FinPoolButton />
+        <Box display="flex" gap="s">
+          <FindPoolButton />
+          <CreatePoolButton />
+        </Box>
       </Box>
     </Box>
   );

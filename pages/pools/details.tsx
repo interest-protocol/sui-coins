@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js';
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -6,42 +5,21 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { SEO } from '@/components';
 import { withObjectIdGuard } from '@/components/hoc';
 import { Routes, RoutesEnum } from '@/constants';
-import { RECOMMENDED_POOLS } from '@/constants/pools';
-import { useNetwork } from '@/context/network';
-import { useWeb3 } from '@/hooks';
 import { PoolPageProps } from '@/interface';
-import { FixedPointMath } from '@/lib';
-import { ZERO_BIG_NUMBER } from '@/utils';
 import PoolDetails from '@/views/pool-details';
+import { PoolDetailsProvider } from '@/views/pool-details/pool-details.context';
 import { PoolForm, PoolOption } from '@/views/pools/pools.types';
 
 const PoolDetailsPage: NextPage<PoolPageProps> = ({ objectId }) => {
-  const { coinsMap } = useWeb3();
-  const { network } = useNetwork();
   const [poolOptionView, setPoolOptionView] = useState<PoolOption>(
     PoolOption.Deposit
   );
 
-  const handleOptionTab = (index: PoolOption) => {
-    setPoolOptionView(index);
-  };
-
-  const pool = RECOMMENDED_POOLS[network].find(
-    ({ poolObjectId }) => poolObjectId === objectId
-  );
+  const handleOptionTab = (index: PoolOption) => setPoolOptionView(index);
 
   const form = useForm<PoolForm>({
     defaultValues: {
-      tokenList: pool?.tokens.map((token) => ({
-        ...token,
-        value: '0',
-      })),
-      lpCoin: {
-        symbol: 'LP token',
-        decimals: 9,
-        type: `${ZERO_BIG_NUMBER}`,
-        value: '0',
-      },
+      tokenList: [],
       settings: {
         slippage: '0.1',
       },
@@ -49,38 +27,20 @@ const PoolDetailsPage: NextPage<PoolPageProps> = ({ objectId }) => {
   });
 
   useEffect(() => {
-    const tokenList = form.getValues('tokenList');
-    const lpCoinType = form.getValues('lpCoin.type');
-
-    form.setValue(
-      'tokenList',
-      tokenList.map((token) => ({
-        ...token,
-        balance: FixedPointMath.toNumber(
-          coinsMap[token.type]
-            ? BigNumber(coinsMap[token.type].balance)
-            : ZERO_BIG_NUMBER
-        ),
-      }))
-    );
-    form.setValue(
-      'lpCoin.balance',
-      FixedPointMath.toNumber(
-        coinsMap[lpCoinType]
-          ? BigNumber(coinsMap[lpCoinType].balance)
-          : ZERO_BIG_NUMBER
-      )
-    );
-  }, [coinsMap]);
+    form.resetField('lpCoin.value');
+    form.resetField('tokenList.0.value');
+    form.resetField('tokenList.1.value');
+  }, [poolOptionView]);
 
   return (
     <FormProvider {...form}>
-      <SEO pageTitle="Pool Details" />
-      <PoolDetails
-        objectId={objectId}
-        poolOptionView={poolOptionView}
-        handleOptionTab={handleOptionTab}
-      />
+      <PoolDetailsProvider objectId={objectId}>
+        <SEO pageTitle="Pool Details" />
+        <PoolDetails
+          poolOptionView={poolOptionView}
+          handleOptionTab={handleOptionTab}
+        />
+      </PoolDetailsProvider>
     </FormProvider>
   );
 };

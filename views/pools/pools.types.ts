@@ -1,4 +1,6 @@
-import { TOKEN_SYMBOL } from '@/lib';
+import { Network } from '@/constants';
+import { TOKEN_SYMBOL } from '@/constants/coins';
+import { AmmPool } from '@/interface';
 
 import { ISwapSettings } from '../swap/swap.types';
 
@@ -17,6 +19,20 @@ export enum PoolOption {
   Withdraw,
 }
 
+export interface PoolCardListProps {
+  tab: PoolTabEnum;
+}
+
+export interface PoolCardListWrapper {
+  network: Network;
+}
+
+export interface PoolCardListContentProps {
+  network: Network;
+  arePoolsLoading: boolean;
+  pools: readonly AmmPool[];
+}
+
 export interface CoinData {
   decimals: number;
   symbol: TOKEN_SYMBOL | string;
@@ -25,15 +41,18 @@ export interface CoinData {
 
 export interface PoolToken extends CoinData {
   value: string;
-  balance: number | null;
+  locked: boolean;
 }
 
 export interface PoolForm {
+  error: string | null;
   lpCoin: PoolToken;
+  explorerLink: string;
   isFindingPool: boolean;
   settings: ISwapSettings;
-  tokenList: ReadonlyArray<CoinData>;
+  tokenList: ReadonlyArray<PoolToken>;
   filterList: ReadonlyArray<FilterItemProps>;
+  pool: AmmPool;
 }
 
 export interface FilterItemProps {

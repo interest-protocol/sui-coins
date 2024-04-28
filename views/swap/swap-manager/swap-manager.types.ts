@@ -1,11 +1,6 @@
 import { SuiClient } from '@mysten/sui.js/client';
 import { Dispatch, SetStateAction } from 'react';
-import {
-  Control,
-  FieldErrors,
-  UseFormSetError,
-  UseFormSetValue,
-} from 'react-hook-form';
+import { Control, UseFormSetValue } from 'react-hook-form';
 
 import { Network } from '@/constants/network';
 
@@ -17,10 +12,8 @@ export interface SwapMessagesProps {
   control: Control<SwapForm>;
   isZeroSwapAmountIn: boolean;
   isZeroSwapAmountOut: boolean;
-  errors: FieldErrors<SwapForm>;
   isFetchingSwapAmountIn: boolean;
   isFetchingSwapAmountOut: boolean;
-  setError: UseFormSetError<SwapForm>;
 }
 
 export interface SwapManagerProps {
@@ -31,11 +24,11 @@ export interface SwapManagerProps {
   account: string | null;
   control: Control<SwapForm>;
   isFetchingSwapAmount: boolean;
+  swapPaths: ReadonlyArray<SwapPath>;
   setValue: UseFormSetValue<SwapForm>;
   setError: Dispatch<SetStateAction<boolean>>;
+  setIsFetchingSwapAmount: (value: boolean) => void;
   setIsZeroSwapAmount: Dispatch<SetStateAction<boolean>>;
-  setIsFetchingSwapAmount: Dispatch<SetStateAction<boolean>>;
-  swapPaths: ReadonlyArray<SwapPath>;
 }
 
 export interface FindSwapPathArgs {

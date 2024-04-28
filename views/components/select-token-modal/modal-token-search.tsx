@@ -14,13 +14,13 @@ const ModalTokenSearch: FC<ModalTokenSearchProps> = ({
   handleSelectToken,
 }) => {
   const id = useId();
-  const { network } = useNetwork();
+  const network = useNetwork();
   const {
     error,
     isLoading,
     data: tokenMetadata,
   } = useSWR(`get-token-metadata-${network}-${search}-${id}`, () =>
-    fetch(`/api/v1/coin-metadata?type=${search}&network=${network}`).then(
+    fetch(`/api/auth/v1/coin-metadata?type=${search}&network=${network}`).then(
       (res) => res.json()
     )
   );

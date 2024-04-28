@@ -19,16 +19,17 @@ const Pools: FC = () => {
       <Box
         px="s"
         gap="2xs"
-        bg="container"
         display="flex"
+        bg="container"
         maxWidth="100%"
         maxHeight="100%"
         borderRadius="xs"
+        minHeight="30rem"
         flexDirection="column"
         py={['s', 's', 's', '2xl']}
       >
         <PoolFilter />
-        <PoolCardList />
+        <PoolCardList tab={tab} />
       </Box>
     </Layout>
   );

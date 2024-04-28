@@ -12,7 +12,6 @@ import FetchingToken from './fetching-token';
 import ModalTokenBody from './modal-token-body';
 import NotFound from './not-found';
 import {
-  CoinDataWithChainInfo,
   SelectTokenModalBodyProps,
   TokenOrigin,
 } from './select-token-modal.types';
@@ -21,7 +20,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   control,
   handleSelectToken: onSelectToken,
 }) => {
-  const { network } = useNetwork();
+  const network = useNetwork();
   const { coins, isFetchingCoinBalances } = useWeb3();
   const favoriteTokenTypes = useReadLocalStorage<ReadonlyArray<string>>(
     `${LOCAL_STORAGE_VERSION}-movement-${network}-favorite-tokens`
@@ -34,12 +33,12 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
     return (
       <ModalTokenBody
         handleSelectToken={onSelectToken}
-        tokens={(COINS as Array<CoinDataWithChainInfo>)
-          ?.sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
-          .filter(
-            ({ symbol, type }) =>
-              type.includes(search) || symbol.toLowerCase().includes(search)
-          )}
+        tokens={COINS?.sort(({ type }) =>
+          favoriteTokenTypes?.includes(type) ? -1 : 1
+        ).filter(
+          ({ symbol, type }) =>
+            type.includes(search) || symbol.toLowerCase().includes(search)
+        )}
       />
     );
 

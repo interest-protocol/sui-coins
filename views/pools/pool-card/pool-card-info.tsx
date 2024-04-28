@@ -1,4 +1,5 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
+import { pathOr } from 'ramda';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
@@ -8,8 +9,11 @@ import { DefaultTokenSVG } from '@/svg';
 
 import { PoolCardTokenInfoProps } from './pool-card.types';
 
-const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({ coins, apr }) => {
-  const { network } = useNetwork();
+const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({
+  coinMetadata,
+  coinTypes,
+}) => {
+  const network = useNetwork();
 
   return (
     <Box>
@@ -29,8 +33,16 @@ const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({ coins, apr }) => {
           alignItems="center"
           alignSelf="stretch"
         >
-          {coins.map(({ symbol }) => {
-            const Icon = TOKEN_ICONS[network][symbol] ?? DefaultTokenSVG;
+          {coinTypes.map((type) => {
+            const metadata = coinMetadata[type];
+
+            const parsedSymbol =
+              metadata?.symbol.toUpperCase() === 'SUI'
+                ? 'MOVE'
+                : metadata?.symbol.toUpperCase();
+            const Icon = !metadata
+              ? DefaultTokenSVG
+              : TOKEN_ICONS[network][parsedSymbol] ?? DefaultTokenSVG;
 
             return (
               <Box
@@ -58,19 +70,11 @@ const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({ coins, apr }) => {
             lineHeight="1.7rem"
             color="onSurface"
           >
-            {coins.reduce(
-              (acc, { symbol }) => `${acc ? `${acc} • ` : ''}${symbol}`,
+            {coinTypes.reduce(
+              (acc, type) =>
+                `${acc ? `${acc} • ` : ''}${pathOr('', [type, 'symbol'], coinMetadata).replace('SUI', 'MOVE')}`,
               ''
             )}
-          </Typography>
-          <Typography
-            textAlign="center"
-            textTransform="uppercase"
-            size="large"
-            variant="label"
-            color="primary"
-          >
-            {apr}% APR
           </Typography>
         </Box>
       </Box>

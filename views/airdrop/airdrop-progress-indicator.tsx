@@ -4,9 +4,11 @@ import {
   ProgressIndicator,
   Typography,
 } from '@interest-protocol/ui-kit';
+import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { Routes, RoutesEnum } from '@/constants';
 import { CheckSVG, WarningSVG } from '@/svg';
 
 import { BATCH_SIZE } from './airdrop.constants';
@@ -15,6 +17,7 @@ import { AirdropProgressIndicatorProps, IAirdropForm } from './airdrop.types';
 const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
   goBack,
 }) => {
+  const { push } = useRouter();
   const { control } = useFormContext<IAirdropForm>();
   const airdropList = useWatch({ control, name: 'airdropList' });
   const doneItems = useWatch({ control, name: 'done' });
@@ -32,25 +35,22 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
     <Box
       p="xl"
       gap="4xl"
-      display="flex"
-      borderRadius="xs"
-      color="onSurface"
       bg="container"
+      display="flex"
+      borderRadius="m"
       flexDirection="column"
     >
       <Typography
-        variant="headline"
         size="large"
+        variant="headline"
         textAlign="center"
-        color={
-          isError
-            ? 'errorContainer'
-            : finished !== 100
-              ? 'onSurface'
-              : 'success'
-        }
+        color={isError ? 'error' : finished !== 100 ? 'onSurface' : 'success'}
       >
-        {isError ? 'error found' : finished !== 100 ? 'Sending' : "You're done"}
+        {isError
+          ? 'error found'
+          : finished !== 100
+            ? 'Sending'
+            : 'You are done'}
       </Typography>
       <Box
         display="flex"
@@ -66,19 +66,19 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
             height="8.75rem"
             borderRadius="full"
             alignItems="center"
+            bg="errorContainer"
             justifyContent="center"
           >
-            <WarningSVG width="100%" maxWidth="8.75rem" maxHeight="8.75rem" />
+            <WarningSVG
+              width="100%"
+              maxWidth="3.96831rem"
+              maxHeight="3.73075rem"
+            />
           </Box>
         ) : finished !== 100 ? (
           <>
             <ProgressIndicator variant="loading" size={200} />
-            <Typography
-              variant="title"
-              size="large"
-              position="absolute"
-              color="onSurface"
-            >
+            <Typography variant="title" size="large" position="absolute">
               {finished}%
             </Typography>
           </>
@@ -90,9 +90,14 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
             color="success"
             borderRadius="full"
             alignItems="center"
+            bg="successContainer"
             justifyContent="center"
           >
-            <CheckSVG width="100%" maxWidth="8.75rem" maxHeight="8.75rem" />
+            <CheckSVG
+              width="100%"
+              maxWidth="3.43225rem"
+              maxHeight="2.52081rem"
+            />
           </Box>
         )}
       </Box>
@@ -102,50 +107,65 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
         variant="body"
         maxWidth="20rem"
         textAlign="center"
-        color="onSurface"
       >
-        {error || finished !== 100
-          ? "This is the loading description. It can be anything you want and as long as you want. But please don't make it too long."
-          : doneItems.length === allBatches
-            ? 'The airdrop has been sent'
-            : `${failedItems.length} batches was not sent`}
+        {isError
+          ? `Batches were not sent`
+          : finished !== 100
+            ? 'Sending batches'
+            : 'The airdrop has been sent'}
       </Typography>
-      {(error || finished === 100) && (
-        <Box
-          pt="xl"
-          display="flex"
-          minWidth="100%"
-          justifyContent="space-between"
-          flexDirection="row"
-        >
+      <Box display="flex" gap="s">
+        {error && (
           <Button
-            flex="1"
-            marginRight="s"
-            borderRadius="xs"
             variant="outline"
             onClick={goBack}
             justifyContent="center"
+            borderRadius="xs"
             borderColor="outlineVariant"
-            color="onSurface"
+            nHover={{
+              borderColor: 'error',
+              color: 'error',
+            }}
           >
             Close
           </Button>
+        )}
+        {error && (
           <Button
-            flex="3"
+            flex="1"
+            bg="error"
+            color="onError"
             variant="filled"
             onClick={goBack}
             borderRadius="xs"
             justifyContent="center"
-            bg={error || failedItems.length ? 'errorContainer' : 'surface'}
-            color={error || failedItems.length ? 'onSurface' : 'onSurface'}
-            nHover={{
-              backgroundColor: 'lowContainer',
-            }}
           >
-            Resend failed batches
+            {error ? 'Resend Failed batches' : 'Got it'}
           </Button>
-        </Box>
-      )}
+        )}
+        {finished === 100 && (
+          <>
+            <Button
+              flex="1"
+              onClick={goBack}
+              variant="outline"
+              borderRadius="xs"
+              justifyContent="center"
+            >
+              Got it
+            </Button>
+            <Button
+              flex="1"
+              variant="filled"
+              borderRadius="xs"
+              justifyContent="center"
+              onClick={() => push(Routes[RoutesEnum.PoolCreate])}
+            >
+              Create Pool
+            </Button>
+          </>
+        )}
+      </Box>
     </Box>
   );
 };

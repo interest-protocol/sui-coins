@@ -12,7 +12,7 @@ const SelectCoins: FC = () => {
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'tokenList',
-    rules: { maxLength: 5 },
+    rules: { maxLength: 2 },
   });
 
   const onRemoveSelectToken = (index: number) => {
@@ -35,7 +35,7 @@ const SelectCoins: FC = () => {
             />
           ))}
         </Box>
-        {fields.length < 5 && (
+        {fields.length < 2 && (
           <Button
             mt="xl"
             mx="auto"
@@ -43,7 +43,15 @@ const SelectCoins: FC = () => {
             color="onSurface"
             borderRadius="xs"
             borderColor="outlineVariant"
-            onClick={() => append({ type: '', symbol: '', decimals: 0 })}
+            onClick={() =>
+              append({
+                type: '',
+                symbol: '',
+                decimals: 0,
+                value: '0',
+                locked: false,
+              })
+            }
             PrefixIcon={
               <PlusSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
             }

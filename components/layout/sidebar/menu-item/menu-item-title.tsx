@@ -99,6 +99,7 @@ const MenuItemTitle: FC<MenuItemTitleContentProps> = ({
     return (
       <TooltipWrapper
         bg="onSurface"
+        zIndex={2}
         width="max-content"
         tooltipPosition="right"
         display={isCollapsed ? (disabled ? 'none' : 'block') : 'none'}

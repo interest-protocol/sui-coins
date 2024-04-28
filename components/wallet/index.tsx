@@ -1,5 +1,5 @@
 import { Box } from '@interest-protocol/ui-kit';
-import { useWalletKit } from '@mysten/wallet-kit';
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import { FC } from 'react';
 
 import MovementNetwork from '../account-info/movement-network';
@@ -7,7 +7,7 @@ import ConnectWalletButton from './connect-wallet-button';
 import Profile from './profile';
 
 const Wallet: FC = () => {
-  const { currentAccount } = useWalletKit();
+  const currentAccount = useCurrentAccount();
 
   return (
     <Box

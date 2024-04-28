@@ -12,6 +12,7 @@ const SelectTypeCLAMM: FC = () => {
 
   return (
     <SelectTypeCard
+      disabled
       title="CLAMM"
       isSelected={type === 'CLAMM'}
       illustration={<Illustration />}

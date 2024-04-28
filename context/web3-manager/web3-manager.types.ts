@@ -1,5 +1,5 @@
 import { SuiClient } from '@mysten/sui.js/client';
-import { PaginatedCoins } from '@mysten/sui.js/src/client';
+import { PaginatedCoins } from '@mysten/sui.js/client';
 import { WalletAccount } from '@wallet-standard/base';
 import { ReactNode } from 'react';
 import { KeyedMutator } from 'swr';
@@ -18,7 +18,7 @@ export interface Web3ManagerState {
   isFetchingCoinBalances: boolean;
   coins: ReadonlyArray<CoinObject>;
   walletAccount: null | WalletAccount;
-  mutate: KeyedMutator<CoinsMap | null>;
+  mutate: KeyedMutator<CoinsMap>;
 }
 
 export interface Web3ManagerProps {

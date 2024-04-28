@@ -22,11 +22,17 @@ const SwapPath: FC = () => {
   const coinOut =
     swapPath.length == 1 ? swapPath[0].coinOut : swapPath[1].coinOut;
 
-  const CoinInIcon = COINS_SVG_MAP_V2[coinIn] ?? COINS_SVG_MAP_V2.default;
+  const CoinInIcon =
+    COINS_SVG_MAP_V2[coinIn as keyof typeof COINS_SVG_MAP_V2] ??
+    COINS_SVG_MAP_V2.default;
 
-  const CoinOutIcon = COINS_SVG_MAP_V2[coinOut] ?? COINS_SVG_MAP_V2.default;
+  const CoinOutIcon =
+    COINS_SVG_MAP_V2[coinOut as keyof typeof COINS_SVG_MAP_V2] ??
+    COINS_SVG_MAP_V2.default;
 
-  const BaseTokenIcon = COINS_SVG_MAP_V2[baseToken] ?? COINS_SVG_MAP_V2.default;
+  const BaseTokenIcon =
+    COINS_SVG_MAP_V2[baseToken as keyof typeof COINS_SVG_MAP_V2] ??
+    COINS_SVG_MAP_V2.default;
 
   return (
     <Box

@@ -1,11 +1,11 @@
+import { useSignTransactionBlock } from '@mysten/dapp-kit';
+import { SuiClient } from '@mysten/sui.js/client';
+import { TransactionObjectArgument } from '@mysten/sui.js/transactions';
+import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { WalletAccount } from '@wallet-standard/base';
 import { Dispatch, SetStateAction } from 'react';
 
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
-import { CoinData } from '@/interface';
-
-export interface IToken extends CoinData {
-  balance: number;
-}
 
 export interface AirdropData {
   address: string;
@@ -15,10 +15,11 @@ export interface AirdropData {
 export type TMethod = 'csv' | 'addressList';
 
 export interface IAirdropForm {
-  token: IToken;
   error: boolean;
+  amount: number;
   method: TMethod;
   decimals: number;
+  token: CoinObject;
   asset?: CoinObject;
   commonAmount: string;
   tokenUSDPrice?: number;
@@ -38,24 +39,45 @@ export interface AirdropUploadFileCardProps {
   name: string;
 }
 
+export interface AirdropConfirmButtonProps {
+  setIsProgressView: Dispatch<SetStateAction<boolean>>;
+}
+
 export interface AirdropProgressIndicatorProps {
   goBack: () => void;
 }
 
-export interface AirdropProgressProps {
+export interface AirdropInputProps {
   setIsProgressView: Dispatch<SetStateAction<boolean>>;
 }
 
-export interface AirdropPreviewButtonProps {
-  handleOpenSummaryModal: () => void;
-}
-
-export interface AirdropPreviewModalProps extends AirdropProgressProps {
+export interface AirdropPreviewModalProps {
   method: TMethod;
-  isOpen: boolean;
   onClose: () => void;
+  setIsProgressView: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface AirdropSummaryProps {
   method: TMethod;
+}
+
+export interface SendAirdropArgs {
+  suiClient: SuiClient;
+  txb: TransactionBlock;
+  contractPackageId: string;
+  tokenType: string;
+  coinToSend:
+    | {
+        kind: 'NestedResult';
+        index: number;
+        resultIndex: number;
+      }
+    | TransactionObjectArgument;
+  batch: readonly AirdropData[];
+  currentAccount: WalletAccount;
+  signTransactionBlock: ReturnType<typeof useSignTransactionBlock>;
+}
+
+export interface AirdropPreviewButtonProps {
+  handleOpenSummaryModal: () => void;
 }

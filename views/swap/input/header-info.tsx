@@ -1,4 +1,4 @@
-import { Box, Typography } from '@interest-protocol/ui-kit';
+import { Box, ProgressIndicator, Typography } from '@interest-protocol/ui-kit';
 import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -10,7 +10,7 @@ import { SwapForm } from '../swap.types';
 import { InputProps } from './input.types';
 
 const HeaderInfo: FC<InputProps> = ({ label }) => {
-  const { coinsMap } = useWeb3();
+  const { coinsMap, isFetchingCoinBalances } = useWeb3();
   const { control } = useFormContext<SwapForm>();
 
   const type = useWatch({ control, name: `${label}.type` });
@@ -30,9 +30,13 @@ const HeaderInfo: FC<InputProps> = ({ label }) => {
         <Typography variant="label" size="small">
           Balance:
         </Typography>
-        <Typography variant="label" size="small" color="primary">
-          {balance}
-        </Typography>
+        {type && isFetchingCoinBalances ? (
+          <ProgressIndicator size={16} variant="loading" />
+        ) : (
+          <Typography variant="label" size="small" color="primary">
+            {balance}
+          </Typography>
+        )}
       </Box>
     </Box>
   );

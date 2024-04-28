@@ -1,17 +1,20 @@
-import { Box, TextField } from '@interest-protocol/ui-kit';
+import { Box, ProgressIndicator, TextField } from '@interest-protocol/ui-kit';
 import { ChangeEvent, FC } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import { parseInputEventToNumberString } from '@/utils';
 
 import { SwapForm } from '../swap.types';
+import AmountInDollar from './dollar-value';
 import HeaderInfo from './header-info';
 import { InputProps } from './input.types';
 import SelectToken from './select-token';
 import SwapFormFieldSlider from './swap-manager-slider';
 
 const Input: FC<InputProps> = ({ label }) => {
-  const { register, setValue } = useFormContext<SwapForm>();
+  const { register, setValue, control } = useFormContext<SwapForm>();
+
+  const isFetching = useWatch({ control, name: `${label}.isFetchingSwap` });
 
   return (
     <Box>
@@ -32,17 +35,23 @@ const Input: FC<InputProps> = ({ label }) => {
             color="onSurface"
             textAlign="right"
             fontFamily="Satoshi"
+            disabled={isFetching}
+            Prefix={
+              isFetching && <ProgressIndicator variant="loading" size={16} />
+            }
+            fieldProps={{
+              width: '100%',
+              borderRadius: 'xs',
+              borderColor: 'transparent',
+            }}
             {...register(`${label}.value`, {
               onChange: (v: ChangeEvent<HTMLInputElement>) => {
+                setValue('lock', false);
                 setValue?.(`${label}.value`, parseInputEventToNumberString(v));
               },
             })}
-            fieldProps={{
-              borderColor: 'transparent',
-              borderRadius: 'xs',
-              width: '100%',
-            }}
           />
+          <AmountInDollar label={label} />
         </Box>
       </Box>
       <Box pb={label === 'to' ? '2xl' : 's'}>

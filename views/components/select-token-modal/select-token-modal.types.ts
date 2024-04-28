@@ -1,16 +1,9 @@
 import { Control, UseFormSetValue } from 'react-hook-form';
 
-import { TOKEN_SYMBOL } from '@/lib';
-
-export interface CoinDataWithChainInfo {
-  type: string;
-  decimals: number;
-  symbol: TOKEN_SYMBOL | string;
-  balance: number | string;
-}
+import { CoinData } from '@/interface';
 
 export interface TokenModalItemProps
-  extends Omit<CoinDataWithChainInfo, 'decimals' | 'balance'> {
+  extends Omit<CoinData, 'decimals' | 'balance'> {
   selected: boolean;
   onClick: () => void;
 }
@@ -18,7 +11,7 @@ export interface TokenModalItemProps
 export interface SelectTokenModalProps {
   simple?: boolean;
   closeModal: () => void;
-  onSelect: (coin: CoinDataWithChainInfo) => void;
+  onSelect: (coin: CoinData) => void;
 }
 
 export interface SelectTokenFilterProps {
@@ -38,12 +31,12 @@ export interface SearchTokenForm {
 
 export interface SelectTokenModalBodyProps {
   control: Control<SearchTokenForm>;
-  handleSelectToken: (coin: CoinDataWithChainInfo) => void;
+  handleSelectToken: (coin: CoinData) => void;
 }
 
 export interface ModalTokenBodyProps {
-  tokens: ReadonlyArray<CoinDataWithChainInfo>;
-  handleSelectToken: (coin: CoinDataWithChainInfo) => void;
+  tokens: ReadonlyArray<CoinData>;
+  handleSelectToken: (coin: CoinData) => void;
 }
 
 export interface ModalTokenSearchProps {
