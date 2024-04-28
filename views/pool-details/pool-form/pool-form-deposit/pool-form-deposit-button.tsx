@@ -11,12 +11,14 @@ import { FixedPointMath } from '@/lib';
 import { showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
 
+import { usePoolDetails } from '../../pool-details.context';
 import PoolPreview from '../pool-form-preview';
 import { useDeposit } from './pool-form-deposit.hooks';
 
 const PoolFormDepositButton: FC = () => {
   const network = useNetwork();
   const deposit = useDeposit();
+  const { pool } = usePoolDetails();
   const client = useMovementClient();
   const account = useCurrentAccount();
   const { coinsMap, mutate } = useWeb3();
@@ -93,12 +95,20 @@ const PoolFormDepositButton: FC = () => {
       const coin2 = tokenList[1];
 
       if (
+        !tokenList?.length ||
+        !coinsMap ||
+        !pool ||
         !coinsMap[coin1.type]?.balance ||
+        !coinsMap[coin2.type]?.balance
+      )
+        return;
+
+      if (
         +Number(coin1.value).toFixed(5) >
-          +FixedPointMath.toNumber(
-            coinsMap[coin1.type].balance,
-            coinsMap[coin1.type].decimals
-          ).toFixed(5)
+        +FixedPointMath.toNumber(
+          coinsMap[coin1.type].balance,
+          coinsMap[coin1.type].decimals
+        ).toFixed(5)
       ) {
         setValue(
           'error',
@@ -108,12 +118,11 @@ const PoolFormDepositButton: FC = () => {
       }
 
       if (
-        !coinsMap[coin2.type]?.balance ||
         +Number(coin2.value).toFixed(5) >
-          +FixedPointMath.toNumber(
-            coinsMap[coin2.type].balance,
-            coinsMap[coin2.type].decimals
-          ).toFixed(5)
+        +FixedPointMath.toNumber(
+          coinsMap[coin2.type].balance,
+          coinsMap[coin2.type].decimals
+        ).toFixed(5)
       ) {
         setValue(
           'error',
