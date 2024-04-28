@@ -862,10 +862,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-2.0.2.tgz#d9fae00a2d5cb40f92cfe64b47ad749fbc38f917"
   integrity sha512-6EwiSjwWYP7pTckG6I5eyFANjPhmPjUX9JRLUSfNPC7FX7zK9gyZAfUEaECL6ALTpGX5AjnBq3C9XmVWPitNpw==
 
-"@interest-protocol/clamm-sdk@^1.0.1-alpha":
-  version "1.0.1-alpha"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/clamm-sdk/-/clamm-sdk-1.0.1-alpha.tgz#df2d0f6470a1e293888cbf9738f5db27a18b2f6c"
-  integrity sha512-TYUDDrnLYq6GNUPHMQERRqS6NSZCy+6fFGiTqmvt7/Sk9vLc5+7yAdEisLkc6e6s794olkn+UAcUFF6XM2b3rA==
+"@interest-protocol/clamm-sdk@^3.0.0-alpha":
+  version "3.0.0-alpha"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/clamm-sdk/-/clamm-sdk-3.0.0-alpha.tgz#1bd399e08f65c9e8b14d019a2eeef4e86b6b3777"
+  integrity sha512-HSbj9DuawwBjn5xo4FHoMlrzi6bTCQER0H/R6KfHZY7hGRyaSiC/MHcbSTMOgyonxOg44aVAvZFuz7P9XZe2Pg==
   dependencies:
     "@mysten/sui.js" "^0.51.2"
     ramda "^0.29.1"

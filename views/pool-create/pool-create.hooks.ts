@@ -7,6 +7,7 @@ import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import { getLpCoinBytecode } from '@/lib/move-template/lp-coin';
 import initMoveByteCodeTemplate from '@/lib/move-template/move-bytecode-template';
+import { isSui } from '@/utils';
 
 import { Token } from './pool-create.types';
 
@@ -44,7 +45,7 @@ export const useCreateLpCoin = () => {
       dependencies: [normalizeSuiAddress('0x1'), normalizeSuiAddress('0x2')],
     });
 
-    txb.transferObjects([upgradeCap], txb.pure(currentAccount.address));
+    txb.transferObjects([upgradeCap], txb.pure.address(currentAccount.address));
 
     return txb;
   };
@@ -64,26 +65,54 @@ export const useCreateStablePool = () => {
 
     if (!treasuryCap) throw new Error('No authorization to use this LP coin');
 
-    const mergeTxb = new TransactionBlock();
+    const auxTxb = new TransactionBlock();
 
-    const coins = tokens.map(({ type }) =>
-      mergeTxb.mergeCoins(
-        coinsMap[type].coinObjectId,
-        coinsMap[type].objects.slice(1).map((object) => object.coinObjectId)
-      )
-    );
+    const coins = tokens.map(({ type, value, decimals }) => {
+      if (isSui(type)) {
+        const coinOut = auxTxb.splitCoins(auxTxb.gas, [
+          auxTxb.pure(
+            FixedPointMath.toBigNumber(value, decimals)
+              .decimalPlaces(0)
+              .toString()
+          ),
+        ]);
+
+        return coinOut;
+      } else {
+        auxTxb.mergeCoins(
+          auxTxb.object(coinsMap[type].coinObjectId),
+          coinsMap[type].objects
+            .slice(1)
+            .map((object) => auxTxb.object(object.coinObjectId))
+        );
+
+        const coinOut = auxTxb.splitCoins(
+          auxTxb.object(coinsMap[type].coinObjectId),
+          [
+            auxTxb.pure(
+              FixedPointMath.toBigNumber(value, decimals)
+                .decimalPlaces(0)
+                .toString()
+            ),
+          ]
+        );
+
+        return coinOut;
+      }
+    });
 
     const typeArguments = [...tokens.map((token) => token.type), coinType];
 
-    const clamm = new CLAMM(
-      client,
-      process.env.CLAMM_PACKAGE_ID!,
-      process.env.CLAMM_SUI_TEARS_PACKAGE_ID!
-    );
+    const clamm = new CLAMM({
+      packageAddress: process.env.NEXT_PUBLIC_CLAMM_PACKAGE_ID!,
+      suiClient: client,
+      suiTearsAddress: process.env.NEXT_PUBLIC_CLAMM_SUI_TEARS_PACKAGE_ID!,
+      network: 'testnet',
+    });
 
     const { pool, poolAdmin, lpCoin, txb } = await clamm.newStable({
       coins,
-      txb: mergeTxb,
+      txb: auxTxb,
       lpCoinTreasuryCap: treasuryCap,
       typeArguments: typeArguments,
     });
@@ -102,49 +131,70 @@ export const useCreateVolatilePool = () => {
   return async (
     tokens: ReadonlyArray<Token>,
     treasuryCap: string | null | undefined,
-    coinType: string
+    lpCoinType: string
   ) => {
     if (!currentAccount) throw new Error('No account');
 
     if (!treasuryCap) throw new Error('No authorization to use this LP coin');
 
-    const mergeTxb = new TransactionBlock();
+    const auxTxb = new TransactionBlock();
 
-    const coins = tokens.map(({ type }) =>
-      mergeTxb.mergeCoins(
-        coinsMap[type].coinObjectId,
-        coinsMap[type].objects.slice(1).map((object) => object.coinObjectId)
-      )
-    );
+    const coins = tokens.map(({ type, value, decimals }) => {
+      if (isSui(type)) {
+        const coinOut = auxTxb.splitCoins(auxTxb.gas, [
+          auxTxb.pure(
+            FixedPointMath.toBigNumber(value, decimals)
+              .decimalPlaces(0)
+              .toString()
+          ),
+        ]);
 
-    const typeArguments = [...tokens.map((token) => token.type), coinType];
+        return coinOut;
+      } else {
+        if (coinsMap[type].objects.length > 1)
+          auxTxb.mergeCoins(
+            auxTxb.object(coinsMap[type].objects[0].coinObjectId),
+            coinsMap[type].objects
+              .slice(1)
+              .map((object) => auxTxb.object(object.coinObjectId))
+          );
+
+        const coinOut = auxTxb.splitCoins(
+          auxTxb.object(coinsMap[type].objects[0].coinObjectId),
+          [
+            auxTxb.pure(
+              FixedPointMath.toBigNumber(value, decimals)
+                .decimalPlaces(0)
+                .toString()
+            ),
+          ]
+        );
+
+        return coinOut;
+      }
+    });
+
+    const typeArguments = [...tokens.map((token) => token.type), lpCoinType];
 
     const PRECISION = 18;
+
     const price = FixedPointMath.toBigNumber(
-      FixedPointMath.toBigNumber(tokens[0].value, PRECISION)
-        .div(FixedPointMath.toBigNumber(tokens[1].value, PRECISION))
-        .toString(),
+      +tokens[0].value / +tokens[1].value,
       PRECISION
     )
       .decimalPlaces(0)
       .toString();
 
-    const clamm = new CLAMM(
-      client,
-      process.env.CLAMM_PACKAGE_ID!,
-      process.env.CLAMM_SUI_TEARS_PACKAGE_ID!
-    );
-
-    console.log({
-      coins,
-      lpCoinTreasuryCap: treasuryCap,
-      typeArguments: typeArguments,
-      prices: [BigInt(price)],
+    const clamm = new CLAMM({
+      packageAddress: process.env.NEXT_PUBLIC_CLAMM_PACKAGE_ID!,
+      suiClient: client,
+      suiTearsAddress: process.env.NEXT_PUBLIC_CLAMM_SUI_TEARS_PACKAGE_ID!,
+      network: 'testnet',
     });
 
     const { pool, poolAdmin, lpCoin, txb } = await clamm.newVolatile({
       coins,
-      txb: mergeTxb,
+      txb: auxTxb,
       lpCoinTreasuryCap: treasuryCap,
       typeArguments: typeArguments,
       prices: [BigInt(price)],
