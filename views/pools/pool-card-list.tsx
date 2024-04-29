@@ -125,6 +125,11 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
     }
   );
 
+  const createPool = () => {
+    push(Routes[RoutesEnum.PoolCreate]);
+    onClose();
+  };
+
   const poolPairFailedModal = () => {
     setModal(
       <Motion
@@ -140,11 +145,11 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
           alignItems="center"
         >
           <FindPoolDialog
+            onClose={onClose}
+            onCreatePool={createPool}
             title="Pool doesn't exist"
             description="If you like, you can create this pool"
             Icon={<PlusSVG maxWidth="1rem" maxHeight="1rem" width="100%" />}
-            onClose={onClose}
-            onCreatePool={() => push(Routes[RoutesEnum.PoolCreate])}
           />
         </Box>
       </Motion>,
