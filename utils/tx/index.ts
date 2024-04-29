@@ -2,8 +2,13 @@ import {
   DevInspectResults,
   SuiTransactionBlockResponse,
 } from '@mysten/sui.js/client';
+import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { head, propOr } from 'ramda';
 
+import { CoinsMap } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { FixedPointMath } from '@/lib';
+
+import { isSui } from '../coin';
 import { SignAndExecuteArgs } from './tx.types';
 
 export const throwTXIfNotSuccessful = (
@@ -55,3 +60,48 @@ export const signAndExecute = async ({
     requestType: 'WaitForLocalExecution',
   });
 };
+
+export const getSpecificCoinAmount =
+  ({
+    type,
+    value,
+    decimals,
+  }: {
+    type: string;
+    value: string;
+    decimals: number;
+  }) =>
+  (tx: TransactionBlock, coinsMap: CoinsMap) => {
+    if (isSui(type)) {
+      const coinOut = tx.splitCoins(tx.gas, [
+        tx.pure(
+          FixedPointMath.toBigNumber(value, decimals)
+            .decimalPlaces(0)
+            .toString()
+        ),
+      ]);
+
+      return coinOut;
+    }
+
+    if (coinsMap[type].objects.length > 1)
+      tx.mergeCoins(
+        tx.object(coinsMap[type].objects[0].coinObjectId),
+        coinsMap[type].objects
+          .slice(1)
+          .map((object) => tx.object(object.coinObjectId))
+      );
+
+    const coinOut = tx.splitCoins(
+      tx.object(coinsMap[type].objects[0].coinObjectId),
+      [
+        tx.pure(
+          FixedPointMath.toBigNumber(value, decimals)
+            .decimalPlaces(0)
+            .toString()
+        ),
+      ]
+    );
+
+    return coinOut;
+  };
