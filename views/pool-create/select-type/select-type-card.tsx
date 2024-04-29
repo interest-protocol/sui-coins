@@ -18,13 +18,13 @@ const SelectTypeCard: FC<SelectTypeCardProps> = ({
     gap="xl"
     width="16rem"
     display="flex"
-    cursor="pointer"
     borderRadius="xs"
     alignItems="center"
     flexDirection="column"
     opacity={disabled ? 0.7 : 1}
     onClick={disabled ? noop : onSelect}
     transition="scale 300ms ease-in-out"
+    cursor={disabled ? 'not-allowed' : 'pointer'}
     bg={isSelected ? 'primary' : 'lowestContainer'}
     nHover={!disabled && { boxShadow: '0 2rem 3rem #0004', scale: '1.02' }}
   >
