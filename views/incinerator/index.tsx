@@ -25,9 +25,9 @@ const Incinerator: FC = () => {
           width="100%"
           display="flex"
           borderRadius="s"
-          maxWidth="51rem"
           bg="lowestContainer"
           flexDirection="column"
+          maxWidth={['20rem', '20rem', '20rem', '51rem']}
         >
           <IncineratorHeader />
           <IncineratorFilterTabs />
