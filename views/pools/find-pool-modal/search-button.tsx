@@ -1,42 +1,33 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { FC, useState } from 'react';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
-import { CoinData, PoolForm } from '../pools.types';
+import { PoolForm } from '../pools.types';
 import { FindPoolModalProps } from './find-pool-modal.types';
 
 const SearchButton: FC<FindPoolModalProps> = ({ closeModal }) => {
-  const { setValue, getValues, control } = useFormContext<PoolForm>();
+  const { setValue, getValues } = useFormContext<PoolForm>();
   const [isError, setError] = useState(false);
-  useFieldArray({
-    control,
-    name: 'tokenList',
-    rules: { maxLength: 5 },
-  });
-
-  const tokenListData = getValues('tokenList');
 
   const handleSearch = () => setValue('isFindingPool', true);
 
-  const hasEmptyKeys = (token: [] | readonly CoinData[]) => {
-    return token.some((obj) =>
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      Object.entries(obj).some(([key, value]) => !value)
-    );
-  };
+  const handleFindPool = async () => {
+    const tokenListData = getValues('tokenList');
 
-  const handleFindPool = () => {
-    const listOfToken = hasEmptyKeys(tokenListData);
-    if (!listOfToken) {
+    if (tokenListData.every(({ type }) => type)) {
       handleSearch();
       closeModal();
-    } else {
-      setError(true);
-      const timeout = setTimeout(() => {
-        setError(false);
-      }, 3000);
-      return () => clearTimeout(timeout);
+      return;
     }
+
+    setError(true);
+
+    const timeout = setTimeout(() => {
+      setError(false);
+      clearTimeout(timeout);
+    }, 3000);
+
+    return;
   };
 
   return (

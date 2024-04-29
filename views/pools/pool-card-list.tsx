@@ -4,12 +4,14 @@ import {
   ProgressIndicator,
   Typography,
 } from '@interest-protocol/ui-kit';
+import { useRouter } from 'next/router';
 import { FC, useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import useSWR from 'swr';
 import { v4 } from 'uuid';
 
+import { Routes, RoutesEnum } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useFindPoolsByCoinTypes } from '@/hooks/use-find-pools-by-coin-types';
 import { useGetCoinMetadata } from '@/hooks/use-get-coin-metadata';
@@ -17,6 +19,7 @@ import useGetMultipleTokenPriceBySymbol from '@/hooks/use-get-multiple-token-pri
 import { useModal } from '@/hooks/use-modal';
 import { usePools } from '@/hooks/use-pools';
 import { AmmPool } from '@/interface';
+import { PlusSVG } from '@/svg';
 import { getAllSymbols } from '@/views/pools/pools.utils';
 
 import FindPoolDialog from './find-pool-modal/find-pool-dialog';
@@ -57,6 +60,7 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
   arePoolsLoading,
   pools,
 }) => {
+  const { push } = useRouter();
   const { setModal, handleClose } = useModal();
 
   const symbols = getAllSymbols(pools);
@@ -116,8 +120,47 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
 
       poolPairLoadingModal();
       toast.dismiss();
+      poolPairFailedModal();
+      return [];
     }
   );
+
+  const createPool = () => {
+    push(Routes[RoutesEnum.PoolCreate]);
+    onClose();
+  };
+
+  const poolPairFailedModal = () => {
+    setModal(
+      <Motion
+        animate={{ scale: 1 }}
+        initial={{ scale: 0.85 }}
+        transition={{ duration: 0.3 }}
+      >
+        <Box
+          display="flex"
+          width="100%"
+          height="100%"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <FindPoolDialog
+            onClose={onClose}
+            onCreatePool={createPool}
+            title="Pool doesn't exist"
+            description="If you like, you can create this pool"
+            Icon={<PlusSVG maxWidth="1rem" maxHeight="1rem" width="100%" />}
+          />
+        </Box>
+      </Motion>,
+      {
+        isOpen: true,
+        custom: true,
+        opaque: false,
+        allowClose: true,
+      }
+    );
+  };
 
   const poolPairLoadingModal = () => {
     setModal(
