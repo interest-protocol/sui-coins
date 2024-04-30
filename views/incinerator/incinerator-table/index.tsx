@@ -9,17 +9,13 @@ import IncineratorTableHeader from './table-header';
 const IncineratorTable: FC = () => {
   const coinObject: any[] = [];
   return (
-    <Box
-      mb="l"
-      gap="l"
-      display="grid"
-      gridTemplateColumns={['1fr', '1fr', '1fr 1fr', '1fr 1fr', '1fr 1fr 1fr']}
-    >
+    <Box mb="l" gap="l" width="100%" display="grid" gridTemplateColumns="1fr">
+      <IncineratorTableHeader />
       {coinObject ? (
         <Box
           gap="s"
+          width="100%"
           display="flex"
-          width={['20rem', '20rem', '0rem', '51.188rem']}
           height="29.188rem"
           flexDirection="column"
           justifyContent="center"
@@ -39,7 +35,6 @@ const IncineratorTable: FC = () => {
       ) : (
         <Box overflowX="auto">
           <Motion as="table" rowGap="l" width="100%" mt="l">
-            <IncineratorTableHeader />
             <IncineratorTableBody />
           </Motion>
         </Box>
