@@ -56,12 +56,19 @@ export const AllObjectsProvider: FC<PropsWithChildren> = ({ children }) => {
 
       const objectsRaw = await getAllObjects(suiClient, currentAccount.address);
 
+      const objectGuardiansBlocklist = await fetch(
+        'https://guardians.suiet.app/object-list.json'
+      )
+        .then((response) => response.json?.())
+        .then((data) => data.blocklist)
+        .catch(() => OBJECT_GUARDIANS_BLOCKLIST);
+
       const objects: ReadonlyArray<ObjectData> = objectsRaw.reduce(
         (acc, objectRaw) => {
           if (!objectRaw.data?.content?.dataType) return acc;
           if (objectRaw.data.content.dataType !== 'moveObject') return acc;
           if (!objectRaw.data.content.hasPublicTransfer) return acc;
-          if (OBJECT_GUARDIANS_BLOCKLIST.includes(objectRaw.data.type!))
+          if (objectGuardiansBlocklist.includes(objectRaw.data.type!))
             return acc;
 
           return [

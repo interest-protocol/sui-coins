@@ -33,7 +33,6 @@ const SendSelectObjectHeader: FC = () => {
         width={['auto', '0px']}
         display={['block', 'none']}
       >
-        Sending:{' '}
         {symbol ||
           (type && type === displayName ? formatAddress(type) : displayName) ||
           'Select Token'}

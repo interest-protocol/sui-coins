@@ -33,7 +33,7 @@ const AirdropNftCoinsMethod: FC = () => {
     setValue('asset', nftsMap[collectionId]);
 
     const nft: NFTCollection = await fetch(
-      `/api/v1/nft-collection?id=${collectionId}`,
+      `/api/auth/v1/nft-collection?id=${collectionId}`,
       {
         method: 'GET',
         headers: {
@@ -112,8 +112,10 @@ const AirdropNftCoinsMethod: FC = () => {
                 >
                   <img
                     width="100%"
-                    src={(asset as NFTCollectionMetadata).img}
                     alt={(asset as NFTCollectionMetadata).name}
+                    src={`/images/nft/${
+                      (asset as NFTCollectionMetadata).id
+                    }.webp`}
                   />
                 </Box>
               )}
