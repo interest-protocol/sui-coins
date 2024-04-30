@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { fetchAllHolders } from '@/api/indexer';
 import { NFTCollectionMetadata } from '@/interface';
 import dbConnect from '@/server';
-import NFTCollectionModel from '@/server/model/nft-collection';
+import NFTCollectionModel from '@/server/model/mainnet/nft-collection';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
