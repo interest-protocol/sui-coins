@@ -8,7 +8,7 @@ import { noop } from '@/utils';
 import { TableHeaderData } from '../incinerator.data';
 
 const IncineratorTableHeader: FC = () => (
-  <Box as="thead">
+  <Box as="thead" m="xs">
     <Box as="tr">
       <Typography as="th" key={v4()} size="small" variant="label" width="1%">
         <Checkbox defaultValue={false} onClick={noop} label="" />
