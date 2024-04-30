@@ -23,6 +23,7 @@ const HeaderInfo: FC<InputProps> = ({ index }) => {
 
   return (
     <Box
+      mr="3rem"
       gap="2xs"
       top="0.2rem"
       display="flex"

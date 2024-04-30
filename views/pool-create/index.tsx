@@ -34,7 +34,7 @@ const PoolCreate = () => {
         flexDirection="column"
         justifyContent="center"
       >
-        <PoolCreateSteps steps={5} currentStep={currentStep} />
+        <PoolCreateSteps steps={stepContent.length} currentStep={currentStep} />
       </Box>
       {stepContent[currentStep]}
     </Layout>

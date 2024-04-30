@@ -4,10 +4,18 @@ export interface Token extends CoinData {
   value: string;
 }
 
+export enum CreatePoolStep {
+  PoolType,
+  PoolAlgorithm,
+  PoolCoins,
+  PoolSummary,
+}
+
 export interface CreatePoolForm {
   dex: string;
-  step: number;
   isStable: boolean;
+  step: CreatePoolStep;
+  explorerLink: string;
   type: 'CLAMM' | 'AMM';
   tokens: ReadonlyArray<Token>;
 }

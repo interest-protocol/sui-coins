@@ -1,16 +1,17 @@
 import { useCurrentAccount } from '@mysten/dapp-kit';
-import { normalizeSuiAddress } from '@mysten/sui.js/dist/cjs/utils';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { normalizeSuiAddress } from '@mysten/sui.js/utils';
 import invariant from 'tiny-invariant';
 
-import { PACKAGES } from '@/constants';
+import { OBJECTS, PACKAGES } from '@/constants';
 import { useNetwork } from '@/context/network';
-import { useWeb3 } from '@/hooks';
+import { useMovementClient, useWeb3 } from '@/hooks';
 import { getLpCoinBytecode } from '@/lib/move-template/lp-coin';
 import initMoveByteCodeTemplate from '@/lib/move-template/move-bytecode-template';
-import { getSpecificCoinAmount } from '@/utils';
+import { createObjectsParameter, getSafeValue } from '@/utils';
 
 import { GetByteCodeArgs, Token } from './pool-create.types';
+import { isPoolsCoinsOrdered } from './pool-create.utils';
 
 export const useCreateLpCoin = () => {
   const currentAccount = useCurrentAccount();
@@ -19,7 +20,6 @@ export const useCreateLpCoin = () => {
     if (!currentAccount) throw new Error('No account');
 
     const info: GetByteCodeArgs = {
-      // TODO get a defualt from Leo and ask the user for one
       imageUrl: 'https://www.interestprotocol.com/logo.png',
       description: `AMM Interest Protocol LpCoin for ${tokens.reduce(
         (acc, { symbol }) => `${acc ? `${acc}/` : ''}${symbol.toUpperCase()}`,
@@ -44,29 +44,118 @@ export const useCreateLpCoin = () => {
   };
 };
 
-export const useCreatePool = () => {
+export const useCreateAmmPool = () => {
   const network = useNetwork();
   const { coinsMap } = useWeb3();
+  const client = useMovementClient();
+  const currentAccount = useCurrentAccount();
 
-  return (
+  return async (
     values: ReadonlyArray<Token>,
     lpCoinType: string,
-    lpCoinTreasury: string
+    lpCoinTreasury: string,
+    isStable: boolean
   ) => {
-    invariant(+values[0].value > 0, 'Cannot add coinAAmount');
-    invariant(+values[1].value > 0, 'Cannot add coinBAmount');
+    invariant(currentAccount, 'You must log into your wallet');
+    invariant(values && values.length, 'You must select at least 2 coins');
+
+    const [coinX, coinY] = values;
+
+    invariant(coinX.type && coinY.type, 'Coin types not found');
+    invariant(coinX.value && coinY.value, 'Deposit more than zero coins');
 
     const txb = new TransactionBlock();
 
-    const objectId = PACKAGES[network].DEX;
+    const objects = OBJECTS[network];
+    const packages = PACKAGES[network];
 
-    const coinAAmount = getSpecificCoinAmount(values[0])(txb, coinsMap);
-    const coinBAmount = getSpecificCoinAmount(values[1])(txb, coinsMap);
+    const isOrdered = await isPoolsCoinsOrdered(values, client, network);
 
-    txb.moveCall({
-      target: `${objectId}::interest_protocol::new_pool`,
-      typeArguments: [values[0].type, values[1].type, lpCoinType],
-      arguments: [txb.object(lpCoinTreasury), coinAAmount, coinBAmount],
+    const walletCoinX = coinsMap[coinX.type];
+    const walletCoinY = coinsMap[coinY.type];
+
+    const safeValueX = getSafeValue({
+      coinValue: coinX.value,
+      coinType: coinX.type,
+      decimals: coinX.decimals || 0,
+      balance: walletCoinX.balance,
     });
+
+    const safeValueY = getSafeValue({
+      coinValue: coinY.value,
+      coinType: coinY.type,
+      decimals: coinY.decimals || 0,
+      balance: walletCoinY.balance,
+    });
+
+    const coinXInList = createObjectsParameter({
+      coinsMap,
+      txb: txb,
+      type: coinX.type,
+      amount: safeValueX.toString(),
+    });
+
+    const coinYInList = createObjectsParameter({
+      coinsMap,
+      txb: txb,
+      type: coinY.type,
+      amount: safeValueY.toString(),
+    });
+
+    const coinXIn = txb.moveCall({
+      target: `${packages.UTILS}::utils::handle_coin_vector`,
+      typeArguments: [coinX.type],
+      arguments: [
+        txb.makeMoveVec({ objects: coinXInList }),
+        txb.pure(safeValueX.toString()),
+      ],
+    });
+
+    const coinYIn = txb.moveCall({
+      target: `${packages.UTILS}::utils::handle_coin_vector`,
+      typeArguments: [coinY.type],
+      arguments: [
+        txb.makeMoveVec({ objects: coinYInList }),
+        txb.pure(safeValueY.toString()),
+      ],
+    });
+
+    const typeArguments = isOrdered
+      ? [coinX.type, coinY.type, lpCoinType]
+      : [coinY.type, coinX.type, lpCoinType];
+
+    const [coin0, coin1] = isOrdered ? [coinXIn, coinYIn] : [coinYIn, coinXIn];
+
+    const [coinXMeta, coinYMeta, lpCoinMeta] = await Promise.all([
+      client.getCoinMetadata({ coinType: coinX.type }),
+      client.getCoinMetadata({ coinType: coinY.type }),
+      client.getCoinMetadata({ coinType: lpCoinType }),
+    ]);
+
+    const coin0Meta = isOrdered ? coinXMeta : coinYMeta;
+    const coin1Meta = isOrdered ? coinYMeta : coinXMeta;
+
+    invariant(coin0Meta && coin0Meta.id, 'CoinX does not have a metadata');
+    invariant(coin1Meta && coin1Meta.id, 'CoinY does not have a metadata');
+    invariant(lpCoinMeta && lpCoinMeta.id, 'lpCoin does not have a metadata');
+
+    const lpCoin = txb.moveCall({
+      target: `${packages.DEX}::interest_protocol_amm::new_pool`,
+      typeArguments,
+      arguments: [
+        txb.object(objects.REGISTRY),
+        coin0,
+        coin1,
+        txb.object(lpCoinTreasury),
+        txb.object(coin0Meta.id),
+        txb.object(coin1Meta.id),
+        txb.object(lpCoinMeta?.id),
+        txb.pure(!isStable),
+      ],
+    });
+
+    txb.transferObjects([lpCoin], txb.pure.address(currentAccount.address));
+
+    return txb;
   };
 };

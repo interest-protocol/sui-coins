@@ -93,7 +93,7 @@ const SelectToken: FC<InputProps> = ({ index }) => {
           ),
         })}
       >
-        <Typography size="large" variant="label" p="xs">
+        <Typography size="large" variant="label" p="xs" whiteSpace="nowrap">
           {currentSymbol || 'Select Token'}
         </Typography>
         {currentSymbol ? (

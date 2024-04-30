@@ -1125,7 +1125,7 @@
   dependencies:
     bs58 "^5.0.0"
 
-"@mysten/dapp-kit@^0.12.9":
+"@mysten/dapp-kit@^0.12.10":
   version "0.12.10"
   resolved "https://registry.yarnpkg.com/@mysten/dapp-kit/-/dapp-kit-0.12.10.tgz#e6411aef8439bfdd27d6d41fc0239b131c610159"
   integrity sha512-PBeLOdXJOCzyHg9LFU1zGEW92/rlo4767SG9wIZ/f1x1HwdDQVTIy1lDOsR6GC4hEqhB3ENG4X/Wcee5vcsOKA==
@@ -1142,7 +1142,7 @@
     clsx "^2.0.0"
     zustand "^4.4.1"
 
-"@mysten/sui.js@0.52.0":
+"@mysten/sui.js@0.52.0", "@mysten/sui.js@^0.52.0":
   version "0.52.0"
   resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.52.0.tgz#2916f79fc5d7832fa538d358b15fe44ade330039"
   integrity sha512-oqfA0O/STWDJgnxvu07HsDRybG8yD3pfqAhADFawZTthbPdl6U01qJQVCzW7yf2OqG9AkYWHT+392rVcVjbcnw==
@@ -1567,10 +1567,10 @@
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.1.1.tgz#1ec17e2edbec25c8306d424ecfbf13c7de1aaa31"
   integrity sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==
 
-"@polymedia/suits@^0.0.39":
-  version "0.0.39"
-  resolved "https://registry.yarnpkg.com/@polymedia/suits/-/suits-0.0.39.tgz#26b16233f8dbc41515fdcc79266b1f54295c1549"
-  integrity sha512-UR904waKIDXwDATxlERdas4gVRfCLwFxe/Gp5AeUUzk2+yBuhx0PAgKef/EUSjlA942iDZkm0z5Nx8zZ4kpMLw==
+"@polymedia/suits@^0.0.40":
+  version "0.0.40"
+  resolved "https://registry.yarnpkg.com/@polymedia/suits/-/suits-0.0.40.tgz#529a1637cca1a5c542125a5e2e80952c91499033"
+  integrity sha512-j5nukm1Td6cabucZGvKTPVD/COl2FM3jBwfRkqYIGt1IJeAZKnXaf+gk3s+zpu1M20Ok/lMci4i1Q5eK3PR3kA==
   dependencies:
     "@mysten/sui.js" "^0.51.2"
 
@@ -9863,6 +9863,7 @@ word-wrap@^1.2.5:
   integrity sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA==
 
 "wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@^7.0.0:
+  name wrap-ansi-cjs
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
