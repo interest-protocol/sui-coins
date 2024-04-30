@@ -13,13 +13,10 @@ export interface CreatePoolForm {
 }
 
 export interface GetByteCodeArgs {
-  decimals: number;
-  totalSupply: bigint;
-  name: string;
   imageUrl: string;
-  symbol: string;
-  recipient: string;
   description: string;
+  coinTypes: string[];
+  isStable: boolean;
 }
 
 export interface ExtractedCoinData {

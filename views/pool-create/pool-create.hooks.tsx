@@ -10,31 +10,23 @@ import { getLpCoinBytecode } from '@/lib/move-template/lp-coin';
 import initMoveByteCodeTemplate from '@/lib/move-template/move-bytecode-template';
 import { getSpecificCoinAmount } from '@/utils';
 
-import { Token } from './pool-create.types';
+import { GetByteCodeArgs, Token } from './pool-create.types';
 
 export const useCreateLpCoin = () => {
   const currentAccount = useCurrentAccount();
 
-  return async (tokens: ReadonlyArray<Token>) => {
+  return async (tokens: ReadonlyArray<Token>, isStable: boolean) => {
     if (!currentAccount) throw new Error('No account');
 
-    const info = {
-      decimals: 9,
-      totalSupply: 0n,
-      recipient: currentAccount.address,
+    const info: GetByteCodeArgs = {
+      // TODO get a defualt from Leo and ask the user for one
       imageUrl: 'https://www.interestprotocol.com/logo.png',
-      name: `i${tokens.reduce(
+      description: `AMM Interest Protocol LpCoin for ${tokens.reduce(
         (acc, { symbol }) => `${acc ? `${acc}/` : ''}${symbol.toUpperCase()}`,
         ''
       )}`,
-      symbol: `ipx-s-${tokens.reduce(
-        (acc, { symbol }) => `${acc ? `${acc}-` : ''}${symbol.toLowerCase()}`,
-        ''
-      )}`,
-      description: `CLAMM Interest Protocol LpCoin for ${tokens.reduce(
-        (acc, { symbol }) => `${acc ? `${acc}/` : ''}${symbol.toUpperCase()}`,
-        ''
-      )}`,
+      coinTypes: tokens.map((x) => x.type),
+      isStable,
     };
 
     await initMoveByteCodeTemplate('/move_bytecode_template_bg.wasm');

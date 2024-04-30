@@ -52,15 +52,18 @@ const updateUrl = (modifiedByteCode: Uint8Array, url: string) =>
 export const getLpCoinBytecode = (info: GetByteCodeArgs) => {
   const templateByteCode = fromHEX(getLpCoinTemplateByteCode());
 
+  const initialModuleName = info.isStable ? 'ipx_s_' : 'ipx_v_';
+  const otwArray = info.coinTypes.map((x) => x.split('::')[2]).join('_');
+
   const modifiedByteCode = template.update_identifiers(templateByteCode, {
-    LP_COIN: info.symbol.toUpperCase().replaceAll('-', '_'),
-    lp_coin: info.symbol.toLowerCase().replaceAll('-', '_'),
+    LP_COIN: initialModuleName.toUpperCase() + otwArray.toUpperCase(),
+    lp_coin: initialModuleName + otwArray,
   });
 
   let updated = updateDecimals(modifiedByteCode, 9);
 
-  updated = updateSymbol(updated, info.symbol);
-  updated = updateName(updated, info.name);
+  updated = updateSymbol(updated, 'ipxsymbol');
+  updated = updateName(updated, 'ipxname');
 
   updated = updateDescription(updated, info.description ?? '');
   updated = updateUrl(updated, info.imageUrl ?? '');

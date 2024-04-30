@@ -14,10 +14,15 @@ import {
   CoinsMap,
 } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { CoinMetadataWithType } from '@/interface';
+import { FixedPointMath } from '@/lib';
 
-import { isSameAddress } from '../address';
+import { isSameStructTag } from '../address';
 import { getBasicCoinMetadata } from '../fn';
-import { CreateVectorParameterArgs, GetCoinsArgs } from './coin.types';
+import {
+  CreateVectorParameterArgs,
+  GetCoinsArgs,
+  GetSafeValueArgs,
+} from './coin.types';
 
 export const isSymbol = (text: string): boolean =>
   new RegExp(/^[A-Z-]+$/g).test(text);
@@ -153,7 +158,7 @@ export const getCoin = async (
       .catch(() => resolve({ type, ...getBasicCoinMetadata(type) }));
   });
 
-export const isSui = (type: string) => isSameAddress(type, SUI_TYPE_ARG);
+export const isSui = (type: string) => isSameStructTag(type, SUI_TYPE_ARG);
 
 export const getCoins = async ({
   suiClient,
@@ -177,4 +182,20 @@ export const getCoins = async ({
   });
 
   return [...data, ...newData];
+};
+
+export const getSafeValue = ({
+  coinValue,
+  coinType,
+  balance,
+  decimals,
+}: GetSafeValueArgs) => {
+  const amount0 = FixedPointMath.toBigNumber(coinValue, decimals).decimalPlaces(
+    0
+  );
+  const safeAmount0 = amount0.gt(balance) ? balance : amount0;
+  const minusOne = safeAmount0.minus(1_000_000_000);
+  if (isSui(coinType)) return minusOne.isNegative() ? BigNumber(0) : minusOne;
+
+  return safeAmount0;
 };

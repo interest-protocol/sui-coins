@@ -1,8 +1,4 @@
-import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
-
-import { FixedPointMath } from '@/lib';
-import { PoolToken } from '@/views/pools/pools.types';
 
 export const getAmmOptimalCoin0Value = (
   coinYAmount: BigNumber,
@@ -79,17 +75,4 @@ export const getAmmXYAmount = (
   const optimalAmountY = lpAmount.multipliedBy(coinYReserves).dividedBy(supply);
 
   return [optimalAmountX, optimalAmountY];
-};
-
-export const getSafeValue = (coin: PoolToken, balance: BigNumber) => {
-  const amount0 = FixedPointMath.toBigNumber(
-    coin.value,
-    coin.decimals
-  ).decimalPlaces(0);
-  const safeAmount0 = amount0.gt(balance) ? balance : amount0;
-  const minusOne = safeAmount0.minus(1_000_000_000);
-  if (coin.symbol === SUI_TYPE_ARG)
-    return minusOne.isNegative() ? BigNumber(0) : minusOne;
-
-  return safeAmount0;
 };

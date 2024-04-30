@@ -8,8 +8,8 @@ import SelectType from './select-type';
 import SelectVolatility from './select-volatility';
 
 export const stepTitle: ReadonlyArray<ReactNode> = [
-  `What type of pool\nyou want to create?`,
-  `Choose your \nalgorithm`,
+  `What type of do you pool\nyou want to create?`,
+  `Choose an \nalgorithm`,
   `Select your coin and \n initial Deposit`,
   `CHOOSE IN WITCH DEX \nYOU WANT YOUR POOL`,
   `Select your coin and \ninitial Deposit`,

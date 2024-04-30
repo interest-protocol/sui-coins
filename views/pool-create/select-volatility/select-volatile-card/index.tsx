@@ -16,7 +16,7 @@ const SelectVolatileCard: FC = () => {
       illustration={<Illustration />}
       isSelected={isStable === false}
       onSelect={() => setValue('isStable', false)}
-      description="Will allow you to have a volatile pair, 3 line max."
+      description="Supports up to 3 Coins."
     />
   );
 };

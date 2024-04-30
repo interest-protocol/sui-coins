@@ -7,6 +7,32 @@ export const MINT_MODULE_NAME_MAP: Record<string, string> = {
   [USDC_TYPE]: 'usdc',
 };
 
+export const AMM_CURVES = {
+  [Network.DEVNET]: {
+    STABLE:
+      '0xf7a29e0a883d131f73307e1b730f016c20ca6310baae013c75fa889673d10055::curves::Stable',
+    VOLATILE:
+      '0xf7a29e0a883d131f73307e1b730f016c20ca6310baae013c75fa889673d10055::curves::Volatile',
+  },
+  [Network.TESTNET]: {
+    STABLE:
+      '0xf7a29e0a883d131f73307e1b730f016c20ca6310baae013c75fa889673d10055::curves::Stable',
+    VOLATILE:
+      '0xf7a29e0a883d131f73307e1b730f016c20ca6310baae013c75fa889673d10055::curves::Volatile',
+  },
+};
+
+export const OBJECTS = {
+  [Network.DEVNET]: {
+    REGISTRY:
+      '0xc78ccb4a0e97102699c10015858da1ab0a79c3d862055e6404cf5b18db9ef282',
+  },
+  [Network.TESTNET]: {
+    REGISTRY:
+      '0xc78ccb4a0e97102699c10015858da1ab0a79c3d862055e6404cf5b18db9ef282',
+  },
+};
+
 export const PACKAGES = {
   [Network.DEVNET]: {
     COINS: '0x8e614b777730a3b481a5f30b53be062fc0c01f93c6fdfe9fb19ffbae7777b700',

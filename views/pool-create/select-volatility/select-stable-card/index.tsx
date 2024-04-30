@@ -16,7 +16,7 @@ const SelectStableCard: FC = () => {
       isSelected={isStable === true}
       illustration={<Illustration />}
       onSelect={() => setValue('isStable', true)}
-      description="Will allow you to have a stable pair, 5 line max."
+      description="Supports up to 5 Coins."
     />
   );
 };
