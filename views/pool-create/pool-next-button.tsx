@@ -70,20 +70,30 @@ const PoolNextButton: FC = () => {
     <>
       {error && (
         <Box
-          p="s"
-          mx="xl"
-          gap="s"
-          display="flex"
+          p="2xl"
+          mb="xl"
+          mx="auto"
+          gap="2rem"
+          bg="container"
+          maxWidth="33rem"
           borderRadius="xs"
-          border="1px solid"
-          bg="errorContainer"
-          color="onErrorContainer"
-          borderColor="onErrorContainer"
         >
-          <DotErrorSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-          <Typography variant="label" size="medium">
-            {error}
-          </Typography>
+          <Box
+            p="s"
+            mx="xl"
+            gap="s"
+            display="flex"
+            borderRadius="xs"
+            border="1px solid"
+            bg="errorContainer"
+            color="onErrorContainer"
+            borderColor="onErrorContainer"
+          >
+            <DotErrorSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+            <Typography variant="label" size="medium">
+              {error}
+            </Typography>
+          </Box>
         </Box>
       )}
       <Button
