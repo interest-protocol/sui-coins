@@ -4,7 +4,7 @@ import invariant from 'tiny-invariant';
 
 import { Network } from '@/constants';
 import dbConnect from '@/server';
-import { getAllPools, handleServerError } from '@/server/utils';
+import { getPoolsByCoinTypes, handleServerError } from '@/server/utils';
 import { movementClient } from '@/utils';
 
 const handler: NextApiHandler = async (req, res) => {
@@ -13,16 +13,18 @@ const handler: NextApiHandler = async (req, res) => {
       await dbConnect();
 
       const client = movementClient[Network.DEVNET];
-      const pageNumber = pathOr(1, ['query', 'pageNumber'], req);
+      const coinInType = pathOr('', ['query', 'coinInType'], req);
+      const coinOutType = pathOr('', ['query', 'coinOutType'], req);
 
       invariant(client, 'Movement client not found');
+      invariant(
+        coinInType && coinOutType,
+        'Please provide both a coin in and coin out types'
+      );
 
-      const [pools, totalPages] = await getAllPools(client, pageNumber);
+      const pools = await getPoolsByCoinTypes(client, coinInType, coinOutType);
 
-      res.status(200).json({
-        pools,
-        totalPages,
-      });
+      res.status(200).json(pools);
     }
 
     res.status(405).send('Method Not Allowed!');

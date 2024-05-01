@@ -33,12 +33,15 @@ import {
 } from './pools.types';
 
 const Pools: FC<PoolCardListWrapper> = ({ network }) => {
-  const { data: pools, isLoading: arePoolsLoading } = usePools();
+  const { data, isLoading: arePoolsLoading } = usePools();
 
+  const safeData = data ? data : { pools: [], totalPages: 0 };
+
+  // TODO HANDLE PAGINATION
   return (
     <PoolCardListContent
       network={network}
-      pools={pools || []}
+      pools={safeData.pools}
       arePoolsLoading={arePoolsLoading}
     />
   );

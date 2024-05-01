@@ -2,7 +2,7 @@ import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import { FC } from 'react';
 
 import { SVGProps } from '@/components/svg/svg.types';
-import { LocalCoinMetadata, PoolTypeEnum } from '@/interface';
+import { LocalCoinMetadata } from '@/interface';
 import { ETHSVG, MOVESVG, USDCSVG } from '@/svg';
 
 import { Network } from './network';
@@ -150,54 +150,10 @@ export const REGISTRY_POOLS = {
   },
 } as Record<string, Record<string, RegistryPool>>;
 
-export const POOLS_ARRAY = [MOVE_ETH_STATE_ID, USDC_ETH_STATE_ID];
-
 export const STATE_KEY_TO_POOL_ID = {
   [USDC_ETH_STATE_ID]: USDC_ETH_POOL_ID,
   [MOVE_ETH_STATE_ID]: MOVE_ETH_POOL_ID,
 } as Record<string, string>;
-
-export const POOLS_MAP = {
-  [SC_V_MOVE_ETH]: MOVE_ETH_STATE_ID,
-  [SC_V_ETH_USDC]: USDC_ETH_STATE_ID,
-} as Record<string, string>;
-
-export const LP_COINS_MAP = {
-  [Network.DEVNET]: {
-    [SC_V_MOVE_ETH]: {
-      decimals: 18,
-      type: SC_V_MOVE_ETH,
-      symbol: 'sc-v-MOVE/ETH',
-    },
-    [SC_V_ETH_USDC]: {
-      decimals: 18,
-      type: SC_V_ETH_USDC,
-      symbol: 'sc-v-ETH/USDC',
-    },
-  },
-};
-
-export const RECOMMENDED_POOLS = {
-  [Network.DEVNET]: [
-    {
-      stable: false,
-      poolType: PoolTypeEnum.AMM,
-      stateKey: MOVE_ETH_STATE_ID,
-      poolObjectId: MOVE_ETH_POOL_ID,
-      lpCoin: LP_COINS_MAP[Network.DEVNET][SC_V_MOVE_ETH],
-      tokens: [COINS_MAP[ETH_TYPE], COINS_MAP[SUI_TYPE_ARG]],
-    },
-    {
-      stable: false,
-      poolType: PoolTypeEnum.AMM,
-      stateKey: USDC_ETH_STATE_ID,
-      poolObjectId: USDC_ETH_POOL_ID,
-      lpCoin: LP_COINS_MAP[Network.DEVNET][SC_V_ETH_USDC],
-      tokens: [COINS_MAP[ETH_TYPE], COINS_MAP[USDC_TYPE]],
-    },
-  ],
-  [Network.TESTNET]: [],
-};
 
 export const COINS_SVG_MAP_V2 = {
   [ETH_TYPE]: ETHSVG,

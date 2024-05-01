@@ -4,6 +4,7 @@ import { AmmPool, AmmServerPool } from '@/interface';
 import { convertServerPoolToClientPool, fetchPool, makeSWRKey } from '@/utils';
 
 import { useMovementClient } from '../use-movement-client';
+import { UsePoolsFetchReturn, UsePoolsReturn } from './use-pools.types';
 
 export const usePool = (parentId: string) => {
   const client = useMovementClient();
@@ -26,13 +27,16 @@ export const usePool = (parentId: string) => {
 };
 
 export const usePools = () =>
-  useSWR<ReadonlyArray<AmmPool>>(
+  useSWR<UsePoolsReturn>(
     `/api/auth/v1/get-pools`,
     async () => {
       const res = await fetch('/api/auth/v1/get-pools');
-      const pools = (await res.json()) as AmmServerPool[];
+      const { pools, totalPages } = (await res.json()) as UsePoolsFetchReturn;
 
-      return pools.map(convertServerPoolToClientPool);
+      return {
+        pools: pools.map((x) => convertServerPoolToClientPool(x)),
+        totalPages,
+      };
     },
     {
       revalidateOnFocus: false,

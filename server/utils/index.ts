@@ -3,8 +3,9 @@ import { isValidSuiObjectId } from '@mysten/sui.js/utils';
 import { toString } from 'ramda';
 import invariant from 'tiny-invariant';
 
+import { PAGE_SIZE } from '@/constants';
 import { AmmPool } from '@/interface';
-import PoolDevnet from '@/server/model/pool-devnet';
+import PoolDevnet, { PoolModel } from '@/server/model/pool-devnet';
 import { fetchPool, fetchPools } from '@/utils';
 
 export const savePool = async (client: SuiClient, poolId: string) => {
@@ -30,16 +31,48 @@ export const savePool = async (client: SuiClient, poolId: string) => {
   return newPool;
 };
 
-export const getAllPools = async (client: SuiClient): Promise<AmmPool[]> => {
-  const pools = await PoolDevnet.find({});
+export const getAllPools = async (
+  client: SuiClient,
+  pageNumber: number
+): Promise<[AmmPool[], number]> => {
+  const totalCount = await PoolDevnet.countDocuments();
+  const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+
+  const pools = await PoolDevnet.find({})
+    .skip((pageNumber - 1) * PAGE_SIZE)
+    .limit(PAGE_SIZE);
+
+  if (!pools || !pools.length) return [[], 0];
+
+  return [
+    await fetchPools(
+      client,
+      pools.map((x) => x.poolObjectId),
+      pools.map((x) => x.stateId)
+    ),
+    totalPages,
+  ];
+};
+
+export const getPoolsByCoinTypes = async (
+  client: SuiClient,
+  coinInType: string,
+  coinOutType: string
+): Promise<readonly PoolModel[]> => {
+  const query = {
+    $or: [
+      { coinX: coinInType },
+      { coinX: coinOutType },
+      { coinY: coinInType },
+      { coinY: coinOutType },
+    ],
+  };
+
+  const pools = (await PoolDevnet.find(query)) as readonly PoolModel[];
 
   if (!pools || !pools.length) return [];
 
-  return await fetchPools(
-    client,
-    pools.map((x) => x.poolObjectId),
-    pools.map((x) => x.stateId)
-  );
+  return pools;
 };
 
 export const handleServerError = (
