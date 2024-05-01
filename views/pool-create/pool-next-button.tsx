@@ -63,7 +63,7 @@ const PoolNextButton: FC = () => {
         { type: '', symbol: '', decimals: 0, value: '' },
         { type: '', symbol: '', decimals: 0, value: '' },
       ]),
-    () => setValue('dex', ''),
+    // () => setValue('dex', ''),
   ];
 
   return (
