@@ -47,7 +47,7 @@ const parsePool = (x: SuiObjectResponse): AmmPool => ({
   ),
   type: pathOr('', ['value', 'type'], x),
   coinTypes: getPoolCoinTypes(pathOr('', ['value', 'type'], x)),
-  poolType: PoolTypeEnum.amm,
+  poolType: PoolTypeEnum.AMM,
   isVolatile: pathOr(
     true,
     ['value', 'fields', 'fees', 'fields', 'volatile'],
