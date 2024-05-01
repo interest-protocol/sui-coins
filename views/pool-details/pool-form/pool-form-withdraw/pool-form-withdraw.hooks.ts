@@ -34,7 +34,12 @@ export const useWithdraw = () => {
 
     const txb = new TransactionBlock();
 
-    const amount = getSafeValue(lpCoin, lpCoinWallet.balance);
+    const amount = getSafeValue({
+      coinType: lpCoin.type,
+      coinValue: lpCoin.value,
+      decimals: lpCoin.decimals,
+      balance: lpCoinWallet.balance,
+    });
 
     const lpCoinInList = createObjectsParameter({
       coinsMap,
