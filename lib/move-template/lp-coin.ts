@@ -60,11 +60,6 @@ export const getLpCoinBytecode = (info: GetByteCodeArgs) => {
     lp_coin: initialModuleName.toLowerCase() + otwArray.toLowerCase(),
   });
 
-  console.log({
-    LP_COIN: initialModuleName.toUpperCase() + otwArray.toUpperCase(),
-    lp_coin: initialModuleName.toLowerCase() + otwArray.toLowerCase(),
-  });
-
   let updated = updateDecimals(modifiedByteCode, 9);
 
   updated = updateSymbol(updated, 'ipxsymbol');
