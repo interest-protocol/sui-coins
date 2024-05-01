@@ -7,7 +7,6 @@ import BigNumber from 'bignumber.js';
 import { useFormContext } from 'react-hook-form';
 
 import { PACKAGES } from '@/constants';
-import { REGISTRY_POOLS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks';
 import { FixedPointMath } from '@/lib';
@@ -101,7 +100,8 @@ const swap = async ({
       { coinIn: coinInType, coinOut: coinOutType, lpCoin: lpCoinType },
       index
     ) => {
-      const poolId = REGISTRY_POOLS[coinInType][coinOutType].poolId;
+      // const poolId = REGISTRY_POOLS[coinInType][coinOutType].poolId;
+      const poolId = '';
 
       // FirstSwap
       if (index === 0) {

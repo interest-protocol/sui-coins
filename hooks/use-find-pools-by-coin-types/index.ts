@@ -8,6 +8,7 @@ export const useFindPoolsByCoinTypes = () => {
   const { isLoading, data, ...extra } = usePools();
 
   const safeData = data ? data : { pools: [], totalPages: 0 };
+
   return {
     isLoading: isLoading || isFetchingCoinBalances,
     data: safeData.pools.filter((x) => coinsMap[x.coinTypes.lpCoin]),

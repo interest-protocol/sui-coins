@@ -1,13 +1,13 @@
+import { useSuiClient } from '@mysten/dapp-kit';
 import useSWR from 'swr';
 
 import { AmmPool, AmmServerPool } from '@/interface';
 import { convertServerPoolToClientPool, fetchPool, makeSWRKey } from '@/utils';
 
-import { useMovementClient } from '../use-movement-client';
 import { UsePoolsFetchReturn, UsePoolsReturn } from './use-pools.types';
 
 export const usePool = (parentId: string) => {
-  const client = useMovementClient();
+  const client = useSuiClient();
 
   return useSWR<AmmPool | null>(
     makeSWRKey([], usePool.name + parentId),

@@ -1,3 +1,4 @@
+import { useSuiClient } from '@mysten/dapp-kit';
 import { BigNumber } from 'bignumber.js';
 import { prop } from 'ramda';
 import { FC, useEffect } from 'react';
@@ -6,7 +7,6 @@ import useSWR from 'swr';
 import { useDebounce } from 'use-debounce';
 
 import { useNetwork } from '@/context/network';
-import { useMovementClient } from '@/hooks';
 import { FixedPointMath } from '@/lib';
 import { makeSWRKey } from '@/utils';
 import {
@@ -31,7 +31,7 @@ const SwapManagerField: FC<SwapManagerProps> = ({
   setValueName,
 }) => {
   const network = useNetwork();
-  const client = useMovementClient();
+  const client = useSuiClient();
   const [from] = useDebounce(useWatch({ control, name }), 900);
 
   const lock = useWatch({ control, name: 'lock' });

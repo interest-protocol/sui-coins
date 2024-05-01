@@ -9,16 +9,18 @@ import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
 
-import { CONTROLLERS_MAP } from '@/constants';
-import { COINS } from '@/constants/coins';
-import { TOKEN_SYMBOL } from '@/constants/coins';
-import { MINT_MODULE_NAME_MAP, PACKAGES } from '@/constants/packages';
+import { TokenIcon } from '@/components';
+import {
+  COINS,
+  CONTROLLERS_MAP,
+  MINT_MODULE_NAME_MAP,
+  PACKAGES,
+} from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useUserMintEpoch, useWeb3 } from '@/hooks';
 import { useModal } from '@/hooks/use-modal';
 import { useSuiSystemState } from '@/hooks/use-sui-system-state';
 import { CoinData } from '@/interface';
-import { TOKEN_ICONS } from '@/lib';
 import { ChevronDownSVG } from '@/svg';
 import { showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
 import { requestMov } from '@/views/faucet/faucet.utils';
@@ -34,16 +36,13 @@ const MintForm: FC = () => {
   const signTransactionBlock = useSignTransactionBlock();
   const currentAccount = useCurrentAccount();
 
-  const SelectedIcon = TOKEN_ICONS[network][selected.symbol];
-
   const { data } = useSuiSystemState();
 
   const lastMintEpoch = useUserMintEpoch();
 
   const isSameEpoch =
     !!Number(data?.epoch) &&
-    (lastMintEpoch as Record<TOKEN_SYMBOL, string>)[selected.symbol] ===
-      data?.epoch;
+    (lastMintEpoch as Record<string, string>)[selected.symbol] === data?.epoch;
 
   const handleMint = async () => {
     try {
@@ -89,7 +88,7 @@ const MintForm: FC = () => {
   };
 
   const onSelect = async ({ decimals, symbol, type }: CoinData) => {
-    setSelected({ symbol: symbol as TOKEN_SYMBOL, type, decimals });
+    setSelected({ symbol: symbol, type, decimals });
     handleClose();
   };
 
@@ -100,7 +99,7 @@ const MintForm: FC = () => {
         initial={{ scale: 0.85 }}
         transition={{ duration: 0.3 }}
       >
-        <SelectTokenModal closeModal={handleClose} onSelect={onSelect} />
+        <SelectTokenModal closeModal={handleClose} onSelect={onSelect} simple />
       </Motion>,
       {
         isOpen: true,
@@ -153,21 +152,12 @@ const MintForm: FC = () => {
               color: 'unset',
             }}
             PrefixIcon={
-              <Box
-                display="flex"
-                bg="onSurface"
-                width="2.5rem"
-                height="2rem"
-                borderRadius="xs"
-                alignItems="center"
-                justifyContent="center"
-              >
-                <SelectedIcon
-                  width="100%"
-                  maxWidth="1.5rem"
-                  maxHeight="1.25rem"
-                />
-              </Box>
+              <TokenIcon
+                withBg
+                network={network}
+                type={selected.type}
+                symbol={selected.symbol}
+              />
             }
             SuffixIcon={
               <Box

@@ -4,7 +4,6 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import TokenIcon from '@/components/token-icon';
-import { TOKEN_ICONS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
 import { CoinData } from '@/interface';
@@ -31,8 +30,6 @@ const SelectToken: FC<InputProps> = ({ label }) => {
     symbol: undefined,
     type: undefined,
   };
-
-  const Icon = TOKEN_ICONS[network][currentSymbol];
 
   const changeURL = (type: string) => {
     const searchParams = new URLSearchParams(location.search);
@@ -104,25 +101,13 @@ const SelectToken: FC<InputProps> = ({ label }) => {
         borderRadius="xs"
         bg="highestContainer"
         onClick={openModal}
-        {...(Icon && {
+        {...(currentSymbol && {
           PrefixIcon: (
-            <Box
-              as="span"
-              width="2.5rem"
-              height="2.5rem"
-              bg="onSurface"
-              color="onPrimary"
-              borderRadius="xs"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <TokenIcon
-                network={network}
-                symbol={currentSymbol}
-                type={currentToken.type}
-              />
-            </Box>
+            <TokenIcon
+              network={network}
+              symbol={currentSymbol}
+              type={currentToken.type}
+            />
           ),
         })}
       >

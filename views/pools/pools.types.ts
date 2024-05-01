@@ -1,4 +1,3 @@
-import { TOKEN_SYMBOL } from '@/constants/coins';
 import { AmmPool } from '@/interface';
 
 import { ISwapSettings } from '../swap/swap.types';
@@ -31,9 +30,9 @@ export interface PoolCardListContentProps {
 }
 
 export interface CoinData {
-  decimals: number;
-  symbol: TOKEN_SYMBOL | string;
   type: string;
+  symbol: string;
+  decimals: number;
 }
 
 export interface PoolToken extends CoinData {

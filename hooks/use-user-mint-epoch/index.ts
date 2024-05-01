@@ -1,18 +1,21 @@
+import { useSuiClient } from '@mysten/dapp-kit';
 import { bcs } from '@mysten/sui.js/bcs';
 import { SuiClient } from '@mysten/sui.js/client';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import useSWR from 'swr';
 
 import { CONTROLLERS_MAP } from '@/constants';
-import { ETH_TYPE, USDC_TYPE } from '@/constants/coins';
-import { TOKEN_SYMBOL } from '@/constants/coins';
-import { Network } from '@/constants/network';
-import { MINT_MODULE_NAME_MAP, PACKAGES } from '@/constants/packages';
+import {
+  ETH_TYPE,
+  MINT_MODULE_NAME_MAP,
+  Network,
+  PACKAGES,
+  USDC_TYPE,
+} from '@/constants';
 import { useNetwork } from '@/context/network';
 import { makeSWRKey } from '@/utils';
 import { getReturnValuesFromInspectResults } from '@/utils';
 
-import { useMovementClient } from '../use-movement-client';
 import { useWeb3 } from '../use-web3';
 
 const getLastMintEpoch = async (
@@ -45,9 +48,9 @@ const getLastMintEpoch = async (
 };
 
 export const useUserMintEpoch = () => {
-  const { account } = useWeb3();
-  const client = useMovementClient();
   const network = useNetwork();
+  const client = useSuiClient();
+  const { account } = useWeb3();
 
   const { data } = useSWR(
     makeSWRKey([account], ''),
@@ -60,8 +63,8 @@ export const useUserMintEpoch = () => {
       ]);
 
       return {
-        [TOKEN_SYMBOL.ETH]: ethLastMintResponse,
-        [TOKEN_SYMBOL.USDC]: usdcLastMintEpoch,
+        ETH: ethLastMintResponse,
+        USDC: usdcLastMintEpoch,
       };
     },
     {
@@ -74,8 +77,8 @@ export const useUserMintEpoch = () => {
 
   return (
     data ?? {
-      [TOKEN_SYMBOL.ETH]: '0',
-      [TOKEN_SYMBOL.USDC]: '0',
+      ETH: '0',
+      USDC: '0',
     }
   );
 };

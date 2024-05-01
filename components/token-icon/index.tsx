@@ -2,9 +2,9 @@ import { Box, ProgressIndicator } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import useSWR from 'swr';
 
-import { TOKEN_ICONS } from '@/constants/coins';
-import { DefaultSVG } from '@/svg';
+import { DefaultTokenSVG } from '@/svg';
 
+import { TOKEN_ICONS } from './token-icon.data';
 import { TokenIconProps, TypeBasedIcon } from './token-icon.types';
 import { isTypeBased } from './token-icons.utils';
 
@@ -52,7 +52,7 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
         width={`calc(${size} * 1.66)`}
         height={`calc(${size} * 1.66)`}
         borderRadius={rounded ? 'full' : 'xs'}
-        {...(!props.url && { bg: 'black', color: 'white' })}
+        {...(!props.url && { bg: 'onSurface', color: 'surface' })}
       >
         {props.url ? (
           <Box
@@ -79,7 +79,7 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
             />
           </Box>
         ) : (
-          <DefaultSVG
+          <DefaultTokenSVG
             width="100%"
             maxWidth={size ?? '1.5rem'}
             maxHeight={size ?? '1.5rem'}
@@ -101,8 +101,9 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
         width={`calc(${size} * 1.66)`}
         height={`calc(${size} * 1.66)`}
         borderRadius={rounded || !withBg ? 'full' : 'xs'}
+        {...(withBg && { bg: 'onSurface', color: 'surface' })}
       >
-        <DefaultSVG
+        <DefaultTokenSVG
           width="100%"
           maxWidth={size ?? '1.5rem'}
           maxHeight={size ?? '1.5rem'}
@@ -120,6 +121,7 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
         width={`calc(${size} * 1.66)`}
         height={`calc(${size} * 1.66)`}
         borderRadius={rounded ? 'full' : 'xs'}
+        {...(withBg && { bg: 'onSurface', color: 'surface' })}
       >
         <Box
           overflow="hidden"
@@ -155,7 +157,7 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
         width={`calc(${size} * 1.66)`}
         height={`calc(${size} * 1.66)`}
         borderRadius={rounded ? 'full' : 'xs'}
-        {...(withBg && { bg: 'black', color: 'white' })}
+        {...(withBg && { bg: 'onSurface', color: 'surface' })}
       >
         <TokenIcon
           width="100%"

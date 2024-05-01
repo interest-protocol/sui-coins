@@ -1,11 +1,11 @@
+import { useSuiClient } from '@mysten/dapp-kit';
 import useSWR from 'swr';
 
 import { makeSWRKey } from '@/utils';
 
-import { useMovementClient } from '../use-movement-client';
-
 export const useSuiSystemState = () => {
-  const client = useMovementClient();
+  const client = useSuiClient();
+
   return useSWR(
     makeSWRKey([], client.getLatestSuiSystemState.name),
     async () => client.getLatestSuiSystemState(),

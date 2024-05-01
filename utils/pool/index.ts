@@ -3,11 +3,10 @@ import { getSuiObjectResponseFields } from '@polymedia/suits';
 import BigNumber from 'bignumber.js';
 import { pathOr } from 'ramda';
 
-import { STATE_KEY_TO_POOL_ID } from '@/constants/coins';
 import { AmmPool, AmmServerPool, PoolTypeEnum } from '@/interface';
 
 const parsePool = (x: SuiObjectResponse, poolId: string): AmmPool => ({
-  poolId: poolId ?? STATE_KEY_TO_POOL_ID[pathOr('', ['id', 'id'], x)],
+  poolId: poolId,
   stateId: pathOr('', ['id', 'id'], x),
   adminBalanceX: BigNumber(
     pathOr('0', ['value', 'fields', 'admin_balance_x'], x)

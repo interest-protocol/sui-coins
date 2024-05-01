@@ -6,8 +6,8 @@ import {
 import { normalizeSuiAddress } from '@mysten/sui.js/utils';
 import { pathOr } from 'ramda';
 
-import { BASE_COINS, REGISTRY_POOLS, RegistryPool } from '@/constants/coins';
-import { PACKAGES } from '@/constants/packages';
+import { Network, PACKAGES } from '@/constants';
+import { RegistryPool } from '@/interface';
 import { getReturnValuesFromInspectResults } from '@/utils';
 import { SwapPath } from '@/views/swap/swap.types';
 
@@ -24,7 +24,9 @@ export const quoteAmountOut = async ({
   let nextAmountIn: TransactionResult | null = null;
 
   swapPath.forEach(({ coinIn, coinOut, lpCoin }, index) => {
-    const pool = REGISTRY_POOLS[coinIn][coinOut].poolId;
+    // const pool = REGISTRY_POOLS[coinIn][coinOut].poolId;
+
+    const pool = '';
 
     nextAmountIn = txb.moveCall({
       target: `${PACKAGES[network].DEX}::quote::amount_out`,
@@ -63,7 +65,8 @@ export const quoteAmountIn = async ({
   let nextAmountOut: TransactionResult | null = null;
 
   swapPath.forEach(({ coinIn, coinOut, lpCoin }, index) => {
-    const pool = REGISTRY_POOLS[coinIn][coinOut].poolId;
+    // const pool = REGISTRY_POOLS[coinIn][coinOut].poolId;
+    const pool = '';
 
     nextAmountOut = txb.moveCall({
       target: `${PACKAGES[network].DEX}::quote::amount_in`,
@@ -99,7 +102,8 @@ export const findSwapPaths = ({
   const pool = pathOr<null | RegistryPool>(
     null,
     [coinInType, coinOutType],
-    REGISTRY_POOLS
+    // REGISTRY_POOLS
+    {}
   );
 
   // MOVE -> ETH
@@ -117,18 +121,26 @@ export const findSwapPaths = ({
 
   const paths = [] as Array<SwapPath>;
 
+  // BASE_COINS[network]
+  const BASE_COINS: Record<Network, ReadonlyArray<string>> = {
+    [Network.DEVNET]: [''],
+    [Network.TESTNET]: [''],
+  };
+
   for (const baseCoin of BASE_COINS[network]) {
     const firstPool = pathOr<null | RegistryPool>(
       null,
       [coinInType, baseCoin],
-      REGISTRY_POOLS
+      // REGISTRY_POOLS
+      {}
     );
 
     if (firstPool) {
       const secondPool = pathOr<null | RegistryPool>(
         null,
         [baseCoin, coinOutType],
-        REGISTRY_POOLS
+        // REGISTRY_POOLS
+        {}
       );
 
       if (secondPool)

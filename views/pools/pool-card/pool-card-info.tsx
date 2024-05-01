@@ -3,9 +3,9 @@ import { pathOr } from 'ramda';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
+import { TokenIcon } from '@/components';
 import { useNetwork } from '@/context/network';
-import { TOKEN_ICONS } from '@/lib';
-import { DefaultTokenSVG } from '@/svg';
+import { getSymbolByType, isSui } from '@/utils';
 
 import { PoolCardTokenInfoProps } from './pool-card.types';
 
@@ -33,33 +33,15 @@ const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({
           alignItems="center"
           alignSelf="stretch"
         >
-          {coinTypes.map((type) => {
-            const metadata = coinMetadata[type];
-
-            const parsedSymbol =
-              metadata?.symbol.toUpperCase() === 'SUI'
-                ? 'MOVE'
-                : metadata?.symbol.toUpperCase();
-            const Icon = !metadata
-              ? DefaultTokenSVG
-              : TOKEN_ICONS[network][parsedSymbol] ?? DefaultTokenSVG;
-
-            return (
-              <Box
-                key={v4()}
-                display="flex"
-                width="2.5rem"
-                bg="onSurface"
-                color="surface"
-                height="2.5rem"
-                borderRadius="xs"
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Icon maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
-              </Box>
-            );
-          })}
+          {coinTypes.map((type) => (
+            <TokenIcon
+              withBg
+              key={v4()}
+              type={type}
+              network={network}
+              symbol={isSui(type) ? 'MOVE' : getSymbolByType(type)}
+            />
+          ))}
         </Box>
         <Box display="flex" flexDirection="column" alignItems="center">
           <Typography
