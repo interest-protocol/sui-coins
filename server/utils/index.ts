@@ -35,20 +35,11 @@ export const getAllPools = async (client: SuiClient): Promise<AmmPool[]> => {
 
   if (!pools || !pools.length) return [];
 
-  const fetchedPools = await fetchPools(
+  return await fetchPools(
     client,
-    pools.map((x) => x.stateId)
+    pools.map((x) => x.poolObjectId),
+    pools.map((x) => x.poolObjectId)
   );
-
-  const poolIdMap = pools.reduce(
-    (acc, { stateId, poolObjectId }) => ({ ...acc, [stateId]: poolObjectId }),
-    {}
-  );
-
-  return fetchedPools.map((pool) => ({
-    ...pool,
-    poolId: poolIdMap[pool.stateId],
-  }));
 };
 
 export const handleServerError = (

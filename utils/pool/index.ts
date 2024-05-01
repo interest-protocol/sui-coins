@@ -6,7 +6,7 @@ import { pathOr } from 'ramda';
 import { STATE_KEY_TO_POOL_ID } from '@/constants/coins';
 import { AmmPool, AmmServerPool, PoolTypeEnum } from '@/interface';
 
-export const parsePool = (x: SuiObjectResponse, poolId?: string): AmmPool => ({
+const parsePool = (x: SuiObjectResponse, poolId: string): AmmPool => ({
   poolId: poolId ?? STATE_KEY_TO_POOL_ID[pathOr('', ['id', 'id'], x)],
   stateId: pathOr('', ['id', 'id'], x),
   adminBalanceX: BigNumber(
@@ -90,7 +90,11 @@ export const fetchPool = async (client: SuiClient, poolId: string) => {
   return parsePool(fields, poolId);
 };
 
-export const fetchPools = async (client: SuiClient, stateIds: string[]) => {
+export const fetchPools = async (
+  client: SuiClient,
+  poolIds: Array<string>,
+  stateIds: Array<string>
+) => {
   const pools = await client.multiGetObjects({
     ids: stateIds,
     options: {
@@ -98,7 +102,9 @@ export const fetchPools = async (client: SuiClient, stateIds: string[]) => {
     },
   });
 
-  return pools.map((x) => parsePool(getSuiObjectResponseFields(x)));
+  return pools.map((x, index) =>
+    parsePool(getSuiObjectResponseFields(x), poolIds[index])
+  );
 };
 
 export const convertServerPoolToClientPool = (x: AmmServerPool): AmmPool => ({
