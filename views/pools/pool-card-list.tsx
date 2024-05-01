@@ -5,14 +5,15 @@ import {
   Typography,
 } from '@interest-protocol/ui-kit';
 import { useRouter } from 'next/router';
+import { inc } from 'ramda';
 import { FC, useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import useSWR from 'swr';
 import { v4 } from 'uuid';
 
-import { Routes, RoutesEnum } from '@/constants';
-import { useNetwork } from '@/context/network';
+import { PAGE_SIZE, Routes, RoutesEnum } from '@/constants';
 import { useFindPoolsByCoinTypes } from '@/hooks/use-find-pools-by-coin-types';
 import { useGetCoinMetadata } from '@/hooks/use-get-coin-metadata';
 import useGetMultipleTokenPriceBySymbol from '@/hooks/use-get-multiple-token-price-by-symbol';
@@ -27,41 +28,49 @@ import PoolCard from './pool-card';
 import {
   PoolCardListContentProps,
   PoolCardListProps,
-  PoolCardListWrapper,
   PoolForm,
   PoolTabEnum,
 } from './pools.types';
 
-const Pools: FC<PoolCardListWrapper> = ({ network }) => {
-  const { data, isLoading: arePoolsLoading } = usePools();
+const Pools: FC = () => {
+  const [page, setPage] = useState(1);
+  const { data, isLoading: arePoolsLoading } = usePools(page);
+  const [pools, setPools] = useState<ReadonlyArray<AmmPool>>([]);
 
-  const safeData = data ? data : { pools: [], totalPages: 0 };
+  const safeData = data ?? { pools: [], totalItems: 0 };
 
-  // TODO HANDLE PAGINATION
+  const nextPage = () => setPage(inc);
+
+  useEffect(() => {
+    if (page > Math.ceil(pools.length / PAGE_SIZE))
+      setPools([...pools, ...safeData.pools]);
+  }, [safeData]);
+
   return (
     <PoolCardListContent
-      network={network}
-      pools={safeData.pools}
+      pools={pools}
+      nextPage={nextPage}
+      totalItems={safeData.totalItems}
       arePoolsLoading={arePoolsLoading}
+      hasMore={safeData.totalItems - page * PAGE_SIZE > 0}
     />
   );
 };
 
-const Position: FC<PoolCardListWrapper> = ({ network }) => {
+const Position: FC = () => {
   const { data, isLoading } = useFindPoolsByCoinTypes();
 
-  return (
-    <PoolCardListContent
-      network={network}
-      pools={data || []}
-      arePoolsLoading={isLoading}
-    />
-  );
+  const safeData = data ?? { pools: [], totalPages: 0 };
+
+  return <PoolCardListContent pools={safeData} arePoolsLoading={isLoading} />;
 };
 
 const PoolCardListContent: FC<PoolCardListContentProps> = ({
-  arePoolsLoading,
   pools,
+  hasMore,
+  nextPage,
+  totalItems,
+  arePoolsLoading,
 }) => {
   const { push } = useRouter();
   const { setModal, handleClose } = useModal();
@@ -215,51 +224,79 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
       </Box>
     );
 
+  if (isFindingPool)
+    return (
+      <Box
+        gap="xs"
+        borderRadius="xs"
+        p={['s', 's', 's', 'l']}
+        display={listPools?.length || pools?.length ? 'grid' : 'flex'}
+        gridTemplateColumns={[
+          '1fr',
+          '1fr',
+          '1fr 1fr',
+          '1fr 1fr',
+          '1fr 1fr 1fr',
+        ]}
+      >
+        {listPools?.map((pool) => (
+          <PoolCard
+            key={v4()}
+            pool={pool}
+            prices={pricesRecord}
+            coinMetadata={coinMetadataMap || {}}
+          />
+        ))}
+      </Box>
+    );
+
+  if (!pools || !pools.length)
+    return (
+      <Box width="100%" color="white">
+        <Typography size="small" variant="display">
+          No pool found!
+        </Typography>
+      </Box>
+    );
+
   return (
-    <Box
-      gap="xs"
-      borderRadius="xs"
-      p={['s', 's', 's', 'l']}
-      display={listPools?.length || pools?.length ? 'grid' : 'flex'}
-      gridTemplateColumns={['1fr', '1fr', '1fr 1fr', '1fr 1fr', '1fr 1fr 1fr']}
-    >
-      {isFindingPool ? (
-        listPools?.map((pool) => (
-          <PoolCard
-            key={v4()}
-            pool={pool}
-            prices={pricesRecord}
-            coinMetadata={coinMetadataMap || {}}
-          />
-        ))
-      ) : pools?.length ? (
-        pools.map((pool) => (
-          <PoolCard
-            key={v4()}
-            pool={pool}
-            prices={pricesRecord}
-            coinMetadata={coinMetadataMap || {}}
-          />
-        ))
-      ) : (
-        <Box width="100%" color="white">
-          <Typography size="small" variant="display">
-            No pool found!
-          </Typography>
+    <InfiniteScroll
+      hasMore={!!hasMore}
+      dataLength={totalItems ?? 0}
+      next={() => nextPage?.()}
+      loader={
+        <Box pt="3xl" width="100%" display="flex" justifyContent="center">
+          <ProgressIndicator variant="loading" />
         </Box>
-      )}
-    </Box>
+      }
+    >
+      <Box
+        gap="xs"
+        borderRadius="xs"
+        p={['s', 's', 's', 'l']}
+        display={listPools?.length || pools?.length ? 'grid' : 'flex'}
+        gridTemplateColumns={[
+          '1fr',
+          '1fr',
+          '1fr 1fr',
+          '1fr 1fr',
+          '1fr 1fr 1fr',
+        ]}
+      >
+        {pools.map((pool) => (
+          <PoolCard
+            key={v4()}
+            pool={pool}
+            prices={pricesRecord}
+            coinMetadata={coinMetadataMap || {}}
+          />
+        ))}
+      </Box>
+    </InfiniteScroll>
   );
 };
 
-const PoolCardList: FC<PoolCardListProps> = ({ tab }) => {
-  const network = useNetwork();
-
-  return tab === PoolTabEnum.Pools ? (
-    <Pools network={network} />
-  ) : (
-    <Position network={network} />
-  );
-};
+const PoolCardList: FC<PoolCardListProps> = ({ tab }) =>
+  tab === PoolTabEnum.Pools ? <Pools /> : <Position />;
 
 export default PoolCardList;

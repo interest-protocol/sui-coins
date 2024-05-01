@@ -17,11 +17,11 @@ const handler: NextApiHandler = async (req, res) => {
 
       invariant(client, 'Movement client not found');
 
-      const [pools, totalPages] = await getAllPools(client, pageNumber);
+      const [pools, totalItems] = await getAllPools(client, pageNumber);
 
       res.status(200).json({
         pools,
-        totalPages,
+        totalItems,
       });
     }
 

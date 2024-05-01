@@ -1,4 +1,3 @@
-import { Network } from '@/constants';
 import { TOKEN_SYMBOL } from '@/constants/coins';
 import { AmmPool } from '@/interface';
 
@@ -23,12 +22,10 @@ export interface PoolCardListProps {
   tab: PoolTabEnum;
 }
 
-export interface PoolCardListWrapper {
-  network: Network;
-}
-
 export interface PoolCardListContentProps {
-  network: Network;
+  hasMore?: boolean;
+  totalItems?: number;
+  nextPage?: () => void;
   arePoolsLoading: boolean;
   pools: readonly AmmPool[];
 }

@@ -35,8 +35,7 @@ export const getAllPools = async (
   client: SuiClient,
   pageNumber: number
 ): Promise<[AmmPool[], number]> => {
-  const totalCount = await PoolDevnet.countDocuments();
-  const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+  const totalItems = await PoolDevnet.countDocuments();
 
   const pools = await PoolDevnet.find({})
     .skip((pageNumber - 1) * PAGE_SIZE)
@@ -50,7 +49,7 @@ export const getAllPools = async (
       pools.map((x) => x.poolObjectId),
       pools.map((x) => x.stateId)
     ),
-    totalPages,
+    totalItems,
   ];
 };
 
@@ -58,7 +57,7 @@ export const getPoolsByCoinTypes = async (
   client: SuiClient,
   coinInType: string,
   coinOutType: string
-): Promise<readonly PoolModel[]> => {
+): Promise<readonly AmmPool[]> => {
   const query = {
     $or: [
       { coinX: coinInType },
@@ -72,7 +71,11 @@ export const getPoolsByCoinTypes = async (
 
   if (!pools || !pools.length) return [];
 
-  return pools;
+  return await fetchPools(
+    client,
+    pools.map((x) => x.poolObjectId),
+    pools.map((x) => x.stateId)
+  );
 };
 
 export const handleServerError = (

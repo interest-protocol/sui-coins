@@ -26,16 +26,16 @@ export const usePool = (parentId: string) => {
   );
 };
 
-export const usePools = () =>
+export const usePools = (page: number = 1) =>
   useSWR<UsePoolsReturn>(
-    `/api/auth/v1/get-pools`,
+    `/api/auth/v1/get-pools?pageNumber=${page}`,
     async () => {
-      const res = await fetch('/api/auth/v1/get-pools');
-      const { pools, totalPages } = (await res.json()) as UsePoolsFetchReturn;
+      const res = await fetch(`/api/auth/v1/get-pools?pageNumber=${page}`);
+      const { pools, totalItems } = (await res.json()) as UsePoolsFetchReturn;
 
       return {
         pools: pools.map((x) => convertServerPoolToClientPool(x)),
-        totalPages,
+        totalItems,
       };
     },
     {
