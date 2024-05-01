@@ -37,6 +37,7 @@ const PoolSummaryButton: FC = () => {
     try {
       const { tokens, isStable, type } = getValues();
 
+      invariant(type === 'AMM', 'Pool is not valid');
       invariant(currentAccount, 'You must login in your wallet');
 
       const txbLpCoin = await createLpCoin(tokens, isStable);
@@ -56,9 +57,8 @@ const PoolSummaryButton: FC = () => {
       );
 
       invariant(treasuryCap, 'Error on load Treasury cap');
-      invariant(type === 'AMM', 'Pool is not valid');
 
-      const txb = await createAmmPool(tokens, treasuryCap, coinType, isStable);
+      const txb = await createAmmPool(tokens, coinType, treasuryCap, isStable);
 
       const tx = await signAndExecute({
         txb,
@@ -71,9 +71,13 @@ const PoolSummaryButton: FC = () => {
 
       setValue('explorerLink', EXPLORER_URL[network](`/txblock/${tx.digest}`));
 
+      console.log({ tx });
+
       // Read the events and get the poolId
       // Call API
     } catch (e) {
+      console.log({ e });
+
       throw new Error((e as Error).message ?? 'Something went wrong');
     }
   };

@@ -2,24 +2,23 @@ import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 
+import { PoolTypeEnum } from '@/interface';
 import { MinusSVG, PlusSVG } from '@/svg';
 
 import { CreatePoolForm } from '../pool-create.types';
-import PoolCreateButton from '../pool-create-button';
+import PoolCreateButton from '../pool-next-button';
 import Input from './input';
 
 const SelectCoins: FC = () => {
   const { control } = useFormContext<CreatePoolForm>();
+
+  const type = useWatch({ control, name: 'type' });
   const isStable = useWatch({ control, name: 'isStable' });
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'tokens',
     rules: { maxLength: isStable ? 5 : 3 },
   });
-
-  const handleRemoveField = (index: number) => {
-    remove(index);
-  };
 
   return (
     <>
@@ -53,7 +52,7 @@ const SelectCoins: FC = () => {
                     nHover={{
                       bg: 'lowestContainer',
                     }}
-                    onClick={() => handleRemoveField(index)}
+                    onClick={() => remove(index)}
                   >
                     <MinusSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
                   </Box>
@@ -61,23 +60,24 @@ const SelectCoins: FC = () => {
               </Box>
             ))}
           </Box>
-          {fields.length < (isStable ? 5 : 3) && (
-            <Button
-              mt="xl"
-              mx="auto"
-              variant="outline"
-              color="onSurface"
-              onClick={() =>
-                append({ type: '', symbol: '', decimals: 0, value: '' })
-              }
-              borderColor="outlineVariant"
-              PrefixIcon={
-                <PlusSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
-              }
-            >
-              Add Coin
-            </Button>
-          )}
+          {type === PoolTypeEnum.CLAMM &&
+            fields.length < (isStable ? 5 : 3) && (
+              <Button
+                mt="xl"
+                mx="auto"
+                variant="outline"
+                color="onSurface"
+                onClick={() =>
+                  append({ type: '', symbol: '', decimals: 0, value: '' })
+                }
+                borderColor="outlineVariant"
+                PrefixIcon={
+                  <PlusSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+                }
+              >
+                Add Coin
+              </Button>
+            )}
         </Box>
       </Box>
       <PoolCreateButton />

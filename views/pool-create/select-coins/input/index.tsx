@@ -37,7 +37,6 @@ const Input: FC<InputProps> = ({ index }) => {
         justifyContent="flex-end"
       >
         <TextField
-          pt="m"
           pl="-1rem"
           fontSize="2xl"
           lineHeight="l"
@@ -54,6 +53,7 @@ const Input: FC<InputProps> = ({ index }) => {
             },
           })}
           fieldProps={{
+            mt: 'm',
             width: '100%',
             borderRadius: 'xs',
             borderColor: 'transparent',

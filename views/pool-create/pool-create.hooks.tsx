@@ -62,7 +62,7 @@ export const useCreateAmmPool = () => {
     const [coinX, coinY] = values;
 
     invariant(coinX.type && coinY.type, 'Coin types not found');
-    invariant(coinX.value && coinY.value, 'Deposit more than zero coins');
+    invariant(+coinX.value && +coinY.value, 'Deposit more than zero coins');
 
     const txb = new TransactionBlock();
 
@@ -89,15 +89,15 @@ export const useCreateAmmPool = () => {
     });
 
     const coinXInList = createObjectsParameter({
+      txb,
       coinsMap,
-      txb: txb,
       type: coinX.type,
       amount: safeValueX.toString(),
     });
 
     const coinYInList = createObjectsParameter({
+      txb,
       coinsMap,
-      txb: txb,
       type: coinY.type,
       amount: safeValueY.toString(),
     });
@@ -149,7 +149,7 @@ export const useCreateAmmPool = () => {
         txb.object(lpCoinTreasury),
         txb.object(coin0Meta.id),
         txb.object(coin1Meta.id),
-        txb.object(lpCoinMeta?.id),
+        txb.object(lpCoinMeta.id),
         txb.pure(!isStable),
       ],
     });

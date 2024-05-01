@@ -14,7 +14,7 @@ import { DotErrorSVG } from '@/svg';
 import { CreatePoolForm, CreatePoolStep, Token } from './pool-create.types';
 import { doesPoolExists } from './pool-create.utils';
 
-const PoolCreateButton: FC = () => {
+const PoolNextButton: FC = () => {
   const network = useNetwork();
   const movementClient = useMovementClient();
   const [error, setError] = useState<string>();
@@ -44,7 +44,7 @@ const PoolCreateButton: FC = () => {
   };
 
   const isDisabled = useMemo(() => {
-    if (error) return true;
+    if (error || loading) return true;
     if (step === CreatePoolStep.PoolType) return type === undefined;
     if (step === CreatePoolStep.PoolAlgorithm) return isStable === undefined;
     if (step === CreatePoolStep.PoolCoins)
@@ -54,7 +54,7 @@ const PoolCreateButton: FC = () => {
       );
 
     return false;
-  }, [step, type, isStable, tokens]);
+  }, [step, type, isStable, tokens, loading]);
 
   const handleClick = [
     null,
@@ -113,4 +113,4 @@ const PoolCreateButton: FC = () => {
   );
 };
 
-export default PoolCreateButton;
+export default PoolNextButton;
