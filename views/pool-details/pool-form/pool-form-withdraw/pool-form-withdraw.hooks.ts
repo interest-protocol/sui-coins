@@ -5,10 +5,14 @@ import { PACKAGES } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks';
 import { FixedPointMath } from '@/lib';
-import { createObjectsParameter, getAmountMinusSlippage } from '@/utils';
+import {
+  createObjectsParameter,
+  getAmountMinusSlippage,
+  getSafeValue,
+} from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
 
-import { getAmmXYAmount, getSafeValue } from '../pool-form.utils';
+import { getAmmXYAmount } from '../pool-form.utils';
 
 export const useWithdraw = () => {
   const network = useNetwork();
