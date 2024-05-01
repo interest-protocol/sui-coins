@@ -4,7 +4,7 @@ import { toString } from 'ramda';
 import invariant from 'tiny-invariant';
 
 import { AmmPool } from '@/interface';
-import PoolDevnet, { PoolModel } from '@/server/model/pool-devnet';
+import PoolDevnet from '@/server/model/pool-devnet';
 import { fetchPool, fetchPools } from '@/utils';
 
 export const savePool = async (client: SuiClient, poolId: string) => {
@@ -31,16 +31,24 @@ export const savePool = async (client: SuiClient, poolId: string) => {
 };
 
 export const getAllPools = async (client: SuiClient): Promise<AmmPool[]> => {
-  let pools = (await PoolDevnet.find({})) || [];
+  const pools = await PoolDevnet.find({});
 
-  if (pools && pools.length) {
-    pools = await fetchPools(
-      client,
-      (pools as PoolModel[]).map((x) => x.stateId)
-    );
-  }
+  if (!pools || !pools.length) return [];
 
-  return pools;
+  const fetchedPools = await fetchPools(
+    client,
+    pools.map((x) => x.stateId)
+  );
+
+  const poolIdMap = pools.reduce(
+    (acc, { stateId, poolObjectId }) => ({ ...acc, [stateId]: poolObjectId }),
+    {}
+  );
+
+  return fetchedPools.map((pool) => ({
+    ...pool,
+    poolId: poolIdMap[pool.stateId],
+  }));
 };
 
 export const handleServerError = (

@@ -6,8 +6,8 @@ import { pathOr } from 'ramda';
 import { STATE_KEY_TO_POOL_ID } from '@/constants/coins';
 import { AmmPool, AmmServerPool, PoolTypeEnum } from '@/interface';
 
-export const parsePool = (x: SuiObjectResponse): AmmPool => ({
-  poolId: STATE_KEY_TO_POOL_ID[pathOr('', ['id', 'id'], x)],
+export const parsePool = (x: SuiObjectResponse, poolId?: string): AmmPool => ({
+  poolId: poolId ?? STATE_KEY_TO_POOL_ID[pathOr('', ['id', 'id'], x)],
   stateId: pathOr('', ['id', 'id'], x),
   adminBalanceX: BigNumber(
     pathOr('0', ['value', 'fields', 'admin_balance_x'], x)
@@ -87,7 +87,7 @@ export const fetchPool = async (client: SuiClient, poolId: string) => {
 
   if (!fields) return null;
 
-  return parsePool(fields);
+  return parsePool(fields, poolId);
 };
 
 export const fetchPools = async (client: SuiClient, stateIds: string[]) => {

@@ -25,9 +25,9 @@ export const usePool = (parentId: string) => {
   );
 };
 
-export const usePools = () => {
-  return useSWR<ReadonlyArray<AmmPool>>(
-    '/api/auth/v1/get-pools',
+export const usePools = () =>
+  useSWR<ReadonlyArray<AmmPool>>(
+    `/api/auth/v1/get-pools`,
     async () => {
       const res = await fetch('/api/auth/v1/get-pools');
       const pools = (await res.json()) as AmmServerPool[];
@@ -40,4 +40,3 @@ export const usePools = () => {
       refreshWhenHidden: false,
     }
   );
-};
