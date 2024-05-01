@@ -181,7 +181,7 @@ export const RECOMMENDED_POOLS = {
   [Network.DEVNET]: [
     {
       stable: false,
-      poolType: PoolTypeEnum.amm,
+      poolType: PoolTypeEnum.AMM,
       stateKey: MOVE_ETH_STATE_ID,
       poolObjectId: MOVE_ETH_POOL_ID,
       lpCoin: LP_COINS_MAP[Network.DEVNET][SC_V_MOVE_ETH],
@@ -189,7 +189,7 @@ export const RECOMMENDED_POOLS = {
     },
     {
       stable: false,
-      poolType: PoolTypeEnum.amm,
+      poolType: PoolTypeEnum.AMM,
       stateKey: USDC_ETH_STATE_ID,
       poolObjectId: USDC_ETH_POOL_ID,
       lpCoin: LP_COINS_MAP[Network.DEVNET][SC_V_ETH_USDC],
