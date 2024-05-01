@@ -11,7 +11,6 @@ import initMoveByteCodeTemplate from '@/lib/move-template/move-bytecode-template
 import { createObjectsParameter, getSafeValue } from '@/utils';
 
 import { GetByteCodeArgs, Token } from './pool-create.types';
-import { isPoolsCoinsOrdered } from './pool-create.utils';
 
 export const useCreateLpCoin = () => {
   const currentAccount = useCurrentAccount();
@@ -69,8 +68,6 @@ export const useCreateAmmPool = () => {
     const objects = OBJECTS[network];
     const packages = PACKAGES[network];
 
-    const isOrdered = await isPoolsCoinsOrdered(values, client, network);
-
     const walletCoinX = coinsMap[coinX.type];
     const walletCoinY = coinsMap[coinY.type];
 
@@ -107,7 +104,7 @@ export const useCreateAmmPool = () => {
       amount: safeValueY.toString(),
     });
 
-    const coinXIn = txb.moveCall({
+    const coin0 = txb.moveCall({
       target: `${packages.UTILS}::utils::handle_coin_vector`,
       typeArguments: [coinX.type],
       arguments: [
@@ -116,7 +113,7 @@ export const useCreateAmmPool = () => {
       ],
     });
 
-    const coinYIn = txb.moveCall({
+    const coin1 = txb.moveCall({
       target: `${packages.UTILS}::utils::handle_coin_vector`,
       typeArguments: [coinY.type],
       arguments: [
@@ -130,20 +127,13 @@ export const useCreateAmmPool = () => {
       y: safeValueY.toString(),
     });
 
-    const typeArguments = isOrdered
-      ? [coinX.type, coinY.type, lpCoinType]
-      : [coinY.type, coinX.type, lpCoinType];
+    const typeArguments = [coinX.type, coinY.type, lpCoinType];
 
-    const [coin0, coin1] = isOrdered ? [coinXIn, coinYIn] : [coinYIn, coinXIn];
-
-    const [coinXMeta, coinYMeta, lpCoinMeta] = await Promise.all([
+    const [coin0Meta, coin1Meta, lpCoinMeta] = await Promise.all([
       client.getCoinMetadata({ coinType: coinX.type }),
       client.getCoinMetadata({ coinType: coinY.type }),
       client.getCoinMetadata({ coinType: lpCoinType }),
     ]);
-
-    const coin0Meta = isOrdered ? coinXMeta : coinYMeta;
-    const coin1Meta = isOrdered ? coinYMeta : coinXMeta;
 
     invariant(coin0Meta && coin0Meta.id, 'CoinX does not have a metadata');
     invariant(coin1Meta && coin1Meta.id, 'CoinY does not have a metadata');

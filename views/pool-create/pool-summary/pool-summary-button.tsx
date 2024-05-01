@@ -4,21 +4,28 @@ import {
   useSignTransactionBlock,
   useSuiClient,
 } from '@mysten/dapp-kit';
+import { useRouter } from 'next/router';
+import { reverse } from 'ramda';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import invariant from 'tiny-invariant';
 
-import { EXPLORER_URL } from '@/constants';
+import { EXPLORER_URL, Routes, RoutesEnum } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useDialog } from '@/hooks';
 import { signAndExecute, throwTXIfNotSuccessful } from '@/utils';
 
 import { useCreateAmmPool, useCreateLpCoin } from '../pool-create.hooks';
 import { CreatePoolForm } from '../pool-create.types';
-import { extractCoinDataFromTx } from '../pool-create.utils';
+import {
+  extractCoinDataFromTx,
+  extractPoolDataFromTx,
+  isPoolsCoinsOrdered,
+} from '../pool-create.utils';
 
 const PoolSummaryButton: FC = () => {
   const network = useNetwork();
+  const { push } = useRouter();
   const suiClient = useSuiClient();
   const createLpCoin = useCreateLpCoin();
   const createAmmPool = useCreateAmmPool();
@@ -34,52 +41,63 @@ const PoolSummaryButton: FC = () => {
   };
 
   const onCreatePool = async () => {
-    try {
-      const { tokens, isStable, type } = getValues();
+    const { tokens, isStable, type } = getValues();
 
-      invariant(type === 'AMM', 'Pool is not valid');
-      invariant(currentAccount, 'You must login in your wallet');
+    invariant(type === 'AMM', 'Pool is not valid');
+    invariant(currentAccount, 'You must login in your wallet');
 
-      const txbLpCoin = await createLpCoin(tokens, isStable);
+    const isOrdered = await isPoolsCoinsOrdered(tokens, suiClient, network);
 
-      const txLpCoin = await signAndExecute({
-        suiClient,
-        currentAccount,
-        txb: txbLpCoin,
-        signTransactionBlock: signTxb,
-      });
+    const orderedTokens = isOrdered ? tokens : reverse(tokens);
 
-      throwTXIfNotSuccessful(txLpCoin);
+    const txbLpCoin = await createLpCoin(orderedTokens, isStable);
 
-      const { treasuryCap, coinType } = await extractCoinDataFromTx(
-        txLpCoin,
-        suiClient
-      );
+    const txLpCoin = await signAndExecute({
+      suiClient,
+      currentAccount,
+      txb: txbLpCoin,
+      signTransactionBlock: signTxb,
+    });
 
-      invariant(treasuryCap, 'Error on load Treasury cap');
+    throwTXIfNotSuccessful(txLpCoin);
 
-      const txb = await createAmmPool(tokens, coinType, treasuryCap, isStable);
+    const { treasuryCap, coinType } = await extractCoinDataFromTx(
+      txLpCoin,
+      suiClient
+    );
 
-      const tx = await signAndExecute({
-        txb,
-        suiClient,
-        currentAccount,
-        signTransactionBlock: signTxb,
-      });
+    invariant(treasuryCap, 'Error on load Treasury cap');
 
-      throwTXIfNotSuccessful(tx);
+    const txb = await createAmmPool(
+      orderedTokens,
+      coinType,
+      treasuryCap,
+      isStable
+    );
 
-      setValue('explorerLink', EXPLORER_URL[network](`/txblock/${tx.digest}`));
+    const tx = await signAndExecute({
+      txb,
+      suiClient,
+      currentAccount,
+      signTransactionBlock: signTxb,
+    });
 
-      console.log({ tx });
+    throwTXIfNotSuccessful(tx);
 
-      // Read the events and get the poolId
-      // Call API
-    } catch (e) {
-      console.log({ e });
+    setValue('explorerLink', EXPLORER_URL[network](`/txblock/${tx.digest}`));
 
-      throw new Error((e as Error).message ?? 'Something went wrong');
-    }
+    const poolId = await extractPoolDataFromTx(tx, suiClient, network);
+
+    await fetch('/api/auth/v1/save-pool', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        poolId,
+        network,
+      }),
+    });
+
+    push(`${Routes[RoutesEnum.PoolDetails]}?objectId=${poolId}`);
   };
 
   const createPool = () =>
@@ -94,7 +112,10 @@ const PoolSummaryButton: FC = () => {
           'Your pool was create successfully, and you can check it on the Explorer',
         primaryButton: {
           label: 'See on Explorer',
-          onClick: gotoExplorer,
+          onClick: () => {
+            gotoExplorer();
+            handleClose();
+          },
         },
       },
       error: {

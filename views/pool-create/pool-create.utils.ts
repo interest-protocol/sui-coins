@@ -139,3 +139,33 @@ export const extractCoinDataFromTx = async (
     } as ExtractedCoinData
   );
 };
+
+export const extractPoolDataFromTx = async (
+  tx: SuiTransactionBlockResponse | DevInspectResults,
+  client: SuiClient,
+  network: Network
+) => {
+  // return if the tx hasn't succeed
+  if (tx.effects?.status?.status !== 'success')
+    throw new Error('Creating a new stable pool failed');
+
+  // get all created objects IDs
+  const createdObjectIds = tx.effects.created!.map(
+    (item: OwnedObjectRef) => item.reference.objectId
+  );
+
+  // fetch objects data
+  const objects = await client.multiGetObjects({
+    ids: createdObjectIds,
+    options: { showContent: true, showType: true, showOwner: true },
+  });
+
+  const poolData = objects.find(
+    (elem) =>
+      elem.data?.content?.dataType === 'moveObject' &&
+      (elem?.data?.content?.type as string) ===
+        `${PACKAGES[network].DEX}::interest_protocol_amm::InterestPool`
+  );
+
+  return poolData?.data?.objectId ?? '';
+};

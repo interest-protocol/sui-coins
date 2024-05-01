@@ -6,7 +6,7 @@ import { pathOr } from 'ramda';
 import { STATE_KEY_TO_POOL_ID } from '@/constants/coins';
 import { AmmPool, AmmServerPool, PoolTypeEnum } from '@/interface';
 
-const parsePool = (x: SuiObjectResponse): AmmPool => ({
+export const parsePool = (x: SuiObjectResponse): AmmPool => ({
   poolId: STATE_KEY_TO_POOL_ID[pathOr('', ['id', 'id'], x)],
   stateId: pathOr('', ['id', 'id'], x),
   adminBalanceX: BigNumber(
