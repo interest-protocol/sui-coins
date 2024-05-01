@@ -195,9 +195,8 @@ export const getSafeValue = ({
   const amount0 = FixedPointMath.toBigNumber(coinValue, decimals).decimalPlaces(
     0
   );
-  const safeAmount0 = amount0.gt(balance) ? balance : amount0;
-  const minusOne = safeAmount0.minus(1_000_000_000);
-  if (isSui(coinType)) return minusOne.isNegative() ? BigNumber(0) : minusOne;
+  const safeBalance = isSui(coinType) ? balance.minus(1_000_000_000) : balance;
+  const safeAmount0 = amount0.gt(safeBalance) ? safeBalance : amount0;
 
-  return safeAmount0;
+  return safeAmount0.isNegative() ? BigNumber(0) : safeAmount0;
 };

@@ -74,12 +74,17 @@ export const useCreateAmmPool = () => {
     const walletCoinX = coinsMap[coinX.type];
     const walletCoinY = coinsMap[coinY.type];
 
+    console.log(walletCoinX.balance.toString());
+    console.log('COINX', coinX);
+
     const safeValueX = getSafeValue({
       coinValue: coinX.value,
       coinType: coinX.type,
       decimals: coinX.decimals || 0,
       balance: walletCoinX.balance,
     });
+
+    console.log(safeValueX.toString());
 
     const safeValueY = getSafeValue({
       coinValue: coinY.value,
@@ -118,6 +123,11 @@ export const useCreateAmmPool = () => {
         txb.makeMoveVec({ objects: coinYInList }),
         txb.pure(safeValueY.toString()),
       ],
+    });
+
+    console.log({
+      x: safeValueX.toString(),
+      y: safeValueY.toString(),
     });
 
     const typeArguments = isOrdered

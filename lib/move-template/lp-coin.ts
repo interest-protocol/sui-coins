@@ -57,7 +57,12 @@ export const getLpCoinBytecode = (info: GetByteCodeArgs) => {
 
   const modifiedByteCode = template.update_identifiers(templateByteCode, {
     LP_COIN: initialModuleName.toUpperCase() + otwArray.toUpperCase(),
-    lp_coin: initialModuleName + otwArray,
+    lp_coin: initialModuleName.toLowerCase() + otwArray.toLowerCase(),
+  });
+
+  console.log({
+    LP_COIN: initialModuleName.toUpperCase() + otwArray.toUpperCase(),
+    lp_coin: initialModuleName.toLowerCase() + otwArray.toLowerCase(),
   });
 
   let updated = updateDecimals(modifiedByteCode, 9);
