@@ -38,7 +38,7 @@ export const getAllPools = async (client: SuiClient): Promise<AmmPool[]> => {
   return await fetchPools(
     client,
     pools.map((x) => x.poolObjectId),
-    pools.map((x) => x.poolObjectId)
+    pools.map((x) => x.stateId)
   );
 };
 
