@@ -70,6 +70,7 @@ export { default as MenuSVG } from './menu';
 export { default as MinusSVG } from './minus';
 export { default as NftSVG } from './nft';
 export { default as NoSearchSVG } from './no-search';
+export { default as PencilSVG } from './pencil';
 export { default as PercentageSVG } from './percentage';
 export { default as PlusSVG } from './plus';
 export { default as PoolSVG } from './pool';
