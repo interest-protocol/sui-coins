@@ -21,7 +21,7 @@ const IncineratorTable: FC = () => {
           borderSpacing="0 0.5rem"
         >
           <IncineratorTableHeader />
-          {fields.length ? (
+          {fields?.length ? (
             <IncineratorTableBody />
           ) : (
             <Box
