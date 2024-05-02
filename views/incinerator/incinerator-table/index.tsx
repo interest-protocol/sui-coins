@@ -1,6 +1,7 @@
 import { Box, Motion } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
+import IncineratorBurnButton from './burn-button';
 import IncineratorTableBody from './table-body';
 import IncineratorTableHeader from './table-header';
 
@@ -19,6 +20,7 @@ const IncineratorTable: FC = () => (
         <IncineratorTableBody />
       </Motion>
     </Box>
+    <IncineratorBurnButton />
   </Box>
 );
 
