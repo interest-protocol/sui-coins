@@ -58,7 +58,6 @@ const IncineratorTableHeader: FC = () => {
           editable,
           isEditing: false,
           state,
-          typing: false,
         };
       })
     );

@@ -5,6 +5,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { IncineratorNoAssetsSVG } from '@/svg';
 
 import { IncineratorForm } from '../incinerator.types';
+import IncineratorBurnButton from './burn-button';
 import IncineratorTableBody from './table-body';
 import IncineratorTableHeader from './table-header';
 
@@ -47,7 +48,9 @@ const IncineratorTable: FC = () => {
           )}
         </Motion>
       </Box>
+      <IncineratorBurnButton />
     </Box>
   );
 };
+
 export default IncineratorTable;

@@ -17,8 +17,8 @@ const Incinerator: FC = () => {
   });
 
   return (
-    <Layout>
-      <FormProvider {...form}>
+    <FormProvider {...form}>
+      <Layout>
         <Box
           mt="3xl"
           mx="auto"
@@ -33,8 +33,8 @@ const Incinerator: FC = () => {
           <IncineratorFilterTabs />
           <IncineratorTable />
         </Box>
-      </FormProvider>
-    </Layout>
+      </Layout>
+    </FormProvider>
   );
 };
 
