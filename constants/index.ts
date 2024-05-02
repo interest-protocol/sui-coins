@@ -36,6 +36,6 @@ export const TOAST_DURATION = 10000;
 export const EXCHANGE_FEE = 0.002;
 
 export * from './coins';
-export * from './dapp';
+export * from './packages';
 export * from './network';
 export * from './routes';

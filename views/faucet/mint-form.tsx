@@ -17,9 +17,8 @@ import {
   PACKAGES,
 } from '@/constants';
 import { useNetwork } from '@/context/network';
-import { useUserMintEpoch, useWeb3 } from '@/hooks';
+import { useWeb3 } from '@/hooks';
 import { useModal } from '@/hooks/use-modal';
-import { useSuiSystemState } from '@/hooks/use-sui-system-state';
 import { CoinData } from '@/interface';
 import { ChevronDownSVG } from '@/svg';
 import { showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
@@ -35,14 +34,6 @@ const MintForm: FC = () => {
   const client = useSuiClient();
   const signTransactionBlock = useSignTransactionBlock();
   const currentAccount = useCurrentAccount();
-
-  const { data } = useSuiSystemState();
-
-  const lastMintEpoch = useUserMintEpoch();
-
-  const isSameEpoch =
-    !!Number(data?.epoch) &&
-    (lastMintEpoch as Record<string, string>)[selected.symbol] === data?.epoch;
 
   const handleMint = async () => {
     try {
@@ -113,7 +104,7 @@ const MintForm: FC = () => {
     toast.promise(handleMint(), {
       loading: 'Loading',
       success: `${selected.symbol} minted successfully`,
-      error: 'You can only mint once every 24 hours',
+      error: 'Something went wrong',
     });
   };
 
@@ -183,20 +174,10 @@ const MintForm: FC = () => {
               {selected.symbol}
             </Typography>
           </Button>
-          {isSameEpoch && (
-            <Typography variant="body" size="small" color="error" mt="xs">
-              You cannot mint more {selected.symbol}
-            </Typography>
-          )}
         </Box>
       </Box>
       <Box display="flex" justifyContent="center">
-        <Button
-          disabled={isSameEpoch}
-          variant="filled"
-          onClick={onMint}
-          color="surface"
-        >
+        <Button color="surface" variant="filled" onClick={onMint}>
           Mint
         </Button>
       </Box>
