@@ -1,10 +1,25 @@
-import { Box, Button, Dialog } from '@interest-protocol/ui-kit';
+import {
+  Box,
+  Button,
+  Dialog,
+  ProgressIndicator,
+  Typography,
+} from '@interest-protocol/ui-kit';
 import { FC } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import { useModal } from '@/hooks/use-modal';
+import { useWeb3 } from '@/hooks/use-web3';
+import { IncineratorNoAssetsSVG } from '@/svg';
+
+import { IncineratorForm } from '../incinerator.types';
 
 const IncineratorBurnButton: FC = () => {
   const { setModal, handleClose } = useModal();
+  const { isFetchingCoinBalances } = useWeb3();
+
+  const { control } = useFormContext<IncineratorForm>();
+  const fields = useWatch({ control, name: `objects` });
 
   const handleBurnAssets = () => {
     setModal(
@@ -26,16 +41,43 @@ const IncineratorBurnButton: FC = () => {
     );
   };
 
-  return (
-    <Box py="m" display="flex" justifyContent="center">
-      <Button
-        type="button"
-        variant="filled"
-        borderRadius="xs"
-        onClick={handleBurnAssets}
+  return !isFetchingCoinBalances ? (
+    !fields?.length ? (
+      <Box
+        gap="s"
+        display="flex"
+        height="50vh"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+        width="100%"
       >
-        Burn assets
-      </Button>
+        <Box p="m">
+          <IncineratorNoAssetsSVG
+            maxHeight="7.375rem"
+            maxWidth="6.625rem"
+            width="100%"
+          />
+        </Box>
+        <Typography variant="label" size="medium">
+          You don’t have any assets
+        </Typography>
+      </Box>
+    ) : (
+      <Box py="m" display="flex" justifyContent="center">
+        <Button
+          type="button"
+          variant="filled"
+          borderRadius="xs"
+          onClick={handleBurnAssets}
+        >
+          Burn assets
+        </Button>
+      </Box>
+    )
+  ) : (
+    <Box mx="auto" display="flex" alignItems="center" flexDirection="column">
+      <ProgressIndicator size={40} variant="loading" />
     </Box>
   );
 };
