@@ -3,7 +3,6 @@ import { FC } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import Layout from '@/components/layout';
-import { ModalProvider } from '@/context/modal';
 
 import IncineratorFilterTabs from './filter-tabs';
 import IncineratorHeader from './header';
@@ -19,24 +18,22 @@ const Incinerator: FC = () => {
 
   return (
     <FormProvider {...form}>
-      <ModalProvider>
-        <Layout>
-          <Box
-            mt="3xl"
-            mx="auto"
-            width="100%"
-            display="flex"
-            borderRadius="s"
-            maxWidth="51rem"
-            bg="lowestContainer"
-            flexDirection="column"
-          >
-            <IncineratorHeader />
-            <IncineratorFilterTabs />
-            <IncineratorTable />
-          </Box>
-        </Layout>
-      </ModalProvider>
+      <Layout>
+        <Box
+          mt="3xl"
+          mx="auto"
+          width="100%"
+          display="flex"
+          borderRadius="s"
+          maxWidth="51rem"
+          bg="lowestContainer"
+          flexDirection="column"
+        >
+          <IncineratorHeader />
+          <IncineratorFilterTabs />
+          <IncineratorTable />
+        </Box>
+      </Layout>
     </FormProvider>
   );
 };
