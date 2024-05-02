@@ -1,11 +1,15 @@
 import { Button, Motion } from '@interest-protocol/ui-kit';
-import { useCurrentAccount, useSignTransactionBlock } from '@mysten/dapp-kit';
+import {
+  useCurrentAccount,
+  useSignTransactionBlock,
+  useSuiClient,
+} from '@mysten/dapp-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { EXPLORER_URL } from '@/constants';
 import { useNetwork } from '@/context/network';
-import { useDialog, useMovementClient, useWeb3 } from '@/hooks';
+import { useDialog, useWeb3 } from '@/hooks';
 import { useModal } from '@/hooks/use-modal';
 import { showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
@@ -15,8 +19,8 @@ import { useWithdraw } from './pool-form-withdraw.hooks';
 
 const PoolFormWithdrawButton: FC = () => {
   const network = useNetwork();
+  const client = useSuiClient();
   const withdraw = useWithdraw();
-  const client = useMovementClient();
   const account = useCurrentAccount();
   const { mutate } = useWeb3();
   const { dialog, handleClose } = useDialog();

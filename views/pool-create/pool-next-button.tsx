@@ -4,11 +4,11 @@ import {
   ProgressIndicator,
   Typography,
 } from '@interest-protocol/ui-kit';
+import { useSuiClient } from '@mysten/dapp-kit';
 import { type FC, useEffect, useMemo, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { useNetwork } from '@/context/network';
-import { useMovementClient } from '@/hooks';
 import { DotErrorSVG } from '@/svg';
 
 import { CreatePoolForm, CreatePoolStep, Token } from './pool-create.types';
@@ -16,7 +16,7 @@ import { doesPoolExists } from './pool-create.utils';
 
 const PoolNextButton: FC = () => {
   const network = useNetwork();
-  const movementClient = useMovementClient();
+  const movementClient = useSuiClient();
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
   const { control, setValue } = useFormContext<CreatePoolForm>();

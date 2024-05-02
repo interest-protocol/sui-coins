@@ -1,11 +1,11 @@
-import { useCurrentAccount } from '@mysten/dapp-kit';
+import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { normalizeSuiAddress } from '@mysten/sui.js/utils';
 import invariant from 'tiny-invariant';
 
 import { OBJECTS, PACKAGES } from '@/constants';
 import { useNetwork } from '@/context/network';
-import { useMovementClient, useWeb3 } from '@/hooks';
+import { useWeb3 } from '@/hooks';
 import { getLpCoinBytecode } from '@/lib/move-template/lp-coin';
 import initMoveByteCodeTemplate from '@/lib/move-template/move-bytecode-template';
 import { createObjectsParameter, getSafeValue } from '@/utils';
@@ -45,8 +45,8 @@ export const useCreateLpCoin = () => {
 
 export const useCreateAmmPool = () => {
   const network = useNetwork();
+  const client = useSuiClient();
   const { coinsMap } = useWeb3();
-  const client = useMovementClient();
   const currentAccount = useCurrentAccount();
 
   return async (
