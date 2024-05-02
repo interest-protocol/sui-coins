@@ -19,6 +19,7 @@ export interface Web3ManagerState {
   isFetchingCoinBalances: boolean;
   coins: ReadonlyArray<CoinObject>;
   walletAccount: null | WalletAccount;
+  objects: ReadonlyArray<ObjectData>;
   ownedNfts: ReadonlyArray<ObjectData>;
   coinsObjects: ReadonlyArray<ObjectData>;
   otherObjects: ReadonlyArray<ObjectData>;

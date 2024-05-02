@@ -4,15 +4,17 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import Layout from '@/components/layout';
 
-import IncineratorFilterTabs from './filter-tabs';
-import IncineratorHeader from './header';
-import { IncineratorForm } from './incinerator.types';
+import { IncineratorForm, IncineratorTabEnum } from './incinerator.types';
+import IncineratorButton from './incinerator-button';
+import IncineratorHeader from './incinerator-header';
 import IncineratorTable from './incinerator-table';
+import IncineratorFilterTabs from './incinerator-tabs';
 
 const Incinerator: FC = () => {
   const form = useForm<IncineratorForm>({
     defaultValues: {
-      filter: 0,
+      objects: [],
+      tab: IncineratorTabEnum.All,
     },
   });
 
@@ -31,7 +33,10 @@ const Incinerator: FC = () => {
         >
           <IncineratorHeader />
           <IncineratorFilterTabs />
-          <IncineratorTable />
+          <Box mb="l" display="grid" gap="l">
+            <IncineratorTable />
+            <IncineratorButton />
+          </Box>
         </Box>
       </Layout>
     </FormProvider>

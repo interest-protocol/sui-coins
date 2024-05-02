@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { formatAddress } from '@mysten/sui.js/utils';
-import { toPairs } from 'ramda';
+import { prop, toPairs } from 'ramda';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -10,21 +10,22 @@ import { v4 } from 'uuid';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
-import { CopySVG, DotErrorSVG, PlusSVG } from '@/svg';
+import { CopySVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 import { getAmountsMapFromObjects } from '@/views/components/send-asset-details/send-asset-details.utils';
 
 import { IncineratorForm } from '../incinerator.types';
 import { useBurn } from './incinerator-button.hooks';
-import { IncineratorButtonProps } from './incinerator-button.types';
 
-const IncineratorButton: FC<IncineratorButtonProps> = ({ openModal }) => {
+const IncineratorButton: FC = () => {
   const burn = useBurn();
   const network = useNetwork();
   const { coinsMap } = useWeb3();
   const { setModal, handleClose } = useModal();
   const { control, reset } = useFormContext<IncineratorForm>();
-  const objects = useWatch({ control, name: 'objects' });
+  const allObjects = useWatch({ control, name: 'objects' });
+
+  const objects = allObjects.filter(prop('active'));
 
   const copy = (type: string) => {
     navigator.clipboard.writeText(type);
@@ -44,13 +45,20 @@ const IncineratorButton: FC<IncineratorButtonProps> = ({ openModal }) => {
     }))
     .filter((item) => item.isGreater);
 
+  const disabled =
+    !objects ||
+    !objects.length ||
+    !objects.every(({ value }) => Number(value)) ||
+    !amountList ||
+    Boolean(amountList.length);
+
+  console.log({
+    objects,
+    amountList,
+  });
+
   const handleBurn = async () => {
-    if (
-      !objects ||
-      !objects.length ||
-      !objects.every(({ value }) => Number(value))
-    )
-      return;
+    if (disabled) return;
 
     const toasterId = toast.loading(
       `Burning asset${objects.length === 1 ? '' : 's'}...`
@@ -127,54 +135,9 @@ const IncineratorButton: FC<IncineratorButtonProps> = ({ openModal }) => {
     );
 
   return (
-    <>
-      {amountList?.length ? (
-        <Box
-          p="s"
-          gap="s"
-          display="flex"
-          borderRadius="xs"
-          border="1px solid"
-          bg="errorContainer"
-          color="onErrorContainer"
-          borderColor="onErrorContainer"
-        >
-          {amountList?.map((item) => (
-            <>
-              <DotErrorSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-              <Typography variant="label" size="medium">
-                {`You don't have ${item.symbol} enough to burn`}
-              </Typography>
-            </>
-          ))}
-        </Box>
-      ) : null}
-      <Box display="flex" justifyContent="center" gap="xs">
-        <Button
-          variant="outline"
-          onClick={openModal}
-          borderColor="outlineVariant"
-          SuffixIcon={
-            <PlusSVG maxWidth="1.2rem" maxHeight="1.2rem" width="100%" />
-          }
-        >
-          Add more
-        </Button>
-        <Button
-          variant="filled"
-          onClick={onBurn}
-          disabled={
-            !objects ||
-            !objects.length ||
-            !objects.every(({ value }) => Number(value)) ||
-            !amountList ||
-            Boolean(amountList.length)
-          }
-        >
-          Burn Object{objects.length === 1 ? '' : 's'}
-        </Button>
-      </Box>
-    </>
+    <Button mx="auto" variant="filled" onClick={onBurn} disabled={disabled}>
+      Burn {objects.length} Asset{objects.length === 1 ? '' : 's'}
+    </Button>
   );
 };
 

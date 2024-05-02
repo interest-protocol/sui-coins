@@ -13,6 +13,7 @@ import { Web3ManagerProps, Web3ManagerState } from './web3-manager.types';
 const CONTEXT_DEFAULT_STATE = {
   nfts: [],
   coins: [],
+  objects: [],
   nftsMap: {},
   coinsMap: {},
   error: false,
@@ -43,7 +44,7 @@ const Web3Manager: FC<Web3ManagerProps> = ({ children }) => {
   } = useGetAllCoins();
 
   const {
-    data: objects,
+    data: allObjects,
     error: objectsError,
     mutate: mutateObjects,
     isLoading: fetchingAllObjects,
@@ -60,6 +61,19 @@ const Web3Manager: FC<Web3ManagerProps> = ({ children }) => {
     mutateObjects();
   };
 
+  const coinsObjects = values(coins ?? {}).map((coin) => ({
+    ...(allObjects?.coinsObjects ?? [])!.find(({ type }) =>
+      type.includes(coin.type)
+    )!,
+    display: coin,
+  }));
+
+  const ownedNfts = allObjects?.ownedNfts ?? [];
+
+  const otherObjects = allObjects?.otherObjects ?? [];
+
+  const objects = [...coinsObjects, ...ownedNfts, ...otherObjects];
+
   return (
     <Provider
       value={{
@@ -71,20 +85,16 @@ const Web3Manager: FC<Web3ManagerProps> = ({ children }) => {
         ),
         connected: isConnected,
         coinsMap: coins ?? ({} as CoinsMap),
-        ownedNfts: objects?.ownedNfts ?? [],
+        ownedNfts,
         walletAccount: currentAccount || null,
         coins: values(coins ?? ({} as CoinsMap)),
         account: currentAccount?.address || null,
-        otherObjects: objects?.otherObjects ?? [],
+        otherObjects,
         error: !!coinsError || nftsError || objectsError,
         isFetchingCoinBalances:
           fetchingAllCoins || fetchingAllObjects || isLoadingNfts,
-        coinsObjects: values(coins ?? {}).map((coin) => ({
-          ...(objects?.coinsObjects ?? [])!.find(({ type }) =>
-            type.includes(coin.type)
-          )!,
-          display: coin,
-        })),
+        coinsObjects,
+        objects,
       }}
     >
       {children}

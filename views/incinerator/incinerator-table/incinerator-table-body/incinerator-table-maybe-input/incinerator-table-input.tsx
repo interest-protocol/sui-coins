@@ -1,4 +1,4 @@
-import { TextField } from '@interest-protocol/ui-kit';
+import { Box, TextField } from '@interest-protocol/ui-kit';
 import { FC, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
@@ -9,10 +9,10 @@ import { parseInputEventToNumberString, ZERO_BIG_NUMBER } from '@/utils';
 import {
   IncineratorForm,
   IncineratorTableBodyRowFieldProps,
-} from '../../incinerator.types';
-import IncineratorTableRowActionButton from './row-action-buttons';
+} from '../../../incinerator.types';
+import IncineratorTableRowActionButton from './incinerator-table-actions';
 
-const IncineratorTableBodyRowField: FC<IncineratorTableBodyRowFieldProps> = ({
+const IncineratorTableInput: FC<IncineratorTableBodyRowFieldProps> = ({
   index,
 }) => {
   const { control } = useFormContext<IncineratorForm>();
@@ -22,7 +22,7 @@ const IncineratorTableBodyRowField: FC<IncineratorTableBodyRowFieldProps> = ({
   const [currentValue, setCurrentValue] = useState(value);
 
   return (
-    <>
+    <Box display="flex" justifyContent="space-between" gap="m">
       <TextField
         placeholder="0"
         fontWeight="500"
@@ -45,8 +45,8 @@ const IncineratorTableBodyRowField: FC<IncineratorTableBodyRowFieldProps> = ({
         }
       />
       <IncineratorTableRowActionButton value={currentValue} index={index} />
-    </>
+    </Box>
   );
 };
 
-export default IncineratorTableBodyRowField;
+export default IncineratorTableInput;

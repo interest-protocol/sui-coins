@@ -7,9 +7,9 @@ import { CheckmarkSVG, TimesSVG } from '@/svg';
 import {
   IncineratorForm,
   IncineratorTableColumnProps,
-} from '../../incinerator.types';
+} from '../../../incinerator.types';
 
-const IncineratorTableRowActionButton: FC<IncineratorTableColumnProps> = ({
+const IncineratorTableActions: FC<IncineratorTableColumnProps> = ({
   index,
   value,
 }) => {
@@ -60,4 +60,4 @@ const IncineratorTableRowActionButton: FC<IncineratorTableColumnProps> = ({
   );
 };
 
-export default IncineratorTableRowActionButton;
+export default IncineratorTableActions;

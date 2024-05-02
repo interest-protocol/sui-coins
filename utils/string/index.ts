@@ -1,6 +1,7 @@
 import { ChangeEvent } from 'react';
 
 import { MAX_NUMBER_INPUT_VALUE } from '@/constants';
+import { ObjectData } from '@/context/all-objects/all-objects.types';
 
 const isExponential = (number: number) => number.toString().includes('e');
 
@@ -127,3 +128,9 @@ export function isHexString(value: any, length?: number): boolean {
   }
   return true;
 }
+
+export const getKindFromObjectData = (object: ObjectData) => {
+  if (object.type.startsWith('0x2::coin::Coin<')) return 'Coin';
+  if (object.display) return 'NFT';
+  return 'Other';
+};

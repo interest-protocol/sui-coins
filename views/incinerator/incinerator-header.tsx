@@ -28,8 +28,8 @@ const IncineratorHeader: FC = () => {
           {...register('searchAssets')}
           nPlaceholder={{ opacity: 0.7 }}
           fieldProps={{
-            height: '2.5rem',
             width: '100%',
+            height: '2.5rem',
             borderRadius: 'full',
           }}
           Prefix={<SearchSVG maxWidth="1rem" maxHeight="1rem" width="100%" />}

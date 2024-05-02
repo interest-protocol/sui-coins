@@ -8,18 +8,19 @@ import { TokenIcon } from '@/components';
 import { useNetwork } from '@/context/network';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { FixedPointMath } from '@/lib';
-import { getSymbolByType, ZERO_BIG_NUMBER } from '@/utils';
+import {
+  getKindFromObjectData,
+  getSymbolByType,
+  ZERO_BIG_NUMBER,
+} from '@/utils';
 
 import {
   IncineratorForm,
   IncineratorTableRowProps,
 } from '../../incinerator.types';
-import QtyIncinerate from './qty-incinerate';
+import QtyIncinerate from './incinerator-table-maybe-input';
 
-const IncineratorTableBodyRow: FC<IncineratorTableRowProps> = ({
-  object,
-  asset,
-}) => {
+const IncineratorTableRow: FC<IncineratorTableRowProps> = ({ object }) => {
   const network = useNetwork();
   const { display, type } = object;
   const displayName = display
@@ -34,7 +35,7 @@ const IncineratorTableBodyRow: FC<IncineratorTableRowProps> = ({
   const index = object.index;
   const url = (display as Record<string, string>)?.image_url;
   const { control, setValue } = useFormContext<IncineratorForm>();
-  const state = useWatch({ control, name: `objects.${index}.state` });
+  const active = useWatch({ control, name: `objects.${index}.active` });
   const editable = useWatch({ control, name: `objects.${index}.editable` });
 
   const balance = FixedPointMath.toNumber(
@@ -42,30 +43,28 @@ const IncineratorTableBodyRow: FC<IncineratorTableRowProps> = ({
     (display as CoinObject)?.decimals ?? 0
   );
 
-  const handleCheck = () => {
-    setValue(`objects.${index}.state`, !state);
-  };
+  const handleCheck = () => setValue(`objects.${index}.active`, !active);
+
+  const objectKind = getKindFromObjectData(object);
 
   return (
     <Box
       as="tr"
       key={v4()}
       width="100%"
-      nHover={{
-        bg: 'lowContainer',
-      }}
       cursor="pointer"
-      bg={state ? 'lowContainer' : 'unset'}
+      nHover={{ bg: 'lowContainer' }}
+      bg={active ? 'lowContainer' : 'unset'}
     >
       <Typography
-        as="th"
+        as="td"
         key={v4()}
         size="small"
         color="outline"
         variant="label"
         textAlign="left"
       >
-        <Checkbox defaultValue={state} onClick={handleCheck} label="" />
+        <Checkbox defaultValue={active} onClick={handleCheck} label="" />
       </Typography>
       <Typography
         pr="m"
@@ -94,7 +93,7 @@ const IncineratorTableBodyRow: FC<IncineratorTableRowProps> = ({
             color="outline"
             whiteSpace="nowrap"
           >
-            Type: {asset}
+            Type: {objectKind}
           </Typography>
         </Box>
       </Typography>
@@ -107,9 +106,13 @@ const IncineratorTableBodyRow: FC<IncineratorTableRowProps> = ({
       >
         {!editable ? '1' : balance}
       </Typography>
-      <QtyIncinerate index={index} />
+      <Typography pr="m" as="td" size="small" variant="label" width="30%">
+        <Box display="flex" justifyContent="space-between">
+          <QtyIncinerate index={index} />
+        </Box>
+      </Typography>
     </Box>
   );
 };
 
-export default IncineratorTableBodyRow;
+export default IncineratorTableRow;

@@ -1,29 +1,23 @@
 import { Box, Motion } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import IncineratorBurnButton from './burn-button';
-import IncineratorTableBody from './table-body';
-import IncineratorTableHeader from './table-header';
+import IncineratorTableBody from './incinerator-table-body';
+import IncineratorTableHeader from './incinerator-table-header';
 
-const IncineratorTable: FC = () => {
-  return (
-    <Box mb="l" display="grid" gap="l">
-      <Box overflowX="auto">
-        <Motion
-          as="table"
-          rowGap="l"
-          width="100%"
-          mt="l"
-          borderCollapse="separate"
-          borderSpacing="0 0.5rem"
-        >
-          <IncineratorTableHeader />
-          <IncineratorTableBody />
-        </Motion>
-      </Box>
-      <IncineratorBurnButton />
-    </Box>
-  );
-};
+const IncineratorTable: FC = () => (
+  <Box overflowX="auto">
+    <Motion
+      mt="l"
+      as="table"
+      rowGap="l"
+      width="100%"
+      borderSpacing="0 0.5rem"
+      borderCollapse="separate"
+    >
+      <IncineratorTableHeader />
+      <IncineratorTableBody />
+    </Motion>
+  </Box>
+);
 
 export default IncineratorTable;

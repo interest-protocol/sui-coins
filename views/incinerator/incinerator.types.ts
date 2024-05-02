@@ -1,22 +1,28 @@
 import { ObjectData } from '@/context/all-objects/all-objects.types';
 
+export enum IncineratorTabEnum {
+  All,
+  Coin,
+  NFT,
+  Other,
+}
+
 export type ObjectField = ObjectData & {
   index: number;
   value: string;
-  state: boolean;
+  active: boolean;
   editable: boolean;
   isEditing: boolean;
 };
 
 export interface IncineratorForm {
-  objects: ReadonlyArray<ObjectField>;
   searchAssets: string;
-  filter: number;
+  tab: IncineratorTabEnum;
+  objects: ReadonlyArray<ObjectField>;
 }
 
 export interface IncineratorTableRowProps {
   object: ObjectField;
-  asset: 'Coin' | 'NFT' | 'Other';
 }
 
 export interface IncineratorTableBodyRowFieldProps {
@@ -26,11 +32,4 @@ export interface IncineratorTableBodyRowFieldProps {
 export interface IncineratorTableColumnProps {
   index: number;
   value: string;
-}
-
-export enum FilterTableEnum {
-  All,
-  Coin,
-  NFT,
-  Other,
 }

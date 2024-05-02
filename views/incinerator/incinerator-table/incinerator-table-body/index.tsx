@@ -4,15 +4,16 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
 import { IncineratorForm } from '../../incinerator.types';
-import IncineratorTableBodyRow from './row';
+import IncineratorTableRow from './incinerator-table-row';
 
 const IncineratorTableBody: FC = () => {
   const { control } = useFormContext<IncineratorForm>();
-  const fields = useWatch({ control, name: `objects` });
+  const objects = useWatch({ control, name: 'objects' });
+
   return (
     <Motion as="tbody">
-      {fields?.map((object) => (
-        <IncineratorTableBodyRow object={object} asset="Coin" key={v4()} />
+      {objects.map((object) => (
+        <IncineratorTableRow object={object} key={v4()} />
       ))}
     </Motion>
   );

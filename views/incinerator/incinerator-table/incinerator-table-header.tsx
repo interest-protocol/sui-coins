@@ -8,20 +8,20 @@ import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import { FilterArrowDownSVG } from '@/svg';
-import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { TableHeaderData } from '../incinerator.data';
-import { FilterTableEnum, IncineratorForm } from '../incinerator.types';
+import { IncineratorForm, IncineratorTabEnum } from '../incinerator.types';
 
 const IncineratorTableHeader: FC = () => {
   const [checked, setChecked] = useState(false);
   const { control } = useFormContext<IncineratorForm>();
-  const filterSelected = useWatch({ control: control, name: 'filter' });
+  const tab = useWatch({ control: control, name: 'tab' });
   const {
-    coinsObjects,
+    objects,
+    coinsMap,
     ownedNfts,
     otherObjects,
-    coinsMap,
+    coinsObjects,
     isFetchingCoinBalances,
   } = useWeb3();
 
@@ -30,74 +30,64 @@ const IncineratorTableHeader: FC = () => {
     name: 'objects',
   });
 
-  const updateAssets = (state: boolean) => {
+  const displayObjects = {
+    [IncineratorTabEnum.All]: objects,
+    [IncineratorTabEnum.Coin]: coinsObjects,
+    [IncineratorTabEnum.NFT]: ownedNfts,
+    [IncineratorTabEnum.Other]: otherObjects,
+  };
+
+  const updateAssets = (active: boolean) => {
     replace(
-      [
-        ...(filterSelected == FilterTableEnum.NFT ||
-        filterSelected == FilterTableEnum.All
-          ? ownedNfts
-          : []),
-        ...(filterSelected == FilterTableEnum.Coin ||
-        filterSelected == FilterTableEnum.All
-          ? coinsObjects
-          : []),
-        ...(filterSelected == FilterTableEnum.Other ||
-        filterSelected == FilterTableEnum.All
-          ? otherObjects
-          : []),
-      ].map((coin: ObjectData, index) => {
-        const balance = coinsMap[(coin.display as CoinObject)?.type]?.balance;
-        const editable = balance && !balance.isZero();
+      displayObjects[tab].map((object: ObjectData, index) => {
+        const coin = coinsMap[(object.display as CoinObject)?.type];
+        const editable = coin && coin.balance && !coin.balance.isZero();
+
         return {
           index,
-          ...coin,
-          value: `${FixedPointMath.toNumber(
-            balance ?? ZERO_BIG_NUMBER,
-            (coin.display as CoinObject)?.decimals ?? 0
-          )}`,
+          ...object,
+          value: coin
+            ? `${FixedPointMath.toNumber(coin.balance, coin.decimals)}`
+            : '1',
           editable,
           isEditing: false,
-          state,
+          active,
         };
       })
     );
   };
 
   useEffect(() => {
-    if (!isFetchingCoinBalances) {
-      !fields.length && updateAssets(checked);
-    }
+    if (!isFetchingCoinBalances && !fields.length) updateAssets(checked);
   }, [isFetchingCoinBalances]);
 
   useEffect(() => {
     updateAssets(checked);
-  }, [filterSelected]);
+  }, [tab]);
 
   return (
     <Box as="thead">
       <Box as="tr">
         <Typography as="th" size="small" variant="label">
           <Checkbox
+            label=""
             defaultValue={checked}
             onClick={() => {
               updateAssets(!checked);
               setChecked(!checked);
             }}
-            label=""
           />
         </Typography>
-        {TableHeaderData.map((item, index) => (
+        {TableHeaderData.map((item) => (
           <Typography
             as="th"
+            pr="xl"
             key={v4()}
             size="small"
             color="outline"
-            variant="headline"
-            textAlign="left"
-            pr="xl"
-            width={index == 1 ? '10%' : '40%'}
             cursor="pointer"
-            minWidth="11rem"
+            textAlign="left"
+            variant="headline"
           >
             <Box display="flex" alignItems="center" gap="xs">
               <Typography variant="headline" size="small" fontSize="12px">

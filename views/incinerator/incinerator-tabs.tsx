@@ -8,7 +8,7 @@ import { IncineratorForm } from './incinerator.types';
 
 const IncineratorFilterTabs: FC = () => {
   const { control, setValue } = useFormContext<IncineratorForm>();
-  const filterSelected = useWatch({ control: control, name: 'filter' });
+  const tab = useWatch({ control, name: 'tab' });
 
   return (
     <Box
@@ -18,15 +18,11 @@ const IncineratorFilterTabs: FC = () => {
       gridTemplateColumns="1fr 1fr 1fr 1fr"
     >
       {FilterData.map((item, index) => (
-        <Box
-          key={v4()}
-          cursor="pointer"
-          onClick={() => setValue('filter', index)}
-        >
+        <Box key={v4()} cursor="pointer" onClick={() => setValue('tab', index)}>
           <Typography variant="body" size="medium" textAlign="center" py="m">
             {item}
           </Typography>
-          {filterSelected === index && (
+          {tab === index && (
             <Motion layout borderBottom="2px solid" borderColor="primary" />
           )}
         </Box>

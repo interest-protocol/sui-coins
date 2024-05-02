@@ -10,10 +10,6 @@ export interface IncineratorObject {
 
 export type SendArguments = IncineratorCoin | IncineratorObject;
 
-export interface IncineratorButtonProps {
-  openModal: () => void;
-}
-
 export interface AmountListProps {
   symbol: string;
   isGreater: boolean;
