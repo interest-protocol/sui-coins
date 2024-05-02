@@ -76,7 +76,7 @@ const IncineratorTableHeader: FC = () => {
   return (
     <Box as="thead">
       <Box as="tr">
-        <Typography as="th" key={v4()} size="small" variant="label" width="1%">
+        <Typography as="th" size="small" variant="label">
           <Checkbox
             defaultValue={checked}
             onClick={() => {

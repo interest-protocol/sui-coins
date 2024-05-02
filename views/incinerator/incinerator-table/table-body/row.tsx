@@ -50,6 +50,7 @@ const IncineratorTableBodyRow: FC<IncineratorTableRowProps> = ({
     <Box
       as="tr"
       key={v4()}
+      width="100%"
       nHover={{
         bg: 'lowContainer',
       }}

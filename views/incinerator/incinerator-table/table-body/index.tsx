@@ -9,7 +9,6 @@ import IncineratorTableBodyRow from './row';
 const IncineratorTableBody: FC = () => {
   const { control } = useFormContext<IncineratorForm>();
   const fields = useWatch({ control, name: `objects` });
-
   return (
     <Motion as="tbody">
       {fields?.map((object) => (
