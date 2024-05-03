@@ -10149,7 +10149,7 @@ packages:
       - '@npmcli/fs'
       - '@npmcli/map-workspaces'
       - '@npmcli/package-json'
-      - '@npmcli/promise-spawn'
+      - '@npmcli/time-spawn'
       - '@npmcli/run-script'
       - abbrev
       - archy
