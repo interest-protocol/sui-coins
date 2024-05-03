@@ -56,23 +56,19 @@ const fetchNftHolder = async ({
         }
       `;
 
-    const response = await fetch(`${process.env.DOMAIN}/api/v1/indexer`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(query),
+    const result = await apiRequestIndexer({
+      query,
+      apiKey: process.env.INDEXER_API_KEY || '',
+      userApiKey: process.env.INDEXER_API_USER || '',
     });
 
-    const result = await response.json();
-
-    if (!result?.data?.data?.sui?.nfts) {
+    if (!result?.data?.sui?.nfts) {
       throw new Error(
         `[fetchHolders] unexpected result: ${JSON.stringify(result)}`
       );
     }
 
-    const nfts = result.data.data.sui.nfts;
+    const nfts = result.data.sui.nfts;
 
     if (!nfts.length) return [];
 
@@ -129,23 +125,19 @@ export const fetchNftMetadata = async (
       }
     `;
 
-    const response = await fetch(`${process.env.DOMAIN}/api/v1/indexer`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(query),
+    const result = await apiRequestIndexer({
+      query,
+      apiKey: process.env.INDEXER_API_KEY || '',
+      userApiKey: process.env.INDEXER_API_USER || '',
     });
 
-    const result = await response.json();
-
-    if (!result?.data?.data?.sui?.collections) {
+    if (!result?.data?.sui?.collections) {
       throw new Error(
         `[fetchMetadata] unexpected result: ${JSON.stringify(result)}`
       );
     }
 
-    const metadata = result.data.data.sui.collections[0];
+    const metadata = result.data.sui.collections[0];
 
     if (!metadata)
       throw new Error(
@@ -161,7 +153,7 @@ export const fetchNftMetadata = async (
       total: supply,
       img: cover_url,
     };
-  } catch (e) {
+  } catch {
     return null;
   }
 };
@@ -185,23 +177,19 @@ export const fetchAllNftMetadata = async (): Promise<
       }
     `;
 
-    const response = await fetch(`${process.env.DOMAIN}/api/v1/indexer`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(query),
+    const result = await apiRequestIndexer({
+      query,
+      apiKey: process.env.INDEXER_API_KEY || '',
+      userApiKey: process.env.INDEXER_API_USER || '',
     });
 
-    const result = await response.json();
-
-    if (!result?.data?.data?.sui?.collections) {
+    if (!result?.data?.sui?.collections) {
       throw new Error(
         `[fetchAllMetadata] unexpected result: ${JSON.stringify(result)}`
       );
     }
 
-    const metadata = result.data.data.sui.collections;
+    const metadata = result.data.sui.collections;
 
     if (!metadata.length) return [];
 
