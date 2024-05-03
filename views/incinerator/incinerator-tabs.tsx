@@ -23,6 +23,8 @@ const IncineratorFilterTabs: FC = () => {
       display="grid"
       flexWrap="wrap"
       gridTemplateColumns="1fr 1fr 1fr 1fr"
+      borderBottom="1px solid"
+      borderColor="outlineVariant"
     >
       {FilterData.map((item, index) => (
         <Box key={v4()} cursor="pointer" onClick={() => setValue('tab', index)}>
