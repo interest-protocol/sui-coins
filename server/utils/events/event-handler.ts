@@ -31,19 +31,24 @@ export const savePoolMainnetEvents = async (data: SuiEvent[]) => {
   newPoolEvents.forEach((event) => {
     const { isStable, coins, lpCoin } = parseType(event);
     const poolObjectId = propOr('', 'pool', event.parsedJson);
-    invariant(poolObjectId, 'Failed to get pool object id');
-    invariant(typeof poolObjectId === 'string', 'Failed to get pool object id');
+    const stateId = propOr('', 'state', event.parsedJson);
+    invariant(
+      poolObjectId && typeof poolObjectId === 'string',
+      'Failed to get pool object id'
+    );
+    invariant(
+      stateId && typeof stateId === 'string',
+      'Failed to get the pool state id'
+    );
 
     poolsToSave.push({
       isStable,
       poolObjectId,
+      stateId,
       lpCoinType: lpCoin,
       coinTypes: coins,
     });
   });
 
-  console.log('pools to save', poolsToSave);
-  const r = await model.insertMany(poolsToSave);
-
-  console.log(r);
+  model.insertMany(poolsToSave);
 };
