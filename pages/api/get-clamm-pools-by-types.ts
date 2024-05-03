@@ -1,3 +1,4 @@
+import { normalizeStructTag } from '@mysten/sui.js/src/utils';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { pathOr } from 'ramda';
 import invariant from 'tiny-invariant';
@@ -19,7 +20,8 @@ export default async function handler(
 
     const data = await getClammPoolsByCoinTypes({
       network: Network.MAINNET,
-      coinTypes,
+      // Assume this throws if it is not a struct tag
+      coinTypes: coinTypes.map((x) => normalizeStructTag(x)),
     });
 
     res.status(200).send(data);
