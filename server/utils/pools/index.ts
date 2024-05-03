@@ -9,7 +9,7 @@ export const getClammPools = async ({
   limit,
 }: GetClammPoolsArgs) => {
   const clammModel = getClammPoolModel(network);
-  const safeLimit = limit > PAGE_SIZE ? limit : PAGE_SIZE;
+  const safeLimit = limit > PAGE_SIZE ? PAGE_SIZE : limit;
 
   const pools = await clammModel
     .find({})
