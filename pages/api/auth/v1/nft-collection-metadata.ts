@@ -2,8 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 import { fetchNftMetadata } from '@/api/indexer';
 import dbConnect from '@/server';
-import NFTCollection from '@/server/model/mainnet/nft-collection';
-import NFTCollectionMetadata from '@/server/model/mainnet/nft-collection-metadata';
+import NFTCollection from '@/server/model/nft-collection';
+import NFTCollectionMetadata from '@/server/model/nft-collection-metadata';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {

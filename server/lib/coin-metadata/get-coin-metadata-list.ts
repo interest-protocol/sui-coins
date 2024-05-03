@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Network } from '@/constants';
 import { CoinMetadataWithType } from '@/interface';
-import { CoinMetadataModel } from '@/server/model/mainnet/coin-metadata';
+import { CoinMetadataModel } from '@/server/model/coin-metadata';
 import { getBasicCoinMetadata } from '@/utils';
 import { chunk } from '@/utils';
 

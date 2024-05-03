@@ -1,8 +1,8 @@
 import { getFullnodeUrl, SuiClient } from '@mysten/sui.js/client';
 
 import { Network } from '@/constants';
-import CoinMetadata from '@/server/model/mainnet/coin-metadata';
-import CoinMetadataTestnet from '@/server/model/mainnet/coin-metadata-testnet';
+import CoinMetadata from '@/server/model/coin-metadata';
+import CoinMetadataTestnet from '@/server/model/coin-metadata-testnet';
 import { getBasicCoinMetadata } from '@/utils';
 
 const testnetClient = new SuiClient({

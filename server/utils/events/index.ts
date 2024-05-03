@@ -2,7 +2,7 @@ import { SuiClient } from '@mysten/sui.js/client';
 
 import { Network } from '@/constants';
 import { CLAMM_PACKAGE_ADDRESSES } from '@/constants/dex';
-import { getEventCursorModel } from '@/server/model/mainnet/event-cursor';
+import { getEventCursorModel } from '@/server/model/event-cursor';
 import { sleep } from '@/utils';
 
 import { savePoolMainnetEvents } from './event-handler';

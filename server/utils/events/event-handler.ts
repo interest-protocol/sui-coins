@@ -4,10 +4,7 @@ import { propOr } from 'ramda';
 import invariant from 'tiny-invariant';
 
 import { Network } from '@/constants';
-import {
-  ClammPoolType,
-  getClammPoolModel,
-} from '@/server/model/mainnet/clamm-pool';
+import { ClammPoolType, getClammPoolModel } from '@/server/model/clamm-pool';
 
 const parseType = (x: SuiEvent) => {
   const types = x.type.split('<').slice(1)[0].split(',');

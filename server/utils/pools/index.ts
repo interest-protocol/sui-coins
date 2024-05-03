@@ -1,5 +1,5 @@
 import { PAGE_SIZE } from '@/constants';
-import { getClammPoolModel } from '@/server/model/mainnet/clamm-pool';
+import { getClammPoolModel } from '@/server/model/clamm-pool';
 
 import { GetClammPoolsArgs, GetClammPoolsByCoinTypesArgs } from './pools.types';
 
