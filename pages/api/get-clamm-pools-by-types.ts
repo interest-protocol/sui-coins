@@ -1,5 +1,6 @@
 import { normalizeStructTag } from '@mysten/sui.js/utils';
 import { NextApiRequest, NextApiResponse } from 'next';
+import NextCors from 'nextjs-cors';
 import { pathOr } from 'ramda';
 import invariant from 'tiny-invariant';
 
@@ -12,6 +13,13 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
+    await NextCors(req, res, {
+      // Options
+      methods: ['GET'],
+      origin: '*',
+      optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    });
+
     await dbConnect();
 
     const coinTypes = pathOr('', ['query', 'coinTypes'], req).split(',');
