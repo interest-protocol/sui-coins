@@ -1,4 +1,4 @@
-import { normalizeStructTag } from '@mysten/sui.js/src/utils';
+import { normalizeStructTag } from '@mysten/sui.js/utils';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { pathOr } from 'ramda';
 import invariant from 'tiny-invariant';
