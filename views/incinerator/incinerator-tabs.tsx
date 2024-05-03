@@ -6,6 +6,13 @@ import { v4 } from 'uuid';
 import { FilterData } from './incinerator.data';
 import { IncineratorForm } from './incinerator.types';
 
+const variants = {
+  collapsed: {
+    height: 'auto',
+  },
+  rest: { height: 0 },
+};
+
 const IncineratorFilterTabs: FC = () => {
   const { control, setValue } = useFormContext<IncineratorForm>();
   const tab = useWatch({ control, name: 'tab' });
@@ -23,7 +30,16 @@ const IncineratorFilterTabs: FC = () => {
             {item}
           </Typography>
           {tab === index && (
-            <Motion layout borderBottom="2px solid" borderColor="primary" />
+            <Motion
+              px="xl"
+              initial="rest"
+              variants={variants}
+              animate="collapsed"
+              overflow="hidden"
+              borderBottom="2px solid"
+              borderBottomColor="primary"
+              layoutId="underline"
+            />
           )}
         </Box>
       ))}
