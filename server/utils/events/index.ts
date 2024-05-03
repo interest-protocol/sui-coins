@@ -112,7 +112,7 @@ const indexEvent = async ({
   await sleep(1);
 
   if (result.hasNextPage)
-    indexEvent({ suiClient, saveCursor, eventData, cursor });
+    indexEvent({ suiClient, saveCursor, eventData, cursor: result.cursor });
 };
 
 export const runIndexer = async (suiClient: SuiClient, network: Network) => {
