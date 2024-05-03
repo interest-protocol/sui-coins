@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { pathOr } from 'ramda';
 
-import { Network } from '@/constants';
+import { Network, PAGE_SIZE } from '@/constants';
 import dbConnect from '@/server';
 import { getClammPools, handleServerError } from '@/server/utils';
 
@@ -13,7 +13,7 @@ export default async function handler(
     await dbConnect();
 
     const page = pathOr(1, ['query', 'page'], req);
-    const limit = pathOr(50, ['query', 'limit'], req);
+    const limit = pathOr(PAGE_SIZE, ['query', 'limit'], req);
 
     const data = await getClammPools({
       network: Network.MAINNET,
