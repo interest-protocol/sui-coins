@@ -30,31 +30,33 @@ const IncineratorTableActions: FC<IncineratorTableColumnProps> = ({
       height="2.5rem"
       alignItems="center"
       justifyContent="flex-end"
-      gap="s"
+      gap="xs"
     >
       <Button
         isIcon
+        mx="xs"
         bg="success"
         variant="text"
-        width="0.75rem"
-        height="0.75rem"
+        height="0.4rem"
+        width="0.4rem"
         borderRadius="full"
         color="lowestContainer"
         onClick={handleApprove}
       >
-        <CheckmarkSVG maxHeight="100%" maxWidth="100%" width="100%" />
+        <CheckmarkSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
       </Button>
       <Button
         isIcon
+        mx="xs"
         bg="error"
         variant="text"
-        width="0.75rem"
-        height="0.75rem"
+        height="0.4rem"
+        width="0.4rem"
         borderRadius="full"
         color="lowestContainer"
         onClick={handleCancel}
       >
-        <TimesSVG maxHeight="100%" maxWidth="100%" width="100%" />
+        <TimesSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
       </Button>
     </Box>
   );
