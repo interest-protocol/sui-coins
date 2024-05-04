@@ -1,4 +1,9 @@
-import { Box, Button, Typography } from '@interest-protocol/ui-kit';
+import {
+  Box,
+  Button,
+  ProgressIndicator,
+  Typography,
+} from '@interest-protocol/ui-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { prop, toPairs } from 'ramda';
 import { FC } from 'react';
@@ -15,12 +20,13 @@ import { getAmountsMapFromObjects } from '@/views/components/send-asset-details/
 
 import IncineratorTokenObject from '../component/incinerator-token-object';
 import { IncineratorForm } from '../incinerator.types';
+import IncineratorNoAsset from '../incinerator-no-assets';
 import { useBurn } from './incinerator-button.hooks';
 
 const IncineratorButton: FC = () => {
   const burn = useBurn();
   const network = useNetwork();
-  const { coinsMap } = useWeb3();
+  const { coinsMap, isFetchingCoinBalances } = useWeb3();
   const { setModal, handleClose } = useModal();
   const { control, reset } = useFormContext<IncineratorForm>();
   const allObjects = useWatch({ control, name: 'objects' });
@@ -128,10 +134,18 @@ const IncineratorButton: FC = () => {
       </Box>
     );
 
-  return (
-    <Button mx="auto" variant="filled" onClick={onBurn} disabled={disabled}>
-      Burn {objects.length} Asset{objects.length === 1 ? '' : 's'}
-    </Button>
+  return !isFetchingCoinBalances ? (
+    !allObjects?.length ? (
+      <IncineratorNoAsset />
+    ) : (
+      <Button mx="auto" variant="filled" onClick={onBurn} disabled={disabled}>
+        Burn {objects.length} Asset{objects.length === 1 ? '' : 's'}
+      </Button>
+    )
+  ) : (
+    <Box mx="auto" display="flex" alignItems="center" flexDirection="column">
+      <ProgressIndicator size={40} variant="loading" />
+    </Box>
   );
 };
 

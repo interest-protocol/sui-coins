@@ -90,7 +90,12 @@ const IncineratorTableHeader: FC = () => {
             variant="headline"
           >
             <Box display="flex" alignItems="center" gap="xs">
-              <Typography variant="headline" size="small" fontSize="12px">
+              <Typography
+                variant="headline"
+                size="small"
+                fontSize="12px"
+                width="max-content"
+              >
                 {item}
               </Typography>
               <Box width="0.5rem" height="0.5rem" display="flex" color="black">
