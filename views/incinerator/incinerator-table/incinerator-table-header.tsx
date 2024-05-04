@@ -93,7 +93,7 @@ const IncineratorTableHeader: FC = () => {
               <Typography
                 variant="headline"
                 size="small"
-                fontSize="12px"
+                fontSize="xs"
                 width="max-content"
               >
                 {item}
