@@ -1,20 +1,19 @@
 import { SuiEvent } from '@mysten/sui.js/client';
+import { isValidSuiObjectId } from '@mysten/sui.js/utils';
+import { normalizeSuiObjectId } from '@mysten/sui.js/utils';
 import { normalizeStructTag } from '@mysten/sui.js/utils';
-import { propOr } from 'ramda';
+import { has, propOr } from 'ramda';
 import invariant from 'tiny-invariant';
 
 import { Network } from '@/constants';
 import { ClammPoolType, getClammPoolModel } from '@/server/model/clamm-pool';
 
 const parseType = (x: SuiEvent) => {
-  const types = x.type.split('<').slice(1)[0].split(',');
-  const [curve, ...coins] = types.slice(0, -1);
-  const lpCoin = types.slice(-1)[0].trim();
-
   return {
-    isStable: curve.includes('Stable'),
-    lpCoin: normalizeStructTag(lpCoin.trim()),
-    coins: coins.map((x) => normalizeStructTag(x.trim())),
+    isStable: x.type.split('<')[1].split(',')[0].includes('Stable'),
+    lpCoin: normalizeStructTag(
+      x.type.split('<')[1].split(',')[1].trim().slice(0, -1)
+    ),
   };
 };
 
@@ -26,24 +25,34 @@ export const savePoolMainnetEvents = async (data: SuiEvent[]) => {
   const poolsToSave: ClammPoolType[] = [];
 
   newPoolEvents.forEach((event) => {
-    const { isStable, coins, lpCoin } = parseType(event);
+    const { isStable, lpCoin } = parseType(event);
+
     const poolObjectId = propOr('', 'pool', event.parsedJson);
-    const stateId = propOr('', 'state', event.parsedJson);
+    const coins = propOr('', 'coins', event.parsedJson);
+
+    invariant(
+      poolObjectId &&
+        typeof poolObjectId === 'string' &&
+        isValidSuiObjectId(poolObjectId),
+      ' Failed to get sui object id'
+    );
+
+    invariant(
+      Array.isArray(coins) && has('name', coins[0]),
+      ' Failed to get coin types'
+    );
+
     invariant(
       poolObjectId && typeof poolObjectId === 'string',
       'Failed to get pool object id'
     );
-    invariant(
-      stateId && typeof stateId === 'string',
-      'Failed to get the pool state id'
-    );
+    invariant(coins && Array.isArray(coins), 'Failed to get coins');
 
     poolsToSave.push({
       isStable,
-      poolObjectId,
-      stateId,
+      poolObjectId: normalizeSuiObjectId(poolObjectId),
       lpCoinType: lpCoin,
-      coinTypes: coins,
+      coinTypes: coins.map((x) => normalizeStructTag(x.name)),
     });
   });
 
