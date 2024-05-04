@@ -1,6 +1,5 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
-import { formatAddress } from '@mysten/sui.js/utils';
 import { prop, toPairs } from 'ramda';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -14,6 +13,7 @@ import { CopySVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 import { getAmountsMapFromObjects } from '@/views/components/send-asset-details/send-asset-details.utils';
 
+import IncineratorTokenObject from '../component/incinerator-token-object';
 import { IncineratorForm } from '../incinerator.types';
 import { useBurn } from './incinerator-button.hooks';
 
@@ -40,7 +40,7 @@ const IncineratorButton: FC = () => {
 
   const amountList = toPairs(getAmountsMapFromObjects(objects))
     .map(([type, amount]) => ({
-      symbol: coinsMap[type].symbol,
+      symbol: coinsMap[type]?.symbol,
       isGreater: coinsMap[type].balance.isLessThan(amount),
     }))
     .filter((item) => item.isGreater);
@@ -51,11 +51,6 @@ const IncineratorButton: FC = () => {
     !objects.every(({ value }) => Number(value)) ||
     !amountList ||
     Boolean(amountList.length);
-
-  console.log({
-    objects,
-    amountList,
-  });
 
   const handleBurn = async () => {
     if (disabled) return;
@@ -79,7 +74,8 @@ const IncineratorButton: FC = () => {
   const onBurn = () =>
     setModal(
       <Box
-        p="l"
+        py="l"
+        px="xl"
         gap="xl"
         display="flex"
         borderRadius="m"
@@ -95,7 +91,7 @@ const IncineratorButton: FC = () => {
             that you are trying to burn are:
           </Typography>
           <Box display="flex" flexDirection="column" gap="xs" my="l">
-            {objects.map(({ type }) => (
+            {objects.map((object) => (
               <Box
                 p="xs"
                 key={v4()}
@@ -104,13 +100,11 @@ const IncineratorButton: FC = () => {
                 bg="lowContainer"
                 borderRadius="xs"
                 alignItems="center"
-                onClick={() => copy(type)}
                 nHover={{ bg: 'container' }}
                 justifyContent="space-between"
+                onClick={() => copy(object.type)}
               >
-                <Typography size="medium" variant="label">
-                  {formatAddress(type)}
-                </Typography>
+                <IncineratorTokenObject object={object} />
                 <CopySVG maxWidth="1rem" maxHeight="1rem" width="100%" />
               </Box>
             ))}

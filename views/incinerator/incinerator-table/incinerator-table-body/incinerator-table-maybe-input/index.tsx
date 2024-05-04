@@ -30,7 +30,7 @@ const IncineratorTableMaybeInput: FC<
       <Typography
         p="xs"
         as="span"
-        size="small"
+        size="large"
         variant="body"
         borderRadius="full"
       >
