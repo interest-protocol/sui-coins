@@ -1,8 +1,8 @@
-import { Box, Button } from '@interest-protocol/ui-kit';
+import { Box } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { CheckmarkSVG, TimesSVG } from '@/svg';
+import { CheckRoundedSVG, TimesRoundedSVG } from '@/svg';
 
 import {
   IncineratorForm,
@@ -25,37 +25,13 @@ const IncineratorTableActions: FC<IncineratorTableColumnProps> = ({
   };
 
   return (
-    <Box
-      display="flex"
-      height="2.5rem"
-      alignItems="center"
-      justifyContent="flex-end"
-      gap="s"
-    >
-      <Button
-        isIcon
-        bg="success"
-        variant="text"
-        width="0.75rem"
-        height="0.75rem"
-        borderRadius="full"
-        color="lowestContainer"
-        onClick={handleApprove}
-      >
-        <CheckmarkSVG maxHeight="100%" maxWidth="100%" width="100%" />
-      </Button>
-      <Button
-        isIcon
-        bg="error"
-        variant="text"
-        width="0.75rem"
-        height="0.75rem"
-        borderRadius="full"
-        color="lowestContainer"
-        onClick={handleCancel}
-      >
-        <TimesSVG maxHeight="100%" maxWidth="100%" width="100%" />
-      </Button>
+    <Box display="flex" alignItems="center" justifyContent="flex-end" gap="xl">
+      <Box onClick={handleApprove}>
+        <CheckRoundedSVG maxHeight="1.75rem" maxWidth="1.75rem" width="100%" />
+      </Box>
+      <Box onClick={handleCancel}>
+        <TimesRoundedSVG maxHeight="1.75rem" maxWidth="1.75rem" width="100%" />
+      </Box>
     </Box>
   );
 };

@@ -39,7 +39,6 @@ const IncineratorTableMaybeInput: FC<
       {editable && (
         <Box
           display="flex"
-          height="2.5rem"
           alignItems="center"
           justifyContent="flex-end"
           gap="s"
