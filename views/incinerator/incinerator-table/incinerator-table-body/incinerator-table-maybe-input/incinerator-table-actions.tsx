@@ -25,19 +25,12 @@ const IncineratorTableActions: FC<IncineratorTableColumnProps> = ({
   };
 
   return (
-    <Box
-      display="flex"
-      height="3rem"
-      alignItems="center"
-      justifyContent="flex-end"
-      gap="xs"
-      ml="m"
-    >
-      <Box onClick={handleApprove} mx="xs">
-        <CheckRoundedSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+    <Box display="flex" alignItems="center" justifyContent="flex-end" gap="xl">
+      <Box onClick={handleApprove}>
+        <CheckRoundedSVG maxHeight="1.75rem" maxWidth="1.75rem" width="100%" />
       </Box>
-      <Box onClick={handleCancel} mx="xs">
-        <TimesRoundedSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+      <Box onClick={handleCancel}>
+        <TimesRoundedSVG maxHeight="1.75rem" maxWidth="1.75rem" width="100%" />
       </Box>
     </Box>
   );

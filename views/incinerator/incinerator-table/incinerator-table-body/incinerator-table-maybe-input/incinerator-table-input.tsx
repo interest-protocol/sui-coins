@@ -22,7 +22,7 @@ const IncineratorTableInput: FC<IncineratorTableBodyRowFieldProps> = ({
   const [currentValue, setCurrentValue] = useState(value);
 
   return (
-    <Box display="flex" justifyContent="space-between" gap="m">
+    <Box display="flex" justifyContent="space-between" width="100%">
       <TextField
         placeholder="0"
         fontWeight="500"
