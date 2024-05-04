@@ -7,7 +7,7 @@ import IncineratorTableHeader from './incinerator-table-header';
 const IncineratorTable: FC = () => (
   <Box overflowX="auto">
     <Motion
-      mt="l"
+      mt="2xs"
       as="table"
       rowGap="l"
       width="100%"

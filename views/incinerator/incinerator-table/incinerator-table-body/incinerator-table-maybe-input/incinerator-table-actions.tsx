@@ -25,7 +25,12 @@ const IncineratorTableActions: FC<IncineratorTableColumnProps> = ({
   };
 
   return (
-    <Box display="flex" alignItems="center" justifyContent="flex-end" gap="xl">
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="flex-end"
+      gap={['2xs', '2xs', '2xs', 'xl']}
+    >
       <Box onClick={handleApprove}>
         <CheckRoundedSVG maxHeight="1.75rem" maxWidth="1.75rem" width="100%" />
       </Box>
