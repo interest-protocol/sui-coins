@@ -4,7 +4,6 @@ import { Network } from '@/constants';
 
 export interface ClammPoolType {
   poolObjectId: string;
-  stateId: string;
   lpCoinType: string;
   isStable: boolean;
   coinTypes: readonly string[];
@@ -20,10 +19,6 @@ export const ClammPoolSchema = new Schema({
     type: String,
     required: true,
     index: true,
-  },
-  stateId: {
-    type: String,
-    required: true,
   },
   lpCoinType: {
     type: String,
