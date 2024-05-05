@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/index-clamm-events",
-      "schedule": "*/1 * * * *"
+      "schedule": "*/3 * * * *"
     }
   ]
 }
