@@ -19,6 +19,7 @@ export const ClammPoolSchema = new Schema({
     type: String,
     required: true,
     index: true,
+    unique: true,
   },
   lpCoinType: {
     type: String,
@@ -43,5 +44,5 @@ const testnetModel =
   mongoose.models[testnetModelName] ||
   mongoose.model<ClammPoolModel>(testnetModelName, ClammPoolSchema);
 
-export const getClammPoolModel = (network: Network) =>
+export const getClammPoolModel = (network: Network): typeof mainnetModel =>
   network === Network.MAINNET ? mainnetModel : testnetModel;

@@ -24,5 +24,5 @@ const testnetModel =
   mongoose.models[testnetModelName] ||
   mongoose.model<ClammGraphModel>(testnetModelName, ClammGraphSchema);
 
-export const getClammGraphModel = (network: Network) =>
+export const getClammGraphModel = (network: Network): typeof mainnetModel =>
   network === Network.MAINNET ? mainnetModel : testnetModel;
