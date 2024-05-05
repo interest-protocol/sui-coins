@@ -27,17 +27,10 @@ export const savePoolMainnetEvents = async (data: SuiEvent[]) => {
         isValidSuiObjectId(poolObjectId),
       ' Failed to get sui object id'
     );
-
     invariant(
       Array.isArray(coins) && has('name', coins[0]),
       ' Failed to get coin types'
     );
-
-    invariant(
-      poolObjectId && typeof poolObjectId === 'string',
-      'Failed to get pool object id'
-    );
-    invariant(coins && Array.isArray(coins), 'Failed to get coins');
     invariant(typeof lpCoin === 'string', 'LpCoin is not found');
     invariant(typeof isStable === 'boolean', 'isStable is not found');
 
