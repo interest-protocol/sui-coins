@@ -105,7 +105,7 @@ const indexEvent = async ({
     eventData,
   });
 
-  await sleep(1);
+  await sleep(800);
 
   if (result.hasNextPage)
     indexEvent({ suiClient, saveCursor, eventData, cursor: result.cursor });
