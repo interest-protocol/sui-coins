@@ -17,7 +17,7 @@ const PoolSummary: FC = () => {
   const { push } = useRouter();
   const network = useNetwork();
   const { getValues } = useFormContext<CreatePoolForm>();
-  const { type: poolType, isStable, tokens, dex } = getValues();
+  const { isStable, tokens, dex } = getValues();
 
   return (
     <Box
@@ -67,7 +67,7 @@ const PoolSummary: FC = () => {
           alignItems="center"
           justifyContent="space-between"
         >
-          {poolType}
+          CLAMM
         </Box>
       </Box>
       <Box
