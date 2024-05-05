@@ -10,12 +10,7 @@ import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { TokenIcon } from '@/components';
-import {
-  COINS,
-  CONTROLLERS_MAP,
-  MINT_MODULE_NAME_MAP,
-  PACKAGES,
-} from '@/constants';
+import { COINS, FAUCET_AMOUNT, TREASURY_CAP_MAP } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks';
 import { useModal } from '@/hooks/use-modal';
@@ -44,14 +39,15 @@ const MintForm: FC = () => {
 
       if (selected.type === SUI_TYPE_ARG) return requestMov(account, network);
 
-      const minted_coin = transactionBlock.moveCall({
-        target: `${PACKAGES[network].COINS}::${
-          MINT_MODULE_NAME_MAP[selected.type]
-        }::mint`,
-        arguments: [transactionBlock.object(CONTROLLERS_MAP[selected.type])],
+      transactionBlock.moveCall({
+        target: `0x2::coin::mint_and_transfer`,
+        typeArguments: [selected.type],
+        arguments: [
+          transactionBlock.object(TREASURY_CAP_MAP[selected.type]),
+          transactionBlock.pure.u64(FAUCET_AMOUNT[selected.type]),
+          transactionBlock.pure.address(account),
+        ],
       });
-
-      transactionBlock.transferObjects([minted_coin], account);
 
       const { transactionBlockBytes, signature } =
         await signTransactionBlock.mutateAsync({
@@ -101,11 +97,13 @@ const MintForm: FC = () => {
     );
 
   const onMint = () => {
-    toast.promise(handleMint(), {
-      loading: 'Loading',
-      success: `${selected.symbol} minted successfully`,
-      error: 'Something went wrong',
-    });
+    toast
+      .promise(handleMint(), {
+        loading: 'Loading',
+        success: `${selected.symbol} minted successfully`,
+        error: 'Something went wrong',
+      })
+      .catch(console.log);
   };
 
   return (
