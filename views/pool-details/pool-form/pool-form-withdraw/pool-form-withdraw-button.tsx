@@ -11,20 +11,18 @@ import { EXPLORER_URL } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useDialog } from '@/hooks/use-dialog';
 import { useModal } from '@/hooks/use-modal';
-import { isClammPool } from '@/hooks/use-pools/use-pools.utils';
 import { useWeb3 } from '@/hooks/use-web3';
 import { showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
 
 import PoolPreview from '../pool-form-preview';
-import { useAmmWithdraw, useClammWithdraw } from './pool-form-withdraw.hooks';
+import { useWithdraw } from './pool-form-withdraw.hooks';
 
 const PoolFormWithdrawButton: FC = () => {
   const network = useNetwork();
   const { mutate } = useWeb3();
   const client = useSuiClient();
-  const ammWithdraw = useAmmWithdraw();
-  const clammWithdraw = useClammWithdraw();
+  const withdraw = useWithdraw();
   const account = useCurrentAccount();
   const { dialog, handleClose } = useDialog();
   const signTransactionBlock = useSignTransactionBlock();
@@ -37,9 +35,7 @@ const PoolFormWithdrawButton: FC = () => {
     try {
       if (!account) return;
 
-      const txb = await (isClammPool(getValues('pool'))
-        ? clammWithdraw
-        : ammWithdraw)(getValues(), account);
+      const txb = await withdraw(getValues(), account);
 
       const { signature, transactionBlockBytes } =
         await signTransactionBlock.mutateAsync({

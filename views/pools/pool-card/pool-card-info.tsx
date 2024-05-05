@@ -9,8 +9,8 @@ import { useNetwork } from '@/context/network';
 import { PoolCardTokenInfoProps } from './pool-card.types';
 
 const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({
-  coinMetadata,
   coinTypes,
+  coinMetadata,
 }) => {
   const network = useNetwork();
 
@@ -33,24 +33,13 @@ const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({
           alignSelf="stretch"
         >
           {coinTypes.map((type) => (
-            <Box
+            <TokenIcon
+              withBg
               key={v4()}
-              display="flex"
-              width="2.5rem"
-              bg="onSurface"
-              color="surface"
-              height="2.5rem"
-              borderRadius="xs"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <TokenIcon
-                withBg
-                type={type}
-                network={network}
-                symbol={coinMetadata[type].symbol}
-              />
-            </Box>
+              type={type}
+              network={network}
+              symbol={coinMetadata[type].symbol}
+            />
           ))}
         </Box>
         <Box display="flex" flexDirection="column" alignItems="center">

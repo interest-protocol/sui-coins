@@ -5,19 +5,12 @@ import { values } from 'ramda';
 import { FC } from 'react';
 import useSWR from 'swr';
 
-import { isClammPool } from '@/hooks/use-pools/use-pools.utils';
 import { FixedPointMath } from '@/lib';
 import { ZERO_BIG_NUMBER } from '@/utils';
 import slippage from '@/views/swap/manage-slippage/slippage';
 
-import {
-  useAmmDeposit,
-  useClammDeposit,
-} from '../pool-form-deposit/pool-form-deposit.hooks';
-import {
-  useAmmWithdraw,
-  useClammWithdraw,
-} from '../pool-form-withdraw/pool-form-withdraw.hooks';
+import { useDeposit } from '../pool-form-deposit/pool-form-deposit.hooks';
+import { useWithdraw } from '../pool-form-withdraw/pool-form-withdraw.hooks';
 import LpCoinField from './fields/lp-coin';
 import TokenListFields from './fields/token-list';
 import { PoolPreviewProps } from './preview.types';
@@ -30,12 +23,6 @@ const PoolPreview: FC<PoolPreviewProps> = ({
 }) => {
   const client = useSuiClient();
   const currentAccount = useCurrentAccount();
-  const useDeposit = isClammPool(getValues('pool'))
-    ? useClammDeposit
-    : useAmmDeposit;
-  const useWithdraw = isClammPool(getValues('pool'))
-    ? useClammWithdraw
-    : useAmmWithdraw;
   const action = (isDeposit ? useDeposit : useWithdraw)();
 
   const fees = useSWR(

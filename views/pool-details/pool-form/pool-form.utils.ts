@@ -28,7 +28,7 @@ const getAmmOptimalAddLiquidity = (
   reservesX: BigNumber,
   reservesY: BigNumber
 ) => {
-  if (reservesX.isZero() && reservesY.isZero())
+  if (reservesX?.isZero() && reservesY.isZero())
     return [desiredAmountX, desiredAmountY];
 
   const optimalYAmount = quoteAmmLiquidity(

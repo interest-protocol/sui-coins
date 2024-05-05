@@ -13,10 +13,10 @@ const PoolForm: FC<PoolDetailsFormProps> = ({
 }) => (
   <Box
     gap="xl"
-    bg="container"
     display="flex"
     borderRadius="xs"
     color="onSurface"
+    bg="lowestContainer"
     flexDirection="column"
     p={['m', 'm', 'm', 'xl']}
   >

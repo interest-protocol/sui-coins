@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form';
 
 import Layout from '@/components/layout';
 import { Routes, RoutesEnum } from '@/constants';
-import { isClammPool } from '@/hooks/use-pools/use-pools.utils';
+import { getSymbolByType } from '@/utils';
 import { PoolForm as PoolFormType } from '@/views/pools/pools.types';
 
 import PoolTitleBar from '../components/pool-title-bar';
@@ -31,15 +31,9 @@ const PoolDetails: FC<PoolDetailsFormProps> = ({
 
     if (formTokenList.every(({ type }) => type)) return;
 
-    const tokenList = (
-      isClammPool(pool)
-        ? pool.coinStates.map((coin) => coin.type)
-        : [pool.coinTypes.coinX, pool.coinTypes.coinY]
-    ) as ReadonlyArray<`0x${string}`>;
+    const tokenList = pool.coinTypes as ReadonlyArray<`0x${string}`>;
 
-    const lpCoinType = (
-      isClammPool(pool) ? pool.poolType : pool.coinTypes.lpCoin
-    ) as `0x${string}`;
+    const lpCoinType = String(pool.lpCoinType) as `0x${string}`;
 
     setValue(
       'tokenList',
@@ -47,8 +41,8 @@ const PoolDetails: FC<PoolDetailsFormProps> = ({
         value: '0',
         locked: true,
         type: tokenType,
+        symbol: metadata[tokenType].symbol,
         decimals: metadata[tokenType].decimals,
-        symbol: metadata[tokenType].symbol.replace('SUI', 'SUI'),
       }))
     );
 
@@ -57,7 +51,7 @@ const PoolDetails: FC<PoolDetailsFormProps> = ({
       decimals: 9,
       locked: true,
       type: lpCoinType,
-      symbol: metadata[lpCoinType].symbol.replace('SUI', 'MOV'),
+      symbol: metadata[lpCoinType]?.symbol ?? getSymbolByType(lpCoinType),
     });
 
     setValue('pool', pool);

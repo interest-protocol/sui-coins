@@ -3,43 +3,22 @@ import { WalletAccount } from '@wallet-standard/base';
 
 import { OBJECT_RECORD } from '@/constants';
 import { useNetwork } from '@/context/network';
-import { isClammPool } from '@/hooks/use-pools/use-pools.utils';
 import { useWeb3 } from '@/hooks/use-web3';
-import { FixedPointMath } from '@/lib';
-import { createObjectsParameter, getAmountMinusSlippage } from '@/utils';
+import {
+  createObjectsParameter,
+  getAmountMinusSlippage,
+  ZERO_BIG_NUMBER,
+} from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
 
-import { getAmmLpCoinAmount, getSafeValue } from '../pool-form.utils';
+import { getSafeValue } from '../pool-form.utils';
 
-export const useClammDeposit = () => {
+export const useDeposit = () => {
   const network = useNetwork();
   const { coinsMap } = useWeb3();
 
   return async (values: PoolForm, account: WalletAccount | null) => {
     const { tokenList, pool, lpCoin, settings } = values;
-
-    if (isClammPool(pool)) throw new Error('Pool is not AMM ');
-
-    if (!tokenList.length) throw new Error('No tokens ');
-
-    if (!account) throw new Error('No account found');
-
-    console.log({ coinsMap, network, lpCoin, settings });
-
-    return new TransactionBlock();
-
-    // TODO: Redo the logic
-  };
-};
-
-export const useAmmDeposit = () => {
-  const network = useNetwork();
-  const { coinsMap } = useWeb3();
-
-  return async (values: PoolForm, account: WalletAccount | null) => {
-    const { tokenList, pool, lpCoin, settings } = values;
-
-    if (isClammPool(pool)) throw new Error('Pool is not AMM ');
 
     if (!tokenList.length) throw new Error('No tokens ');
 
@@ -88,13 +67,7 @@ export const useAmmDeposit = () => {
       arguments: [txb.makeMoveVec({ objects: coin1InList }), txb.pure(amount1)],
     });
 
-    const lpAmount = getAmmLpCoinAmount(
-      FixedPointMath.toBigNumber(coin0.value, coin0.decimals),
-      FixedPointMath.toBigNumber(coin1.value, coin1.decimals),
-      pool.balanceX,
-      pool.balanceY,
-      pool.lpCoinSupply
-    );
+    const lpAmount = ZERO_BIG_NUMBER;
 
     const minimumAmount = getAmountMinusSlippage(lpAmount, settings.slippage);
 
@@ -102,7 +75,7 @@ export const useAmmDeposit = () => {
       target: `${OBJECT_RECORD[network].DEX_PACKAGE_ID}::interest_protocol_amm::add_liquidity`,
       typeArguments: [coin0.type, coin1.type, lpCoin.type],
       arguments: [
-        txb.object(pool.poolId),
+        txb.object(pool.poolObjectId),
         coin0In,
         coin1In,
         txb.pure(minimumAmount),

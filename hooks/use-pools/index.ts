@@ -1,45 +1,16 @@
-import { useSuiClient } from '@mysten/dapp-kit';
-import { SuiObjectResponse } from '@mysten/sui.js/client';
-import { getSuiObjectResponseFields } from '@polymedia/suits';
-import { pathOr } from 'ramda';
+import { InterestPool, QueryPoolsReturn } from '@interest-protocol/clamm-sdk';
 import useSWR from 'swr';
 
-import { Pool } from '@/interface';
 import { makeSWRKey } from '@/utils';
 
-import { parsePool } from './use-pools.utils';
+import { useClammSdk } from '../use-clamm-sdk';
 
-export const usePool = (parentId: string) => {
-  const client = useSuiClient();
+export const usePool = (poolId: string) => {
+  const clamm = useClammSdk();
 
-  return useSWR<Pool | null>(
-    makeSWRKey([], usePool.name + parentId),
-    async () => {
-      if (!parentId) return null;
-
-      const { data } = await client.getDynamicFields({ parentId });
-
-      if (!data.length) return null;
-
-      const objectId = data[0].objectId;
-
-      const { data: poolData } = await client.getObject({
-        id: objectId,
-        options: { showContent: true, showType: true },
-      });
-
-      if (!poolData || !poolData.content) return null;
-
-      const fields: null | SuiObjectResponse = pathOr(
-        null,
-        ['content', 'fields'],
-        poolData
-      );
-
-      if (!fields) return null;
-
-      return parsePool(fields);
-    },
+  return useSWR<InterestPool>(
+    makeSWRKey([poolId], usePool.name),
+    async () => clamm.getPool(poolId),
     {
       revalidateOnFocus: false,
       revalidateOnMount: true,
@@ -48,23 +19,12 @@ export const usePool = (parentId: string) => {
   );
 };
 
-export const usePools = (poolAddresses: string[]) => {
-  const client = useSuiClient();
+export const usePools = (page: number) => {
+  const clamm = useClammSdk();
 
-  return useSWR<ReadonlyArray<Pool>>(
-    makeSWRKey([], usePools.name + poolAddresses),
-    async () => {
-      if (!poolAddresses.length) return [];
-
-      const pools = await client.multiGetObjects({
-        ids: poolAddresses,
-        options: {
-          showContent: true,
-        },
-      });
-
-      return pools.map((x) => parsePool(getSuiObjectResponseFields(x)));
-    },
+  return useSWR<QueryPoolsReturn>(
+    makeSWRKey([page], usePools.name),
+    async () => clamm.getPools(),
     {
       revalidateOnFocus: false,
       revalidateOnMount: true,

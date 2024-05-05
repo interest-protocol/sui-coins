@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { pathOr } from 'ramda';
+import { path, pathOr } from 'ramda';
 import invariant from 'tiny-invariant';
 
 import { Network, PAGE_SIZE } from '@/constants';
+import { CLAMM_ALLOWED_NETWORKS } from '@/constants/dex';
 import dbConnect from '@/server';
 import { getClammPools, handleServerError } from '@/server/utils';
 
@@ -14,16 +15,18 @@ export default async function handler(
     await dbConnect();
 
     const page = +pathOr(1, ['query', 'page'], req);
+    const network = String(path(['query', 'network'], req));
     const limit = +pathOr(PAGE_SIZE, ['query', 'limit'], req);
 
     // Prevent ppl from passing malicious strings to DB queries
     invariant(!isNaN(page), 'Page must be a number');
-    invariant(!isNaN(limit), 'Page must be a number');
+    invariant(!isNaN(limit), 'Limit must be a number');
+    // invariant(CLAMM_ALLOWED_NETWORKS[network], 'Network must be valid');
 
     const data = await getClammPools({
-      network: Network.MAINNET,
       page,
       limit,
+      network: CLAMM_ALLOWED_NETWORKS[network] ?? Network.MAINNET,
     });
 
     res.status(200).send(data);

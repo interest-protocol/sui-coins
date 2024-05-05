@@ -7,11 +7,10 @@ import {
 import { ChangeEvent, FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { TOKEN_ICONS } from '@/constants/coins';
+import { TokenIcon } from '@/components';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
-import { DefaultTokenSVG } from '@/svg';
 import { parseInputEventToNumberString } from '@/utils';
 import { PoolForm, PoolOption } from '@/views/pools/pools.types';
 
@@ -29,8 +28,6 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
     : 'lpCoin';
 
   const token = getValues(fieldName);
-
-  const Icon = token ? TOKEN_ICONS[network][token.symbol] : DefaultTokenSVG;
 
   const handleDepositLock = () => {
     if ('tokenList.0' === fieldName) {
@@ -79,20 +76,12 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
         },
       })}
       TokenIcon={
-        Icon && (
-          <Box
-            bg="onSurface"
-            width="2.5rem"
-            display="flex"
-            height="2.5rem"
-            borderRadius="xs"
-            alignItems="center"
-            justifyContent="center"
-            color="lowestContainer"
-          >
-            <Icon maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
-          </Box>
-        )
+        <TokenIcon
+          withBg
+          network={network}
+          type={token?.type ?? ''}
+          symbol={token?.symbol ?? ''}
+        />
       }
       Label={
         <Typography

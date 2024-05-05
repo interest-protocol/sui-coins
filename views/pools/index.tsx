@@ -20,11 +20,11 @@ const Pools: FC = () => {
         px="s"
         gap="2xs"
         display="flex"
-        bg="container"
         maxWidth="100%"
         maxHeight="100%"
         borderRadius="xs"
         minHeight="30rem"
+        bg="lowestContainer"
         flexDirection="column"
         py={['s', 's', 's', '2xl']}
       >

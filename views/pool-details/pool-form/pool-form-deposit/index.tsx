@@ -3,21 +3,17 @@ import { FC } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { v4 } from 'uuid';
 
-import { isClammPool } from '@/hooks/use-pools/use-pools.utils';
 import { PoolForm } from '@/views/pools/pools.types';
 import ManageSlippage from '@/views/swap/manage-slippage';
 
-import { usePoolDetails } from '../../pool-details.context';
 import PoolField from '../pool-field';
 import { PoolFormProps } from '../pool-field/pool-field.types';
-import AmmDepositManager from './pool-form-amm-deposit-manager';
 import PoolFormDepositButton from './pool-form-deposit-button';
+import DepositManager from './pool-form-deposit-manager';
 import PoolReceiveSection from './pool-form-deposit-receive';
 
 const PoolDeposit: FC<PoolFormProps> = ({ poolOptionView }) => {
   const { control } = useFormContext<PoolForm>();
-
-  const { pool } = usePoolDetails();
 
   const { fields } = useFieldArray({ control, name: 'tokenList' });
 
@@ -57,7 +53,7 @@ const PoolDeposit: FC<PoolFormProps> = ({ poolOptionView }) => {
           <ManageSlippage />
         </Box>
       </Box>
-      {isClammPool(pool!) ? null : <AmmDepositManager />}
+      <DepositManager />
       <PoolFormDepositButton />
     </>
   );

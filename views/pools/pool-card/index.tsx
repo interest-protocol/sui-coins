@@ -1,32 +1,40 @@
 import { Box } from '@interest-protocol/ui-kit';
+import BigNumber from 'bignumber.js';
 import Link from 'next/link';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
 import { Routes, RoutesEnum } from '@/constants';
-import { isClammPool } from '@/hooks/use-pools/use-pools.utils';
-import { AmmPool, PoolTypeEnum } from '@/interface';
+import { usePool } from '@/hooks/use-pools';
 import { FixedPointMath } from '@/lib';
 import { formatDollars } from '@/utils';
 
 import { LINES } from './pool-card.data';
 import { AlgorithmEnum, PoolCardProps } from './pool-card.types';
-import { getAmmLiquidity, getClammLiquidity } from './pool-card.utils';
+import {
+  getStableLiquidity,
+  getVolatileLiquidity,
+  isStablePool,
+} from './pool-card.utils';
 import PoolCardHeader from './pool-card-header';
 import PoolCardInfo from './pool-card-info';
 import PoolCardTrade from './pool-card-trade';
 
 const PoolCard: FC<PoolCardProps> = ({ pool, coinMetadata, prices }) => {
-  const coinTypes = isClammPool(pool)
-    ? pool.coinStates.map(({ type }) => type)
-    : [pool.coinTypes.coinX, pool.coinTypes.coinY];
+  const { data, isLoading } = usePool(pool.poolObjectId);
 
-  const liquidity = isClammPool(pool)
-    ? getClammLiquidity(pool)
-    : getAmmLiquidity(pool, coinMetadata, prices);
+  const loading = isLoading || !data;
+
+  const liquidity = data
+    ? isStablePool(data, pool.isStable)
+      ? getStableLiquidity(data, coinMetadata, prices)
+      : getVolatileLiquidity(data, coinMetadata, prices)
+    : 0;
 
   return (
-    <Link href={`${Routes[RoutesEnum.PoolDetails]}?objectId=${pool.poolId}`}>
+    <Link
+      href={`${Routes[RoutesEnum.PoolDetails]}?objectId=${pool.poolObjectId}`}
+    >
       <Box
         p="m"
         flex="1"
@@ -49,13 +57,11 @@ const PoolCard: FC<PoolCardProps> = ({ pool, coinMetadata, prices }) => {
       >
         <PoolCardHeader
           tags={[
-            PoolTypeEnum[pool.poolType],
-            (pool as AmmPool).isVolatile
-              ? AlgorithmEnum.volatile
-              : AlgorithmEnum.stable,
+            'CLAMM',
+            pool.isStable ? AlgorithmEnum.stable : AlgorithmEnum.volatile,
           ]}
         />
-        <PoolCardInfo coinTypes={coinTypes} coinMetadata={coinMetadata} />
+        <PoolCardInfo coinTypes={pool.coinTypes} coinMetadata={coinMetadata} />
         <Box px="m" py="xs" bg="surface" borderRadius="1rem">
           {LINES.map((line, index) => (
             <PoolCardTrade
@@ -63,16 +69,37 @@ const PoolCard: FC<PoolCardProps> = ({ pool, coinMetadata, prices }) => {
               index={index}
               key={v4()}
               amount={
-                !pool
-                  ? '0'
-                  : index
-                    ? !prices
-                      ? '0'
-                      : `${formatDollars(liquidity)}`
-                    : `${FixedPointMath.toNumber(
-                        isClammPool(pool) ? pool.fees.midFee : pool.fees.feeIn,
-                        15
-                      )}% / ${FixedPointMath.toNumber(isClammPool(pool) ? pool.fees.midFee : pool.fees.feeOut, 15)}%`
+                loading
+                  ? '--'
+                  : !pool
+                    ? '0'
+                    : index
+                      ? !prices
+                        ? '0'
+                        : formatDollars(liquidity)
+                      : isStablePool(data, pool.isStable)
+                        ? `${FixedPointMath.toNumber(
+                            BigNumber(
+                              String(data.state.fees.feeInPercent)
+                            ).times(100),
+                            18
+                          )}% / ${FixedPointMath.toNumber(
+                            BigNumber(
+                              String(data.state.fees.feeOutPercent)
+                            ).times(100),
+                            18
+                          )}%`
+                        : `${FixedPointMath.toNumber(
+                            BigNumber(String(data.state.fees.midFee)).div(
+                              100000000
+                            ),
+                            0
+                          )}% / ${FixedPointMath.toNumber(
+                            BigNumber(String(data.state.fees.outFee)).div(
+                              100000000
+                            ),
+                            0
+                          )}%`
               }
             />
           ))}

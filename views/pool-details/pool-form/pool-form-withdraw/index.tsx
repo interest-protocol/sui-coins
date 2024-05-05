@@ -5,9 +5,9 @@ import ManageSlippage from '@/views/swap/manage-slippage';
 
 import PoolField from '../pool-field';
 import { PoolFormProps } from '../pool-field/pool-field.types';
-import Selection from './pool-form-amm-withdraw-receive';
 import PoolFormWithdrawButton from './pool-form-withdraw-button';
 import WithdrawManager from './pool-form-withdraw-manager';
+import Selection from './pool-form-withdraw-receive';
 
 const PoolFormWithdraw: FC<PoolFormProps> = ({ poolOptionView }) => (
   <>

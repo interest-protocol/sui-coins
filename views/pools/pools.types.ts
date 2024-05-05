@@ -1,5 +1,7 @@
+import { PoolMetadata } from '@interest-protocol/clamm-sdk';
+
 import { Network } from '@/constants';
-import { CoinData, Pool } from '@/interface';
+import { CoinData } from '@/interface';
 
 import { ISwapSettings } from '../swap/swap.types';
 
@@ -29,7 +31,7 @@ export interface PoolCardListWrapper {
 export interface PoolCardListContentProps {
   network: Network;
   arePoolsLoading: boolean;
-  pools: readonly Pool[];
+  pools: ReadonlyArray<PoolMetadata>;
 }
 
 export interface PoolToken extends CoinData {
@@ -46,7 +48,7 @@ export interface PoolForm {
   settings: ISwapSettings;
   tokenList: ReadonlyArray<PoolToken>;
   filterList: ReadonlyArray<FilterItemProps>;
-  pool: Pool;
+  pool: PoolMetadata;
 }
 
 export interface FilterItemProps {

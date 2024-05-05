@@ -1,12 +1,10 @@
-import { values } from 'ramda';
+import { InterestPool } from '@interest-protocol/clamm-sdk';
 import { createContext, FC, PropsWithChildren, useContext } from 'react';
 
 import { useNetwork } from '@/context/network';
 import { useGetCoinMetadata } from '@/hooks/use-get-coin-metadata';
 import useGetMultipleTokenPriceBySymbol from '@/hooks/use-get-multiple-token-price-by-symbol';
 import { usePool } from '@/hooks/use-pools';
-import { isClammPool } from '@/hooks/use-pools/use-pools.utils';
-import { Pool } from '@/interface';
 import { CoinMetadataWithType } from '@/interface';
 
 import { getAllSymbols } from '../pools/pools.utils';
@@ -17,7 +15,7 @@ interface PoolDetailsProviderProps {
 
 interface PoolDetailsContext {
   loading: boolean;
-  pool: Pool | null | undefined;
+  pool: InterestPool | null | undefined;
   prices: Record<string, number> | undefined;
   metadata: Record<string, CoinMetadataWithType> | undefined;
 }
@@ -47,13 +45,7 @@ export const PoolDetailsProvider: FC<
     data: metadata,
     error: metadataError,
     isLoading: isMetadataLoading,
-  } = useGetCoinMetadata(
-    pool
-      ? isClammPool(pool)
-        ? pool.coinStates.map((coin) => coin.type)
-        : values(pool.coinTypes)
-      : []
-  );
+  } = useGetCoinMetadata(pool ? pool.coinTypes : []);
 
   const {
     data: prices,

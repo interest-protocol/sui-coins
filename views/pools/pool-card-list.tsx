@@ -1,3 +1,4 @@
+import { PoolMetadata } from '@interest-protocol/clamm-sdk';
 import {
   Box,
   Motion,
@@ -10,15 +11,12 @@ import toast from 'react-hot-toast';
 import useSWR from 'swr';
 import { v4 } from 'uuid';
 
-import { POOLS_ARRAY } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useFindPoolsByCoinTypes } from '@/hooks/use-find-pools-by-coin-types';
 import { useGetCoinMetadata } from '@/hooks/use-get-coin-metadata';
 import useGetMultipleTokenPriceBySymbol from '@/hooks/use-get-multiple-token-price-by-symbol';
 import { useModal } from '@/hooks/use-modal';
 import { usePools } from '@/hooks/use-pools';
-import { isClammPool } from '@/hooks/use-pools/use-pools.utils';
-import { AmmPool, Pool } from '@/interface';
 import { getAllSymbols } from '@/views/pools/pools.utils';
 
 import FindPoolDialog from './find-pool-modal/find-pool-dialog';
@@ -32,12 +30,15 @@ import {
 } from './pools.types';
 
 const Pools: FC<PoolCardListWrapper> = ({ network }) => {
-  const { data: pools, isLoading: arePoolsLoading } = usePools(POOLS_ARRAY);
+  const [page] = useState(1);
+  const { data, isLoading: arePoolsLoading } = usePools(page);
+
+  console.log({ data });
 
   return (
     <PoolCardListContent
       network={network}
-      pools={pools || []}
+      pools={data?.pools || []}
       arePoolsLoading={arePoolsLoading}
     />
   );
@@ -49,7 +50,7 @@ const Position: FC<PoolCardListWrapper> = ({ network }) => {
   return (
     <PoolCardListContent
       network={network}
-      pools={data || []}
+      pools={data?.pools || []}
       arePoolsLoading={isLoading}
     />
   );
@@ -68,60 +69,45 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
     useGetMultipleTokenPriceBySymbol(symbols);
 
   const { data: coinMetadataMap, isLoading: isCoinMetadataLoading } =
-    useGetCoinMetadata([
-      ...new Set(
-        pools.flatMap((pool) =>
-          isClammPool(pool)
-            ? pool.coinStates.map((coin) => coin.type)
-            : [pool.coinTypes.coinX, pool.coinTypes.coinY]
-        )
-      ),
-    ]);
+    useGetCoinMetadata([...new Set(pools.flatMap((pool) => pool.coinTypes))]);
 
   const { control, setValue } = useFormContext<PoolForm>();
   const filterList = useWatch({ control, name: 'filterList' });
   const tokenList = useWatch({ control, name: 'tokenList' });
-  const [listPools, setListPools] = useState<readonly Pool[] | undefined>();
+  const [listPools, setListPools] = useState<ReadonlyArray<PoolMetadata>>([]);
 
   const onClose = () => {
     setValue('isFindingPool', false);
     handleClose();
   };
 
-  const sortedPoolList = (poolList?: readonly Pool[]) =>
-    poolList?.filter((pool) =>
+  const sortedPoolList = (
+    poolList: ReadonlyArray<PoolMetadata>
+  ): ReadonlyArray<PoolMetadata> =>
+    poolList.filter((pool) =>
       filterList?.length
-        ? filterList.every(({ type, description }) => {
-            if (
+        ? filterList.every(
+            ({ type, description }) =>
               type === 'algorithm' &&
-              (description === 'stable') === !(pool as AmmPool).isVolatile
-            )
-              return true;
-
-            if (type === 'pool_type' && description === pool.poolType)
-              return true;
-
-            return false;
-          })
+              description === (pool.isStable ? 'stable' : 'volatile')
+          )
         : true
     );
 
   const isFindingPool = useWatch({ control, name: 'isFindingPool' });
 
-  const { data: _pools, isLoading: isFilteredPoolsLoading } = useSWR(
+  const { data: _pools, isLoading: isFilteredPoolsLoading } = useSWR<
+    ReadonlyArray<PoolMetadata>
+  >(
     `${isFindingPool}` +
-      pools.map((x) => x.poolId).toString() +
+      pools.map((x) => x.poolObjectId).toString() +
       tokenList?.toString(),
     async () => {
       if (!isFindingPool) return pools;
 
-      const filteredPools = pools.filter((pool) => {
-        const coinTypes = isClammPool(pool)
-          ? pool.coinStates.map((coin) => coin.type)
-          : [pool.coinTypes.coinX, pool.coinTypes.coinY];
-
-        return tokenList.every((x) => coinTypes.includes(x.type));
-      });
+      const filteredPools = pools.filter((pool) =>
+        tokenList.every((x) => pool.coinTypes.includes(x.type))
+      );
 
       toast.dismiss();
       return filteredPools;
@@ -162,7 +148,7 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
   };
 
   useEffect(() => {
-    setListPools(sortedPoolList(_pools));
+    setListPools(sortedPoolList(_pools ?? []));
   }, [filterList, _pools]);
 
   if (
@@ -187,17 +173,8 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
       display={listPools?.length || pools?.length ? 'grid' : 'flex'}
       gridTemplateColumns={['1fr', '1fr', '1fr 1fr', '1fr 1fr', '1fr 1fr 1fr']}
     >
-      {isFindingPool ? (
+      {listPools.length ? (
         listPools?.map((pool) => (
-          <PoolCard
-            key={v4()}
-            pool={pool}
-            prices={pricesRecord}
-            coinMetadata={coinMetadataMap || {}}
-          />
-        ))
-      ) : pools?.length ? (
-        pools.map((pool) => (
           <PoolCard
             key={v4()}
             pool={pool}

@@ -1,9 +1,10 @@
 import { normalizeStructTag } from '@mysten/sui.js/utils';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { pathOr } from 'ramda';
+import { path, pathOr } from 'ramda';
 import invariant from 'tiny-invariant';
 
 import { Network } from '@/constants';
+import { CLAMM_ALLOWED_NETWORKS } from '@/constants/dex';
 import dbConnect from '@/server';
 import { getClammPoolsByCoinTypes, handleServerError } from '@/server/utils';
 
@@ -14,12 +15,14 @@ export default async function handler(
   try {
     await dbConnect();
 
+    const network = String(path(['query', 'network'], req));
     const coinTypes = pathOr('', ['query', 'coinTypes'], req).split(',');
 
     invariant(coinTypes.length, 'You  must pass at least one coin type');
+    // invariant(CLAMM_ALLOWED_NETWORKS[network], 'Network must be valid');
 
     const data = await getClammPoolsByCoinTypes({
-      network: Network.MAINNET,
+      network: CLAMM_ALLOWED_NETWORKS[network] ?? Network.MAINNET,
       // Assume this throws if it is not a struct tag
       coinTypes: coinTypes.map((x) => normalizeStructTag(x)),
     });

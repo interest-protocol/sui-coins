@@ -1,8 +1,8 @@
-import { CLAMM } from '@interest-protocol/clamm-sdk';
-import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { normalizeSuiAddress } from '@mysten/sui.js/utils';
 
+import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import { getLpCoinBytecode } from '@/lib/move-template/lp-coin';
@@ -52,7 +52,7 @@ export const useCreateLpCoin = () => {
 };
 
 export const useCreateStablePool = () => {
-  const client = useSuiClient();
+  const clamm = useClammSdk();
   const { coinsMap } = useWeb3();
   const currentAccount = useCurrentAccount();
 
@@ -103,13 +103,6 @@ export const useCreateStablePool = () => {
 
     const typeArguments = [...tokens.map((token) => token.type), coinType];
 
-    const clamm = new CLAMM({
-      packageAddress: process.env.NEXT_PUBLIC_CLAMM_PACKAGE_ID!,
-      suiClient: client,
-      suiTearsAddress: process.env.NEXT_PUBLIC_CLAMM_SUI_TEARS_PACKAGE_ID!,
-      network: 'testnet',
-    });
-
     const { pool, poolAdmin, lpCoin, txb } = await clamm.newStable({
       coins,
       txb: auxTxb,
@@ -124,7 +117,7 @@ export const useCreateStablePool = () => {
 };
 
 export const useCreateVolatilePool = () => {
-  const client = useSuiClient();
+  const clamm = useClammSdk();
   const { coinsMap } = useWeb3();
   const currentAccount = useCurrentAccount();
 
@@ -184,13 +177,6 @@ export const useCreateVolatilePool = () => {
     )
       .decimalPlaces(0)
       .toString();
-
-    const clamm = new CLAMM({
-      packageAddress: process.env.NEXT_PUBLIC_CLAMM_PACKAGE_ID!,
-      suiClient: client,
-      suiTearsAddress: process.env.NEXT_PUBLIC_CLAMM_SUI_TEARS_PACKAGE_ID!,
-      network: 'testnet',
-    });
 
     const { pool, poolAdmin, lpCoin, txb } = await clamm.newVolatile({
       coins,

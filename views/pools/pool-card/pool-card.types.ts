@@ -1,6 +1,7 @@
+import { PoolMetadata } from '@interest-protocol/clamm-sdk';
 import { ReactNode } from 'react';
 
-import { CoinMetadataWithType, Pool } from '@/interface';
+import { CoinMetadataWithType } from '@/interface';
 
 export enum AlgorithmEnum {
   'stable' = 'stable',
@@ -25,7 +26,7 @@ export interface PoolCardTradeProps {
 }
 
 export interface PoolCardProps {
-  pool: Pool;
+  pool: PoolMetadata;
   prices: Record<string, number>;
   coinMetadata: Record<string, CoinMetadataWithType>;
 }

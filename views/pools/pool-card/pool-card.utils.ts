@@ -1,55 +1,135 @@
+import {
+  InterestPool,
+  StablePool,
+  VolatilePool,
+} from '@interest-protocol/clamm-sdk';
+import { BigNumber } from 'bignumber.js';
 import { isEmpty } from 'ramda';
 
-import { AmmPool, ClammPool, CoinMetadataWithType } from '@/interface';
+import { CoinMetadataWithType } from '@/interface';
 import { FixedPointMath } from '@/lib';
-import { ZERO_BIG_NUMBER } from '@/utils';
 
-export const getAmmLiquidity = (
-  pool: AmmPool,
+export const isStablePool = (
+  pool: InterestPool,
+  isStable: boolean
+): pool is StablePool => isStable;
+
+export const getStableLiquidity = (
+  pool: StablePool,
   metadata: Record<string, CoinMetadataWithType>,
   prices: Record<string, number>
 ): number => {
   if (isEmpty(prices)) return 0;
 
-  const priceX = metadata[pool.coinTypes.coinX]
+  const priceX = metadata[pool.coinTypes[0]]
     ? prices[
-        metadata[pool.coinTypes.coinX]?.symbol.toLowerCase() === 'sui'
+        metadata[pool.coinTypes[0]]?.symbol.toLowerCase() === 'sui'
           ? 'mov'
-          : metadata[pool.coinTypes.coinX]?.symbol.toLowerCase()
+          : metadata[pool.coinTypes[0]]?.symbol.toLowerCase()
       ]
     : null;
 
-  const priceY = metadata[pool.coinTypes.coinY]
+  const priceY = metadata[pool.coinTypes[1]]
     ? prices[
-        metadata[pool.coinTypes.coinY]?.symbol.toLowerCase() === ' sui'
+        metadata[pool.coinTypes[1]]?.symbol.toLowerCase() === ' sui'
           ? 'move'
-          : metadata[pool.coinTypes.coinY]?.symbol.toLowerCase()
+          : metadata[pool.coinTypes[1]]?.symbol.toLowerCase()
       ]
     : null;
 
   if (!priceX && !!priceY)
-    return 2 * FixedPointMath.toNumber(pool.balanceY, pool.decimalsY) * priceY;
+    return (
+      2 *
+      FixedPointMath.toNumber(
+        BigNumber(String(pool.state.balances[1])),
+        metadata[pool.coinTypes[1]].decimals
+      ) *
+      priceY
+    );
 
   if (!priceY && !!priceX)
-    return 2 * FixedPointMath.toNumber(pool.balanceX, pool.decimalsX) * priceX;
+    return (
+      2 *
+      FixedPointMath.toNumber(
+        BigNumber(String(pool.state.balances[0])),
+        metadata[pool.coinTypes[0]].decimals
+      ) *
+      priceX
+    );
 
   if (priceX && priceY)
     return (
-      FixedPointMath.toNumber(pool.balanceY, pool.decimalsY) * priceY +
-      FixedPointMath.toNumber(pool.balanceX, pool.decimalsX) * priceX
+      FixedPointMath.toNumber(
+        BigNumber(String(pool.state.balances[1])),
+        metadata[pool.coinTypes[1]].decimals
+      ) *
+        priceY +
+      FixedPointMath.toNumber(
+        BigNumber(String(pool.state.balances[0])),
+        metadata[pool.coinTypes[0]].decimals
+      ) *
+        priceX
     );
 
   return 0;
 };
 
-export const getClammLiquidity = (pool: ClammPool): number =>
-  FixedPointMath.toNumber(
-    pool.coinStates.reduce(
-      (acc, { index, price }) =>
-        acc.plus(
-          price.multipliedBy(pool.balances[FixedPointMath.toNumber(index, 18)])
-        ),
-      ZERO_BIG_NUMBER
-    ),
-    18
-  );
+export const getVolatileLiquidity = (
+  pool: VolatilePool,
+  metadata: Record<string, CoinMetadataWithType>,
+  prices: Record<string, number>
+): number => {
+  if (isEmpty(prices)) return 0;
+
+  const priceX = metadata[pool.coinTypes[0]]
+    ? prices[
+        metadata[pool.coinTypes[0]]?.symbol.toLowerCase() === 'sui'
+          ? 'mov'
+          : metadata[pool.coinTypes[0]]?.symbol.toLowerCase()
+      ]
+    : null;
+
+  const priceY = metadata[pool.coinTypes[1]]
+    ? prices[
+        metadata[pool.coinTypes[1]]?.symbol.toLowerCase() === ' sui'
+          ? 'move'
+          : metadata[pool.coinTypes[1]]?.symbol.toLowerCase()
+      ]
+    : null;
+
+  if (!priceX && !!priceY)
+    return (
+      2 *
+      FixedPointMath.toNumber(
+        BigNumber(String(pool.state.balances[1])),
+        metadata[pool.coinTypes[1]].decimals
+      ) *
+      priceY
+    );
+
+  if (!priceY && !!priceX)
+    return (
+      2 *
+      FixedPointMath.toNumber(
+        BigNumber(String(pool.state.balances[0])),
+        metadata[pool.coinTypes[0]].decimals
+      ) *
+      priceX
+    );
+
+  if (priceX && priceY)
+    return (
+      FixedPointMath.toNumber(
+        BigNumber(String(pool.state.balances[1])),
+        metadata[pool.coinTypes[1]].decimals
+      ) *
+        priceY +
+      FixedPointMath.toNumber(
+        BigNumber(String(pool.state.balances[0])),
+        metadata[pool.coinTypes[0]].decimals
+      ) *
+        priceX
+    );
+
+  return 0;
+};

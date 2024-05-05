@@ -14,3 +14,9 @@ export const CLAMM_PACKAGE_ADDRESSES = {
       '0x54a25034e68e4f7977f1f11c3c8eba99d87543248f937927fc9e8833cb5e39c4',
   },
 };
+
+export const CLAMM_ALLOWED_NETWORKS: Record<string, Network> = {
+  mainnet: Network.MAINNET,
+  testnet: Network.TESTNET,
+  devnet: 'sui:devnet' as Network,
+};

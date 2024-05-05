@@ -11,20 +11,20 @@ import { EXPLORER_URL } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useDialog } from '@/hooks/use-dialog';
 import { useModal } from '@/hooks/use-modal';
-import { isClammPool } from '@/hooks/use-pools/use-pools.utils';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import { showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
 
+import { usePoolDetails } from '../../pool-details.context';
 import PoolPreview from '../pool-form-preview';
-import { useAmmDeposit } from './pool-form-deposit.hooks';
+import { useDeposit } from './pool-form-deposit.hooks';
 
 const PoolFormDepositButton: FC = () => {
+  const deposit = useDeposit();
   const network = useNetwork();
   const client = useSuiClient();
-  const ammDeposit = useAmmDeposit();
-  const clammDeposit = useAmmDeposit();
+  const { pool } = usePoolDetails();
   const account = useCurrentAccount();
   const { coinsMap, mutate } = useWeb3();
   const { dialog, handleClose } = useDialog();
@@ -38,9 +38,7 @@ const PoolFormDepositButton: FC = () => {
     try {
       if (!account) return;
 
-      const txb = await (isClammPool(getValues('pool'))
-        ? clammDeposit
-        : ammDeposit)(getValues(), account);
+      const txb = await deposit(getValues(), account);
 
       const { signature, transactionBlockBytes } =
         await signTransactionBlock.mutateAsync({
@@ -102,12 +100,20 @@ const PoolFormDepositButton: FC = () => {
       const coin2 = tokenList[1];
 
       if (
+        !tokenList?.length ||
+        !coinsMap ||
+        !pool ||
         !coinsMap[coin1.type]?.balance ||
+        !coinsMap[coin2.type]?.balance
+      )
+        return;
+
+      if (
         +Number(coin1.value).toFixed(5) >
-          +FixedPointMath.toNumber(
-            coinsMap[coin1.type].balance,
-            coinsMap[coin1.type].decimals
-          ).toFixed(5)
+        +FixedPointMath.toNumber(
+          coinsMap[coin1.type].balance,
+          coinsMap[coin1.type].decimals
+        ).toFixed(5)
       ) {
         setValue(
           'error',
@@ -117,12 +123,11 @@ const PoolFormDepositButton: FC = () => {
       }
 
       if (
-        !coinsMap[coin2.type]?.balance ||
         +Number(coin2.value).toFixed(5) >
-          +FixedPointMath.toNumber(
-            coinsMap[coin2.type].balance,
-            coinsMap[coin2.type].decimals
-          ).toFixed(5)
+        +FixedPointMath.toNumber(
+          coinsMap[coin2.type].balance,
+          coinsMap[coin2.type].decimals
+        ).toFixed(5)
       ) {
         setValue(
           'error',
