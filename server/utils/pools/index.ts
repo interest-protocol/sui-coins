@@ -35,3 +35,14 @@ export const getClammPoolsByCoinTypes = async ({
 
   return clammModel.find(query);
 };
+
+export const getClammPoolsByLpCoinTypes = async ({
+  network,
+  coinTypes,
+}: GetClammPoolsByCoinTypesArgs) => {
+  const clammModel = getClammPoolModel(network);
+
+  const query = { lpCoinType: { $in: coinTypes } };
+
+  return clammModel.find(query);
+};
