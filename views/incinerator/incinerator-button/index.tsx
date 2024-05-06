@@ -1,9 +1,4 @@
-import {
-  Box,
-  Button,
-  ProgressIndicator,
-  Typography,
-} from '@interest-protocol/ui-kit';
+import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { prop, toPairs } from 'ramda';
 import { FC } from 'react';
@@ -14,21 +9,19 @@ import { v4 } from 'uuid';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
-import { CopySVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 import { getAmountsMapFromObjects } from '@/views/components/send-asset-details/send-asset-details.utils';
 
 import IncineratorTokenObject from '../component/incinerator-token-object';
+import { useBurn } from '../incinerator.hooks';
 import { IncineratorForm } from '../incinerator.types';
-import IncineratorNoAsset from '../incinerator-no-assets';
-import { useBurn } from './incinerator-button.hooks';
 
 const IncineratorButton: FC = () => {
   const burn = useBurn();
   const network = useNetwork();
-  const { coinsMap, isFetchingCoinBalances } = useWeb3();
   const { setModal, handleClose } = useModal();
-  const { control, reset } = useFormContext<IncineratorForm>();
+  const { coinsMap } = useWeb3();
+  const { control, setValue } = useFormContext<IncineratorForm>();
   const allObjects = useWatch({ control, name: 'objects' });
 
   const objects = allObjects.filter(prop('active'));
@@ -41,7 +34,6 @@ const IncineratorButton: FC = () => {
 
   const onSuccess = (tx: SuiTransactionBlockResponse) => {
     showTXSuccessToast(tx, network);
-    reset();
   };
 
   const amountList = toPairs(getAmountsMapFromObjects(objects))
@@ -73,6 +65,7 @@ const IncineratorButton: FC = () => {
     } catch (e) {
       toast.error((e as any).message ?? 'Something went wrong');
     } finally {
+      setValue('objects', []);
       toast.dismiss(toasterId);
     }
   };
@@ -111,7 +104,9 @@ const IncineratorButton: FC = () => {
                 onClick={() => copy(object.type)}
               >
                 <IncineratorTokenObject object={object} />
-                <CopySVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+                <Typography size="medium" variant="body">
+                  {object.value}
+                </Typography>
               </Box>
             ))}
           </Box>
@@ -134,18 +129,10 @@ const IncineratorButton: FC = () => {
       </Box>
     );
 
-  return !isFetchingCoinBalances ? (
-    !allObjects?.length ? (
-      <IncineratorNoAsset />
-    ) : (
-      <Button mx="auto" variant="filled" onClick={onBurn} disabled={disabled}>
-        Burn {objects.length} Asset{objects.length === 1 ? '' : 's'}
-      </Button>
-    )
-  ) : (
-    <Box mx="auto" display="flex" alignItems="center" flexDirection="column">
-      <ProgressIndicator size={40} variant="loading" />
-    </Box>
+  return (
+    <Button mx="auto" variant="filled" onClick={onBurn} disabled={disabled}>
+      Burn {objects.length} Asset{objects.length === 1 ? '' : 's'}
+    </Button>
   );
 };
 

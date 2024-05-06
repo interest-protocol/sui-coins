@@ -6,12 +6,12 @@ import { IncineratorNoAssetsSVG } from '@/svg';
 const IncineratorNoAsset: FC = () => (
   <Box
     gap="s"
+    width="100%"
     display="flex"
-    height="50vh"
+    height="30rem"
+    alignItems="center"
     flexDirection="column"
     justifyContent="center"
-    alignItems="center"
-    width="100%"
   >
     <Box p="m">
       <IncineratorNoAssetsSVG
