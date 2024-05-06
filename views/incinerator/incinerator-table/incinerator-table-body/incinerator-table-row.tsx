@@ -61,7 +61,7 @@ const IncineratorTableRow: FC<IncineratorTableRowProps> = ({ object }) => {
         {!editable ? '1' : balance}
       </Typography>
       <Typography pr="m" as="td" size="small" variant="label" width="40%">
-        <Box display="flex" justifyContent="space-between">
+        <Box display="flex" width="100%" gap="s" justifyContent="space-between">
           <QtyIncinerate index={index} />
         </Box>
       </Typography>

@@ -1,4 +1,4 @@
-import { Box, TextField } from '@interest-protocol/ui-kit';
+import { TextField } from '@interest-protocol/ui-kit';
 import { FC, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
@@ -22,7 +22,7 @@ const IncineratorTableInput: FC<IncineratorTableBodyRowFieldProps> = ({
   const [currentValue, setCurrentValue] = useState(value);
 
   return (
-    <Box display="flex" justifyContent="space-between" width="100%" gap="s">
+    <>
       <TextField
         placeholder="0"
         fontWeight="500"
@@ -45,7 +45,7 @@ const IncineratorTableInput: FC<IncineratorTableBodyRowFieldProps> = ({
         }
       />
       <IncineratorTableRowActionButton value={currentValue} index={index} />
-    </Box>
+    </>
   );
 };
 
