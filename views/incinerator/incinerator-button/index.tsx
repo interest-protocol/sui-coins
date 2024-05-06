@@ -14,7 +14,6 @@ import { v4 } from 'uuid';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
-import { CopySVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 import { getAmountsMapFromObjects } from '@/views/components/send-asset-details/send-asset-details.utils';
 
@@ -111,7 +110,9 @@ const IncineratorButton: FC = () => {
                 onClick={() => copy(object.type)}
               >
                 <IncineratorTokenObject object={object} />
-                <CopySVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+                <Typography size="medium" variant="body">
+                  {object.value}
+                </Typography>
               </Box>
             ))}
           </Box>
