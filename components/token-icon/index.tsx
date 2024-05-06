@@ -128,8 +128,6 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
   if (!TokenIcon && !iconSrc && !isLoading)
     return (
       <Box
-        bg="black"
-        color="white"
         display="flex"
         overflow="hidden"
         position="relative"
@@ -137,7 +135,8 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
         justifyContent="center"
         width={`calc(${size} * 1.66)`}
         height={`calc(${size} * 1.66)`}
-        borderRadius={rounded || !withBg ? 'full' : 'xs'}
+        borderRadius={rounded ? 'full' : 'xs'}
+        {...(withBg && { bg: 'black', color: 'white' })}
       >
         <DefaultSVG
           width="100%"

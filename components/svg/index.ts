@@ -56,6 +56,7 @@ export { default as GithubSVG } from './github';
 export { default as HamburgerSVG } from './hamburger';
 export { default as HeartSVG } from './heart';
 export { default as InfoSVG } from './info';
+export { default as InfoCircleSVG } from './info-circle';
 export { default as IPXSVG } from './ipx';
 export { default as IPXRoundedSVG } from './ipx-rounded';
 export { default as LinkSVG } from './link';

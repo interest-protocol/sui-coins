@@ -16,10 +16,23 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
   >
 > = [
   {
-    name: 'swap',
+    name: 'Trade',
     disabled: false,
     Icon: DoubleChevronSVG,
-    path: Routes[RoutesEnum.Swap],
+    accordionList: [
+      {
+        name: 'Swap',
+        disabled: false,
+        path: Routes[RoutesEnum.Swap],
+        networks: [Network.MAINNET, Network.TESTNET],
+      },
+      {
+        name: 'DCA',
+        disabled: false,
+        path: Routes[RoutesEnum.DCA],
+        networks: [Network.MAINNET, Network.TESTNET],
+      },
+    ],
     networks: [Network.MAINNET, Network.TESTNET],
   },
   {
