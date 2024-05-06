@@ -15,6 +15,7 @@ const Incinerator: FC = () => {
     defaultValues: {
       objects: [],
       tab: IncineratorTabEnum.All,
+      searchAssets: '',
     },
   });
 

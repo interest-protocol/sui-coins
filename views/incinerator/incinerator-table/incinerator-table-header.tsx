@@ -25,6 +25,8 @@ const IncineratorTableHeader: FC = () => {
     isFetchingCoinBalances,
   } = useWeb3();
 
+  const searchAssetsValue = useWatch({ control, name: 'searchAssets' });
+
   const { fields, replace } = useFieldArray({
     control,
     name: 'objects',
@@ -39,21 +41,35 @@ const IncineratorTableHeader: FC = () => {
 
   const updateAssets = (active: boolean) => {
     replace(
-      displayObjects[tab].map((object: ObjectData, index) => {
-        const coin = coinsMap[(object.display as CoinObject)?.type];
-        const editable = coin && coin.balance && !coin.balance.isZero();
+      displayObjects[tab]
+        .map((object: ObjectData, index) => {
+          const coin = coinsMap[(object.display as CoinObject)?.type];
+          const editable = coin && coin.balance && !coin.balance.isZero();
 
-        return {
-          index,
-          ...object,
-          value: coin
-            ? `${FixedPointMath.toNumber(coin.balance, coin.decimals)}`
-            : '1',
-          editable,
-          isEditing: false,
-          active,
-        };
-      })
+          return {
+            index,
+            ...object,
+            value: coin
+              ? `${FixedPointMath.toNumber(coin.balance, coin.decimals)}`
+              : '1',
+            editable,
+            isEditing: false,
+            active,
+          };
+        })
+        .filter(
+          (object) =>
+            object.type
+              .toLocaleLowerCase()
+              .includes(searchAssetsValue.toLocaleLowerCase()) ||
+            object.display?.symbol
+              ?.toLocaleLowerCase()
+              .includes(searchAssetsValue.toLocaleLowerCase()) ||
+            object.display?.coinObjectId
+              ?.toLocaleLowerCase()
+              .includes(searchAssetsValue.toLocaleLowerCase()) ||
+            searchAssetsValue == ''
+        )
     );
   };
 
@@ -63,7 +79,7 @@ const IncineratorTableHeader: FC = () => {
 
   useEffect(() => {
     updateAssets(checked);
-  }, [tab]);
+  }, [tab, searchAssetsValue]);
 
   return (
     <Box as="thead">
