@@ -33,8 +33,6 @@ const Pools: FC<PoolCardListWrapper> = ({ network }) => {
   const [page] = useState(1);
   const { data, isLoading: arePoolsLoading } = usePools(page);
 
-  console.log({ data });
-
   return (
     <PoolCardListContent
       network={network}

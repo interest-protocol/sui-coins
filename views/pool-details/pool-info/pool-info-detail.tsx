@@ -3,8 +3,9 @@ import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
+import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { FixedPointMath } from '@/lib';
-import { formatDollars, formatMoney } from '@/utils';
+import { formatDollars, formatMoney, parseBigNumberish } from '@/utils';
 import {
   getStableLiquidity,
   getVolatileLiquidity,
@@ -19,6 +20,7 @@ import ItemToken from './components/accordion/item-token';
 import { POOL_INFORMATION, POOL_STATISTICS } from './pool-info.data';
 
 const PoolInfoDetail: FC = () => {
+  const clamm = useClammSdk();
   const { pool, metadata, prices, loading } = usePoolDetails();
 
   if (loading)
@@ -93,7 +95,6 @@ const PoolInfoDetail: FC = () => {
               const balance = pool.state.balances[index];
               const symbol = metadata[type].symbol ?? '';
               const price = prices[symbol];
-              console.log({ price, symbol, balance });
 
               return (
                 <ItemToken
@@ -117,8 +118,8 @@ const PoolInfoDetail: FC = () => {
                     price
                       ? (+(
                           (FixedPointMath.toNumber(
-                            BigNumber(String(balance)).times(price),
-                            18
+                            parseBigNumberish(balance).times(price),
+                            parseBigNumberish(clamm.PRECISION).e!
                           ) /
                             liquidity) *
                           100
@@ -133,8 +134,8 @@ const PoolInfoDetail: FC = () => {
               labelColor="outline"
               content={formatMoney(
                 FixedPointMath.toNumber(
-                  BigNumber(String(pool.state.lpCoinSupply)),
-                  18
+                  parseBigNumberish(pool.state.lpCoinSupply),
+                  parseBigNumberish(clamm.PRECISION).e!
                 )
               )}
             />

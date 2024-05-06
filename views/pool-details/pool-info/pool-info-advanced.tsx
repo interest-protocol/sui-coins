@@ -1,10 +1,10 @@
 import { Box } from '@interest-protocol/ui-kit';
-import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
+import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { FixedPointMath } from '@/lib';
-import { formatMoney, getSymbolByType } from '@/utils';
+import { formatMoney, getSymbolByType, parseBigNumberish } from '@/utils';
 import { isStablePool } from '@/views/pools/pool-card/pool-card.utils';
 
 import { usePoolDetails } from '../pool-details.context';
@@ -14,6 +14,7 @@ import ItemToken from './components/accordion/item-token';
 import { POOL_PARAMETERS } from './pool-info.data';
 
 const AdvanceDetail: FC = () => {
+  const clamm = useClammSdk();
   const { pool, metadata, loading, prices } = usePoolDetails();
 
   if (loading)
@@ -30,39 +31,6 @@ const AdvanceDetail: FC = () => {
       </Box>
     );
 
-  // STABLE
-  // lpCoinSupply: bigint;
-  // lpCoinDecimals: number;
-  // balances: readonly bigint[];
-  // initialA: bigint;
-  // futureA: bigint;
-  // initialATime: bigint;
-  // futureATime: bigint;
-  // nCoins: number;
-
-  // VOLATILE
-  // a: bigint;
-  // futureA: bigint;
-  // gamma: bigint;
-  // initialTime: bigint;
-  // futureGamma: bigint;
-  // futureTime: bigint;
-  // adminBalance: bigint;
-  // balances: readonly bigint[];
-  // d: bigint;
-  // fees: VolatileFees;
-  // lastPriceTimestamp: bigint;
-  // lpCoinSupply: bigint;
-  // maxA: bigint;
-  // minA: bigint;
-  // nCoins: number;
-  // rebalancingParams: RebalancingParams;
-  // virtualPrice: bigint;
-  // xcpProfit: bigint;
-  // xcpProfitA: bigint;
-  // notAdjusted: boolean;
-  // coinStateMap: Record<string, CoinState>;
-
   return (
     <Box>
       <Accordion title={POOL_PARAMETERS.title}>
@@ -71,22 +39,22 @@ const AdvanceDetail: FC = () => {
               {
                 label: 'Fee In',
                 content: `${FixedPointMath.toNumber(
-                  BigNumber(String(pool.state.fees.feeInPercent)).times(100),
-                  18
+                  parseBigNumberish(pool.state.fees.feeInPercent).times(100),
+                  parseBigNumberish(clamm.PRECISION).e!
                 )}%`,
               },
               {
                 label: 'Fee Out',
                 content: `${FixedPointMath.toNumber(
-                  BigNumber(String(pool.state.fees.feeOutPercent)).times(100),
-                  18
+                  parseBigNumberish(pool.state.fees.feeOutPercent).times(100),
+                  parseBigNumberish(clamm.PRECISION).e!
                 )}%`,
               },
               {
                 label: 'Initial A',
                 popupInfo: 'A',
                 content: FixedPointMath.toNumber(
-                  BigNumber(String(pool.state.initialA)),
+                  parseBigNumberish(pool.state.initialA),
                   0
                 ),
               },
@@ -94,7 +62,7 @@ const AdvanceDetail: FC = () => {
                 label: 'Future A',
                 popupInfo: 'A',
                 content: FixedPointMath.toNumber(
-                  BigNumber(String(pool.state.futureA)),
+                  parseBigNumberish(pool.state.futureA),
                   0
                 ),
               },
@@ -103,62 +71,62 @@ const AdvanceDetail: FC = () => {
               {
                 label: 'Mid Fee',
                 content: FixedPointMath.toNumber(
-                  BigNumber(String(pool.state.fees.midFee)),
-                  18
+                  parseBigNumberish(pool.state.fees.midFee),
+                  parseBigNumberish(clamm.PRECISION).e!
                 ),
               },
               {
                 label: 'Fee Out',
                 content: FixedPointMath.toNumber(
-                  BigNumber(String(pool.state.fees.outFee)),
-                  18
+                  parseBigNumberish(pool.state.fees.outFee),
+                  parseBigNumberish(clamm.PRECISION).e!
                 ),
               },
               {
                 label: 'A',
                 popupInfo: 'A',
                 content: FixedPointMath.toNumber(
-                  BigNumber(String(pool.state.a)),
-                  18
+                  parseBigNumberish(pool.state.a),
+                  parseBigNumberish(clamm.PRECISION).e!
                 ),
               },
               {
                 label: 'Gamma',
                 content: FixedPointMath.toNumber(
-                  BigNumber(String(pool.state.gamma)),
-                  18
+                  parseBigNumberish(pool.state.gamma),
+                  parseBigNumberish(clamm.PRECISION).e!
                 ),
               },
               {
                 label: 'Allowed Extra Profit',
                 content: FixedPointMath.toNumber(
-                  BigNumber(String(pool.state.rebalancingParams.extraProfit)),
-                  18
+                  parseBigNumberish(pool.state.rebalancingParams.extraProfit),
+                  parseBigNumberish(clamm.PRECISION).e!
                 ),
               },
               {
                 label: 'Fee Gamma',
                 content: FixedPointMath.toNumber(
-                  BigNumber(String(pool.state.fees.gammaFee)),
-                  18
+                  parseBigNumberish(pool.state.fees.gammaFee),
+                  parseBigNumberish(clamm.PRECISION).e!
                 ),
               },
               {
                 label: 'Adjustment Step',
                 content: FixedPointMath.toNumber(
-                  BigNumber(
-                    String(pool.state.rebalancingParams.adjustmentStep)
+                  parseBigNumberish(
+                    pool.state.rebalancingParams.adjustmentStep
                   ),
-                  18
+                  parseBigNumberish(clamm.PRECISION).e!
                 ),
               },
               {
                 label: 'Moving Average Time',
                 content: FixedPointMath.toNumber(
-                  BigNumber(String(pool.state.initialTime))
-                    .plus(BigNumber(String(pool.state.futureTime)))
+                  parseBigNumberish(pool.state.initialTime)
+                    .plus(parseBigNumberish(pool.state.futureTime))
                     .div(2),
-                  18
+                  parseBigNumberish(clamm.PRECISION).e!
                 ),
               },
             ]

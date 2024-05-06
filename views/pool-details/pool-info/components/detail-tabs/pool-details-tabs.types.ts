@@ -1,12 +1,12 @@
 import { ReactNode } from 'react';
 
-export interface DetaiTabItemProps {
+export interface DetailsTabItemProps {
   item: ReactNode;
   isSelected: boolean;
   onChange: () => void;
 }
 
-export interface DetaiTabsProps {
+export interface DetailsTabsProps {
   defaultTabIndex?: number;
   items: ReadonlyArray<ReactNode>;
   onChangeTab?: (tabIndex: number) => void;

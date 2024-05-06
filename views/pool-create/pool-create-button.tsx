@@ -17,13 +17,11 @@ const PoolCreateButton: FC = () => {
   ];
 
   const handleClick = [
-    null,
     () =>
       setValue('tokens', [
         { type: '' as `0x${string}`, symbol: '', decimals: 0, value: '' },
         { type: '' as `0x${string}`, symbol: '', decimals: 0, value: '' },
       ]),
-    () => setValue('dex', ''),
   ];
 
   return (

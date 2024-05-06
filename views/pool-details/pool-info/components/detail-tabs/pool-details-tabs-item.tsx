@@ -1,9 +1,9 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import { DetaiTabItemProps } from './pool-details-tabs.types';
+import { DetailsTabItemProps } from './pool-details-tabs.types';
 
-const DetaiTabItem: FC<DetaiTabItemProps> = ({
+const DetailsTabItem: FC<DetailsTabItemProps> = ({
   isSelected,
   onChange,
   item,
@@ -23,4 +23,4 @@ const DetaiTabItem: FC<DetaiTabItemProps> = ({
     </Typography>
   </Box>
 );
-export default DetaiTabItem;
+export default DetailsTabItem;

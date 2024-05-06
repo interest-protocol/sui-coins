@@ -17,7 +17,7 @@ const PoolSummary: FC = () => {
   const { push } = useRouter();
   const network = useNetwork();
   const { getValues } = useFormContext<CreatePoolForm>();
-  const { isStable, tokens, dex } = getValues();
+  const { isStable, tokens } = getValues();
 
   return (
     <Box
@@ -159,39 +159,6 @@ const PoolSummary: FC = () => {
             <Box>{formatMoney(Number(value))}</Box>
           </Box>
         ))}
-      </Box>
-      <Box
-        my="m"
-        display="flex"
-        alignItems="center"
-        justifyContent="space-between"
-      >
-        <Box display="flex" gap="s">
-          <Box color="success">
-            <CircleCheckSVG maxWidth="1.2rem" maxHeight="1.2rem" width="100%" />
-          </Box>
-          <Typography
-            size="medium"
-            variant="body"
-            opacity={0.64}
-            color="onSurface"
-          >
-            Dex
-          </Typography>
-        </Box>
-        <Box
-          px="m"
-          py="xs"
-          display="flex"
-          borderRadius="xs"
-          bg="lowContainer"
-          color="onSurface"
-          alignItems="center"
-          textTransform="capitalize"
-          justifyContent="space-between"
-        >
-          {dex}
-        </Box>
       </Box>
       <Box display="flex" justifyContent="center" gap="s" mt="xl">
         <Button
