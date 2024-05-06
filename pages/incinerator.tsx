@@ -13,6 +13,7 @@ import {
 const IncineratorPage: NextPage = () => {
   const form = useForm<IncineratorForm>({
     defaultValues: {
+      search: '',
       objects: [],
       checked: false,
       tab: IncineratorTabEnum.All,

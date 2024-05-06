@@ -28,8 +28,12 @@ import {
 export const useIncineratorManager = () => {
   const currentAccount = useCurrentAccount();
   const { control, setValue } = useFormContext<IncineratorForm>();
+
+  const search = useWatch({ control, name: 'search' });
   const tab = useWatch({ control: control, name: 'tab' });
+  const formObjects = useWatch({ control, name: 'objects' });
   const checked = useWatch({ control: control, name: 'checked' });
+
   const {
     objects,
     coinsMap,
@@ -38,11 +42,6 @@ export const useIncineratorManager = () => {
     coinsObjects,
     isFetchingCoinBalances,
   } = useWeb3();
-
-  const formObjects = useWatch({
-    control,
-    name: 'objects',
-  });
 
   const displayObjects = {
     [IncineratorTabEnum.All]: objects,
@@ -54,21 +53,37 @@ export const useIncineratorManager = () => {
   const updateAssets = (active: boolean) => {
     setValue(
       'objects',
-      displayObjects[tab].map((object: ObjectData, index) => {
+      displayObjects[tab].reduce((acc, object) => {
+        if (
+          !(
+            object.type?.toLowerCase().includes(search.toLowerCase()) ||
+            object.display?.symbol
+              ?.toLowerCase()
+              .includes(search.toLowerCase()) ||
+            object.display?.coinObjectId
+              ?.toLowerCase()
+              .includes(search.toLowerCase())
+          )
+        )
+          return acc;
+
         const coin = coinsMap[(object.display as CoinObject)?.type];
         const editable = coin && coin.balance && !coin.balance.isZero();
 
-        return {
-          index,
-          ...object,
-          value: coin
-            ? `${FixedPointMath.toNumber(coin.balance, coin.decimals)}`
-            : '1',
-          editable,
-          isEditing: false,
-          active,
-        };
-      })
+        return [
+          ...acc,
+          {
+            index: acc.length,
+            ...object,
+            value: coin
+              ? `${FixedPointMath.toNumber(coin.balance, coin.decimals)}`
+              : '1',
+            editable,
+            isEditing: false,
+            active,
+          },
+        ];
+      }, [] as ReadonlyArray<ObjectField>)
     );
   };
 
@@ -109,16 +124,16 @@ export const useIncineratorManager = () => {
   }, [isFetchingCoinBalances]);
 
   useEffect(() => {
+    updateAssets(checked);
+  }, [checked, tab, currentAccount, search]);
+
+  useEffect(() => {
     if (objects.length !== formObjects.length) {
       updateAssets(checked);
       return;
     }
     if (coinsMap) updateBalances();
   }, [objects, coinsMap]);
-
-  useEffect(() => {
-    updateAssets(checked);
-  }, [checked, tab, currentAccount]);
 
   return;
 };

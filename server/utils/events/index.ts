@@ -13,7 +13,9 @@ const EVENTS_TO_INDEX = {
     NEW_2_POOL: {
       type: `${CLAMM_PACKAGE_ADDRESSES[Network.MAINNET].CLAMM}::pool_events`,
       query: {
-        MoveEventType: `${CLAMM_PACKAGE_ADDRESSES[Network.MAINNET].CLAMM}::pool_events::NewPool`,
+        MoveEventType: `${
+          CLAMM_PACKAGE_ADDRESSES[Network.MAINNET].CLAMM
+        }::pool_events::NewPool`,
       },
       saveEvent: savePoolMainnetEvents,
     },
@@ -22,7 +24,9 @@ const EVENTS_TO_INDEX = {
     NEW_2_POOL: {
       type: `${CLAMM_PACKAGE_ADDRESSES[Network.TESTNET].CLAMM}::pool_events`,
       query: {
-        MoveEventType: `${CLAMM_PACKAGE_ADDRESSES[Network.TESTNET].CLAMM}::pool_events::NewPool`,
+        MoveEventType: `${
+          CLAMM_PACKAGE_ADDRESSES[Network.TESTNET].CLAMM
+        }::pool_events::NewPool`,
       },
       saveEvent: async () => {},
     },
