@@ -4,7 +4,7 @@ import invariant from 'tiny-invariant';
 
 import { Network } from '@/constants';
 import dbConnect from '@/server';
-import { getAllPools, handleServerError } from '@/server/utils';
+import { getAllPools, handleServerError } from '@/server/utils/amm-pools';
 import { movementClient } from '@/utils';
 
 const handler: NextApiHandler = async (req, res) => {
@@ -14,10 +14,16 @@ const handler: NextApiHandler = async (req, res) => {
 
       const client = movementClient[Network.DEVNET];
       const pageNumber = pathOr(1, ['query', 'pageNumber'], req);
+      const network = pathOr(Network.DEVNET, ['query', 'network'], req);
 
+      invariant(Object.values(Network).includes(network), 'Invalid network');
       invariant(client, 'Movement client not found');
 
-      const [pools, totalItems] = await getAllPools(client, pageNumber);
+      const [pools, totalItems] = await getAllPools({
+        client,
+        network,
+        pageNumber,
+      });
 
       res.status(200).json({
         pools,

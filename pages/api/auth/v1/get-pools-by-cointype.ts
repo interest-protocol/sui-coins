@@ -4,7 +4,10 @@ import invariant from 'tiny-invariant';
 
 import { Network } from '@/constants';
 import dbConnect from '@/server';
-import { getPoolsByCoinTypes, handleServerError } from '@/server/utils';
+import {
+  getPoolsByCoinTypes,
+  handleServerError,
+} from '@/server/utils/amm-pools';
 import { movementClient } from '@/utils';
 
 const handler: NextApiHandler = async (req, res) => {
@@ -12,9 +15,13 @@ const handler: NextApiHandler = async (req, res) => {
     if (req.method === 'GET') {
       await dbConnect();
 
-      const client = movementClient[Network.DEVNET];
       const coinInType = pathOr('', ['query', 'coinInType'], req);
       const coinOutType = pathOr('', ['query', 'coinOutType'], req);
+      const network = pathOr(Network.DEVNET, ['query', 'network'], req);
+
+      invariant(Object.values(Network).includes(network), 'Invalid network');
+
+      const client = movementClient[network];
 
       invariant(client, 'Movement client not found');
       invariant(
@@ -22,7 +29,12 @@ const handler: NextApiHandler = async (req, res) => {
         'Please provide both a coin in and coin out types'
       );
 
-      const pools = await getPoolsByCoinTypes(client, coinInType, coinOutType);
+      const pools = await getPoolsByCoinTypes({
+        client,
+        network,
+        coinInType,
+        coinOutType,
+      });
 
       res.status(200).json(pools);
     }

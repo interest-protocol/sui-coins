@@ -130,7 +130,7 @@ export const useCreateAmmPool = () => {
     invariant(lpCoinMeta && lpCoinMeta.id, 'lpCoin does not have a metadata');
 
     const lpCoin = txb.moveCall({
-      target: `${packages.DEX}::interest_protocol_amm::new_pool`,
+      target: `${packages.DEX}::interest_protocol_amm::new`,
       typeArguments,
       arguments: [
         txb.object(objects.REGISTRY),

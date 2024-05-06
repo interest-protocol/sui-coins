@@ -5,7 +5,7 @@ import dbConnect from '@/server';
 import getCoinMetadata from '@/server/lib/coin-metadata/get-coin-metadata';
 import getCoinMetadataList from '@/server/lib/coin-metadata/get-coin-metadata-list';
 import coinMetadata from '@/server/model/coin-metadata';
-import { handleServerError } from '@/server/utils';
+import { handleServerError } from '@/server/utils/amm-pools';
 import { isInvalidNetwork } from '@/utils';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
