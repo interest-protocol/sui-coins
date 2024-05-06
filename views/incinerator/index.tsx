@@ -1,45 +1,56 @@
-import { Box } from '@interest-protocol/ui-kit';
+import { Box, ProgressIndicator } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
-import Layout from '@/components/layout';
+import { useWeb3 } from '@/hooks/use-web3';
 
-import { IncineratorForm, IncineratorTabEnum } from './incinerator.types';
+import { useIncineratorManager } from './incinerator.hooks';
+import { IncineratorForm } from './incinerator.types';
 import IncineratorButton from './incinerator-button';
 import IncineratorHeader from './incinerator-header';
+import IncineratorNoAsset from './incinerator-no-assets';
 import IncineratorTable from './incinerator-table';
 import IncineratorFilterTabs from './incinerator-tabs';
 
 const Incinerator: FC = () => {
-  const form = useForm<IncineratorForm>({
-    defaultValues: {
-      objects: [],
-      tab: IncineratorTabEnum.All,
-    },
-  });
+  const { isFetchingCoinBalances } = useWeb3();
+  const { control } = useFormContext<IncineratorForm>();
+  const objects = useWatch({ control, name: 'objects' });
+
+  useIncineratorManager();
 
   return (
-    <FormProvider {...form}>
-      <Layout>
+    <Box
+      mt="3xl"
+      mx="auto"
+      width="100%"
+      display="flex"
+      borderRadius="s"
+      maxWidth="51rem"
+      bg="lowestContainer"
+      flexDirection="column"
+    >
+      <IncineratorHeader />
+      <IncineratorFilterTabs />
+      {isFetchingCoinBalances ? (
         <Box
-          mt="3xl"
           mx="auto"
-          width="100%"
           display="flex"
-          borderRadius="s"
-          maxWidth="51rem"
-          bg="lowestContainer"
-          flexDirection="column"
+          height="30rem"
+          alignItems="center"
+          justifyContent="center"
         >
-          <IncineratorHeader />
-          <IncineratorFilterTabs />
-          <Box mb="l" display="grid" gap="l">
-            <IncineratorTable />
-            <IncineratorButton />
-          </Box>
+          <ProgressIndicator size={40} variant="loading" />
         </Box>
-      </Layout>
-    </FormProvider>
+      ) : !objects?.length ? (
+        <IncineratorNoAsset />
+      ) : (
+        <Box mb="l" display="grid" gap="l">
+          <IncineratorTable />
+          <IncineratorButton />
+        </Box>
+      )}
+    </Box>
   );
 };
 

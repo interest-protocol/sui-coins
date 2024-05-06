@@ -16,6 +16,7 @@ export type ObjectField = ObjectData & {
 };
 
 export interface IncineratorForm {
+  checked: boolean;
   searchAssets: string;
   tab: IncineratorTabEnum;
   objects: ReadonlyArray<ObjectField>;
