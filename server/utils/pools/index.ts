@@ -9,7 +9,7 @@ export const getClammPools = async ({
   limit,
 }: GetClammPoolsArgs) => {
   const clammModel = getClammPoolModel(network);
-  const safeLimit = limit > PAGE_SIZE ? limit : PAGE_SIZE;
+  const safeLimit = limit > PAGE_SIZE ? PAGE_SIZE : limit;
 
   const pools = await clammModel
     .find({})
@@ -31,7 +31,18 @@ export const getClammPoolsByCoinTypes = async ({
 }: GetClammPoolsByCoinTypesArgs) => {
   const clammModel = getClammPoolModel(network);
 
-  const query = { coinTypes: { $all: coinTypes } };
+  const query = { coinTypes: { $in: coinTypes } };
+
+  return clammModel.find(query);
+};
+
+export const getClammPoolsByLpCoinTypes = async ({
+  network,
+  coinTypes,
+}: GetClammPoolsByCoinTypesArgs) => {
+  const clammModel = getClammPoolModel(network);
+
+  const query = { lpCoinType: { $in: coinTypes } };
 
   return clammModel.find(query);
 };

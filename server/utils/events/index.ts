@@ -13,10 +13,9 @@ const EVENTS_TO_INDEX = {
     NEW_2_POOL: {
       type: `${CLAMM_PACKAGE_ADDRESSES[Network.MAINNET].CLAMM}::pool_events`,
       query: {
-        MoveEventModule: {
-          module: 'pool_events',
-          package: CLAMM_PACKAGE_ADDRESSES[Network.MAINNET].CLAMM,
-        },
+        MoveEventType: `${
+          CLAMM_PACKAGE_ADDRESSES[Network.MAINNET].CLAMM
+        }::pool_events::NewPool`,
       },
       saveEvent: savePoolMainnetEvents,
     },
@@ -25,10 +24,9 @@ const EVENTS_TO_INDEX = {
     NEW_2_POOL: {
       type: `${CLAMM_PACKAGE_ADDRESSES[Network.TESTNET].CLAMM}::pool_events`,
       query: {
-        MoveEventModule: {
-          module: 'pool_events',
-          package: CLAMM_PACKAGE_ADDRESSES[Network.TESTNET].CLAMM,
-        },
+        MoveEventType: `${
+          CLAMM_PACKAGE_ADDRESSES[Network.TESTNET].CLAMM
+        }::pool_events::NewPool`,
       },
       saveEvent: async () => {},
     },
@@ -68,10 +66,12 @@ const createSaveCursor =
   async ({ cursor, type }: SaveCursorArgs) => {
     const model = getEventCursorModel(network);
 
-    const doc = await model.findOne({ eventId: type });
+    const doc: ReturnType<typeof model.findOne> = await model.findOne({
+      eventId: type,
+    });
 
     if (doc) {
-      doc.setUpdate({
+      doc.updateOne({
         eventId: type,
         ...cursor,
       });
@@ -109,10 +109,10 @@ const indexEvent = async ({
     eventData,
   });
 
-  await sleep(1);
+  await sleep(800);
 
   if (result.hasNextPage)
-    indexEvent({ suiClient, saveCursor, eventData, cursor });
+    indexEvent({ suiClient, saveCursor, eventData, cursor: result.cursor });
 };
 
 export const runIndexer = async (suiClient: SuiClient, network: Network) => {

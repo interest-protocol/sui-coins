@@ -4,7 +4,7 @@ export const EXCHANGE_FEE = 0.002;
 
 export const CLAMM_PACKAGE_ADDRESSES = {
   [Network.MAINNET]: {
-    CLAMM: '0x9f1105f1c9d0120a50f154525ee4cbc3ac4387ee6fa078613139e76f2bbe78a4',
+    CLAMM: '0x429dbf2fc849c0b4146db09af38c104ae7a3ed746baf835fa57fee27fa5ff382',
     SUITEARS:
       '0x7ba65fa88ed4026304b7f95ee86f96f8169170efe84b56d465b4fe305e2486cb',
   },

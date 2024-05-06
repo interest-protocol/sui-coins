@@ -35,5 +35,5 @@ const testnetModel =
   mongoose.models[testnetModelName] ||
   mongoose.model<EventCursorModel>(testnetModelName, ClammGraphSchema);
 
-export const getEventCursorModel = (network: Network) =>
+export const getEventCursorModel = (network: Network): typeof mainnetModel =>
   network === Network.MAINNET ? mainnetModel : testnetModel;

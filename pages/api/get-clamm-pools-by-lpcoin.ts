@@ -1,13 +1,12 @@
 import { normalizeStructTag } from '@mysten/sui.js/utils';
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextCors from 'nextjs-cors';
-import { path, pathOr } from 'ramda';
+import { pathOr } from 'ramda';
 import invariant from 'tiny-invariant';
 
 import { Network } from '@/constants';
-import { CLAMM_ALLOWED_NETWORKS } from '@/constants/dex';
 import dbConnect from '@/server';
-import { getClammPoolsByCoinTypes, handleServerError } from '@/server/utils';
+import { getClammPoolsByLpCoinTypes, handleServerError } from '@/server/utils';
 
 export default async function handler(
   req: NextApiRequest,
@@ -23,16 +22,14 @@ export default async function handler(
 
     await dbConnect();
 
-    const network = String(path(['query', 'network'], req));
-    const coinTypes = pathOr('', ['query', 'coinTypes'], req).split(',');
+    const lpCoinTypes = pathOr('', ['query', 'lpCoinType'], req).split(',');
 
-    invariant(coinTypes.length, 'You  must pass at least one coin type');
-    // invariant(CLAMM_ALLOWED_NETWORKS[network], 'Network must be valid');
+    invariant(lpCoinTypes.length, 'You  must pass at least one coin type');
 
-    const data = await getClammPoolsByCoinTypes({
-      network: CLAMM_ALLOWED_NETWORKS[network] ?? Network.MAINNET,
+    const data = await getClammPoolsByLpCoinTypes({
+      network: Network.MAINNET,
       // Assume this throws if it is not a struct tag
-      coinTypes: coinTypes.map((x) => normalizeStructTag(x)),
+      coinTypes: lpCoinTypes.map((x) => normalizeStructTag(x)),
     });
 
     res.status(200).send(data);
