@@ -1,20 +1,27 @@
 import { Box, Checkbox, Typography } from '@interest-protocol/ui-kit';
 import { FC, useEffect, useState } from 'react';
-import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
-import { ObjectData } from '@/context/all-objects/all-objects.types';
+import {
+  CoinObjectData,
+  ObjectData,
+} from '@/context/all-objects/all-objects.types';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import { FilterArrowDownSVG } from '@/svg';
 
 import { TableHeaderData } from '../incinerator.data';
-import { IncineratorForm, IncineratorTabEnum } from '../incinerator.types';
+import {
+  IncineratorForm,
+  IncineratorTabEnum,
+  ObjectField,
+} from '../incinerator.types';
 
 const IncineratorTableHeader: FC = () => {
   const [checked, setChecked] = useState(false);
-  const { control } = useFormContext<IncineratorForm>();
+  const { control, setValue } = useFormContext<IncineratorForm>();
   const tab = useWatch({ control: control, name: 'tab' });
   const {
     objects,
@@ -25,7 +32,7 @@ const IncineratorTableHeader: FC = () => {
     isFetchingCoinBalances,
   } = useWeb3();
 
-  const { fields, replace } = useFieldArray({
+  const formObjects = useWatch({
     control,
     name: 'objects',
   });
@@ -38,7 +45,8 @@ const IncineratorTableHeader: FC = () => {
   };
 
   const updateAssets = (active: boolean) => {
-    replace(
+    setValue(
+      'objects',
       displayObjects[tab].map((object: ObjectData, index) => {
         const coin = coinsMap[(object.display as CoinObject)?.type];
         const editable = coin && coin.balance && !coin.balance.isZero();
@@ -57,9 +65,46 @@ const IncineratorTableHeader: FC = () => {
     );
   };
 
+  const updateBalances = () => {
+    setValue(
+      'objects',
+      formObjects.map((object: ObjectField): ObjectField => {
+        if (!object.display) return object;
+
+        if (!object.display.balance) return object;
+
+        const coin = coinsMap[(object.display as CoinObject).type];
+
+        return {
+          ...object,
+          display: {
+            ...object.display,
+            balance: coin.balance,
+          } as CoinObjectData['display'],
+          ...(!object.isEditing && {
+            value: coin.balance.lt(
+              FixedPointMath.toBigNumber(object.value, coin.decimals)
+            )
+              ? String(FixedPointMath.toNumber(coin.balance, coin.decimals))
+              : object.value,
+          }),
+        };
+      })
+    );
+  };
+
   useEffect(() => {
-    if (!isFetchingCoinBalances && !fields.length) updateAssets(checked);
+    if (!isFetchingCoinBalances && !formObjects.length) updateAssets(checked);
   }, [isFetchingCoinBalances]);
+
+  useEffect(() => {
+    if (!formObjects.length) {
+      updateAssets(checked);
+      return;
+    }
+
+    updateBalances();
+  }, [coinsMap]);
 
   useEffect(() => {
     updateAssets(checked);

@@ -38,10 +38,11 @@ export const useBurn = () => {
 
       const firstCoinObject = txb.object(firstCoin.coinObjectId);
 
-      txb.mergeCoins(
-        firstCoinObject,
-        otherCoins.map((coin) => coin.coinObjectId)
-      );
+      if (otherCoins.length)
+        txb.mergeCoins(
+          firstCoinObject,
+          otherCoins.map((coin) => coin.coinObjectId)
+        );
 
       const [splittedCoin] = txb.splitCoins(firstCoinObject, [
         txb.pure(

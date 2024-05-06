@@ -26,9 +26,9 @@ import { useBurn } from './incinerator-button.hooks';
 const IncineratorButton: FC = () => {
   const burn = useBurn();
   const network = useNetwork();
-  const { coinsMap, isFetchingCoinBalances } = useWeb3();
   const { setModal, handleClose } = useModal();
-  const { control, reset } = useFormContext<IncineratorForm>();
+  const { coinsMap, isFetchingCoinBalances } = useWeb3();
+  const { control, setValue } = useFormContext<IncineratorForm>();
   const allObjects = useWatch({ control, name: 'objects' });
 
   const objects = allObjects.filter(prop('active'));
@@ -41,7 +41,6 @@ const IncineratorButton: FC = () => {
 
   const onSuccess = (tx: SuiTransactionBlockResponse) => {
     showTXSuccessToast(tx, network);
-    reset();
   };
 
   const amountList = toPairs(getAmountsMapFromObjects(objects))
@@ -73,6 +72,7 @@ const IncineratorButton: FC = () => {
     } catch (e) {
       toast.error((e as any).message ?? 'Something went wrong');
     } finally {
+      setValue('objects', []);
       toast.dismiss(toasterId);
     }
   };
