@@ -9,10 +9,27 @@ import IncineratorTableRow from './incinerator-table-row';
 const IncineratorTableBody: FC = () => {
   const { control } = useFormContext<IncineratorForm>();
   const objects = useWatch({ control, name: 'objects' });
+  const searchAssetsValue = useWatch({ control, name: 'searchAssets' });
+
+  const filteredObjects =
+    (searchAssetsValue?.trim() || '') === ''
+      ? objects
+      : objects.filter(
+          (object) =>
+            object.display?.symbol
+              ?.toLowerCase()
+              ?.includes(searchAssetsValue.toLowerCase()) ||
+            object.display?.coinObjectId?.includes(
+              searchAssetsValue.toLowerCase()
+            ) ||
+            object.display?.coinObjectId?.includes(
+              searchAssetsValue.toLowerCase()
+            )
+        );
 
   return (
     <Motion as="tbody">
-      {objects.map((object) => (
+      {filteredObjects.map((object) => (
         <IncineratorTableRow object={object} key={v4()} />
       ))}
     </Motion>
