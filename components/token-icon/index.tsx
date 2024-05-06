@@ -35,7 +35,7 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
       if (TokenIcon || !isTypeBased(props)) return null;
 
       const data = await fetch(
-        `/api/auth/v1/coin-metadata?network=${network}&type=${type}`
+        `/api/auth/v1/coin-metadata?network=${network}&type=${type.toLowerCase()}`
       ).then((res) => res.json());
 
       return data.iconUrl;

@@ -80,7 +80,7 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
           <TokenIcon
             withBg
             network={network}
-            type={token.symbol}
+            type={token.type}
             symbol={token.symbol}
           />
         )
