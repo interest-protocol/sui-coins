@@ -24,7 +24,8 @@ const IncineratorTableBody: FC = () => {
             ) ||
             object.display?.coinObjectId?.includes(
               searchAssetsValue.toLowerCase()
-            )
+            ) ||
+            object.display?.type?.includes(searchAssetsValue.toLowerCase())
         );
 
   return (
