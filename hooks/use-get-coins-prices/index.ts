@@ -27,7 +27,7 @@ export const useGetCoinsPrices = (
     error,
     isLoading,
   } = useSWR(
-    `/api/v1/quote?id=${coinTypes
+    `/api/auth/v1/quote?id=${coinTypes
       .map((coinType) => COIN_MARKET_CAP_ID_RECORD[network][coinType])
       .filter((x) => x !== -1 && !!x)}`,
     fetcher,

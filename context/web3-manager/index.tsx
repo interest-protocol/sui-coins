@@ -58,7 +58,7 @@ const Web3Manager: FC<Web3ManagerProps> = ({ children }) => {
 
   const mutate = () => {
     mutateCoins();
-    mutateObjects();
+    mutateObjects?.();
   };
 
   const coinsObjects = values(coins ?? {}).map((coin) => ({

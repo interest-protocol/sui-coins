@@ -1,8 +1,8 @@
 {
   "crons": [
     {
-      "path": "/api/v1/cron",
-      "schedule": "0 0 * * 1,3,5"
+      "path": "/api/index-clamm-events",
+      "schedule": "*/3 * * * *"
     }
   ]
 }

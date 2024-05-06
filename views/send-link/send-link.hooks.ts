@@ -39,7 +39,7 @@ export const useReclaimLink = () => {
 
   return async (
     link: ZkSendLink,
-    gasObject: SuiObjectRef,
+    gasObjects: Array<SuiObjectRef>,
     onSuccess: (tx: SuiTransactionBlockResponse) => void
   ) => {
     if (!currentAccount) throw new Error('Error on current account');
@@ -54,7 +54,7 @@ export const useReclaimLink = () => {
       }),
     });
 
-    transactionBlock.setGasPayment([gasObject]);
+    transactionBlock.setGasPayment(gasObjects);
     transactionBlock.setGasBudget(BigInt(ZK_SEND_GAS_BUDGET));
 
     const { transactionBlockBytes, signature } =
