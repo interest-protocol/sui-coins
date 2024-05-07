@@ -1,5 +1,5 @@
 import { useSuiClient } from '@mysten/dapp-kit';
-import { TransactionObjectArgument } from '@mysten/sui.js/src/transactions';
+import { TransactionObjectArgument } from '@mysten/sui.js/transactions';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { SUI_CLOCK_OBJECT_ID } from '@mysten/sui.js/utils';
 import { devInspectAndGetReturnValues } from '@polymedia/suits';
