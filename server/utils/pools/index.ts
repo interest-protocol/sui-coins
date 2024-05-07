@@ -1,6 +1,7 @@
 import { isValidSuiObjectId } from '@mysten/sui.js/utils';
 import invariant from 'tiny-invariant';
 
+import { Network } from '@/constants';
 import { PAGE_SIZE } from '@/constants';
 import { CLAMM } from '@/server/clients';
 import { getClammPoolModel } from '@/server/model/clamm-pool';
@@ -57,6 +58,7 @@ export const getClammPoolsByLpCoinTypes = async ({
 
 export const savePool = async ({ poolId, network }: SavePoolArgs) => {
   invariant(isValidSuiObjectId(poolId), 'Invalid pool id');
+  invariant(Object.values(Network).includes(network), 'Unsupported network');
 
   const clammModel = getClammPoolModel(network);
 

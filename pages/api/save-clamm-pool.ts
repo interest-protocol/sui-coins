@@ -7,8 +7,6 @@ import dbConnect from '@/server';
 import { handleServerError } from '@/server/utils';
 import { savePool } from '@/server/utils';
 
-import { suiClientRecord } from '../../server/clients';
-
 interface Body {
   network: Network;
   poolId: string;
