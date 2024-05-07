@@ -72,7 +72,7 @@ const Swap: FC = () => (
         <PreviewSwapButton />
       </Box>
       <SwapPath />
-      <Box my="xs">
+      <Box my="xs" bg="lowestContainer" borderRadius="xs">
         <ManageSlippage />
       </Box>
     </Box>

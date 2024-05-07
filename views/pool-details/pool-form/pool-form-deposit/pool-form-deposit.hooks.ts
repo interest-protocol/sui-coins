@@ -1,91 +1,79 @@
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { WalletAccount } from '@wallet-standard/base';
+import invariant from 'tiny-invariant';
 
-import { OBJECT_RECORD } from '@/constants';
-import { useNetwork } from '@/context/network';
+import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { useWeb3 } from '@/hooks/use-web3';
-import {
-  createObjectsParameter,
-  getAmountMinusSlippage,
-  ZERO_BIG_NUMBER,
-} from '@/utils';
+import { FixedPointMath } from '@/lib';
+import { getAmountMinusSlippage, isSui, parseBigNumberish } from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
 
-import { getSafeValue } from '../pool-form.utils';
-
 export const useDeposit = () => {
-  const network = useNetwork();
+  const clamm = useClammSdk();
   const { coinsMap } = useWeb3();
+  const currentAccount = useCurrentAccount();
 
-  return async (values: PoolForm, account: WalletAccount | null) => {
-    const { tokenList, pool, lpCoin, settings } = values;
+  return async (values: PoolForm) => {
+    const { tokenList, pool, settings } = values;
 
-    if (!tokenList.length) throw new Error('No tokens ');
+    invariant(currentAccount, 'Must to connect your wallet');
+    invariant(tokenList.length, 'No tokens ');
 
-    if (!account) throw new Error('No account found');
+    const initTxb = new TransactionBlock();
 
-    const coin0 = tokenList[0];
-    const coin1 = tokenList[1];
+    const coins = tokenList.map(({ value, type }) => {
+      const [firstCoin, ...otherCoins] = coinsMap[type].objects;
 
-    if (!+coin0.value || !+coin1.value)
-      throw new Error('Check the coins value');
+      const firstCoinObject = initTxb.object(firstCoin.coinObjectId);
 
-    const walletCoin0 = coinsMap[coin0.type];
-    const walletCoin1 = coinsMap[coin1.type];
+      if (otherCoins.length)
+        initTxb.mergeCoins(
+          firstCoinObject,
+          otherCoins.map((coin) => coin.coinObjectId)
+        );
 
-    if (!walletCoin0 || !walletCoin1) throw new Error('Check the wallet coins');
+      const [splittedCoin] = initTxb.splitCoins(
+        isSui(type) ? initTxb.gas : firstCoinObject,
+        [
+          initTxb.pure(
+            FixedPointMath.toBigNumber(value, coinsMap[type].decimals)
+              .decimalPlaces(0)
+              .toString()
+          ),
+        ]
+      );
 
-    const txb = new TransactionBlock();
-
-    const amount0 = getSafeValue(coin0, walletCoin0.balance);
-
-    const amount1 = getSafeValue(coin1, walletCoin1.balance);
-
-    const coin0InList = createObjectsParameter({
-      coinsMap,
-      txb: txb,
-      type: coin0.type,
-      amount: amount0.toString(),
+      return splittedCoin;
     });
 
-    const coin1InList = createObjectsParameter({
-      coinsMap,
-      txb: txb,
-      type: coin1.type,
-      amount: amount1.toString(),
+    const minAmountQuote = await clamm.quoteAddLiquidity({
+      pool: pool.poolObjectId,
+      amounts: tokenList.map(({ value, decimals }) =>
+        BigInt(
+          FixedPointMath.toBigNumber(value, decimals)
+            .decimalPlaces(0)
+            .toString()
+        )
+      ),
     });
 
-    const coin0In = txb.moveCall({
-      target: `${OBJECT_RECORD[network].UTILS_PACKAGE_ID}::utils::handle_coin_vector`,
-      typeArguments: [coin0.type],
-      arguments: [txb.makeMoveVec({ objects: coin0InList }), txb.pure(amount0)],
+    const minAmountWithSlippage = getAmountMinusSlippage(
+      parseBigNumberish(minAmountQuote),
+      settings.slippage
+    )
+      .decimalPlaces(0)
+      .toString();
+
+    const minAmount = BigInt(minAmountWithSlippage);
+
+    const { lpCoin, txb } = await clamm.addLiquidity({
+      minAmount,
+      txb: initTxb,
+      coinsIn: coins,
+      pool: pool.poolObjectId,
     });
 
-    const coin1In = txb.moveCall({
-      target: `${OBJECT_RECORD[network].UTILS_PACKAGE_ID}::utils::handle_coin_vector`,
-      typeArguments: [coin1.type],
-      arguments: [txb.makeMoveVec({ objects: coin1InList }), txb.pure(amount1)],
-    });
-
-    const lpAmount = ZERO_BIG_NUMBER;
-
-    const minimumAmount = getAmountMinusSlippage(lpAmount, settings.slippage);
-
-    const [lpCoinOut, coinXOut, coinYOut] = txb.moveCall({
-      target: `${OBJECT_RECORD[network].DEX_PACKAGE_ID}::interest_protocol_amm::add_liquidity`,
-      typeArguments: [coin0.type, coin1.type, lpCoin.type],
-      arguments: [
-        txb.object(pool.poolObjectId),
-        coin0In,
-        coin1In,
-        txb.pure(minimumAmount),
-      ],
-    });
-
-    txb.transferObjects(
-      [lpCoinOut, coinXOut, coinYOut],
-      txb.pure(account.address)
-    );
+    txb.transferObjects([lpCoin], txb.pure.address(currentAccount.address));
 
     return txb;
   };

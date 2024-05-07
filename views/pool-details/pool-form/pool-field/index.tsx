@@ -49,7 +49,7 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
       disabled={!token}
       labelPosition="right"
       tokenName={token?.symbol ?? ''}
-      fieldProps={{ bg: 'lowestContainer' }}
+      fieldProps={{ bg: 'container' }}
       handleMax={() => {
         if (isDeposit) handleDepositLock();
 

@@ -63,6 +63,9 @@ export const safeSymbol = (symbol: string, type: string): string => {
   return newSymbol;
 };
 
+export const safePoolSymbolFromType = (type: string): string =>
+  type.split('::').reverse()[0];
+
 export const getSafeTotalBalance = propOr(new BigNumber(0), 'totalBalance') as (
   x: CoinObject
 ) => BigNumber;
@@ -106,7 +109,7 @@ export const createObjectsParameter = ({
   coinsMap,
   amount,
 }: CreateVectorParameterArgs) => {
-  if (type === SUI_TYPE_ARG) {
+  if (isSui(type)) {
     const [coin] = txb.splitCoins(txb.gas, [txb.pure(amount.toString())]);
     return [coin];
   }

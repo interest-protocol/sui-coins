@@ -49,7 +49,7 @@ const PoolDeposit: FC<PoolFormProps> = ({ poolOptionView }) => {
         <Typography variant="body" size="large" mb="m">
           Manage your slippage
         </Typography>
-        <Box bg="lowestContainer" borderRadius="xs">
+        <Box bg="container" borderRadius="xs">
           <ManageSlippage />
         </Box>
       </Box>
