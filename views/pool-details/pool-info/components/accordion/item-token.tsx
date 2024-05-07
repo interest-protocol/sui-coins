@@ -22,7 +22,7 @@ const ItemCoin: FC<PoolDetailAccordionItemCoinProps> = ({
       alignItems="center"
       justifyContent="space-between"
     >
-      <Box display="flex" alignItems="center" justifyContent="center">
+      <Box display="flex" alignItems="center" justifyContent="center" gap="s">
         <TokenIcon
           withBg
           rounded

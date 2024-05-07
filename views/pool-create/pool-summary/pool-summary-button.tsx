@@ -11,6 +11,7 @@ import invariant from 'tiny-invariant';
 
 import { Routes, RoutesEnum } from '@/constants';
 import { useNetwork } from '@/context/network';
+import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { useDialog } from '@/hooks/use-dialog';
 import {
   showTXSuccessToast,
@@ -30,6 +31,7 @@ const PoolSummaryButton: FC = () => {
   const network = useNetwork();
   const { push } = useRouter();
   const client = useSuiClient();
+  const clamm = useClammSdk();
   const createLpCoin = useCreateLpCoin();
   const signTxb = useSignTransactionBlock();
   const currentAccount = useCurrentAccount();
@@ -78,16 +80,9 @@ const PoolSummaryButton: FC = () => {
 
       throwTXIfNotSuccessful(tx);
 
-      const poolId = extractPoolDataFromTx(tx, client, network);
+      const poolId = await extractPoolDataFromTx(tx, client, network);
 
-      await fetch('/api/auth/v1/save-pool', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          poolId,
-          network,
-        }),
-      });
+      await clamm.savePool(poolId);
 
       showTXSuccessToast(tx, network);
 
