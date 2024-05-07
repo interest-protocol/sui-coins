@@ -5,7 +5,11 @@ import { MAINNET_COINS_INFO } from '@/constants/coins';
 import { FixedPointMath } from '@/lib';
 import { isBigNumberish } from '@/utils';
 
+import { AIRDROP_BLACKLIST } from './airdrop.constants';
 import { AirdropData } from './airdrop.types';
+
+export const isAllowedAddress = (address: string) =>
+  !AIRDROP_BLACKLIST.includes(normalizeSuiAddress(address));
 
 export const csvToAirdrop = (
   csv: string,
@@ -27,6 +31,8 @@ export const csvToAirdrop = (
     const data = [] as AirdropData[];
 
     addresses.forEach((address, i) => {
+      if (!isAllowedAddress(address)) return;
+
       data.push({
         address,
         amount: amounts[i],
@@ -53,6 +59,8 @@ export const textToAirdrop = (
     const data = [] as AirdropData[];
 
     addresses.forEach((address) => {
+      if (!isAllowedAddress(address)) return;
+
       data.push({
         address,
         amount: FixedPointMath.toBigNumber(commonAmount, decimals).toString(),

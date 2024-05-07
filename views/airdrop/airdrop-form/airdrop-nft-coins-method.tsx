@@ -11,8 +11,8 @@ import { ChevronRightSVG } from '@/svg';
 import SelectNFTModal from '@/views/components/select-nft-modal';
 import SelectTokenModal from '@/views/components/select-token-modal';
 
-import { IAirdropForm } from '../airdrop.types';
-import { getSymbol } from '../airdrop.utils';
+import { AirdropData, IAirdropForm } from '../airdrop.types';
+import { getSymbol, isAllowedAddress } from '../airdrop.utils';
 import AirdropCommonAmountTextField from './airdrop-common-amount-text-field';
 
 const AirdropNftCoinsMethod: FC = () => {
@@ -44,12 +44,19 @@ const AirdropNftCoinsMethod: FC = () => {
       .then((res) => res.json())
       .catch(console.log);
 
-    const airdropList = nft.holders.map((address) => ({
-      address,
-      amount: BigNumber(getValues('commonAmount'))
-        .times(BigNumber(10).pow(getValues('token.decimals')))
-        .toString(),
-    }));
+    const airdropList = nft.holders.reduce((acc, address) => {
+      if (!isAllowedAddress(address)) return acc;
+
+      return [
+        ...acc,
+        {
+          address,
+          amount: BigNumber(getValues('commonAmount'))
+            .times(BigNumber(10).pow(getValues('token.decimals')))
+            .toString(),
+        },
+      ];
+    }, [] as ReadonlyArray<AirdropData>);
 
     setValue('airdropList', airdropList);
   };
