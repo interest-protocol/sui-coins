@@ -1,7 +1,16 @@
+import { isValidSuiObjectId } from '@mysten/sui.js/utils';
+import invariant from 'tiny-invariant';
+
+import { Network } from '@/constants';
 import { PAGE_SIZE } from '@/constants';
+import { CLAMM } from '@/server/clients';
 import { getClammPoolModel } from '@/server/model/clamm-pool';
 
-import { GetClammPoolsArgs, GetClammPoolsByCoinTypesArgs } from './pools.types';
+import {
+  GetClammPoolsArgs,
+  GetClammPoolsByCoinTypesArgs,
+  SavePoolArgs,
+} from './pools.types';
 
 export const getClammPools = async ({
   network,
@@ -45,4 +54,29 @@ export const getClammPoolsByLpCoinTypes = async ({
   const query = { lpCoinType: { $in: coinTypes } };
 
   return clammModel.find(query);
+};
+
+export const savePool = async ({ poolId, network }: SavePoolArgs) => {
+  invariant(isValidSuiObjectId(poolId), 'Invalid pool id');
+  invariant(Object.values(Network).includes(network), 'Unsupported network');
+
+  const clammModel = getClammPoolModel(network);
+
+  const exists = await clammModel.findOne({ poolObjectId: poolId });
+
+  invariant(exists == undefined, 'Pool already saved');
+
+  const pool = await CLAMM.getPool(poolId);
+  invariant(pool, `Wrong pool ${poolId}`);
+
+  const newPool = await clammModel.create({
+    poolObjectId: pool.poolObjectId,
+    lpCoinType: pool.lpCoinType,
+    isStable: pool.isStable,
+    coinTypes: pool.coinTypes,
+  });
+
+  await newPool.save();
+
+  return newPool;
 };
