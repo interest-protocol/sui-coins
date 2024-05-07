@@ -1,4 +1,4 @@
-import { normalizeSuiAddress } from '@mysten/sui.js/dist/cjs/utils';
+import { normalizeSuiAddress } from '@mysten/sui.js/utils';
 
 export const RATE_LIMIT_DELAY = 5000;
 
