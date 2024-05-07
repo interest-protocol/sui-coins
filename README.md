@@ -2,6 +2,10 @@
 
  <p> <img width="50px"height="50px" src="./public/logo.png" /></p> Is a protocol to swap and lend crypto, commodities, gold, and fiat currencies.
 
+## Airdrop Blacklist
+
+If you don't want to receive the airdrop from **SuiCoins** automatically, edit and add your address to [airdrop-blacklist.json](./public/airdrop-blacklist.json).
+
 ## Contributing
 
 We always want to be better.

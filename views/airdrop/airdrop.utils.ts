@@ -3,13 +3,13 @@ import { propOr } from 'ramda';
 
 import { MAINNET_COINS_INFO } from '@/constants/coins';
 import { FixedPointMath } from '@/lib';
-import { isBigNumberish } from '@/utils';
+import { isBigNumberish, isSameAddress } from '@/utils';
 
-import { AIRDROP_BLACKLIST } from './airdrop.constants';
+import AIRDROP_BLACKLIST from '../../public/airdrop-blacklist.json';
 import { AirdropData } from './airdrop.types';
 
 export const isAllowedAddress = (address: string) =>
-  !AIRDROP_BLACKLIST.includes(normalizeSuiAddress(address));
+  AIRDROP_BLACKLIST.every((item) => !isSameAddress(item, address));
 
 export const csvToAirdrop = (
   csv: string,
