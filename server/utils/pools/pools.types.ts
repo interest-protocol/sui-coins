@@ -1,3 +1,5 @@
+import { SuiClient } from '@mysten/sui.js/client';
+
 import { Network } from '@/constants';
 
 export interface GetClammPoolsArgs {
@@ -9,4 +11,9 @@ export interface GetClammPoolsArgs {
 export interface GetClammPoolsByCoinTypesArgs {
   network: Network;
   coinTypes: string[];
+}
+
+export interface SavePoolArgs {
+  poolId: string;
+  network: Network;
 }
