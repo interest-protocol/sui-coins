@@ -10,6 +10,7 @@ import { fetchPool, fetchPools } from '@/utils';
 import {
   GetAllPoolsArgs,
   GetPoolsByCoinTypes,
+  GetPoolsByLpCoins,
   SavePoolArgs,
 } from './amm-pools.types';
 
@@ -30,6 +31,7 @@ export const savePool = async ({ client, poolId, network }: SavePoolArgs) => {
     stateId: pool.stateId,
     coinX: pool.coinTypes.coinX,
     coinY: pool.coinTypes.coinY,
+    lpCoinType: pool.coinTypes.lpCoin,
     isVolatile: pool.isVolatile,
   });
 
@@ -77,6 +79,28 @@ export const getPoolsByCoinTypes = async ({
       { coinY: coinInType },
       { coinY: coinOutType },
     ],
+  };
+
+  const ammPoolModel = getAmmPoolModel(network);
+
+  const pools = (await ammPoolModel.find(query)) as readonly AMMPoolModel[];
+
+  if (!pools || !pools.length) return [];
+
+  return await fetchPools(
+    client,
+    pools.map((x) => x.poolObjectId),
+    pools.map((x) => x.stateId)
+  );
+};
+
+export const getPoolsByLpCoins = async ({
+  client,
+  network,
+  lpCoins,
+}: GetPoolsByLpCoins): Promise<readonly AmmPool[]> => {
+  const query = {
+    lpCoinType: { $in: lpCoins },
   };
 
   const ammPoolModel = getAmmPoolModel(network);

@@ -20,3 +20,9 @@ export interface GetPoolsByCoinTypes {
   coinInType: string;
   coinOutType: string;
 }
+
+export interface GetPoolsByLpCoins {
+  client: SuiClient;
+  network: Network;
+  lpCoins: readonly string[];
+}

@@ -8,6 +8,7 @@ export interface AMMPoolModel extends Document {
   coinX: string;
   coinY: string;
   isVolatile: boolean;
+  lpCoinType: string;
 }
 
 const modelName = 'MovementAMMPool';
@@ -32,6 +33,11 @@ export const AmmPoolSchema = new Schema({
     required: true,
   },
   coinY: {
+    type: String,
+    index: true,
+    required: true,
+  },
+  lpCoinType: {
     type: String,
     index: true,
     required: true,
