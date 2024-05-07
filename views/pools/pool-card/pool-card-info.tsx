@@ -16,49 +16,47 @@ const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({
   const network = useNetwork();
 
   return (
-    <Box>
+    <Box
+      my="xl"
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      flexDirection="column"
+    >
       <Box
-        my="xl"
+        mb="m"
+        gap="m"
         display="flex"
+        height="2.5rem"
         justifyContent="center"
         alignItems="center"
-        flexDirection="column"
+        alignSelf="stretch"
       >
-        <Box
-          mb="m"
-          gap="m"
-          display="flex"
-          height="2.5rem"
-          justifyContent="center"
-          alignItems="center"
-          alignSelf="stretch"
+        {coinTypes.map((type) => (
+          <TokenIcon
+            withBg
+            key={v4()}
+            type={type}
+            network={network}
+            symbol={isSui(type) ? 'MOVE' : getSymbolByType(type)}
+          />
+        ))}
+      </Box>
+      <Box display="flex" flexDirection="column" alignItems="center">
+        <Typography
+          size="small"
+          variant="body"
+          fontSize="1rem"
+          fontWeight="700"
+          lineHeight="1.7rem"
+          color="onSurface"
         >
-          {coinTypes.map((type) => (
-            <TokenIcon
-              withBg
-              key={v4()}
-              type={type}
-              network={network}
-              symbol={isSui(type) ? 'MOVE' : getSymbolByType(type)}
-            />
-          ))}
-        </Box>
-        <Box display="flex" flexDirection="column" alignItems="center">
-          <Typography
-            size="small"
-            variant="body"
-            fontSize="1rem"
-            fontWeight="700"
-            lineHeight="1.7rem"
-            color="onSurface"
-          >
-            {coinTypes.reduce(
-              (acc, type) =>
-                `${acc ? `${acc} • ` : ''}${pathOr('', [type, 'symbol'], coinMetadata).replace('SUI', 'MOVE')}`,
-              ''
-            )}
-          </Typography>
-        </Box>
+          {coinTypes.reduce(
+            (acc, type) =>
+              `${acc ? `${acc} • ` : ''}${pathOr('', [type, 'symbol'], coinMetadata).replace('SUI', 'MOVE')}`,
+            ''
+          )}
+        </Typography>
       </Box>
     </Box>
   );
