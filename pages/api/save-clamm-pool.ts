@@ -16,7 +16,7 @@ const handler: NextApiHandler = async (req, res) => {
   try {
     await NextCors(req, res, {
       // Options
-      methods: ['GET'],
+      methods: ['POST'],
       origin: '*',
       optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
     });
