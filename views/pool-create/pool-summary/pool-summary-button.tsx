@@ -1,11 +1,22 @@
 import { Button } from '@interest-protocol/ui-kit';
-import { useSignTransactionBlock, useSuiClient } from '@mysten/dapp-kit';
+import {
+  useCurrentAccount,
+  useSignTransactionBlock,
+  useSuiClient,
+} from '@mysten/dapp-kit';
+import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+import invariant from 'tiny-invariant';
 
+import { Routes, RoutesEnum } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useDialog } from '@/hooks/use-dialog';
-import { showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
+import {
+  showTXSuccessToast,
+  signAndExecute,
+  throwTXIfNotSuccessful,
+} from '@/utils';
 
 import {
   useCreateLpCoin,
@@ -13,14 +24,16 @@ import {
   useCreateVolatilePool,
 } from '../pool-create.hooks';
 import { CreatePoolForm, Token } from '../pool-create.types';
-import { extractCoinData } from '../pool-create.utils';
+import { extractCoinData, extractPoolDataFromTx } from '../pool-create.utils';
 
 const PoolSummaryButton: FC = () => {
   const network = useNetwork();
+  const { push } = useRouter();
   const client = useSuiClient();
-  const signTxb = useSignTransactionBlock();
-  const { dialog, handleClose } = useDialog();
   const createLpCoin = useCreateLpCoin();
+  const signTxb = useSignTransactionBlock();
+  const currentAccount = useCurrentAccount();
+  const { dialog, handleClose } = useDialog();
   const createStablePool = useCreateStablePool();
   const createVolatilePool = useCreateVolatilePool();
   const { control } = useFormContext<CreatePoolForm>();
@@ -29,7 +42,8 @@ const PoolSummaryButton: FC = () => {
 
   const onCreatePool = async () => {
     try {
-      if (!form || !form.tokens?.length) throw new Error('No data');
+      invariant(form && form.tokens?.length, 'No data');
+      invariant(currentAccount, 'No wallet');
 
       const lpCoinTxb = await createLpCoin(form.tokens as ReadonlyArray<Token>);
 
@@ -55,18 +69,29 @@ const PoolSummaryButton: FC = () => {
         coinType
       );
 
-      const { signature, transactionBlockBytes } = await signTxb.mutateAsync({
-        transactionBlock: txb,
-      });
-
-      const tx = await client.executeTransactionBlock({
-        transactionBlock: transactionBlockBytes,
-        signature,
+      const tx = await signAndExecute({
+        txb,
+        suiClient: client,
+        currentAccount,
+        signTransactionBlock: signTxb,
       });
 
       throwTXIfNotSuccessful(tx);
 
+      const poolId = extractPoolDataFromTx(tx, client, network);
+
+      await fetch('/api/auth/v1/save-pool', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          poolId,
+          network,
+        }),
+      });
+
       showTXSuccessToast(tx, network);
+
+      push(`${Routes[RoutesEnum.PoolDetails]}?objectId=${poolId}`);
     } catch (e) {
       console.log(e);
       throw e;

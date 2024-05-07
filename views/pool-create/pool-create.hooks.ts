@@ -7,7 +7,6 @@ import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import { getLpCoinBytecode } from '@/lib/move-template/lp-coin';
 import initMoveByteCodeTemplate from '@/lib/move-template/move-bytecode-template';
-import { isSui } from '@/utils';
 
 import { Token } from './pool-create.types';
 
@@ -67,38 +66,26 @@ export const useCreateStablePool = () => {
 
     const auxTxb = new TransactionBlock();
 
-    const coins = tokens.map(({ type, value, decimals }) => {
-      if (isSui(type)) {
-        const coinOut = auxTxb.splitCoins(auxTxb.gas, [
-          auxTxb.pure(
-            FixedPointMath.toBigNumber(value, decimals)
-              .decimalPlaces(0)
-              .toString()
-          ),
-        ]);
+    const coins = tokens.map(({ type, value }) => {
+      const [firstCoin, ...otherCoins] = coinsMap[type].objects;
 
-        return coinOut;
-      } else {
+      const firstCoinObject = auxTxb.object(firstCoin.coinObjectId);
+
+      if (otherCoins.length)
         auxTxb.mergeCoins(
-          auxTxb.object(coinsMap[type].coinObjectId),
-          coinsMap[type].objects
-            .slice(1)
-            .map((object) => auxTxb.object(object.coinObjectId))
+          firstCoinObject,
+          otherCoins.map((coin) => coin.coinObjectId)
         );
 
-        const coinOut = auxTxb.splitCoins(
-          auxTxb.object(coinsMap[type].coinObjectId),
-          [
-            auxTxb.pure(
-              FixedPointMath.toBigNumber(value, decimals)
-                .decimalPlaces(0)
-                .toString()
-            ),
-          ]
-        );
+      const [splittedCoin] = auxTxb.splitCoins(firstCoinObject, [
+        auxTxb.pure(
+          FixedPointMath.toBigNumber(value, coinsMap[type].decimals)
+            .decimalPlaces(0)
+            .toString()
+        ),
+      ]);
 
-        return coinOut;
-      }
+      return splittedCoin;
     });
 
     const typeArguments = [...tokens.map((token) => token.type), coinType];
@@ -132,39 +119,26 @@ export const useCreateVolatilePool = () => {
 
     const auxTxb = new TransactionBlock();
 
-    const coins = tokens.map(({ type, value, decimals }) => {
-      if (isSui(type)) {
-        const coinOut = auxTxb.splitCoins(auxTxb.gas, [
-          auxTxb.pure(
-            FixedPointMath.toBigNumber(value, decimals)
-              .decimalPlaces(0)
-              .toString()
-          ),
-        ]);
+    const coins = tokens.map(({ type, value }) => {
+      const [firstCoin, ...otherCoins] = coinsMap[type].objects;
 
-        return coinOut;
-      } else {
-        if (coinsMap[type].objects.length > 1)
-          auxTxb.mergeCoins(
-            auxTxb.object(coinsMap[type].objects[0].coinObjectId),
-            coinsMap[type].objects
-              .slice(1)
-              .map((object) => auxTxb.object(object.coinObjectId))
-          );
+      const firstCoinObject = auxTxb.object(firstCoin.coinObjectId);
 
-        const coinOut = auxTxb.splitCoins(
-          auxTxb.object(coinsMap[type].objects[0].coinObjectId),
-          [
-            auxTxb.pure(
-              FixedPointMath.toBigNumber(value, decimals)
-                .decimalPlaces(0)
-                .toString()
-            ),
-          ]
+      if (otherCoins.length)
+        auxTxb.mergeCoins(
+          firstCoinObject,
+          otherCoins.map((coin) => coin.coinObjectId)
         );
 
-        return coinOut;
-      }
+      const [splittedCoin] = auxTxb.splitCoins(firstCoinObject, [
+        auxTxb.pure(
+          FixedPointMath.toBigNumber(value, coinsMap[type].decimals)
+            .decimalPlaces(0)
+            .toString()
+        ),
+      ]);
+
+      return splittedCoin;
     });
 
     const typeArguments = [...tokens.map((token) => token.type), lpCoinType];

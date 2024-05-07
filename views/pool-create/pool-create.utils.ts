@@ -6,6 +6,9 @@ import {
 } from '@mysten/sui.js/client';
 import { pathOr } from 'ramda';
 
+import { Network } from '@/constants';
+import { CLAMM_PACKAGE_ADDRESSES } from '@/constants/dex';
+
 import { ExtractedCoinData } from './pool-create.types';
 
 const getCoinType = (x: string) =>
@@ -68,4 +71,34 @@ export const extractCoinData = async (
       coinType: '',
     } as ExtractedCoinData
   );
+};
+
+export const extractPoolDataFromTx = async (
+  tx: SuiTransactionBlockResponse | DevInspectResults,
+  client: SuiClient,
+  network: Network
+) => {
+  // return if the tx hasn't succeed
+  if (tx.effects?.status?.status !== 'success')
+    throw new Error('Creating a new stable pool failed');
+
+  // get all created objects IDs
+  const createdObjectIds = tx.effects.created!.map(
+    (item: OwnedObjectRef) => item.reference.objectId
+  );
+
+  // fetch objects data
+  const objects = await client.multiGetObjects({
+    ids: createdObjectIds,
+    options: { showContent: true, showType: true, showOwner: true },
+  });
+
+  const poolData = objects.find(
+    (elem) =>
+      elem.data?.content?.dataType === 'moveObject' &&
+      (elem?.data?.content?.type as string) ===
+        `${CLAMM_PACKAGE_ADDRESSES[network]}::interest_pool::InterestPool`
+  );
+
+  return poolData?.data?.objectId ?? '';
 };

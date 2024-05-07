@@ -2,14 +2,12 @@ import mongoose, { Document, Schema } from 'mongoose';
 
 import { Network } from '@/constants';
 
-export interface ClammPoolType {
+export interface ClammPoolModel extends Document {
   poolObjectId: string;
   lpCoinType: string;
   isStable: boolean;
   coinTypes: readonly string[];
 }
-
-export interface ClammPoolModel extends Document {}
 
 const modelName = 'ClammPool';
 const testnetModelName = modelName + 'Testnet';
