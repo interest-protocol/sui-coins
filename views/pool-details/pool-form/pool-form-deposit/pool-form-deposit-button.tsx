@@ -13,7 +13,11 @@ import { useDialog } from '@/hooks/use-dialog';
 import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
-import { showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
+import {
+  showTXSuccessToast,
+  signAndExecute,
+  throwTXIfNotSuccessful,
+} from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
 
 import { usePoolDetails } from '../../pool-details.context';
@@ -23,9 +27,9 @@ import { useDeposit } from './pool-form-deposit.hooks';
 const PoolFormDepositButton: FC = () => {
   const deposit = useDeposit();
   const network = useNetwork();
-  const client = useSuiClient();
+  const suiClient = useSuiClient();
   const { pool } = usePoolDetails();
-  const account = useCurrentAccount();
+  const currentAccount = useCurrentAccount();
   const { coinsMap, mutate } = useWeb3();
   const { dialog, handleClose } = useDialog();
   const signTransactionBlock = useSignTransactionBlock();
@@ -36,30 +40,24 @@ const PoolFormDepositButton: FC = () => {
 
   const handleDeposit = async () => {
     try {
-      if (!account) return;
+      if (!currentAccount) return;
 
-      const txb = await deposit(getValues(), account);
+      const txb = await deposit(getValues());
 
-      const { signature, transactionBlockBytes } =
-        await signTransactionBlock.mutateAsync({
-          transactionBlock: txb,
-          account: account,
-        });
-
-      const tx = await client.executeTransactionBlock({
-        signature,
-        options: { showEffects: true },
-        requestType: 'WaitForEffectsCert',
-        transactionBlock: transactionBlockBytes,
+      const tx = await signAndExecute({
+        txb,
+        suiClient,
+        currentAccount,
+        signTransactionBlock,
       });
 
       throwTXIfNotSuccessful(tx);
 
-      await showTXSuccessToast(tx, network);
+      showTXSuccessToast(tx, network);
 
       setValue('explorerLink', `${EXPLORER_URL[network]}/tx/${tx.digest}`);
     } finally {
-      await mutate();
+      mutate();
     }
   };
 
