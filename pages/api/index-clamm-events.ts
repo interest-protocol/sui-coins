@@ -2,8 +2,9 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 import { Network } from '@/constants';
 import dbConnect from '@/server';
-import { suiClientRecord } from '@/server/sui-client';
 import { handleServerError, runIndexer } from '@/server/utils';
+
+import { suiClientRecord } from '../../server/clients';
 
 export default async function handler(_: NextApiRequest, res: NextApiResponse) {
   try {
