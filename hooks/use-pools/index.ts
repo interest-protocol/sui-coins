@@ -22,7 +22,7 @@ export const usePool = (poolId: string) => {
 export const usePools = (page: number) => {
   const clamm = useClammSdk();
 
-  return useSWR<QueryPoolsReturn>(
+  return useSWR<QueryPoolsReturn<InterestPool>>(
     makeSWRKey([page], usePools.name),
     async () => clamm.getPools(),
     {
