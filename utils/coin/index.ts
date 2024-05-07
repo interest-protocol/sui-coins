@@ -1,5 +1,6 @@
 import type { Token } from '@interest-protocol/sui-tokens';
 import { CoinStruct } from '@mysten/sui.js/dist/cjs/client';
+import { normalizeStructTag } from '@mysten/sui.js/utils';
 import { normalizeSuiObjectId, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
 import { propOr } from 'ramda';
@@ -108,9 +109,19 @@ export const createObjectsParameter = ({
 
   return coinsMap[type]
     ? coinsMap[type].objects.map((x) =>
-        txb.object(normalizeSuiObjectId(x.coinObjectId))
+        txb.objectRef({
+          objectId: normalizeSuiObjectId(x.coinObjectId),
+          digest: x.digest,
+          version: x.version,
+        })
       )
     : [];
+};
+
+export const isLpCoinType = (x: string) => {
+  const normalized = normalizeStructTag(x.trim());
+  const OTW = normalized.split('::')[2];
+  return OTW.startsWith('IPX_V') || OTW.startsWith('IPX_S');
 };
 
 export const normalizeSuiType = (x: string) => {

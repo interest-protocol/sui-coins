@@ -1,8 +1,13 @@
 import useSWR from 'swr';
 
 import { useNetwork } from '@/context/network';
+import { useWeb3 } from '@/hooks';
 import { AmmPool, AmmServerPool } from '@/interface';
-import { convertServerPoolToClientPool } from '@/utils';
+import {
+  convertServerPoolToClientPool,
+  isLpCoinType,
+  makeSWRKey,
+} from '@/utils';
 
 export const useGetPoolsByCoinTypes = (
   coinInType: string,
@@ -29,12 +34,17 @@ export const useGetPoolsByCoinTypes = (
   );
 };
 
-export const useGetPoolsByLpCoinTypes = (lpCoins: readonly string[]) => {
+export const useGetPoolsByLpCoinTypes = () => {
   const network = useNetwork();
+  const { coins, account } = useWeb3();
 
-  return useSWR<AmmPool[]>(
-    `/api/auth/v1/get-pools-by-lpcoins?lpCoins=${lpCoins.toString()}&network=${network}`,
+  const lpCoins = coins.filter((x) => isLpCoinType(x.type)).map((x) => x.type);
+
+  return useSWR<readonly AmmPool[]>(
+    makeSWRKey([network, account], useGetPoolsByLpCoinTypes.name),
     async () => {
+      if (!account) return [];
+
       const res = await fetch(
         `/api/auth/v1/get-pools-by-lpcoins?lpCoins=${lpCoins.toString()}&network=${network}`
       );

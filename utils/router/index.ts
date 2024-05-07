@@ -36,7 +36,7 @@ export const findRoutes = (
     path.push(currentCoin);
 
     if (currentCoin === endCoin) {
-      allPaths.push([path.slice(), poolIds.slice()]);
+      allPaths.push([path, poolIds]);
     } else {
       for (const pool of Dex[currentCoin]) {
         for (const neighborCoin of Object.keys(Dex)) {

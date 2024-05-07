@@ -15,7 +15,11 @@ const handler: NextApiHandler = async (req, res) => {
   try {
     if (req.method === 'POST') {
       await dbConnect();
-      const { network, poolId } = req.body as Body;
+
+      const body = JSON.parse(req.body) as Body;
+
+      const network = body.network;
+      const poolId = body.poolId;
 
       invariant(network && poolId, 'invalid body');
 

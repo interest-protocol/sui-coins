@@ -14,9 +14,9 @@ import useSWR from 'swr';
 import { v4 } from 'uuid';
 
 import { PAGE_SIZE, Routes, RoutesEnum } from '@/constants';
-import { useFindPoolsByCoinTypes } from '@/hooks/use-find-pools-by-coin-types';
 import { useGetCoinMetadata } from '@/hooks/use-get-coin-metadata';
 import useGetMultipleTokenPriceBySymbol from '@/hooks/use-get-multiple-token-price-by-symbol';
+import { useGetPoolsByLpCoinTypes } from '@/hooks/use-get-pools-by-cointypes';
 import { useModal } from '@/hooks/use-modal';
 import { usePools } from '@/hooks/use-pools';
 import { AmmPool } from '@/interface';
@@ -59,9 +59,9 @@ const Pools: FC = () => {
 };
 
 const Position: FC = () => {
-  const { data, isLoading } = useFindPoolsByCoinTypes();
+  const { data, isLoading } = useGetPoolsByLpCoinTypes();
 
-  const safeData = data ?? { pools: [], totalPages: 0 };
+  const safeData = data ?? [];
 
   return <PoolCardListContent pools={safeData} arePoolsLoading={isLoading} />;
 };
