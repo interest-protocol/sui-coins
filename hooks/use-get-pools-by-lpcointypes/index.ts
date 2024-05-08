@@ -9,31 +9,6 @@ import {
   makeSWRKey,
 } from '@/utils';
 
-export const useGetPoolsByCoinTypes = (
-  coinInType: string,
-  coinOutType: string
-) => {
-  const network = useNetwork();
-
-  return useSWR<AmmPool[]>(
-    `/api/auth/v1/get-pools-by-cointypes?coinInType=${coinInType}&coinOutType=${coinOutType}&network=${network}`,
-    async () => {
-      const res = await fetch(
-        `/api/auth/v1/get-pools-by-cointypes?coinInType=${coinInType}&coinOutType=${coinOutType}&network=${network}`
-      );
-
-      const pools = (await res.json()) as AmmServerPool[];
-
-      return pools.map((x) => convertServerPoolToClientPool(x));
-    },
-    {
-      revalidateOnFocus: false,
-      revalidateOnMount: true,
-      refreshWhenHidden: false,
-    }
-  );
-};
-
 export const useGetPoolsByLpCoinTypes = () => {
   const network = useNetwork();
   const { coins, account } = useWeb3();

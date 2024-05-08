@@ -1,3 +1,5 @@
+import { isEmpty, propOr } from 'ramda';
+
 import { AmmPool } from '@/interface';
 
 import { Dex, Routes } from './router.types';
@@ -24,10 +26,12 @@ export const constructDex = (pools: readonly AmmPool[]): Dex => {
 };
 
 export const findRoutes = (
-  Dex: Dex,
+  dex: Dex | undefined | null,
   startCoin: string,
   endCoin: string
 ): Routes => {
+  if (!dex || isEmpty(dex)) return [];
+
   const allPaths: [string[], string[]][] = [];
   const visited: { [key: string]: boolean } = {};
 
@@ -36,11 +40,14 @@ export const findRoutes = (
     path.push(currentCoin);
 
     if (currentCoin === endCoin) {
-      allPaths.push([path, poolIds]);
+      allPaths.push([path.slice(), poolIds.slice()]);
     } else {
-      for (const pool of Dex[currentCoin]) {
-        for (const neighborCoin of Object.keys(Dex)) {
-          if (Dex[neighborCoin].includes(pool) && !visited[neighborCoin]) {
+      const currentCoinPools = propOr([], currentCoin, dex) as string[];
+
+      for (const pool of currentCoinPools) {
+        for (const neighborCoin of Object.keys(dex!)) {
+          const neighborCoinsPools = propOr([], neighborCoin, dex) as string[];
+          if (neighborCoinsPools.includes(pool) && !visited[neighborCoin]) {
             backtrack(neighborCoin, path, [...poolIds, pool]);
           }
         }
@@ -52,5 +59,6 @@ export const findRoutes = (
   }
 
   backtrack(startCoin, [], []);
+
   return allPaths;
 };

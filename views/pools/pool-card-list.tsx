@@ -4,6 +4,7 @@ import {
   ProgressIndicator,
   Typography,
 } from '@interest-protocol/ui-kit';
+import { useGetPoolsByLpCoinTypes } from 'hooks/use-get-pools-by-lpcointypes';
 import { useRouter } from 'next/router';
 import { inc } from 'ramda';
 import { FC, useEffect, useState } from 'react';
@@ -16,7 +17,6 @@ import { v4 } from 'uuid';
 import { PAGE_SIZE, Routes, RoutesEnum } from '@/constants';
 import { useGetCoinMetadata } from '@/hooks/use-get-coin-metadata';
 import useGetMultipleTokenPriceBySymbol from '@/hooks/use-get-multiple-token-price-by-symbol';
-import { useGetPoolsByLpCoinTypes } from '@/hooks/use-get-pools-by-cointypes';
 import { useModal } from '@/hooks/use-modal';
 import { usePools } from '@/hooks/use-pools';
 import { AmmPool } from '@/interface';

@@ -16,14 +16,20 @@ const SwapPath: FC = () => {
     control: formSwap.control,
     name: 'readyToSwap',
   });
-  const swapPath = useWatch({ control: formSwap.control, name: 'swapPath' });
+  const swapPath = useWatch({
+    control: formSwap.control,
+    name: 'routeWithAmount',
+  });
 
   if (!readyToSwap || !swapPath || !swapPath.length) return null;
 
-  const coinIn = swapPath[0].coinIn;
-  const baseToken = swapPath.length == 2 ? swapPath[0].coinOut : '';
-  const coinOut =
-    swapPath.length == 1 ? swapPath[0].coinOut : swapPath[1].coinOut;
+  const [coinsPath, ,] = swapPath;
+
+  const coinIn = coinsPath[0];
+  const baseTokens = coinsPath.slice(1, -1);
+  const coinOut = coinsPath[coinsPath.length - 1];
+
+  return null;
 
   return (
     <Box
@@ -45,7 +51,7 @@ const SwapPath: FC = () => {
         symbol={isSui(coinIn) ? 'MOVE' : getSymbolByType(coinIn)}
       />
       <SwapArrowSVG width="100%" maxWidth="5rem" maxHeight="0.75rem" />
-      {baseToken && (
+      {baseTokens.map((baseToken) => (
         <>
           <TokenIcon
             type={baseToken}
@@ -54,7 +60,7 @@ const SwapPath: FC = () => {
           />
           <SwapArrowSVG width="100%" maxWidth="5rem" maxHeight="0.75rem" />
         </>
-      )}
+      ))}
       <TokenIcon
         type={coinOut}
         network={network}

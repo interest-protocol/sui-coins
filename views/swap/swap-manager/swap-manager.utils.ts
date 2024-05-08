@@ -1,163 +1,96 @@
-import { bcs } from '@mysten/sui.js/bcs';
-import {
-  TransactionBlock,
-  TransactionResult,
-} from '@mysten/sui.js/transactions';
-import { normalizeSuiAddress } from '@mysten/sui.js/utils';
-import { pathOr } from 'ramda';
+import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { TransactionObjectArgument } from '@mysten/sui.js/transactions';
+import { SUI_CLOCK_OBJECT_ID } from '@mysten/sui.js/utils';
+import { devInspectAndGetReturnValues } from '@polymedia/suits';
+import BigNumber from 'bignumber.js';
+import invariant from 'tiny-invariant';
 
-import { Network, PACKAGES } from '@/constants';
-import { RegistryPool } from '@/interface';
-import { getReturnValuesFromInspectResults } from '@/utils';
-import { SwapPath } from '@/views/swap/swap.types';
+import { PACKAGES } from '@/constants';
 
-import { FindSwapPathArgs, QuoteAmountArgs } from './swap-manager.types';
+import { FindAmountArgs, RouteWithAmount } from './swap-manager.types';
 
-export const quoteAmountOut = async ({
+export const findAmount = async ({
   client,
+  routes,
+  poolsMap,
   amount,
-  swapPath,
+  isAmountIn,
   network,
-}: QuoteAmountArgs) => {
-  const txb = new TransactionBlock();
+}: FindAmountArgs): Promise<RouteWithAmount[]> => {
+  if (!+amount)
+    return routes.map(([coinsPath, idsPath]) => [
+      coinsPath,
+      idsPath,
+      {
+        isAmountIn,
+        amount: BigNumber(0),
+      },
+    ]);
 
-  let nextAmountIn: TransactionResult | null = null;
+  const txbArray = [] as TransactionBlock[];
 
-  swapPath.forEach(({ coinIn, coinOut, lpCoin }, index) => {
-    // const pool = REGISTRY_POOLS[coinIn][coinOut].poolId;
+  const functionName = isAmountIn ? 'amount_out' : 'amount_in';
 
-    const pool = '';
-
-    nextAmountIn = txb.moveCall({
-      target: `${PACKAGES[network].DEX}::quote::amount_out`,
-      typeArguments: [coinIn, coinOut, lpCoin],
-      arguments: [
-        txb.object(pool),
-        index === 0 ? txb.pure(amount) : nextAmountIn!,
-      ],
-    });
-  });
-
-  const response = await client.devInspectTransactionBlock({
-    transactionBlock: txb,
-    sender: normalizeSuiAddress('0x0'),
-  });
-
-  if (response.effects.status.status === 'failure') return '0';
-
-  const data = getReturnValuesFromInspectResults(response);
-
-  if (!data || !data.length) return '0';
-
-  const result = data[0];
-
-  return bcs.de(result[1], Uint8Array.from(result[0])) as string;
-};
-
-export const quoteAmountIn = async ({
-  client,
-  amount,
-  swapPath,
-  network,
-}: QuoteAmountArgs) => {
-  const txb = new TransactionBlock();
-
-  let nextAmountOut: TransactionResult | null = null;
-
-  swapPath.forEach(({ coinIn, coinOut, lpCoin }, index) => {
-    // const pool = REGISTRY_POOLS[coinIn][coinOut].poolId;
-    const pool = '';
-
-    nextAmountOut = txb.moveCall({
-      target: `${PACKAGES[network].DEX}::quote::amount_in`,
-      typeArguments: [coinIn, coinOut, lpCoin],
-      arguments: [
-        txb.object(pool),
-        index === 0 ? txb.pure(amount) : nextAmountOut!,
-      ],
-    });
-  });
-
-  const response = await client.devInspectTransactionBlock({
-    transactionBlock: txb,
-    sender: normalizeSuiAddress('0x0'),
-  });
-
-  if (response.effects.status.status === 'failure') return '0';
-
-  const data = getReturnValuesFromInspectResults(response);
-
-  if (!data || !data.length) return '0';
-
-  const result = data[0];
-
-  return bcs.de(result[1], Uint8Array.from(result[0])) as string;
-};
-
-export const findSwapPaths = ({
-  network,
-  coinInType,
-  coinOutType,
-}: FindSwapPathArgs): ReadonlyArray<SwapPath> => {
-  const pool = pathOr<null | RegistryPool>(
-    null,
-    [coinInType, coinOutType],
-    // REGISTRY_POOLS
-    {}
+  const parsedRoutes = routes.map(([coinsPath, idsPath]) =>
+    isAmountIn
+      ? [coinsPath, idsPath]
+      : [coinsPath.slice().reverse(), idsPath.slice().reverse()]
   );
 
-  // MOVE -> ETH
-  if (pool) {
-    return [
-      [
-        {
-          coinIn: coinInType,
-          coinOut: coinOutType,
-          lpCoin: pool.lpCoinType,
-        },
-      ],
-    ];
-  }
+  parsedRoutes.forEach(([coinsPath, idsPath]) => {
+    const txb = new TransactionBlock();
 
-  const paths = [] as Array<SwapPath>;
+    let amountIn: string | TransactionObjectArgument | any = amount;
 
-  // BASE_COINS[network]
-  const BASE_COINS: Record<Network, ReadonlyArray<string>> = {
-    [Network.DEVNET]: [''],
-    [Network.TESTNET]: [''],
-  };
+    idsPath.forEach((id, index) => {
+      const isFirstCall = index === 0;
+      const isLastCall = index + 1 === idsPath.length;
+      const poolMetadata = poolsMap[id];
 
-  for (const baseCoin of BASE_COINS[network]) {
-    const firstPool = pathOr<null | RegistryPool>(
-      null,
-      [coinInType, baseCoin],
-      // REGISTRY_POOLS
-      {}
-    );
+      if (isLastCall || (isFirstCall && isLastCall)) {
+        txb.moveCall({
+          target: `${PACKAGES[network].DEX}::quote::${functionName}`,
+          typeArguments: [
+            coinsPath[index],
+            coinsPath[index + 1],
+            poolMetadata.coinTypes.lpCoin,
+          ],
+          arguments: [
+            txb.object(id),
+            txb.object(SUI_CLOCK_OBJECT_ID),
+            isFirstCall ? txb.pure.u64(amountIn.toString()) : amountIn,
+          ],
+        });
 
-    if (firstPool) {
-      const secondPool = pathOr<null | RegistryPool>(
-        null,
-        [baseCoin, coinOutType],
-        // REGISTRY_POOLS
-        {}
-      );
+        txbArray.push(txb);
+      }
 
-      if (secondPool)
-        paths.push([
-          {
-            coinIn: coinInType,
-            coinOut: baseCoin,
-            lpCoin: firstPool.lpCoinType,
-          },
-          {
-            coinIn: baseCoin,
-            coinOut: coinOutType,
-            lpCoin: secondPool.lpCoinType,
-          },
-        ]);
-    }
-  }
+      amountIn = txb.moveCall({
+        target: `${PACKAGES[network].DEX}::quote::${functionName}`,
+        typeArguments: [
+          coinsPath[index],
+          coinsPath[index + 1],
+          poolMetadata.coinTypes.lpCoin,
+        ],
+        arguments: [
+          txb.object(id),
+          txb.object(SUI_CLOCK_OBJECT_ID),
+          isFirstCall ? txb.pure.u64(amountIn.toString()) : amountIn,
+        ],
+      });
+    });
+  });
 
-  return paths;
+  const promises = txbArray.map((t) =>
+    devInspectAndGetReturnValues(client as any, t as any)
+  );
+
+  const results = await Promise.all(promises);
+
+  return results.map(([result], index) => {
+    invariant(result.length, 'Result is empty');
+    invariant(typeof result[0] === 'string', 'Value is not a string');
+
+    return [...routes[index], { isAmountIn, amount: BigNumber(result[0]) }];
+  });
 };

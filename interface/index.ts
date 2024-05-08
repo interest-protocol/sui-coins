@@ -27,11 +27,6 @@ export interface PoolPageProps {
   stateId: string;
 }
 
-export interface RegistryPool {
-  poolId: string;
-  lpCoinType: string;
-}
-
 export interface CoinMetadataWithType extends CoinMetadata {
   type: `0x${string}`;
 }

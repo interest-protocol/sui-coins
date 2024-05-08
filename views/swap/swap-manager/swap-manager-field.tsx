@@ -9,21 +9,19 @@ import { useDebounce } from 'use-debounce';
 import { useNetwork } from '@/context/network';
 import { FixedPointMath } from '@/lib';
 import { makeSWRKey } from '@/utils';
-import {
-  quoteAmountIn,
-  quoteAmountOut,
-} from '@/views/swap/swap-manager/swap-manager.utils';
 
-import { SwapManagerProps } from './swap-manager.types';
+import { RouteWithAmount, SwapManagerProps } from './swap-manager.types';
+import { findAmount } from './swap-manager.utils';
 
 const SwapManagerField: FC<SwapManagerProps> = ({
   type,
+  poolsMap,
   name,
   control,
   account,
   setError,
   setValue,
-  swapPaths,
+  routes,
   hasNoMarket,
   setIsZeroSwapAmount,
   isFetchingSwapAmount,
@@ -40,7 +38,7 @@ const SwapManagerField: FC<SwapManagerProps> = ({
   const { error } = useSWR(
     makeSWRKey(
       [account, type, prop('value', from), prop('type', from)],
-      client.devInspectTransactionBlock.name
+      SwapManagerField.name
     ),
     async () => {
       const amount = FixedPointMath.toBigNumber(from.value, from.decimals);
@@ -51,30 +49,24 @@ const SwapManagerField: FC<SwapManagerProps> = ({
 
       setIsFetchingSwapAmount(true);
 
-      const promises = swapPaths.map((swapPath) =>
-        (setValueName === 'to' ? quoteAmountOut : quoteAmountIn)({
-          client,
-          swapPath,
-          amount: safeAmount.toString(),
-          network,
-        })
-      );
+      const routesWithAmounts = await findAmount({
+        client,
+        routes,
+        amount: safeAmount.toString(),
+        isAmountIn: name === 'to',
+        network,
+        poolsMap,
+      });
 
-      const amounts = await Promise.all(promises);
+      return routesWithAmounts.reduce(
+        (acc, routeWithAmount) => {
+          const [coinsPath, poolIds, amountObj] = routeWithAmount;
 
-      return amounts.reduce(
-        (acc, amount, index) => {
-          const accAmount = BigNumber(acc.amount);
-          const nextAmount = BigNumber(amount);
+          if (acc[2].amount.gt(amountObj.amount)) return acc;
 
-          if (accAmount.gte(nextAmount)) return acc;
-
-          return {
-            amount,
-            swapPathIndex: index,
-          };
+          return [coinsPath, poolIds, amountObj];
         },
-        { amount: '0', swapPathIndex: 0 }
+        [[], [], { isAmountIn: false, amount: BigNumber(0) }] as RouteWithAmount
       );
     },
     {
@@ -82,7 +74,7 @@ const SwapManagerField: FC<SwapManagerProps> = ({
         setError(false);
         setIsFetchingSwapAmount(false);
         setValue('lock', true);
-        setValue('swapPath', []);
+        setValue('routeWithAmount', []);
       },
       onSuccess: (response) => {
         if (!response) {
@@ -92,16 +84,19 @@ const SwapManagerField: FC<SwapManagerProps> = ({
           return;
         }
 
-        setIsZeroSwapAmount(!response.amount);
+        const [coinsPath, poolIds, amountObj] = response;
+
+        setIsZeroSwapAmount(amountObj.amount.isZero());
         setValue(
           `${setValueName}.value`,
           FixedPointMath.toNumber(
-            new BigNumber(response.amount),
+            amountObj.amount,
             decimals,
             decimals
           ).toString()
         );
-        setValue('swapPath', swapPaths[response.swapPathIndex]);
+        setValue('poolsMap', poolsMap);
+        setValue('routeWithAmount', [coinsPath, poolIds, amountObj]);
 
         setError(false);
         setIsFetchingSwapAmount(false);
@@ -116,7 +111,7 @@ const SwapManagerField: FC<SwapManagerProps> = ({
   useEffect(() => {
     setValue(
       'disabled',
-      !!(error && +from?.value > 0) ||
+      (error && +from?.value > 0) ||
         isFetchingSwapAmount ||
         from?.type === type ||
         hasNoMarket

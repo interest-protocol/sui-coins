@@ -1,8 +1,6 @@
 import { useCurrentAccount } from '@mysten/dapp-kit';
-import {
-  TransactionBlock,
-  TransactionResult,
-} from '@mysten/sui.js/transactions';
+import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { SUI_CLOCK_OBJECT_ID } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
 import { useFormContext } from 'react-hook-form';
 
@@ -10,7 +8,7 @@ import { PACKAGES } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks';
 import { FixedPointMath } from '@/lib';
-import { createObjectsParameter, ZERO_BIG_NUMBER } from '@/utils';
+import { createObjectsParameter, getSafeValue, ZERO_BIG_NUMBER } from '@/utils';
 
 import { SwapArgs, SwapForm } from './swap.types';
 import { getAmountMinusSlippage } from './swap.utils';
@@ -53,9 +51,12 @@ const swap = async ({
   network,
   isZeroSwap = false,
 }: SwapArgs) => {
-  const { settings, from, to, swapPath } = formSwap.getValues();
+  const { settings, from, to, routeWithAmount, poolsMap } =
+    formSwap.getValues();
 
-  if (!swapPath.length) throw new Error('There is no market');
+  if (!poolsMap) throw new Error('Pools map is missing');
+
+  if (!routeWithAmount.length) throw new Error('There is no market');
 
   if (!to.type || !from.type) throw new Error('No tokens selected');
 
@@ -67,14 +68,25 @@ const swap = async ({
 
   const fromValue = isZeroSwap ? (+from.value * 0.05).toString() : from.value;
 
+  const walletCoin = coinsMap[from.type];
+
+  const safeAmount = getSafeValue({
+    coinValue: from.value,
+    coinType: from.type,
+    decimals: from.decimals,
+    balance: walletCoin.balance,
+  });
+
   const amount = isMaxTrade
-    ? coinsMap[to.type]
-      ? BigNumber(coinsMap[to.type].balance)
+    ? coinsMap[from.type]
+      ? BigNumber(coinsMap[from.type].balance)
       : ZERO_BIG_NUMBER
     : FixedPointMath.toBigNumber(fromValue, from.decimals).decimalPlaces(
         0,
         BigNumber.ROUND_DOWN
       );
+
+  const amountIn = safeAmount.gt(amount) ? safeAmount : amount;
 
   const amountOut = FixedPointMath.toBigNumber(
     to.value,
@@ -89,55 +101,63 @@ const swap = async ({
     coinsMap,
     txb,
     type: from.type,
-    amount: amount.toString(),
+    amount: amountIn.toString(),
   });
 
-  let nextCoin: null | TransactionResult = null;
-  const numberOfSwaps = swapPath.length;
+  const coinIn = txb.moveCall({
+    target: `${PACKAGES[network].UTILS}::utils::handle_coin_vector`,
+    typeArguments: [from.type],
+    arguments: [
+      txb.makeMoveVec({ objects: coinInList }),
+      txb.pure.u64(amountIn.toString()),
+    ],
+  });
 
-  swapPath.forEach(
-    (
-      { coinIn: coinInType, coinOut: coinOutType, lpCoin: lpCoinType },
-      index
-    ) => {
-      // const poolId = REGISTRY_POOLS[coinInType][coinOutType].poolId;
-      const poolId = '';
+  let assetIn = coinIn;
 
-      // FirstSwap
-      if (index === 0) {
-        const coinIn = txb.moveCall({
-          target: `${PACKAGES[network].UTILS}::utils::handle_coin_vector`,
-          typeArguments: [from.type],
-          arguments: [
-            txb.makeMoveVec({ objects: coinInList }),
-            txb.pure(amount),
-          ],
-        });
+  const [coinsPath, idsPath] = routeWithAmount;
 
-        nextCoin = txb.moveCall({
-          target: `${PACKAGES[network].DEX}::interest_protocol_amm::swap`,
-          typeArguments: [coinInType, coinOutType, lpCoinType],
-          arguments: [
-            txb.object(poolId),
-            coinIn,
-            txb.pure(numberOfSwaps === 0 ? minAmountOut.toString() : '0'),
-          ],
-        });
-      } else {
-        nextCoin = txb.moveCall({
-          target: `${PACKAGES[network].DEX}::interest_protocol_amm::swap`,
-          typeArguments: [coinInType, coinOutType, lpCoinType],
-          arguments: [
-            txb.object(poolId),
-            nextCoin!,
-            txb.pure(numberOfSwaps === index ? minAmountOut.toString() : '0'),
-          ],
-        });
-      }
+  idsPath.forEach((id, index) => {
+    const isFirstCall = index === 0;
+    const isLastCall = index + 1 === idsPath.length;
+    const poolMetadata = poolsMap[id];
+
+    if (isLastCall || (isFirstCall && isLastCall)) {
+      assetIn = txb.moveCall({
+        target: `${PACKAGES[network].DEX}::interest_protocol_amm::swap`,
+        typeArguments: [
+          coinsPath[index],
+          coinsPath[index + 1],
+          poolMetadata.coinTypes.lpCoin,
+        ],
+        arguments: [
+          txb.object(id),
+          txb.object(SUI_CLOCK_OBJECT_ID),
+          assetIn,
+          txb.pure.u64('0'),
+        ],
+      });
+
+      return;
     }
-  );
 
-  txb.transferObjects([nextCoin!], currentAccount.address);
+    assetIn = txb.moveCall({
+      target: `${PACKAGES[network].DEX}::interest_protocol_amm::swap`,
+      typeArguments: [
+        coinsPath[index],
+        coinsPath[index + 1],
+        poolMetadata.coinTypes.lpCoin,
+      ],
+      arguments: [
+        txb.object(id),
+        txb.object(SUI_CLOCK_OBJECT_ID),
+        assetIn,
+        txb.pure.u64(minAmountOut.toString()),
+      ],
+    });
+  });
+
+  txb.transferObjects([assetIn], txb.pure.address(currentAccount.address));
 
   return txb;
 };
