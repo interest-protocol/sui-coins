@@ -4,7 +4,9 @@ import {
   useSuiClient,
 } from '@mysten/dapp-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
+import { TransactionObjectArgument } from '@mysten/sui.js/src/transactions';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
+import BigNumber from 'bignumber.js';
 import { useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
@@ -160,6 +162,15 @@ export const useBurn = () => {
     const objectsToTransfer = objects.map((object) => {
       if (!isCoinObject(object as ObjectData)) return object.objectId;
 
+      if (BigNumber(object.display?.balance || '0').isZero()) {
+        txb.moveCall({
+          target: '0x2::coin::destroy_zero',
+          arguments: [txb.object(object.objectId)],
+          typeArguments: [object.display?.type || ''],
+        });
+        return null;
+      }
+
       const [firstCoin, ...otherCoins] = (object as CoinObjectData).display
         .objects;
 
@@ -185,7 +196,12 @@ export const useBurn = () => {
       return splittedCoin;
     });
 
-    txb.transferObjects(objectsToTransfer, txb.pure.address('0x0'));
+    const toTransfer = objectsToTransfer.filter((x) => x != null) as
+      | TransactionObjectArgument[]
+      | string[];
+
+    if (toTransfer.length)
+      txb.transferObjects(toTransfer, txb.pure.address('0x0'));
 
     const tx = await signAndExecute({
       txb,

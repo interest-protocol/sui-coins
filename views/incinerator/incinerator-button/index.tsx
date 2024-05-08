@@ -33,12 +33,7 @@ const IncineratorButton: FC = () => {
     showTXSuccessToast(tx, network);
   };
 
-  const disabled =
-    !objects ||
-    !objects.length ||
-    !objects.every(({ value, kind, display }) =>
-      kind === 'Coin' && !display?.balance ? true : Number(value)
-    );
+  const disabled = !objects || !objects.length;
 
   const handleBurn = async () => {
     if (disabled) return;
