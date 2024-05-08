@@ -30,8 +30,8 @@ const SwapPage: NextPage = () => {
   } = useRouter();
 
   const settings = useReadLocalStorage<ISwapSettings>(
-    `${LOCAL_STORAGE_VERSION}-movement-coins-settings`
-  ) ?? { interval: '10', slippage: '0.1' };
+    `${LOCAL_STORAGE_VERSION}-movement-settings`
+  ) ?? { slippage: '0.1' };
 
   const form = useForm<SwapForm>({
     defaultValues: {

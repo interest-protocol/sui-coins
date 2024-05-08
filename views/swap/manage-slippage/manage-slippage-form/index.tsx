@@ -3,6 +3,7 @@ import { ChangeEvent, FC } from 'react';
 import { useForm, useFormContext } from 'react-hook-form';
 import { v4 } from 'uuid';
 
+import { LOCAL_STORAGE_VERSION } from '@/constants';
 import { PercentageSVG } from '@/svg';
 import { parseInputEventToNumberString } from '@/utils';
 
@@ -25,6 +26,12 @@ const ManageSlippageForm: FC<ManageSlippageFormProps> = ({
 
   const onConfirm = () => {
     setValue('settings.slippage', formTmpSettings.getValues('slippage'));
+
+    localStorage.setItem(
+      `${LOCAL_STORAGE_VERSION}-movement-settings`,
+      JSON.stringify({ slippage: formTmpSettings.getValues('slippage') })
+    );
+
     handleManageView?.();
   };
 
