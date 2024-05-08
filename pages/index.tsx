@@ -15,7 +15,7 @@ import { COINS_MAP } from '@/constants/coins';
 import { ModalProvider } from '@/context/modal';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks';
-import { getCoin } from '@/utils';
+import { getCoin, isSui } from '@/utils';
 import { updateURL } from '@/utils/url';
 import Swap from '@/views/swap';
 import { ISwapSettings, SwapForm, SwapToken } from '@/views/swap/swap.types';
@@ -57,10 +57,13 @@ const SwapPage: NextPage = () => {
 
       form.setValue(field, token);
 
-      fetch(`/api/auth/v1/coin-price?symbol=${symbol}`)
+      fetch(`/api/auth/v1/coin-price?symbol=${isSui(type) ? 'SUI' : symbol}`)
         .then((response) => response.json())
         .then((data) =>
-          form.setValue(`${field}.usdPrice`, data[symbol][0].quote.USD.price)
+          form.setValue(
+            `${field}.usdPrice`,
+            data[isSui(type) ? 'SUI' : symbol][0].quote.USD.price
+          )
         )
         .catch(() => null);
 
@@ -88,10 +91,13 @@ const SwapPage: NextPage = () => {
 
       form.setValue(field, token);
 
-      fetch(`/api/auth/v1/coin-price?symbol=${symbol}`)
+      fetch(`/api/auth/v1/coin-price?symbol=${isSui(type) ? 'SUI' : symbol}`)
         .then((response) => response.json?.())
         .then((data) =>
-          form.setValue(`${field}.usdPrice`, data[symbol][0].quote.USD.price)
+          form.setValue(
+            `${field}.usdPrice`,
+            data[isSui(type) ? 'SUI' : symbol][0].quote.USD.price
+          )
         )
         .catch(console.log);
 

@@ -29,8 +29,6 @@ const SwapPath: FC = () => {
   const baseTokens = coinsPath.slice(1, -1);
   const coinOut = coinsPath[coinsPath.length - 1];
 
-  return null;
-
   return (
     <Box
       p="l"
