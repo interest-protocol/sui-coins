@@ -1,4 +1,4 @@
-import type { MouseEvent as ReactMouseEvent } from 'react';
+import type { MouseEventHandler } from 'react';
 
 import type { ObjectData } from '@/context/all-objects/all-objects.types';
 
@@ -39,6 +39,6 @@ export interface IncineratorTableColumnProps extends IncineratorTableRowProps {
 }
 
 export interface IncineratorTableActionsProps {
-  handleCancel: (e?: ReactMouseEvent<MouseEvent>) => void;
-  handleApprove: (e?: ReactMouseEvent<MouseEvent>) => void;
+  handleCancel: MouseEventHandler<HTMLDivElement>;
+  handleApprove: MouseEventHandler<HTMLDivElement>;
 }
