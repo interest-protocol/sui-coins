@@ -53,9 +53,10 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     networks: [Network.MAINNET, Network.TESTNET],
   },
   {
-    name: 'incinerator',
-    disabled: false,
+    beta: true,
     Icon: FireSVG,
+    disabled: false,
+    name: 'incinerator',
     path: Routes[RoutesEnum.Incinerator],
     networks: [Network.MAINNET, Network.TESTNET],
   },
