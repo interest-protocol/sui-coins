@@ -1,21 +1,17 @@
-import { Box, Button, TextField } from '@interest-protocol/ui-kit';
+import { Box, TextField } from '@interest-protocol/ui-kit';
 import { ChangeEvent, FC } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
-import { useWeb3 } from '@/hooks';
-import { FixedPointMath } from '@/lib';
 import { parseInputEventToNumberString } from '@/utils';
 
 import { CreatePoolForm } from '../../pool-create.types';
 import HeaderInfo from './header-info';
 import { InputProps } from './input.types';
+import InputMaxButton from './input-max-button';
 import SelectToken from './select-token';
 
 const Input: FC<InputProps> = ({ index }) => {
-  const { coinsMap } = useWeb3();
-  const { register, control, setValue } = useFormContext<CreatePoolForm>();
-
-  const type = useWatch({ control, name: `tokens.${index}.type` });
+  const { register, setValue } = useFormContext<CreatePoolForm>();
 
   return (
     <Box
@@ -60,24 +56,7 @@ const Input: FC<InputProps> = ({ index }) => {
           }}
         />
       </Box>
-      <Button
-        px="s"
-        variant="text"
-        color="primary"
-        onClick={() =>
-          setValue(
-            `tokens.${index}.value`,
-            String(
-              FixedPointMath.toNumber(
-                coinsMap[type].balance,
-                coinsMap[type].decimals
-              )
-            )
-          )
-        }
-      >
-        max
-      </Button>
+      <InputMaxButton index={index} />
     </Box>
   );
 };

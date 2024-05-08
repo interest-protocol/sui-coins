@@ -25,6 +25,7 @@ import { getAllSymbols } from '@/views/pools/pools.utils';
 
 import FindPoolDialog from './find-pool-modal/find-pool-dialog';
 import PoolCard from './pool-card';
+import PoolCardSkeleton from './pool-card/pool-card-skeleton';
 import {
   PoolCardListContentProps,
   PoolCardListProps,
@@ -250,12 +251,31 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
       </Box>
     );
 
-  if (!pools || !pools.length)
+  if (!pools)
     return (
       <Box width="100%" color="white">
         <Typography size="small" variant="display">
           No pool found!
         </Typography>
+      </Box>
+    );
+
+  if (!pools.length)
+    return (
+      <Box
+        gap="xs"
+        display="grid"
+        borderRadius="xs"
+        p={['s', 's', 's', 'l']}
+        gridTemplateColumns={[
+          '1fr',
+          '1fr',
+          '1fr 1fr',
+          '1fr 1fr',
+          '1fr 1fr 1fr',
+        ]}
+      >
+        <PoolCardSkeleton />
       </Box>
     );
 

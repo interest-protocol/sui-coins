@@ -1,6 +1,5 @@
 import { Box, TooltipWrapper, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
-import { v4 } from 'uuid';
 
 import { ExclamationCircleSVG, QuestionCircleSVG } from '@/svg';
 
@@ -15,7 +14,6 @@ const PoolCardTrade: FC<PoolCardTradeProps> = ({
 }) => (
   <Box
     py="xs"
-    key={v4()}
     display="flex"
     borderTop="1px solid"
     justifyContent="space-between"

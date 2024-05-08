@@ -11,26 +11,27 @@ import {
   useSignTransactionBlock,
   useSuiClient,
 } from '@mysten/dapp-kit';
-import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { normalizeSuiAddress } from '@mysten/sui.js/utils';
 import { ChangeEvent, FC } from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { useNetwork } from '@/context/network';
-import { getBytecode } from '@/lib/move-template/coin';
-import initMoveByteCodeTemplate from '@/lib/move-template/move-bytecode-template';
-import { parseInputEventToNumberString, showTXSuccessToast } from '@/utils';
+import {
+  parseInputEventToNumberString,
+  showTXSuccessToast,
+  signAndExecute,
+} from '@/utils';
 import { throwTXIfNotSuccessful } from '@/utils';
 
+import { useCreateToken } from '../create-token.hooks';
 import { ICreateTokenForm } from '../create-token.types';
-import { Blacklist } from './blacklist';
 import { validationSchema } from './create-token-form.validation';
-import FixedSupplyToggle from './fixed-supply-toggle';
-import UploadImage from './upload-image';
+import CreateTokenFormImage from './create-token-form-image';
+import CreateTokenFormToggle from './create-token-form-toggle';
 
 const CreateTokenForm: FC = () => {
+  const createToken = useCreateToken();
   const [loading, setLoading] = useState(false);
   const {
     register,
@@ -48,54 +49,24 @@ const CreateTokenForm: FC = () => {
     reValidateMode: 'onBlur',
   });
 
-  const suiClient = useSuiClient();
   const network = useNetwork();
+  const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
   const signTransactionBlock = useSignTransactionBlock();
 
-  const createToken = async () => {
+  const handleCreateToken = async () => {
     try {
       setLoading(true);
 
       if (!currentAccount) return;
 
-      const { name, symbol } = getValues();
+      const txb = await createToken(getValues());
 
-      if (
-        Blacklist.includes(name.toUpperCase().trim()) ||
-        Blacklist.includes(symbol.toUpperCase().trim())
-      ) {
-        throw new Error('Nice try :)');
-      }
-
-      await initMoveByteCodeTemplate('/move_bytecode_template_bg.wasm');
-
-      const txb = new TransactionBlock();
-
-      const [upgradeCap] = txb.publish({
-        modules: [
-          [
-            ...getBytecode({
-              ...getValues(),
-              recipient: currentAccount.address,
-            }),
-          ],
-        ],
-        dependencies: [normalizeSuiAddress('0x1'), normalizeSuiAddress('0x2')],
-      });
-
-      txb.transferObjects([upgradeCap], txb.pure(currentAccount.address));
-
-      const { signature, transactionBlockBytes } =
-        await signTransactionBlock.mutateAsync({
-          transactionBlock: txb,
-          account: currentAccount,
-        });
-
-      const tx = await suiClient.executeTransactionBlock({
-        signature,
-        transactionBlock: transactionBlockBytes,
-        requestType: 'WaitForEffectsCert',
+      const tx = await signAndExecute({
+        txb,
+        suiClient,
+        currentAccount,
+        signTransactionBlock,
       });
 
       throwTXIfNotSuccessful(tx);
@@ -109,7 +80,7 @@ const CreateTokenForm: FC = () => {
   const onSubmit = async () => {
     const loading = toast.loading('Generating new coin...');
     try {
-      await createToken();
+      await handleCreateToken();
       toast.success('Coin Generated!');
     } catch (e) {
       toast.error((e as Error).message || 'Something went wrong');
@@ -199,7 +170,7 @@ const CreateTokenForm: FC = () => {
             <Typography size="large" variant="body" textAlign="center">
               or
             </Typography>
-            <UploadImage setValue={setValue} />
+            <CreateTokenFormImage setValue={setValue} />
           </Box>
           <Box display="flex" flexDirection="column" gap="m">
             <Box>2. Coin Features</Box>
@@ -253,7 +224,7 @@ const CreateTokenForm: FC = () => {
               borderRadius="xs"
               flexDirection="column"
             >
-              <FixedSupplyToggle control={control} setValue={setValue} />
+              <CreateTokenFormToggle control={control} setValue={setValue} />
             </Box>
             <Box display="flex" justifyContent="center">
               <Button

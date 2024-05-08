@@ -14,3 +14,7 @@ export interface FixedSupplyToggleProps {
   control: Control<ICreateTokenForm>;
   setValue: UseFormSetValue<ICreateTokenForm>;
 }
+
+export interface CreateTokenFormImageProps {
+  setValue: UseFormSetValue<ICreateTokenForm>;
+}
