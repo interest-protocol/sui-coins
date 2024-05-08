@@ -25,7 +25,7 @@ const IncineratorHeader: FC = () => {
         <TextField
           fontSize="medium"
           placeholder="Search"
-          {...register('searchAssets')}
+          {...register('search')}
           nPlaceholder={{ opacity: 0.7 }}
           fieldProps={{
             width: '100%',
