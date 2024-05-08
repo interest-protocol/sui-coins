@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { useWeb3 } from '@/hooks';
@@ -51,9 +51,12 @@ const SwapManager: FC = () => {
     error: dexError,
   } = useGetDex({ coinInType, coinOutType });
 
-  // TODO
-  if (!isLoading && dexError && !data)
-    return <div>Error fetching the pools</div>;
+  useEffect(() => {
+    formSwap.setValue(
+      'error',
+      !isLoading && dexError && !data ? 'Error fetching the pools' : undefined
+    );
+  }, [dexError]);
 
   if (isLoading || !data) return null;
 
