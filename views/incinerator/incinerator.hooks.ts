@@ -4,7 +4,7 @@ import {
   useSuiClient,
 } from '@mysten/dapp-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
-import { TransactionObjectArgument } from '@mysten/sui.js/src/transactions';
+import { TransactionObjectArgument } from '@mysten/sui.js/transactions';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import BigNumber from 'bignumber.js';
 import { useEffect } from 'react';
