@@ -5,15 +5,15 @@ import { FC } from 'react';
 import { TokenIcon } from '@/components';
 import { useNetwork } from '@/context/network';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
-import { getKindFromObjectData, getSymbolByType } from '@/utils';
+import { getSymbolByType } from '@/utils';
 
-import { IncineratorTableRowProps as IncineratorTokenObjectProps } from '../../incinerator.types';
+import { IncineratorTokenObjectProps } from './incinerator.types';
 
 const IncineratorTokenObject: FC<IncineratorTokenObjectProps> = ({
   object,
 }) => {
   const network = useNetwork();
-  const { display, type } = object;
+  const { display, type, kind } = object;
   const displayName = display
     ? (display as Record<string, string>).name ?? display.symbol ?? type
     : type;
@@ -24,8 +24,6 @@ const IncineratorTokenObject: FC<IncineratorTokenObjectProps> = ({
   };
 
   const url = (display as Record<string, string>)?.image_url;
-
-  const objectKind = getKindFromObjectData(object);
 
   return (
     <Box display="flex" gap="s" alignItems="center">
@@ -46,7 +44,7 @@ const IncineratorTokenObject: FC<IncineratorTokenObjectProps> = ({
           color="outline"
           whiteSpace="nowrap"
         >
-          Type: {objectKind}
+          Type: {kind}
         </Typography>
       </Box>
     </Box>

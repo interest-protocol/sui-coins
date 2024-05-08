@@ -1,39 +1,67 @@
 import { TextField } from '@interest-protocol/ui-kit';
-import { FC, useState } from 'react';
+import {
+  type FC,
+  type KeyboardEventHandler,
+  type MouseEvent as ReactMouseEvent,
+  useState,
+} from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { Keys } from '@/constants';
+import type { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { FixedPointMath } from '@/lib';
 import { parseInputEventToNumberString, ZERO_BIG_NUMBER } from '@/utils';
 
-import {
+import type {
   IncineratorForm,
-  IncineratorTableBodyRowFieldProps,
+  IncineratorTableRowProps,
 } from '../../../incinerator.types';
 import IncineratorTableRowActionButton from './incinerator-table-actions';
 
-const IncineratorTableInput: FC<IncineratorTableBodyRowFieldProps> = ({
-  index,
-}) => {
-  const { control } = useFormContext<IncineratorForm>();
-  const value = useWatch({ control, name: `objects.${index}.value` });
-  const display = useWatch({ control, name: `objects.${index}.display` });
+const IncineratorTableInput: FC<IncineratorTableRowProps> = ({ index }) => {
+  const { control, setValue, getValues } = useFormContext<IncineratorForm>();
 
-  const [currentValue, setCurrentValue] = useState(value);
+  const display = useWatch({ control, name: `objects.${index}.display` });
+  const [oldValue, setOldValue] = useState(getValues(`objects.${index}.value`));
+
+  const handleApprove = (e?: ReactMouseEvent<MouseEvent>) => {
+    e?.stopPropagation();
+
+    const value = getValues(`objects.${index}.value`);
+    setOldValue(value);
+
+    setValue(`objects.${index}.isEditing`, false);
+  };
+
+  const handleCancel = (e?: ReactMouseEvent<MouseEvent>) => {
+    e?.stopPropagation();
+
+    setValue(`objects.${index}.value`, oldValue);
+
+    setValue(`objects.${index}.isEditing`, false);
+  };
+
+  const onKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
+    if (e.code === Keys.Enter) return handleApprove();
+    if (e.code === Keys.Escape) return handleCancel();
+  };
 
   return (
     <>
       <TextField
         placeholder="0"
         fontWeight="500"
+        onKeyDown={onKeyDown}
+        defaultValue={oldValue}
+        onClick={(e) => e.stopPropagation()}
         fieldProps={{
           height: '2.5rem',
           borderRadius: 'xs',
           bg: 'lowestContainer',
         }}
-        value={currentValue}
         onChange={(e) =>
-          setCurrentValue(
+          setValue(
+            `objects.${index}.value`,
             parseInputEventToNumberString(
               e,
               FixedPointMath.toNumber(
@@ -44,7 +72,10 @@ const IncineratorTableInput: FC<IncineratorTableBodyRowFieldProps> = ({
           )
         }
       />
-      <IncineratorTableRowActionButton value={currentValue} index={index} />
+      <IncineratorTableRowActionButton
+        handleCancel={handleCancel}
+        handleApprove={handleApprove}
+      />
     </>
   );
 };

@@ -12,9 +12,7 @@ const IncineratorTableHeader: FC = () => {
   const { control, setValue } = useFormContext<IncineratorForm>();
   const checked = useWatch({ control: control, name: 'checked' });
 
-  const toggleChecked = () => {
-    setValue('checked', !checked);
-  };
+  const toggleChecked = () => setValue('checked', !checked);
 
   return (
     <Box as="thead">

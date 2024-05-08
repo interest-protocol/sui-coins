@@ -1,4 +1,6 @@
-import { ObjectData } from '@/context/all-objects/all-objects.types';
+import type { MouseEvent as ReactMouseEvent } from 'react';
+
+import type { ObjectData } from '@/context/all-objects/all-objects.types';
 
 export enum IncineratorTabEnum {
   All,
@@ -18,21 +20,25 @@ export type ObjectField = ObjectData & {
 
 export interface IncineratorForm {
   reset: boolean;
-  checked: boolean;
   search: string;
+  checked: boolean;
   tab: IncineratorTabEnum;
   objects: ReadonlyArray<ObjectField>;
 }
 
 export interface IncineratorTableRowProps {
+  index: number;
+}
+
+export interface IncineratorTokenObjectProps {
   object: ObjectField;
 }
 
-export interface IncineratorTableBodyRowFieldProps {
-  index: number;
+export interface IncineratorTableColumnProps extends IncineratorTableRowProps {
+  value: string;
 }
 
-export interface IncineratorTableColumnProps {
-  index: number;
-  value: string;
+export interface IncineratorTableActionsProps {
+  handleCancel: (e?: ReactMouseEvent<MouseEvent>) => void;
+  handleApprove: (e?: ReactMouseEvent<MouseEvent>) => void;
 }

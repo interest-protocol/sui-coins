@@ -1,5 +1,6 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
+import { formatAddress } from '@mysten/sui.js/utils';
 import { prop } from 'ramda';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -8,11 +9,12 @@ import { v4 } from 'uuid';
 
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
+import { CopySVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 
-import IncineratorTokenObject from '../component/incinerator-token-object';
 import { useBurn } from '../incinerator.hooks';
 import { IncineratorForm } from '../incinerator.types';
+import IncineratorTokenObject from '../incinerator-token-object';
 
 const IncineratorButton: FC = () => {
   const burn = useBurn();
@@ -50,7 +52,6 @@ const IncineratorButton: FC = () => {
     } catch (e) {
       toast.error((e as any).message ?? 'Something went wrong');
     } finally {
-      setValue('objects', []);
       setValue('reset', true);
       toast.dismiss(toasterId);
     }
@@ -75,24 +76,47 @@ const IncineratorButton: FC = () => {
             You cannot revert, once assets are burnt. Make sure, the addresses
             that you are trying to burn are:
           </Typography>
-          <Box display="flex" flexDirection="column" gap="xs" my="l">
+          <Box
+            my="l"
+            gap="xs"
+            display="flex"
+            overflowY="auto"
+            maxHeight="20rem"
+            flexDirection="column"
+          >
             {objects.map((object) => (
               <Box
                 p="xs"
                 key={v4()}
                 display="flex"
-                cursor="pointer"
                 bg="lowContainer"
                 borderRadius="xs"
                 alignItems="center"
                 nHover={{ bg: 'container' }}
                 justifyContent="space-between"
-                onClick={() => copy(object.type)}
               >
                 <IncineratorTokenObject object={object} />
-                <Typography size="medium" variant="body">
-                  {object.value}
-                </Typography>
+                <Box textAlign="right">
+                  <Typography size="medium" variant="body">
+                    {object.value}
+                  </Typography>
+                  <Typography
+                    mt="xs"
+                    size="small"
+                    variant="body"
+                    color="outline"
+                    cursor="pointer"
+                    onClick={() => copy(object.type)}
+                    nHover={{ color: 'outlineVariant' }}
+                  >
+                    {formatAddress(object.type)}{' '}
+                    <CopySVG
+                      width="100%"
+                      maxWidth="0.75rem"
+                      maxHeight="0.75rem"
+                    />
+                  </Typography>
+                </Box>
               </Box>
             ))}
           </Box>

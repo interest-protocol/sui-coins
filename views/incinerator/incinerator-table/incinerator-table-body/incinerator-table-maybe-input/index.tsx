@@ -1,29 +1,35 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
-import { FC } from 'react';
+import { FC, MouseEventHandler } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { PencilSVG } from '@/svg';
 
 import {
   IncineratorForm,
-  IncineratorTableColumnProps,
+  IncineratorTableRowProps,
 } from '../../../incinerator.types';
 import IncineratorTableInput from './incinerator-table-input';
 
-const IncineratorTableMaybeInput: FC<
-  Omit<IncineratorTableColumnProps, 'value'> & { isCoin: boolean }
-> = ({ index, isCoin }) => {
-  const { control, setValue } = useFormContext<IncineratorForm>();
-  const value = useWatch({ control, name: `objects.${index}.value` });
-  const editable = useWatch({ control, name: `objects.${index}.editable` });
+const IncineratorTableMaybeInput: FC<IncineratorTableRowProps> = ({
+  index,
+}) => {
+  const { control, setValue, getValues } = useFormContext<IncineratorForm>();
+
   const isEditing = useWatch({ control, name: `objects.${index}.isEditing` });
 
-  const handleEditing = () => {
+  if (isEditing) return <IncineratorTableInput index={index} />;
+
+  const kind = getValues(`objects.${index}.kind`);
+  const value = getValues(`objects.${index}.value`);
+  const editable = getValues(`objects.${index}.editable`);
+
+  const isCoin = kind === 'Coin';
+
+  const handleEditing: MouseEventHandler = (e) => {
+    e.stopPropagation();
     setValue(`objects.${index}.active`, true);
     setValue(`objects.${index}.isEditing`, true);
   };
-
-  if (isEditing) return <IncineratorTableInput index={index} />;
 
   return (
     <>
@@ -38,10 +44,10 @@ const IncineratorTableMaybeInput: FC<
       </Typography>
       {editable && (
         <Box
+          gap="s"
           display="flex"
           alignItems="center"
           justifyContent="flex-end"
-          gap="s"
         >
           <Button
             isIcon

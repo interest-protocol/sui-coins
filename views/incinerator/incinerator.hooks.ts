@@ -22,7 +22,6 @@ import {
   signAndExecute,
   throwTXIfNotSuccessful,
 } from '@/utils';
-import { ZERO_BIG_NUMBER } from '@/utils';
 import { isCoinObject } from '@/views/components/select-object-modal/select-object-modal.utils';
 
 import {
@@ -33,7 +32,7 @@ import {
 
 export const useIncineratorManager = () => {
   const currentAccount = useCurrentAccount();
-  const { control, setValue } = useFormContext<IncineratorForm>();
+  const { control, setValue, getValues } = useFormContext<IncineratorForm>();
   const {
     objects,
     coinsMap,
@@ -43,11 +42,10 @@ export const useIncineratorManager = () => {
     isFetchingCoinBalances,
   } = useWeb3();
 
-  const tab = useWatch({ control: control, name: 'tab' });
+  const tab = useWatch({ control, name: 'tab' });
+  const reset = useWatch({ control, name: 'reset' });
   const search = useWatch({ control, name: 'search' });
-  const formObjects = useWatch({ control, name: 'objects' });
-  const reset = useWatch({ control: control, name: 'reset' });
-  const checked = useWatch({ control: control, name: 'checked' });
+  const checked = useWatch({ control, name: 'checked' });
 
   const displayObjects = {
     [IncineratorTabEnum.All]: objects,
@@ -96,36 +94,8 @@ export const useIncineratorManager = () => {
     );
   };
 
-  const updateBalances = () => {
-    setValue(
-      'objects',
-      formObjects.map((object: ObjectField): ObjectField => {
-        if (!object.display || !object.display.balance) return object;
-
-        const coin = coinsMap[(object.display as CoinObject).type] ?? {
-          balance: ZERO_BIG_NUMBER,
-          decimals: 0,
-        };
-
-        return {
-          ...object,
-          display: {
-            ...object.display,
-            balance: coin.balance,
-          } as CoinObjectData['display'],
-          ...(!object.isEditing && {
-            value: coin.balance.lt(
-              FixedPointMath.toBigNumber(object.value, coin.decimals)
-            )
-              ? String(FixedPointMath.toNumber(coin.balance, coin.decimals))
-              : object.value,
-          }),
-        };
-      })
-    );
-  };
-
   useEffect(() => {
+    const formObjects = getValues('objects');
     if (!isFetchingCoinBalances && currentAccount && !formObjects.length)
       updateAssets(checked);
   }, [isFetchingCoinBalances]);
@@ -135,14 +105,16 @@ export const useIncineratorManager = () => {
   }, [checked, tab, currentAccount, search]);
 
   useEffect(() => {
-    if (objects.length !== formObjects.length) {
-      updateAssets(checked);
-      return;
-    }
-    if (coinsMap) updateBalances();
-  }, [objects, coinsMap]);
+    const formObjects = getValues('objects');
 
-  return;
+    if (objects.length !== formObjects.length) updateAssets(checked);
+  }, [objects]);
+
+  useEffect(() => {
+    if (reset) updateAssets(checked);
+  }, [coinsMap]);
+
+  return { isFetchingCoinBalances, objects: getValues('objects'), reset };
 };
 
 export const useBurn = () => {
