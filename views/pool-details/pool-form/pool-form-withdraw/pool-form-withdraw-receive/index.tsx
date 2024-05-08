@@ -10,9 +10,6 @@ const PoolFormWithdrawReceive: FC = () => {
     SelectionFieldValues.None
   );
 
-  const handleSelection = (newSelection: SelectionFieldValues) =>
-    setCurrentSelected(newSelection);
-
   return (
     <Box display="flex" flexDirection="column" gap="m">
       <Typography variant="body" size="large">
@@ -20,26 +17,29 @@ const PoolFormWithdrawReceive: FC = () => {
       </Typography>
       <Box
         display="flex"
-        borderRadius="xs"
         overflow="hidden"
-        bg="lowestContainer"
+        borderRadius="xs"
+        border="1px solid"
         flexDirection="column"
+        borderColor="container"
       >
-        <Box display="flex" gap="xl" pb="m" px="xl">
+        <Box p="l" gap="xl" display="flex">
           <PoolFormWithdrawReceiveType
             label="One Coin"
-            handleSelect={handleSelection}
-            currentValue={currentSelected}
+            handleSelect={setCurrentSelected}
             type={SelectionFieldValues.OneCoin}
+            isSelected={currentSelected == SelectionFieldValues.OneCoin}
           />
           <PoolFormWithdrawReceiveType
             label="Balance"
-            handleSelect={handleSelection}
-            currentValue={currentSelected}
+            handleSelect={setCurrentSelected}
             type={SelectionFieldValues.Balance}
+            isSelected={currentSelected == SelectionFieldValues.Balance}
           />
         </Box>
-        <PoolFormWithdrawReceiveTokens type={currentSelected} />
+        {!!currentSelected && (
+          <PoolFormWithdrawReceiveTokens type={currentSelected} />
+        )}
       </Box>
     </Box>
   );

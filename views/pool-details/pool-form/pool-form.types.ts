@@ -1,7 +1,7 @@
 export interface RadioFieldProps {
   label: string;
+  isSelected: boolean;
   type: SelectionFieldValues;
-  currentValue: SelectionFieldValues;
   handleSelect: (newValue: SelectionFieldValues) => void;
 }
 

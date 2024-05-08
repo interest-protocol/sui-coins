@@ -1,79 +1,68 @@
+import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { WalletAccount } from '@wallet-standard/base';
 
-import { OBJECT_RECORD } from '@/constants';
-import { useNetwork } from '@/context/network';
+import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { useWeb3 } from '@/hooks/use-web3';
-import {
-  createObjectsParameter,
-  getAmountMinusSlippage,
-  ZERO_BIG_NUMBER,
-} from '@/utils';
+import { FixedPointMath } from '@/lib';
+import { getCoinOfValue } from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
 
-import { getSafeValue } from '../pool-form.utils';
-
 export const useWithdraw = () => {
-  const network = useNetwork();
+  const clamm = useClammSdk();
   const { coinsMap } = useWeb3();
+  const suiClient = useSuiClient();
+  const currentAccount = useCurrentAccount();
 
-  return async (values: PoolForm, account: WalletAccount | null) => {
-    const { tokenList, pool, lpCoin, settings } = values;
+  return async (values: PoolForm) => {
+    const { tokenList, pool, lpCoin: coin, tokenSelected } = values;
 
-    if (!+lpCoin.value || !tokenList.length) throw new Error('No tokens ');
+    if (!+coin.value || !tokenList.length) throw new Error('No tokens ');
 
-    const coin0 = tokenList[0];
-    const coin1 = tokenList[1];
+    if (!currentAccount) throw new Error('No account found');
 
-    if (!account) throw new Error('No account found');
-
-    const lpCoinWallet = coinsMap[lpCoin.type];
+    const lpCoinWallet = coinsMap[coin.type];
 
     if (!lpCoinWallet) throw new Error('Check the wallet Lp coins');
 
-    const txb = new TransactionBlock();
+    const initTxb = new TransactionBlock();
 
-    const amount = getSafeValue(lpCoin, lpCoinWallet.balance);
+    const coinValue = FixedPointMath.toBigNumber(coin.value, coin.decimals)
+      .decimalPlaces(0)
+      .toString();
 
-    const lpCoinInList = createObjectsParameter({
-      coinsMap,
-      txb: txb,
-      type: lpCoin.type,
-      amount: amount.toString(),
+    const lpCoin = await getCoinOfValue({
+      suiClient,
+      coinValue,
+      txb: initTxb,
+      coinType: coin.type,
+      account: currentAccount.address,
     });
 
-    const lpCoinIn = txb.moveCall({
-      target: `${OBJECT_RECORD[network].UTILS_PACKAGE_ID}::utils::handle_coin_vector`,
-      typeArguments: [lpCoin.type],
-      arguments: [txb.makeMoveVec({ objects: lpCoinInList }), txb.pure(amount)],
-    });
+    let coinsOut = [];
+    let txb: TransactionBlock;
 
-    const [expectedXAmount, expectedYAmount] = [
-      ZERO_BIG_NUMBER,
-      ZERO_BIG_NUMBER,
-    ];
+    if (tokenSelected) {
+      const response = await clamm.removeLiquidityOneCoin({
+        lpCoin,
+        txb: initTxb,
+        pool: pool.poolObjectId,
+        coinOutType: tokenSelected,
+      });
 
-    const minimumXAmount = getAmountMinusSlippage(
-      expectedXAmount,
-      settings.slippage
-    );
-    const minimumYAmount = getAmountMinusSlippage(
-      expectedYAmount,
-      settings.slippage
-    );
+      coinsOut = [response.coinOut];
+      txb = response.txb;
+    } else {
+      const response = await clamm.removeLiquidity({
+        lpCoin,
+        txb: initTxb,
+        pool: pool.poolObjectId,
+      });
 
-    const [coinXOut, coinYOut] = txb.moveCall({
-      target: `${OBJECT_RECORD[network].DEX_PACKAGE_ID}::interest_protocol_amm::remove_liquidity`,
-      typeArguments: [coin0.type, coin1.type, lpCoin.type],
-      arguments: [
-        txb.object(pool.poolObjectId),
-        lpCoinIn,
-        txb.pure(minimumXAmount),
-        txb.pure(minimumYAmount),
-      ],
-    });
+      coinsOut = response.coinsOut;
+      txb = response.txb;
+    }
 
-    txb.transferObjects([coinXOut, coinYOut], txb.pure(account.address));
+    txb.transferObjects(coinsOut, txb.pure.address(currentAccount.address));
 
     return txb;
   };

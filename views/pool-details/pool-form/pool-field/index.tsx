@@ -11,7 +11,7 @@ import { TokenIcon } from '@/components';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
-import { parseInputEventToNumberString } from '@/utils';
+import { parseInputEventToNumberString, safePoolSymbolFromType } from '@/utils';
 import { PoolForm, PoolOption } from '@/views/pools/pools.types';
 
 import { PoolFieldsProps } from './pool-field.types';
@@ -48,7 +48,9 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
       textAlign="right"
       disabled={!token}
       labelPosition="right"
-      tokenName={token?.symbol ?? ''}
+      tokenName={
+        token?.symbol || !isDeposit ? safePoolSymbolFromType(token.type) : ''
+      }
       fieldProps={{ bg: 'container' }}
       handleMax={() => {
         if (isDeposit) handleDepositLock();
