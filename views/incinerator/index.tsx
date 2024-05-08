@@ -15,6 +15,8 @@ import IncineratorFilterTabs from './incinerator-tabs';
 const Incinerator: FC = () => {
   const { isFetchingCoinBalances } = useWeb3();
   const { control } = useFormContext<IncineratorForm>();
+
+  const reset = useWatch({ control, name: 'reset' });
   const objects = useWatch({ control, name: 'objects' });
 
   useIncineratorManager();
@@ -32,7 +34,7 @@ const Incinerator: FC = () => {
     >
       <IncineratorHeader />
       <IncineratorFilterTabs />
-      {isFetchingCoinBalances ? (
+      {reset || isFetchingCoinBalances ? (
         <Box
           mx="auto"
           display="flex"

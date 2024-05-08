@@ -16,8 +16,8 @@ const IncineratorTableInput: FC<IncineratorTableBodyRowFieldProps> = ({
   index,
 }) => {
   const { control } = useFormContext<IncineratorForm>();
-  const display = useWatch({ control, name: `objects.${index}.display` });
   const value = useWatch({ control, name: `objects.${index}.value` });
+  const display = useWatch({ control, name: `objects.${index}.display` });
 
   const [currentValue, setCurrentValue] = useState(value);
 

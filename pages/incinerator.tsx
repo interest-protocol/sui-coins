@@ -14,6 +14,7 @@ const IncineratorPage: NextPage = () => {
   const form = useForm<IncineratorForm>({
     defaultValues: {
       objects: [],
+      reset: false,
       checked: false,
       tab: IncineratorTabEnum.All,
     },

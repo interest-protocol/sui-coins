@@ -13,9 +13,11 @@ export type ObjectField = ObjectData & {
   active: boolean;
   editable: boolean;
   isEditing: boolean;
+  kind: 'Coin' | 'NFT' | 'Other';
 };
 
 export interface IncineratorForm {
+  reset: boolean;
   checked: boolean;
   searchAssets: string;
   tab: IncineratorTabEnum;

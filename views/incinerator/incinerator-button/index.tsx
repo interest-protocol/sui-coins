@@ -1,6 +1,6 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
-import { prop, toPairs } from 'ramda';
+import { prop } from 'ramda';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -8,9 +8,7 @@ import { v4 } from 'uuid';
 
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
-import { useWeb3 } from '@/hooks/use-web3';
 import { showTXSuccessToast } from '@/utils';
-import { getAmountsMapFromObjects } from '@/views/components/send-asset-details/send-asset-details.utils';
 
 import IncineratorTokenObject from '../component/incinerator-token-object';
 import { useBurn } from '../incinerator.hooks';
@@ -20,7 +18,6 @@ const IncineratorButton: FC = () => {
   const burn = useBurn();
   const network = useNetwork();
   const { setModal, handleClose } = useModal();
-  const { coinsMap } = useWeb3();
   const { control, setValue } = useFormContext<IncineratorForm>();
   const allObjects = useWatch({ control, name: 'objects' });
 
@@ -36,19 +33,12 @@ const IncineratorButton: FC = () => {
     showTXSuccessToast(tx, network);
   };
 
-  const amountList = toPairs(getAmountsMapFromObjects(objects))
-    .map(([type, amount]) => ({
-      symbol: coinsMap[type]?.symbol,
-      isGreater: coinsMap[type].balance.isLessThan(amount),
-    }))
-    .filter((item) => item.isGreater);
-
   const disabled =
     !objects ||
     !objects.length ||
-    !objects.every(({ value }) => Number(value)) ||
-    !amountList ||
-    Boolean(amountList.length);
+    !objects.every(({ value, kind, display }) =>
+      kind === 'Coin' && !display?.balance ? true : Number(value)
+    );
 
   const handleBurn = async () => {
     if (disabled) return;
@@ -66,6 +56,7 @@ const IncineratorButton: FC = () => {
       toast.error((e as any).message ?? 'Something went wrong');
     } finally {
       setValue('objects', []);
+      setValue('reset', true);
       toast.dismiss(toasterId);
     }
   };

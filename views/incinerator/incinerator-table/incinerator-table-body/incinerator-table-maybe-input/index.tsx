@@ -11,8 +11,8 @@ import {
 import IncineratorTableInput from './incinerator-table-input';
 
 const IncineratorTableMaybeInput: FC<
-  Omit<IncineratorTableColumnProps, 'value'>
-> = ({ index }) => {
+  Omit<IncineratorTableColumnProps, 'value'> & { isCoin: boolean }
+> = ({ index, isCoin }) => {
   const { control, setValue } = useFormContext<IncineratorForm>();
   const value = useWatch({ control, name: `objects.${index}.value` });
   const editable = useWatch({ control, name: `objects.${index}.editable` });
@@ -34,7 +34,7 @@ const IncineratorTableMaybeInput: FC<
         variant="body"
         borderRadius="full"
       >
-        {!editable ? 1 : value}
+        {isCoin ? value : 1}
       </Typography>
       {editable && (
         <Box

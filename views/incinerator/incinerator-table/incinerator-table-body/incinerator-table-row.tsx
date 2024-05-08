@@ -5,7 +5,6 @@ import { v4 } from 'uuid';
 
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { FixedPointMath } from '@/lib';
-import { ZERO_BIG_NUMBER } from '@/utils';
 
 import IncineratorTokenObject from '../../component/incinerator-token-object';
 import {
@@ -20,14 +19,16 @@ const IncineratorTableRow: FC<IncineratorTableRowProps> = ({ object }) => {
   const index = object.index;
   const { control, setValue } = useFormContext<IncineratorForm>();
   const active = useWatch({ control, name: `objects.${index}.active` });
-  const editable = useWatch({ control, name: `objects.${index}.editable` });
+  const kind = useWatch({ control, name: `objects.${index}.kind` });
 
   const balance = FixedPointMath.toNumber(
-    (display as CoinObject)?.balance ?? ZERO_BIG_NUMBER,
+    (display as CoinObject)?.balance,
     (display as CoinObject)?.decimals ?? 0
   );
 
   const handleCheck = () => setValue(`objects.${index}.active`, !active);
+
+  const isCoin = kind === 'Coin';
 
   return (
     <Box
@@ -58,11 +59,11 @@ const IncineratorTableRow: FC<IncineratorTableRowProps> = ({ object }) => {
         variant="body"
         whiteSpace="nowrap"
       >
-        {!editable ? '1' : balance}
+        {isCoin ? balance : '1'}
       </Typography>
       <Typography pr="m" as="td" size="small" variant="label" width="40%">
         <Box display="flex" width="100%" gap="s" justifyContent="space-between">
-          <QtyIncinerate index={index} />
+          <QtyIncinerate index={index} isCoin={isCoin} />
         </Box>
       </Typography>
     </Box>
