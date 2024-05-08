@@ -32,9 +32,6 @@ import {
 export const useIncineratorManager = () => {
   const currentAccount = useCurrentAccount();
   const { control, setValue } = useFormContext<IncineratorForm>();
-  const tab = useWatch({ control: control, name: 'tab' });
-  const reset = useWatch({ control: control, name: 'reset' });
-  const checked = useWatch({ control: control, name: 'checked' });
   const {
     objects,
     coinsMap,
@@ -44,10 +41,10 @@ export const useIncineratorManager = () => {
     isFetchingCoinBalances,
   } = useWeb3();
 
-  const formObjects = useWatch({
-    control,
-    name: 'objects',
-  });
+  const tab = useWatch({ control: control, name: 'tab' });
+  const formObjects = useWatch({ control, name: 'objects' });
+  const reset = useWatch({ control: control, name: 'reset' });
+  const checked = useWatch({ control: control, name: 'checked' });
 
   const displayObjects = {
     [IncineratorTabEnum.All]: objects,
@@ -68,15 +65,15 @@ export const useIncineratorManager = () => {
         return {
           index,
           ...object,
+          active,
+          editable,
+          isEditing: false,
+          kind: getKindFromObjectData(object),
           value: coin
             ? `${FixedPointMath.toNumber(coin.balance, coin.decimals)}`
             : '1',
-          editable,
-          isEditing: false,
-          active,
-          kind: getKindFromObjectData(object),
         };
-      })
+      }) as ReadonlyArray<ObjectField>
     );
   };
 

@@ -15,8 +15,8 @@ interface BaseObjectData {
 }
 
 export interface AllCoins {
-  coinsObjects: ReadonlyArray<ObjectData>;
   ownedNfts: ReadonlyArray<ObjectData>;
+  coinsObjects: ReadonlyArray<ObjectData>;
   otherObjects: ReadonlyArray<ObjectData>;
 }
 

@@ -131,6 +131,6 @@ export function isHexString(value: any, length?: number): boolean {
 
 export const getKindFromObjectData = (object: ObjectData) => {
   if (object?.display?.type) return 'Coin';
-  if (object.display) return 'NFT';
+  if (object?.display) return 'NFT';
   return 'Other';
 };
