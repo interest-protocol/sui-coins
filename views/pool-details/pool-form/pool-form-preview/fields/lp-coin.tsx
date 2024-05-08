@@ -2,6 +2,7 @@ import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
 import IPX from '@/components/svg/ipx';
+import { safePoolSymbolFromType } from '@/utils';
 
 import { FieldProps } from '../preview.types';
 
@@ -22,7 +23,8 @@ const LpCoinField: FC<FieldProps> = ({ getValues }) => (
           <IPX maxHeight="1rem" maxWidth="1rem" width="100%" />
         </Box>
         <Typography variant="body" size="large">
-          {getValues('lpCoin.symbol')}
+          {getValues('lpCoin.symbol') ||
+            safePoolSymbolFromType(getValues('lpCoin.type'))}
         </Typography>
       </Box>
       <Typography variant="body" ml="m" size="large">

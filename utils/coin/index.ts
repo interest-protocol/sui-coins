@@ -64,7 +64,7 @@ export const safeSymbol = (symbol: string, type: string): string => {
 };
 
 export const safePoolSymbolFromType = (type: string): string =>
-  type.split('::').reverse()[0];
+  type.split('::')[2];
 
 export const getSafeTotalBalance = propOr(new BigNumber(0), 'totalBalance') as (
   x: CoinObject
