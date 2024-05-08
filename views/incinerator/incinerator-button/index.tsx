@@ -1,7 +1,6 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
-import { formatAddress } from '@mysten/sui.js/utils';
-import { toPairs } from 'ramda';
+import { prop, toPairs } from 'ramda';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -10,21 +9,22 @@ import { v4 } from 'uuid';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
-import { CopySVG, DotErrorSVG, PlusSVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 import { getAmountsMapFromObjects } from '@/views/components/send-asset-details/send-asset-details.utils';
 
+import IncineratorTokenObject from '../component/incinerator-token-object';
+import { useBurn } from '../incinerator.hooks';
 import { IncineratorForm } from '../incinerator.types';
-import { useBurn } from './incinerator-button.hooks';
-import { IncineratorButtonProps } from './incinerator-button.types';
 
-const IncineratorButton: FC<IncineratorButtonProps> = ({ openModal }) => {
+const IncineratorButton: FC = () => {
   const burn = useBurn();
   const network = useNetwork();
-  const { coinsMap } = useWeb3();
   const { setModal, handleClose } = useModal();
-  const { control, reset } = useFormContext<IncineratorForm>();
-  const objects = useWatch({ control, name: 'objects' });
+  const { coinsMap } = useWeb3();
+  const { control, setValue } = useFormContext<IncineratorForm>();
+  const allObjects = useWatch({ control, name: 'objects' });
+
+  const objects = allObjects.filter(prop('active'));
 
   const copy = (type: string) => {
     navigator.clipboard.writeText(type);
@@ -34,23 +34,24 @@ const IncineratorButton: FC<IncineratorButtonProps> = ({ openModal }) => {
 
   const onSuccess = (tx: SuiTransactionBlockResponse) => {
     showTXSuccessToast(tx, network);
-    reset();
   };
 
   const amountList = toPairs(getAmountsMapFromObjects(objects))
     .map(([type, amount]) => ({
-      symbol: coinsMap[type].symbol,
+      symbol: coinsMap[type]?.symbol,
       isGreater: coinsMap[type].balance.isLessThan(amount),
     }))
     .filter((item) => item.isGreater);
 
+  const disabled =
+    !objects ||
+    !objects.length ||
+    !objects.every(({ value }) => Number(value)) ||
+    !amountList ||
+    Boolean(amountList.length);
+
   const handleBurn = async () => {
-    if (
-      !objects ||
-      !objects.length ||
-      !objects.every(({ value }) => Number(value))
-    )
-      return;
+    if (disabled) return;
 
     const toasterId = toast.loading(
       `Burning asset${objects.length === 1 ? '' : 's'}...`
@@ -64,6 +65,7 @@ const IncineratorButton: FC<IncineratorButtonProps> = ({ openModal }) => {
     } catch (e) {
       toast.error((e as any).message ?? 'Something went wrong');
     } finally {
+      setValue('objects', []);
       toast.dismiss(toasterId);
     }
   };
@@ -71,7 +73,8 @@ const IncineratorButton: FC<IncineratorButtonProps> = ({ openModal }) => {
   const onBurn = () =>
     setModal(
       <Box
-        p="l"
+        py="l"
+        px="xl"
         gap="xl"
         display="flex"
         borderRadius="m"
@@ -87,7 +90,7 @@ const IncineratorButton: FC<IncineratorButtonProps> = ({ openModal }) => {
             that you are trying to burn are:
           </Typography>
           <Box display="flex" flexDirection="column" gap="xs" my="l">
-            {objects.map(({ type }) => (
+            {objects.map((object) => (
               <Box
                 p="xs"
                 key={v4()}
@@ -96,14 +99,14 @@ const IncineratorButton: FC<IncineratorButtonProps> = ({ openModal }) => {
                 bg="lowContainer"
                 borderRadius="xs"
                 alignItems="center"
-                onClick={() => copy(type)}
                 nHover={{ bg: 'container' }}
                 justifyContent="space-between"
+                onClick={() => copy(object.type)}
               >
-                <Typography size="medium" variant="label">
-                  {formatAddress(type)}
+                <IncineratorTokenObject object={object} />
+                <Typography size="medium" variant="body">
+                  {object.value}
                 </Typography>
-                <CopySVG maxWidth="1rem" maxHeight="1rem" width="100%" />
               </Box>
             ))}
           </Box>
@@ -127,54 +130,9 @@ const IncineratorButton: FC<IncineratorButtonProps> = ({ openModal }) => {
     );
 
   return (
-    <>
-      {amountList?.length ? (
-        <Box
-          p="s"
-          gap="s"
-          display="flex"
-          borderRadius="xs"
-          border="1px solid"
-          bg="errorContainer"
-          color="onErrorContainer"
-          borderColor="onErrorContainer"
-        >
-          {amountList?.map((item) => (
-            <>
-              <DotErrorSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-              <Typography variant="label" size="medium">
-                {`You don't have ${item.symbol} enough to burn`}
-              </Typography>
-            </>
-          ))}
-        </Box>
-      ) : null}
-      <Box display="flex" justifyContent="center" gap="xs">
-        <Button
-          variant="outline"
-          onClick={openModal}
-          borderColor="outlineVariant"
-          SuffixIcon={
-            <PlusSVG maxWidth="1.2rem" maxHeight="1.2rem" width="100%" />
-          }
-        >
-          Add more
-        </Button>
-        <Button
-          variant="filled"
-          onClick={onBurn}
-          disabled={
-            !objects ||
-            !objects.length ||
-            !objects.every(({ value }) => Number(value)) ||
-            !amountList ||
-            Boolean(amountList.length)
-          }
-        >
-          Burn Object{objects.length === 1 ? '' : 's'}
-        </Button>
-      </Box>
-    </>
+    <Button mx="auto" variant="filled" onClick={onBurn} disabled={disabled}>
+      Burn {objects.length} Asset{objects.length === 1 ? '' : 's'}
+    </Button>
   );
 };
 

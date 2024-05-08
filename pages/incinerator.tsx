@@ -1,14 +1,35 @@
 import { NextPage } from 'next';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { SEO } from '@/components';
+import Layout from '@/components/layout';
 import { AllObjectsProvider } from '@/context/all-objects';
 import Incinerator from '@/views/incinerator';
+import {
+  IncineratorForm,
+  IncineratorTabEnum,
+} from '@/views/incinerator/incinerator.types';
 
-const IncineratorPage: NextPage = () => (
-  <AllObjectsProvider>
-    <SEO pageTitle="Incinerator" />
-    <Incinerator />
-  </AllObjectsProvider>
-);
+const IncineratorPage: NextPage = () => {
+  const form = useForm<IncineratorForm>({
+    defaultValues: {
+      search: '',
+      objects: [],
+      checked: false,
+      tab: IncineratorTabEnum.All,
+    },
+  });
+
+  return (
+    <AllObjectsProvider>
+      <FormProvider {...form}>
+        <Layout>
+          <SEO pageTitle="Incinerator" />
+          <Incinerator />
+        </Layout>
+      </FormProvider>
+    </AllObjectsProvider>
+  );
+};
 
 export default IncineratorPage;

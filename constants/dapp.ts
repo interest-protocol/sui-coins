@@ -4,6 +4,8 @@ export const MAX_NUMBER_INPUT_VALUE = 9000000000000000;
 
 export const LOCAL_STORAGE_VERSION = 'v1';
 
+export const PAGE_SIZE = 50;
+
 export enum Network {
   MAINNET = 'sui:mainnet',
   TESTNET = 'sui:testnet',
