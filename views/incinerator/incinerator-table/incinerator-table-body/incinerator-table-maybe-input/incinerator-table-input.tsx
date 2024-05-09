@@ -3,6 +3,7 @@ import {
   type FC,
   type KeyboardEventHandler,
   type MouseEventHandler,
+  useEffect,
   useState,
 } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -45,6 +46,18 @@ const IncineratorTableInput: FC<IncineratorTableRowProps> = ({ index }) => {
     if (e.code === Keys.Enter) return handleApprove(e as any);
     if (e.code === Keys.Escape) return handleCancel(e as any);
   };
+
+  const handleDocumentKeyDown = (e: KeyboardEvent) => {
+    onKeyDown(e as any);
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleDocumentKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleDocumentKeyDown);
+    };
+  }, []);
 
   return (
     <>
