@@ -3,11 +3,11 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
-import IncineratorTokenObject from '../../incinerator-token-object';
 import {
   IncineratorForm,
   IncineratorTableRowProps,
 } from '../../incinerator.types';
+import IncineratorTokenObject from '../../incinerator-token-object';
 import IncineratorTableBalance from './incinerator-table-balance';
 import IncineratorTableCheckbox from './incinerator-table-checkbox';
 import QtyIncinerate from './incinerator-table-maybe-input';
