@@ -73,8 +73,8 @@ const IncineratorButton: FC = () => {
         </Typography>
         <Box>
           <Typography variant="body" size="medium" maxWidth="27rem">
-            You cannot revert, once assets are burnt. Make sure, the addresses
-            that you are trying to burn are:
+            This is irreversible. Please double-check the types of assets you
+            are burning.
           </Typography>
           <Box
             my="l"
