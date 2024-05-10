@@ -22,7 +22,6 @@ export const useBurn = () => {
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
   const signTransactionBlock = useSignTransactionBlock();
-  const { mutate } = useWeb3();
 
   return async (
     objects: ReadonlyArray<ObjectField>,
@@ -89,8 +88,6 @@ export const useBurn = () => {
     });
 
     throwTXIfNotSuccessful(tx);
-
-    await mutate();
 
     onSuccess(tx);
   };
