@@ -32,7 +32,9 @@ const SidebarMenuList: FC<MenuListProps> = ({
           )
         )}
       </Box>
-      <Box borderTop="1px solid" borderColor="outlineVariant" />
+      {PARTNERS.length && (
+        <Box borderTop="1px solid" borderColor="outlineVariant" />
+      )}
       {PARTNERS.map(({ link, name, img }) => (
         <Box pt="m" key={v4()}>
           <a href={link} target="_blank" rel="noreferrer">
