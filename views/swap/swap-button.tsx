@@ -10,7 +10,6 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 import { EXPLORER_URL, Network } from '@/constants';
 import { useDialog } from '@/hooks/use-dialog';
-import { useWeb3 } from '@/hooks/use-web3';
 import { throwTXIfNotSuccessful, ZERO_BIG_NUMBER } from '@/utils';
 import { SwapForm } from '@/views/swap/swap.types';
 
@@ -23,8 +22,6 @@ const SwapButton: FC = () => {
   const currentAccount = useCurrentAccount();
   const formSwap = useFormContext<SwapForm>();
   const { dialog, handleClose } = useDialog();
-
-  const { mutate } = useWeb3();
 
   const signTransactionBlock = useSignTransactionBlock();
 
@@ -95,7 +92,6 @@ const SwapButton: FC = () => {
     } finally {
       resetInput();
       formSwap.setValue('swapping', false);
-      mutate();
     }
   };
 
