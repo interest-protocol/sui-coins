@@ -18,7 +18,6 @@ const SearchUpdate: FC = () => {
       alignItems="center"
       position="relative"
       borderColor="outlineVariant"
-      disabled={false}
       nHover={{
         background: 'lowContainer',
       }}
