@@ -32,38 +32,74 @@ const SidebarMenuList: FC<MenuListProps> = ({
           )
         )}
       </Box>
-      <Box as="hr" borderColor="outline" />
-      {PARTNERS.map(({ link, name, Icon }) => (
+      <Box borderTop="1px solid" borderColor="outlineVariant" />
+      {PARTNERS.map(({ link, name, img }) => (
         <Box pt="m" key={v4()}>
           <a href={link} target="_blank" rel="noreferrer">
-            <Box
-              bg="white"
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              p="xs"
-              pr="s"
-              borderRadius="s"
-              cursor="pointer"
-            >
-              <Box display="flex" alignItems="center" justifyItems="center">
-                <Box mr="s">
-                  <Icon maxWidth="2.8rem" maxHeight="2.8rem" width="100%" />
-                </Box>
-                <Typography
-                  textDecoration="underline"
-                  variant="label"
-                  size="large"
+            {isCollapsed ? (
+              <Box
+                display="flex"
+                borderRadius="s"
+                cursor="pointer"
+                alignItems="center"
+                bg="lowestContainer"
+                justifyContent="center"
+              >
+                <Box
+                  display="flex"
+                  width="2.8rem"
+                  height="2.8rem"
+                  overflow="hidden"
+                  borderRadius="50%"
+                  alignItems="center"
+                  justifyContent="center"
                 >
-                  {name}
-                </Typography>
+                  <img src={img} alt={name} width="80%" height="80%" />
+                </Box>
               </Box>
-              <ArrowTopRightSVG
-                maxWidth="1.5rem"
-                maxHeight="1.5rem"
-                width="1.5rem"
-              />
-            </Box>
+            ) : (
+              <Box
+                p="xs"
+                pr="s"
+                display="flex"
+                borderRadius="s"
+                cursor="pointer"
+                alignItems="center"
+                bg="lowestContainer"
+                justifyContent="space-between"
+              >
+                <Box display="flex" alignItems="center" justifyItems="center">
+                  <Box mr="s">
+                    <Box
+                      display="flex"
+                      width="2.8rem"
+                      height="2.8rem"
+                      overflow="hidden"
+                      borderRadius="50%"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <img src={img} alt={name} width="80%" height="80%" />
+                    </Box>
+                  </Box>
+                  <Typography
+                    size="large"
+                    variant="label"
+                    textDecoration="underline"
+                    display={isCollapsed ? 'none' : 'block'}
+                  >
+                    {name}
+                  </Typography>
+                </Box>
+                <Box display={isCollapsed ? 'none' : 'block'}>
+                  <ArrowTopRightSVG
+                    width="1.5rem"
+                    maxWidth="1.5rem"
+                    maxHeight="1.5rem"
+                  />
+                </Box>
+              </Box>
+            )}
           </a>
         </Box>
       ))}
