@@ -63,7 +63,6 @@ export { default as LogoSVG } from './logo';
 export { default as LogoutSVG } from './logout';
 export { default as MATICSVG } from './matic';
 export { default as MATICChainSVG } from './matic-chain';
-export { default as MemechanSVG } from './memechan';
 export { default as MenuSVG } from './menu';
 export { default as MinusSVG } from './minus';
 export { default as NftSVG } from './nft';
