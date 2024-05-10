@@ -1,23 +1,55 @@
-import { TextField } from '@interest-protocol/ui-kit';
+import { Button, TextField } from '@interest-protocol/ui-kit';
 import {
   type FC,
   type KeyboardEventHandler,
   type MouseEventHandler,
+  useEffect,
   useState,
 } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { CoinObject } from '@/components/web3-manager/coins-manager/web3-manager.types';
 import { Keys } from '@/constants';
+import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import { parseInputEventToNumberString, ZERO_BIG_NUMBER } from '@/utils';
 
-import type { CoinObject } from '../../../../../components/web3-manager/coins-manager/web3-manager.types';
 import type {
   IncineratorForm,
   IncineratorTableRowProps,
 } from '../../../incinerator.types';
 import IncineratorTableRowActionButton from './incinerator-table-actions';
 
+const IncineratorTableInputMax: FC<IncineratorTableRowProps> = ({ index }) => {
+  const { coinsMap } = useWeb3();
+  const { setValue, getValues } = useFormContext<IncineratorForm>();
+
+  const handleMax: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e?.stopPropagation();
+
+    const display = getValues(`objects.${index}.display`);
+
+    const balance = coinsMap[`${display?.type}`]
+      ? FixedPointMath.toNumber(
+          coinsMap[`${display?.type}`].balance,
+          coinsMap[`${display?.type}`].decimals
+        )
+      : 0;
+
+    setValue(`objects.${index}.value`, `${balance}`);
+  };
+  return (
+    <Button
+      p="xs"
+      type="button"
+      mr="-0.75rem"
+      variant="text"
+      onClick={handleMax}
+    >
+      max
+    </Button>
+  );
+};
 const IncineratorTableInput: FC<IncineratorTableRowProps> = ({ index }) => {
   const { control, setValue, getValues } = useFormContext<IncineratorForm>();
 
@@ -46,6 +78,18 @@ const IncineratorTableInput: FC<IncineratorTableRowProps> = ({ index }) => {
     if (e.code === Keys.Escape) return handleCancel(e as any);
   };
 
+  const handleDocumentKeyDown = (e: KeyboardEvent) => {
+    onKeyDown(e as any);
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleDocumentKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleDocumentKeyDown);
+    };
+  }, []);
+
   return (
     <>
       <TextField
@@ -59,6 +103,7 @@ const IncineratorTableInput: FC<IncineratorTableRowProps> = ({ index }) => {
           borderRadius: 'xs',
           bg: 'lowestContainer',
         }}
+        Suffix={<IncineratorTableInputMax index={index} />}
         onChange={(e) =>
           setValue(
             `objects.${index}.value`,

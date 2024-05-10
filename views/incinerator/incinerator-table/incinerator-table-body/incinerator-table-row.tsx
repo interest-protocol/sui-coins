@@ -3,11 +3,11 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
-import IncineratorTokenObject from '../../incinerator-token-object';
 import {
   IncineratorForm,
   IncineratorTableRowProps,
 } from '../../incinerator.types';
+import IncineratorTokenObject from '../../incinerator-token-object';
 import IncineratorTableBalance from './incinerator-table-balance';
 import IncineratorTableCheckbox from './incinerator-table-checkbox';
 import QtyIncinerate from './incinerator-table-maybe-input';
@@ -36,7 +36,12 @@ const IncineratorTableRow: FC<IncineratorTableRowProps> = ({ index }) => {
       </Typography>
       <IncineratorTableBalance index={index} />
       <Typography pr="m" as="td" size="small" variant="label" width="40%">
-        <Box display="flex" width="100%" gap="s" justifyContent="space-between">
+        <Box
+          gap="s"
+          display="flex"
+          width={['20rem', '100%']}
+          justifyContent="space-between"
+        >
           <QtyIncinerate index={index} />
         </Box>
       </Typography>

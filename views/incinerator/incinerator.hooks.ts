@@ -22,6 +22,7 @@ export const useBurn = () => {
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
   const signTransactionBlock = useSignTransactionBlock();
+  const { mutate } = useWeb3();
 
   return async (
     objects: ReadonlyArray<ObjectField>,
@@ -35,7 +36,9 @@ export const useBurn = () => {
     const objectsToTransfer = objects.map((object) => {
       if (!isCoinObject(object as ObjectData)) return object.objectId;
 
-      if (BigNumber(object.display?.balance || '0').isZero()) {
+      const objectBalance = BigNumber(object.display?.balance || '0');
+
+      if (objectBalance.isZero()) {
         txb.moveCall({
           target: '0x2::coin::destroy_zero',
           arguments: [txb.object(object.objectId)],
@@ -43,6 +46,13 @@ export const useBurn = () => {
         });
         return null;
       }
+
+      const amount = FixedPointMath.toBigNumber(
+        object.value,
+        Number(object.display!.decimals!)
+      );
+
+      if (amount.isZero() && !objectBalance.isZero()) return null;
 
       const [firstCoin, ...otherCoins] = (object as CoinObjectData).display
         .objects;
@@ -55,12 +65,7 @@ export const useBurn = () => {
           otherCoins.map((coin) => coin.coinObjectId)
         );
 
-      const amount = FixedPointMath.toBigNumber(
-        object.value,
-        Number(object.display!.decimals!)
-      );
-
-      if (amount.eq(object.display!.balance)) return firstCoinObject;
+      if (amount.gte(object.display!.balance)) return firstCoinObject;
 
       const [splittedCoin] = txb.splitCoins(firstCoinObject, [
         txb.pure(amount.decimalPlaces(0).toString()),
@@ -84,6 +89,8 @@ export const useBurn = () => {
     });
 
     throwTXIfNotSuccessful(tx);
+
+    await mutate();
 
     onSuccess(tx);
   };

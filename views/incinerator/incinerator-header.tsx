@@ -5,6 +5,7 @@ import { useFormContext } from 'react-hook-form';
 import { SearchSVG } from '@/svg';
 
 import { IncineratorForm } from './incinerator.types';
+import SearchUpdate from './search-update';
 
 const IncineratorHeader: FC = () => {
   const { register } = useFormContext<IncineratorForm>();
@@ -21,19 +22,22 @@ const IncineratorHeader: FC = () => {
       <Typography variant="title" size="large" fontSize="5xl" fontWeight="700">
         Incinerator
       </Typography>
-      <Box width={['100%', '100%', '100%', '25rem']}>
-        <TextField
-          fontSize="medium"
-          placeholder="Search"
-          {...register('search')}
-          nPlaceholder={{ opacity: 0.7 }}
-          fieldProps={{
-            width: '100%',
-            height: '2.5rem',
-            borderRadius: 'full',
-          }}
-          Prefix={<SearchSVG maxWidth="1rem" maxHeight="1rem" width="100%" />}
-        />
+      <Box display="flex" justifyContent="center" alignItems="center">
+        <Box width={['100%', '100%', '100%', '25rem']}>
+          <TextField
+            fontSize="medium"
+            placeholder="Search"
+            {...register('search')}
+            nPlaceholder={{ opacity: 0.7 }}
+            fieldProps={{
+              width: '100%',
+              height: '2.5rem',
+              borderRadius: 'full',
+            }}
+            Prefix={<SearchSVG maxWidth="1rem" maxHeight="1rem" width="100%" />}
+          />
+        </Box>
+        <SearchUpdate />
       </Box>
     </Box>
   );
