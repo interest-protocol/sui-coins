@@ -1,7 +1,7 @@
 import { Control, UseFormSetValue } from 'react-hook-form';
 
 import { Network } from '@/constants';
-import { ObjectData } from '@/context/all-objects/all-objects.types';
+import { ObjectData } from '@/hooks/use-all-objects/all-objects.types';
 
 export type ObjectModalItemProps = ObjectData & {
   selected: boolean;

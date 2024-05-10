@@ -1,7 +1,7 @@
 import { ChangeEvent } from 'react';
 
 import { MAX_NUMBER_INPUT_VALUE } from '@/constants';
-import { ObjectData } from '@/context/all-objects/all-objects.types';
+import { ObjectData } from '@/hooks/use-all-objects/all-objects.types';
 
 const isExponential = (number: number) => number.toString().includes('e');
 

@@ -7,115 +7,16 @@ import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { TransactionObjectArgument } from '@mysten/sui.js/transactions';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import BigNumber from 'bignumber.js';
-import { useEffect } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
 
 import {
   CoinObjectData,
   ObjectData,
-} from '@/context/all-objects/all-objects.types';
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
-import { useWeb3 } from '@/hooks/use-web3';
+} from '@/components/web3-manager/all-objects-manager/all-objects.types';
 import { FixedPointMath } from '@/lib';
-import {
-  getKindFromObjectData,
-  signAndExecute,
-  throwTXIfNotSuccessful,
-} from '@/utils';
+import { signAndExecute, throwTXIfNotSuccessful } from '@/utils';
 import { isCoinObject } from '@/views/components/select-object-modal/select-object-modal.utils';
 
-import {
-  IncineratorForm,
-  IncineratorTabEnum,
-  ObjectField,
-} from './incinerator.types';
-
-export const useIncineratorManager = () => {
-  const currentAccount = useCurrentAccount();
-  const { control, setValue, getValues } = useFormContext<IncineratorForm>();
-  const {
-    objects,
-    coinsMap,
-    ownedNfts,
-    otherObjects,
-    coinsObjects,
-    isFetchingCoinBalances,
-  } = useWeb3();
-
-  const tab = useWatch({ control, name: 'tab' });
-  const reset = useWatch({ control, name: 'reset' });
-  const search = useWatch({ control, name: 'search' });
-  const checked = useWatch({ control, name: 'checked' });
-
-  const displayObjects = {
-    [IncineratorTabEnum.All]: objects,
-    [IncineratorTabEnum.Coin]: coinsObjects,
-    [IncineratorTabEnum.NFT]: ownedNfts,
-    [IncineratorTabEnum.Other]: otherObjects,
-  };
-
-  const updateAssets = (active: boolean) => {
-    if (reset) setValue('reset', false);
-
-    setValue(
-      'objects',
-      displayObjects[tab].reduce((acc, object) => {
-        if (
-          !(
-            object.type?.toLowerCase().includes(search.toLowerCase()) ||
-            object.display?.symbol
-              ?.toLowerCase()
-              .includes(search.toLowerCase()) ||
-            object.display?.coinObjectId
-              ?.toLowerCase()
-              .includes(search.toLowerCase())
-          )
-        )
-          return acc;
-
-        const coin = coinsMap[(object.display as CoinObject)?.type];
-        const editable = coin && coin.balance && !coin.balance.isZero();
-
-        return [
-          ...acc,
-          {
-            ...object,
-            active,
-            editable,
-            isEditing: false,
-            index: acc.length,
-            kind: getKindFromObjectData(object),
-            value: coin
-              ? `${FixedPointMath.toNumber(coin.balance, coin.decimals)}`
-              : '1',
-          },
-        ];
-      }, [] as ReadonlyArray<ObjectField>)
-    );
-  };
-
-  useEffect(() => {
-    const formObjects = getValues('objects');
-    if (!isFetchingCoinBalances && currentAccount && !formObjects.length)
-      updateAssets(checked);
-  }, [isFetchingCoinBalances]);
-
-  useEffect(() => {
-    updateAssets(checked);
-  }, [checked, tab, currentAccount, search]);
-
-  useEffect(() => {
-    const formObjects = getValues('objects');
-
-    if (objects.length !== formObjects.length) updateAssets(checked);
-  }, [objects]);
-
-  useEffect(() => {
-    if (reset) updateAssets(checked);
-  }, [coinsMap]);
-
-  return { isFetchingCoinBalances, objects: getValues('objects'), reset };
-};
+import { ObjectField } from './incinerator.types';
 
 export const useBurn = () => {
   const suiClient = useSuiClient();

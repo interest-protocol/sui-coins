@@ -5,12 +5,12 @@ import {
   TextField,
   Typography,
 } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { Network } from '@/constants';
-import { ObjectData } from '@/context/all-objects/all-objects.types';
-import { useNetwork } from '@/context/network';
+import { ObjectData } from '@/hooks/use-all-objects/all-objects.types';
 import { SearchSVG, TimesSVG } from '@/svg';
 
 import {
@@ -25,7 +25,7 @@ const SelectObjectModal: FC<SelectObjectModalProps> = ({
   onSelect,
   closeModal,
 }) => {
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
   const { control, register, setValue } = useForm<SearchObjectForm>({
     defaultValues: {
       search: '',

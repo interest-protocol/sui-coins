@@ -1,6 +1,6 @@
 import type { MouseEventHandler } from 'react';
 
-import type { ObjectData } from '@/context/all-objects/all-objects.types';
+import { ObjectData } from '@/components/web3-manager/all-objects-manager/all-objects.types';
 
 export enum IncineratorTabEnum {
   All,
@@ -10,7 +10,6 @@ export enum IncineratorTabEnum {
 }
 
 export type ObjectField = ObjectData & {
-  index: number;
   value: string;
   active: boolean;
   editable: boolean;
@@ -21,6 +20,7 @@ export type ObjectField = ObjectData & {
 export interface IncineratorForm {
   reset: boolean;
   search: string;
+  empty: boolean;
   checked: boolean;
   tab: IncineratorTabEnum;
   objects: ReadonlyArray<ObjectField>;

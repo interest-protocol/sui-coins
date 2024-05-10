@@ -3,6 +3,7 @@ import { FC } from 'react';
 
 import IncineratorContent from './incinerator-content';
 import IncineratorHeader from './incinerator-header';
+import IncineratorManager from './incinerator-manager';
 import IncineratorFilterTabs from './incinerator-tabs';
 
 const Incinerator: FC = () => (
@@ -16,6 +17,7 @@ const Incinerator: FC = () => (
     bg="lowestContainer"
     flexDirection="column"
   >
+    <IncineratorManager />
     <IncineratorHeader />
     <IncineratorFilterTabs />
     <IncineratorContent />

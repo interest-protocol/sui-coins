@@ -1,4 +1,5 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { formatAddress } from '@mysten/sui.js/utils';
 import { prop } from 'ramda';
@@ -7,7 +8,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { v4 } from 'uuid';
 
-import { useNetwork } from '@/context/network';
+import { Network } from '@/constants';
 import { useModal } from '@/hooks/use-modal';
 import { CopySVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
@@ -18,7 +19,7 @@ import IncineratorTokenObject from '../incinerator-token-object';
 
 const IncineratorButton: FC = () => {
   const burn = useBurn();
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
   const { setModal, handleClose } = useModal();
   const { control, setValue } = useFormContext<IncineratorForm>();
   const allObjects = useWatch({ control, name: 'objects' });
@@ -32,7 +33,7 @@ const IncineratorButton: FC = () => {
   };
 
   const onSuccess = (tx: SuiTransactionBlockResponse) => {
-    showTXSuccessToast(tx, network);
+    showTXSuccessToast(tx, network as Network);
   };
 
   const disabled = !objects || !objects.length;

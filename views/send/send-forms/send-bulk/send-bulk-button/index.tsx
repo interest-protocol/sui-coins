@@ -1,10 +1,11 @@
 import { Box, Button, Dialog } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { useNetwork } from '@/context/network';
+import { Network } from '@/constants';
 import { useModal } from '@/hooks/use-modal';
 import { showTXSuccessToast } from '@/utils';
 
@@ -12,8 +13,8 @@ import { ISendBulkForm } from '../send-bulk.types';
 import useCreateLink from './send-button.hooks';
 
 const SendBulkFormButton: FC = () => {
-  const network = useNetwork();
   const createLink = useCreateLink();
+  const { network } = useSuiClientContext();
   const { setModal, handleClose } = useModal();
   const { control, setValue } = useFormContext<ISendBulkForm>();
   const object = useWatch({ control, name: 'object' });
@@ -23,7 +24,7 @@ const SendBulkFormButton: FC = () => {
     tx: SuiTransactionBlockResponse,
     links: ReadonlyArray<string>
   ) => {
-    showTXSuccessToast(tx, network);
+    showTXSuccessToast(tx, network as Network);
 
     setValue('links', links);
   };

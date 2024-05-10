@@ -1,15 +1,22 @@
 import { Box, ProgressIndicator } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 
-import { useIncineratorManager } from './incinerator.hooks';
+import { useWeb3 } from '@/hooks/use-web3';
+
+import { IncineratorForm } from './incinerator.types';
 import IncineratorButton from './incinerator-button';
 import IncineratorNoAsset from './incinerator-no-assets';
 import IncineratorTable from './incinerator-table';
 
 const IncineratorContent: FC = () => {
-  const { reset, isFetchingCoinBalances, objects } = useIncineratorManager();
+  const { loading } = useWeb3();
+  const { control } = useFormContext<IncineratorForm>();
 
-  if (reset || isFetchingCoinBalances)
+  const reset = useWatch({ control, name: 'reset' });
+  const empty = useWatch({ control, name: 'empty' });
+
+  if (empty && (reset || loading))
     return (
       <Box
         mx="auto"
@@ -22,7 +29,7 @@ const IncineratorContent: FC = () => {
       </Box>
     );
 
-  if (!objects?.length) return <IncineratorNoAsset />;
+  if (empty) return <IncineratorNoAsset />;
 
   return (
     <Box mb="l" display="grid" gap="l">

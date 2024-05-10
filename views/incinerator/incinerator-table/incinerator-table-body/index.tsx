@@ -7,6 +7,7 @@ import IncineratorTableRow from './incinerator-table-row';
 
 const IncineratorTableBody: FC = () => {
   const { control } = useFormContext<IncineratorForm>();
+
   const { fields } = useFieldArray({ control, name: 'objects' });
 
   return (

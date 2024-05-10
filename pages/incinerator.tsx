@@ -3,7 +3,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { SEO } from '@/components';
 import Layout from '@/components/layout';
-import { AllObjectsProvider } from '@/context/all-objects';
 import Incinerator from '@/views/incinerator';
 import {
   IncineratorForm,
@@ -15,6 +14,7 @@ const IncineratorPage: NextPage = () => {
     defaultValues: {
       search: '',
       objects: [],
+      empty: true,
       reset: false,
       checked: false,
       tab: IncineratorTabEnum.All,
@@ -22,14 +22,12 @@ const IncineratorPage: NextPage = () => {
   });
 
   return (
-    <AllObjectsProvider>
-      <FormProvider {...form}>
-        <Layout>
-          <SEO pageTitle="Incinerator" />
-          <Incinerator />
-        </Layout>
-      </FormProvider>
-    </AllObjectsProvider>
+    <FormProvider {...form}>
+      <Layout features={['objects', 'coins']}>
+        <SEO pageTitle="Incinerator" />
+        <Incinerator />
+      </Layout>
+    </FormProvider>
   );
 };
 

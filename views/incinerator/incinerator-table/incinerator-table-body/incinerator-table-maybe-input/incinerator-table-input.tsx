@@ -8,10 +8,10 @@ import {
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { Keys } from '@/constants';
-import type { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { FixedPointMath } from '@/lib';
 import { parseInputEventToNumberString, ZERO_BIG_NUMBER } from '@/utils';
 
+import type { CoinObject } from '../../../../../components/web3-manager/coins-manager/web3-manager.types';
 import type {
   IncineratorForm,
   IncineratorTableRowProps,

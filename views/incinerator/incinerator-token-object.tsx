@@ -1,19 +1,20 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { formatAddress } from '@mysten/sui.js/utils';
 import { FC } from 'react';
 
 import { TokenIcon } from '@/components';
-import { useNetwork } from '@/context/network';
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { Network } from '@/constants';
 import { getSymbolByType } from '@/utils';
 
+import { CoinObject } from '../../components/web3-manager/coins-manager/web3-manager.types';
 import { IncineratorTokenObjectProps } from './incinerator.types';
 
 const IncineratorTokenObject: FC<IncineratorTokenObjectProps> = ({
   object,
 }) => {
-  const network = useNetwork();
   const { display, type, kind } = object;
+  const { network } = useSuiClientContext();
   const displayName = display
     ? (display as Record<string, string>).name ?? display.symbol ?? type
     : type;
@@ -31,7 +32,7 @@ const IncineratorTokenObject: FC<IncineratorTokenObjectProps> = ({
         withBg
         size="1.6rem"
         symbol={symbol}
-        {...(url ? { url } : { type: coinType, network })}
+        {...(url ? { url } : { type: coinType, network: network as Network })}
       />
       <Box>
         <Typography size="medium" variant="body" whiteSpace="nowrap">
