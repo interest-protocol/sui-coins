@@ -1,4 +1,4 @@
-import { Box, Typography } from '@interest-protocol/ui-kit';
+import { Box, TooltipWrapper, Typography } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
 import { formatAddress } from '@mysten/sui.js/utils';
 import { FC } from 'react';
@@ -35,9 +35,17 @@ const IncineratorTokenObject: FC<IncineratorTokenObjectProps> = ({
         {...(url ? { url } : { type: coinType, network: network as Network })}
       />
       <Box>
-        <Typography size="medium" variant="body" whiteSpace="nowrap">
-          {type === displayName ? formatAddress(type) : displayName}
-        </Typography>
+        <TooltipWrapper
+          bg="highContainer"
+          maxWidth="20rem"
+          wordWrap="break-word"
+          tooltipContent={type}
+          tooltipPosition="top"
+        >
+          <Typography size="medium" variant="body" whiteSpace="nowrap">
+            {type === displayName ? formatAddress(type) : displayName}
+          </Typography>
+        </TooltipWrapper>
         <Typography
           as="span"
           size="small"
