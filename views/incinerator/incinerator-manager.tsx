@@ -98,7 +98,7 @@ const IncineratorManager: FC = () => {
         return;
       }
     }
-  }, [coinsMap]);
+  }, [objects]);
 
   useEffect(() => {
     if (!formObjects.length !== empty) setValue('empty', !formObjects.length);
