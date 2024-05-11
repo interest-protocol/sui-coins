@@ -14,9 +14,9 @@ import { useWeb3 } from '@/hooks/use-web3';
 import { CopySVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 
-import { useBurn } from '../incinerator.hooks';
-import { IncineratorForm } from '../incinerator.types';
-import IncineratorTokenObject from '../incinerator-token-object';
+import { useBurn } from './incinerator.hooks';
+import { IncineratorForm } from './incinerator.types';
+import IncineratorTokenObject from './incinerator-token-object';
 
 const IncineratorButton: FC = () => {
   const burn = useBurn();
@@ -57,7 +57,7 @@ const IncineratorButton: FC = () => {
       toast.error((e as any).message ?? 'Something went wrong');
     } finally {
       setValue('reset', true);
-      setDelay(undefined);
+      setDelay(10000);
       toast.dismiss(toasterId);
     }
   };

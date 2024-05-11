@@ -5,9 +5,9 @@ import { useFormContext } from 'react-hook-form';
 import { useWeb3 } from '@/hooks/use-web3';
 import { RefreshSVG } from '@/svg';
 
-import { IncineratorForm } from '../incinerator.types';
+import { IncineratorForm } from './incinerator.types';
 
-const SearchUpdate: FC = () => {
+const IncineratorRefresh: FC = () => {
   const { mutate } = useWeb3();
   const { setValue } = useFormContext<IncineratorForm>();
 
@@ -32,17 +32,12 @@ const SearchUpdate: FC = () => {
       position="relative"
       onClick={onRefresh}
       borderColor="outlineVariant"
-      nHover={{
-        background: 'lowContainer',
-      }}
-      nActive={{
-        background: 'transparent',
-        color: 'onSurface',
-      }}
+      nHover={{ bg: 'lowContainer' }}
+      nActive={{ bg: 'transparent', color: 'onSurface' }}
     >
       <RefreshSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
     </Button>
   );
 };
 
-export default SearchUpdate;
+export default IncineratorRefresh;

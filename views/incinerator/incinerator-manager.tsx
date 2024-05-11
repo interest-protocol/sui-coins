@@ -81,18 +81,22 @@ const IncineratorManager: FC = () => {
   }, [checked]);
 
   useEffect(() => {
-    updateAssets();
+    if (displayObjects[tab].every((type) => type)) {
+      updateAssets();
+    }
   }, [tab, currentAccount, search]);
 
   useEffect(() => {
-    if (reset) {
-      updateAssets();
-      return;
-    }
-    if (formObjects.length !== objects.length) {
-      updateAssets();
-      setDelay(undefined);
-      return;
+    if (displayObjects[tab].every((type) => type)) {
+      if (reset) {
+        updateAssets();
+        return;
+      }
+      if (formObjects.length !== displayObjects[tab].length) {
+        updateAssets();
+        setDelay(undefined);
+        return;
+      }
     }
   }, [coinsMap]);
 

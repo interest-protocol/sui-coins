@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form';
 import { SearchSVG } from '@/svg';
 
 import { IncineratorForm } from './incinerator.types';
-import SearchUpdate from './search-update';
+import IncineratorRefresh from './incinerator-refresh';
 
 const IncineratorHeader: FC = () => {
   const { register } = useFormContext<IncineratorForm>();
@@ -37,7 +37,7 @@ const IncineratorHeader: FC = () => {
             Prefix={<SearchSVG maxWidth="1rem" maxHeight="1rem" width="100%" />}
           />
         </Box>
-        <SearchUpdate />
+        <IncineratorRefresh />
       </Box>
     </Box>
   );
