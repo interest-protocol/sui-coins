@@ -3,9 +3,8 @@ import {
   AirdropSVG,
   CirclePlusSVG,
   DoubleChevronSVG,
-  FireSVG,
+  MenuSVG,
   PoolSVG,
-  UploadSVG,
 } from '@/svg';
 
 import { MenuItemProps } from './sidebar.types';
@@ -45,19 +44,26 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     networks: [Network.MAINNET, Network.TESTNET],
   },
   {
-    beta: true,
-    name: 'zkSend',
+    name: 'more',
     disabled: false,
-    Icon: UploadSVG,
-    path: Routes[RoutesEnum.Send],
-    networks: [Network.MAINNET, Network.TESTNET],
-  },
-  {
-    beta: true,
-    Icon: FireSVG,
-    disabled: false,
-    name: 'incinerator',
-    path: Routes[RoutesEnum.Incinerator],
+    Icon: MenuSVG,
+    accordionList: [
+      {
+        beta: true,
+        name: 'zkSend',
+        disabled: false,
+        path: Routes[RoutesEnum.Send],
+        networks: [Network.MAINNET, Network.TESTNET],
+      },
+      {
+        beta: true,
+        disabled: false,
+        name: 'incinerator',
+        path: Routes[RoutesEnum.Incinerator],
+        networks: [Network.MAINNET, Network.TESTNET],
+      },
+    ],
+    path: Routes[RoutesEnum.Airdrop],
     networks: [Network.MAINNET, Network.TESTNET],
   },
 ];

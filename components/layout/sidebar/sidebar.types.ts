@@ -4,20 +4,19 @@ import { SVGProps } from '@/components/svg/svg.types';
 import { Network } from '@/constants';
 
 export interface MenuItemCollapsibleProps {
+  beta?: boolean;
   accordionList?: ReadonlyArray<AccordionItemProps>;
 }
 
 export interface MenuItemTitleContentProps extends MenuItemCollapsibleProps {
   name: string;
   path?: string;
-  beta?: boolean;
   disabled: boolean;
   Icon: FC<SVGProps>;
   isCollapsed: boolean;
 }
 
 export interface MenuItemProps extends MenuItemTitleContentProps {
-  beta?: boolean;
   networks: ReadonlyArray<Network>;
   setIsCollapsed: (value: boolean) => void;
   setTemporarilyOpen: Dispatch<SetStateAction<boolean>>;
@@ -39,6 +38,7 @@ export interface MenuListItemTextProps {
 export interface AccordionItemProps {
   name: string;
   path: string;
+  beta?: boolean;
   disabled: boolean;
   networks: ReadonlyArray<Network>;
 }
