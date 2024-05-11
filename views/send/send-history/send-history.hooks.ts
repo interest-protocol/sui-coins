@@ -4,7 +4,7 @@ import {
   useSuiClient,
   useSuiClientContext,
 } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui.js/dist/cjs/client';
+import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { listCreatedLinks, ZkSendLink } from '@mysten/zksend';
 import useSWR from 'swr';
 
