@@ -18,7 +18,9 @@ const IncineratorManager: FC = () => {
   const { control, setValue } = useFormContext<IncineratorForm>();
   const {
     delay,
+    error,
     objects,
+    loading,
     coinsMap,
     ownedNfts,
     otherObjects,
@@ -88,24 +90,14 @@ const IncineratorManager: FC = () => {
   }, [checked]);
 
   useEffect(() => {
-    if (displayObjects[tab].length && displayObjects[tab].every((type) => type))
+    if (!loading && !error && displayObjects[tab].every((type) => type))
       updateAssets();
   }, [tab, currentAccount, search]);
 
   useEffect(() => {
-    if (
-      displayObjects[tab].length &&
-      displayObjects[tab].every((type) => type)
-    ) {
-      if (reset) {
-        updateAssets();
-        return;
-      }
-      if (formObjects.length !== displayObjects[tab].length) {
-        if (delay !== undefined) setDelay(undefined);
-        updateAssets();
-        return;
-      }
+    if (!loading && !error && displayObjects[tab].every((type) => type)) {
+      if (delay !== undefined) setDelay(undefined);
+      updateAssets();
     }
   }, [coinsMap]);
 
