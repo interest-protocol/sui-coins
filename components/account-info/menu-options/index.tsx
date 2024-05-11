@@ -13,8 +13,7 @@ import { v4 } from 'uuid';
 
 import { SIDEBAR_ITEMS } from '@/components/layout/sidebar/sidebar.data';
 import ConnectWalletButton from '@/components/wallet/connect-wallet-button';
-import { DISPLAY_NETWORK, wrapperVariants } from '@/constants';
-import { useNetwork } from '@/context/network';
+import { DISPLAY_NETWORK, Network, wrapperVariants } from '@/constants';
 import { ArrowLeftSVG, SignOutSVG, SuiLogoSVG } from '@/svg';
 
 import Avatar from '../avatar';
@@ -48,8 +47,7 @@ const AccountSubMenu: FC<{ closeSubmenu: () => void }> = ({ closeSubmenu }) => {
 };
 
 const NetworkSubMenu: FC<{ closeSubmenu: () => void }> = ({ closeSubmenu }) => {
-  const network = useNetwork();
-  const { selectNetwork } = useSuiClientContext();
+  const { network, selectNetwork } = useSuiClientContext();
 
   return (
     <>
@@ -77,8 +75,10 @@ const MenuOptions: FC<MenuOptionsProps> = ({
   isMenuOpen,
   handleDisconnect,
 }) => {
-  const network = useNetwork();
   const { asPath, push } = useRouter();
+
+  const { network } = useSuiClientContext();
+
   const { isConnected } = useCurrentWallet();
   const [submenu, setSubmenu] = useState<ReactNode>(null);
 
@@ -136,7 +136,7 @@ const MenuOptions: FC<MenuOptionsProps> = ({
                 onClick={openNetworkSubmenu}
               >
                 <SuiLogoSVG maxWidth="2rem" maxHeight="2rem" />
-                <Box>{DISPLAY_NETWORK[network]}</Box>
+                <Box>{DISPLAY_NETWORK[network as Network]}</Box>
               </OptionItem>
               <OptionItem onClick={handleDisconnect}>
                 <Box display="flex" color="error">

@@ -3,28 +3,25 @@ import {
   useCurrentAccount,
   useSignTransactionBlock,
   useSuiClient,
+  useSuiClientContext,
 } from '@mysten/dapp-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { EXPLORER_URL } from '@/constants';
-import { useNetwork } from '@/context/network';
+import { EXPLORER_URL, Network } from '@/constants';
 import { useDialog } from '@/hooks/use-dialog';
-import { useWeb3 } from '@/hooks/use-web3';
 import { throwTXIfNotSuccessful, ZERO_BIG_NUMBER } from '@/utils';
 import { SwapForm } from '@/views/swap/swap.types';
 
 import { useAftermathRouter } from './swap.hooks';
 
 const SwapButton: FC = () => {
-  const network = useNetwork();
   const client = useSuiClient();
   const router = useAftermathRouter();
+  const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
   const formSwap = useFormContext<SwapForm>();
   const { dialog, handleClose } = useDialog();
-
-  const { mutate } = useWeb3();
 
   const signTransactionBlock = useSignTransactionBlock();
 
@@ -90,12 +87,11 @@ const SwapButton: FC = () => {
 
       formSwap.setValue(
         'explorerLink',
-        `${EXPLORER_URL[network]}/tx/${tx.digest}`
+        `${EXPLORER_URL[network as Network]}/tx/${tx.digest}`
       );
     } finally {
       resetInput();
       formSwap.setValue('swapping', false);
-      mutate();
     }
   };
 

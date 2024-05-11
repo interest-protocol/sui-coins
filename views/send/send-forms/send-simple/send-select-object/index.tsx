@@ -2,10 +2,10 @@ import { Box, TextField } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { FixedPointMath } from '@/lib';
 import { parseInputEventToNumberString, ZERO_BIG_NUMBER } from '@/utils';
 
+import { CoinObject } from '../../../../../components/web3-manager/coins-manager/web3-manager.types';
 import { ISendSimpleForm } from '../send-simple.types';
 import SelectObject from './select-object';
 import { SendFormSelectObjectProps } from './send-select-object.types';

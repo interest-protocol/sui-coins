@@ -3,6 +3,7 @@ import {
   useCurrentAccount,
   useSignTransactionBlock,
   useSuiClient,
+  useSuiClientContext,
 } from '@mysten/dapp-kit';
 import { SuiObjectChangeCreated } from '@mysten/sui.js/client';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
@@ -12,9 +13,8 @@ import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { AIRDROP_SEND_CONTRACT, TREASURY } from '@/constants';
+import { AIRDROP_SEND_CONTRACT, Network, TREASURY } from '@/constants';
 import { AIRDROP_SUI_FEE_PER_ADDRESS } from '@/constants/fees';
-import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks/use-web3';
 import {
   getCoins,
@@ -40,11 +40,11 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
   setIsProgressView,
 }) => {
   const { coinsMap } = useWeb3();
-  const { getValues, setValue } = useFormContext<IAirdropForm>();
-  const network = useNetwork();
   const suiClient = useSuiClient();
-  const signTransactionBlock = useSignTransactionBlock();
+  const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
+  const signTransactionBlock = useSignTransactionBlock();
+  const { getValues, setValue } = useFormContext<IAirdropForm>();
 
   const handleSend = async () => {
     setIsProgressView(true);
@@ -55,7 +55,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
       if (!airdropList || !coinsMap || !coinsMap[token.type] || !currentAccount)
         return;
 
-      const contractPackageId = AIRDROP_SEND_CONTRACT[network];
+      const contractPackageId = AIRDROP_SEND_CONTRACT[network as Network];
 
       const list = splitArray(airdropList, BATCH_SIZE);
 
@@ -91,7 +91,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
         throwTXIfNotSuccessful(tx, () => setValue('error', true));
 
-        showTXSuccessToast(tx, network);
+        showTXSuccessToast(tx, network as Network);
 
         const [gasCoin, spendCoin] =
           (tx.objectChanges as Array<SuiObjectChangeCreated>)!.reduce(
@@ -137,7 +137,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
           setValue('done', [...getValues('done'), Number(index)]);
 
-          showTXSuccessToast(tx, network);
+          showTXSuccessToast(tx, network as Network);
 
           await pauseUtilNextTx(initAirdropTxMS);
         }
@@ -179,7 +179,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
       throwTXIfNotSuccessful(tx, () => setValue('error', true));
 
-      showTXSuccessToast(tx, network);
+      showTXSuccessToast(tx, network as Network);
 
       if (mergeCoinsPred)
         [nextDigest, nextVersion] = findNextVersionAndDigest(
@@ -240,7 +240,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           setValue('failed', [...getValues('failed'), Number(index)])
         );
 
-        showTXSuccessToast(tx, network);
+        showTXSuccessToast(tx, network as Network);
 
         setValue('done', [...getValues('done'), Number(index)]);
 

@@ -1,11 +1,12 @@
 import { Token } from '@interest-protocol/sui-tokens';
 import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import TokenIcon from '@/components/token-icon';
-import { useNetwork } from '@/context/network';
+import { Network } from '@/constants';
 import { useModal } from '@/hooks/use-modal';
 import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
 import { updateURL } from '@/utils';
@@ -15,8 +16,8 @@ import { SwapForm } from '../swap.types';
 import { InputProps } from './input.types';
 
 const SelectToken: FC<InputProps> = ({ label }) => {
-  const network = useNetwork();
   const { pathname } = useRouter();
+  const { network } = useSuiClientContext();
   const { setModal, handleClose } = useModal();
 
   const { setValue, control } = useFormContext<SwapForm>();
@@ -125,9 +126,9 @@ const SelectToken: FC<InputProps> = ({ label }) => {
           PrefixIcon: (
             <TokenIcon
               withBg
-              network={network}
               type={currentType}
               symbol={currentSymbol}
+              network={network as Network}
             />
           ),
         })}

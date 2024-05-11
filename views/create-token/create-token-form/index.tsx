@@ -4,6 +4,7 @@ import {
   useCurrentAccount,
   useSignTransactionBlock,
   useSuiClient,
+  useSuiClientContext,
 } from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { normalizeSuiAddress, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
@@ -13,7 +14,7 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { TextField } from '@/components';
-import { useNetwork } from '@/context/network';
+import { Network } from '@/constants';
 import { useWeb3 } from '@/hooks/use-web3';
 import { parseInputEventToNumberString, showTXSuccessToast } from '@/utils';
 import { throwTXIfNotSuccessful } from '@/utils';
@@ -45,10 +46,10 @@ const CreateTokenForm: FC = () => {
   });
 
   const suiClient = useSuiClient();
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
   const signTransactionBlock = useSignTransactionBlock();
-  const { coinsMap, mutate } = useWeb3();
+  const { coinsMap } = useWeb3();
 
   const createToken = async () => {
     try {
@@ -107,10 +108,9 @@ const CreateTokenForm: FC = () => {
 
       throwTXIfNotSuccessful(tx);
 
-      showTXSuccessToast(tx, network);
+      showTXSuccessToast(tx, network as Network);
     } finally {
       setLoading(false);
-      mutate();
     }
   };
 

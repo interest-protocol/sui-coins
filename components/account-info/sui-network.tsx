@@ -10,8 +10,7 @@ import { not, toPairs } from 'ramda';
 import { FC, useState } from 'react';
 import { v4 } from 'uuid';
 
-import { DISPLAY_NETWORK, wrapperVariants } from '@/constants';
-import { useNetwork } from '@/context/network';
+import { DISPLAY_NETWORK, Network, wrapperVariants } from '@/constants';
 import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
 import { useIsFirstRender } from '@/hooks/use-is-first-render';
 import { ChevronDownSVG, SuiLogoSVG } from '@/svg';
@@ -24,8 +23,7 @@ const SuiNetwork: FC = () => {
   const isFirstRender = useIsFirstRender();
   const { colors } = useTheme() as Theme;
   const [isOpen, setIsOpen] = useState(false);
-  const { selectNetwork } = useSuiClientContext();
-  const network = useNetwork();
+  const { network, selectNetwork } = useSuiClientContext();
 
   const closeNetworkDropdown = (event: any) => {
     if (
@@ -76,7 +74,7 @@ const SuiNetwork: FC = () => {
         >
           <SuiLogoSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
         </Box>
-        <Box fontFamily="Proto">{DISPLAY_NETWORK[network]}</Box>
+        <Box fontFamily="Proto">{DISPLAY_NETWORK[network as Network]}</Box>
         <Box
           display="flex"
           transform={`rotate(${isOpen ? '180deg' : '0deg'})`}

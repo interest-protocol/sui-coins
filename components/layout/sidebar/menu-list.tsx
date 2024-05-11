@@ -1,9 +1,10 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
+import { Network } from '@/constants';
 import { PARTNERS } from '@/constants';
-import { useNetwork } from '@/context/network';
 import { ArrowTopRightSVG } from '@/svg';
 
 import SideBarMenuItem from './menu-item';
@@ -15,22 +16,22 @@ const SidebarMenuList: FC<MenuListProps> = ({
   setIsCollapsed,
   setTemporarilyOpen,
 }) => {
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
 
   return (
     <>
       <Box display="flex" flexDirection="column" gap="s" pb="m">
-        {SIDEBAR_ITEMS.filter(({ networks }) => networks.includes(network)).map(
-          (item) => (
-            <SideBarMenuItem
-              {...item}
-              key={v4()}
-              isCollapsed={isCollapsed}
-              setIsCollapsed={setIsCollapsed}
-              setTemporarilyOpen={setTemporarilyOpen}
-            />
-          )
-        )}
+        {SIDEBAR_ITEMS.filter(({ networks }) =>
+          networks.includes(network as Network)
+        ).map((item) => (
+          <SideBarMenuItem
+            {...item}
+            key={v4()}
+            isCollapsed={isCollapsed}
+            setIsCollapsed={setIsCollapsed}
+            setTemporarilyOpen={setTemporarilyOpen}
+          />
+        ))}
       </Box>
       {!!PARTNERS.length && (
         <Box borderTop="1px solid" borderColor="outlineVariant" />

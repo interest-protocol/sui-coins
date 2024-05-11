@@ -1,14 +1,15 @@
 import { Box, Motion, Typography } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { TokenIcon } from '@/components';
-import { useNetwork } from '@/context/network';
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { Network } from '@/constants';
 import { useModal } from '@/hooks/use-modal';
 import useTokenPriceBySymbol from '@/hooks/use-token-price';
 import { ChevronRightSVG } from '@/svg';
 
+import { CoinObject } from '../../../components/web3-manager/coins-manager/web3-manager.types';
 import SelectTokenModal from '../../components/select-token-modal';
 import { IAirdropForm } from '../airdrop.types';
 import { getSymbol } from '../airdrop.utils';
@@ -16,7 +17,7 @@ import { getSymbol } from '../airdrop.utils';
 const BOX_ID = 'dropdown-id';
 
 const AirdropSelectToken: FC = () => {
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
   const { setModal, handleClose } = useModal();
   const { control, setValue } = useFormContext<IAirdropForm>();
   const token = useWatch({ control, name: 'token' });
@@ -68,8 +69,8 @@ const AirdropSelectToken: FC = () => {
           <TokenIcon
             withBg
             type={token.type}
-            network={network}
             symbol={token.symbol}
+            network={network as Network}
           />
         )}
         <Typography variant="label" size="large" flex="1" as="span">
