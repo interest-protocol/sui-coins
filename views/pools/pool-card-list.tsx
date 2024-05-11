@@ -31,7 +31,9 @@ import {
 
 const Pools: FC<PoolCardListWrapper> = ({ network }) => {
   const [page] = useState(1);
-  const { data, isLoading: arePoolsLoading } = usePools(page);
+  const { data, isLoading: arePoolsLoading } = usePools(page, {
+    $or: [{ hooks: { $exists: false } }, { hooks: null }],
+  });
 
   return (
     <PoolCardListContent

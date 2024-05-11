@@ -1,6 +1,8 @@
 import { Box } from '@interest-protocol/ui-kit';
 import BigNumber from 'bignumber.js';
+import { pathOr } from 'ramda';
 import { FC } from 'react';
+import { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
@@ -22,6 +24,20 @@ import { POOL_INFORMATION, POOL_STATISTICS } from './pool-info.data';
 const PoolInfoDetail: FC = () => {
   const clamm = useClammSdk();
   const { pool, metadata, prices, loading } = usePoolDetails();
+  const [virtualPrice, setVirtualPrice] = useState(
+    pool?.isStable
+      ? BigNumber(0)
+      : BigNumber(pathOr('0', ['state', 'virtualPrice'], pool))
+  );
+
+  useEffect(() => {
+    if (pool && pool.isStable) {
+      clamm
+        .getStablePoolVirtualPrice(pool)
+        .then((vp) => setVirtualPrice(BigNumber(vp.toString())))
+        .catch();
+    }
+  }, [pool?.isStable]);
 
   if (loading)
     return (
@@ -47,18 +63,10 @@ const PoolInfoDetail: FC = () => {
     ? getStableLiquidity(pool, metadata, prices)
     : getVolatileLiquidity(pool, metadata, prices);
 
-  const virtualPrice = liquidity
-    ? FixedPointMath.toNumber(
-        FixedPointMath.toBigNumber(liquidity).div(
-          String(pool.state.lpCoinSupply)
-        ),
-        0
-      )
-    : 0;
-
-  const statsData = liquidity
-    ? [formatDollars(liquidity), formatDollars(virtualPrice, 9)]
-    : ['', ''];
+  const statsData = [
+    liquidity ? formatDollars(liquidity) : 'N/A',
+    formatDollars(FixedPointMath.toNumber(virtualPrice, 18), 9),
+  ];
 
   return (
     <Box>
@@ -134,8 +142,7 @@ const PoolInfoDetail: FC = () => {
               labelColor="outline"
               content={formatMoney(
                 FixedPointMath.toNumber(
-                  parseBigNumberish(pool.state.lpCoinSupply),
-                  parseBigNumberish(clamm.PRECISION).e!
+                  parseBigNumberish(pool.state.lpCoinSupply)
                 )
               )}
             />

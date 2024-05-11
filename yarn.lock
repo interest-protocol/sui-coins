@@ -869,12 +869,13 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-2.0.2.tgz#d9fae00a2d5cb40f92cfe64b47ad749fbc38f917"
   integrity sha512-6EwiSjwWYP7pTckG6I5eyFANjPhmPjUX9JRLUSfNPC7FX7zK9gyZAfUEaECL6ALTpGX5AjnBq3C9XmVWPitNpw==
 
-"@interest-protocol/clamm-sdk@^6.1.1-alpha":
-  version "6.1.1-alpha"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/clamm-sdk/-/clamm-sdk-6.1.1-alpha.tgz#8d412e5a786d78e24fa04b4c54126ac46ac37e06"
-  integrity sha512-0nkWJSJlgvPFawCa5Z+k+RVZWcHihpybMCwhHUhA0YEM/Miwq+QkBFVH5UvEwT88tc5CEA86/4XWItCkRIi/sw==
+"@interest-protocol/clamm-sdk@^8.0.1-alpha":
+  version "8.0.1-alpha"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/clamm-sdk/-/clamm-sdk-8.0.1-alpha.tgz#4782a91a17ca3544b7b623ccfb4d70f49fb810e2"
+  integrity sha512-GruTWNaXcMQgHMaMlPGwUlBFkZTDwuMdCnQP0dozSsGOYO2tKj8za1e/QlwANza/HjIc+Xhh43BP7YOWhEpveg==
   dependencies:
     "@mysten/sui.js" "^0.51.2"
+    just-camel-case "^6.2.0"
     ramda "^0.29.1"
     tiny-invariant "^1.3.3"
 
@@ -6553,6 +6554,11 @@ jsonparse@^1.2.0, jsonparse@^1.3.1:
     array.prototype.flat "^1.3.1"
     object.assign "^4.1.4"
     object.values "^1.1.6"
+
+just-camel-case@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/just-camel-case/-/just-camel-case-6.2.0.tgz#c08a7079f3ae010d25c8d258bb6db1f3f387c225"
+  integrity sha512-ICenRLXwkQYLk3UyvLQZ+uKuwFVJ3JHFYFn7F2782G2Mv2hW8WPePqgdhpnjGaqkYtSVWnyCESZhGXUmY3/bEg==
 
 just-diff-apply@^5.2.0:
   version "5.5.0"

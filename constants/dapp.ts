@@ -76,20 +76,3 @@ export const SPONSOR_WALLET = {
   [Network.TESTNET]:
     '0x5e7197d38ea9d838835462dadc447770cde842537cfb528f6b36478f4c968164',
 };
-export const VOLATILE = {
-  [Network.TESTNET]: `${
-    OBJECT_RECORD[Network.TESTNET].DEX_PACKAGE_ID
-  }::curve::Volatile`,
-  [Network.MAINNET]: `${
-    OBJECT_RECORD[Network.MAINNET].DEX_PACKAGE_ID
-  }::curve::Volatile`,
-};
-
-export const STABLE = {
-  [Network.TESTNET]: `${
-    OBJECT_RECORD[Network.TESTNET].DEX_PACKAGE_ID
-  }::curve::Stable`,
-  [Network.MAINNET]: `${
-    OBJECT_RECORD[Network.MAINNET].DEX_PACKAGE_ID
-  }::curve::Stable`,
-};

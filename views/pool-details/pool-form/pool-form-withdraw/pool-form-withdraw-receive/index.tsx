@@ -31,7 +31,7 @@ const PoolFormWithdrawReceive: FC = () => {
             isSelected={currentSelected == SelectionFieldValues.OneCoin}
           />
           <PoolFormWithdrawReceiveType
-            label="Balance"
+            label="Balanced"
             handleSelect={setCurrentSelected}
             type={SelectionFieldValues.Balance}
             isSelected={currentSelected == SelectionFieldValues.Balance}

@@ -1,3 +1,4 @@
+import { PoolMetadata } from '@interest-protocol/clamm-sdk';
 import mongoose, { Document, Schema } from 'mongoose';
 
 import { Network } from '@/constants';
@@ -7,6 +8,7 @@ export interface ClammPoolModel extends Document {
   lpCoinType: string;
   isStable: boolean;
   coinTypes: readonly string[];
+  hooks?: PoolMetadata['hooks'] | null;
 }
 
 const modelName = 'ClammPool';
@@ -31,6 +33,10 @@ export const ClammPoolSchema = new Schema({
     type: [String],
     index: true,
     required: true,
+  },
+  hooks: {
+    type: Object,
+    default: null,
   },
 });
 

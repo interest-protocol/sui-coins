@@ -39,8 +39,7 @@ const AdvanceDetail: FC = () => {
               {
                 label: 'Fee In',
                 content: `${FixedPointMath.toNumber(
-                  parseBigNumberish(pool.state.fees.feeInPercent).times(100),
-                  parseBigNumberish(clamm.PRECISION).e!
+                  parseBigNumberish(pool.state.fees.feeInPercent).times(100)
                 )}%`,
               },
               {
@@ -70,35 +69,37 @@ const AdvanceDetail: FC = () => {
           : [
               {
                 label: 'Mid Fee',
-                content: FixedPointMath.toNumber(
+                popupInfo: 'Trading fee when the pool is balanced',
+                content: `${FixedPointMath.toNumber(
                   parseBigNumberish(pool.state.fees.midFee),
-                  parseBigNumberish(clamm.PRECISION).e!
-                ),
+                  8
+                )}%`,
               },
               {
                 label: 'Fee Out',
-                content: FixedPointMath.toNumber(
+                popupInfo: 'Trading fee when the pool is imbalanced',
+                content: `${FixedPointMath.toNumber(
                   parseBigNumberish(pool.state.fees.outFee),
-                  parseBigNumberish(clamm.PRECISION).e!
-                ),
+                  8
+                )}%`,
               },
               {
                 label: 'A',
-                popupInfo: 'A',
-                content: FixedPointMath.toNumber(
-                  parseBigNumberish(pool.state.a),
-                  parseBigNumberish(clamm.PRECISION).e!
-                ),
+                popupInfo: 'Amplifier to stabilize the pool',
+                content: pool.state.a.toString(),
               },
               {
                 label: 'Gamma',
+                popupInfo: 'Controls overall breadth of the curve',
                 content: FixedPointMath.toNumber(
                   parseBigNumberish(pool.state.gamma),
-                  parseBigNumberish(clamm.PRECISION).e!
+                  18
                 ),
               },
               {
                 label: 'Allowed Extra Profit',
+                popupInfo:
+                  'Excess profit (over the 50% baseline) required to allow price re-pegging',
                 content: FixedPointMath.toNumber(
                   parseBigNumberish(pool.state.rebalancingParams.extraProfit),
                   parseBigNumberish(clamm.PRECISION).e!
@@ -106,28 +107,31 @@ const AdvanceDetail: FC = () => {
               },
               {
                 label: 'Fee Gamma',
+                popupInfo:
+                  'Adjusts how quickly fees increase with greater imbalance',
                 content: FixedPointMath.toNumber(
                   parseBigNumberish(pool.state.fees.gammaFee),
-                  parseBigNumberish(clamm.PRECISION).e!
+                  18
                 ),
               },
               {
                 label: 'Adjustment Step',
+                popupInfo: 'Minimum size of price scale adjustments',
                 content: FixedPointMath.toNumber(
                   parseBigNumberish(
                     pool.state.rebalancingParams.adjustmentStep
                   ),
-                  parseBigNumberish(clamm.PRECISION).e!
+                  18
                 ),
               },
               {
                 label: 'Moving Average Time',
-                content: FixedPointMath.toNumber(
-                  parseBigNumberish(pool.state.initialTime)
-                    .plus(parseBigNumberish(pool.state.futureTime))
-                    .div(2),
-                  parseBigNumberish(clamm.PRECISION).e!
-                ),
+                popupInfo:
+                  'Controls the duration of the EMA internal “price oracle”',
+                content: `${FixedPointMath.toNumber(
+                  parseBigNumberish(pool.state.rebalancingParams.maHalfTime),
+                  3
+                )}s`,
               },
             ]
         ).map(({ label, content, popupInfo }) => (

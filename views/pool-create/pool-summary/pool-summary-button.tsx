@@ -88,7 +88,6 @@ const PoolSummaryButton: FC = () => {
 
       push(`${Routes[RoutesEnum.PoolDetails]}?objectId=${poolId}`);
     } catch (e) {
-      console.log(e);
       throw e;
     }
   };
