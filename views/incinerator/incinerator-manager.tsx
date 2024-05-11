@@ -16,8 +16,15 @@ import {
 const IncineratorManager: FC = () => {
   const currentAccount = useCurrentAccount();
   const { control, setValue } = useFormContext<IncineratorForm>();
-  const { objects, coinsMap, ownedNfts, otherObjects, coinsObjects, setDelay } =
-    useWeb3();
+  const {
+    delay,
+    objects,
+    coinsMap,
+    ownedNfts,
+    otherObjects,
+    coinsObjects,
+    setDelay,
+  } = useWeb3();
 
   const tab = useWatch({ control, name: 'tab' });
   const empty = useWatch({ control, name: 'empty' });
@@ -81,24 +88,26 @@ const IncineratorManager: FC = () => {
   }, [checked]);
 
   useEffect(() => {
-    if (displayObjects[tab].every((type) => type)) {
+    if (displayObjects[tab].length && displayObjects[tab].every((type) => type))
       updateAssets();
-    }
   }, [tab, currentAccount, search]);
 
   useEffect(() => {
-    if (displayObjects[tab].every((type) => type)) {
+    if (
+      displayObjects[tab].length &&
+      displayObjects[tab].every((type) => type)
+    ) {
       if (reset) {
         updateAssets();
         return;
       }
       if (formObjects.length !== displayObjects[tab].length) {
+        if (delay !== undefined) setDelay(undefined);
         updateAssets();
-        setDelay(undefined);
         return;
       }
     }
-  }, [objects]);
+  }, [coinsMap]);
 
   useEffect(() => {
     if (!formObjects.length !== empty) setValue('empty', !formObjects.length);

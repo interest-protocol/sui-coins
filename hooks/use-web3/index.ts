@@ -16,6 +16,7 @@ const getCoinsObjects = (
 
 export const useWeb3 = () => {
   const {
+    delay,
     coins,
     coinsMap,
     error: coinsError,
@@ -52,6 +53,7 @@ export const useWeb3 = () => {
     nfts,
     coins,
     error,
+    delay,
     loading,
     nftsMap,
     objects,
