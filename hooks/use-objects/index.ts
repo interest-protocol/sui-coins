@@ -1,3 +1,4 @@
+import { v4 } from 'uuid';
 import { create } from 'zustand';
 
 import { AllObjects } from '../../components/web3-manager/all-objects-manager/all-objects.types';
@@ -21,12 +22,20 @@ export const useObjects = create<UseObjectsResponse>((set) => {
 
   const updateError = (response: boolean) => set({ error: response });
 
+  const updateDelay = (delay: number | undefined) => set({ delay });
+
+  const refresh = () => set({ id: v4() });
+
   return {
+    id: v4(),
     error: false,
+    delay: 10000,
     ownedNfts: [],
     loading: false,
     otherObjects: [],
     coinsObjects: [],
+    refresh,
+    updateDelay,
     updateError,
     updateLoading,
     updateAllObjects,

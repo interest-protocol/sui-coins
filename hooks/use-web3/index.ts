@@ -16,18 +16,22 @@ const getCoinsObjects = (
 
 export const useWeb3 = () => {
   const {
-    coinsMap,
     coins,
-    loading: coinsLoading,
+    coinsMap,
     error: coinsError,
+    loading: coinsLoading,
+    refresh: refreshCoins,
+    updateDelay: updateDelayCoins,
   } = useCoins();
 
   const {
     ownedNfts,
     otherObjects,
     coinsObjects,
-    loading: objectsLoading,
     error: objectsError,
+    loading: objectsLoading,
+    refresh: refreshObjects,
+    updateDelay: updateDelayObjects,
   } = useObjects();
 
   const {
@@ -41,16 +45,27 @@ export const useWeb3 = () => {
 
   const objects = [...compiledCoinsObjects, ...ownedNfts, ...otherObjects];
 
+  const error = nftsError || coinsError || objectsError;
+  const loading = nftsLoading || coinsLoading || objectsLoading;
+
   return {
     nfts,
     coins,
+    error,
+    loading,
     nftsMap,
     objects,
     coinsMap,
     ownedNfts,
     otherObjects,
     coinsObjects: compiledCoinsObjects,
-    error: nftsError || coinsError || objectsError,
-    loading: nftsLoading || coinsLoading || objectsLoading,
+    mutate: () => {
+      refreshCoins();
+      refreshObjects();
+    },
+    setDelay: (interval: number | undefined) => {
+      updateDelayCoins(interval);
+      updateDelayObjects(interval);
+    },
   };
 };

@@ -1,9 +1,22 @@
 import { Button } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
+import { useFormContext } from 'react-hook-form';
 
+import { useWeb3 } from '@/hooks/use-web3';
 import { RefreshSVG } from '@/svg';
 
+import { IncineratorForm } from '../incinerator.types';
+
 const SearchUpdate: FC = () => {
+  const { mutate } = useWeb3();
+  const { setValue } = useFormContext<IncineratorForm>();
+
+  const onRefresh = () => {
+    mutate();
+    setValue('reset', true);
+    setValue('empty', true);
+  };
+
   return (
     <Button
       isIcon
@@ -17,6 +30,7 @@ const SearchUpdate: FC = () => {
       borderRadius="full"
       alignItems="center"
       position="relative"
+      onClick={onRefresh}
       borderColor="outlineVariant"
       nHover={{
         background: 'lowContainer',

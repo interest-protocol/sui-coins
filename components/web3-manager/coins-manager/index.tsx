@@ -30,10 +30,13 @@ const CoinsManager: FC = () => {
   const suiClient = useSuiClient();
   const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
-  const { updateCoins, updateLoading, updateError } = useCoins();
+  const { id, delay, updateCoins, updateLoading, updateError } = useCoins();
 
   useSWR(
-    makeSWRKey([network, currentAccount?.address], suiClient.getAllCoins.name),
+    makeSWRKey(
+      [id, network, currentAccount?.address],
+      suiClient.getAllCoins.name
+    ),
     async () => {
       try {
         updateError(false);
@@ -104,7 +107,7 @@ const CoinsManager: FC = () => {
       revalidateOnFocus: false,
       revalidateOnMount: true,
       refreshWhenHidden: false,
-      refreshInterval: 10000,
+      refreshInterval: delay,
     }
   );
 

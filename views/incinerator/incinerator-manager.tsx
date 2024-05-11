@@ -16,7 +16,7 @@ import {
 const IncineratorManager: FC = () => {
   const currentAccount = useCurrentAccount();
   const { control, setValue } = useFormContext<IncineratorForm>();
-  const { objects, coinsMap, ownedNfts, otherObjects, coinsObjects } =
+  const { objects, coinsMap, ownedNfts, otherObjects, coinsObjects, setDelay } =
     useWeb3();
 
   const tab = useWatch({ control, name: 'tab' });
@@ -33,7 +33,7 @@ const IncineratorManager: FC = () => {
     [IncineratorTabEnum.Other]: otherObjects,
   };
 
-  const updateAssets = (active: boolean) => {
+  const updateAssets = () => {
     if (reset) setValue('reset', false);
 
     setValue(
@@ -59,8 +59,8 @@ const IncineratorManager: FC = () => {
           ...acc,
           {
             ...object,
-            active,
             editable,
+            active: checked,
             isEditing: false,
             index: acc.length,
             kind: getKindFromObjectData(object),
@@ -73,16 +73,27 @@ const IncineratorManager: FC = () => {
     );
   };
 
-  useEffect(() => {
-    updateAssets(checked);
-  }, [checked, tab, currentAccount, search]);
+  const updateChecked = () =>
+    formObjects.map((_, index) => setValue(`objects.${index}.active`, checked));
 
   useEffect(() => {
-    if (objects.length !== formObjects.length) updateAssets(checked);
-  }, [objects]);
+    updateChecked();
+  }, [checked]);
 
   useEffect(() => {
-    if (reset) updateAssets(checked);
+    updateAssets();
+  }, [tab, currentAccount, search]);
+
+  useEffect(() => {
+    if (reset) {
+      updateAssets();
+      return;
+    }
+    if (formObjects.length !== objects.length) {
+      updateAssets();
+      setDelay(undefined);
+      return;
+    }
   }, [coinsMap]);
 
   useEffect(() => {

@@ -10,6 +10,7 @@ import { v4 } from 'uuid';
 
 import { Network } from '@/constants';
 import { useModal } from '@/hooks/use-modal';
+import { useWeb3 } from '@/hooks/use-web3';
 import { CopySVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 
@@ -19,9 +20,11 @@ import IncineratorTokenObject from '../incinerator-token-object';
 
 const IncineratorButton: FC = () => {
   const burn = useBurn();
+  const { setDelay } = useWeb3();
   const { network } = useSuiClientContext();
   const { setModal, handleClose } = useModal();
   const { control, setValue } = useFormContext<IncineratorForm>();
+
   const allObjects = useWatch({ control, name: 'objects' });
 
   const objects = allObjects.filter(prop('active'));
@@ -54,6 +57,7 @@ const IncineratorButton: FC = () => {
       toast.error((e as any).message ?? 'Something went wrong');
     } finally {
       setValue('reset', true);
+      setDelay(undefined);
       toast.dismiss(toasterId);
     }
   };
@@ -88,6 +92,7 @@ const IncineratorButton: FC = () => {
             {objects.map((object) => (
               <Box
                 p="xs"
+                pr="xl"
                 key={v4()}
                 display="flex"
                 bg="lowContainer"
@@ -102,7 +107,6 @@ const IncineratorButton: FC = () => {
                     {object.value}
                   </Typography>
                   <Typography
-                    mt="xs"
                     size="small"
                     variant="body"
                     color="outline"

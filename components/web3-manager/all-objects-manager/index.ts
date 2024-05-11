@@ -3,7 +3,7 @@ import {
   useSuiClient,
   useSuiClientContext,
 } from '@mysten/dapp-kit';
-import { FC, useId } from 'react';
+import { FC } from 'react';
 import useSWR from 'swr';
 
 import { useObjects } from '@/hooks/use-objects';
@@ -31,11 +31,11 @@ const getAllObjects: TGetAllObjects = async (
 };
 
 const AllObjectsManager: FC = () => {
-  const id = useId();
   const suiClient = useSuiClient();
   const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
-  const { updateAllObjects, updateError, updateLoading } = useObjects();
+  const { id, delay, updateAllObjects, updateError, updateLoading } =
+    useObjects();
 
   useSWR(
     makeSWRKey(
@@ -120,7 +120,7 @@ const AllObjectsManager: FC = () => {
       revalidateOnFocus: false,
       revalidateOnMount: true,
       refreshWhenHidden: false,
-      refreshInterval: 10000,
+      refreshInterval: delay,
     }
   );
 
