@@ -1,9 +1,4 @@
-import {
-  Box,
-  Button,
-  TooltipWrapper,
-  Typography,
-} from '@interest-protocol/ui-kit';
+import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { formatAddress } from '@mysten/sui.js/utils';
