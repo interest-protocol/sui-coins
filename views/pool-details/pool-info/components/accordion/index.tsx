@@ -8,8 +8,9 @@ import CollapseIcon from './accordion-icon';
 const variants = {
   collapsed: {
     height: 'auto',
+    display: 'block',
   },
-  rest: { height: 0 },
+  rest: { height: 0, display: 'none' },
 };
 
 const PoolDetailCollapse: FC<PoolDetailAccordionProps> = ({
@@ -27,13 +28,13 @@ const PoolDetailCollapse: FC<PoolDetailAccordionProps> = ({
   return (
     <>
       <Box
+        px="xl"
         display="flex"
         height="3.5rem"
         cursor="pointer"
         alignItems="center"
         justifyContent="space-between"
         onClick={handleCollapseClick}
-        px="xl"
       >
         {title ? (
           <Typography size="large" variant="label">
@@ -45,22 +46,21 @@ const PoolDetailCollapse: FC<PoolDetailAccordionProps> = ({
           ''
         )}
         <Motion
-          initial="rest"
-          animate={isExpanded ? 'collapsed' : 'rest'}
           display="flex"
+          initial="rest"
           alignItems="center"
+          animate={isExpanded ? 'collapsed' : 'rest'}
         >
           <CollapseIcon />
         </Motion>
       </Box>
       <Motion
+        px="xl"
         initial="rest"
         variants={variants}
-        animate={isExpanded ? 'collapsed' : 'rest'}
-        overflow="hidden"
         borderBottom="1px solid"
+        animate={isExpanded ? 'collapsed' : 'rest'}
         borderBottomColor={noBorder ? 'transparent' : 'outlineVariant'}
-        px="xl"
       >
         {children}
       </Motion>
