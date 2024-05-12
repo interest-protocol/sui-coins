@@ -1,9 +1,10 @@
 import { ReactNode } from 'react';
 
 export interface PoolDetailAccordionProps {
-  title: string;
+  title?: string;
   noBorder?: boolean;
   children: ReactNode;
+  loading?: boolean;
 }
 
 export interface PoolDetailAccordionItemData {
