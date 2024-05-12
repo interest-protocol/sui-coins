@@ -1,7 +1,7 @@
 import { SuiClient } from '@mysten/sui.js/client';
 
 import { Network } from '@/constants';
-import { CLAMM_PACKAGE_ADDRESSES } from '@/constants/dex';
+import { CLAMM_PACKAGE_ADDRESSES } from '@/constants/clamm';
 import { getEventCursorModel } from '@/server/model/event-cursor';
 import { sleep } from '@/utils';
 

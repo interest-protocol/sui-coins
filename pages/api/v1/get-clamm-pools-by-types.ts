@@ -5,7 +5,7 @@ import { path, pathOr } from 'ramda';
 import invariant from 'tiny-invariant';
 
 import { Network } from '@/constants';
-import { CLAMM_ALLOWED_NETWORKS } from '@/constants/dex';
+import { CLAMM_ALLOWED_NETWORKS } from '@/constants/clamm';
 import dbConnect from '@/server';
 import { getClammPoolsByCoinTypes, handleServerError } from '@/server/utils';
 

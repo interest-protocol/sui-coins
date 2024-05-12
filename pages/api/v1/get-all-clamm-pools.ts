@@ -4,7 +4,7 @@ import { path, pathOr } from 'ramda';
 import invariant from 'tiny-invariant';
 
 import { Network, PAGE_SIZE } from '@/constants';
-import { CLAMM_ALLOWED_NETWORKS } from '@/constants/dex';
+import { CLAMM_ALLOWED_NETWORKS } from '@/constants/clamm';
 import dbConnect from '@/server';
 import { getClammPools, handleServerError } from '@/server/utils';
 

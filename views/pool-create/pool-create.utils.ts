@@ -7,7 +7,7 @@ import {
 import { pathOr } from 'ramda';
 
 import { Network } from '@/constants';
-import { CLAMM_PACKAGE_ADDRESSES } from '@/constants/dex';
+import { CLAMM_PACKAGE_ADDRESSES } from '@/constants/clamm';
 
 import { ExtractedCoinData } from './pool-create.types';
 

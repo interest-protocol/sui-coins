@@ -27,7 +27,7 @@ export const usePool = (poolId: string) => {
 export const usePools = (page: number, findQuery = {}) => {
   const clamm = useClammSdk();
   return useSWR<QueryPoolsReturn<InterestPool>>(
-    makeSWRKey([page], usePools.name),
+    makeSWRKey([page, findQuery], usePools.name),
     async () => {
       const res = await fetch(
         `api/auth/v1/get-all-clamm-pools?page=${page}&limit=50&find=${JSON.stringify(findQuery)}`

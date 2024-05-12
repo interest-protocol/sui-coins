@@ -7,7 +7,7 @@ import useSWR from 'swr';
 import { useDebounce } from 'use-debounce';
 
 import { TREASURY } from '@/constants';
-import { EXCHANGE_FEE } from '@/constants/dex';
+import { EXCHANGE_FEE } from '@/constants/clamm';
 import { useNetwork } from '@/context/network';
 import { FixedPointMath } from '@/lib';
 import { RefreshSVG } from '@/svg';

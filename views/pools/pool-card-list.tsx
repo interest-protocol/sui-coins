@@ -12,11 +12,11 @@ import useSWR from 'swr';
 import { v4 } from 'uuid';
 
 import { useNetwork } from '@/context/network';
-import { useFindPoolsByCoinTypes } from '@/hooks/use-find-pools-by-coin-types';
 import { useGetCoinMetadata } from '@/hooks/use-get-coin-metadata';
 import useGetMultipleTokenPriceBySymbol from '@/hooks/use-get-multiple-token-price-by-symbol';
 import { useModal } from '@/hooks/use-modal';
 import { usePools } from '@/hooks/use-pools';
+import { useWeb3 } from '@/hooks/use-web3';
 import { getAllSymbols } from '@/views/pools/pools.utils';
 
 import FindPoolDialog from './find-pool-modal/find-pool-dialog';
@@ -45,8 +45,13 @@ const Pools: FC<PoolCardListWrapper> = ({ network }) => {
 };
 
 const Position: FC<PoolCardListWrapper> = ({ network }) => {
-  const { data, isLoading } = useFindPoolsByCoinTypes();
-
+  const [page] = useState(1);
+  const { coins } = useWeb3();
+  const { data, isLoading } = usePools(page, {
+    lpCoinType: {
+      $in: coins.map((elem) => elem.type.includes('IPX')),
+    },
+  });
   return (
     <PoolCardListContent
       network={network}

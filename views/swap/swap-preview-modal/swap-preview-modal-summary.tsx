@@ -6,7 +6,7 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import useSWR from 'swr';
 
-import { EXCHANGE_FEE } from '@/constants/dex';
+import { EXCHANGE_FEE } from '@/constants/clamm';
 import { FixedPointMath } from '@/lib';
 import { DotErrorSVG } from '@/svg';
 import { ZERO_BIG_NUMBER } from '@/utils';
