@@ -20,6 +20,7 @@ import { PoolDetailAccordionItemStandardProps } from './components/accordion/acc
 import ItemStandard from './components/accordion/item-standard';
 import ItemToken from './components/accordion/item-token';
 import { POOL_INFORMATION, POOL_STATISTICS } from './pool-info.data';
+import PoolInfoLoading from './pool-info-loading';
 
 const PoolInfoDetail: FC = () => {
   const clamm = useClammSdk();
@@ -39,12 +40,7 @@ const PoolInfoDetail: FC = () => {
     }
   }, [pool?.isStable]);
 
-  if (loading)
-    return (
-      <Box p="xl" textAlign="center">
-        Loading Pool...
-      </Box>
-    );
+  if (loading) return <PoolInfoLoading />;
 
   if (!pool || !metadata || !prices)
     return (
