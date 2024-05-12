@@ -12,7 +12,12 @@ const PoolInfo: FC = () => {
   );
 
   return (
-    <Box color="onSurface" borderRadius="xs" bg="lowestContainer">
+    <Box
+      color="onSurface"
+      borderRadius="xs"
+      bg="lowestContainer"
+      width="fill-available"
+    >
       <DetailTabs
         onChangeTab={setPoolDetailsView}
         defaultTabIndex={poolDetailsView}
