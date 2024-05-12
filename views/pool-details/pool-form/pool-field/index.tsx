@@ -98,15 +98,15 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
         >
           Balance:{' '}
           <Typography size="medium" variant="label" color="primary" as="span">
-            {loading ? (
-              <Box mt="-1rem" ml="s">
-                <ProgressIndicator variant="loading" size={16} />
-              </Box>
-            ) : token && coinsMap[token.type] ? (
+            {token && coinsMap[token.type] ? (
               FixedPointMath.toNumber(
                 coinsMap[token.type].balance,
                 token.decimals
               )
+            ) : loading ? (
+              <Box mt="-1rem" ml="s">
+                <ProgressIndicator variant="loading" size={16} />
+              </Box>
             ) : (
               0
             )}
