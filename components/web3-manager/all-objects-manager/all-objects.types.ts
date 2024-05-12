@@ -1,6 +1,6 @@
 import { SuiClient, SuiObjectResponse } from '@mysten/sui.js/client';
 
-import { CoinObject } from '../../hooks/use-get-all-coins/use-get-all-coins.types';
+import { CoinObject } from '../coins-manager/web3-manager.types';
 
 export type TGetAllObjects = (
   provider: SuiClient,
@@ -14,9 +14,9 @@ interface BaseObjectData {
   display?: Record<string, string> | undefined | null;
 }
 
-export interface AllCoins {
-  coinsObjects: ReadonlyArray<ObjectData>;
+export interface AllObjects {
   ownedNfts: ReadonlyArray<ObjectData>;
+  coinsObjects: ReadonlyArray<ObjectData>;
   otherObjects: ReadonlyArray<ObjectData>;
 }
 

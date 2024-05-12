@@ -5,6 +5,7 @@ import {
   ProgressIndicator,
   Typography,
 } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { inc } from 'ramda';
 import { FC, useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -13,8 +14,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import useSWR from 'swr';
 import { v4 } from 'uuid';
 
-import { PAGE_SIZE } from '@/constants';
-import { useNetwork } from '@/context/network';
+import { Network, PAGE_SIZE } from '@/constants';
 import { useGetCoinMetadata } from '@/hooks/use-get-coin-metadata';
 import useGetMultipleTokenPriceBySymbol from '@/hooks/use-get-multiple-token-price-by-symbol';
 import { useModal } from '@/hooks/use-modal';
@@ -113,10 +113,10 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
   totalItems,
   arePoolsLoading,
 }) => {
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
   const { setModal, handleClose } = useModal();
 
-  const symbols = getAllSymbols(pools, network);
+  const symbols = getAllSymbols(pools, network as Network);
 
   const { data: pricesRecord, isLoading: arePricesLoading } =
     useGetMultipleTokenPriceBySymbol(symbols);

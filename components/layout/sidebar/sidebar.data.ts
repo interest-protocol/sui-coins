@@ -3,6 +3,7 @@ import {
   AirdropSVG,
   CirclePlusSVG,
   DoubleChevronSVG,
+  FireSVG,
   PoolSVG,
   UploadSVG,
 } from '@/svg';
@@ -49,6 +50,14 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     disabled: false,
     Icon: UploadSVG,
     path: Routes[RoutesEnum.Send],
+    networks: [Network.MAINNET, Network.TESTNET],
+  },
+  {
+    beta: true,
+    Icon: FireSVG,
+    disabled: false,
+    name: 'incinerator',
+    path: Routes[RoutesEnum.Incinerator],
     networks: [Network.MAINNET, Network.TESTNET],
   },
 ];

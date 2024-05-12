@@ -3,7 +3,8 @@ import BigNumber from 'bignumber.js';
 import { Control, UseFormSetValue } from 'react-hook-form';
 
 import { Network } from '@/constants';
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+
+import { CoinObject } from '../../../components/web3-manager/coins-manager/web3-manager.types';
 
 export interface TokenModalMetadata {
   name: string;

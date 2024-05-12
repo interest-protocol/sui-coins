@@ -4,15 +4,12 @@ import { not } from 'ramda';
 import { FC, useState } from 'react';
 
 import { Network } from '@/constants';
-import { useNetwork } from '@/context/network';
 
 import MenuSettingsListHeaderMobile from './header';
 import ItemWrapper from './item-wrapper';
 
 const MenuSettingsList: FC = () => {
-  const network = useNetwork();
-
-  const { selectNetwork } = useSuiClientContext();
+  const { network, selectNetwork } = useSuiClientContext();
 
   const [toggle, setToggle] = useState(false);
 

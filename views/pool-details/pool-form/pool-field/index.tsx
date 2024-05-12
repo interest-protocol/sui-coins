@@ -4,11 +4,12 @@ import {
   TokenField,
   Typography,
 } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { ChangeEvent, FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { TokenIcon } from '@/components';
-import { useNetwork } from '@/context/network';
+import { Network } from '@/constants';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import { parseInputEventToNumberString, safePoolSymbolFromType } from '@/utils';
@@ -17,8 +18,8 @@ import { PoolForm, PoolOption } from '@/views/pools/pools.types';
 import { PoolFieldsProps } from './pool-field.types';
 
 const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
-  const network = useNetwork();
-  const { coinsMap, isFetchingCoinBalances } = useWeb3();
+  const { network } = useSuiClientContext();
+  const { coinsMap, loading } = useWeb3();
   const { register, setValue, getValues } = useFormContext<PoolForm>();
 
   const isDeposit = poolOptionView === PoolOption.Deposit;
@@ -80,8 +81,8 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
       TokenIcon={
         <TokenIcon
           withBg
-          network={network}
           type={token?.type ?? ''}
+          network={network as Network}
           symbol={token?.symbol ?? ''}
         />
       }
@@ -97,7 +98,7 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
         >
           Balance:{' '}
           <Typography size="medium" variant="label" color="primary" as="span">
-            {isFetchingCoinBalances ? (
+            {loading ? (
               <Box mt="-1rem" ml="s">
                 <ProgressIndicator variant="loading" size={16} />
               </Box>

@@ -1,10 +1,10 @@
 import { Box, Motion, Typography } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
 import { Network } from '@/constants';
-import { useNetwork } from '@/context/network';
 
 import { SelectTokenFilterProps } from './select-token-modal.types';
 
@@ -12,7 +12,7 @@ const SelectTokenFilter: FC<SelectTokenFilterProps> = ({
   control,
   setValue,
 }) => {
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
   const filterSelected = useWatch({ control, name: 'filter' });
 
   return (

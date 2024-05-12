@@ -13,7 +13,7 @@ const Airdrop: FC = () => {
   const [isProgressView, setIsProgressView] = useState(false);
 
   return (
-    <Layout title="Airdrop">
+    <Layout title="Airdrop" features={['coins', 'nfts']}>
       <Box width="100%">
         {isProgressView ? (
           <Box

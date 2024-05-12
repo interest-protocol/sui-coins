@@ -1,17 +1,18 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
 import { TokenIcon } from '@/components';
-import { useNetwork } from '@/context/network';
+import { Network } from '@/constants';
 import { ArrowLeftSVG } from '@/svg';
 import { PoolForm as PoolFormType } from '@/views/pools/pools.types';
 
 import { PoolTitleBarProps } from './pool-title-bar.types';
 
 const PoolTitleBar: FC<PoolTitleBarProps> = ({ onBack, centerTile }) => {
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
   const { control } = useFormContext<PoolFormType>();
 
   const tokens = useWatch({
@@ -74,7 +75,7 @@ const PoolTitleBar: FC<PoolTitleBarProps> = ({ onBack, centerTile }) => {
               key={v4()}
               type={type}
               symbol={symbol}
-              network={network}
+              network={network as Network}
             />
           ))}
         </Box>

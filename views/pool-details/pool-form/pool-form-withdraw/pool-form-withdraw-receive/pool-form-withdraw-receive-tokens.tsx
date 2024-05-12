@@ -4,18 +4,19 @@ import {
   RadioButton,
   Typography,
 } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
 import { TokenIcon } from '@/components';
-import { useNetwork } from '@/context/network';
+import { Network } from '@/constants';
 import { PoolForm } from '@/views/pools/pools.types';
 
 import { SelectionFieldValues, TokenListProps } from '../../pool-form.types';
 
 const PoolFormWithdrawReceiveTokens: FC<TokenListProps> = ({ type }) => {
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
   const { control, setValue } = useFormContext<PoolForm>();
 
   const tokenList = useWatch({ control, name: 'tokenList' });
@@ -41,7 +42,12 @@ const PoolFormWithdrawReceiveTokens: FC<TokenListProps> = ({ type }) => {
         >
           <Box display="flex" gap="xs" alignItems="center">
             {isOneCoin && <RadioButton defaultValue={tokenSelected === type} />}
-            <TokenIcon withBg symbol={symbol} type={type} network={network} />
+            <TokenIcon
+              withBg
+              symbol={symbol}
+              type={type}
+              network={network as Network}
+            />
             <Typography variant="body" size="large">
               {symbol}
             </Typography>

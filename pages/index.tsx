@@ -1,3 +1,4 @@
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import {
   isValidSuiAddress,
   normalizeSuiAddress,
@@ -10,17 +11,17 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
 
 import { SEO } from '@/components';
-import { LOCAL_STORAGE_VERSION } from '@/constants';
+import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
 import { COIN_TYPE_TO_COIN } from '@/constants/coins';
-import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks/use-web3';
 import { getCoin, updateURL } from '@/utils';
 import Swap from '@/views/swap';
 import { ISwapSettings, SwapForm, SwapToken } from '@/views/swap/swap.types';
 
 const SwapPage: NextPage = () => {
-  const network = useNetwork();
   const { coinsMap } = useWeb3();
+
+  const { network } = useSuiClientContext();
   const {
     query: { to, from },
     pathname,
@@ -50,7 +51,7 @@ const SwapPage: NextPage = () => {
   ) => {
     if (value === SUI_TYPE_ARG) {
       const { type, symbol, decimals } =
-        COIN_TYPE_TO_COIN[network][SUI_TYPE_ARG];
+        COIN_TYPE_TO_COIN[network as Network][SUI_TYPE_ARG];
 
       const token: SwapToken = {
         type,
@@ -79,7 +80,7 @@ const SwapPage: NextPage = () => {
     ) {
       const { type, symbol, decimals } = await getCoin(
         value,
-        network,
+        network as Network,
         coinsMap
       );
 
@@ -134,12 +135,10 @@ const SwapPage: NextPage = () => {
   }, []);
 
   return (
-    <>
-      <FormProvider {...form}>
-        <SEO pageTitle="Trade" />
-        <Swap />
-      </FormProvider>
-    </>
+    <FormProvider {...form}>
+      <SEO pageTitle="Trade" />
+      <Swap />
+    </FormProvider>
   );
 };
 

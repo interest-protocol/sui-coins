@@ -1,10 +1,11 @@
 import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import TokenIcon from '@/components/token-icon';
+import { Network } from '@/constants';
 import { TOKEN_ICONS } from '@/constants/coins';
-import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
 import { CoinData } from '@/interface';
 import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
@@ -14,7 +15,7 @@ import { CreatePoolForm } from '../../pool-create.types';
 import { InputProps } from './input.types';
 
 const SelectToken: FC<InputProps> = ({ index }) => {
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
   const { setModal, handleClose } = useModal();
 
   const { setValue, control, getValues } = useFormContext<CreatePoolForm>();
@@ -26,7 +27,9 @@ const SelectToken: FC<InputProps> = ({ index }) => {
 
   const { symbol: currentSymbol } = currentToken;
 
-  const Icon = currentSymbol ? TOKEN_ICONS[network][currentSymbol] : null;
+  const Icon = currentSymbol
+    ? TOKEN_ICONS[network as Network][currentSymbol]
+    : null;
 
   const onSelect = async ({ type, decimals, symbol }: CoinData) => {
     if (getValues('tokens')?.some((token) => token.type === type)) return;
@@ -85,9 +88,9 @@ const SelectToken: FC<InputProps> = ({ index }) => {
               alignItems="center"
             >
               <TokenIcon
-                network={network}
                 symbol={currentSymbol}
                 type={currentToken.type}
+                network={network as Network}
               />
             </Box>
           ),

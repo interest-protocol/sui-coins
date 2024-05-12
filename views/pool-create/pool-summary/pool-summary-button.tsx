@@ -3,14 +3,14 @@ import {
   useCurrentAccount,
   useSignTransactionBlock,
   useSuiClient,
+  useSuiClientContext,
 } from '@mysten/dapp-kit';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import invariant from 'tiny-invariant';
 
-import { Routes, RoutesEnum } from '@/constants';
-import { useNetwork } from '@/context/network';
+import { Network, Routes, RoutesEnum } from '@/constants';
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { useDialog } from '@/hooks/use-dialog';
 import {
@@ -28,10 +28,10 @@ import { CreatePoolForm, Token } from '../pool-create.types';
 import { extractCoinData, extractPoolDataFromTx } from '../pool-create.utils';
 
 const PoolSummaryButton: FC = () => {
-  const network = useNetwork();
   const { push } = useRouter();
   const client = useSuiClient();
   const clamm = useClammSdk();
+  const { network } = useSuiClientContext();
   const createLpCoin = useCreateLpCoin();
   const signTxb = useSignTransactionBlock();
   const currentAccount = useCurrentAccount();
@@ -43,53 +43,49 @@ const PoolSummaryButton: FC = () => {
   const form = useWatch({ control });
 
   const onCreatePool = async () => {
-    try {
-      invariant(form && form.tokens?.length, 'No data');
-      invariant(currentAccount, 'No wallet');
+    invariant(form && form.tokens?.length, 'No data');
+    invariant(currentAccount, 'No wallet');
 
-      const lpCoinTxb = await createLpCoin(form.tokens as ReadonlyArray<Token>);
+    const lpCoinTxb = await createLpCoin(form.tokens as ReadonlyArray<Token>);
 
-      const { signature: lpCoinSignature, transactionBlockBytes: lpCoinBytes } =
-        await signTxb.mutateAsync({
-          transactionBlock: lpCoinTxb,
-        });
-
-      const lpCoinTx = await client.executeTransactionBlock({
-        signature: lpCoinSignature,
-        transactionBlock: lpCoinBytes,
-        options: {
-          showEffects: true,
-        },
-        requestType: 'WaitForLocalExecution',
+    const { signature: lpCoinSignature, transactionBlockBytes: lpCoinBytes } =
+      await signTxb.mutateAsync({
+        transactionBlock: lpCoinTxb,
       });
 
-      const { treasuryCap, coinType } = await extractCoinData(lpCoinTx, client);
+    const lpCoinTx = await client.executeTransactionBlock({
+      signature: lpCoinSignature,
+      transactionBlock: lpCoinBytes,
+      options: {
+        showEffects: true,
+      },
+      requestType: 'WaitForLocalExecution',
+    });
 
-      const txb = await (form.isStable ? createStablePool : createVolatilePool)(
-        form.tokens as ReadonlyArray<Token>,
-        treasuryCap,
-        coinType
-      );
+    const { treasuryCap, coinType } = await extractCoinData(lpCoinTx, client);
 
-      const tx = await signAndExecute({
-        txb,
-        suiClient: client,
-        currentAccount,
-        signTransactionBlock: signTxb,
-      });
+    const txb = await (form.isStable ? createStablePool : createVolatilePool)(
+      form.tokens as ReadonlyArray<Token>,
+      treasuryCap,
+      coinType
+    );
 
-      throwTXIfNotSuccessful(tx);
+    const tx = await signAndExecute({
+      txb,
+      suiClient: client,
+      currentAccount,
+      signTransactionBlock: signTxb,
+    });
 
-      const poolId = await extractPoolDataFromTx(tx, client, network);
+    throwTXIfNotSuccessful(tx);
 
-      await clamm.savePool(poolId);
+    const poolId = await extractPoolDataFromTx(tx, client, network as Network);
 
-      showTXSuccessToast(tx, network);
+    await clamm.savePool(poolId);
 
-      push(`${Routes[RoutesEnum.PoolDetails]}?objectId=${poolId}`);
-    } catch (e) {
-      throw e;
-    }
+    showTXSuccessToast(tx, network as Network);
+
+    push(`${Routes[RoutesEnum.PoolDetails]}?objectId=${poolId}`);
   };
 
   const createPool = () =>

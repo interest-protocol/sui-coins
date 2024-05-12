@@ -1,10 +1,11 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { pathOr } from 'ramda';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
 import { TokenIcon } from '@/components';
-import { useNetwork } from '@/context/network';
+import { Network } from '@/constants';
 
 import { PoolCardTokenInfoProps } from './pool-card.types';
 
@@ -12,7 +13,7 @@ const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({
   coinTypes,
   coinMetadata,
 }) => {
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
 
   return (
     <Box>
@@ -37,7 +38,7 @@ const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({
               withBg
               key={v4()}
               type={type}
-              network={network}
+              network={network as Network}
               symbol={coinMetadata[type].symbol}
             />
           ))}

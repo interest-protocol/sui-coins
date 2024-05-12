@@ -3,12 +3,12 @@ import {
   useCurrentAccount,
   useSignTransactionBlock,
   useSuiClient,
+  useSuiClientContext,
 } from '@mysten/dapp-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { EXPLORER_URL } from '@/constants';
-import { useNetwork } from '@/context/network';
+import { EXPLORER_URL, Network } from '@/constants';
 import { useDialog } from '@/hooks/use-dialog';
 import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
@@ -23,10 +23,10 @@ import PoolPreview from '../pool-form-preview';
 import { useWithdraw } from './pool-form-withdraw.hooks';
 
 const PoolFormWithdrawButton: FC = () => {
-  const network = useNetwork();
   const { mutate } = useWeb3();
   const withdraw = useWithdraw();
   const suiClient = useSuiClient();
+  const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
   const { dialog, handleClose } = useDialog();
   const signTransactionBlock = useSignTransactionBlock();
@@ -50,9 +50,12 @@ const PoolFormWithdrawButton: FC = () => {
 
       throwTXIfNotSuccessful(tx);
 
-      showTXSuccessToast(tx, network);
+      showTXSuccessToast(tx, network as Network);
 
-      setValue('explorerLink', `${EXPLORER_URL[network]}/tx/${tx.digest}`);
+      setValue(
+        'explorerLink',
+        `${EXPLORER_URL[network as Network]}/tx/${tx.digest}`
+      );
     } finally {
       mutate();
     }

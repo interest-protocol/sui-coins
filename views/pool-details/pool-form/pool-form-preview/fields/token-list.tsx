@@ -1,14 +1,15 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
 import { TokenIcon } from '@/components';
-import { useNetwork } from '@/context/network';
+import { Network } from '@/constants';
 
 import { FieldProps } from '../preview.types';
 
 const TokenListFields: FC<FieldProps> = ({ getValues }) => {
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
   const tokenList = getValues('tokenList');
 
   return (
@@ -19,8 +20,8 @@ const TokenListFields: FC<FieldProps> = ({ getValues }) => {
             <TokenIcon
               withBg
               type={token.type}
-              network={network}
               symbol={token.symbol}
+              network={network as Network}
             />
             <Typography variant="body" size="large">
               {token.symbol}

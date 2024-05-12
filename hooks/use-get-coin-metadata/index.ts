@@ -1,11 +1,11 @@
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import useSWR from 'swr';
 
-import { useNetwork } from '@/context/network';
 import { CoinMetadataWithType } from '@/interface';
 import { makeSWRKey } from '@/utils';
 
 export const useGetCoinMetadata = (coinsType: ReadonlyArray<string>) => {
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
 
   return useSWR<Record<string, CoinMetadataWithType>>(
     makeSWRKey([], useGetCoinMetadata.name + coinsType + network),

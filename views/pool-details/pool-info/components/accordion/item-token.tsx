@@ -1,19 +1,20 @@
 import { Box, Tag, Typography } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { FC } from 'react';
 
 import { TokenIcon } from '@/components';
-import { useNetwork } from '@/context/network';
+import { Network } from '@/constants';
 
 import { PoolDetailAccordionItemCoinProps } from './accordion.types';
 
 const ItemCoin: FC<PoolDetailAccordionItemCoinProps> = ({
   type,
+  value,
   symbol,
   percentage,
   conversion,
-  value,
 }) => {
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
 
   return (
     <Box
@@ -28,7 +29,7 @@ const ItemCoin: FC<PoolDetailAccordionItemCoinProps> = ({
           rounded
           type={type}
           symbol={symbol}
-          network={network}
+          network={network as Network}
         />
         <Typography size="medium" variant="body" mr="0.5rem">
           {symbol}

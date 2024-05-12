@@ -1,14 +1,13 @@
 import { Button } from '@interest-protocol/ui-kit';
-import { useCurrentAccount } from '@mysten/dapp-kit';
+import { useCurrentAccount, useSuiClientContext } from '@mysten/dapp-kit';
 import { getFaucetHost, requestSuiFromFaucetV1 } from '@mysten/sui.js/faucet';
 import { FC } from 'react';
 import toast from 'react-hot-toast';
 
 import { Network } from '@/constants';
-import { useNetwork } from '@/context/network';
 
 const Mint: FC = () => {
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
 
   const getFaucet = async () => {

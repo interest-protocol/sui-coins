@@ -1,10 +1,11 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { TokenIcon } from '@/components';
-import { useNetwork } from '@/context/network';
+import { Network } from '@/constants';
 import { FixedPointMath } from '@/lib';
 import { ArrowLeftSVG, TimesSVG } from '@/svg';
 import { formatMoney } from '@/utils';
@@ -19,7 +20,7 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
   onClose,
   setIsProgressView,
 }) => {
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
   const { control } = useFormContext<IAirdropForm>();
 
   const { symbol, decimals, type } = useWatch({ control, name: 'token' });
@@ -89,7 +90,11 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
             justifyContent="space-between"
           >
             <Box display="flex" alignItems="center" gap="m">
-              <TokenIcon type={type} symbol={symbol} network={network} />
+              <TokenIcon
+                type={type}
+                symbol={symbol}
+                network={network as Network}
+              />
               <Typography size="small" variant="title">
                 {symbol}
               </Typography>

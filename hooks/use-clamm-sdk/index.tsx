@@ -1,14 +1,13 @@
 import { CLAMM } from '@interest-protocol/clamm-sdk';
-import { useSuiClient } from '@mysten/dapp-kit';
+import { useSuiClient, useSuiClientContext } from '@mysten/dapp-kit';
 
 import { Network } from '@/constants';
-import { useNetwork } from '@/context/network';
 
 let cachedClamm: CLAMM;
 
 export const useClammSdk = (): CLAMM => {
-  const network = useNetwork();
   const suiClient = useSuiClient();
+  const { network } = useSuiClientContext();
 
   cachedClamm =
     cachedClamm ??

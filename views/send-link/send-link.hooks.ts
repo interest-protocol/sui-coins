@@ -2,6 +2,7 @@ import {
   useCurrentAccount,
   useSignTransactionBlock,
   useSuiClient,
+  useSuiClientContext,
 } from '@mysten/dapp-kit';
 import {
   SuiObjectRef,
@@ -12,27 +13,26 @@ import useSWR from 'swr';
 
 import { Network } from '@/constants';
 import { ZK_BAG_CONTRACT_IDS, ZK_SEND_GAS_BUDGET } from '@/constants/zksend';
-import { useNetwork } from '@/context/network';
 import { throwTXIfNotSuccessful } from '@/utils';
 import { createClaimTransaction } from '@/utils/zk-send';
 
 export const useLink = () => {
-  const network = useNetwork();
   const suiClient = useSuiClient();
+  const { network } = useSuiClientContext();
 
   return useSWR<ZkSendLink>(`${location}-${network}`, () =>
     ZkSendLink.fromUrl(location.href, {
       client: suiClient,
       host: '/send/link',
       path: location.origin,
-      contract: ZK_BAG_CONTRACT_IDS[network],
+      contract: ZK_BAG_CONTRACT_IDS[network as Network],
       network: network === Network.MAINNET ? 'mainnet' : 'testnet',
     })
   );
 };
 
 export const useReclaimLink = () => {
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
   const signTransactionBlock = useSignTransactionBlock();

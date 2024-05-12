@@ -14,12 +14,12 @@ import {
   WORMHOLE_TOKENS,
   WORMHOLE_TOKENS_TYPE,
 } from '@/constants/coins';
+import { CoinData, CoinMetadataWithType } from '@/interface';
+
 import {
   CoinObject,
   CoinsMap,
-} from '@/hooks/use-get-all-coins/use-get-all-coins.types';
-import { CoinData, CoinMetadataWithType } from '@/interface';
-
+} from '../../components/web3-manager/coins-manager/web3-manager.types';
 import { isSameAddress } from '../address';
 import { ZERO_BIG_NUMBER } from '../big-number';
 import { getBasicCoinMetadata } from '../fn';

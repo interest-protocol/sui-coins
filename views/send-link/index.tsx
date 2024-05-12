@@ -4,13 +4,14 @@ import {
   ProgressIndicator,
   Typography,
 } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
 
+import { Network } from '@/constants';
 import { SUI_TYPE_ARG_LONG } from '@/constants/coins';
-import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks/use-web3';
 import { CheckmarkSVG, ErrorSVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
@@ -19,9 +20,9 @@ import { useReclaimLink } from './send-link.hooks';
 import { SendLinkProps } from './send-link.types';
 
 const SendLink: FC<SendLinkProps> = ({ data, error, isLoading, mutate }) => {
-  const network = useNetwork();
   const { coinsMap } = useWeb3();
   const reclaim = useReclaimLink();
+  const { network } = useSuiClientContext();
   const [isReclaiming, setReclaiming] = useState(false);
 
   const url = location.href;
@@ -34,7 +35,7 @@ const SendLink: FC<SendLinkProps> = ({ data, error, isLoading, mutate }) => {
   };
 
   const onSuccess = (tx: SuiTransactionBlockResponse) => {
-    showTXSuccessToast(tx, network);
+    showTXSuccessToast(tx, network as Network);
     mutate();
   };
 
