@@ -1,16 +1,19 @@
-import { PoolMetadata } from '@interest-protocol/clamm-sdk';
+import { InterestPool, PoolMetadata } from '@interest-protocol/clamm-sdk';
 import {
   Box,
   Motion,
   ProgressIndicator,
   Typography,
 } from '@interest-protocol/ui-kit';
+import { inc } from 'ramda';
 import { FC, useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import useSWR from 'swr';
 import { v4 } from 'uuid';
 
+import { PAGE_SIZE } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useGetCoinMetadata } from '@/hooks/use-get-coin-metadata';
 import useGetMultipleTokenPriceBySymbol from '@/hooks/use-get-multiple-token-price-by-symbol';
@@ -21,49 +24,94 @@ import { getAllSymbols } from '@/views/pools/pools.utils';
 
 import FindPoolDialog from './find-pool-modal/find-pool-dialog';
 import PoolCard from './pool-card';
+import PoolCardSkeleton from './pool-card/pool-card-skeleton';
 import {
   PoolCardListContentProps,
   PoolCardListProps,
-  PoolCardListWrapper,
   PoolForm,
   PoolTabEnum,
 } from './pools.types';
 
-const Pools: FC<PoolCardListWrapper> = ({ network }) => {
-  const [page] = useState(1);
+const Pools: FC = () => {
+  const [page, setPage] = useState(1);
+  const [pools, setPools] = useState<ReadonlyArray<InterestPool>>([]);
   const { data, isLoading: arePoolsLoading } = usePools(page, {
     $or: [{ hooks: { $exists: false } }, { hooks: null }],
   });
 
+  const safeData = data ?? { pools: [], totalPages: 0 };
+
+  const nextPage = () => setPage(inc);
+
+  useEffect(() => {
+    const dataIds = safeData.pools.map(({ poolObjectId }) => poolObjectId);
+
+    if (
+      data &&
+      data.totalPages &&
+      page <= data.totalPages &&
+      !pools.some(({ poolObjectId }) => dataIds.includes(poolObjectId))
+    )
+      setPools([...pools, ...safeData.pools]);
+  }, [data]);
+
   return (
     <PoolCardListContent
-      network={network}
-      pools={data?.pools || []}
+      pools={pools}
+      nextPage={nextPage}
+      totalItems={data?.totalPages ?? 0}
       arePoolsLoading={arePoolsLoading}
+      hasMore={(data?.totalPages ?? 0) - page * PAGE_SIZE > 0}
     />
   );
 };
 
-const Position: FC<PoolCardListWrapper> = ({ network }) => {
-  const [page] = useState(1);
+const Position: FC = () => {
   const { coins } = useWeb3();
-  const { data, isLoading } = usePools(page, {
+  const [page, setPage] = useState(1);
+  const [pools, setPools] = useState<ReadonlyArray<InterestPool>>([]);
+  const { data, isLoading: arePoolsLoading } = usePools(page, {
     lpCoinType: {
-      $in: coins.map((elem) => elem.type.includes('IPX')),
+      $in: coins.reduce(
+        (acc, { type }) => (type.includes('IPX') ? [...acc, type] : acc),
+        [] as ReadonlyArray<string>
+      ),
     },
   });
+
+  const safeData = data ?? { pools: [], totalPages: 0 };
+
+  const nextPage = () => setPage(inc);
+
+  useEffect(() => {
+    const dataIds = safeData.pools.map(({ poolObjectId }) => poolObjectId);
+
+    if (
+      data &&
+      data.totalPages &&
+      page <= data.totalPages &&
+      !pools.some(({ poolObjectId }) => dataIds.includes(poolObjectId))
+    )
+      setPools([...pools, ...safeData.pools]);
+  }, [data]);
+
   return (
     <PoolCardListContent
-      network={network}
-      pools={data?.pools || []}
-      arePoolsLoading={isLoading}
+      pools={pools}
+      nextPage={nextPage}
+      arePoolsLoading={arePoolsLoading}
+      totalItems={data?.totalPages ?? 0}
+      hasMore={(data?.totalPages ?? 0) - page * PAGE_SIZE > 0}
     />
   );
 };
 
 const PoolCardListContent: FC<PoolCardListContentProps> = ({
-  arePoolsLoading,
   pools,
+  hasMore,
+  nextPage,
+  totalItems,
+  arePoolsLoading,
 }) => {
   const network = useNetwork();
   const { setModal, handleClose } = useModal();
@@ -165,47 +213,115 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
     !!(isFindingPool && isFilteredPoolsLoading)
   )
     return (
-      <Box pt="3xl" width="100%" display="flex" justifyContent="center">
-        <ProgressIndicator variant="loading" />
+      <Box
+        gap="xs"
+        display="grid"
+        borderRadius="xs"
+        p={['s', 's', 's', 'l']}
+        gridTemplateColumns={[
+          '1fr',
+          '1fr',
+          '1fr 1fr',
+          '1fr 1fr',
+          '1fr 1fr 1fr',
+        ]}
+      >
+        <PoolCardSkeleton />
       </Box>
     );
 
-  return (
-    <Box
-      gap="xs"
-      borderRadius="xs"
-      p={['s', 's', 's', 'l']}
-      display={listPools?.length || pools?.length ? 'grid' : 'flex'}
-      gridTemplateColumns={['1fr', '1fr', '1fr 1fr', '1fr 1fr', '1fr 1fr 1fr']}
-    >
-      {listPools.length ? (
-        listPools?.map((pool) => (
+  if (isFindingPool)
+    return (
+      <Box
+        gap="xs"
+        borderRadius="xs"
+        p={['s', 's', 's', 'l']}
+        display={listPools?.length || pools?.length ? 'grid' : 'flex'}
+        gridTemplateColumns={[
+          '1fr',
+          '1fr',
+          '1fr 1fr',
+          '1fr 1fr',
+          '1fr 1fr 1fr',
+        ]}
+      >
+        {listPools?.map((pool) => (
           <PoolCard
             key={v4()}
             pool={pool}
             prices={pricesRecord}
             coinMetadata={coinMetadataMap || {}}
           />
-        ))
-      ) : (
-        <Box width="100%" color="white">
-          <Typography size="small" variant="display">
-            No pool found!
-          </Typography>
+        ))}
+      </Box>
+    );
+
+  if (!pools)
+    return (
+      <Box width="100%" color="white">
+        <Typography size="small" variant="display">
+          No pool found!
+        </Typography>
+      </Box>
+    );
+
+  if (!pools.length)
+    return (
+      <Box
+        gap="xs"
+        display="grid"
+        borderRadius="xs"
+        p={['s', 's', 's', 'l']}
+        gridTemplateColumns={[
+          '1fr',
+          '1fr',
+          '1fr 1fr',
+          '1fr 1fr',
+          '1fr 1fr 1fr',
+        ]}
+      >
+        <PoolCardSkeleton />
+      </Box>
+    );
+
+  return (
+    <InfiniteScroll
+      hasMore={!!hasMore}
+      dataLength={totalItems ?? 0}
+      next={() => nextPage?.()}
+      loader={
+        <Box pt="3xl" width="100%" display="flex" justifyContent="center">
+          <ProgressIndicator variant="loading" />
         </Box>
-      )}
-    </Box>
+      }
+    >
+      <Box
+        gap="xs"
+        borderRadius="xs"
+        p={['s', 's', 's', 'l']}
+        display={listPools?.length || pools?.length ? 'grid' : 'flex'}
+        gridTemplateColumns={[
+          '1fr',
+          '1fr',
+          '1fr 1fr',
+          '1fr 1fr',
+          '1fr 1fr 1fr',
+        ]}
+      >
+        {pools.map((pool) => (
+          <PoolCard
+            key={v4()}
+            pool={pool}
+            prices={pricesRecord}
+            coinMetadata={coinMetadataMap || {}}
+          />
+        ))}
+      </Box>
+    </InfiniteScroll>
   );
 };
 
-const PoolCardList: FC<PoolCardListProps> = ({ tab }) => {
-  const network = useNetwork();
-
-  return tab === PoolTabEnum.Pools ? (
-    <Pools network={network} />
-  ) : (
-    <Position network={network} />
-  );
-};
+const PoolCardList: FC<PoolCardListProps> = ({ tab }) =>
+  tab === PoolTabEnum.Pools ? <Pools /> : <Position />;
 
 export default PoolCardList;

@@ -1,5 +1,5 @@
 import { PoolMetadata } from '@interest-protocol/clamm-sdk';
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Model, Schema } from 'mongoose';
 
 import { Network } from '@/constants';
 
@@ -41,12 +41,12 @@ export const ClammPoolSchema = new Schema({
 });
 
 const mainnetModel =
-  mongoose.models[modelName] ||
+  (mongoose.models[modelName] as Model<ClammPoolModel>) ||
   mongoose.model<ClammPoolModel>(modelName, ClammPoolSchema);
 
 const testnetModel =
-  mongoose.models[testnetModelName] ||
+  (mongoose.models[testnetModelName] as Model<ClammPoolModel>) ||
   mongoose.model<ClammPoolModel>(testnetModelName, ClammPoolSchema);
 
-export const getClammPoolModel = (network: Network): typeof mainnetModel =>
+export const getClammPoolModel = (network: Network) =>
   network === Network.MAINNET ? mainnetModel : testnetModel;

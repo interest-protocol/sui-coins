@@ -1,4 +1,4 @@
-import { PoolMetadata } from '@interest-protocol/clamm-sdk';
+import { InterestPool, PoolMetadata } from '@interest-protocol/clamm-sdk';
 
 import { Network } from '@/constants';
 import { CoinData } from '@/interface';
@@ -29,11 +29,12 @@ export interface PoolCardListWrapper {
 }
 
 export interface PoolCardListContentProps {
-  network: Network;
+  hasMore?: boolean;
+  totalItems?: number;
+  nextPage?: () => void;
   arePoolsLoading: boolean;
-  pools: ReadonlyArray<PoolMetadata>;
+  pools: readonly InterestPool[];
 }
-
 export interface PoolToken extends CoinData {
   value: string;
   locked: boolean;

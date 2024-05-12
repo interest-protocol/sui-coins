@@ -57,7 +57,7 @@ const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({
                   '',
                   [type, 'symbol'],
                   coinMetadata
-                ).replace('SUI', 'MOV')}`,
+                )}`,
               ''
             )}
           </Typography>
