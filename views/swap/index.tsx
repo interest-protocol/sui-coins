@@ -1,8 +1,9 @@
-import { Box } from '@interest-protocol/ui-kit';
+import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
 import Layout from '@/components/layout';
+import { HopAgSVG } from '@/svg';
 
 import Input from './input';
 import Slider from './input/slider';
@@ -70,6 +71,23 @@ const Swap: FC = () => (
       <Box py="xl" px={['2xs', 'm']} borderRadius="xs" bg="lowestContainer">
         <Input label="to" />
         <PreviewSwapButton />
+        <Box
+          p="l"
+          gap="xs"
+          width="100%"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          flexDirection={['column', 'column', 'column', 'row']}
+        >
+          <Typography variant="label" size="medium">
+            Powered by:
+          </Typography>
+          <HopAgSVG width="100%" maxHeight="1.5rem" maxWidth="1.5rem" />
+          <Typography variant="body" size="medium">
+            Hop Aggregator
+          </Typography>
+        </Box>
       </Box>
       <SwapPath />
       <Box my="xs">
