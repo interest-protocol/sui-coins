@@ -35,7 +35,8 @@ const SwapFlipToken: FC = () => {
       bg="onPrimary"
       width="1.5rem"
       height="1.5rem"
-      color="primary"
+      color="onSurface"
+      borderRadius="full"
       onClick={flipToken}
       disabled={(!to && !from) || swapping}
     >
