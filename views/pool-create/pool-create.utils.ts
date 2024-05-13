@@ -6,9 +6,6 @@ import {
 } from '@mysten/sui.js/client';
 import { pathOr } from 'ramda';
 
-import { Network } from '@/constants';
-import { CLAMM_PACKAGE_ADDRESSES } from '@/constants/clamm';
-
 import { ExtractedCoinData } from './pool-create.types';
 
 const getCoinType = (x: string) =>
@@ -75,8 +72,7 @@ export const extractCoinData = async (
 
 export const extractPoolDataFromTx = async (
   tx: SuiTransactionBlockResponse | DevInspectResults,
-  client: SuiClient,
-  network: Network
+  client: SuiClient
 ) => {
   // return if the tx hasn't succeed
   if (tx.effects?.status?.status !== 'success')
@@ -96,8 +92,9 @@ export const extractPoolDataFromTx = async (
   const poolData = objects.find(
     (elem) =>
       elem.data?.content?.dataType === 'moveObject' &&
-      (elem?.data?.content?.type as string) ===
-        `${CLAMM_PACKAGE_ADDRESSES[network]}::interest_pool::InterestPool`
+      (elem?.data?.content?.type as string).includes(
+        `::interest_pool::InterestPool`
+      )
   );
 
   return poolData?.data?.objectId ?? '';

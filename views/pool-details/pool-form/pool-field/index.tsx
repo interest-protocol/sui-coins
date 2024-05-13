@@ -5,6 +5,7 @@ import {
   Typography,
 } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
+import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import { ChangeEvent, FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
@@ -12,7 +13,11 @@ import { TokenIcon } from '@/components';
 import { Network } from '@/constants';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
-import { parseInputEventToNumberString, safePoolSymbolFromType } from '@/utils';
+import {
+  isSui,
+  parseInputEventToNumberString,
+  safePoolSymbolFromType,
+} from '@/utils';
 import { PoolForm, PoolOption } from '@/views/pools/pools.types';
 
 import { PoolFieldsProps } from './pool-field.types';
@@ -98,7 +103,8 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
         >
           Balance:{' '}
           <Typography size="medium" variant="label" color="primary" as="span">
-            {token && coinsMap[token.type] ? (
+            {token &&
+            coinsMap[isSui(token.type) ? SUI_TYPE_ARG : token.type] ? (
               FixedPointMath.toNumber(
                 coinsMap[token.type].balance,
                 token.decimals

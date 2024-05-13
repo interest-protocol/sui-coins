@@ -1,5 +1,11 @@
+import { QuoteSwapReturn } from '@interest-protocol/clamm-sdk';
+import {
+  CoinPath,
+  PoolObjectIdPath,
+} from '@interest-protocol/clamm-sdk/dist/clamm/router/router.types';
 import { Box, Button, ProgressIndicator } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
+import { normalizeStructTag } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import Countdown, { CountdownRendererFn } from 'react-countdown';
@@ -9,11 +15,14 @@ import { useDebounce } from 'use-debounce';
 
 import { TREASURY } from '@/constants';
 import { EXCHANGE_FEE } from '@/constants/clamm';
+import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { FixedPointMath } from '@/lib';
 import { RefreshSVG } from '@/svg';
+import { parseBigNumberish } from '@/utils';
 
 import { useAftermathRouter } from './swap.hooks';
 import { SwapForm } from './swap.types';
+import { isNativeRoute } from './swap.utils';
 
 const countdownRenderer =
   (interval: string): CountdownRendererFn =>
@@ -32,9 +41,12 @@ const countdownRenderer =
   };
 
 const SwapUpdatePrice: FC = () => {
+  const clamm = useClammSdk();
   const { network } = useSuiClientContext();
   const aftermathRouter = useAftermathRouter();
   const { control, setValue, getValues } = useFormContext<SwapForm>();
+
+  const native = getValues('native');
 
   const coinInType = useWatch({
     control,
@@ -84,6 +96,49 @@ const SwapUpdatePrice: FC = () => {
 
   const disabled = !coinInValue || coinInValue.isZero() || !coinOutType;
 
+  const getRoutes = async () => {
+    try {
+      if (!native) {
+        return await aftermathRouter.getCompleteTradeRouteGivenAmountIn({
+          coinInType,
+          coinOutType,
+          coinInAmount: BigInt(
+            coinInValue.decimalPlaces(0, BigNumber.ROUND_DOWN).toString()
+          ),
+          referrer: TREASURY,
+          externalFee: {
+            recipient: TREASURY,
+            feePercentage: EXCHANGE_FEE,
+          },
+        });
+      }
+
+      return await clamm
+        .getRoutesQuotes({
+          coinIn: normalizeStructTag(coinInType),
+          coinOut: normalizeStructTag(coinOutType),
+          amount: BigInt(
+            coinInValue.decimalPlaces(0, BigNumber.ROUND_DOWN).toString()
+          ),
+        })
+        .then((value) => ({
+          ...value,
+          routes: value.routes.reduce(
+            ([acc], route) => [
+              acc && acc[2].amount >= route[2].amount ? acc : route,
+            ],
+            [] as [CoinPath, PoolObjectIdPath, QuoteSwapReturn][]
+          ),
+        }));
+    } catch (e) {
+      resetFields();
+      setValue('error', 'There is no market for these coins.');
+      throw e;
+    } finally {
+      setValue('fetchingPrices', false);
+    }
+  };
+
   const { mutate } = useSWR(
     `${coinInType}-${coinOutType}-${coinInValue?.toString()}-${network}`,
     async () => {
@@ -96,39 +151,30 @@ const SwapUpdatePrice: FC = () => {
 
       setValue('fetchingPrices', true);
 
-      const data = await aftermathRouter
-        .getCompleteTradeRouteGivenAmountIn({
-          coinInType,
-          coinOutType,
-          coinInAmount: BigInt(
-            coinInValue.decimalPlaces(0, BigNumber.ROUND_DOWN).toString()
-          ),
-          referrer: TREASURY,
-          externalFee: {
-            recipient: TREASURY,
-            feePercentage: EXCHANGE_FEE,
-          },
-        })
-        .catch((e) => {
-          resetFields();
-          setValue('error', 'There is no market for these coins.');
-          throw e;
-        })
-        .finally(() => {
-          setValue('fetchingPrices', false);
-        });
+      const data = await getRoutes();
 
       setValue('route', data);
 
       setValue(
         'to.display',
-        Number(
-          (
-            (FixedPointMath.toNumber(coinInValue, getValues('from.decimals')) *
-              10 ** (getValues('from.decimals') - getValues('to.decimals'))) /
-            data.spotPrice
-          ).toFixed(6)
-        ).toPrecision()
+        isNativeRoute(data)
+          ? String(
+              FixedPointMath.toNumber(
+                parseBigNumberish(data.routes[0][2].amount),
+                getValues('to.decimals')
+              )
+            )
+          : Number(
+              (
+                (FixedPointMath.toNumber(
+                  coinInValue,
+                  getValues('from.decimals')
+                ) *
+                  10 **
+                    (getValues('from.decimals') - getValues('to.decimals'))) /
+                data.spotPrice
+              ).toFixed(6)
+            ).toPrecision()
       );
 
       setValue('lastFetchDate', Date.now());

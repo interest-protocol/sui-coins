@@ -7,17 +7,22 @@ import {
 } from '@mysten/dapp-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+import invariant from 'tiny-invariant';
 
 import { EXPLORER_URL, Network } from '@/constants';
 import { useDialog } from '@/hooks/use-dialog';
-import { throwTXIfNotSuccessful, ZERO_BIG_NUMBER } from '@/utils';
+import {
+  signAndExecute,
+  throwTXIfNotSuccessful,
+  ZERO_BIG_NUMBER,
+} from '@/utils';
 import { SwapForm } from '@/views/swap/swap.types';
 
-import { useAftermathRouter } from './swap.hooks';
+import { useSwap } from './swap.hooks';
 
 const SwapButton: FC = () => {
+  const swap = useSwap();
   const client = useSuiClient();
-  const router = useAftermathRouter();
   const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
   const formSwap = useFormContext<SwapForm>();
@@ -31,8 +36,6 @@ const SwapButton: FC = () => {
     formSwap.setValue('from.value', ZERO_BIG_NUMBER);
   };
 
-  const route = useWatch({ control: formSwap.control, name: 'route' });
-
   const swapping = useWatch({
     control: formSwap.control,
     name: 'swapping',
@@ -41,11 +44,6 @@ const SwapButton: FC = () => {
   const readyToSwap = useWatch({
     control: formSwap.control,
     name: 'readyToSwap',
-  });
-
-  const slippage = useWatch({
-    control: formSwap.control,
-    name: 'settings.slippage',
   });
 
   const gotoExplorer = () => {
@@ -60,27 +58,17 @@ const SwapButton: FC = () => {
 
   const handleSwap = async () => {
     try {
-      if (!route || !currentAccount) throw new Error('Something went wrong');
+      invariant(currentAccount, 'Need to connect wallet');
 
       formSwap.setValue('swapping', true);
 
-      const txb = await router.getTransactionForCompleteTradeRoute({
-        walletAddress: currentAccount.address,
-        completeRoute: route,
-        slippage: Number(slippage),
-      });
+      const txb = await swap(formSwap.getValues());
 
-      const { signature, transactionBlockBytes } =
-        await signTransactionBlock.mutateAsync({
-          transactionBlock: txb,
-          account: currentAccount,
-        });
-
-      const tx = await client.executeTransactionBlock({
-        transactionBlock: transactionBlockBytes,
-        signature,
-        options: { showEffects: true },
-        requestType: 'WaitForEffectsCert',
+      const tx = await signAndExecute({
+        txb,
+        currentAccount,
+        suiClient: client,
+        signTransactionBlock,
       });
 
       throwTXIfNotSuccessful(tx);
@@ -95,7 +83,7 @@ const SwapButton: FC = () => {
     }
   };
 
-  const swap = () =>
+  const onSwap = () =>
     readyToSwap &&
     dialog.promise(handleSwap(), {
       loading: {
@@ -126,7 +114,7 @@ const SwapButton: FC = () => {
 
   return (
     <Button
-      onClick={swap}
+      onClick={onSwap}
       variant="filled"
       justifyContent="center"
       disabled={!readyToSwap}

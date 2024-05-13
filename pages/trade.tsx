@@ -9,12 +9,11 @@ import SwapInitManager from '@/views/swap/swap-init-manager';
 const SwapPage: NextPage = () => {
   const form = useForm<SwapForm>({
     defaultValues: {
-      native: false,
+      native: true,
       loading: true,
       settings: { interval: '10', slippage: '0.1' },
     },
   });
-
   return (
     <FormProvider {...form}>
       <SEO pageTitle="Trade" />

@@ -7,6 +7,7 @@ import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import { getLpCoinBytecode } from '@/lib/move-template/lp-coin';
 import initMoveByteCodeTemplate from '@/lib/move-template/move-bytecode-template';
+import { isSui } from '@/utils';
 
 import { Token } from './pool-create.types';
 
@@ -120,6 +121,15 @@ export const useCreateVolatilePool = () => {
     const auxTxb = new TransactionBlock();
 
     const coins = tokens.map(({ type, value }) => {
+      if (isSui(type))
+        return auxTxb.splitCoins(auxTxb.gas, [
+          auxTxb.pure(
+            FixedPointMath.toBigNumber(value, coinsMap[type].decimals)
+              .decimalPlaces(0)
+              .toString()
+          ),
+        ])[0];
+
       const [firstCoin, ...otherCoins] = coinsMap[type].objects;
 
       const firstCoinObject = auxTxb.object(firstCoin.coinObjectId);
@@ -145,19 +155,18 @@ export const useCreateVolatilePool = () => {
 
     const PRECISION = 18;
 
-    const price = FixedPointMath.toBigNumber(
-      +tokens[0].value / +tokens[1].value,
-      PRECISION
-    )
-      .decimalPlaces(0)
-      .toString();
+    const price = BigInt(
+      FixedPointMath.toBigNumber(+tokens[0].value / +tokens[1].value, PRECISION)
+        .decimalPlaces(0)
+        .toFixed(0)
+    );
 
     const { pool, poolAdmin, lpCoin, txb } = await clamm.newVolatile({
       coins,
       txb: auxTxb,
       lpCoinTreasuryCap: treasuryCap,
       typeArguments: typeArguments,
-      prices: [BigInt(price)],
+      prices: [price],
     });
 
     txb.transferObjects([poolAdmin, lpCoin], txb.pure(currentAccount.address));

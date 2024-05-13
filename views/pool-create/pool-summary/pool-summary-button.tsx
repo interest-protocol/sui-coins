@@ -48,18 +48,11 @@ const PoolSummaryButton: FC = () => {
 
     const lpCoinTxb = await createLpCoin(form.tokens as ReadonlyArray<Token>);
 
-    const { signature: lpCoinSignature, transactionBlockBytes: lpCoinBytes } =
-      await signTxb.mutateAsync({
-        transactionBlock: lpCoinTxb,
-      });
-
-    const lpCoinTx = await client.executeTransactionBlock({
-      signature: lpCoinSignature,
-      transactionBlock: lpCoinBytes,
-      options: {
-        showEffects: true,
-      },
-      requestType: 'WaitForLocalExecution',
+    const lpCoinTx = await signAndExecute({
+      txb: lpCoinTxb,
+      currentAccount,
+      suiClient: client,
+      signTransactionBlock: signTxb,
     });
 
     const { treasuryCap, coinType } = await extractCoinData(lpCoinTx, client);
@@ -72,14 +65,14 @@ const PoolSummaryButton: FC = () => {
 
     const tx = await signAndExecute({
       txb,
-      suiClient: client,
       currentAccount,
+      suiClient: client,
       signTransactionBlock: signTxb,
     });
 
     throwTXIfNotSuccessful(tx);
 
-    const poolId = await extractPoolDataFromTx(tx, client, network as Network);
+    const poolId = await extractPoolDataFromTx(tx, client);
 
     await clamm.savePool(poolId);
 
