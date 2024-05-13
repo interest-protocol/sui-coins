@@ -139,7 +139,7 @@ const SwapUpdatePrice: FC = () => {
   return (
     <Button
       isIcon
-      p="s"
+      p="xs"
       bg="onPrimary"
       width="1.5rem"
       height="1.5rem"
@@ -179,7 +179,7 @@ const SwapUpdatePrice: FC = () => {
         </Box>
       ) : (
         <Box as="span" display="flex" color="onSurface">
-          <RefreshSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+          <RefreshSVG maxWidth="2rem" maxHeight="2rem" width="100%" />
         </Box>
       )}
     </Button>
