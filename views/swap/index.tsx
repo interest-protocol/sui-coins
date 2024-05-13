@@ -11,6 +11,7 @@ import PreviewSwapButton from './preview-swap-button';
 import SwapFlipToken from './swap-flip-token';
 import SwapHeader from './swap-header';
 import SwapPath from './swap-path';
+import SwapPoweredBy from './swap-powered-by';
 import SwapUpdatePrice from './swap-update-price';
 
 const Swap: FC = () => (
@@ -68,6 +69,7 @@ const Swap: FC = () => (
           <Input label="to" />
           <PreviewSwapButton />
         </Box>
+        <SwapPoweredBy />
       </Box>
       <SwapPath />
       <Box my="xs">

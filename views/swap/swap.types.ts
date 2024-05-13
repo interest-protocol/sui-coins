@@ -24,16 +24,21 @@ export interface SwapForm {
   lastFetchDate: number | null;
   from: SwapToken & { value: BigNumber };
   route: RouterCompleteTradeRoute | null;
-  aggregator: AggregatorType;
+  aggregator: AggregatorPros;
 }
 
 export interface SwapPreviewModalProps {
   onClose: () => void;
 }
 
-export type AggregatorType = 'hop' | 'aftermath';
+export interface AggregatorPros {
+  url: string;
+  logo: string;
+  name: string;
+  shortName: 'hop' | 'aftermath';
+}
 
 export interface SwapSelectAggregatorModalProps {
-  onSelect: (type: AggregatorType) => void;
-  aggregatorSelected: AggregatorType;
+  onSelect: (aggregator: AggregatorPros) => void;
+  aggregatorSelected: AggregatorPros;
 }

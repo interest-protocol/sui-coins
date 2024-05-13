@@ -5,20 +5,20 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { useModal } from '@/hooks/use-modal';
 import { ThreeDotsSVG } from '@/svg';
 
-import { AggregatorType, SwapForm } from './swap.types';
+import { AggregatorPros, SwapForm } from './swap.types';
 import SwapSelectAggregatorModal from './swap-select-aggregator-modal';
 
 const SwapHeader: FC = () => {
-  const { control, setValue } = useFormContext<SwapForm>();
   const { setModal, handleClose } = useModal();
+  const { control, setValue } = useFormContext<SwapForm>();
 
-  const aggregator = useWatch({
+  const aggregatorSelected = useWatch({
     control,
     name: 'aggregator',
   });
 
-  const onSelect = (type: AggregatorType) => {
-    setValue('aggregator', type);
+  const onSelect = (aggregator: AggregatorPros) => {
+    setValue('aggregator', aggregator);
     handleClose();
   };
 
@@ -31,7 +31,7 @@ const SwapHeader: FC = () => {
       >
         <SwapSelectAggregatorModal
           onSelect={onSelect}
-          aggregatorSelected={aggregator}
+          aggregatorSelected={aggregatorSelected}
         />
       </Motion>,
       {
@@ -63,9 +63,9 @@ const SwapHeader: FC = () => {
             <img
               width="100%"
               height="100%"
-              alt={aggregator}
+              alt={aggregatorSelected.name}
               style={{ borderRadius: '999rem' }}
-              src={`/images/aggregators/${aggregator}.webp`}
+              src={aggregatorSelected.logo}
             />
           </Box>
         }
@@ -76,7 +76,7 @@ const SwapHeader: FC = () => {
         }
       >
         <Typography variant="body" size="medium" textTransform="capitalize">
-          {aggregator}
+          {aggregatorSelected.shortName}
         </Typography>
       </Button>
     </Box>

@@ -44,7 +44,7 @@ const SwapSelectAggregatorModal: FC<SwapSelectAggregatorModalProps> = ({
           <TimesSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
         </Button>
       </Box>
-      {AGGREGATORS_LIST.map(({ type, description }) => (
+      {AGGREGATORS_LIST.map((aggregator) => (
         <Box
           p="l"
           key={v4()}
@@ -56,17 +56,19 @@ const SwapSelectAggregatorModal: FC<SwapSelectAggregatorModalProps> = ({
           }}
           cursor="pointer"
           transition="all 300ms ease-in-out"
-          onClick={() => onSelect(type)}
-          bg={aggregatorSelected == type ? '#0053DB14' : 'unset'}
+          onClick={() => onSelect(aggregator)}
+          bg={
+            aggregatorSelected.name == aggregator.name ? '#0053DB14' : 'unset'
+          }
         >
           <Box display="flex" alignItems="center" gap="m">
             <Box width="2.5rem" height="2.5rem">
               <img
-                alt={type}
+                alt={aggregator.name}
                 width="100%"
                 height="100%"
                 style={{ borderRadius: '0.5rem' }}
-                src={`/images/aggregators/${type}.webp`}
+                src={aggregator.logo}
               />
             </Box>
             <Typography
@@ -76,10 +78,10 @@ const SwapSelectAggregatorModal: FC<SwapSelectAggregatorModalProps> = ({
               fontWeight="700"
               textTransform="capitalize"
             >
-              {description}
+              {aggregator.name}
             </Typography>
           </Box>
-          {aggregatorSelected == type && (
+          {aggregatorSelected.name == aggregator.name && (
             <Box width="1rem" height="1rem">
               <CheckSVG width="100%" maxWidth="100%" maxHeight="100%" />
             </Box>
