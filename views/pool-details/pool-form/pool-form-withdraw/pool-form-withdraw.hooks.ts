@@ -13,7 +13,7 @@ export const useWithdraw = () => {
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
 
-  return async (values: PoolForm) => {
+  return async (values: PoolForm): Promise<TransactionBlock> => {
     const { tokenList, pool, lpCoin: coin, tokenSelected } = values;
 
     if (!+coin.value || !tokenList.length) throw new Error('No tokens ');
@@ -44,26 +44,26 @@ export const useWithdraw = () => {
     if (tokenSelected) {
       const response = await clamm.removeLiquidityOneCoin({
         lpCoin,
-        txb: initTxb,
+        txb: initTxb as any,
         pool: pool.poolObjectId,
         coinOutType: tokenSelected,
       });
 
       coinsOut = [response.coinOut];
-      txb = response.txb;
+      txb = response.txb as unknown as TransactionBlock;
     } else {
       const response = await clamm.removeLiquidity({
         lpCoin,
-        txb: initTxb,
+        txb: initTxb as any,
         pool: pool.poolObjectId,
       });
 
       coinsOut = response.coinsOut;
-      txb = response.txb;
+      txb = response.txb as unknown as TransactionBlock;
     }
 
     txb.transferObjects(coinsOut, txb.pure.address(currentAccount.address));
 
-    return txb;
+    return txb as TransactionBlock;
   };
 };

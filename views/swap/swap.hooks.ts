@@ -28,7 +28,7 @@ export const useSwap = () => {
   const afRouter = useAftermathRouter();
   const currentAccount = useCurrentAccount();
 
-  return async (values: SwapForm) => {
+  return async (values: SwapForm): Promise<TransactionBlock> => {
     invariant(values.route && currentAccount, 'Something went wrong');
 
     if (!isNativeRoute(values.route))
@@ -67,7 +67,7 @@ export const useSwap = () => {
 
     const { coinOut, txb } = clamm.swapRoute({
       coinIn,
-      txb: auxTxb,
+      txb: auxTxb as any,
       route: [route[0], route[1]],
       poolsMap: values.route.poolsMap,
       slippage: +values.settings.slippage,
@@ -75,6 +75,6 @@ export const useSwap = () => {
 
     txb.transferObjects([coinOut], txb.pure(currentAccount.address));
 
-    return txb;
+    return txb as unknown as TransactionBlock;
   };
 };

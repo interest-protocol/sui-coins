@@ -13,7 +13,7 @@ export const useDeposit = () => {
   const { coinsMap } = useWeb3();
   const currentAccount = useCurrentAccount();
 
-  return async (values: PoolForm) => {
+  return async (values: PoolForm): Promise<TransactionBlock> => {
     const { tokenList, pool, settings } = values;
 
     invariant(currentAccount, 'Must to connect your wallet');
@@ -68,13 +68,13 @@ export const useDeposit = () => {
 
     const { lpCoin, txb } = await clamm.addLiquidity({
       minAmount,
-      txb: initTxb,
       coinsIn: coins,
+      txb: initTxb as any,
       pool: pool.poolObjectId,
     });
 
     txb.transferObjects([lpCoin], txb.pure.address(currentAccount.address));
 
-    return txb;
+    return txb as unknown as TransactionBlock;
   };
 };

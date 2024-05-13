@@ -60,7 +60,7 @@ export const useCreateStablePool = () => {
     tokens: ReadonlyArray<Token>,
     treasuryCap: string | null | undefined,
     coinType: string
-  ) => {
+  ): Promise<TransactionBlock> => {
     if (!currentAccount) throw new Error('No account');
 
     if (!treasuryCap) throw new Error('No authorization to use this LP coin');
@@ -93,14 +93,14 @@ export const useCreateStablePool = () => {
 
     const { pool, poolAdmin, lpCoin, txb } = await clamm.newStable({
       coins,
-      txb: auxTxb,
+      txb: auxTxb as any,
       lpCoinTreasuryCap: treasuryCap,
       typeArguments: typeArguments,
     });
 
     txb.transferObjects([poolAdmin, lpCoin], txb.pure(currentAccount.address));
 
-    return clamm.shareStablePool({ txb, pool });
+    return clamm.shareStablePool({ txb, pool }) as unknown as TransactionBlock;
   };
 };
 
@@ -113,7 +113,7 @@ export const useCreateVolatilePool = () => {
     tokens: ReadonlyArray<Token>,
     treasuryCap: string | null | undefined,
     lpCoinType: string
-  ) => {
+  ): Promise<TransactionBlock> => {
     if (!currentAccount) throw new Error('No account');
 
     if (!treasuryCap) throw new Error('No authorization to use this LP coin');
@@ -163,7 +163,7 @@ export const useCreateVolatilePool = () => {
 
     const { pool, poolAdmin, lpCoin, txb } = await clamm.newVolatile({
       coins,
-      txb: auxTxb,
+      txb: auxTxb as any,
       lpCoinTreasuryCap: treasuryCap,
       typeArguments: typeArguments,
       prices: [price],
@@ -171,6 +171,9 @@ export const useCreateVolatilePool = () => {
 
     txb.transferObjects([poolAdmin, lpCoin], txb.pure(currentAccount.address));
 
-    return clamm.shareVolatilePool({ txb, pool });
+    return clamm.shareVolatilePool({
+      txb,
+      pool,
+    }) as unknown as TransactionBlock;
   };
 };
