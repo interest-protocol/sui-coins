@@ -1,6 +1,8 @@
-import { Token } from '@interest-protocol/sui-tokens';
-import { RouterCompleteTradeRoute } from 'aftermath-ts-sdk';
-import BigNumber from 'bignumber.js';
+import type { Token } from '@interest-protocol/sui-tokens';
+import type { RouterCompleteTradeRoute } from 'aftermath-ts-sdk';
+import type BigNumber from 'bignumber.js';
+
+import type { JSONQuoteResponse } from '@/server/lib/hop/hop.utils';
 
 export interface ISwapSettings {
   slippage: string;
@@ -12,6 +14,11 @@ export interface SwapToken extends Token {
   usdPrice: number | null;
 }
 
+export enum Aggregator {
+  Hop = 'hop',
+  Aftermath = 'aftermath',
+}
+
 export interface SwapForm {
   to: SwapToken;
   loading: boolean;
@@ -19,11 +26,12 @@ export interface SwapForm {
   explorerLink: string;
   error: string | null;
   readyToSwap: boolean;
+  aggregator: Aggregator;
   fetchingPrices: boolean;
   settings: ISwapSettings;
   lastFetchDate: number | null;
   from: SwapToken & { value: BigNumber };
-  route: RouterCompleteTradeRoute | null;
+  route: RouterCompleteTradeRoute | JSONQuoteResponse | null;
 }
 
 export interface SwapPreviewModalProps {

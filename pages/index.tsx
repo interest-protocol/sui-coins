@@ -16,7 +16,12 @@ import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks/use-web3';
 import { getCoin, updateURL } from '@/utils';
 import Swap from '@/views/swap';
-import { ISwapSettings, SwapForm, SwapToken } from '@/views/swap/swap.types';
+import {
+  Aggregator,
+  ISwapSettings,
+  SwapForm,
+  SwapToken,
+} from '@/views/swap/swap.types';
 
 const SwapPage: NextPage = () => {
   const network = useNetwork();
@@ -35,6 +40,7 @@ const SwapPage: NextPage = () => {
     defaultValues: {
       loading: true,
       settings,
+      aggregator: Aggregator.Hop,
     },
   });
 

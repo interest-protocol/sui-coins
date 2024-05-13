@@ -14,12 +14,12 @@ import { useWeb3 } from '@/hooks/use-web3';
 import { throwTXIfNotSuccessful, ZERO_BIG_NUMBER } from '@/utils';
 import { SwapForm } from '@/views/swap/swap.types';
 
-import { useAftermathRouter } from './swap.hooks';
+import { useSwap } from './swap.hooks';
 
 const SwapButton: FC = () => {
+  const swap = useSwap();
   const network = useNetwork();
   const client = useSuiClient();
-  const router = useAftermathRouter();
   const currentAccount = useCurrentAccount();
   const formSwap = useFormContext<SwapForm>();
   const { dialog, handleClose } = useDialog();
@@ -46,11 +46,6 @@ const SwapButton: FC = () => {
     name: 'readyToSwap',
   });
 
-  const slippage = useWatch({
-    control: formSwap.control,
-    name: 'settings.slippage',
-  });
-
   const gotoExplorer = () => {
     window.open(
       formSwap.getValues('explorerLink'),
@@ -67,11 +62,7 @@ const SwapButton: FC = () => {
 
       formSwap.setValue('swapping', true);
 
-      const txb = await router.getTransactionForCompleteTradeRoute({
-        walletAddress: currentAccount.address,
-        completeRoute: route,
-        slippage: Number(slippage),
-      });
+      const txb = await swap(formSwap.getValues());
 
       const { signature, transactionBlockBytes } =
         await signTransactionBlock.mutateAsync({
@@ -99,7 +90,7 @@ const SwapButton: FC = () => {
     }
   };
 
-  const swap = () =>
+  const onSwap = () =>
     readyToSwap &&
     dialog.promise(handleSwap(), {
       loading: {
@@ -130,10 +121,10 @@ const SwapButton: FC = () => {
 
   return (
     <Button
-      onClick={swap}
+      onClick={onSwap}
       variant="filled"
       justifyContent="center"
-      disabled={!readyToSwap}
+      // disabled={!readyToSwap}
     >
       <Typography variant="label" size="large">
         {swapping ? 'Swapping...' : 'Swap'}
