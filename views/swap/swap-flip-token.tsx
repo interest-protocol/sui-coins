@@ -31,6 +31,7 @@ const SwapFlipToken: FC = () => {
   return (
     <Button
       isIcon
+      p="s"
       variant="text"
       bg="onPrimary"
       width="1.5rem"

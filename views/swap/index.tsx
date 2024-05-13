@@ -37,11 +37,16 @@ const Swap: FC = () => (
             }
           />
         </Box>
-        <Box position="relative" px="s">
-          <Box width="100%" p="0.25rem" bg="lowContainer" />
+        <Box
+          position="relative"
+          display="flex"
+          alignContent="center"
+          justifyContent="center"
+        >
+          <Box width="100%" height="0.188rem" bg="lowContainer" />
           <Box
             gap="s"
-            my="-2rem"
+            my="-1.7rem"
             width="100%"
             display="flex"
             position="absolute"
@@ -56,7 +61,7 @@ const Swap: FC = () => (
                   width="3.25rem"
                   height="3.25rem"
                   borderRadius="full"
-                  border="6px solid"
+                  border="3px solid"
                   alignItems="center"
                   borderColor="lowContainer"
                   justifyContent="center"

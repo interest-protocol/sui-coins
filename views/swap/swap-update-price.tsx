@@ -139,6 +139,7 @@ const SwapUpdatePrice: FC = () => {
   return (
     <Button
       isIcon
+      p="s"
       bg="onPrimary"
       width="1.5rem"
       height="1.5rem"
