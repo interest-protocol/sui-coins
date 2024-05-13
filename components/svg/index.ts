@@ -91,6 +91,7 @@ export { default as SwapSVG } from './swap';
 export { default as SwapArrowSVG } from './swap-arrow';
 export { default as SwitchSVG } from './switch';
 export { default as TelegramSVG } from './telegram';
+export { default as ThreeDotsSVG } from './three-dots';
 export { default as TickSVG } from './tick';
 export { default as TimesSVG } from './times';
 export { default as TimesRoundedSVG } from './times-rounded';

@@ -35,6 +35,7 @@ const SwapPage: NextPage = () => {
   const form = useForm<SwapForm>({
     defaultValues: {
       loading: true,
+      aggregator: 'hop',
       settings,
     },
   });
