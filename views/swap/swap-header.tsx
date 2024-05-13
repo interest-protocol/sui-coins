@@ -1,18 +1,46 @@
-import { Box, Button, Typography } from '@interest-protocol/ui-kit';
+import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { useModal } from '@/hooks/use-modal';
 import { ThreeDotsSVG } from '@/svg';
 
-import { SwapForm } from './swap.types';
+import { AggregatorType, SwapForm } from './swap.types';
+import SwapSelectAggregatorModal from './swap-select-aggregator-modal';
 
 const SwapHeader: FC = () => {
-  const { control } = useFormContext<SwapForm>();
+  const { control, setValue } = useFormContext<SwapForm>();
+  const { setModal, handleClose } = useModal();
 
   const aggregator = useWatch({
     control,
     name: 'aggregator',
   });
+
+  const onSelect = (type: AggregatorType) => {
+    setValue('aggregator', type);
+    handleClose();
+  };
+
+  const openModal = () =>
+    setModal(
+      <Motion
+        animate={{ scale: 1 }}
+        initial={{ scale: 0.85 }}
+        transition={{ duration: 0.3 }}
+      >
+        <SwapSelectAggregatorModal
+          onSelect={onSelect}
+          aggregatorSelected={aggregator}
+        />
+      </Motion>,
+      {
+        isOpen: true,
+        custom: true,
+        opaque: false,
+        allowClose: true,
+      }
+    );
 
   return (
     <Box display="flex" justifyContent="space-between">
@@ -29,6 +57,7 @@ const SwapHeader: FC = () => {
         variant="outline"
         borderRadius="full"
         borderColor="outlineVariant"
+        onClick={openModal}
         PrefixIcon={
           <Box height="1.5rem" borderRadius="full">
             <img
