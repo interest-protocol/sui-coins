@@ -7,7 +7,7 @@ import {
   TooltipWrapper,
   Typography,
 } from '@interest-protocol/ui-kit';
-import { useCurrentAccount } from '@mysten/dapp-kit';
+import { useCurrentAccount, useSuiClientContext } from '@mysten/dapp-kit';
 import type {
   SuiObjectRef,
   SuiTransactionBlockResponse,
@@ -20,8 +20,7 @@ import { FC, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { v4 } from 'uuid';
 
-import { EXPLORER_URL, Routes, RoutesEnum } from '@/constants';
-import { useNetwork } from '@/context/network';
+import { EXPLORER_URL, Network, Routes, RoutesEnum } from '@/constants';
 import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
 import {
@@ -44,9 +43,9 @@ import SendHistoryDetailsModal from './send-history-details';
 
 const SendHistoryTable: FC = () => {
   const { push } = useRouter();
-  const network = useNetwork();
   const { coinsMap } = useWeb3();
   const reclaimLink = useReclaimLink();
+  const { network } = useSuiClientContext();
   const regenerateLink = useRegenerateLink();
   const { setModal, handleClose } = useModal();
   const [currentCursor, setCursor] = useState<string | null>(null);
@@ -85,7 +84,7 @@ const SendHistoryTable: FC = () => {
 
   const onSuccessReclaim = (tx: SuiTransactionBlockResponse) => {
     if (!currentAccount) return;
-    showTXSuccessToast(tx, network);
+    showTXSuccessToast(tx, network as Network);
 
     setGasObjects(findNextGasCoin(tx, currentAccount.address));
 
@@ -96,7 +95,7 @@ const SendHistoryTable: FC = () => {
     tx: SuiTransactionBlockResponse,
     url: string
   ) => {
-    showTXSuccessToast(tx, network);
+    showTXSuccessToast(tx, network as Network);
 
     push(`${Routes[RoutesEnum.SendLink]}#${url.split('#')[1]}`);
   };
@@ -107,7 +106,7 @@ const SendHistoryTable: FC = () => {
     );
 
   const gotoExplorer = (digest: string) =>
-    window.open(`${EXPLORER_URL[network]}/tx/${digest}`);
+    window.open(`${EXPLORER_URL[network as Network]}/tx/${digest}`);
 
   const handleReclaimLink = async (link: ZkSendLink) => {
     const gasCoins = gasObjects.length

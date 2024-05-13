@@ -1,4 +1,5 @@
 import { Box, Button, ProgressIndicator } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import Countdown, { CountdownRendererFn } from 'react-countdown';
@@ -8,7 +9,6 @@ import { useDebounce } from 'use-debounce';
 
 import { TREASURY } from '@/constants';
 import { EXCHANGE_FEE } from '@/constants/dex';
-import { useNetwork } from '@/context/network';
 import { FixedPointMath } from '@/lib';
 import { RefreshSVG } from '@/svg';
 
@@ -32,7 +32,7 @@ const countdownRenderer =
   };
 
 const SwapUpdatePrice: FC = () => {
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
   const aftermathRouter = useAftermathRouter();
   const { control, setValue, getValues } = useFormContext<SwapForm>();
 

@@ -1,3 +1,5 @@
+import 'react-loading-skeleton/dist/skeleton.css';
+
 import { Global } from '@emotion/react';
 import { ThemeProviderProps } from '@emotion/react/types/theming';
 import {

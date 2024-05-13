@@ -5,8 +5,9 @@ import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { WalletAccount } from '@wallet-standard/base';
 import { Dispatch, SetStateAction } from 'react';
 
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { NFTCollectionMetadata } from '@/interface';
+
+import { CoinObject } from '../../components/web3-manager/coins-manager/web3-manager.types';
 
 export interface AirdropData {
   address: string;

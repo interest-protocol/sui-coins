@@ -1,10 +1,11 @@
 import { Chain } from '@interest-protocol/sui-tokens';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { isValidSuiAddress } from '@mysten/sui.js/utils';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
 
-import { LOCAL_STORAGE_VERSION } from '@/constants';
+import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
 import {
   CELER_TOKENS,
   CELER_TOKENS_TYPE,
@@ -13,11 +14,10 @@ import {
   WORMHOLE_TOKENS,
   WORMHOLE_TOKENS_TYPE,
 } from '@/constants/coins';
-import { useNetwork } from '@/context/network';
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { useWeb3 } from '@/hooks/use-web3';
 import { coinDataToCoinObject } from '@/utils';
 
+import { CoinObject } from '../../../components/web3-manager/coins-manager/web3-manager.types';
 import FetchingToken from './fetching-token';
 import ModalTokenBody from './modal-token-body';
 import ModalTokenSearch from './modal-token-search';
@@ -32,8 +32,8 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   control,
   handleSelectToken: onSelectToken,
 }) => {
-  const network = useNetwork();
-  const { coins, coinsMap, isFetchingCoinBalances } = useWeb3();
+  const { network } = useSuiClientContext();
+  const { coins, coinsMap, loading } = useWeb3();
   const favoriteTokenTypes = useReadLocalStorage<ReadonlyArray<string>>(
     `${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-tokens`
   );
@@ -44,7 +44,9 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   const handleSelectToken = async (type: string, chain?: Chain) => {
     if (coinsMap[type]) return onSelectToken(coinsMap[type]);
 
-    const token = STRICT_TOKENS[network].find((token) => token.type === type);
+    const token = STRICT_TOKENS[network as Network].find(
+      (token) => token.type === type
+    );
 
     if (token) return onSelectToken(coinDataToCoinObject(token));
 
@@ -64,12 +66,12 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
     (!isSearchAddress && filterSelected === TokenOrigin.Strict) ||
     (filterSelected === TokenOrigin.Strict &&
       isSearchAddress &&
-      STRICT_TOKENS_TYPE[network].includes(search))
+      STRICT_TOKENS_TYPE[network as Network].includes(search))
   )
     return (
       <ModalTokenBody
         handleSelectToken={handleSelectToken}
-        tokens={STRICT_TOKENS[network]
+        tokens={STRICT_TOKENS[network as Network]
           ?.sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
           .filter(
             ({ symbol, type }) =>
@@ -84,12 +86,12 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
     (!isSearchAddress && filterSelected === TokenOrigin.Wormhole) ||
     (filterSelected === TokenOrigin.Wormhole &&
       isSearchAddress &&
-      WORMHOLE_TOKENS_TYPE[network].includes(search))
+      WORMHOLE_TOKENS_TYPE[network as Network].includes(search))
   )
     return (
       <ModalTokenBody
         handleSelectToken={handleSelectToken}
-        tokens={WORMHOLE_TOKENS[network]
+        tokens={WORMHOLE_TOKENS[network as Network]
           ?.sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
           .filter(
             ({ symbol, type }) =>
@@ -104,12 +106,12 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
     (!isSearchAddress && filterSelected === TokenOrigin.Celer) ||
     (filterSelected === TokenOrigin.Celer &&
       isSearchAddress &&
-      CELER_TOKENS_TYPE[network].includes(search))
+      CELER_TOKENS_TYPE[network as Network].includes(search))
   )
     return (
       <ModalTokenBody
         handleSelectToken={handleSelectToken}
-        tokens={CELER_TOKENS[network]
+        tokens={CELER_TOKENS[network as Network]
           ?.sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
           .filter(
             ({ symbol, type }) =>
@@ -120,7 +122,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
       />
     );
 
-  if (isFetchingCoinBalances) return <FetchingToken />;
+  if (loading) return <FetchingToken />;
 
   const noWalletToShow = filterSelected == TokenOrigin.Wallet && !coins?.length;
 

@@ -1,7 +1,7 @@
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { Aftermath } from 'aftermath-ts-sdk';
 
 import { Network } from '@/constants';
-import { useNetwork } from '@/context/network';
 
 const INIT_ARG = {
   [Network.TESTNET]: 'TESTNET',
@@ -9,7 +9,7 @@ const INIT_ARG = {
 };
 
 export const useAftermathRouter = () => {
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
 
-  return new Aftermath(INIT_ARG[network]).Router();
+  return new Aftermath(INIT_ARG[network as Network]).Router();
 };
