@@ -8,7 +8,7 @@ import { v4 } from 'uuid';
 import { TokenIcon } from '@/components';
 import { Network } from '@/constants';
 import { COIN_TYPE_TO_SYMBOL, SUI_TYPE_ARG_LONG } from '@/constants/coins';
-import { AftermathSVG, SwapArrowSVG } from '@/svg';
+import { SwapArrowSVG } from '@/svg';
 import { SwapForm } from '@/views/swap/swap.types';
 
 const SwapPath: FC = () => {
@@ -88,26 +88,6 @@ const SwapPath: FC = () => {
           ])}
         </Box>
       ))}
-      <a
-        target="_blank"
-        rel="noopener, noreferrer"
-        href="https://aftermath.finance"
-      >
-        <Box
-          gap="2xs"
-          display="flex"
-          left={['0.75rem', 'unset']}
-          right="0.75rem"
-          bottom="0.25rem"
-          position="absolute"
-          alignItems="flex-end"
-        >
-          <Typography variant="body" size="small">
-            Powered by
-          </Typography>
-          <AftermathSVG width="100%" maxWidth="1.2rem" maxHeight="1.2rem" />
-        </Box>
-      </a>
     </Box>
   );
 };
