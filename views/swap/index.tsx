@@ -27,7 +27,7 @@ const Swap: FC = () => (
     >
       <Box bg="lowestContainer" borderRadius="s" p="xl">
         <SwapHeader />
-        <Box py="xl">
+        <Box py="xl" my="m" borderRadius="xs">
           <Input
             label="from"
             slider={
@@ -37,10 +37,11 @@ const Swap: FC = () => (
             }
           />
         </Box>
-        <Box position="relative">
+        <Box position="relative" px="s">
+          <Box width="100%" p="0.25rem" bg="lowContainer" />
           <Box
-            my="-2rem"
             gap="s"
+            my="-2rem"
             width="100%"
             display="flex"
             position="absolute"
@@ -57,7 +58,7 @@ const Swap: FC = () => (
                   borderRadius="full"
                   border="6px solid"
                   alignItems="center"
-                  borderColor="surface"
+                  borderColor="lowContainer"
                   justifyContent="center"
                 >
                   {button}
@@ -66,7 +67,7 @@ const Swap: FC = () => (
             )}
           </Box>
         </Box>
-        <Box py="xl" borderRadius="xs" bg="lowestContainer">
+        <Box py="xl" borderRadius="xs" bg="lowestContainer" my="m">
           <Input label="to" />
           <PreviewSwapButton />
         </Box>
