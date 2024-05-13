@@ -1,6 +1,6 @@
 import { createNetworkConfig, SuiClientProvider } from '@mysten/dapp-kit';
 import { getFullnodeUrl } from '@mysten/sui.js/client';
-import { FC, PropsWithChildren, useMemo } from 'react';
+import { FC, PropsWithChildren, useMemo, useState } from 'react';
 
 import { Network } from '@/constants';
 
@@ -17,15 +17,18 @@ const { networkConfig } = createNetworkConfig({
 });
 
 export const NetworkProvider: FC<PropsWithChildren> = ({ children }) => {
+  const [updateNetwork, setUpdateNetwork] = useState({});
+
   const network = useMemo(
     () =>
       (window.localStorage.getItem(LOCAL_NETWORK_KEY) as Network) ??
       Network.MAINNET,
-    []
+    [updateNetwork]
   );
 
   const changeNetwork = (network: Network) => {
     window.localStorage.setItem(LOCAL_NETWORK_KEY, network);
+    setUpdateNetwork({});
   };
 
   return (

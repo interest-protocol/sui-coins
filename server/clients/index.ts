@@ -16,6 +16,6 @@ export const suiClientRecord = {
 } as Record<Network, SuiClient>;
 
 export const CLAMM = new CLAMM_({
-  suiClient: mainnetClient,
+  suiClient: mainnetClient as any,
   network: 'mainnet',
 });
