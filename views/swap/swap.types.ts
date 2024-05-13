@@ -24,6 +24,7 @@ export interface SwapForm {
   lastFetchDate: number | null;
   from: SwapToken & { value: BigNumber };
   route: RouterCompleteTradeRoute | null;
+  aggregator: 'hop' | 'aftermath';
 }
 
 export interface SwapPreviewModalProps {
