@@ -2,7 +2,7 @@ import { HopSdk } from '@hop.ag/sdk';
 import { GetQuoteResponse } from '@hop.ag/sdk/dist/sdk/routes/quote';
 import type { Trade } from '@hop.ag/sdk/dist/sdk/util';
 import { getFullnodeUrl } from '@mysten/sui.js/client';
-import { toB64 } from '@mysten/sui.js/utils';
+import { normalizeStructTag, toB64 } from '@mysten/sui.js/utils';
 
 import { mainnetClient } from '@/server/clients';
 
@@ -28,8 +28,8 @@ export const quote = async (
   amount_in: bigint
 ): Promise<GetQuoteResponse> =>
   sdk.fetchQuote({
-    token_in,
-    token_out,
+    token_in: normalizeStructTag(token_in),
+    token_out: normalizeStructTag(token_out),
     amount_in,
   });
 

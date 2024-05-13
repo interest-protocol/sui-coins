@@ -12,11 +12,7 @@ export const useHopSdk = () => ({
     fetch(`/api/auth/v1/hop/swap`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        trade,
-        account,
-        slippage,
-      }),
+      body: JSON.stringify({ trade, account, slippage }),
     })
       .then((response) => response.json?.())
       .then(({ txb }: { txb: string }) =>

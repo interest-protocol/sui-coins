@@ -123,8 +123,8 @@ const SwapButton: FC = () => {
     <Button
       onClick={onSwap}
       variant="filled"
+      disabled={!readyToSwap}
       justifyContent="center"
-      // disabled={!readyToSwap}
     >
       <Typography variant="label" size="large">
         {swapping ? 'Swapping...' : 'Swap'}
