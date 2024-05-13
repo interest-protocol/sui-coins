@@ -36,6 +36,7 @@ export const quote = async (
 export const swap = async ({ trade, account, slippage }: SwapArg) => {
   const { transaction } = await sdk.fetchTx({
     trade,
+    gas_budget: 1e9,
     sui_address: account,
     max_slippage_bps: slippage,
   });

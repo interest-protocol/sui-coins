@@ -1,5 +1,5 @@
 import { useSuiClient } from '@mysten/dapp-kit';
-import { SuiObjectResponse } from '@mysten/sui.js/dist/cjs/client';
+import { SuiObjectResponse } from '@mysten/sui.js/client';
 import type { LinkAssets } from '@mysten/zksend/dist/cjs/links/utils';
 import useSWR from 'swr';
 
