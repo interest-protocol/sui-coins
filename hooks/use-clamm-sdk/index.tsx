@@ -12,7 +12,7 @@ export const useClammSdk = (): CLAMM => {
   cachedClamm =
     cachedClamm ??
     new CLAMM({
-      suiClient,
+      suiClient: suiClient as any,
       network: network === Network.MAINNET ? 'mainnet' : 'testnet',
     });
 
