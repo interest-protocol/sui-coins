@@ -40,11 +40,12 @@ const Swap: FC = () => (
         <Box position="relative">
           <Box
             my="-2rem"
+            gap="s"
             width="100%"
             display="flex"
             position="absolute"
             alignItems="center"
-            justifyContent="space-between"
+            justifyContent="center"
           >
             {[<SwapFlipToken key={v4()} />, <SwapUpdatePrice key={v4()} />].map(
               (button) => (
@@ -53,7 +54,7 @@ const Swap: FC = () => (
                   display="flex"
                   width="3.25rem"
                   height="3.25rem"
-                  borderRadius="s"
+                  borderRadius="full"
                   border="6px solid"
                   alignItems="center"
                   borderColor="surface"
