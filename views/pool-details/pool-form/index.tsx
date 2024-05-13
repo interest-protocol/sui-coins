@@ -17,6 +17,7 @@ const PoolForm: FC<PoolDetailsFormProps> = ({
     borderRadius="xs"
     color="onSurface"
     bg="lowestContainer"
+    width="fill-available"
     flexDirection="column"
     p={['m', 'm', 'm', 'xl']}
   >
