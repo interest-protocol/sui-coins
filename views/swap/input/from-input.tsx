@@ -31,6 +31,8 @@ const FromInput: FC<Pick<InputFieldProps, 'slider'>> = ({ slider }) => {
           justifyContent="flex-end"
         >
           <TextField
+            // eslint-disable-next-line jsx-a11y/no-autofocus
+            autoFocus
             pl="-1rem"
             fontSize="2xl"
             lineHeight="l"
