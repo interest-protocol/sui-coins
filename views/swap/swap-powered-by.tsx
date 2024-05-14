@@ -8,7 +8,7 @@ import { SwapForm } from './swap.types';
 const SwapPoweredBy: FC = () => {
   const { control } = useFormContext<SwapForm>();
 
-  const aggregator = useWatch({ control, name: 'aggregator' });
+  const aggregator = useWatch({ control, name: 'settings.aggregator' });
 
   return (
     <a

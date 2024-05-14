@@ -7,6 +7,7 @@ import type { JSONQuoteResponse } from '@/server/lib/hop/hop.utils';
 export interface ISwapSettings {
   slippage: string;
   interval: string;
+  aggregator: Aggregator;
 }
 
 export interface SwapToken extends Token {
@@ -26,7 +27,6 @@ export interface SwapForm {
   explorerLink: string;
   error: string | null;
   readyToSwap: boolean;
-  aggregator: Aggregator;
   fetchingPrices: boolean;
   settings: ISwapSettings;
   lastFetchDate: number | null;

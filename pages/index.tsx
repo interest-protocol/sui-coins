@@ -11,8 +11,7 @@ const SwapPage: NextPage = () => {
     defaultValues: {
       focus: true,
       loading: true,
-      aggregator: Aggregator.Hop,
-      settings: { interval: '10', slippage: '0.1' },
+      settings: { interval: '10', slippage: '0.1', aggregator: Aggregator.Hop },
     },
   });
 

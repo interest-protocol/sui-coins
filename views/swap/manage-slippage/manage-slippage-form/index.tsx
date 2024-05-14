@@ -23,14 +23,18 @@ const ManageSlippageForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
     formTmpSettings.setValue('slippage', value);
 
   const onConfirm = () => {
-    const { slippage, interval } = formTmpSettings.getValues();
+    const { slippage, interval, aggregator } = formTmpSettings.getValues();
 
     setValue('settings.slippage', slippage);
     setValue('settings.interval', interval);
 
     localStorage.setItem(
       `${LOCAL_STORAGE_VERSION}-sui-coins-settings`,
-      JSON.stringify({ slippage, interval })
+      JSON.stringify({
+        slippage,
+        interval,
+        aggregator,
+      })
     );
 
     handleManageView();
