@@ -13,9 +13,12 @@ const SwapMessages: FC = () => {
 
   const error = useWatch({ control, name: 'error' });
 
-  const isLeastOneSuiErrorMessage = SwapMessagesEnum.leastOneSui == error;
-
   if (!error) return null;
+
+  const isCostumErrorBoxMessage = [
+    SwapMessagesEnum.leastOneSui,
+    SwapMessagesEnum.notEnoughToken,
+  ].includes(error);
 
   return (
     <Box
@@ -25,14 +28,12 @@ const SwapMessages: FC = () => {
       display="flex"
       borderRadius="xs"
       border="1px solid"
-      bg={isLeastOneSuiErrorMessage ? 'lowContainer' : 'errorContainer'}
-      color={isLeastOneSuiErrorMessage ? 'outline' : 'onErrorContainer'}
-      borderColor={isLeastOneSuiErrorMessage ? 'outline' : 'onErrorContainer'}
+      bg={isCostumErrorBoxMessage ? 'lowContainer' : 'errorContainer'}
+      color={isCostumErrorBoxMessage ? 'outline' : 'onErrorContainer'}
+      borderColor={isCostumErrorBoxMessage ? 'outline' : 'onErrorContainer'}
     >
       <DotErrorSVG
-        dotColor={
-          isLeastOneSuiErrorMessage ? colors.lowContainer : colors.error
-        }
+        dotColor={isCostumErrorBoxMessage ? colors.lowContainer : colors.error}
         maxHeight="1rem"
         maxWidth="1rem"
         width="100%"
