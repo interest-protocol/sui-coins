@@ -2,6 +2,7 @@ import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { LOCAL_STORAGE_VERSION } from '@/constants';
 import { useModal } from '@/hooks/use-modal';
 import { ThreeDotsSVG } from '@/svg';
 
@@ -13,13 +14,21 @@ const SwapHeader: FC = () => {
   const { setModal, handleClose } = useModal();
   const { control, setValue } = useFormContext<SwapForm>();
 
-  const aggregator = useWatch({
+  const settings = useWatch({
     control,
-    name: 'aggregator',
+    name: 'settings',
   });
 
   const onSelect = (aggregator: Aggregator) => {
-    setValue('aggregator', aggregator);
+    setValue('settings.aggregator', aggregator);
+    localStorage.setItem(
+      `${LOCAL_STORAGE_VERSION}-sui-coins-settings`,
+      JSON.stringify({
+        slippage: settings.slippage,
+        interval: settings.interval,
+        aggregator,
+      })
+    );
     handleClose();
   };
 
@@ -32,7 +41,7 @@ const SwapHeader: FC = () => {
       >
         <SwapSelectAggregatorModal
           onSelect={onSelect}
-          aggregatorSelected={AGGREGATORS_LIST[aggregator]}
+          aggregatorSelected={AGGREGATORS_LIST[settings.aggregator]}
         />
       </Motion>,
       {
@@ -65,8 +74,8 @@ const SwapHeader: FC = () => {
               width="100%"
               height="100%"
               style={{ borderRadius: '999rem' }}
-              alt={AGGREGATORS_LIST[aggregator].name}
-              src={AGGREGATORS_LIST[aggregator].logo}
+              alt={AGGREGATORS_LIST[settings.aggregator].name}
+              src={AGGREGATORS_LIST[settings.aggregator].logo}
             />
           </Box>
         }
@@ -77,7 +86,7 @@ const SwapHeader: FC = () => {
         }
       >
         <Typography variant="body" size="medium" textTransform="capitalize">
-          {AGGREGATORS_LIST[aggregator].shortName}
+          {AGGREGATORS_LIST[settings.aggregator].shortName}
         </Typography>
       </Button>
     </Box>

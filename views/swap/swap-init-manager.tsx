@@ -13,7 +13,7 @@ import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
 import { useWeb3 } from '@/hooks/use-web3';
 import { getCoin, isSui, updateURL } from '@/utils';
 
-import { ISwapSettings, SwapForm, SwapToken } from './swap.types';
+import { Aggregator, ISwapSettings, SwapForm, SwapToken } from './swap.types';
 
 const SwapInitManager: FC = () => {
   const { coinsMap } = useWeb3();
@@ -28,7 +28,7 @@ const SwapInitManager: FC = () => {
 
   const settings = useReadLocalStorage<ISwapSettings>(
     `${LOCAL_STORAGE_VERSION}-sui-coins-settings`
-  ) ?? { interval: '10', slippage: '0.1' };
+  ) ?? { interval: '10', slippage: '0.1', aggregator: Aggregator.Hop };
 
   useEffect(() => {
     form.reset();

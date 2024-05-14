@@ -15,6 +15,8 @@ const FromInput: FC = () => {
   const { register, setValue, getValues, control } = useFormContext<SwapForm>();
 
   const swapping = useWatch({ control, name: 'swapping' });
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const focus = useWatch({ control, name: 'focus' });
 
   return (
@@ -31,8 +33,6 @@ const FromInput: FC = () => {
           <SelectToken label="from" />
           <Box display="flex" alignItems="center" justifyContent="flex-end">
             <TextField
-              // eslint-disable-next-line jsx-a11y/no-autofocus
-              autoFocus={focus}
               lineHeight="l"
               placeholder="0"
               color="onSurface"

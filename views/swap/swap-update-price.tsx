@@ -45,7 +45,7 @@ const SwapUpdatePrice: FC = () => {
     name: 'from.type',
   });
 
-  const aggregator = useWatch({ control, name: 'aggregator' });
+  const aggregator = useWatch({ control, name: 'settings.aggregator' });
 
   const [coinInValue] = useDebounce(
     useWatch({
@@ -102,20 +102,21 @@ const SwapUpdatePrice: FC = () => {
 
       setValue('fetchingPrices', true);
 
-      const data = await (aggregator === Aggregator.Aftermath
-        ? aftermathRouter.getCompleteTradeRouteGivenAmountIn({
-            coinInType,
-            coinOutType,
-            coinInAmount: BigInt(
-              coinInValue.decimalPlaces(0, BigNumber.ROUND_DOWN).toString()
-            ),
-            referrer: TREASURY,
-            externalFee: {
-              recipient: TREASURY,
-              feePercentage: EXCHANGE_FEE,
-            },
-          })
-        : hopSdk.quote(coinInType, coinOutType, coinInValue.toFixed(0))
+      const data = await (
+        aggregator === Aggregator.Aftermath
+          ? aftermathRouter.getCompleteTradeRouteGivenAmountIn({
+              coinInType,
+              coinOutType,
+              coinInAmount: BigInt(
+                coinInValue.decimalPlaces(0, BigNumber.ROUND_DOWN).toString()
+              ),
+              referrer: TREASURY,
+              externalFee: {
+                recipient: TREASURY,
+                feePercentage: EXCHANGE_FEE,
+              },
+            })
+          : hopSdk.quote(coinInType, coinOutType, coinInValue.toFixed(0))
       )
         .catch((e) => {
           resetFields();
