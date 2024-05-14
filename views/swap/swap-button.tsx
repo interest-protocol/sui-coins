@@ -72,7 +72,7 @@ const SwapButton: FC = () => {
 
       const { signature, transactionBlockBytes } =
         await signTransactionBlock.mutateAsync({
-          transactionBlock: txb,
+          transactionBlock: txb as any,
           account: currentAccount,
         });
 

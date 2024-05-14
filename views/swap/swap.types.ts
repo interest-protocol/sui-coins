@@ -1,6 +1,6 @@
-import { Token } from '@interest-protocol/sui-tokens';
-import { RouterCompleteTradeRoute } from 'aftermath-ts-sdk';
-import BigNumber from 'bignumber.js';
+import type { Token } from '@interest-protocol/sui-tokens';
+import type { RouterCompleteTradeRoute } from 'aftermath-ts-sdk';
+import type BigNumber from 'bignumber.js';
 
 export interface ISwapSettings {
   slippage: string;

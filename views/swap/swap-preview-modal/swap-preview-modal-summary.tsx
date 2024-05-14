@@ -39,7 +39,7 @@ const SwapPreviewModalSummary: FC = () => {
       });
 
       const inspect = await suiClient.devInspectTransactionBlock({
-        transactionBlock: txb,
+        transactionBlock: txb as any,
         sender: currentAccount.address,
       });
 

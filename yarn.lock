@@ -1949,6 +1949,25 @@
     superstruct "^1.0.3"
     tweetnacl "^1.0.3"
 
+"@scallop-io/sui-scallop-sdk@^0.45.0":
+  version "0.45.0"
+  resolved "https://registry.yarnpkg.com/@scallop-io/sui-scallop-sdk/-/sui-scallop-sdk-0.45.0.tgz#9d45b301164f3bc2a1551f13d09f79c27320792d"
+  integrity sha512-Lx0jX5tsLnL/Uj+qvN/5spBUwJ9MSrqQsT5L365IcQEnzZwKLdi5uVvzMec0mS8kFERxPSMxHFq7tGRx1NmGZQ==
+  dependencies:
+    "@mysten/bcs" "^0.8.1"
+    "@mysten/sui.js" "^0.44.0"
+    "@noble/curves" "^1.2.0"
+    "@noble/hashes" "^1.3.2"
+    "@pythnetwork/price-service-client" "^1.8.2"
+    "@pythnetwork/pyth-sui-js" "^1.2.4"
+    "@scallop-io/sui-kit" "^0.44.2"
+    "@scure/bip39" "^1.2.1"
+    "@tanstack/query-core" "^5.28.0"
+    axios "^1.6.0"
+    bignumber.js "^9.1.2"
+    superstruct "^1.0.3"
+    tweetnacl "^1.0.3"
+
 "@scure/base@~1.1.6":
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/@scure/base/-/base-1.1.6.tgz#8ce5d304b436e4c84f896e0550c83e4d88cb917d"
@@ -2067,7 +2086,7 @@
   dependencies:
     tslib "^2.4.0"
 
-"@tanstack/query-core@5.36.0":
+"@tanstack/query-core@5.36.0", "@tanstack/query-core@^5.28.0":
   version "5.36.0"
   resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.36.0.tgz#905bd05b6a73e58d70d95912d84e979ed865ab6a"
   integrity sha512-B5BD3pg/mztDR36i77hGcyySKKeYrbM5mnogOROTBi1SUml5ByRK7PGUUl16vvubvQC+mSnqziFG/VIy/DE3FQ==
@@ -2838,7 +2857,7 @@ acorn@^8.4.1, acorn@^8.6.0, acorn@^8.9.0:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.11.3.tgz#71e0b14e13a4ec160724b38fb7b0f233b1b81d7a"
   integrity sha512-Y9rRfJG5jcKOE0CLisYbojUjIrIEE7AGMzA/Sm4BslANhbS+cDMpgBdcPT91oJ7OuJ9hYJBx59RjbhxVnrF8Xg==
 
-aftermath-ts-sdk@^1.1.41:
+aftermath-ts-sdk@^1.1.61:
   version "1.1.61"
   resolved "https://registry.yarnpkg.com/aftermath-ts-sdk/-/aftermath-ts-sdk-1.1.61.tgz#c40b5624e7b4aa11e2694e023ffdc58ba11c7018"
   integrity sha512-Bhr0XsdYzYftmZFL5Ob084zOclIsmPfvenMUUJOIe9tVj0/qLWcGI5hRI6Awjxe9bQD2AXZ/QJuIR6O9P615VA==
