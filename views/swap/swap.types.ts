@@ -32,6 +32,7 @@ export interface SwapForm {
   lastFetchDate: number | null;
   from: SwapToken & { value: BigNumber };
   route: RouterCompleteTradeRoute | JSONQuoteResponse | null;
+  focus: boolean;
 }
 
 export interface SwapPreviewModalProps {

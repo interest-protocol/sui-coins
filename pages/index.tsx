@@ -9,6 +9,7 @@ import SwapInitManager from '@/views/swap/swap-init-manager';
 const SwapPage: NextPage = () => {
   const form = useForm<SwapForm>({
     defaultValues: {
+      focus: true,
       loading: true,
       aggregator: Aggregator.Hop,
       settings: { interval: '10', slippage: '0.1' },

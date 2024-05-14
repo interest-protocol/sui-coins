@@ -9,16 +9,16 @@ import { SwapForm } from '../swap.types';
 import Balance from './balance';
 import AmountInDollar from './dollar-value';
 import HeaderInfo from './header-info';
-import { InputFieldProps } from './input.types';
 import SelectToken from './select-token';
 
-const FromInput: FC<Pick<InputFieldProps, 'slider'>> = ({ slider }) => {
+const FromInput: FC = () => {
   const { register, setValue, getValues, control } = useFormContext<SwapForm>();
 
   const swapping = useWatch({ control, name: 'swapping' });
+  const focus = useWatch({ control, name: 'focus' });
 
   return (
-    <Box py="5xl">
+    <>
       <HeaderInfo label="from" />
       <Box
         py="l"
@@ -32,7 +32,7 @@ const FromInput: FC<Pick<InputFieldProps, 'slider'>> = ({ slider }) => {
           <Box display="flex" alignItems="center" justifyContent="flex-end">
             <TextField
               // eslint-disable-next-line jsx-a11y/no-autofocus
-              autoFocus
+              autoFocus={focus}
               lineHeight="l"
               placeholder="0"
               color="onSurface"
@@ -71,8 +71,7 @@ const FromInput: FC<Pick<InputFieldProps, 'slider'>> = ({ slider }) => {
           <AmountInDollar label="from" />
         </Box>
       </Box>
-      {slider && <Box pb="s">{slider}</Box>}
-    </Box>
+    </>
   );
 };
 
