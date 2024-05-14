@@ -1320,10 +1320,10 @@
     superstruct "^1.0.3"
     tweetnacl "^1.0.3"
 
-"@mysten/sui.js@^0.52.0":
-  version "0.52.0"
-  resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.52.0.tgz#2916f79fc5d7832fa538d358b15fe44ade330039"
-  integrity sha512-oqfA0O/STWDJgnxvu07HsDRybG8yD3pfqAhADFawZTthbPdl6U01qJQVCzW7yf2OqG9AkYWHT+392rVcVjbcnw==
+"@mysten/sui.js@^0.51.2":
+  version "0.51.2"
+  resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.51.2.tgz#40c54bf1df57fdeaf27ad11efddeaa20ff5e6a7b"
+  integrity sha512-RRG/VHhVvkQlWqodFZagRxVDo3SbXh4e3xTBplhPNNyybugbWj/V+wGrNv5/KtxfVxHBw6jTCoB798ijqPBq7g==
   dependencies:
     "@graphql-typed-document-node/core" "^3.2.0"
     "@mysten/bcs" "0.11.1"
@@ -1338,10 +1338,10 @@
     superstruct "^1.0.3"
     tweetnacl "^1.0.3"
 
-"@mysten/suins-toolkit@^0.4.4":
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/@mysten/suins-toolkit/-/suins-toolkit-0.4.4.tgz#24f226fb90a85ab301aafe302f7d0e026348c152"
-  integrity sha512-LWFYxUvVxakJ0/oSEmRakdsOOs3HWbwIKjMvx30SBQLKPqKMvpJn+oWeJeuwTLpDfPGB4MJp7HmMczebE8UIxg==
+"@mysten/sui.js@^0.52.0":
+  version "0.52.0"
+  resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.52.0.tgz#2916f79fc5d7832fa538d358b15fe44ade330039"
+  integrity sha512-oqfA0O/STWDJgnxvu07HsDRybG8yD3pfqAhADFawZTthbPdl6U01qJQVCzW7yf2OqG9AkYWHT+392rVcVjbcnw==
   dependencies:
     "@graphql-typed-document-node/core" "^3.2.0"
     "@mysten/bcs" "0.11.1"

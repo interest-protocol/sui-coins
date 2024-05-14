@@ -15,6 +15,7 @@ const SwapPage: NextPage = () => {
       settings: { interval: '10', slippage: '0.1' },
     },
   });
+
   return (
     <FormProvider {...form}>
       <SEO pageTitle="Trade" />

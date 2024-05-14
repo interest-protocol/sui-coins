@@ -10,9 +10,8 @@ import { useFormContext } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
 
 import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
-import { COIN_TYPE_TO_COIN } from '@/constants/coins';
 import { useWeb3 } from '@/hooks/use-web3';
-import { getCoin, updateURL } from '@/utils';
+import { getCoin, isSui, updateURL } from '@/utils';
 
 import { ISwapSettings, SwapForm, SwapToken } from './swap.types';
 
@@ -37,64 +36,61 @@ const SwapInitManager: FC = () => {
     updateURL(pathname);
   }, [network]);
 
+  const getSwapToken = async (
+    type: `0x${string}`
+  ): Promise<SwapToken | null> => {
+    if (isSui(type)) {
+      const decimals = 9;
+      const symbol = 'SUI';
+      const type = SUI_TYPE_ARG;
+
+      return {
+        type,
+        symbol,
+        decimals,
+        display: '',
+        usdPrice: null,
+      };
+    }
+    if (
+      typeof type === 'string' &&
+      type.startsWith('0x') &&
+      isValidSuiAddress(normalizeSuiAddress(type).split('::')[0])
+    ) {
+      const coin = await getCoin(type, network as Network, coinsMap);
+
+      return {
+        ...coin,
+        display: '',
+        usdPrice: null,
+      };
+    }
+    return null;
+  };
+
   const setDefaultToken = async (
     value: `0x${string}`,
     field: 'to' | 'from'
   ) => {
-    if (value === SUI_TYPE_ARG) {
-      const { type, symbol, decimals } =
-        COIN_TYPE_TO_COIN[network as Network][SUI_TYPE_ARG];
+    if (!value) return;
 
-      const token: SwapToken = {
-        type,
-        symbol,
-        decimals,
-        display: '',
-        usdPrice: null,
-      };
+    const token = await getSwapToken(value);
 
-      form.setValue(field, token);
+    if (!token) return;
 
-      fetch(`/api/auth/v1/coin-price?symbol=${symbol}`)
-        .then((response) => response.json())
-        .then((data) =>
-          form.setValue(`${field}.usdPrice`, data[symbol][0].quote.USD.price)
+    form.setValue(field, token);
+
+    fetch(`/api/auth/v1/coin-price?symbol=${token.symbol}`)
+      .then((response) => response.json?.())
+      .then((data) =>
+        form.setValue(
+          `${field}.usdPrice`,
+          data[token.symbol][0].quote.USD.price
         )
-        .catch(() => null);
+      )
+      .catch(console.log);
 
-      return type;
-    }
-
-    if (
-      typeof value === 'string' &&
-      value.startsWith('0x') &&
-      isValidSuiAddress(normalizeSuiAddress(value).split('::')[0])
-    ) {
-      const { type, symbol, decimals } = await getCoin(
-        value,
-        network as Network,
-        coinsMap
-      );
-
-      const token: SwapToken = {
-        type,
-        symbol,
-        decimals,
-        display: '',
-        usdPrice: null,
-      };
-
-      form.setValue(field, token);
-
-      fetch(`/api/auth/v1/coin-price?symbol=${symbol}`)
-        .then((response) => response.json?.())
-        .then((data) =>
-          form.setValue(`${field}.usdPrice`, data[symbol][0].quote.USD.price)
-        )
-        .catch(console.log);
-
-      return type;
-    }
+    return token.type;
   };
 
   useEffect(() => {

@@ -6,26 +6,21 @@ import { SwapForm } from '../swap.types';
 
 const PriceImpact: FC = () => {
   const { control } = useFormContext<SwapForm>();
-  const fromValue = useWatch({ control, name: 'from.value' });
-  const fromUSDPrice = useWatch({ control, name: 'from.usdPrice' });
+
   const toValue = useWatch({ control, name: 'to.display' });
+  const fromValue = useWatch({ control, name: 'from.display' });
   const toUSDPrice = useWatch({ control, name: 'to.usdPrice' });
+  const fromUSDPrice = useWatch({ control, name: 'from.usdPrice' });
+
   const toUSD = toUSDPrice ? +toValue * toUSDPrice : null;
   const fromUSD = fromUSDPrice ? +fromValue * fromUSDPrice : null;
-
-  const differenceBetween = fromUSD && toUSD ? toUSD - fromUSD : null;
-
-  const priceImpact =
-    differenceBetween && fromUSD ? (differenceBetween * 100) / fromUSD : null;
+  const differenceBetween = fromUSD && toUSD ? fromUSD - toUSD : null;
+  const priceImpact = differenceBetween ? differenceBetween * 100 : null;
 
   if (!priceImpact) return null;
 
   const STATUS =
-    Number(priceImpact) < 1
-      ? 'success'
-      : Number(priceImpact) < 5
-        ? 'warning'
-        : 'error';
+    priceImpact < 1 ? 'success' : priceImpact < 5 ? 'warning' : 'error';
 
   return (
     <Typography

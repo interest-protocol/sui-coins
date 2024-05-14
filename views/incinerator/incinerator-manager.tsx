@@ -45,6 +45,9 @@ const IncineratorManager: FC = () => {
   const updateAssets = () => {
     if (reset) setValue('reset', false);
 
+    if (empty !== !displayObjects[tab].length)
+      setValue('empty', !displayObjects[tab].length);
+
     setValue(
       'objects',
       displayObjects[tab].reduce((acc, object) => {
@@ -86,24 +89,25 @@ const IncineratorManager: FC = () => {
     formObjects.map((_, index) => setValue(`objects.${index}.active`, checked));
 
   useEffect(() => {
-    updateChecked();
+    if (displayObjects[tab].length) updateChecked();
   }, [checked]);
 
   useEffect(() => {
-    if (!loading && !error && displayObjects[tab].every((type) => type))
+    if (
+      !reset &&
+      !loading &&
+      !error &&
+      displayObjects[tab].every(({ type }) => type)
+    )
       updateAssets();
   }, [tab, currentAccount, search]);
 
   useEffect(() => {
-    if (!loading && !error && displayObjects[tab].every((type) => type)) {
-      if (delay !== undefined) setDelay(undefined);
+    if (!loading && !error && displayObjects[tab].every(({ type }) => type)) {
+      if (!reset && delay !== undefined) setDelay(undefined);
       updateAssets();
     }
   }, [coinsMap]);
-
-  useEffect(() => {
-    if (!formObjects.length !== empty) setValue('empty', !formObjects.length);
-  }, [formObjects]);
 
   return null;
 };
