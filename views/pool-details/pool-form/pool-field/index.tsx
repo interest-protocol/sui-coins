@@ -104,6 +104,7 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
           Balance:{' '}
           <Typography size="medium" variant="label" color="primary" as="span">
             {token &&
+            token.type &&
             coinsMap[isSui(token.type) ? SUI_TYPE_ARG : token.type] ? (
               FixedPointMath.toNumber(
                 coinsMap[token.type].balance,
