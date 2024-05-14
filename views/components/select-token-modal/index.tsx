@@ -8,9 +8,9 @@ import {
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { SearchSVG, TimesSVG } from '@/svg';
 
+import { CoinObject } from '../../../components/web3-manager/coins-manager/web3-manager.types';
 import {
   SearchTokenForm,
   SelectTokenModalProps,

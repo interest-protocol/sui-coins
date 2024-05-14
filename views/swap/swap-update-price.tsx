@@ -1,4 +1,5 @@
 import { Box, Button, ProgressIndicator } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import Countdown, { CountdownRendererFn } from 'react-countdown';
@@ -8,7 +9,6 @@ import { useDebounce } from 'use-debounce';
 
 import { TREASURY } from '@/constants';
 import { EXCHANGE_FEE } from '@/constants/dex';
-import { useNetwork } from '@/context/network';
 import { FixedPointMath } from '@/lib';
 import { RefreshSVG } from '@/svg';
 
@@ -32,7 +32,7 @@ const countdownRenderer =
   };
 
 const SwapUpdatePrice: FC = () => {
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
   const aftermathRouter = useAftermathRouter();
   const { control, setValue, getValues } = useFormContext<SwapForm>();
 
@@ -120,16 +120,14 @@ const SwapUpdatePrice: FC = () => {
 
       setValue('route', data);
 
-      setValue(
-        'to.display',
-        Number(
-          (
-            (FixedPointMath.toNumber(coinInValue, getValues('from.decimals')) *
-              10 ** (getValues('from.decimals') - getValues('to.decimals'))) /
-            data.spotPrice
-          ).toFixed(6)
-        ).toPrecision()
-      );
+      const value = Number(
+        FixedPointMath.toNumber(
+          coinInValue.times(data.spotPrice),
+          2 * getValues('from.decimals') - getValues('to.decimals')
+        ).toFixed(6)
+      ).toPrecision();
+
+      setValue('to.display', value);
 
       setValue('lastFetchDate', Date.now());
     },
@@ -139,11 +137,13 @@ const SwapUpdatePrice: FC = () => {
   return (
     <Button
       isIcon
+      p="xs"
       bg="onPrimary"
       width="1.5rem"
       height="1.5rem"
-      color="primary"
       variant="filled"
+      color="onSurface"
+      borderRadius="full"
       alignItems="center"
       position="relative"
       disabled={disabled}
@@ -153,7 +153,7 @@ const SwapUpdatePrice: FC = () => {
       nDisabled={
         disabled && {
           opacity: 1,
-          color: 'outline',
+          color: 'onSurface',
           bg: 'lowestContainer',
           nHover: {
             bg: 'lowestContainer',
@@ -165,19 +165,19 @@ const SwapUpdatePrice: FC = () => {
       }}
     >
       {fetchingPrices ? (
-        <Box as="span" display="flex" position="absolute">
+        <Box as="span" display="flex" position="absolute" color="onSurface">
           <ProgressIndicator size={24} variant="loading" />
         </Box>
       ) : lastFetchDate ? (
-        <Box as="span" display="flex" position="absolute">
+        <Box as="span" display="flex" position="absolute" color="onSurface">
           <Countdown
             date={lastFetchDate + Number(interval) * 1000}
             renderer={countdownRenderer(interval)}
           />
         </Box>
       ) : (
-        <Box as="span" display="flex">
-          <RefreshSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+        <Box as="span" display="flex" color="onSurface">
+          <RefreshSVG maxWidth="2rem" maxHeight="2rem" width="100%" />
         </Box>
       )}
     </Button>

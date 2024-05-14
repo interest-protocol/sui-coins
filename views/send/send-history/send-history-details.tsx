@@ -1,11 +1,12 @@
 import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { formatAddress } from '@mysten/sui.js/utils';
 import { LinkAssets } from '@mysten/zksend/dist/cjs/links/utils';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
 import { TokenIcon } from '@/components';
-import { useNetwork } from '@/context/network';
+import { Network } from '@/constants';
 import { FixedPointMath } from '@/lib';
 import { TimesSVG } from '@/svg';
 import { getSymbolByType } from '@/utils';
@@ -19,7 +20,7 @@ const SendHistoryDetailsModal: FC<{
   closeModal: () => void;
   assets: LinkAssets;
 }> = ({ closeModal, assets }) => {
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
   const amountsMap = getAmountsMap(assets.balances);
 
   const { data: nfts } = useAssetsNFTs(assets.nfts);
@@ -74,7 +75,12 @@ const SendHistoryDetailsModal: FC<{
             justifyContent="space-between"
           >
             <Box gap="s" display="flex" alignItems="center">
-              <TokenIcon withBg type={type} symbol={symbol} network={network} />
+              <TokenIcon
+                withBg
+                type={type}
+                symbol={symbol}
+                network={network as Network}
+              />
               <Typography variant="body" size="medium">
                 {symbol}
               </Typography>
@@ -104,8 +110,8 @@ const SendHistoryDetailsModal: FC<{
                   withBg
                   loaderSize={12}
                   symbol={symbol}
-                  network={network}
-                  {...(url ? { url } : { network, type })}
+                  network={network as Network}
+                  {...(url ? { url } : { network: network as Network, type })}
                 />
                 <Typography variant="label" size="large">
                   {displayName || symbol || formatAddress(type)}

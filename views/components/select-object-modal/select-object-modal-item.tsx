@@ -5,18 +5,18 @@ import {
   Typography,
   useTheme,
 } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { formatAddress } from '@mysten/sui.js/utils';
 import { FC, MouseEventHandler, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { useLocalStorage } from 'usehooks-ts';
 
 import { TokenIcon } from '@/components';
-import { LOCAL_STORAGE_VERSION } from '@/constants';
-import { useNetwork } from '@/context/network';
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
 import { FavoriteSVG } from '@/svg';
 import { getSymbolByType } from '@/utils';
 
+import { CoinObject } from '../../../components/web3-manager/coins-manager/web3-manager.types';
 import { ObjectModalItemProps } from './select-object-modal.types';
 
 const ObjectModalItem: FC<ObjectModalItemProps> = ({
@@ -25,8 +25,8 @@ const ObjectModalItem: FC<ObjectModalItemProps> = ({
   onClick,
   selected,
 }) => {
-  const network = useNetwork();
   const { colors } = useTheme() as Theme;
+  const { network } = useSuiClientContext();
   const [isLoading, setLoading] = useState(false);
   const [favoriteObjects, setFavoriteObjects] = useLocalStorage<
     ReadonlyArray<string>
@@ -84,7 +84,7 @@ const ObjectModalItem: FC<ObjectModalItemProps> = ({
           withBg
           size="1.6rem"
           symbol={symbol}
-          {...(url ? { url } : { type: coinType, network })}
+          {...(url ? { url } : { type: coinType, network: network as Network })}
         />
         <Box
           ml="1rem"

@@ -1,9 +1,10 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { TokenIcon } from '@/components';
-import { useNetwork } from '@/context/network';
+import { Network } from '@/constants';
 import { ArrowLeftSVG, TimesSVG } from '@/svg';
 import { formatDollars } from '@/utils';
 
@@ -12,7 +13,7 @@ import SwapButton from '../swap-button';
 import SwapPreviewModalSummary from './swap-preview-modal-summary';
 
 const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
   const { control } = useFormContext<SwapForm>();
 
   const tokenFrom = useWatch({ control, name: 'from' });
@@ -66,7 +67,7 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
             justifyContent="start"
           >
             <Typography size="medium" variant="label" mb="xs">
-              FROM
+              Pay
             </Typography>
             <Box
               p="s"
@@ -79,9 +80,9 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
               <Box display="flex" alignItems="center" gap="m">
                 <TokenIcon
                   withBg
-                  network={network}
                   type={tokenFrom.type}
                   symbol={tokenFrom.symbol}
+                  network={network as Network}
                 />
                 <Typography size="small" variant="title">
                   {tokenFrom.symbol}
@@ -114,7 +115,7 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
               justifyContent="start"
             >
               <Typography size="medium" variant="label" mb="xs">
-                TO (ESTIMATED)
+                RECEIVE (ESTIMATED)
               </Typography>
               <Box
                 p="s"
@@ -127,9 +128,9 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
                 <Box display="flex" alignItems="center" gap="m">
                   <TokenIcon
                     withBg
-                    network={network}
                     type={tokenTo.type}
                     symbol={tokenTo.symbol}
+                    network={network as Network}
                   />
                   <Typography size="small" variant="title">
                     {tokenTo.symbol}

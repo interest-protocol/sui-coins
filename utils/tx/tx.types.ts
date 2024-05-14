@@ -1,4 +1,4 @@
-import { useSignTransactionBlock } from '@mysten/dapp-kit/dist/esm';
+import { useSignTransactionBlock } from '@mysten/dapp-kit';
 import { SuiClient } from '@mysten/sui.js/client';
 import { SuiTransactionBlockResponseOptions } from '@mysten/sui.js/client';
 import { TransactionBlock } from '@mysten/sui.js/transactions';

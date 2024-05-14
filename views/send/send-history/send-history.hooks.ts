@@ -2,19 +2,19 @@ import {
   useCurrentAccount,
   useSignTransactionBlock,
   useSuiClient,
+  useSuiClientContext,
 } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui.js/dist/cjs/client';
+import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { listCreatedLinks, ZkSendLink } from '@mysten/zksend';
 import useSWR from 'swr';
 
 import { Network } from '@/constants';
 import { ZK_BAG_CONTRACT_IDS } from '@/constants/zksend';
-import { useNetwork } from '@/context/network';
 import { throwTXIfNotSuccessful } from '@/utils';
 
 export const useLinkList = (currentCursor: string | null) => {
-  const network = useNetwork();
   const suiClient = useSuiClient();
+  const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
 
   return useSWR(
@@ -27,7 +27,7 @@ export const useLinkList = (currentCursor: string | null) => {
         host: '/send/link',
         path: location.origin,
         address: currentAccount.address,
-        contract: ZK_BAG_CONTRACT_IDS[network],
+        contract: ZK_BAG_CONTRACT_IDS[network as Network],
         network: network === Network.MAINNET ? 'mainnet' : 'testnet',
         ...(currentCursor && { cursor: currentCursor }),
       });

@@ -1,4 +1,4 @@
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { CoinObject } from '../../../../components/web3-manager/coins-manager/web3-manager.types';
 
 export interface ObjectField extends CoinObject {
   value: string;

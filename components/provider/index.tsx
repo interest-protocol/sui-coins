@@ -1,5 +1,3 @@
-import 'react-loading-skeleton/dist/skeleton.css';
-
 import { WalletProvider } from '@mysten/dapp-kit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { FC, PropsWithChildren } from 'react';
@@ -15,7 +13,7 @@ const Provider: FC<PropsWithChildren> = ({ children }) => (
   <ThemeManager>
     <QueryClientProvider client={queryClient}>
       <NetworkProvider>
-        <WalletProvider autoConnect zkSend={{ name: 'Sui Coins' }}>
+        <WalletProvider autoConnect stashedWallet={{ name: 'Sui Coins' }}>
           <SuiNsProvider>{children}</SuiNsProvider>
         </WalletProvider>
       </NetworkProvider>

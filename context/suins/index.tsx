@@ -1,4 +1,4 @@
-import { useAccounts } from '@mysten/dapp-kit';
+import { useAccounts, useSuiClientContext } from '@mysten/dapp-kit';
 import { getFullnodeUrl, SuiClient } from '@mysten/sui.js/client';
 import { SuinsClient } from '@mysten/suins-toolkit';
 import { fromPairs, pathOr, prop } from 'ramda';
@@ -12,7 +12,6 @@ import {
 } from 'react';
 
 import { Network } from '@/constants';
-import { useNetwork } from '@/context/network';
 import { noop } from '@/utils';
 
 import { ISuiNsContext } from './suins.types';
@@ -62,14 +61,14 @@ const suiNsClientRecord = {
 const suiNsContext = createContext<ISuiNsContext>({} as ISuiNsContext);
 
 export const SuiNsProvider: FC<PropsWithChildren> = ({ children }) => {
-  const { Provider } = suiNsContext;
-  const network = useNetwork();
   const accounts = useAccounts();
+  const { Provider } = suiNsContext;
+  const { network } = useSuiClientContext();
   const [loading, setLoading] = useState<boolean>(false);
   const [names, setNames] = useState<Record<string, string>>({});
   const [nsImages, setNsImages] = useState<Record<string, string>>({});
 
-  const provider = suiNsClientRecord[network];
+  const provider = suiNsClientRecord[network as Network];
 
   useEffect(() => {
     if (accounts.length) {
@@ -107,7 +106,9 @@ export const SuiNsProvider: FC<PropsWithChildren> = ({ children }) => {
 
                     if (!nftId) return [nameServer, null];
 
-                    const nft = await suiClientRecord[network].getObject({
+                    const nft = await suiClientRecord[
+                      network as Network
+                    ].getObject({
                       id: nftId,
                       options: { showDisplay: true },
                     });

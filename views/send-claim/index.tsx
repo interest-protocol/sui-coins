@@ -5,7 +5,7 @@ import {
   TextField,
   Typography,
 } from '@interest-protocol/ui-kit';
-import { useCurrentAccount } from '@mysten/dapp-kit';
+import { useCurrentAccount, useSuiClientContext } from '@mysten/dapp-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { isValidSuiAddress } from '@mysten/sui.js/utils';
 import { FC, useState } from 'react';
@@ -14,7 +14,7 @@ import toast from 'react-hot-toast';
 import { useDebounce } from 'use-debounce';
 
 import Layout from '@/components/layout';
-import { useNetwork } from '@/context/network';
+import { Network } from '@/constants';
 import { CheckmarkSVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 
@@ -24,14 +24,14 @@ import { IClaimForm, SendClaimProps } from './send-claim.types';
 
 const SendClaim: FC<SendClaimProps> = ({ data, error, mutate, isLoading }) => {
   const claim = useClaim();
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
   const [isClaiming, setClaiming] = useState(false);
   const { control, register } = useFormContext<IClaimForm>();
   const [address] = useDebounce(useWatch({ control, name: 'address' }), 800);
 
   const onSuccess = (tx: SuiTransactionBlockResponse) => {
-    showTXSuccessToast(tx, network);
+    showTXSuccessToast(tx, network as Network);
   };
 
   const isClaimed = !!data?.claimed;
@@ -164,7 +164,10 @@ const SendClaim: FC<SendClaimProps> = ({ data, error, mutate, isLoading }) => {
                 border="1px solid"
                 borderColor="outlineVariant"
               >
-                <SendAssetDetails network={network} assets={data.assets} />
+                <SendAssetDetails
+                  network={network as Network}
+                  assets={data.assets}
+                />
               </Box>
             </Box>
           )
