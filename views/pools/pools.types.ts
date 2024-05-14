@@ -8,6 +8,7 @@ import { ISwapSettings } from '../swap/swap.types';
 export enum FilterTypeEnum {
   ALGORITHM = 'algorithm',
   POOL_TYPE = 'pool_type',
+  CATEGORY = 'category',
 }
 
 export enum PoolTabEnum {
