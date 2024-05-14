@@ -46,6 +46,6 @@ export interface AggregatorPros {
 }
 
 export interface SwapSelectAggregatorModalProps {
-  onSelect: (aggregator: AggregatorPros) => void;
   aggregatorSelected: AggregatorPros;
+  onSelect: (aggregator: Aggregator) => void;
 }

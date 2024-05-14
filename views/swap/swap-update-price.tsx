@@ -91,7 +91,7 @@ const SwapUpdatePrice: FC = () => {
   const disabled = !coinInValue || coinInValue.isZero() || !coinOutType;
 
   const { mutate } = useSWR(
-    `${coinInType}-${coinOutType}-${coinInValue?.toString()}-${network}`,
+    `${coinInType}-${coinOutType}-${coinInValue?.toString()}-${network}-${aggregator}`,
     async () => {
       if (disabled) {
         resetFields();

@@ -15,7 +15,8 @@ const PriceImpact: FC = () => {
   const toUSD = toUSDPrice ? +toValue * toUSDPrice : null;
   const fromUSD = fromUSDPrice ? +fromValue * fromUSDPrice : null;
   const differenceBetween = fromUSD && toUSD ? fromUSD - toUSD : null;
-  const priceImpact = differenceBetween ? differenceBetween * 100 : null;
+  const priceImpact =
+    differenceBetween && fromUSD ? (differenceBetween * 100) / fromUSD : null;
 
   if (!priceImpact) return null;
 

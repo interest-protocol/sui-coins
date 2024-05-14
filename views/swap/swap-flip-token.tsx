@@ -41,7 +41,7 @@ const SwapFlipToken: FC = () => {
       onClick={flipToken}
       disabled={(!to && !from) || swapping}
     >
-      <SwapSVG maxWidth="2rem" maxHeight="2rem" width="100%" />
+      <SwapSVG maxWidth="1.25rem" maxHeight="1.25rem" width="100%" />
     </Button>
   );
 };

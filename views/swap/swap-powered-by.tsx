@@ -2,18 +2,20 @@ import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { AGGREGATORS_LIST } from './swap.data';
 import { SwapForm } from './swap.types';
 
 const SwapPoweredBy: FC = () => {
   const { control } = useFormContext<SwapForm>();
 
-  const aggregator = useWatch({
-    control,
-    name: 'aggregator',
-  });
+  const aggregator = useWatch({ control, name: 'aggregator' });
 
   return (
-    <a target="_blank" rel="noopener, noreferrer" href={aggregator.url}>
+    <a
+      target="_blank"
+      rel="noopener, noreferrer"
+      href={AGGREGATORS_LIST[aggregator].url}
+    >
       <Box
         gap="s"
         display="flex"
@@ -30,9 +32,9 @@ const SwapPoweredBy: FC = () => {
             <img
               width="100%"
               height="100%"
-              src={aggregator.logo}
-              alt={aggregator.name}
               style={{ borderRadius: '9999rem' }}
+              src={AGGREGATORS_LIST[aggregator].logo}
+              alt={AGGREGATORS_LIST[aggregator].name}
             />
           </Box>
           <Typography
@@ -42,7 +44,7 @@ const SwapPoweredBy: FC = () => {
             fontWeight="500"
             textTransform="capitalize"
           >
-            {aggregator.name}
+            {AGGREGATORS_LIST[aggregator].name}
           </Typography>
         </Box>
       </Box>

@@ -67,7 +67,8 @@ const SwapPreviewModalSummary: FC = () => {
 
   const differenceBetween = fromUSD && toUSD ? fromUSD - toUSD : null;
 
-  const priceImpact = differenceBetween ? differenceBetween * 100 : null;
+  const priceImpact =
+    differenceBetween && fromUSD ? (differenceBetween * 100) / fromUSD : null;
 
   return (
     <Box display="flex" flexDirection="column" mb="m" gap="l">
