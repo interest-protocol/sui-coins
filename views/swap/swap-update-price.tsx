@@ -121,9 +121,10 @@ const SwapUpdatePrice: FC = () => {
       setValue('route', data);
 
       const value = Number(
-        FixedPointMath.toNumber(
-          coinInValue.times(data.spotPrice),
-          2 * getValues('from.decimals') - getValues('to.decimals')
+        (
+          (FixedPointMath.toNumber(coinInValue, getValues('from.decimals')) *
+            10 ** (getValues('from.decimals') - getValues('to.decimals'))) /
+          data.spotPrice
         ).toFixed(6)
       ).toPrecision();
 
