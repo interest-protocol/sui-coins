@@ -2,7 +2,7 @@ import { Box, Button, ProgressIndicator } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
 import { RouterCompleteTradeRoute } from 'aftermath-ts-sdk';
 import BigNumber from 'bignumber.js';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import Countdown, { CountdownRendererFn } from 'react-countdown';
 import { useFormContext, useWatch } from 'react-hook-form';
 import useSWR from 'swr';
@@ -15,6 +15,7 @@ import { FixedPointMath } from '@/lib';
 import { JSONQuoteResponse } from '@/server/lib/hop/hop.utils';
 import { RefreshSVG } from '@/svg';
 
+import { SwapMessagesEnum } from './swap.data';
 import { useAftermathRouter } from './swap.hooks';
 import { Aggregator, SwapForm } from './swap.types';
 
@@ -90,7 +91,7 @@ const SwapUpdatePrice: FC = () => {
 
   const disabled = !coinInValue || coinInValue.isZero() || !coinOutType;
 
-  const { mutate } = useSWR(
+  const { mutate, error } = useSWR(
     `${coinInType}-${coinOutType}-${coinInValue?.toString()}-${network}-${aggregator}`,
     async () => {
       if (disabled) {
@@ -102,30 +103,18 @@ const SwapUpdatePrice: FC = () => {
 
       setValue('fetchingPrices', true);
 
-      const data = await (
-        aggregator === Aggregator.Aftermath
-          ? aftermathRouter.getCompleteTradeRouteGivenAmountIn({
-              coinInType,
-              coinOutType,
-              coinInAmount: BigInt(
-                coinInValue.decimalPlaces(0, BigNumber.ROUND_DOWN).toString()
-              ),
-              referrer: TREASURY,
-              externalFee: {
-                recipient: TREASURY,
-                feePercentage: EXCHANGE_FEE,
-              },
-            })
-          : hopSdk.quote(coinInType, coinOutType, coinInValue.toFixed(0))
-      )
-        .catch((e) => {
-          resetFields();
-          setValue('error', 'There is no market for these coins.');
-          throw e;
-        })
-        .finally(() => {
-          setValue('fetchingPrices', false);
-        });
+      const data = await (aggregator === Aggregator.Aftermath
+        ? aftermathRouter.getCompleteTradeRouteGivenAmountIn({
+            coinInType,
+            coinOutType,
+            referrer: TREASURY,
+            coinInAmount: BigInt(coinInValue.toFixed(0)),
+            externalFee: { recipient: TREASURY, feePercentage: EXCHANGE_FEE },
+          })
+        : hopSdk.quote(coinInType, coinOutType, coinInValue.toFixed(0))
+      ).finally(() => {
+        setValue('fetchingPrices', false);
+      });
 
       setValue('route', data);
 
@@ -147,6 +136,13 @@ const SwapUpdatePrice: FC = () => {
     },
     { refreshInterval: Number(interval) * 1000, refreshWhenOffline: false }
   );
+
+  useEffect(() => {
+    if (error) {
+      resetFields();
+      setValue('error', SwapMessagesEnum.noMarket);
+    }
+  }, [error]);
 
   return (
     <Button
