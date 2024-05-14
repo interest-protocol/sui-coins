@@ -1,4 +1,5 @@
 import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
+import { toPairs } from 'ramda';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
@@ -44,7 +45,7 @@ const SwapSelectAggregatorModal: FC<SwapSelectAggregatorModalProps> = ({
           <TimesSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
         </Button>
       </Box>
-      {AGGREGATORS_LIST.map((aggregator) => (
+      {toPairs(AGGREGATORS_LIST).map(([aggregator, data]) => (
         <Box
           p="l"
           key={v4()}
@@ -57,18 +58,16 @@ const SwapSelectAggregatorModal: FC<SwapSelectAggregatorModalProps> = ({
           cursor="pointer"
           transition="all 300ms ease-in-out"
           onClick={() => onSelect(aggregator)}
-          bg={
-            aggregatorSelected.name == aggregator.name ? '#0053DB14' : 'unset'
-          }
+          bg={aggregatorSelected.name == data.name ? '#0053DB14' : 'unset'}
         >
           <Box display="flex" alignItems="center" gap="m">
             <Box width="2.5rem" height="2.5rem">
               <img
-                alt={aggregator.name}
+                alt={data.name}
                 width="100%"
                 height="100%"
                 style={{ borderRadius: '0.5rem' }}
-                src={aggregator.logo}
+                src={data.logo}
               />
             </Box>
             <Typography
@@ -78,10 +77,10 @@ const SwapSelectAggregatorModal: FC<SwapSelectAggregatorModalProps> = ({
               fontWeight="700"
               textTransform="capitalize"
             >
-              {aggregator.name}
+              {data.name}
             </Typography>
           </Box>
-          {aggregatorSelected.name == aggregator.name && (
+          {aggregatorSelected.name == data.name && (
             <Box width="1rem" height="1rem">
               <CheckSVG width="100%" maxWidth="100%" maxHeight="100%" />
             </Box>
