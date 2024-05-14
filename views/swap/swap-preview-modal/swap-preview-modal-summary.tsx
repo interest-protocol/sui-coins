@@ -22,8 +22,8 @@ const SwapPreviewModalSummary: FC = () => {
 
   const fromValue = useWatch({ control, name: 'from.value' });
   const fromUSDPrice = useWatch({ control, name: 'from.usdPrice' });
-  const toValue = useWatch({ control, name: 'to.display' });
-  const toUSDPrice = useWatch({ control, name: 'to.usdPrice' });
+  const toValue = useWatch({ control, name: 'from.display' });
+  const toUSDPrice = useWatch({ control, name: 'from.usdPrice' });
   const route = useWatch({ control, name: 'route' });
   const slippage = useWatch({ control, name: 'settings.slippage' });
 
