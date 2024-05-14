@@ -74,13 +74,7 @@ const SwapPreviewModalSummary: FC = () => {
   return (
     <Box display="flex" flexDirection="column" mb="m" gap="l">
       <Box bg="surface" px="m" py="2xs" borderRadius="xs">
-        <Box
-          py="m"
-          display="flex"
-          borderBottom="1px solid"
-          borderColor="outlineVariant"
-          justifyContent="space-between"
-        >
+        <Box py="m" display="flex" justifyContent="space-between">
           <Typography
             size="medium"
             variant="body"
@@ -103,7 +97,13 @@ const SwapPreviewModalSummary: FC = () => {
           </Box>
         </Box>
         {aggregator !== Aggregator.Hop && (
-          <Box py="m" display="flex" justifyContent="space-between">
+          <Box
+            py="m"
+            display="flex"
+            borderTop="1px solid"
+            borderColor="outlineVariant"
+            justifyContent="space-between"
+          >
             <Typography
               variant="body"
               size="medium"
