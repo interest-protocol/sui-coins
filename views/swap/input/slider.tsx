@@ -43,7 +43,6 @@ const SwapFormFieldSlider: FC = () => {
           ).toFixed(0)
         : 100
       : 0;
-
   return (
     <Box mx="s">
       <Slider
@@ -65,6 +64,7 @@ const SwapFormFieldSlider: FC = () => {
             'from.value',
             balance.times(BigNumber(value)).div(BigNumber(100))
           );
+          if (getValues('focus')) setValue('focus', false);
         }}
       />
     </Box>

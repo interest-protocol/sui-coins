@@ -67,7 +67,7 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
             justifyContent="start"
           >
             <Typography size="medium" variant="label" mb="xs">
-              FROM
+              Pay
             </Typography>
             <Box
               p="s"
@@ -115,7 +115,7 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
               justifyContent="start"
             >
               <Typography size="medium" variant="label" mb="xs">
-                TO (ESTIMATED)
+                RECEIVE (ESTIMATED)
               </Typography>
               <Box
                 p="s"

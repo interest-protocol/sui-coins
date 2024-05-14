@@ -1,5 +1,6 @@
 import { Box, Button, ProgressIndicator } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
+import { RouterCompleteTradeRoute } from 'aftermath-ts-sdk';
 import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import Countdown, { CountdownRendererFn } from 'react-countdown';
@@ -9,11 +10,13 @@ import { useDebounce } from 'use-debounce';
 
 import { TREASURY } from '@/constants';
 import { EXCHANGE_FEE } from '@/constants/dex';
+import { useHopSdk } from '@/hooks/use-hop-sdk';
 import { FixedPointMath } from '@/lib';
+import { JSONQuoteResponse } from '@/server/lib/hop/hop.utils';
 import { RefreshSVG } from '@/svg';
 
 import { useAftermathRouter } from './swap.hooks';
-import { SwapForm } from './swap.types';
+import { Aggregator, SwapForm } from './swap.types';
 
 const countdownRenderer =
   (interval: string): CountdownRendererFn =>
@@ -32,6 +35,7 @@ const countdownRenderer =
   };
 
 const SwapUpdatePrice: FC = () => {
+  const hopSdk = useHopSdk();
   const { network } = useSuiClientContext();
   const aftermathRouter = useAftermathRouter();
   const { control, setValue, getValues } = useFormContext<SwapForm>();
@@ -40,6 +44,8 @@ const SwapUpdatePrice: FC = () => {
     control,
     name: 'from.type',
   });
+
+  const aggregator = useWatch({ control, name: 'settings.aggregator' });
 
   const [coinInValue] = useDebounce(
     useWatch({
@@ -85,7 +91,7 @@ const SwapUpdatePrice: FC = () => {
   const disabled = !coinInValue || coinInValue.isZero() || !coinOutType;
 
   const { mutate } = useSWR(
-    `${coinInType}-${coinOutType}-${coinInValue?.toString()}-${network}`,
+    `${coinInType}-${coinOutType}-${coinInValue?.toString()}-${network}-${aggregator}`,
     async () => {
       if (disabled) {
         resetFields();
@@ -96,19 +102,22 @@ const SwapUpdatePrice: FC = () => {
 
       setValue('fetchingPrices', true);
 
-      const data = await aftermathRouter
-        .getCompleteTradeRouteGivenAmountIn({
-          coinInType,
-          coinOutType,
-          coinInAmount: BigInt(
-            coinInValue.decimalPlaces(0, BigNumber.ROUND_DOWN).toString()
-          ),
-          referrer: TREASURY,
-          externalFee: {
-            recipient: TREASURY,
-            feePercentage: EXCHANGE_FEE,
-          },
-        })
+      const data = await (
+        aggregator === Aggregator.Aftermath
+          ? aftermathRouter.getCompleteTradeRouteGivenAmountIn({
+              coinInType,
+              coinOutType,
+              coinInAmount: BigInt(
+                coinInValue.decimalPlaces(0, BigNumber.ROUND_DOWN).toString()
+              ),
+              referrer: TREASURY,
+              externalFee: {
+                recipient: TREASURY,
+                feePercentage: EXCHANGE_FEE,
+              },
+            })
+          : hopSdk.quote(coinInType, coinOutType, coinInValue.toFixed(0))
+      )
         .catch((e) => {
           resetFields();
           setValue('error', 'There is no market for these coins.');
@@ -121,10 +130,14 @@ const SwapUpdatePrice: FC = () => {
       setValue('route', data);
 
       const value = Number(
-        (
-          (FixedPointMath.toNumber(coinInValue, getValues('from.decimals')) *
-            10 ** (getValues('from.decimals') - getValues('to.decimals'))) /
-          data.spotPrice
+        (aggregator === Aggregator.Aftermath
+          ? (FixedPointMath.toNumber(coinInValue, getValues('from.decimals')) *
+              10 ** (getValues('from.decimals') - getValues('to.decimals'))) /
+            (data as RouterCompleteTradeRoute).spotPrice
+          : FixedPointMath.toNumber(
+              BigNumber((data as JSONQuoteResponse).amount_out_with_fee),
+              getValues('to.decimals')
+            )
         ).toFixed(6)
       ).toPrecision();
 
@@ -138,11 +151,13 @@ const SwapUpdatePrice: FC = () => {
   return (
     <Button
       isIcon
+      p="xs"
       bg="onPrimary"
       width="1.5rem"
       height="1.5rem"
-      color="primary"
       variant="filled"
+      color="onSurface"
+      borderRadius="full"
       alignItems="center"
       position="relative"
       disabled={disabled}
@@ -152,7 +167,7 @@ const SwapUpdatePrice: FC = () => {
       nDisabled={
         disabled && {
           opacity: 1,
-          color: 'outline',
+          color: 'onSurface',
           bg: 'lowestContainer',
           nHover: {
             bg: 'lowestContainer',
@@ -164,19 +179,19 @@ const SwapUpdatePrice: FC = () => {
       }}
     >
       {fetchingPrices ? (
-        <Box as="span" display="flex" position="absolute">
+        <Box as="span" display="flex" position="absolute" color="onSurface">
           <ProgressIndicator size={24} variant="loading" />
         </Box>
       ) : lastFetchDate ? (
-        <Box as="span" display="flex" position="absolute">
+        <Box as="span" display="flex" position="absolute" color="onSurface">
           <Countdown
             date={lastFetchDate + Number(interval) * 1000}
             renderer={countdownRenderer(interval)}
           />
         </Box>
       ) : (
-        <Box as="span" display="flex">
-          <RefreshSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+        <Box as="span" display="flex" color="onSurface">
+          <RefreshSVG maxWidth="2rem" maxHeight="2rem" width="100%" />
         </Box>
       )}
     </Button>

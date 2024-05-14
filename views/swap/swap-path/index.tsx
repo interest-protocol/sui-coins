@@ -1,23 +1,20 @@
-import { Box, Typography } from '@interest-protocol/ui-kit';
-import { useSuiClientContext } from '@mysten/dapp-kit';
-import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import { Box } from '@interest-protocol/ui-kit';
+import { toPairs, values } from 'ramda';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
-import { TokenIcon } from '@/components';
-import { Network } from '@/constants';
-import { COIN_TYPE_TO_SYMBOL, SUI_TYPE_ARG_LONG } from '@/constants/coins';
-import { AftermathSVG, SwapArrowSVG } from '@/svg';
 import { SwapForm } from '@/views/swap/swap.types';
 
+import { isAftermathRoute } from '../swap.utils';
+import SwapPathLine from './swap-path-line';
+
 const SwapPath: FC = () => {
-  const { network } = useSuiClientContext();
   const { control } = useFormContext<SwapForm>();
 
-  const routes = useWatch({ control, name: 'route.routes' });
+  const route = useWatch({ control, name: 'route' });
 
-  if (!routes?.length) return null;
+  if (!route) return null;
 
   return (
     <Box
@@ -37,77 +34,29 @@ const SwapPath: FC = () => {
       flexWrap="wrap"
       overflowX="auto"
     >
-      {routes.map(({ paths }) => (
-        <Box
-          gap="m"
-          key={v4()}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Typography variant="label" size="small">
-            {(+(100 / routes.length).toFixed(1)).toPrecision()}%
-          </Typography>
-          {paths?.map(({ coinIn, coinOut, protocolName }, index) => [
-            !index ? (
-              <TokenIcon
-                key={v4()}
-                network={network as Network}
-                type={
-                  coinIn.type === SUI_TYPE_ARG_LONG ? SUI_TYPE_ARG : coinIn.type
-                }
-                symbol={
-                  COIN_TYPE_TO_SYMBOL[network as Network][
-                    coinIn.type === SUI_TYPE_ARG_LONG
-                      ? SUI_TYPE_ARG
-                      : coinIn.type
-                  ]
-                }
-              />
-            ) : null,
-            <Box key={v4()}>
-              <Typography variant="label" size="small">
-                {protocolName}
-              </Typography>
-              <SwapArrowSVG width="100%" maxWidth="5rem" maxHeight="0.75rem" />
-            </Box>,
-            <TokenIcon
+      {isAftermathRoute(route)
+        ? route.routes.map(({ paths }) => (
+            <SwapPathLine
               key={v4()}
-              network={network as Network}
-              type={
-                coinOut.type === SUI_TYPE_ARG_LONG ? SUI_TYPE_ARG : coinOut.type
-              }
-              symbol={
-                COIN_TYPE_TO_SYMBOL[network as Network][
-                  coinOut.type === SUI_TYPE_ARG_LONG
-                    ? SUI_TYPE_ARG
-                    : coinOut.type
-                ]
-              }
-            />,
-          ])}
-        </Box>
-      ))}
-      <a
-        target="_blank"
-        rel="noopener, noreferrer"
-        href="https://aftermath.finance"
-      >
-        <Box
-          gap="2xs"
-          display="flex"
-          left={['0.75rem', 'unset']}
-          right="0.75rem"
-          bottom="0.25rem"
-          position="absolute"
-          alignItems="flex-end"
-        >
-          <Typography variant="body" size="small">
-            Powered by
-          </Typography>
-          <AftermathSVG width="100%" maxWidth="1.2rem" maxHeight="1.2rem" />
-        </Box>
-      </a>
+              percentage={100 / route.routes.length}
+              paths={paths.map(({ coinIn, coinOut, protocolName }) => [
+                coinIn.type,
+                coinOut.type,
+                protocolName as string,
+              ])}
+            />
+          ))
+        : toPairs(route.trade.edges).map(([final, path]) => (
+            <SwapPathLine
+              key={v4()}
+              percentage={100 / values(route.trade.edges).length}
+              paths={[...path, final].map((type) => [
+                route.trade.nodes[type].amount_in.token as string,
+                route.trade.nodes[type].amount_out.token as string,
+                route.trade.nodes[type].pool.sui_exchange as string,
+              ])}
+            />
+          ))}
     </Box>
   );
 };

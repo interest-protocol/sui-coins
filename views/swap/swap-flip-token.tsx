@@ -31,15 +31,17 @@ const SwapFlipToken: FC = () => {
   return (
     <Button
       isIcon
+      p="xs"
       variant="text"
       bg="onPrimary"
       width="1.5rem"
       height="1.5rem"
-      color="primary"
+      color="onSurface"
+      borderRadius="full"
       onClick={flipToken}
       disabled={(!to && !from) || swapping}
     >
-      <SwapSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+      <SwapSVG maxWidth="1.25rem" maxHeight="1.25rem" width="100%" />
     </Button>
   );
 };
