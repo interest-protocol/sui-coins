@@ -27,7 +27,7 @@ const Swap: FC = () => (
     >
       <Box bg="lowestContainer" borderRadius="s" p="xl">
         <SwapHeader />
-        <Box py="xl" my="m" borderRadius="xs">
+        <Box display="flex" flexDirection="column" gap="5xl">
           <Input
             label="from"
             slider={
@@ -74,8 +74,8 @@ const Swap: FC = () => (
         </Box>
         <Box py="xl" borderRadius="xs" bg="lowestContainer" my="m">
           <Input label="to" />
-          <PreviewSwapButton />
         </Box>
+        <PreviewSwapButton />
         <SwapPoweredBy />
       </Box>
       <SwapPath />

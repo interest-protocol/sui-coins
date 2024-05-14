@@ -120,16 +120,14 @@ const SwapUpdatePrice: FC = () => {
 
       setValue('route', data);
 
-      setValue(
-        'to.display',
-        Number(
-          (
-            (FixedPointMath.toNumber(coinInValue, getValues('from.decimals')) *
-              10 ** (getValues('from.decimals') - getValues('to.decimals'))) /
-            data.spotPrice
-          ).toFixed(6)
-        ).toPrecision()
-      );
+      const value = Number(
+        FixedPointMath.toNumber(
+          coinInValue.times(data.spotPrice),
+          2 * getValues('from.decimals') - getValues('to.decimals')
+        ).toFixed(6)
+      ).toPrecision();
+
+      setValue('to.display', value);
 
       setValue('lastFetchDate', Date.now());
     },
