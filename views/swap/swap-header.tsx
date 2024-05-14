@@ -19,8 +19,6 @@ const SwapHeader: FC = () => {
     name: 'settings',
   });
 
-  console.log({ settings });
-
   const onSelect = (aggregator: Aggregator) => {
     setValue('settings.aggregator', aggregator);
     localStorage.setItem(
