@@ -4,7 +4,6 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
-import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { SwapForm } from '../swap.types';
 import { InputProps } from './input.types';
@@ -15,12 +14,11 @@ const HeaderInfo: FC<InputProps> = ({ label }) => {
 
   const type = useWatch({ control, name: `${label}.type` });
   const symbol = useWatch({ control, name: `${label}.symbol` });
-  const decimals = useWatch({ control, name: `${label}.decimals` });
 
-  const balance = FixedPointMath.toNumber(
-    coinsMap[type]?.balance ?? ZERO_BIG_NUMBER,
-    coinsMap[type]?.decimals ?? decimals
-  );
+  const balance =
+    type && coinsMap[type]
+      ? FixedPointMath.toNumber(coinsMap[type].balance, coinsMap[type].decimals)
+      : 0;
 
   return (
     <Box px="l" display="flex" justifyContent="space-between">
