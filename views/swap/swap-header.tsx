@@ -71,7 +71,7 @@ const SwapHeader: FC = () => {
         borderColor="outlineVariant"
         onClick={openModal}
         PrefixIcon={
-          <Box height="1.5rem" borderRadius="full">
+          <Box height="1.5rem" width="1.5rem" borderRadius="full">
             <img
               width="100%"
               height="100%"
