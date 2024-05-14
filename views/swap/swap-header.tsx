@@ -19,6 +19,8 @@ const SwapHeader: FC = () => {
     name: 'settings',
   });
 
+  console.log({ settings });
+
   const onSelect = (aggregator: Aggregator) => {
     setValue('settings.aggregator', aggregator);
     localStorage.setItem(
@@ -74,8 +76,8 @@ const SwapHeader: FC = () => {
               width="100%"
               height="100%"
               style={{ borderRadius: '999rem' }}
-              alt={AGGREGATORS_LIST[settings.aggregator].name}
-              src={AGGREGATORS_LIST[settings.aggregator].logo}
+              alt={AGGREGATORS_LIST[settings.aggregator]?.name}
+              src={AGGREGATORS_LIST[settings.aggregator]?.logo}
             />
           </Box>
         }
@@ -86,7 +88,7 @@ const SwapHeader: FC = () => {
         }
       >
         <Typography variant="body" size="medium" textTransform="capitalize">
-          {AGGREGATORS_LIST[settings.aggregator].shortName}
+          {AGGREGATORS_LIST[settings.aggregator]?.shortName}
         </Typography>
       </Button>
     </Box>

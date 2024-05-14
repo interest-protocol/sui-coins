@@ -32,7 +32,8 @@ const SwapInitManager: FC = () => {
 
   useEffect(() => {
     form.reset();
-    form.setValue('settings', settings);
+    const defaultSettings = form.getValues('settings');
+    form.setValue('settings', { ...defaultSettings, ...settings });
     updateURL(pathname);
   }, [network]);
 
@@ -94,7 +95,8 @@ const SwapInitManager: FC = () => {
   };
 
   useEffect(() => {
-    form.setValue('settings', settings);
+    const defaultSettings = form.getValues('settings');
+    form.setValue('settings', { ...defaultSettings, ...settings });
   }, [settings]);
 
   useEffect(() => {
