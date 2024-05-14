@@ -139,11 +139,13 @@ const SwapUpdatePrice: FC = () => {
   return (
     <Button
       isIcon
+      p="xs"
       bg="onPrimary"
       width="1.5rem"
       height="1.5rem"
-      color="primary"
       variant="filled"
+      color="onSurface"
+      borderRadius="full"
       alignItems="center"
       position="relative"
       disabled={disabled}
@@ -153,7 +155,7 @@ const SwapUpdatePrice: FC = () => {
       nDisabled={
         disabled && {
           opacity: 1,
-          color: 'outline',
+          color: 'onSurface',
           bg: 'lowestContainer',
           nHover: {
             bg: 'lowestContainer',
@@ -165,19 +167,19 @@ const SwapUpdatePrice: FC = () => {
       }}
     >
       {fetchingPrices ? (
-        <Box as="span" display="flex" position="absolute">
+        <Box as="span" display="flex" position="absolute" color="onSurface">
           <ProgressIndicator size={24} variant="loading" />
         </Box>
       ) : lastFetchDate ? (
-        <Box as="span" display="flex" position="absolute">
+        <Box as="span" display="flex" position="absolute" color="onSurface">
           <Countdown
             date={lastFetchDate + Number(interval) * 1000}
             renderer={countdownRenderer(interval)}
           />
         </Box>
       ) : (
-        <Box as="span" display="flex">
-          <RefreshSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+        <Box as="span" display="flex" color="onSurface">
+          <RefreshSVG maxWidth="2rem" maxHeight="2rem" width="100%" />
         </Box>
       )}
     </Button>

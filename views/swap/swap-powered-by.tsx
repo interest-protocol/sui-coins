@@ -23,7 +23,7 @@ const SwapPoweredBy: FC = () => {
         justifyContent="center"
       >
         <Typography variant="label" size="small" fontSize="s">
-          Powered By;
+          Powered By:
         </Typography>
         <Box display="flex" alignItems="center" gap="xs">
           <Box width="1.5rem" height="1.5rem">

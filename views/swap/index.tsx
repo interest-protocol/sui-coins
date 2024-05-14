@@ -27,7 +27,7 @@ const Swap: FC = () => (
     >
       <Box bg="lowestContainer" borderRadius="s" p="xl">
         <SwapHeader />
-        <Box py="xl">
+        <Box py="xl" my="m" borderRadius="xs">
           <Input
             label="from"
             slider={
@@ -37,14 +37,21 @@ const Swap: FC = () => (
             }
           />
         </Box>
-        <Box position="relative">
+        <Box
+          display="flex"
+          position="relative"
+          alignContent="center"
+          justifyContent="center"
+        >
+          <Box width="100%" height="0.313rem" bg="lowContainer" />
           <Box
-            my="-2rem"
+            gap="s"
+            my="-1.5rem"
             width="100%"
             display="flex"
             position="absolute"
             alignItems="center"
-            justifyContent="space-between"
+            justifyContent="center"
           >
             {[<SwapFlipToken key={v4()} />, <SwapUpdatePrice key={v4()} />].map(
               (button) => (
@@ -53,10 +60,10 @@ const Swap: FC = () => (
                   display="flex"
                   width="3.25rem"
                   height="3.25rem"
-                  borderRadius="s"
-                  border="6px solid"
+                  borderRadius="full"
+                  border="5px solid"
                   alignItems="center"
-                  borderColor="surface"
+                  borderColor="lowContainer"
                   justifyContent="center"
                 >
                   {button}
@@ -65,7 +72,7 @@ const Swap: FC = () => (
             )}
           </Box>
         </Box>
-        <Box py="xl" borderRadius="xs" bg="lowestContainer">
+        <Box py="xl" borderRadius="xs" bg="lowestContainer" my="m">
           <Input label="to" />
           <PreviewSwapButton />
         </Box>
