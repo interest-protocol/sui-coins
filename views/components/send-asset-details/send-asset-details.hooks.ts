@@ -1,14 +1,13 @@
-import { useSuiClient } from '@mysten/dapp-kit';
+import { useSuiClient, useSuiClientContext } from '@mysten/dapp-kit';
 import { SuiObjectResponse } from '@mysten/sui.js/client';
 import type { LinkAssets } from '@mysten/zksend/dist/cjs/links/utils';
 import useSWR from 'swr';
 
-import { useNetwork } from '@/context/network';
 import { CoinMetadataWithType } from '@/interface';
 
 export const useAssetsNFTs = (nfts: LinkAssets['nfts']) => {
-  const network = useNetwork();
   const suiClient = useSuiClient();
+  const { network } = useSuiClientContext();
 
   const idList = nfts.map(({ objectId }) => objectId).join();
 
@@ -32,7 +31,7 @@ export const useAssetsNFTs = (nfts: LinkAssets['nfts']) => {
 };
 
 export const useAssetsBalances = (balances: LinkAssets['balances']) => {
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
   const typeList = balances.reduce(
     (acc, { coinType }) => (acc ? `${acc},${coinType}` : coinType),
     ''

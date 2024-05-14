@@ -37,3 +37,15 @@ export interface SwapForm {
 export interface SwapPreviewModalProps {
   onClose: () => void;
 }
+
+export interface AggregatorPros {
+  url: string;
+  logo: string;
+  name: string;
+  shortName: 'hop' | 'aftermath';
+}
+
+export interface SwapSelectAggregatorModalProps {
+  onSelect: (aggregator: AggregatorPros) => void;
+  aggregatorSelected: AggregatorPros;
+}

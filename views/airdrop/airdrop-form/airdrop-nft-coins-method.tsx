@@ -3,7 +3,6 @@ import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
 import { NFTCollection, NFTCollectionMetadata } from '@/interface';
@@ -11,6 +10,7 @@ import { ChevronRightSVG } from '@/svg';
 import SelectNFTModal from '@/views/components/select-nft-modal';
 import SelectTokenModal from '@/views/components/select-token-modal';
 
+import { CoinObject } from '../../../components/web3-manager/coins-manager/web3-manager.types';
 import { IAirdropForm } from '../airdrop.types';
 import { getSymbol } from '../airdrop.utils';
 import AirdropCommonAmountTextField from './airdrop-common-amount-text-field';

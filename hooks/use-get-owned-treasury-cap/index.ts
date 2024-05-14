@@ -1,7 +1,10 @@
-import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
+import {
+  useCurrentAccount,
+  useSuiClient,
+  useSuiClientContext,
+} from '@mysten/dapp-kit';
 import useSWR from 'swr';
 
-import { useNetwork } from '@/context/network';
 import { makeSWRKey } from '@/utils';
 
 import { TGetOwned } from './use-get-owned-treasury-cap.types';
@@ -44,7 +47,7 @@ const getOwned: TGetOwned = async (provider, account, cursor = null) => {
 
 export const useGetOwnedTreasuryCap = () => {
   const suiClient = useSuiClient();
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
 
   return useSWR(

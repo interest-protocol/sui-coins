@@ -3,28 +3,30 @@ import {
   useCurrentAccount,
   useSignTransactionBlock,
   useSuiClient,
+  useSuiClientContext,
 } from '@mysten/dapp-kit';
+import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { EXPLORER_URL } from '@/constants';
-import { useNetwork } from '@/context/network';
+import { EXPLORER_URL, Network } from '@/constants';
 import { useDialog } from '@/hooks/use-dialog';
-import { useWeb3 } from '@/hooks/use-web3';
-import { throwTXIfNotSuccessful, ZERO_BIG_NUMBER } from '@/utils';
+import {
+  signAndExecute,
+  throwTXIfNotSuccessful,
+  ZERO_BIG_NUMBER,
+} from '@/utils';
 import { SwapForm } from '@/views/swap/swap.types';
 
 import { useSwap } from './swap.hooks';
 
 const SwapButton: FC = () => {
   const swap = useSwap();
-  const network = useNetwork();
-  const client = useSuiClient();
+  const suiClient = useSuiClient();
+  const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
   const formSwap = useFormContext<SwapForm>();
   const { dialog, handleClose } = useDialog();
-
-  const { mutate } = useWeb3();
 
   const signTransactionBlock = useSignTransactionBlock();
 
@@ -62,31 +64,24 @@ const SwapButton: FC = () => {
 
       formSwap.setValue('swapping', true);
 
-      const txb = await swap(formSwap.getValues());
+      const txb = (await swap(formSwap.getValues())) as TransactionBlock;
 
-      const { signature, transactionBlockBytes } =
-        await signTransactionBlock.mutateAsync({
-          transactionBlock: txb,
-          account: currentAccount,
-        });
-
-      const tx = await client.executeTransactionBlock({
-        transactionBlock: transactionBlockBytes,
-        signature,
-        options: { showEffects: true },
-        requestType: 'WaitForEffectsCert',
+      const tx = await signAndExecute({
+        txb,
+        suiClient,
+        currentAccount,
+        signTransactionBlock,
       });
 
       throwTXIfNotSuccessful(tx);
 
       formSwap.setValue(
         'explorerLink',
-        `${EXPLORER_URL[network]}/tx/${tx.digest}`
+        `${EXPLORER_URL[network as Network]}/tx/${tx.digest}`
       );
     } finally {
       resetInput();
       formSwap.setValue('swapping', false);
-      mutate();
     }
   };
 

@@ -1,18 +1,21 @@
 import { toB64 } from '@mysten/bcs';
-import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
+import {
+  useCurrentAccount,
+  useSuiClient,
+  useSuiClientContext,
+} from '@mysten/dapp-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { ZkSendLink } from '@mysten/zksend';
 
 import { Network } from '@/constants';
 import { ZK_BAG_CONTRACT_IDS } from '@/constants/zksend';
-import { useNetwork } from '@/context/network';
 import { throwTXIfNotSuccessful } from '@/utils';
 import { createClaimTransaction } from '@/utils/zk-send';
 
 export const useClaim = () => {
-  const network = useNetwork();
   const suiClient = useSuiClient();
+  const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
 
   return async (
@@ -28,7 +31,7 @@ export const useClaim = () => {
       sender: link.keypair!.toSuiAddress(),
       assets: link.assets,
       ...(network === Network.TESTNET && {
-        contracts: ZK_BAG_CONTRACT_IDS[network],
+        contracts: ZK_BAG_CONTRACT_IDS[network as Network],
       }),
     });
 

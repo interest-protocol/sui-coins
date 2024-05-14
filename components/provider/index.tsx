@@ -1,5 +1,3 @@
-import 'react-loading-skeleton/dist/skeleton.css';
-
 import { WalletProvider } from '@mysten/dapp-kit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { FC, PropsWithChildren } from 'react';

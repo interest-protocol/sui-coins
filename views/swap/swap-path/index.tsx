@@ -1,10 +1,9 @@
-import { Box, Typography } from '@interest-protocol/ui-kit';
+import { Box } from '@interest-protocol/ui-kit';
 import { toPairs, values } from 'ramda';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
-import { AftermathSVG } from '@/svg';
 import { SwapForm } from '@/views/swap/swap.types';
 
 import { isAftermathRoute } from '../swap.utils';
@@ -58,26 +57,6 @@ const SwapPath: FC = () => {
               ])}
             />
           ))}
-      <a
-        target="_blank"
-        rel="noopener, noreferrer"
-        href="https://aftermath.finance"
-      >
-        <Box
-          gap="2xs"
-          display="flex"
-          left={['0.75rem', 'unset']}
-          right="0.75rem"
-          bottom="0.25rem"
-          position="absolute"
-          alignItems="flex-end"
-        >
-          <Typography variant="body" size="small">
-            Powered by
-          </Typography>
-          <AftermathSVG width="100%" maxWidth="1.2rem" maxHeight="1.2rem" />
-        </Box>
-      </a>
     </Box>
   );
 };

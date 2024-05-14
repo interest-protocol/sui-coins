@@ -7,8 +7,8 @@ import { CaretUpSVG } from '@/svg';
 import { MenuSettingsListHeaderProps } from './menu-settings.types';
 
 const MenuSettingsListHeaderMobile: FC<MenuSettingsListHeaderProps> = ({
-  handleButton,
   isOpen,
+  handleButton,
 }) => (
   <Box
     p="xl"

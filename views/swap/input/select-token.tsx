@@ -1,11 +1,12 @@
 import { Token } from '@interest-protocol/sui-tokens';
 import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import TokenIcon from '@/components/token-icon';
-import { useNetwork } from '@/context/network';
+import { Network } from '@/constants';
 import { useModal } from '@/hooks/use-modal';
 import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
 import { updateURL } from '@/utils';
@@ -15,8 +16,8 @@ import { SwapForm } from '../swap.types';
 import { InputProps } from './input.types';
 
 const SelectToken: FC<InputProps> = ({ label }) => {
-  const network = useNetwork();
   const { pathname } = useRouter();
+  const { network } = useSuiClientContext();
   const { setModal, handleClose } = useModal();
 
   const { setValue, control } = useFormContext<SwapForm>();
@@ -109,35 +110,40 @@ const SelectToken: FC<InputProps> = ({ label }) => {
   return (
     <Box
       position="relative"
-      minWidth={['4rem', '8rem', '8rem', '8rem', '10rem']}
+      minWidth={['4rem', '8rem', '8rem', '8rem', '6.25rem']}
     >
       <Button
-        p="2xs"
+        p="xs"
+        pl={currentType ? 'xs' : '1rem !important'}
         fontSize="s"
+        height="2.5rem"
         width="100%"
         variant="tonal"
-        borderRadius="xs"
+        borderRadius="full"
+        border="1px solid"
+        borderColor="#C6C6CA !important"
         disabled={swapping}
         onClick={openModal}
-        bg="highestContainer"
+        bg="#F8F9FD"
         opacity={swapping ? 0.7 : 1}
         {...(currentType && {
           PrefixIcon: (
             <TokenIcon
               withBg
-              network={network}
+              rounded
               type={currentType}
               symbol={currentSymbol}
+              network={network as Network}
             />
           ),
         })}
       >
         <Typography
-          m="xs"
           size="large"
           variant="label"
           overflow="hidden"
           whiteSpace="nowrap"
+          fontFamily="Satoshi"
           width={['0px', 'auto']}
           display={[currentType ? 'none' : 'block', 'block']}
         >

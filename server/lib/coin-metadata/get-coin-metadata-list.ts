@@ -31,7 +31,7 @@ const getCoinMetadataList = async (
 
   if (!missingCoinsType.length) return docs;
 
-  const missingCoinsTypeBatches = chunk<string>(missingCoinsType, 7);
+  const missingCoinsTypeBatches = chunk<string>(missingCoinsType, 10);
 
   const missingCoinsMetadata: Array<
     CoinMetadataWithType & { hasMetadata: boolean }

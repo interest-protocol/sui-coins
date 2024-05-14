@@ -1,12 +1,12 @@
 import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
-import { ObjectData } from '@/context/all-objects/all-objects.types';
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { ObjectData } from '@/components/web3-manager/all-objects-manager/all-objects.types';
 import { useModal } from '@/hooks/use-modal';
 import { MinusSVG, PlusSVG } from '@/svg';
 import SelectObjectModal from '@/views/components/select-object-modal';
 
+import { CoinObject } from '../../../../components/web3-manager/coins-manager/web3-manager.types';
 import SendFormSelectObject from './send-select-object';
 import { ISendSimpleForm } from './send-simple.types';
 import FormSendButton from './send-simple-button';

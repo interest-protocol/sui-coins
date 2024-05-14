@@ -6,6 +6,7 @@ import { FixedPointMath } from '@/lib';
 import { parseInputEventToNumberString } from '@/utils';
 
 import { SwapForm } from '../swap.types';
+import Balance from './balance';
 import AmountInDollar from './dollar-value';
 import HeaderInfo from './header-info';
 import { InputFieldProps } from './input.types';
@@ -20,53 +21,63 @@ const Input: FC<InputFieldProps> = ({ label, slider }) => {
   });
 
   return (
-    <Box>
+    <Box py="5xl">
       <HeaderInfo label={label} />
-      <Box pl="l" pt="m" display="flex" justifyContent="space-between">
-        <SelectToken label={label} />
-        <Box
-          display="flex"
-          alignItems="flex-end"
-          flexDirection="column"
-          justifyContent="flex-end"
-        >
-          <TextField
-            pl="-1rem"
-            fontSize="2xl"
-            lineHeight="l"
-            placeholder="0"
-            color="onSurface"
-            textAlign="right"
-            fontFamily="Satoshi"
-            disabled={label === 'to' || swapping}
-            fieldProps={{
-              width: '100%',
-              borderRadius: 'xs',
-              borderColor: 'transparent',
-              border: 'none !important',
-              nHover: { border: 'none !important' },
-              nFocus: { border: 'none !important' },
-              nActive: { border: 'none !important' },
-            }}
-            {...register(`${label}.display`, {
-              onChange: (v: ChangeEvent<HTMLInputElement>) => {
-                const value = parseInputEventToNumberString(v);
-                setValue(`${label}.display`, value);
-                if (label === 'from')
-                  setValue(
-                    'from.value',
-                    FixedPointMath.toBigNumber(
-                      value,
-                      getValues('from.decimals')
-                    )
-                  );
-              },
-            })}
-          />
+      <Box
+        py="l"
+        gap="0.5rem"
+        display="flex"
+        flexDirection="column"
+        justifyContent="space-between"
+      >
+        <Box display="flex" justifyContent="space-between">
+          <SelectToken label={label} />
+          <Box display="flex" alignItems="center" justifyContent="flex-end">
+            <TextField
+              fontSize={['3xl', '5xl']}
+              lineHeight="l"
+              placeholder="0"
+              color="onSurface"
+              textAlign="right"
+              fontFamily="Satoshi"
+              disabled={label === 'to' || swapping}
+              fieldProps={{
+                width: '100%',
+                borderRadius: 'xs',
+                borderColor: 'transparent',
+                border: 'none !important',
+                mr: '-1rem',
+                nHover: { border: 'none !important' },
+                nFocus: { border: 'none !important' },
+                nActive: { border: 'none !important' },
+              }}
+              {...register(
+                `${label}.display`,
+                label === 'from'
+                  ? {
+                      onChange: (v: ChangeEvent<HTMLInputElement>) => {
+                        const value = parseInputEventToNumberString(v);
+                        setValue(`${label}.display`, value);
+                        setValue(
+                          'from.value',
+                          FixedPointMath.toBigNumber(
+                            value,
+                            getValues('from.decimals')
+                          )
+                        );
+                      },
+                    }
+                  : {}
+              )}
+            />
+          </Box>
+        </Box>
+        <Box display="flex" justifyContent="space-between">
+          <Balance label={label} />
           <AmountInDollar label={label} />
         </Box>
       </Box>
-      <Box pb={label === 'to' ? '2xl' : 's'}>{slider}</Box>
+      {slider && <Box pb={label === 'to' ? '2xl' : 's'}>{slider}</Box>}
     </Box>
   );
 };
