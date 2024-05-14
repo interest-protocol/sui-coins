@@ -8,6 +8,7 @@ import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
+import { SwapMessagesEnum } from './swap.data';
 import { SwapForm } from './swap.types';
 import SwapMessages from './swap-messages';
 import SwapPreviewModal from './swap-preview-modal';
@@ -59,12 +60,12 @@ const PreviewSwapButton: FC = () => {
     ) {
       if (from.type === SUI_TYPE_ARG)
         if (isGreaterThanAllowedWhenSui) {
-          setValue('error', 'You must have at least 1 SUI on your wallet');
+          setValue('error', SwapMessagesEnum.leastOneSui);
           return;
         }
 
       if (isGreaterThanBalance) {
-        setValue('error', 'You do not have enough tokens.');
+        setValue('error', SwapMessagesEnum.notEnoughToken);
         return;
       }
     }
