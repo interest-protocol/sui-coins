@@ -48,20 +48,24 @@ const Input: FC<InputFieldProps> = ({ label, slider }) => {
               nFocus: { border: 'none !important' },
               nActive: { border: 'none !important' },
             }}
-            {...register(`${label}.display`, {
-              onChange: (v: ChangeEvent<HTMLInputElement>) => {
-                const value = parseInputEventToNumberString(v);
-                setValue(`${label}.display`, value);
-                if (label === 'from')
-                  setValue(
-                    'from.value',
-                    FixedPointMath.toBigNumber(
-                      value,
-                      getValues('from.decimals')
-                    )
-                  );
-              },
-            })}
+            {...register(
+              `${label}.display`,
+              label === 'from'
+                ? {
+                    onChange: (v: ChangeEvent<HTMLInputElement>) => {
+                      const value = parseInputEventToNumberString(v);
+                      setValue(`${label}.display`, value);
+                      setValue(
+                        'from.value',
+                        FixedPointMath.toBigNumber(
+                          value,
+                          getValues('from.decimals')
+                        )
+                      );
+                    },
+                  }
+                : {}
+            )}
           />
           <AmountInDollar label={label} />
         </Box>
