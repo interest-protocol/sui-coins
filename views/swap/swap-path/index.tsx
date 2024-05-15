@@ -1,5 +1,5 @@
 import { Box } from '@interest-protocol/ui-kit';
-import { empty, toPairs, values } from 'ramda';
+import { toPairs, values } from 'ramda';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
@@ -15,8 +15,6 @@ const SwapPath: FC = () => {
   const route = useWatch({ control, name: 'route' });
 
   if (!route) return null;
-
-  console.log({ route });
 
   return (
     <Box
@@ -48,7 +46,7 @@ const SwapPath: FC = () => {
             ])}
           />
         ))
-      ) : empty(route.trade.edges) ? (
+      ) : !toPairs(route.trade.edges).length ? (
         <SwapPathLine
           key={v4()}
           percentage={100}

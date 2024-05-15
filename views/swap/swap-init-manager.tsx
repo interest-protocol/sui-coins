@@ -1,9 +1,5 @@
 import { useSuiClientContext } from '@mysten/dapp-kit';
-import {
-  isValidSuiAddress,
-  normalizeSuiAddress,
-  SUI_TYPE_ARG,
-} from '@mysten/sui.js/utils';
+import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import { useRouter } from 'next/router';
 import { FC, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -53,11 +49,7 @@ const SwapInitManager: FC = () => {
         usdPrice: null,
       };
     }
-    if (
-      typeof type === 'string' &&
-      type.startsWith('0x') &&
-      isValidSuiAddress(normalizeSuiAddress(type).split('::')[0])
-    ) {
+    if (typeof type === 'string' && type.startsWith('0x')) {
       const coin = await getCoin(type, network as Network, coinsMap);
 
       return {
