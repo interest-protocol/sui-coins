@@ -1,9 +1,5 @@
 import { useSuiClientContext } from '@mysten/dapp-kit';
-import {
-  isValidSuiAddress,
-  normalizeSuiAddress,
-  SUI_TYPE_ARG,
-} from '@mysten/sui.js/utils';
+import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import { useRouter } from 'next/router';
 import { FC, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -13,7 +9,7 @@ import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
 import { useWeb3 } from '@/hooks/use-web3';
 import { getCoin, isSui, updateURL } from '@/utils';
 
-import { ISwapSettings, SwapForm, SwapToken } from './swap.types';
+import { Aggregator, ISwapSettings, SwapForm, SwapToken } from './swap.types';
 
 const SwapInitManager: FC = () => {
   const { coinsMap } = useWeb3();
@@ -28,11 +24,12 @@ const SwapInitManager: FC = () => {
 
   const settings = useReadLocalStorage<ISwapSettings>(
     `${LOCAL_STORAGE_VERSION}-sui-coins-settings`
-  ) ?? { interval: '10', slippage: '0.1' };
+  ) ?? { interval: '10', slippage: '0.1', aggregator: Aggregator.Hop };
 
   useEffect(() => {
     form.reset();
-    form.setValue('settings', settings);
+    const defaultSettings = form.getValues('settings');
+    form.setValue('settings', { ...defaultSettings, ...settings });
     updateURL(pathname);
   }, [network]);
 
@@ -52,11 +49,7 @@ const SwapInitManager: FC = () => {
         usdPrice: null,
       };
     }
-    if (
-      typeof type === 'string' &&
-      type.startsWith('0x') &&
-      isValidSuiAddress(normalizeSuiAddress(type).split('::')[0])
-    ) {
+    if (typeof type === 'string' && type.startsWith('0x')) {
       const coin = await getCoin(type, network as Network, coinsMap);
 
       return {
@@ -72,6 +65,8 @@ const SwapInitManager: FC = () => {
     value: `0x${string}`,
     field: 'to' | 'from'
   ) => {
+    if (!value) return;
+
     const token = await getSwapToken(value);
 
     if (!token) return;
@@ -92,7 +87,8 @@ const SwapInitManager: FC = () => {
   };
 
   useEffect(() => {
-    form.setValue('settings', settings);
+    const defaultSettings = form.getValues('settings');
+    form.setValue('settings', { ...defaultSettings, ...settings });
   }, [settings]);
 
   useEffect(() => {

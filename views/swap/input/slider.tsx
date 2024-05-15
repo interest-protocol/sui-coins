@@ -65,6 +65,7 @@ const SwapFormFieldSlider: FC = () => {
             'from.value',
             balance.times(BigNumber(value)).div(BigNumber(100))
           );
+          if (getValues('focus')) setValue('focus', false);
         }}
       />
     </Box>
