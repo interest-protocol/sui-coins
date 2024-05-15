@@ -1,5 +1,5 @@
 import { Box } from '@interest-protocol/ui-kit';
-import { toPairs, values } from 'ramda';
+import { empty, toPairs, values } from 'ramda';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
@@ -16,6 +16,8 @@ const SwapPath: FC = () => {
 
   if (!route) return null;
 
+  console.log({ route });
+
   return (
     <Box
       p="l"
@@ -23,40 +25,54 @@ const SwapPath: FC = () => {
       mt="xs"
       mx="auto"
       width="100%"
-      maxWidth="90vw"
       display="flex"
+      maxWidth="90vw"
+      flexWrap="wrap"
+      overflowX="auto"
       color="onSurface"
       borderRadius="xs"
       position="relative"
       bg="lowestContainer"
-      alignItems={['unset', 'unset', 'center']}
       flexDirection="column"
-      flexWrap="wrap"
-      overflowX="auto"
+      alignItems={['unset', 'unset', 'center']}
     >
-      {isAftermathRoute(route)
-        ? route.routes.map(({ paths }) => (
-            <SwapPathLine
-              key={v4()}
-              percentage={100 / route.routes.length}
-              paths={paths.map(({ coinIn, coinOut, protocolName }) => [
-                coinIn.type,
-                coinOut.type,
-                protocolName as string,
-              ])}
-            />
-          ))
-        : toPairs(route.trade.edges).map(([final, path]) => (
-            <SwapPathLine
-              key={v4()}
-              percentage={100 / values(route.trade.edges).length}
-              paths={[...path, final].map((type) => [
-                route.trade.nodes[type].amount_in.token as string,
-                route.trade.nodes[type].amount_out.token as string,
-                route.trade.nodes[type].pool.sui_exchange as string,
-              ])}
-            />
-          ))}
+      {isAftermathRoute(route) ? (
+        route.routes.map(({ paths }) => (
+          <SwapPathLine
+            key={v4()}
+            percentage={100 / route.routes.length}
+            paths={paths.map(({ coinIn, coinOut, protocolName }) => [
+              coinIn.type,
+              coinOut.type,
+              protocolName as string,
+            ])}
+          />
+        ))
+      ) : empty(route.trade.edges) ? (
+        <SwapPathLine
+          key={v4()}
+          percentage={100}
+          paths={[
+            [
+              values(route.trade.nodes)[0].amount_in.token as string,
+              values(route.trade.nodes)[0].amount_out.token as string,
+              values(route.trade.nodes)[0].pool.sui_exchange as string,
+            ],
+          ]}
+        />
+      ) : (
+        toPairs(route.trade.edges).map(([final, path]) => (
+          <SwapPathLine
+            key={v4()}
+            percentage={100 / values(route.trade.edges).length}
+            paths={[...path, final].map((type) => [
+              route.trade.nodes[type].amount_in.token as string,
+              route.trade.nodes[type].amount_out.token as string,
+              route.trade.nodes[type].pool.sui_exchange as string,
+            ])}
+          />
+        ))
+      )}
     </Box>
   );
 };
