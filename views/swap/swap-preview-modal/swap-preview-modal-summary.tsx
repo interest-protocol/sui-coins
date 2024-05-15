@@ -6,13 +6,12 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import useSWR from 'swr';
 
-import { EXCHANGE_FEE } from '@/constants/dex';
 import { FixedPointMath } from '@/lib';
 import { DotErrorSVG } from '@/svg';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { useSwap } from '../swap.hooks';
-import { Aggregator, SwapForm } from '../swap.types';
+import { SwapForm } from '../swap.types';
 import { isAftermathRoute } from '../swap.utils';
 
 const SwapPreviewModalSummary: FC = () => {
@@ -27,7 +26,6 @@ const SwapPreviewModalSummary: FC = () => {
   const toUSDPrice = useWatch({ control, name: 'to.usdPrice' });
   const fromUSDPrice = useWatch({ control, name: 'from.usdPrice' });
   const slippage = useWatch({ control, name: 'settings.slippage' });
-  const aggregator = useWatch({ control, name: 'settings.aggregator' });
 
   const trackKey = route
     ? isAftermathRoute(route)
@@ -96,29 +94,6 @@ const SwapPreviewModalSummary: FC = () => {
             </Typography>
           </Box>
         </Box>
-        {aggregator !== Aggregator.Hop && (
-          <Box
-            py="m"
-            display="flex"
-            borderTop="1px solid"
-            borderColor="outlineVariant"
-            justifyContent="space-between"
-          >
-            <Typography
-              variant="body"
-              size="medium"
-              opacity="0.80"
-              color="#000000A3"
-            >
-              Exchange fee
-            </Typography>
-            <Box display="flex" justifyContent="center" alignItems="center">
-              <Typography mr="s" variant="body" size="medium" color="onSurface">
-                {EXCHANGE_FEE * 100}%
-              </Typography>
-            </Box>
-          </Box>
-        )}
         <Box
           py="m"
           display="flex"
