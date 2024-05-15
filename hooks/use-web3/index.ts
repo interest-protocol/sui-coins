@@ -46,12 +46,12 @@ export const useWeb3 = () => {
 
   const compiledCoinsObjects = useMemo(
     () => getCoinsObjects(coinsObjects, coins),
-    [coinsObjects]
+    [coinsObjects, coins]
   );
 
   const objects = useMemo(
     () => [...compiledCoinsObjects, ...ownedNfts, ...otherObjects],
-    [ownedNfts, otherObjects, coinsObjects]
+    [ownedNfts, otherObjects, compiledCoinsObjects]
   );
 
   const error = nftsError || coinsError || objectsError;
