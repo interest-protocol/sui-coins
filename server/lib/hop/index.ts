@@ -4,6 +4,8 @@ import type { Trade } from '@hop.ag/sdk/dist/sdk/util';
 import { getFullnodeUrl } from '@mysten/sui.js/client';
 import { normalizeStructTag, toB64 } from '@mysten/sui.js/utils';
 
+import { TREASURY } from '@/constants';
+import { EXCHANGE_FEE } from '@/constants/dex';
 import { mainnetClient } from '@/server/clients';
 
 export interface SwapArg {
@@ -17,7 +19,8 @@ const rpc =
 
 const hop_api_options = {
   api_key: process.env.HOP_API_KEY || '',
-  fee_bps: 0,
+  fee_bps: EXCHANGE_FEE,
+  fee_wallet: TREASURY,
 };
 
 const sdk = new HopSdk.HopApi(rpc, hop_api_options);

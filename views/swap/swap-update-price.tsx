@@ -9,6 +9,7 @@ import useSWR from 'swr';
 import { useDebounce } from 'use-debounce';
 
 import { TREASURY } from '@/constants';
+import { EXCHANGE_FEE } from '@/constants/dex';
 import { useHopSdk } from '@/hooks/use-hop-sdk';
 import { FixedPointMath } from '@/lib';
 import { JSONQuoteResponse } from '@/server/lib/hop/hop.utils';
@@ -108,6 +109,7 @@ const SwapUpdatePrice: FC = () => {
             coinOutType,
             referrer: TREASURY,
             coinInAmount: BigInt(coinInValue.toFixed(0)),
+            externalFee: { recipient: TREASURY, feePercentage: EXCHANGE_FEE },
           })
         : hopSdk.quote(coinInType, coinOutType, coinInValue.toFixed(0))
       ).finally(() => {
