@@ -35,7 +35,7 @@ const PoolCardTrade: FC<PoolCardTradeProps> = ({
       </Typography>
       <TooltipWrapper
         bg="onSurface"
-        tooltipPosition="right"
+        tooltipPosition="top"
         tooltipContent={
           <Typography variant="body" size="medium" color="surface">
             {tooltipInfo}

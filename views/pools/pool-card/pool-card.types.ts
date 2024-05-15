@@ -8,6 +8,12 @@ export enum AlgorithmEnum {
   'volatile' = 'volatile',
 }
 
+export enum CategoryEnum {
+  'official' = 'official',
+  'partner' = 'partners',
+  'all' = 'all',
+}
+
 export interface PoolCardHeaderProps {
   tags?: ReadonlyArray<string>;
 }
