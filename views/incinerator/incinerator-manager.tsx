@@ -45,8 +45,7 @@ const IncineratorManager: FC = () => {
   const updateAssets = () => {
     if (reset) setValue('reset', false);
 
-    if (empty !== !displayObjects[tab].length)
-      setValue('empty', !displayObjects[tab].length);
+    setValue('empty', !displayObjects[tab].length);
 
     setValue(
       'objects',
