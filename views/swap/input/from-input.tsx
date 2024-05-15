@@ -14,10 +14,8 @@ import SelectToken from './select-token';
 const FromInput: FC = () => {
   const { register, setValue, getValues, control } = useFormContext<SwapForm>();
 
+  useWatch({ control, name: 'focus' });
   const swapping = useWatch({ control, name: 'swapping' });
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const focus = useWatch({ control, name: 'focus' });
 
   return (
     <>
