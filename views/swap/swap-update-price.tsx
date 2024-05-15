@@ -133,6 +133,7 @@ const SwapUpdatePrice: FC = () => {
       setValue('to.display', value);
 
       setValue('lastFetchDate', Date.now());
+      setValue('error', null);
     },
     { refreshInterval: Number(interval) * 1000, refreshWhenOffline: false }
   );
