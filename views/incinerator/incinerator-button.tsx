@@ -3,7 +3,7 @@ import { useSuiClientContext } from '@mysten/dapp-kit';
 import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
 import { formatAddress } from '@mysten/sui.js/utils';
 import { prop } from 'ramda';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { v4 } from 'uuid';
