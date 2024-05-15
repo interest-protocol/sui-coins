@@ -10,6 +10,7 @@ import { updateURL } from '@/utils';
 import Input from './input';
 import ManageSlippage from './manage-slippage';
 import { SwapForm } from './swap.types';
+import SwapHeader from './swap-header';
 import SwapManager from './swap-manager';
 import SwapPath from './swap-manager/swap-path';
 import SwapPreviewButton from './swap-preview-button';
@@ -40,6 +41,7 @@ const Swap: FC = () => {
         width={['100%', '100%', '100%', '39.75rem']}
       >
         <Box py="xl" px="m" my="xs" borderRadius="xs" bg="container">
+          <SwapHeader />
           <Input label="from" />
           <Box my="0.25rem" position="relative">
             <Box
