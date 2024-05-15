@@ -22,14 +22,13 @@ const IncineratorManager: FC = () => {
     objects,
     loading,
     coinsMap,
+    setDelay,
     ownedNfts,
     otherObjects,
     coinsObjects,
-    setDelay,
   } = useWeb3();
 
   const tab = useWatch({ control, name: 'tab' });
-  const empty = useWatch({ control, name: 'empty' });
   const reset = useWatch({ control, name: 'reset' });
   const search = useWatch({ control, name: 'search' });
   const checked = useWatch({ control, name: 'checked' });
@@ -94,8 +93,8 @@ const IncineratorManager: FC = () => {
   useEffect(() => {
     if (
       !reset &&
-      !loading &&
       !error &&
+      !loading &&
       displayObjects[tab].every(({ type }) => type)
     )
       updateAssets();
@@ -106,7 +105,7 @@ const IncineratorManager: FC = () => {
       if (!reset && delay !== undefined) setDelay(undefined);
       updateAssets();
     }
-  }, [coinsMap]);
+  }, [objects, loading]);
 
   return null;
 };
