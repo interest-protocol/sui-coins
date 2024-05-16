@@ -5,6 +5,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { parseInputEventToNumberString } from '@/utils';
 
 import { SwapForm } from '../swap.types';
+import Balance from './balance';
 import AmountInDollar from './dollar-value';
 import HeaderInfo from './header-info';
 import { InputProps } from './input.types';
@@ -19,13 +20,13 @@ const Input: FC<InputProps> = ({ label }) => {
   return (
     <Box>
       <HeaderInfo label={label} />
-      <Box pl="l" pt="m" display="flex" justifyContent="space-between">
+      <Box pl="l" pt="m" pb="xs" display="flex" justifyContent="space-between">
         <SelectToken label={label} />
         <Box
           display="flex"
-          justifyContent="flex-end"
           alignItems="flex-end"
           flexDirection="column"
+          justifyContent="flex-end"
         >
           <TextField
             pl="-1rem"
@@ -53,6 +54,9 @@ const Input: FC<InputProps> = ({ label }) => {
           />
           <AmountInDollar label={label} />
         </Box>
+      </Box>
+      <Box pl="l" display="flex" alignItems="center">
+        <Balance label={label} />
       </Box>
       <Box pb={label === 'to' ? '2xl' : 's'}>
         {label === 'from' && (

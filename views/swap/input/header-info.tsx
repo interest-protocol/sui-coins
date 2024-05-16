@@ -24,7 +24,7 @@ const HeaderInfo: FC<InputProps> = ({ label }) => {
   return (
     <Box px="l" display="flex" justifyContent="space-between" color="onSurface">
       <Typography variant="label" size="small">
-        {label}
+        You {label == 'from' ? 'pay' : 'receive'}
       </Typography>
       <Box display="flex" justifyContent="center" alignItems="center" gap="2xs">
         <Typography variant="label" size="small">

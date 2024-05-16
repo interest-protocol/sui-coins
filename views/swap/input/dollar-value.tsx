@@ -33,7 +33,6 @@ const AmountInDollar: FC<InputProps> = ({ label }) => {
             +BigNumber(value).times(BigNumber(usdPrice)).toNumber().toFixed(3)
           )
         : '--'}{' '}
-      USD
     </Typography>
   );
 };

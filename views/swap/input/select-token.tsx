@@ -96,26 +96,28 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       minWidth={['8rem', '8rem', '8rem', '8rem', '10rem']}
     >
       <Button
-        p="2xs"
-        fontSize="s"
+        p="xs"
         width="100%"
+        fontSize="xs"
         variant="tonal"
+        borderRadius="m"
         color="onSurface"
-        borderRadius="xs"
+        border="1px solid"
+        borderColor="outline"
         bg="highestContainer"
         onClick={openModal}
         {...(Icon && {
           PrefixIcon: (
             <Box
               as="span"
-              width="2.5rem"
-              height="2.5rem"
+              width="2rem"
+              height="2rem"
               bg="onSurface"
-              color="onPrimary"
-              borderRadius="xs"
               display="flex"
-              justifyContent="center"
+              borderRadius="m"
+              color="onPrimary"
               alignItems="center"
+              justifyContent="center"
             >
               <TokenIcon
                 network={network}
@@ -126,14 +128,21 @@ const SelectToken: FC<InputProps> = ({ label }) => {
           ),
         })}
       >
-        <Typography size="large" variant="label" p="xs">
-          {currentSymbol ?? 'Select Token'}
-        </Typography>
-        {currentSymbol ? (
-          <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-        ) : (
-          <ChevronRightSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-        )}
+        <Box
+          width="100%"
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          <Typography size="large" variant="label" p="xs">
+            {currentSymbol ?? 'Select Token'}
+          </Typography>
+          {currentSymbol ? (
+            <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+          ) : (
+            <ChevronRightSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+          )}
+        </Box>
       </Button>
     </Box>
   );
