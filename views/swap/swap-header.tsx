@@ -61,7 +61,12 @@ const SwapHeader: FC = () => {
           </Box>
         }
       >
-        <Typography variant="body" size="medium" textTransform="capitalize">
+        <Typography
+          variant="body"
+          size="medium"
+          textTransform="capitalize"
+          pr="xs"
+        >
           {AGGREGATORS_LIST[settings.aggregator]?.shortName}
         </Typography>
       </Button>
