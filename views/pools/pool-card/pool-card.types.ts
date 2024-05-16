@@ -3,15 +3,12 @@ import { ReactNode } from 'react';
 
 import { CoinMetadataWithType } from '@/interface';
 
-export enum AlgorithmEnum {
-  'stable' = 'stable',
-  'volatile' = 'volatile',
-}
-
-export enum CategoryEnum {
+export enum FormFilterValue {
   'official' = 'official',
   'partner' = 'partners',
   'all' = 'all',
+  'stable' = 'stable',
+  'volatile' = 'volatile',
 }
 
 export interface PoolCardHeaderProps {

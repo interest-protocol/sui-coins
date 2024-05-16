@@ -20,10 +20,7 @@ const Dropdown: FC<DropdownProps> = ({ label, type, filterData, disabled }) => {
   });
 
   const [isOpen, setOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<FilterItemProps>({
-    type: type,
-    description: '',
-  });
+  const [selectedOption, setSelectedOption] = useState<FilterItemProps>();
 
   const [isSelected, setIsSelected] = useState(false);
 
@@ -41,14 +38,14 @@ const Dropdown: FC<DropdownProps> = ({ label, type, filterData, disabled }) => {
     const fieldSelected = fields?.filter((field) => field.type == type)[0];
     setSelectedOption({
       type: type,
-      description: fieldSelected?.description || '',
+      value: fieldSelected?.value || '',
     });
   }, [fields]);
 
   const handleSelect = (option: FilterItemProps) => {
-    if (option.description != selectedOption.description) {
+    if (option.value != selectedOption?.value) {
       const tmpFilters = fields?.filter(
-        (field) => selectedOption.description != field.description
+        (field) => selectedOption?.value != field.value
       );
       tmpFilters.push({ ...option });
       setSelectedOption(option);
@@ -127,11 +124,9 @@ const Dropdown: FC<DropdownProps> = ({ label, type, filterData, disabled }) => {
                       }}
                       textTransform="capitalize"
                     >
-                      {value.description}
+                      {value?.value}
                       <RadioButton
-                        defaultValue={
-                          selectedOption.description === value.description
-                        }
+                        defaultValue={selectedOption?.value === value.value}
                       />
                     </Box>
                   );

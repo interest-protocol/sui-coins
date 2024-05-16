@@ -10,7 +10,7 @@ import { FixedPointMath } from '@/lib';
 import { formatDollars } from '@/utils';
 
 import { LINES } from './pool-card.data';
-import { AlgorithmEnum, PoolCardProps } from './pool-card.types';
+import { FormFilterValue, PoolCardProps } from './pool-card.types';
 import {
   getStableLiquidity,
   getVolatileLiquidity,
@@ -58,7 +58,7 @@ const PoolCard: FC<PoolCardProps> = ({ pool, coinMetadata, prices }) => {
         <PoolCardHeader
           tags={[
             'CLAMM',
-            pool.isStable ? AlgorithmEnum.stable : AlgorithmEnum.volatile,
+            pool.isStable ? FormFilterValue.stable : FormFilterValue.volatile,
           ]}
         />
         <PoolCardInfo coinTypes={pool.coinTypes} coinMetadata={coinMetadata} />

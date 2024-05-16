@@ -1,29 +1,29 @@
-import { AlgorithmEnum, CategoryEnum } from '../pool-card/pool-card.types';
+import { FormFilterValue } from '../pool-card/pool-card.types';
 import { FilterItemProps, FilterTypeEnum } from '../pools.types';
 
 export const ALGORITHM_TYPE: Array<FilterItemProps> = [
   {
     type: FilterTypeEnum.ALGORITHM,
-    description: AlgorithmEnum.stable,
+    value: FormFilterValue.stable,
   },
   {
     type: FilterTypeEnum.ALGORITHM,
-    description: AlgorithmEnum.volatile,
+    value: FormFilterValue.volatile,
   },
 ];
 
 export const CATEGORY_TYPE: Array<FilterItemProps> = [
   {
     type: FilterTypeEnum.CATEGORY,
-    description: CategoryEnum.official,
+    value: FormFilterValue.official,
   },
   {
     type: FilterTypeEnum.CATEGORY,
-    description: CategoryEnum.partner,
+    value: FormFilterValue.partner,
   },
   {
     type: FilterTypeEnum.CATEGORY,
-    description: CategoryEnum.all,
+    value: FormFilterValue.all,
   },
 ];
 

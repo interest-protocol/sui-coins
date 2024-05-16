@@ -1,13 +1,12 @@
 import { InterestPool, PoolMetadata } from '@interest-protocol/clamm-sdk';
 
-import { Network } from '@/constants';
 import { CoinData } from '@/interface';
+import { FormFilterValue } from '@/views/pools/pool-card/pool-card.types';
 
 import { ISwapSettings } from '../swap/swap.types';
 
 export enum FilterTypeEnum {
   ALGORITHM = 'algorithm',
-  POOL_TYPE = 'pool_type',
   CATEGORY = 'category',
 }
 
@@ -23,10 +22,6 @@ export enum PoolOption {
 
 export interface PoolCardListProps {
   tab: PoolTabEnum;
-}
-
-export interface PoolCardListWrapper {
-  network: Network;
 }
 
 export interface PoolCardListContentProps {
@@ -55,5 +50,5 @@ export interface PoolForm {
 
 export interface FilterItemProps {
   type: FilterTypeEnum;
-  description: string;
+  value: FormFilterValue;
 }

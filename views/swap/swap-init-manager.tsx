@@ -124,8 +124,6 @@ const SwapInitManager: FC = () => {
 
       const params = searchParams.toString();
 
-      console.log({ params });
-
       updateURL(`${pathname}${params ? `?${params}` : ''}`);
     })();
   }, []);

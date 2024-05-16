@@ -6,7 +6,7 @@ import {
   Typography,
 } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
-import { inc } from 'ramda';
+import { inc, isEmpty } from 'ramda';
 import { FC, useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -15,28 +15,66 @@ import useSWR from 'swr';
 import { v4 } from 'uuid';
 
 import { Network, PAGE_SIZE } from '@/constants';
+import { CATEGORY_POOLS } from '@/constants/clamm';
 import { useGetCoinMetadata } from '@/hooks/use-get-coin-metadata';
 import useGetMultipleTokenPriceBySymbol from '@/hooks/use-get-multiple-token-price-by-symbol';
 import { useModal } from '@/hooks/use-modal';
 import { usePools } from '@/hooks/use-pools';
 import { useWeb3 } from '@/hooks/use-web3';
+import { FormFilterValue } from '@/views/pools/pool-card/pool-card.types';
 import { getAllSymbols } from '@/views/pools/pools.utils';
 
 import FindPoolDialog from './find-pool-modal/find-pool-dialog';
 import PoolCard from './pool-card';
 import PoolCardSkeleton from './pool-card/pool-card-skeleton';
 import {
+  FilterTypeEnum,
   PoolCardListContentProps,
   PoolCardListProps,
   PoolForm,
   PoolTabEnum,
 } from './pools.types';
 
+const DEFAULT_QUERY = [
+  { $or: [{ hooks: { $exists: false } }, { hooks: null }] },
+] as Record<any, any>[];
+
 const Pools: FC = () => {
   const [page, setPage] = useState(1);
+  const formContext = useFormContext<PoolForm>();
+  const { network } = useSuiClientContext();
+
+  const filterProps = useWatch({
+    control: formContext.control,
+    name: 'filterList',
+  });
+
+  const filterQuery = filterProps.reduce(
+    (acc, filterProp) => {
+      if (
+        filterProp.type === FilterTypeEnum.CATEGORY &&
+        filterProp.value !== FormFilterValue.all
+      ) {
+        const ids: string[] =
+          CATEGORY_POOLS[filterProp.value][network as Network];
+        return [...acc, { poolObjectId: { $in: ids } }];
+      }
+
+      if (filterProp.type === FilterTypeEnum.ALGORITHM) {
+        const pred = filterProp.value !== FormFilterValue.volatile;
+        return [...acc, { isStable: pred }];
+      }
+
+      return acc;
+    },
+    [] as Record<any, any>[]
+  );
+
   const [pools, setPools] = useState<ReadonlyArray<InterestPool>>([]);
   const { data, isLoading: arePoolsLoading } = usePools(page, {
-    $or: [{ hooks: { $exists: false } }, { hooks: null }],
+    $and: isEmpty(filterQuery)
+      ? DEFAULT_QUERY
+      : DEFAULT_QUERY.concat(filterQuery),
   });
 
   const safeData = data ?? { pools: [], totalPages: 0 };
@@ -47,21 +85,21 @@ const Pools: FC = () => {
     const dataIds = safeData.pools.map(({ poolObjectId }) => poolObjectId);
 
     if (
-      data &&
-      data.totalPages &&
-      page <= data.totalPages &&
+      safeData &&
+      safeData.totalPages &&
+      page <= safeData.totalPages &&
       !pools.some(({ poolObjectId }) => dataIds.includes(poolObjectId))
     )
-      setPools([...pools, ...safeData.pools]);
-  }, [data]);
+      setPools((pools) => pools.concat(safeData.pools));
+  }, [safeData, pools]);
 
   return (
     <PoolCardListContent
       pools={pools}
       nextPage={nextPage}
-      totalItems={data?.totalPages ?? 0}
+      totalItems={safeData?.totalPages ?? 0}
       arePoolsLoading={arePoolsLoading}
-      hasMore={(data?.totalPages ?? 0) - page * PAGE_SIZE > 0}
+      hasMore={(safeData?.totalPages ?? 0) - page * PAGE_SIZE > 0}
     />
   );
 };
@@ -140,9 +178,9 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
     poolList.filter((pool) =>
       filterList?.length
         ? filterList.every(
-            ({ type, description }) =>
+            ({ type, value }) =>
               type === 'algorithm' &&
-              description === (pool.isStable ? 'stable' : 'volatile')
+              value === (pool.isStable ? 'stable' : 'volatile')
           )
         : true
     );

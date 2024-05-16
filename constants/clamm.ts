@@ -20,3 +20,35 @@ export const CLAMM_ALLOWED_NETWORKS: Record<string, Network> = {
   testnet: Network.TESTNET,
   devnet: 'sui:devnet' as Network,
 };
+
+export const OFFICIAL_KEY = 'official' as string;
+
+export const PARTNERS_KEY = 'partners' as string;
+
+const SCALLOP_USDC_WSUSDC_POOL =
+  '0x6fc47a4c120278a30721eba138c5b19d7ea565934c33dc8facf20a79877f0a86';
+
+const SCALLOP_SUI_WSSUI_POOL =
+  '0x671343abb3bc0a2742443b835e06adc989690fc378f6bf330f7029584d30f555';
+
+export const SCALLOP_POOLS_MAP = {
+  [Network.MAINNET]: {
+    [SCALLOP_USDC_WSUSDC_POOL]: SCALLOP_USDC_WSUSDC_POOL,
+    [SCALLOP_SUI_WSSUI_POOL]: SCALLOP_SUI_WSSUI_POOL,
+  },
+  [Network.TESTNET]: {},
+};
+
+const OFFICIAL_POOLS = {
+  [Network.MAINNET]: [SCALLOP_USDC_WSUSDC_POOL, SCALLOP_SUI_WSSUI_POOL],
+  [Network.TESTNET]: [],
+};
+const PARTNER_POOLS = {
+  [Network.MAINNET]: [SCALLOP_USDC_WSUSDC_POOL, SCALLOP_SUI_WSSUI_POOL],
+  [Network.TESTNET]: [],
+};
+
+export const CATEGORY_POOLS = {
+  [OFFICIAL_KEY]: OFFICIAL_POOLS,
+  [PARTNERS_KEY]: PARTNER_POOLS,
+};

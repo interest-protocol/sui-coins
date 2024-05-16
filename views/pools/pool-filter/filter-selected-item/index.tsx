@@ -18,9 +18,7 @@ const FilterSelectedItem: FC = () => {
   });
 
   const removeFilter = (filter: FilterItemProps) => {
-    const tmpFilters = fields?.filter(
-      (field) => filter.description != field.description
-    );
+    const tmpFilters = fields?.filter((field) => filter.value != field.value);
     replace(tmpFilters);
   };
 
@@ -65,7 +63,7 @@ const FilterSelectedItem: FC = () => {
               </Box>
             }
           >
-            {field.description}
+            {field.value}
           </Button>
         </Box>
       ))}
