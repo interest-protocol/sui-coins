@@ -6,7 +6,9 @@ import { CoinsMap } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { CoinData } from '@/interface';
 
 export interface ISwapSettings {
+  interval: string;
   slippage: string;
+  aggregator: Aggregator;
 }
 
 export interface SwapToken extends CoinData {
@@ -19,6 +21,10 @@ interface SwapTypeArgs {
   coinIn: string;
   coinOut: string;
   lpCoin: string;
+}
+
+export enum Aggregator {
+  Native = 'Native',
 }
 
 export type SwapPath = ReadonlyArray<SwapTypeArgs>;
@@ -34,6 +40,13 @@ export interface SwapForm {
   disabled: boolean;
   swapPath: SwapPath;
   readyToSwap: boolean;
+}
+
+export interface AggregatorPros {
+  url: string;
+  logo: string;
+  name: string;
+  shortName: 'Native';
 }
 
 export interface SwapPreviewModalProps {
