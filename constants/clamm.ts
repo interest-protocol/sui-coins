@@ -1,3 +1,5 @@
+import { normalizeStructTag } from '@mysten/sui.js/utils';
+
 import { Network } from './dapp';
 
 export const EXCHANGE_FEE = 0.002;
@@ -19,8 +21,9 @@ export const CLAMM_PACKAGE_ADDRESSES = {
   },
 };
 
-export const SCALLOP_SUI_TYPE =
-  '0xefe8b36d5b2e43728cc323298626b83177803521d195cfb11e15b910e892fddf::reserve::MarketCoin<0x2::sui::SUI>' as string;
+export const SCALLOP_SUI_TYPE = normalizeStructTag(
+  '0xefe8b36d5b2e43728cc323298626b83177803521d195cfb11e15b910e892fddf::reserve::MarketCoin<0x2::sui::SUI>'
+) as string;
 
 export const SCALLOP_USDC_TYPE =
   '0xefe8b36d5b2e43728cc323298626b83177803521d195cfb11e15b910e892fddf::reserve::MarketCoin<0x5d4b302506645c37ff133b98c4b50a5ae14841659738d6d733d59d0d217a93bf::coin::COIN>' as string;

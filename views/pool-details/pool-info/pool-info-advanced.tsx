@@ -1,8 +1,12 @@
+import { VolatilePool } from '@interest-protocol/clamm-sdk';
 import { Box } from '@interest-protocol/ui-kit';
+import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
+import { WRAPPED_CONVERSION_MAP } from '@/constants/clamm';
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
+import { useNetwork } from '@/hooks/use-network';
 import { FixedPointMath } from '@/lib';
 import { formatMoney, getSymbolByType, parseBigNumberish } from '@/utils';
 import { isStablePool } from '@/views/pools/pool-card/pool-card.utils';
@@ -17,7 +21,7 @@ import PoolInfoLoading from './pool-info-loading';
 const AdvanceDetail: FC = () => {
   const clamm = useClammSdk();
   const { pool, metadata, loading, prices } = usePoolDetails();
-
+  const network = useNetwork();
   if (loading) return <PoolInfoLoading />;
 
   if (!pool || !metadata || !prices)
@@ -26,6 +30,9 @@ const AdvanceDetail: FC = () => {
         Pool not found
       </Box>
     );
+
+  const firstCoinPrice =
+    prices[metadata[pool.coinTypes[0]].symbol.toLowerCase()];
 
   return (
     <Box>
@@ -140,27 +147,40 @@ const AdvanceDetail: FC = () => {
         ))}
       </Accordion>
       <Accordion title="Price">
-        {pool.coinTypes.map((type) => (
-          <ItemToken
-            key={v4()}
-            type={type}
-            value={formatMoney(prices[metadata[type].symbol] ?? 0)}
-            symbol={metadata?.[type].symbol ?? getSymbolByType(type)}
-          />
-        ))}
+        {pool.coinTypes.map((type) => {
+          if (!pool.isStable) {
+            const price =
+              (pool as VolatilePool).state.coinStateMap[
+                WRAPPED_CONVERSION_MAP[network][type] || type
+              ]?.price || 0n;
+
+            const priceN = FixedPointMath.toNumber(
+              BigNumber(price.toString()),
+              18
+            );
+            return (
+              <ItemToken
+                key={v4()}
+                type={type}
+                value={formatMoney(firstCoinPrice * priceN, 4)}
+                symbol={metadata?.[type].symbol ?? getSymbolByType(type)}
+              />
+            );
+          }
+
+          return (
+            <ItemToken
+              key={v4()}
+              type={type}
+              value={formatMoney(
+                prices[metadata[type].symbol.toLowerCase()] ?? 0,
+                4
+              )}
+              symbol={metadata?.[type].symbol ?? getSymbolByType(type)}
+            />
+          );
+        })}
       </Accordion>
-      {/* <Accordion title="Oracle Price" noBorder>
-        {pool.coinTypes.map((type) => (
-          <ItemToken
-            key={v4()}
-            type={type}
-            value={formatMoney(
-              FixedPointMath.toNumber(priceOracle, decimalsScalar.e!)
-            )}
-            symbol={metadata?.[type].symbol ?? getSymbolByType(type)}
-          />
-        ))}
-      </Accordion> */}
     </Box>
   );
 };

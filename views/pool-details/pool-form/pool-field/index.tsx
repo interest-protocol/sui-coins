@@ -77,10 +77,7 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
         onChange: (v: ChangeEvent<HTMLInputElement>) => {
           if (isDeposit) handleDepositLock();
 
-          setValue(
-            `${fieldName}.value`,
-            (+Number(parseInputEventToNumberString(v)).toFixed(5)).toPrecision()
-          );
+          setValue(`${fieldName}.value`, parseInputEventToNumberString(v));
         },
       })}
       TokenIcon={

@@ -62,7 +62,7 @@ export const useWithdraw = () => {
         lpCoin,
         txb: initTxb as any,
         pool: pool.poolObjectId,
-        coinOutType: convertedType ?? tokenSelected,
+        coinOutType: convertedType || tokenSelected,
       });
 
       txb = response.txb as unknown as TransactionBlock;
@@ -91,14 +91,23 @@ export const useWithdraw = () => {
         coinsOut = [] as TransactionResult[];
 
         pool.coinTypes.forEach((x, index) => {
-          const unwrappedType = WRAPPED_CONVERSION_MAP[network][x];
+          const wrappedType = WRAPPED_CONVERSION_MAP[network][x];
 
-          if (!unwrappedType) return;
-          const cap = SCALLOP_WRAPPED_COINS_TREASURY_CAPS[network][x];
+          if (!wrappedType) {
+            coinsOut.push(response.coinsOut[index]);
+            return;
+          }
+
+          const cap = SCALLOP_WRAPPED_COINS_TREASURY_CAPS[network][wrappedType];
+
+          if (!cap) {
+            coinsOut.push(response.coinsOut[index]);
+            return;
+          }
 
           const unwrappedCoin = initTxb.moveCall({
             target: `${pkgs.SCALLOP_COINS_WRAPPER}::wrapped_scoin::burn`,
-            typeArguments: [unwrappedType, x],
+            typeArguments: [x, wrappedType],
             arguments: [initTxb.object(cap), response.coinsOut[index]],
           });
 

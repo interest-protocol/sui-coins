@@ -40,6 +40,32 @@ export const useDeposit = () => {
     });
 
     const coins = tokenList.map(({ value, type }) => {
+      if (!+value) {
+        const rightType =
+          isScallop && !!WRAPPED_CONVERSION_MAP[network][type]
+            ? WRAPPED_CONVERSION_MAP[network][type]
+            : type;
+
+        const coinZero = initTxb.moveCall({
+          target: `0x2::coin::zero`,
+          typeArguments: [rightType],
+        });
+
+        return coinZero;
+      }
+
+      if (isSui(type)) {
+        const [splittedCoin] = initTxb.splitCoins(initTxb.gas, [
+          initTxb.pure(
+            FixedPointMath.toBigNumber(value, coinsMap[type].decimals)
+              .decimalPlaces(0)
+              .toString()
+          ),
+        ]);
+
+        return splittedCoin;
+      }
+
       const [firstCoin, ...otherCoins] = coinsMap[type].objects;
 
       const firstCoinObject = initTxb.object(firstCoin.coinObjectId);
@@ -50,16 +76,13 @@ export const useDeposit = () => {
           otherCoins.map((coin) => coin.coinObjectId)
         );
 
-      const [splittedCoin] = initTxb.splitCoins(
-        isSui(type) ? initTxb.gas : firstCoinObject,
-        [
-          initTxb.pure(
-            FixedPointMath.toBigNumber(value, coinsMap[type].decimals)
-              .decimalPlaces(0)
-              .toString()
-          ),
-        ]
-      );
+      const [splittedCoin] = initTxb.splitCoins(firstCoinObject, [
+        initTxb.pure(
+          FixedPointMath.toBigNumber(value, coinsMap[type].decimals)
+            .decimalPlaces(0)
+            .toString()
+        ),
+      ]);
 
       if (isScallop && !!WRAPPED_CONVERSION_MAP[network][type]) {
         const wrappedType = WRAPPED_CONVERSION_MAP[network][type];

@@ -1,3 +1,4 @@
+import { normalizeStructTag } from '@mysten/sui.js/utils';
 import useSWR from 'swr';
 
 import { METADATA } from '@/constants/metadata';
@@ -23,7 +24,12 @@ export const useGetCoinMetadata = (coinsType: ReadonlyArray<string>) => {
         .then((res) => res.json())
         .then((data: ReadonlyArray<CoinMetadataWithType>) =>
           data
-            .concat(METADATA[network])
+            .map((metadata) => {
+              const override =
+                METADATA[network][normalizeStructTag(metadata.type)];
+
+              return override || metadata;
+            })
             .reduce((acc, item) => ({ ...acc, [item.type]: item }), {})
         );
     },

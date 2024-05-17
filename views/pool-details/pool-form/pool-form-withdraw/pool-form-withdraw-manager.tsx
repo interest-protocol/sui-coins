@@ -2,8 +2,11 @@ import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC, useEffect } from 'react';
 import { useWatch } from 'react-hook-form';
 import { useFormContext } from 'react-hook-form';
+import { useDebounce } from 'use-debounce';
 
+import { WRAPPED_CONVERSION_MAP } from '@/constants/clamm';
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
+import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import { DotErrorSVG } from '@/svg';
@@ -16,9 +19,9 @@ const WithdrawManager: FC = () => {
   const { control, setValue, getValues } = useFormContext<PoolForm>();
 
   const error = useWatch({ control, name: 'error' });
-  const value = useWatch({ control, name: 'lpCoin.value' });
+  const [value] = useDebounce(useWatch({ control, name: 'lpCoin.value' }), 800);
   const tokenSelected = useWatch({ control, name: 'tokenSelected' });
-
+  const network = useNetwork();
   const handleQuoteRemoveLiquidity = async () => {
     try {
       setValue('isFindingPool', true);
@@ -27,9 +30,11 @@ const WithdrawManager: FC = () => {
       const lpCoinDecimals = getValues('lpCoin.decimals');
 
       if (tokenSelected) {
+        const convertedType = WRAPPED_CONVERSION_MAP[network][tokenSelected];
+
         const minQuote = await clamm.quoteRemoveLiquidityOneCoin({
           pool: poolId,
-          coinOutType: tokenSelected,
+          coinOutType: convertedType || tokenSelected,
           amount: BigInt(
             FixedPointMath.toBigNumber(value, lpCoinDecimals)
               .decimalPlaces(0)

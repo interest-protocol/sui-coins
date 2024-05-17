@@ -183,8 +183,6 @@ const Position: FC = () => {
       setPools((pools) => pools.concat(safeData.pools));
   }, [safeData, pools]);
 
-  console.log({ pools });
-
   return (
     <PoolCardListContent
       pools={pools}
@@ -293,23 +291,6 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
   useEffect(() => {
     setListPools(sortedPoolList(_pools ?? []));
   }, [filterList, _pools]);
-
-  console.log({
-    arePoolsLoading,
-    pricesRecord,
-    coinMetadataMap,
-    arePricesLoading,
-    isCoinMetadataLoading,
-    isFindingPool,
-    isFilteredPoolsLoading,
-    pred:
-      arePoolsLoading ||
-      !pricesRecord ||
-      !coinMetadataMap ||
-      arePricesLoading ||
-      isCoinMetadataLoading ||
-      !!(isFindingPool && isFilteredPoolsLoading),
-  });
 
   if (
     arePoolsLoading ||

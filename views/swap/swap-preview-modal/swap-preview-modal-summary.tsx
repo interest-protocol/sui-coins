@@ -43,18 +43,12 @@ const SwapPreviewModalSummary: FC = () => {
     async () => {
       if (!route || !currentAccount) return;
 
-      console.log(1);
-
       const txb = await swap(getValues());
-
-      console.log(2);
 
       const inspect = await suiClient.devInspectTransactionBlock({
         transactionBlock: txb,
         sender: currentAccount.address,
       });
-
-      console.log({ inspect });
 
       const { storageRebate, ...gasStructure } = inspect.effects.gasUsed;
 
@@ -71,8 +65,6 @@ const SwapPreviewModalSummary: FC = () => {
       ];
     }
   );
-
-  console.log({ error });
 
   const toUSD = toUSDPrice ? +toValue * toUSDPrice : null;
   const fromUSD = fromUSDPrice ? +fromValue * fromUSDPrice : null;

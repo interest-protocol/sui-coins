@@ -1,3 +1,4 @@
+import { VolatilePool } from '@interest-protocol/clamm-sdk';
 import { Box } from '@interest-protocol/ui-kit';
 import BigNumber from 'bignumber.js';
 import { pathOr } from 'ramda';
@@ -5,7 +6,9 @@ import { FC } from 'react';
 import { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 
+import { WRAPPED_CONVERSION_MAP } from '@/constants/clamm';
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
+import { useNetwork } from '@/hooks/use-network';
 import { FixedPointMath } from '@/lib';
 import { formatDollars, formatMoney, parseBigNumberish } from '@/utils';
 import {
@@ -31,6 +34,8 @@ const PoolInfoDetail: FC = () => {
       : BigNumber(pathOr('0', ['state', 'virtualPrice'], pool))
   );
 
+  const network = useNetwork();
+
   useEffect(() => {
     if (pool && pool.isStable) {
       clamm
@@ -48,6 +53,10 @@ const PoolInfoDetail: FC = () => {
         Pool not found
       </Box>
     );
+
+  const symbol = metadata[pool.coinTypes[0]].symbol ?? '';
+
+  const firstCoinUSDPrice = symbol ? prices[symbol.toLowerCase()] : 0;
 
   const infoData = [
     pool.poolObjectId,
@@ -98,7 +107,54 @@ const PoolInfoDetail: FC = () => {
             {pool.coinTypes.map((type, index) => {
               const balance = pool.state.balances[index];
               const symbol = metadata[type].symbol ?? '';
-              const price = prices[symbol];
+
+              const price = prices[symbol.toLowerCase()];
+
+              if (!pool.isStable) {
+                const price =
+                  (pool as VolatilePool).state.coinStateMap[
+                    WRAPPED_CONVERSION_MAP[network][type] || type
+                  ]?.price || 0n;
+                const priceN = FixedPointMath.toNumber(
+                  BigNumber(price.toString()),
+                  18
+                );
+
+                const realPrice = priceN * firstCoinUSDPrice;
+
+                return (
+                  <ItemToken
+                    key={v4()}
+                    type={type}
+                    symbol={symbol}
+                    value={formatMoney(
+                      FixedPointMath.toNumber(BigNumber(String(balance)), 18)
+                    )}
+                    conversion={
+                      realPrice
+                        ? formatDollars(
+                            FixedPointMath.toNumber(
+                              BigNumber(String(balance)).times(realPrice),
+                              18
+                            )
+                          )
+                        : 'N/A'
+                    }
+                    percentage={
+                      realPrice
+                        ? (+(
+                            (FixedPointMath.toNumber(
+                              parseBigNumberish(balance).times(realPrice),
+                              parseBigNumberish(clamm.PRECISION).e!
+                            ) /
+                              liquidity) *
+                            100
+                          ).toFixed(2)).toPrecision() + '%'
+                        : 'N/A'
+                    }
+                  />
+                );
+              }
 
               return (
                 <ItemToken
