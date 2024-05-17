@@ -36,7 +36,7 @@ export const useSwap = () => {
         walletAddress: currentAccount.address,
         completeRoute: values.route,
         slippage: Number(values.settings.slippage),
-      })) as Promise<TransactionBlock>;
+      })) as unknown as TransactionBlock;
 
     const route = values.route.routes[0];
 
