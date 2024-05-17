@@ -5,7 +5,7 @@ import { getFullnodeUrl } from '@mysten/sui.js/client';
 import { normalizeStructTag, toB64 } from '@mysten/sui.js/utils';
 
 import { TREASURY } from '@/constants';
-import { EXCHANGE_FEE } from '@/constants/dex';
+import { EXCHANGE_FEE } from '@/constants/clamm';
 import { mainnetClient } from '@/server/clients';
 
 export interface SwapArg {
