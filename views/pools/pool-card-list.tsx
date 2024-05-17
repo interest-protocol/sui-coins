@@ -111,15 +111,61 @@ const Pools: FC = () => {
 const Position: FC = () => {
   const { coins } = useWeb3();
   const [page, setPage] = useState(1);
+  const formContext = useFormContext<PoolForm>();
+  const { network } = useSuiClientContext();
+
+  const filterProps = useWatch({
+    control: formContext.control,
+    name: 'filterList',
+  });
+
+  const filterQuery = filterProps.reduce(
+    (acc, filterProp) => {
+      if (
+        filterProp.type === FilterTypeEnum.CATEGORY &&
+        filterProp.value !== FormFilterValue.all
+      ) {
+        const ids: string[] =
+          CATEGORY_POOLS[filterProp.value][network as Network];
+        return [...acc, { poolObjectId: { $in: ids } }];
+      }
+
+      if (filterProp.type === FilterTypeEnum.ALGORITHM) {
+        const pred = filterProp.value !== FormFilterValue.volatile;
+        return [...acc, { isStable: pred }];
+      }
+
+      return acc;
+    },
+    [
+      {
+        lpCoinType: {
+          $in: coins.reduce(
+            (acc, { type }) => (type.includes('IPX') ? [...acc, type] : acc),
+            [] as ReadonlyArray<string>
+          ),
+        },
+      },
+    ] as Record<any, any>[]
+  ) ?? [
+    {
+      lpCoinType: {
+        $in: coins.reduce(
+          (acc, { type }) => (type.includes('IPX') ? [...acc, type] : acc),
+          [] as ReadonlyArray<string>
+        ),
+      },
+    },
+  ];
+
   const [pools, setPools] = useState<ReadonlyArray<InterestPool>>([]);
   const { data, isLoading: arePoolsLoading } = usePools(page, {
-    lpCoinType: {
-      $in: coins.reduce(
-        (acc, { type }) => (type.includes('IPX') ? [...acc, type] : acc),
-        [] as ReadonlyArray<string>
-      ),
-    },
+    $and: filterQuery,
   });
+
+  useEffect(() => {
+    setPools([]);
+  }, [filterProps]);
 
   const safeData = data ?? { pools: [], totalPages: 0 };
 
@@ -129,13 +175,15 @@ const Position: FC = () => {
     const dataIds = safeData.pools.map(({ poolObjectId }) => poolObjectId);
 
     if (
-      data &&
-      data.totalPages &&
-      page <= data.totalPages &&
+      safeData &&
+      safeData.totalPages &&
+      page <= safeData.totalPages &&
       !pools.some(({ poolObjectId }) => dataIds.includes(poolObjectId))
     )
-      setPools([...pools, ...safeData.pools]);
-  }, [data]);
+      setPools((pools) => pools.concat(safeData.pools));
+  }, [safeData, pools]);
+
+  console.log({ pools });
 
   return (
     <PoolCardListContent
@@ -246,6 +294,23 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
     setListPools(sortedPoolList(_pools ?? []));
   }, [filterList, _pools]);
 
+  console.log({
+    arePoolsLoading,
+    pricesRecord,
+    coinMetadataMap,
+    arePricesLoading,
+    isCoinMetadataLoading,
+    isFindingPool,
+    isFilteredPoolsLoading,
+    pred:
+      arePoolsLoading ||
+      !pricesRecord ||
+      !coinMetadataMap ||
+      arePricesLoading ||
+      isCoinMetadataLoading ||
+      !!(isFindingPool && isFilteredPoolsLoading),
+  });
+
   if (
     arePoolsLoading ||
     !pricesRecord ||
@@ -298,31 +363,12 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
       </Box>
     );
 
-  if (!pools)
+  if (!pools || !pools.length)
     return (
-      <Box width="100%" color="white">
+      <Box width="100%" color="onSurface" my="3xl">
         <Typography size="small" variant="display">
           No pool found!
         </Typography>
-      </Box>
-    );
-
-  if (!pools.length)
-    return (
-      <Box
-        gap="xs"
-        display="grid"
-        borderRadius="xs"
-        p={['s', 's', 's', 'l']}
-        gridTemplateColumns={[
-          '1fr',
-          '1fr',
-          '1fr 1fr',
-          '1fr 1fr',
-          '1fr 1fr 1fr',
-        ]}
-      >
-        <PoolCardSkeleton />
       </Box>
     );
 
