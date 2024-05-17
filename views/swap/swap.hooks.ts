@@ -1,28 +1,20 @@
-import { useCurrentAccount, useSuiClientContext } from '@mysten/dapp-kit';
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { Aftermath } from 'aftermath-ts-sdk';
 import invariant from 'tiny-invariant';
 
-import { Network } from '@/constants';
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
+import { useHopSdk } from '@/hooks/use-hop-sdk';
 import { useWeb3 } from '@/hooks/use-web3';
 import { isSui } from '@/utils';
 
 import { SwapForm } from './swap.types';
-import { isNativeRoute } from './swap.utils';
+import { isAftermathRoute, isNativeRoute } from './swap.utils';
 
-const INIT_ARG = {
-  [Network.TESTNET]: 'TESTNET',
-  [Network.MAINNET]: 'MAINNET',
-};
-
-export const useAftermathRouter = () => {
-  const { network } = useSuiClientContext();
-
-  return new Aftermath(INIT_ARG[network as Network]).Router();
-};
+export const useAftermathRouter = () => new Aftermath('MAINNET').Router();
 
 export const useSwap = () => {
+  const hopSdk = useHopSdk();
   const clamm = useClammSdk();
   const { coinsMap } = useWeb3();
   const afRouter = useAftermathRouter();
@@ -31,13 +23,22 @@ export const useSwap = () => {
   return async (values: SwapForm): Promise<TransactionBlock> => {
     invariant(values.route && currentAccount, 'Something went wrong');
 
-    if (!isNativeRoute(values.route))
-      return (await afRouter.getTransactionForCompleteTradeRoute({
-        walletAddress: currentAccount.address,
-        completeRoute: values.route,
-        slippage: Number(values.settings.slippage),
-      })) as unknown as TransactionBlock;
+    if (!isNativeRoute(values.route)) {
+      if (isAftermathRoute(values.route))
+        return (await afRouter.getTransactionForCompleteTradeRoute({
+          walletAddress: currentAccount.address,
+          completeRoute: values.route,
+          slippage: Number(values.settings.slippage),
+        })) as unknown as TransactionBlock;
 
+      const trade = values.route.trade;
+
+      return await hopSdk.swap(
+        trade,
+        currentAccount.address,
+        +values.settings.slippage * 100
+      );
+    }
     const route = values.route.routes[0];
 
     const auxTxb = new TransactionBlock();

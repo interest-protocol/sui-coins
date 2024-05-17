@@ -5,6 +5,7 @@ import {
   useSuiClient,
   useSuiClientContext,
 } from '@mysten/dapp-kit';
+import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import invariant from 'tiny-invariant';
@@ -18,11 +19,12 @@ import {
 } from '@/utils';
 import { SwapForm } from '@/views/swap/swap.types';
 
+import { SwapMessagesEnum } from './swap.data';
 import { useSwap } from './swap.hooks';
 
 const SwapButton: FC = () => {
   const swap = useSwap();
-  const client = useSuiClient();
+  const suiClient = useSuiClient();
   const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
   const formSwap = useFormContext<SwapForm>();
@@ -62,12 +64,12 @@ const SwapButton: FC = () => {
 
       formSwap.setValue('swapping', true);
 
-      const txb = await swap(formSwap.getValues());
+      const txb = (await swap(formSwap.getValues())) as TransactionBlock;
 
       const tx = await signAndExecute({
         txb,
+        suiClient,
         currentAccount,
-        suiClient: client,
         signTransactionBlock,
       });
 
@@ -88,18 +90,16 @@ const SwapButton: FC = () => {
     dialog.promise(handleSwap(), {
       loading: {
         title: 'Swapping...',
-        message: 'We are swapping, and you will let you know when it is done',
+        message: SwapMessagesEnum.swapping,
       },
       error: {
         title: 'Swap Failure',
-        message:
-          'Your swap failed, please try to increment your slippage and try again or contact the support team',
+        message: SwapMessagesEnum.swapFailure,
         primaryButton: { label: 'Try again', onClick: handleClose },
       },
       success: {
         title: 'Swap Successfully',
-        message:
-          'Your swap was successfully, and you can check it on the Explorer',
+        message: SwapMessagesEnum.swapSuccess,
         primaryButton: {
           label: 'See on Explorer',
           onClick: gotoExplorer,
@@ -116,8 +116,8 @@ const SwapButton: FC = () => {
     <Button
       onClick={onSwap}
       variant="filled"
-      justifyContent="center"
       disabled={!readyToSwap}
+      justifyContent="center"
     >
       <Typography variant="label" size="large">
         {swapping ? 'Swapping...' : 'Swap'}
