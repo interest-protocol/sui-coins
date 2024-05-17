@@ -20,7 +20,7 @@ const SlippageInfo: FC<SlippageInfoProps> = ({ isOpen, handleManageView }) => {
       display="flex"
       alignItems="center"
       justifyContent="space-between"
-      borderRadius="xs"
+      borderRadius="s"
       bg="onPrimary"
     >
       <Typography variant="label" size="large" fontSize="0.875rem">
