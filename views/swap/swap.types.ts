@@ -18,13 +18,13 @@ export interface SwapToken extends Token {
 
 export enum Aggregator {
   Hop = 'hop',
+  Interest = 'interest',
   Aftermath = 'aftermath',
 }
 
 export interface SwapForm {
   to: SwapToken;
   focus: boolean;
-  native: boolean;
   loading: boolean;
   swapping: boolean;
   explorerLink: string;
@@ -50,14 +50,15 @@ export type AggregatorType =
   | `${Aggregator.Aftermath}`
   | 'interest';
 
-export interface AggregatorPros {
+export interface AggregatorProps {
   url: string;
   logo: string;
   name: string;
+  disabled?: boolean;
   shortName: AggregatorType;
 }
 
 export interface SwapSelectAggregatorModalProps {
-  aggregatorSelected: AggregatorPros;
+  aggregatorSelected: AggregatorProps;
   onSelect: (aggregator: AggregatorType) => void;
 }

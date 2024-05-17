@@ -15,7 +15,7 @@ const SwapMessages: FC = () => {
 
   if (!error) return null;
 
-  const isCostumErrorBoxMessage = [
+  const isCustomErrorBoxMessage = [
     SwapMessagesEnum.leastOneSui,
     SwapMessagesEnum.notEnoughToken,
   ].includes(error);
@@ -28,12 +28,12 @@ const SwapMessages: FC = () => {
       display="flex"
       borderRadius="xs"
       border="1px solid"
-      bg={isCostumErrorBoxMessage ? 'lowContainer' : 'errorContainer'}
-      color={isCostumErrorBoxMessage ? 'outline' : 'onErrorContainer'}
-      borderColor={isCostumErrorBoxMessage ? 'outline' : 'onErrorContainer'}
+      bg={isCustomErrorBoxMessage ? 'lowContainer' : 'errorContainer'}
+      color={isCustomErrorBoxMessage ? 'outline' : 'onErrorContainer'}
+      borderColor={isCustomErrorBoxMessage ? 'outline' : 'onErrorContainer'}
     >
       <DotErrorSVG
-        dotColor={isCostumErrorBoxMessage ? colors.lowContainer : colors.error}
+        dotColor={isCustomErrorBoxMessage ? colors.lowContainer : colors.error}
         maxHeight="1rem"
         maxWidth="1rem"
         width="100%"

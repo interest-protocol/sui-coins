@@ -36,15 +36,19 @@ const SwapPath: FC = () => {
       alignItems={['unset', 'unset', 'center']}
     >
       {isNativeRoute(route) ? (
-        <SwapPathLine
-          key={v4()}
-          percentage={100}
-          paths={route.routes.map((path) => [
-            path[0][0] as string,
-            path[0][1] as string,
-            'IPX CLAMM',
-          ])}
-        />
+        route.routes.map(([paths]) => (
+          <SwapPathLine
+            key={v4()}
+            percentage={100}
+            paths={paths
+              .slice(0, -1)
+              .map((path, index) => [
+                path as string,
+                paths[index + 1] as string,
+                'IPX CLAMM',
+              ])}
+          />
+        ))
       ) : isAftermathRoute(route) ? (
         route.routes.map(({ paths }) => (
           <SwapPathLine

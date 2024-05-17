@@ -5,7 +5,6 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { LOCAL_STORAGE_VERSION } from '@/constants';
 import { useModal } from '@/hooks/use-modal';
 import { ThreeDotsSVG } from '@/svg';
-import { noop } from '@/utils';
 
 import { AGGREGATORS_LIST } from './swap.data';
 import { Aggregator, AggregatorType, SwapForm } from './swap.types';
@@ -18,11 +17,6 @@ const SwapHeader: FC = () => {
   const settings = useWatch({
     control,
     name: 'settings',
-  });
-
-  const native = useWatch({
-    control,
-    name: 'native',
   });
 
   const onSelect = (aggregator: AggregatorType) => {
@@ -47,16 +41,7 @@ const SwapHeader: FC = () => {
       >
         <SwapSelectAggregatorModal
           onSelect={onSelect}
-          aggregatorSelected={
-            native
-              ? {
-                  url: '',
-                  name: 'Interest',
-                  shortName: 'interest',
-                  logo: 'https://interestprotocol.com/logo.png',
-                }
-              : AGGREGATORS_LIST[settings.aggregator]
-          }
+          aggregatorSelected={AGGREGATORS_LIST[settings.aggregator]}
         />
       </Motion>,
       {
@@ -81,8 +66,8 @@ const SwapHeader: FC = () => {
         p="xs"
         variant="outline"
         borderRadius="full"
+        onClick={openModal}
         borderColor="outlineVariant"
-        onClick={native ? noop : openModal}
         PrefixIcon={
           <Box height="1.5rem" width="1.5rem" borderRadius="full">
             <img
@@ -95,11 +80,9 @@ const SwapHeader: FC = () => {
           </Box>
         }
         SuffixIcon={
-          !native && (
-            <Box width="1.5rem" height="1rem">
-              <ThreeDotsSVG maxHeight="100%" maxWidth="100%" width="100%" />
-            </Box>
-          )
+          <Box width="1.5rem" height="1rem">
+            <ThreeDotsSVG maxHeight="100%" maxWidth="100%" width="100%" />
+          </Box>
         }
       >
         <Typography variant="body" size="medium" textTransform="capitalize">

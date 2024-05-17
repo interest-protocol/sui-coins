@@ -51,7 +51,7 @@ const SwapUpdatePrice: FC = () => {
   const aftermathRouter = useAftermathRouter();
   const { control, setValue, getValues } = useFormContext<SwapForm>();
 
-  const native = getValues('native');
+  const native = getValues('settings.aggregator') === Aggregator.Interest;
 
   const coinInType = useWatch({
     control,

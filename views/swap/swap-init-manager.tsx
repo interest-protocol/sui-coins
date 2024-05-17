@@ -28,7 +28,14 @@ const SwapInitManager: FC = () => {
   useEffect(() => {
     form.reset();
     const defaultSettings = form.getValues('settings');
-    form.setValue('settings', { ...defaultSettings, ...settings });
+    form.setValue('settings', {
+      ...defaultSettings,
+      ...settings,
+      ...(process.env.VERCEL_ENV === 'production' &&
+        settings.aggregator === Aggregator.Interest && {
+          aggregator: Aggregator.Hop,
+        }),
+    });
     updateURL(pathname);
   }, [network]);
 

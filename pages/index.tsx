@@ -10,7 +10,6 @@ const SwapPage: NextPage = () => {
   const form = useForm<SwapForm>({
     defaultValues: {
       focus: true,
-      native: false,
       loading: true,
       settings: { interval: '10', slippage: '0.1', aggregator: Aggregator.Hop },
     },

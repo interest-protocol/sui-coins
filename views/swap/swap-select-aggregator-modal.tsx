@@ -9,7 +9,7 @@ import { CheckSVG, TimesSVG } from '@/svg';
 import { AGGREGATORS_LIST } from './swap.data';
 import {
   Aggregator,
-  AggregatorPros,
+  AggregatorProps,
   SwapSelectAggregatorModalProps,
 } from './swap.types';
 
@@ -49,7 +49,7 @@ const SwapSelectAggregatorModal: FC<SwapSelectAggregatorModalProps> = ({
           <TimesSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
         </Button>
       </Box>
-      {values(AGGREGATORS_LIST).map((data: AggregatorPros) => (
+      {values(AGGREGATORS_LIST).map((data: AggregatorProps) => (
         <Box
           p="l"
           key={v4()}
@@ -59,7 +59,9 @@ const SwapSelectAggregatorModal: FC<SwapSelectAggregatorModalProps> = ({
           nHover={{ bg: '#0053DB14' }}
           justifyContent="space-between"
           transition="all 300ms ease-in-out"
+          opacity={data.disabled ? '0.7' : 1}
           onClick={() =>
+            !data.disabled &&
             onSelect(
               data.shortName as
                 | `${Aggregator.Hop}`
