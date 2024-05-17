@@ -32,11 +32,11 @@ export const useSwap = () => {
     invariant(values.route && currentAccount, 'Something went wrong');
 
     if (!isNativeRoute(values.route))
-      return await afRouter.getTransactionForCompleteTradeRoute({
+      return (await afRouter.getTransactionForCompleteTradeRoute({
         walletAddress: currentAccount.address,
         completeRoute: values.route,
         slippage: Number(values.settings.slippage),
-      });
+      })) as Promise<TransactionBlock>;
 
     const route = values.route.routes[0];
 
@@ -70,7 +70,7 @@ export const useSwap = () => {
       txb: auxTxb as any,
       route: [route[0], route[1]],
       poolsMap: values.route.poolsMap,
-      slippage: +values.settings.slippage * 100,
+      slippage: Number((+values.settings.slippage * 100).toFixed(0)),
     });
 
     txb.transferObjects([coinOut], txb.pure(currentAccount.address));
