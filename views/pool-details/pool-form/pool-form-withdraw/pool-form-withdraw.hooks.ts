@@ -1,10 +1,17 @@
 import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
+import { TransactionResult } from '@mysten/sui.js/src/transactions';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 
+import {
+  CLAMM_PACKAGE_ADDRESSES,
+  SCALLOP_WRAPPED_COINS_TREASURY_CAPS,
+  WRAPPED_CONVERSION_MAP,
+} from '@/constants/clamm';
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
+import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
-import { getCoinOfValue } from '@/utils';
+import { getCoinOfValue, isScallopPool } from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
 
 export const useWithdraw = () => {
@@ -12,6 +19,8 @@ export const useWithdraw = () => {
   const { coinsMap } = useWeb3();
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
+  const network = useNetwork();
+  const pkgs = CLAMM_PACKAGE_ADDRESSES[network];
 
   return async (values: PoolForm): Promise<TransactionBlock> => {
     const { tokenList, pool, lpCoin: coin, tokenSelected } = values;
@@ -41,25 +50,63 @@ export const useWithdraw = () => {
     let coinsOut = [];
     let txb: TransactionBlock;
 
+    const isScallop = isScallopPool({
+      poolObjectId: pool.poolObjectId,
+      network,
+    });
+
     if (tokenSelected) {
+      const convertedType = WRAPPED_CONVERSION_MAP[network][tokenSelected];
+
       const response = await clamm.removeLiquidityOneCoin({
         lpCoin,
         txb: initTxb as any,
         pool: pool.poolObjectId,
-        coinOutType: tokenSelected,
+        coinOutType: convertedType ?? tokenSelected,
       });
 
-      coinsOut = [response.coinOut];
       txb = response.txb as unknown as TransactionBlock;
+
+      if (convertedType) {
+        const cap = SCALLOP_WRAPPED_COINS_TREASURY_CAPS[network][convertedType];
+
+        const unwrappedCoin = initTxb.moveCall({
+          target: `${pkgs.SCALLOP_COINS_WRAPPER}::wrapped_scoin::burn`,
+          typeArguments: [tokenSelected, convertedType],
+          arguments: [initTxb.object(cap), response.coinOut],
+        });
+
+        coinsOut = [unwrappedCoin];
+      } else {
+        coinsOut = [response.coinOut];
+      }
     } else {
       const response = await clamm.removeLiquidity({
         lpCoin,
         txb: initTxb as any,
         pool: pool.poolObjectId,
       });
-
-      coinsOut = response.coinsOut;
       txb = response.txb as unknown as TransactionBlock;
+      if (isScallop) {
+        coinsOut = [] as TransactionResult[];
+
+        pool.coinTypes.forEach((x, index) => {
+          const unwrappedType = WRAPPED_CONVERSION_MAP[network][x];
+
+          if (!unwrappedType) return;
+          const cap = SCALLOP_WRAPPED_COINS_TREASURY_CAPS[network][x];
+
+          const unwrappedCoin = initTxb.moveCall({
+            target: `${pkgs.SCALLOP_COINS_WRAPPER}::wrapped_scoin::burn`,
+            typeArguments: [unwrappedType, x],
+            arguments: [initTxb.object(cap), response.coinsOut[index]],
+          });
+
+          coinsOut.push(unwrappedCoin);
+        });
+      } else {
+        coinsOut = response.coinsOut;
+      }
     }
 
     txb.transferObjects(coinsOut, txb.pure.address(currentAccount.address));

@@ -46,6 +46,21 @@ export const SCALLOP_WRAPPED_COINS_TREASURY_CAPS = {
   },
 };
 
+export const WRAPPED_CONVERSION_MAP = {
+  [Network.MAINNET]: {
+    [WS_USDC_TYPE]: SCALLOP_USDC_TYPE,
+    [WS_SUI_TYPE]: SCALLOP_SUI_TYPE,
+    [SCALLOP_USDC_TYPE]: WS_USDC_TYPE,
+    [SCALLOP_SUI_TYPE]: WS_SUI_TYPE,
+  },
+  [Network.TESTNET]: {
+    [WS_USDC_TYPE]: SCALLOP_USDC_TYPE,
+    [WS_SUI_TYPE]: SCALLOP_SUI_TYPE,
+    [SCALLOP_USDC_TYPE]: WS_USDC_TYPE,
+    [SCALLOP_SUI_TYPE]: WS_SUI_TYPE,
+  },
+};
+
 export const CLAMM_ALLOWED_NETWORKS: Record<string, Network> = {
   mainnet: Network.MAINNET,
   testnet: Network.TESTNET,
@@ -66,11 +81,11 @@ export const SCALLOP_POOLS_MAP = {
   [Network.MAINNET]: {
     [SCALLOP_USDC_WSUSDC_POOL]: SCALLOP_USDC_WSUSDC_POOL,
     [SCALLOP_SUI_WSSUI_POOL]: SCALLOP_SUI_WSSUI_POOL,
-  },
+  } as Record<string, string>,
   [Network.TESTNET]: {
     [SCALLOP_USDC_WSUSDC_POOL]: SCALLOP_USDC_WSUSDC_POOL,
     [SCALLOP_SUI_WSSUI_POOL]: SCALLOP_SUI_WSSUI_POOL,
-  },
+  } as Record<string, string>,
 };
 
 const OFFICIAL_POOLS = {

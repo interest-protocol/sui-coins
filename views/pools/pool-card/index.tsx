@@ -90,15 +90,11 @@ const PoolCard: FC<PoolCardProps> = ({ pool, coinMetadata, prices }) => {
                             18
                           )}%`
                         : `${FixedPointMath.toNumber(
-                            BigNumber(String(data.state.fees.midFee)).div(
-                              100000000
-                            ),
-                            0
+                            BigNumber(String(data.state.fees.midFee)),
+                            8
                           )}% / ${FixedPointMath.toNumber(
-                            BigNumber(String(data.state.fees.outFee)).div(
-                              100000000
-                            ),
-                            0
+                            BigNumber(String(data.state.fees.outFee)),
+                            8
                           )}%`
               }
             />

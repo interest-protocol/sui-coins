@@ -3,13 +3,15 @@ import {
   useSuiClient,
   useSuiClientContext,
 } from '@mysten/dapp-kit';
+import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import { normalizeStructTag } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import useSWR from 'swr';
 
 import { useCoins } from '@/hooks/use-coins';
 import { CoinMetadataWithType } from '@/interface';
-import { makeSWRKey, normalizeSuiType, ZERO_BIG_NUMBER } from '@/utils';
+import { isSui, makeSWRKey, ZERO_BIG_NUMBER } from '@/utils';
 
 import { CoinsMap, TGetAllCoins } from './web3-manager.types';
 
@@ -72,8 +74,42 @@ const CoinsManager: FC = () => {
 
         const coins = filteredCoinsRaw.reduce(
           (acc, { coinType, ...coinRaw }) => {
-            const type = normalizeSuiType(coinType) as `0x${string}`;
+            const type = normalizeStructTag(coinType) as `0x${string}`;
             const { symbol, decimals, ...metadata } = dbCoinsMetadata[coinType];
+
+            if (isSui(type))
+              return {
+                ...acc,
+                [SUI_TYPE_ARG as `0x${string}`]: {
+                  ...acc[SUI_TYPE_ARG as `0x${string}`],
+                  ...coinRaw,
+                  type: SUI_TYPE_ARG as `0x${string}`,
+                  symbol,
+                  decimals,
+                  metadata,
+                  balance: BigNumber(coinRaw.balance).plus(
+                    acc[SUI_TYPE_ARG as `0x${string}`]?.balance ??
+                      ZERO_BIG_NUMBER
+                  ),
+                  objects: (acc[SUI_TYPE_ARG as string]?.objects ?? []).concat([
+                    { ...coinRaw, type: SUI_TYPE_ARG as `0x${string}` },
+                  ]),
+                },
+                [type]: {
+                  ...acc[type],
+                  ...coinRaw,
+                  type,
+                  symbol,
+                  decimals,
+                  metadata,
+                  balance: BigNumber(coinRaw.balance).plus(
+                    acc[type]?.balance ?? ZERO_BIG_NUMBER
+                  ),
+                  objects: (acc[type]?.objects ?? []).concat([
+                    { ...coinRaw, type },
+                  ]),
+                },
+              };
 
             return {
               ...acc,

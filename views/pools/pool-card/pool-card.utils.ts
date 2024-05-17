@@ -3,6 +3,7 @@ import {
   StablePool,
   VolatilePool,
 } from '@interest-protocol/clamm-sdk';
+import { normalizeStructTag } from '@mysten/sui.js/utils';
 import { BigNumber } from 'bignumber.js';
 import { isEmpty } from 'ramda';
 
@@ -83,51 +84,35 @@ export const getVolatileLiquidity = (
 
   const priceX = metadata[pool.coinTypes[0]]
     ? prices[
-        metadata[pool.coinTypes[0]]?.symbol.toLowerCase() === 'sui'
-          ? 'mov'
-          : metadata[pool.coinTypes[0]]?.symbol.toLowerCase()
+        metadata[normalizeStructTag(pool.coinTypes[0])]?.symbol.toLowerCase()
       ]
     : null;
 
   const priceY = metadata[pool.coinTypes[1]]
     ? prices[
-        metadata[pool.coinTypes[1]]?.symbol.toLowerCase() === ' sui'
-          ? 'move'
-          : metadata[pool.coinTypes[1]]?.symbol.toLowerCase()
+        metadata[normalizeStructTag(pool.coinTypes[1])]?.symbol.toLowerCase()
       ]
     : null;
 
   if (!priceX && !!priceY)
     return (
       2 *
-      FixedPointMath.toNumber(
-        BigNumber(String(pool.state.balances[1])),
-        metadata[pool.coinTypes[1]].decimals
-      ) *
+      FixedPointMath.toNumber(BigNumber(String(pool.state.balances[1])), 18) *
       priceY
     );
 
   if (!priceY && !!priceX)
     return (
       2 *
-      FixedPointMath.toNumber(
-        BigNumber(String(pool.state.balances[0])),
-        metadata[pool.coinTypes[0]].decimals
-      ) *
+      FixedPointMath.toNumber(BigNumber(String(pool.state.balances[0])), 18) *
       priceX
     );
 
   if (priceX && priceY)
     return (
-      FixedPointMath.toNumber(
-        BigNumber(String(pool.state.balances[1])),
-        metadata[pool.coinTypes[1]].decimals
-      ) *
+      FixedPointMath.toNumber(BigNumber(String(pool.state.balances[1])), 18) *
         priceY +
-      FixedPointMath.toNumber(
-        BigNumber(String(pool.state.balances[0])),
-        metadata[pool.coinTypes[0]].decimals
-      ) *
+      FixedPointMath.toNumber(BigNumber(String(pool.state.balances[0])), 18) *
         priceX
     );
 

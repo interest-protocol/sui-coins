@@ -5,6 +5,7 @@ export * from './clipboard';
 export * from './coin';
 export * from './fn';
 export * from './parse';
+export * from './pool';
 export * from './promise';
 export * from './string';
 export * from './toast';
