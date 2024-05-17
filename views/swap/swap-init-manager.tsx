@@ -32,9 +32,11 @@ const SwapInitManager: FC = () => {
       ...defaultSettings,
       ...settings,
       ...(process.env.VERCEL_ENV === 'production' &&
-        settings.aggregator === Aggregator.Interest && {
-          aggregator: Aggregator.Hop,
-        }),
+      settings.aggregator === Aggregator.Interest
+        ? {
+            aggregator: Aggregator.Hop,
+          }
+        : {}),
     });
     updateURL(pathname);
   }, [network]);
