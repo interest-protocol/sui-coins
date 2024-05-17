@@ -77,6 +77,10 @@ const Pools: FC = () => {
       : DEFAULT_QUERY.concat(filterQuery),
   });
 
+  useEffect(() => {
+    setPools([]);
+  }, [filterProps]);
+
   const safeData = data ?? { pools: [], totalPages: 0 };
 
   const nextPage = () => setPage(inc);

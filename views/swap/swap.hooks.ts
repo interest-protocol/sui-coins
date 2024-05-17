@@ -70,7 +70,7 @@ export const useSwap = () => {
       txb: auxTxb as any,
       route: [route[0], route[1]],
       poolsMap: values.route.poolsMap,
-      slippage: +values.settings.slippage,
+      slippage: +values.settings.slippage * 100,
     });
 
     txb.transferObjects([coinOut], txb.pure(currentAccount.address));
