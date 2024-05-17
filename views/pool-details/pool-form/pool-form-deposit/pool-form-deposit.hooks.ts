@@ -2,16 +2,29 @@ import { useCurrentAccount } from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import invariant from 'tiny-invariant';
 
+import {
+  CLAMM_PACKAGE_ADDRESSES,
+  SCALLOP_WRAPPED_COINS_TREASURY_CAPS,
+  WRAPPED_CONVERSION_MAP,
+} from '@/constants/clamm';
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
+import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
-import { getAmountMinusSlippage, isSui, parseBigNumberish } from '@/utils';
+import {
+  getAmountMinusSlippage,
+  isScallopPool,
+  isSui,
+  parseBigNumberish,
+} from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
 
 export const useDeposit = () => {
   const clamm = useClammSdk();
   const { coinsMap } = useWeb3();
   const currentAccount = useCurrentAccount();
+  const network = useNetwork();
+  const pkgs = CLAMM_PACKAGE_ADDRESSES[network];
 
   return async (values: PoolForm): Promise<TransactionBlock> => {
     const { tokenList, pool, settings } = values;
@@ -20,6 +33,11 @@ export const useDeposit = () => {
     invariant(tokenList.length, 'No tokens ');
 
     const initTxb = new TransactionBlock();
+
+    const isScallop = isScallopPool({
+      poolObjectId: pool.poolObjectId,
+      network,
+    });
 
     const coins = tokenList.map(({ value, type }) => {
       const [firstCoin, ...otherCoins] = coinsMap[type].objects;
@@ -42,6 +60,21 @@ export const useDeposit = () => {
           ),
         ]
       );
+
+      if (isScallop && !!WRAPPED_CONVERSION_MAP[network][type]) {
+        const wrappedType = WRAPPED_CONVERSION_MAP[network][type];
+        const cap = SCALLOP_WRAPPED_COINS_TREASURY_CAPS[network][wrappedType];
+
+        if (!cap) return splittedCoin;
+
+        const wrappedCoin = initTxb.moveCall({
+          target: `${pkgs.SCALLOP_COINS_WRAPPER}::wrapped_scoin::mint`,
+          typeArguments: [type, wrappedType],
+          arguments: [initTxb.object(cap), splittedCoin],
+        });
+
+        return wrappedCoin;
+      }
 
       return splittedCoin;
     });

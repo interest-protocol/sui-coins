@@ -1,6 +1,7 @@
 import { Token } from '@interest-protocol/sui-tokens';
 import { CoinStruct } from '@mysten/sui.js/client';
 import { TransactionResult } from '@mysten/sui.js/transactions';
+import { normalizeStructTag } from '@mysten/sui.js/utils';
 import { formatAddress, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
 import { propOr } from 'ramda';
@@ -20,7 +21,6 @@ import {
   CoinObject,
   CoinsMap,
 } from '../../components/web3-manager/coins-manager/web3-manager.types';
-import { isSameAddress } from '../address';
 import { ZERO_BIG_NUMBER } from '../big-number';
 import { getBasicCoinMetadata } from '../fn';
 import {
@@ -252,4 +252,5 @@ export async function getCoinOfValue({
   return coinOfValue;
 }
 
-export const isSui = (type: string) => isSameAddress(type, SUI_TYPE_ARG);
+export const isSui = (type: string) =>
+  normalizeStructTag(SUI_TYPE_ARG) === normalizeStructTag(type);

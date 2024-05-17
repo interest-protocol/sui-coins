@@ -55,7 +55,7 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
       disabled={!token}
       labelPosition="right"
       tokenName={
-        token?.symbol || !isDeposit ? safePoolSymbolFromType(token.type) : ''
+        token?.symbol || (!isDeposit ? safePoolSymbolFromType(token.type) : '')
       }
       fieldProps={{ bg: 'container' }}
       handleMax={() => {
@@ -107,7 +107,7 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
             token.type &&
             coinsMap[isSui(token.type) ? SUI_TYPE_ARG : token.type] ? (
               FixedPointMath.toNumber(
-                coinsMap[token.type].balance,
+                coinsMap[isSui(token.type) ? SUI_TYPE_ARG : token.type].balance,
                 token.decimals
               )
             ) : loading ? (
