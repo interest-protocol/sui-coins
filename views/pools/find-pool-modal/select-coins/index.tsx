@@ -12,12 +12,10 @@ const SelectCoins: FC = () => {
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'tokenList',
-    rules: { maxLength: 5 },
+    rules: { maxLength: 2 },
   });
 
-  const onRemoveSelectToken = (index: number) => {
-    remove(index);
-  };
+  const onRemoveSelectToken = (index: number) => remove(index);
 
   return (
     <Box my="2xs" height="73%">
@@ -26,7 +24,7 @@ const SelectCoins: FC = () => {
           Select pool token
         </Typography>
         <Box display="grid" gap="s" my="s">
-          {fields.slice(0, 5).map(({ id }, index) => (
+          {fields.slice(0, 2).map(({ id }, index) => (
             <SelectToken
               key={id}
               index={index}
@@ -35,7 +33,7 @@ const SelectCoins: FC = () => {
             />
           ))}
         </Box>
-        {fields.length < 5 && (
+        {fields.length < 2 && (
           <Button
             mt="xl"
             mx="auto"

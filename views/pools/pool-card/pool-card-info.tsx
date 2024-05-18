@@ -39,7 +39,7 @@ const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({
               key={v4()}
               type={type}
               network={network as Network}
-              symbol={coinMetadata[type].symbol}
+              symbol={coinMetadata[type]?.symbol ?? ''}
             />
           ))}
         </Box>

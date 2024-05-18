@@ -6,7 +6,7 @@ import {
   Typography,
 } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
-import { inc, isEmpty } from 'ramda';
+import { inc } from 'ramda';
 import { FC, useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -49,8 +49,19 @@ const Pools: FC = () => {
     name: 'filterList',
   });
 
-  const filterQuery = filterProps.reduce(
-    (acc, filterProp) => {
+  const tokenList = useWatch({
+    control: formContext.control,
+    name: 'tokenList',
+  });
+
+  const query =
+    filterProps.reduce((acc, filterProp) => {
+      if (tokenList?.filter(({ type }) => type).length)
+        return [
+          ...acc,
+          { coinTypes: { $in: tokenList.map(({ type }) => type) } },
+        ];
+
       if (
         filterProp.type === FilterTypeEnum.CATEGORY &&
         filterProp.value !== FormFilterValue.all
@@ -66,20 +77,16 @@ const Pools: FC = () => {
       }
 
       return acc;
-    },
-    [] as Record<any, any>[]
-  );
+    }, DEFAULT_QUERY) ?? DEFAULT_QUERY;
 
   const [pools, setPools] = useState<ReadonlyArray<InterestPool>>([]);
   const { data, isLoading: arePoolsLoading } = usePools(page, {
-    $and: isEmpty(filterQuery)
-      ? DEFAULT_QUERY
-      : DEFAULT_QUERY.concat(filterQuery),
+    $and: query,
   });
 
   useEffect(() => {
     setPools([]);
-  }, [filterProps]);
+  }, [filterProps, tokenList]);
 
   const safeData = data ?? { pools: [], totalPages: 0 };
 
