@@ -51,7 +51,7 @@ const Pools: FC = () => {
 
   const query =
     filterProps.reduce((acc, filterProp) => {
-      const tokenList = getValues('tokenList');
+      const tokenList = formContext.getValues('tokenList');
 
       if (tokenList?.filter(({ type }) => type).length)
         return [
