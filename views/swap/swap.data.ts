@@ -1,17 +1,24 @@
-import { Aggregator, AggregatorPros } from './swap.types';
+import { Aggregator, AggregatorProps } from './swap.types';
 
-export const AGGREGATORS_LIST: Record<Aggregator, AggregatorPros> = {
+export const AGGREGATORS_LIST: Record<Aggregator, AggregatorProps> = {
   [Aggregator.Hop]: {
-    shortName: 'hop',
     url: 'https://hop.ag/',
     name: 'Hop Aggregator',
+    shortName: Aggregator.Hop,
     logo: '/images/aggregators/hop.webp',
   },
   [Aggregator.Aftermath]: {
     name: 'Aftermath',
-    shortName: 'aftermath',
+    shortName: Aggregator.Aftermath,
     url: 'https://aftermath.finance/',
     logo: '/images/aggregators/aftermath.webp',
+  },
+  [Aggregator.Interest]: {
+    url: '',
+    name: 'Interest',
+    shortName: Aggregator.Interest,
+    logo: 'https://interestprotocol.com/logo.png',
+    disabled: process.env.VERCEL_ENV === 'production',
   },
 };
 

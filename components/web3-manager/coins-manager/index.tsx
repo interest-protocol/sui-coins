@@ -1,15 +1,15 @@
-import {
-  useCurrentAccount,
-  useSuiClient,
-  useSuiClientContext,
-} from '@mysten/dapp-kit';
+import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
+import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import { normalizeStructTag } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import useSWR from 'swr';
 
+import { METADATA } from '@/constants/metadata';
 import { useCoins } from '@/hooks/use-coins';
+import { useNetwork } from '@/hooks/use-network';
 import { CoinMetadataWithType } from '@/interface';
-import { makeSWRKey, normalizeSuiType, ZERO_BIG_NUMBER } from '@/utils';
+import { isSui, makeSWRKey, ZERO_BIG_NUMBER } from '@/utils';
 
 import { CoinsMap, TGetAllCoins } from './web3-manager.types';
 
@@ -28,7 +28,7 @@ const getAllCoins: TGetAllCoins = async (provider, account, cursor = null) => {
 
 const CoinsManager: FC = () => {
   const suiClient = useSuiClient();
-  const { network } = useSuiClientContext();
+  const network = useNetwork();
   const currentAccount = useCurrentAccount();
   const { id, delay, updateCoins, updateLoading, updateError } = useCoins();
 
@@ -61,19 +61,63 @@ const CoinsManager: FC = () => {
           )
             .then((res) => res.json())
             .then((data: ReadonlyArray<CoinMetadataWithType>) =>
-              data.reduce((acc, item) => ({ ...acc, [item.type]: item }), {})
+              data.reduce((acc, item) => {
+                const override =
+                  METADATA[network][normalizeStructTag(item.type)] || item;
+                return {
+                  ...acc,
+                  [normalizeStructTag(override.type)]: {
+                    ...override,
+                    type: normalizeStructTag(override.type),
+                  },
+                };
+              }, {})
             );
 
         const filteredCoinsRaw = coinsRaw.filter(
-          ({ coinType }) => dbCoinsMetadata[coinType]
+          ({ coinType }) => dbCoinsMetadata[normalizeStructTag(coinType)]
         );
 
         if (!filteredCoinsRaw.length) return {} as CoinsMap;
 
         const coins = filteredCoinsRaw.reduce(
           (acc, { coinType, ...coinRaw }) => {
-            const type = normalizeSuiType(coinType) as `0x${string}`;
-            const { symbol, decimals, ...metadata } = dbCoinsMetadata[coinType];
+            const type = normalizeStructTag(coinType) as `0x${string}`;
+            const { symbol, decimals, ...metadata } = dbCoinsMetadata[type];
+
+            if (isSui(type))
+              return {
+                ...acc,
+                [SUI_TYPE_ARG as `0x${string}`]: {
+                  ...acc[SUI_TYPE_ARG as `0x${string}`],
+                  ...coinRaw,
+                  type: SUI_TYPE_ARG as `0x${string}`,
+                  symbol,
+                  decimals,
+                  metadata,
+                  balance: BigNumber(coinRaw.balance).plus(
+                    acc[SUI_TYPE_ARG as `0x${string}`]?.balance ??
+                      ZERO_BIG_NUMBER
+                  ),
+                  objects: (acc[SUI_TYPE_ARG as string]?.objects ?? []).concat([
+                    { ...coinRaw, type: SUI_TYPE_ARG as `0x${string}` },
+                  ]),
+                },
+                [type]: {
+                  ...acc[type],
+                  ...coinRaw,
+                  type,
+                  symbol,
+                  decimals,
+                  metadata,
+                  balance: BigNumber(coinRaw.balance).plus(
+                    acc[type]?.balance ?? ZERO_BIG_NUMBER
+                  ),
+                  objects: (acc[type]?.objects ?? []).concat([
+                    { ...coinRaw, type },
+                  ]),
+                },
+              };
 
             return {
               ...acc,

@@ -892,19 +892,20 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-2.0.3.tgz#4a2868d75d6d6963e423bcf90b7fd1be343409d3"
   integrity sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==
 
-"@interest-protocol/clamm-sdk@^6.1.1-alpha":
-  version "6.1.1-alpha"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/clamm-sdk/-/clamm-sdk-6.1.1-alpha.tgz#8d412e5a786d78e24fa04b4c54126ac46ac37e06"
-  integrity sha512-0nkWJSJlgvPFawCa5Z+k+RVZWcHihpybMCwhHUhA0YEM/Miwq+QkBFVH5UvEwT88tc5CEA86/4XWItCkRIi/sw==
+"@interest-protocol/clamm-sdk@^8.3.0-alpha":
+  version "8.3.0-alpha"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/clamm-sdk/-/clamm-sdk-8.3.0-alpha.tgz#32f4c8542000e7dd22cf1f172860d898a7a86775"
+  integrity sha512-4Vb1LSYd3/3okE6Q6NdrsMRYmx+JtaiXkRY4JY2DfPLQb2ctgjateIXgpv8pY1lmwYBc1klO+ctauaNc9Pc2qw==
   dependencies:
-    "@mysten/sui.js" "^0.51.2"
+    "@mysten/sui.js" "^0.54.1"
+    just-camel-case "^6.2.0"
     ramda "^0.29.1"
     tiny-invariant "^1.3.3"
 
-"@interest-protocol/sui-tokens@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/sui-tokens/-/sui-tokens-1.3.0.tgz#a01d1bacbffd08bf4a99934a981fab2bc313e9b2"
-  integrity sha512-2+KZNr5Mzvdh7z4gfDQC2UTSkMEl8D9aOb+uq6lP9usMKCQobvRAPAmx0MorWR4td8Z7zDQ3fD3dVf42IxvVsA==
+"@interest-protocol/sui-tokens@1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/sui-tokens/-/sui-tokens-1.4.0.tgz#b9417a5241a6e7639fe165c2cb9a4e2fe1590b22"
+  integrity sha512-6eIGxndsJ1kcCCxd6foX7c6d1i5AjC9yBiqTBgr4hFXHoVpjtnXCfmYTsJCQYB1vjwljy5+00t/uvfQywTmWcA==
 
 "@interest-protocol/ui-kit@^0.2.26-alpha":
   version "0.2.26-alpha"
@@ -1295,24 +1296,6 @@
     "@scure/bip39" "^1.2.1"
     "@suchipi/femver" "^1.0.0"
     events "^3.3.0"
-    superstruct "^1.0.3"
-    tweetnacl "^1.0.3"
-
-"@mysten/sui.js@^0.51.2":
-  version "0.51.2"
-  resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.51.2.tgz#40c54bf1df57fdeaf27ad11efddeaa20ff5e6a7b"
-  integrity sha512-RRG/VHhVvkQlWqodFZagRxVDo3SbXh4e3xTBplhPNNyybugbWj/V+wGrNv5/KtxfVxHBw6jTCoB798ijqPBq7g==
-  dependencies:
-    "@graphql-typed-document-node/core" "^3.2.0"
-    "@mysten/bcs" "0.11.1"
-    "@noble/curves" "^1.1.0"
-    "@noble/hashes" "^1.3.1"
-    "@scure/bip32" "^1.3.1"
-    "@scure/bip39" "^1.2.1"
-    "@suchipi/femver" "^1.0.0"
-    bech32 "^2.0.0"
-    gql.tada "^1.4.1"
-    graphql "^16.8.1"
     superstruct "^1.0.3"
     tweetnacl "^1.0.3"
 
@@ -2109,10 +2092,15 @@
   dependencies:
     tslib "^2.4.0"
 
-"@tanstack/query-core@5.36.0", "@tanstack/query-core@^5.28.0":
+"@tanstack/query-core@5.36.0":
   version "5.36.0"
   resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.36.0.tgz#905bd05b6a73e58d70d95912d84e979ed865ab6a"
   integrity sha512-B5BD3pg/mztDR36i77hGcyySKKeYrbM5mnogOROTBi1SUml5ByRK7PGUUl16vvubvQC+mSnqziFG/VIy/DE3FQ==
+
+"@tanstack/query-core@^5.28.0":
+  version "5.36.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.36.1.tgz#ae46f935c4752812a56c6815305061a3da82e7b8"
+  integrity sha512-BteWYEPUcucEu3NBcDAgKuI4U25R9aPrHSP6YSf2NvaD2pSlIQTdqOfLRsxH9WdRYg7k0Uom35Uacb6nvbIMJg==
 
 "@tanstack/react-query@^5.7.2":
   version "5.36.0"
@@ -6618,6 +6606,11 @@ jsonparse@^1.2.0, jsonparse@^1.3.1:
     object.assign "^4.1.4"
     object.values "^1.1.6"
 
+just-camel-case@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/just-camel-case/-/just-camel-case-6.2.0.tgz#c08a7079f3ae010d25c8d258bb6db1f3f387c225"
+  integrity sha512-ICenRLXwkQYLk3UyvLQZ+uKuwFVJ3JHFYFn7F2782G2Mv2hW8WPePqgdhpnjGaqkYtSVWnyCESZhGXUmY3/bEg==
+
 just-diff-apply@^5.2.0:
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/just-diff-apply/-/just-diff-apply-5.5.0.tgz#771c2ca9fa69f3d2b54e7c3f5c1dfcbcc47f9f0f"
@@ -8310,6 +8303,13 @@ react-image-file-resizer@^0.4.8:
   resolved "https://registry.yarnpkg.com/react-image-file-resizer/-/react-image-file-resizer-0.4.8.tgz#85f4ae4469fd2867d961568af660ef403d7a79af"
   integrity sha512-Ue7CfKnSlsfJ//SKzxNMz8avDgDSpWQDOnTKOp/GNRFJv4dO9L5YGHNEnj40peWkXXAK2OK0eRIoXhOYpUzUTQ==
 
+react-infinite-scroll-component@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/react-infinite-scroll-component/-/react-infinite-scroll-component-6.1.0.tgz#7e511e7aa0f728ac3e51f64a38a6079ac522407f"
+  integrity sha512-SQu5nCqy8DxQWpnUVLx7V7b7LcA37aM7tvoWjTLZp1dk6EJibM5/4EJKzOnl07/BsM1Y40sKLuqjCwwH/xV0TQ==
+  dependencies:
+    throttle-debounce "^2.1.0"
+
 react-is@^16.10.2, react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
@@ -9204,6 +9204,11 @@ text-table@^0.2.0, text-table@~0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==
+
+throttle-debounce@^2.1.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/throttle-debounce/-/throttle-debounce-2.3.0.tgz#fd31865e66502071e411817e241465b3e9c372e2"
+  integrity sha512-H7oLPV0P7+jgvrk+6mwwwBDmxTaxnu9HMXmloNLXwnNO0ZxZ31Orah2n8lU1eMPvsaowP2CX+USCgyovXfdOFQ==
 
 "through@>=2.2.7 <3":
   version "2.3.8"
