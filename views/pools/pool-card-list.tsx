@@ -49,13 +49,10 @@ const Pools: FC = () => {
     name: 'filterList',
   });
 
-  const tokenList = useWatch({
-    control: formContext.control,
-    name: 'tokenList',
-  });
-
   const query =
     filterProps.reduce((acc, filterProp) => {
+      const tokenList = getValues('tokenList');
+
       if (tokenList?.filter(({ type }) => type).length)
         return [
           ...acc,

@@ -8,7 +8,7 @@ import { PoolForm } from '../pools.types';
 import { FindPoolModalProps } from './find-pool-modal.types';
 
 const SearchButton: FC<FindPoolModalProps> = ({ closeModal }) => {
-  const { getValues } = useFormContext<PoolForm>();
+  const { setValue, getValues } = useFormContext<PoolForm>();
   const [isError, setError] = useState(false);
 
   const tokenListData = getValues('tokenList');
@@ -18,6 +18,7 @@ const SearchButton: FC<FindPoolModalProps> = ({ closeModal }) => {
 
   const handleFindPool = () => {
     if (hasEmptyKeys(tokenListData)) return setError(true);
+    setValue('isFindingPool', true);
     closeModal();
   };
 
