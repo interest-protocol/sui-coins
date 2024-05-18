@@ -43,7 +43,7 @@ const SwapSelectAggregatorModal: FC<SwapSelectAggregatorModalProps> = ({
       >
         <Box />
         <Typography variant="title" size="large">
-          Select Aggregator
+          Select DEX
         </Typography>
         <Button variant="text" isIcon onClick={handleClose} mr="-0.5rem">
           <TimesSVG maxWidth="1rem" maxHeight="1rem" width="100%" />

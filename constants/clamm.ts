@@ -64,6 +64,28 @@ export const WRAPPED_CONVERSION_MAP = {
   },
 };
 
+export const WRAPPED_TO_COIN = {
+  [Network.MAINNET]: {
+    [WS_USDC_TYPE]: SCALLOP_USDC_TYPE,
+    [WS_SUI_TYPE]: SCALLOP_SUI_TYPE,
+  },
+  [Network.TESTNET]: {
+    [WS_USDC_TYPE]: SCALLOP_USDC_TYPE,
+    [WS_SUI_TYPE]: SCALLOP_SUI_TYPE,
+  },
+};
+
+export const COIN_TO_WRAPPED = {
+  [Network.MAINNET]: {
+    [SCALLOP_USDC_TYPE]: WS_USDC_TYPE,
+    [SCALLOP_SUI_TYPE]: WS_SUI_TYPE,
+  },
+  [Network.TESTNET]: {
+    [SCALLOP_USDC_TYPE]: WS_USDC_TYPE,
+    [SCALLOP_SUI_TYPE]: WS_SUI_TYPE,
+  },
+};
+
 export const CLAMM_ALLOWED_NETWORKS: Record<string, Network> = {
   mainnet: Network.MAINNET,
   testnet: Network.TESTNET,
