@@ -3,7 +3,7 @@ import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import { LocalCoinMetadata } from '@/interface';
 
 const MOVEMENT_MOCK_COINS_PACKAGE =
-  '0xdf4cfd011bd3055d54ed1e1d9036adec0dcb635e4bca6f4ca6930206442a7497';
+  '0x6c4e7af6322e89ac676b463e05399607285e8aa64d092cfca849b058cba798af';
 
 export const BTC_TYPE = `${MOVEMENT_MOCK_COINS_PACKAGE}::btc::BTC`;
 
@@ -15,13 +15,13 @@ export const USDT_TYPE = `${MOVEMENT_MOCK_COINS_PACKAGE}::usdt::USDT`;
 
 export const TREASURY_CAP_MAP = {
   [USDC_TYPE]:
-    '0x2c58686019d64f6885c19f8de66887d56fba73ce7bb8517ca70f17e5c2622e0f',
+    '0x21101a4b9c057b28582476a1a4899808ceb6a140dd1b7052195cc88274892427',
   [ETH_TYPE]:
-    '0x2b39c6e7c3b0e12f2d649b96b321f2943c97a60563e9afb0304d50863f7b5315',
+    '0x2c8658587b1ee7abf01dc790f14530f37f786cd0d798834637e348b2e20f8ac3',
   [BTC_TYPE]:
-    '0x147f4494f94a603c85256143c3b9164f9aeecc1e9db4208c5f2881324a356efc',
+    '0xfa97291c69f67650d832ab67f2a445769827b75e35018ed302c83bd889eacf44',
   [USDT_TYPE]:
-    '0x0d76d311a9a2a24f6724d3bfb4fbab81a6962eed53ba0c9454a69d7e81ad98d3',
+    '0xa3ca4a03d3801b5dc26e2cc68e16e84b3904a8750a13a2d594a840b708d3ea4c',
 } as Record<string, string>;
 
 export const FAUCET_AMOUNT = {
