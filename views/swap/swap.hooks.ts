@@ -101,18 +101,18 @@ export const useSwap = () => {
       slippage: Number((+values.settings.slippage * 100).toFixed(0)),
     });
 
-    const unwrappedCoin =
-      WRAPPED_TO_COIN[network][normalizeStructTag(values.to.type)];
+    const wrappedCoin =
+      COIN_TO_WRAPPED[network][normalizeStructTag(values.to.type)];
 
-    if (unwrappedCoin) {
+    if (wrappedCoin) {
       const cap =
         SCALLOP_WRAPPED_COINS_TREASURY_CAPS[network][
-          normalizeStructTag(values.to.type)
+          normalizeStructTag(wrappedCoin)
         ];
 
       const coinY = auxTxb.moveCall({
         target: `${pkgs.SCALLOP_COINS_WRAPPER}::wrapped_scoin::burn`,
-        typeArguments: [unwrappedCoin, normalizeStructTag(values.to.type)],
+        typeArguments: [normalizeStructTag(values.to.type), wrappedCoin],
         arguments: [auxTxb.object(cap), coinOut],
       });
 

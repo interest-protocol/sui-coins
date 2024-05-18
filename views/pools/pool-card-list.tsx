@@ -1,30 +1,21 @@
-import { InterestPool, PoolMetadata } from '@interest-protocol/clamm-sdk';
-import {
-  Box,
-  Motion,
-  ProgressIndicator,
-  Typography,
-} from '@interest-protocol/ui-kit';
+import { InterestPool } from '@interest-protocol/clamm-sdk';
+import { Box, ProgressIndicator, Typography } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
 import { inc } from 'ramda';
 import { FC, useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import toast from 'react-hot-toast';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import useSWR from 'swr';
 import { v4 } from 'uuid';
 
 import { Network, PAGE_SIZE } from '@/constants';
 import { CATEGORY_POOLS } from '@/constants/clamm';
 import { useGetCoinMetadata } from '@/hooks/use-get-coin-metadata';
 import useGetMultipleTokenPriceBySymbol from '@/hooks/use-get-multiple-token-price-by-symbol';
-import { useModal } from '@/hooks/use-modal';
 import { usePools } from '@/hooks/use-pools';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FormFilterValue } from '@/views/pools/pool-card/pool-card.types';
 import { getAllSymbols } from '@/views/pools/pools.utils';
 
-import FindPoolDialog from './find-pool-modal/find-pool-dialog';
 import PoolCard from './pool-card';
 import PoolCardSkeleton from './pool-card/pool-card-skeleton';
 import {
@@ -53,16 +44,10 @@ const Pools: FC = () => {
     name: 'isFindingPool',
   });
 
+  const tokenList = formContext.getValues('tokenList');
+
   const query =
     filterProps.reduce((acc, filterProp) => {
-      const tokenList = formContext.getValues('tokenList');
-
-      if (isFindingPool && tokenList?.filter(({ type }) => type).length)
-        return [
-          ...acc,
-          { coinTypes: { $in: tokenList.map(({ type }) => type) } },
-        ];
-
       if (
         filterProp.type === FilterTypeEnum.CATEGORY &&
         filterProp.value !== FormFilterValue.all
@@ -80,10 +65,22 @@ const Pools: FC = () => {
       return acc;
     }, DEFAULT_QUERY) ?? DEFAULT_QUERY;
 
-  const [pools, setPools] = useState<ReadonlyArray<InterestPool>>([]);
-  const { data, isLoading: arePoolsLoading } = usePools(page, {
-    $and: query,
-  });
+  const [pools, setPools] = useState<ReadonlyArray<InterestPool> | undefined>();
+  const { data, isLoading: arePoolsLoading } = usePools(
+    page,
+    isFindingPool
+      ? {
+          $and: [
+            ...DEFAULT_QUERY,
+            ...tokenList.map(({ type }) => ({
+              coinTypes: { $in: [type] },
+            })),
+          ],
+        }
+      : {
+          $and: query,
+        }
+  );
 
   useEffect(() => {
     setPools([]);
@@ -100,9 +97,9 @@ const Pools: FC = () => {
       safeData &&
       safeData.totalPages &&
       page <= safeData.totalPages &&
-      !pools.some(({ poolObjectId }) => dataIds.includes(poolObjectId))
+      !pools?.some(({ poolObjectId }) => dataIds.includes(poolObjectId))
     )
-      setPools((pools) => pools.concat(safeData.pools));
+      setPools((pools) => pools?.concat(safeData.pools));
   }, [safeData, pools]);
 
   return (
@@ -195,7 +192,7 @@ const Position: FC = () => {
     <PoolCardListContent
       pools={pools}
       nextPage={nextPage}
-      arePoolsLoading={arePoolsLoading}
+      arePoolsLoading={arePoolsLoading || !pools}
       totalItems={data?.totalPages ?? 0}
       hasMore={(data?.totalPages ?? 0) - page * PAGE_SIZE > 0}
     />
@@ -210,103 +207,21 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
   arePoolsLoading,
 }) => {
   const { network } = useSuiClientContext();
-  const { setModal, handleClose } = useModal();
 
-  const symbols = getAllSymbols(pools, network as Network);
+  const symbols = getAllSymbols(pools || [], network as Network);
 
   const { data: pricesRecord, isLoading: arePricesLoading } =
     useGetMultipleTokenPriceBySymbol(symbols);
 
   const { data: coinMetadataMap, isLoading: isCoinMetadataLoading } =
-    useGetCoinMetadata([...new Set(pools.flatMap((pool) => pool.coinTypes))]);
-
-  const { control, setValue } = useFormContext<PoolForm>();
-  const filterList = useWatch({ control, name: 'filterList' });
-  const tokenList = useWatch({ control, name: 'tokenList' });
-  const [listPools, setListPools] = useState<ReadonlyArray<PoolMetadata>>([]);
-
-  const onClose = () => {
-    setValue('isFindingPool', false);
-    handleClose();
-  };
-
-  const sortedPoolList = (
-    poolList: ReadonlyArray<PoolMetadata>
-  ): ReadonlyArray<PoolMetadata> =>
-    poolList.filter((pool) =>
-      filterList?.length
-        ? filterList.every(
-            ({ type, value }) =>
-              type === 'algorithm' &&
-              value === (pool.isStable ? 'stable' : 'volatile')
-          )
-        : true
-    );
-
-  const isFindingPool = useWatch({ control, name: 'isFindingPool' });
-
-  const { data: _pools, isLoading: isFilteredPoolsLoading } = useSWR<
-    ReadonlyArray<PoolMetadata>
-  >(
-    `${isFindingPool}` +
-      pools.map((x) => x.poolObjectId).toString() +
-      tokenList?.toString(),
-    async () => {
-      if (!isFindingPool) return pools;
-
-      const filteredPools = pools.filter((pool) =>
-        tokenList.every((x) => pool.coinTypes.includes(x.type))
-      );
-
-      toast.dismiss();
-      return filteredPools;
-      poolPairLoadingModal();
-    }
-  );
-
-  const poolPairLoadingModal = () => {
-    setModal(
-      <Motion
-        animate={{ scale: 1 }}
-        initial={{ scale: 0.85 }}
-        transition={{ duration: 0.3 }}
-      >
-        <Box
-          display="flex"
-          width="100%"
-          height="100%"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <FindPoolDialog
-            title="Finding Pair"
-            description="Loading"
-            Icon={<ProgressIndicator variant="loading" />}
-            onClose={onClose}
-            withoutButton
-          />
-        </Box>
-      </Motion>,
-      {
-        isOpen: true,
-        custom: true,
-        opaque: false,
-        allowClose: true,
-      }
-    );
-  };
-
-  useEffect(() => {
-    setListPools(sortedPoolList(_pools ?? []));
-  }, [filterList, _pools]);
+    useGetCoinMetadata([...new Set(pools?.flatMap((pool) => pool.coinTypes))]);
 
   if (
     arePoolsLoading ||
     !pricesRecord ||
     !coinMetadataMap ||
     arePricesLoading ||
-    isCoinMetadataLoading ||
-    !!(isFindingPool && isFilteredPoolsLoading)
+    isCoinMetadataLoading
   )
     return (
       <Box
@@ -323,32 +238,6 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
         ]}
       >
         <PoolCardSkeleton />
-      </Box>
-    );
-
-  if (isFindingPool)
-    return (
-      <Box
-        gap="xs"
-        borderRadius="xs"
-        p={['s', 's', 's', 'l']}
-        display={listPools?.length || pools?.length ? 'grid' : 'flex'}
-        gridTemplateColumns={[
-          '1fr',
-          '1fr',
-          '1fr 1fr',
-          '1fr 1fr',
-          '1fr 1fr 1fr',
-        ]}
-      >
-        {listPools?.map((pool) => (
-          <PoolCard
-            key={v4()}
-            pool={pool}
-            prices={pricesRecord}
-            coinMetadata={coinMetadataMap || {}}
-          />
-        ))}
       </Box>
     );
 
@@ -376,7 +265,7 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
         gap="xs"
         borderRadius="xs"
         p={['s', 's', 's', 'l']}
-        display={listPools?.length || pools?.length ? 'grid' : 'flex'}
+        display={pools?.length ? 'grid' : 'flex'}
         gridTemplateColumns={[
           '1fr',
           '1fr',
