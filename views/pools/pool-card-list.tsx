@@ -48,12 +48,16 @@ const Pools: FC = () => {
     control: formContext.control,
     name: 'filterList',
   });
+  const isFindingPool = useWatch({
+    control: formContext.control,
+    name: 'isFindingPool',
+  });
 
   const query =
     filterProps.reduce((acc, filterProp) => {
       const tokenList = formContext.getValues('tokenList');
 
-      if (tokenList?.filter(({ type }) => type).length)
+      if (isFindingPool && tokenList?.filter(({ type }) => type).length)
         return [
           ...acc,
           { coinTypes: { $in: tokenList.map(({ type }) => type) } },
@@ -83,7 +87,7 @@ const Pools: FC = () => {
 
   useEffect(() => {
     setPools([]);
-  }, [filterProps, tokenList]);
+  }, [filterProps, isFindingPool]);
 
   const safeData = data ?? { pools: [], totalPages: 0 };
 
