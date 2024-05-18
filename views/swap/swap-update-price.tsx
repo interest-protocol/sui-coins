@@ -4,7 +4,6 @@ import {
   PoolObjectIdPath,
 } from '@interest-protocol/clamm-sdk/dist/clamm/router/router.types';
 import { Box, Button, ProgressIndicator } from '@interest-protocol/ui-kit';
-import { useSuiClientContext } from '@mysten/dapp-kit';
 import { normalizeStructTag } from '@mysten/sui.js/utils';
 import { RouterCompleteTradeRoute } from 'aftermath-ts-sdk';
 import BigNumber from 'bignumber.js';
@@ -15,9 +14,10 @@ import useSWR from 'swr';
 import { useDebounce } from 'use-debounce';
 
 import { TREASURY } from '@/constants';
-import { EXCHANGE_FEE } from '@/constants/clamm';
+import { COIN_TO_WRAPPED, EXCHANGE_FEE } from '@/constants/clamm';
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { useHopSdk } from '@/hooks/use-hop-sdk';
+import { useNetwork } from '@/hooks/use-network';
 import { FixedPointMath } from '@/lib';
 import { JSONQuoteResponse } from '@/server/lib/hop/hop.utils';
 import { RefreshSVG } from '@/svg';
@@ -47,7 +47,7 @@ const countdownRenderer =
 const SwapUpdatePrice: FC = () => {
   const clamm = useClammSdk();
   const hopSdk = useHopSdk();
-  const { network } = useSuiClientContext();
+  const network = useNetwork();
   const aftermathRouter = useAftermathRouter();
   const { control, setValue, getValues } = useFormContext<SwapForm>();
 
@@ -119,8 +119,12 @@ const SwapUpdatePrice: FC = () => {
 
       return await clamm
         .getRoutesQuotes({
-          coinIn: normalizeStructTag(coinInType),
-          coinOut: normalizeStructTag(coinOutType),
+          coinIn:
+            COIN_TO_WRAPPED[network][normalizeStructTag(coinInType)] ||
+            coinInType,
+          coinOut:
+            COIN_TO_WRAPPED[network][normalizeStructTag(coinOutType)] ||
+            coinOutType,
           amount: BigInt(
             coinInValue.decimalPlaces(0, BigNumber.ROUND_DOWN).toString()
           ),

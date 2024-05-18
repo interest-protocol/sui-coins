@@ -892,12 +892,12 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-2.0.3.tgz#4a2868d75d6d6963e423bcf90b7fd1be343409d3"
   integrity sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==
 
-"@interest-protocol/clamm-sdk@^8.1.0-alpha":
-  version "8.1.0-alpha"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/clamm-sdk/-/clamm-sdk-8.1.0-alpha.tgz#da9530f8f605fc1afdfcfe32db5c3e9e780f0583"
-  integrity sha512-nmP4uO106SMexmIBXfjVMoWpDBZs7FzU1+gn5zTMCFVI5O+nYqmqVhlCjsqUp9ztZcEcMMmLvsz9TNpZQs/pAg==
+"@interest-protocol/clamm-sdk@^8.3.0-alpha":
+  version "8.3.0-alpha"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/clamm-sdk/-/clamm-sdk-8.3.0-alpha.tgz#32f4c8542000e7dd22cf1f172860d898a7a86775"
+  integrity sha512-4Vb1LSYd3/3okE6Q6NdrsMRYmx+JtaiXkRY4JY2DfPLQb2ctgjateIXgpv8pY1lmwYBc1klO+ctauaNc9Pc2qw==
   dependencies:
-    "@mysten/sui.js" "^0.51.2"
+    "@mysten/sui.js" "^0.54.1"
     just-camel-case "^6.2.0"
     ramda "^0.29.1"
     tiny-invariant "^1.3.3"
@@ -1296,24 +1296,6 @@
     "@scure/bip39" "^1.2.1"
     "@suchipi/femver" "^1.0.0"
     events "^3.3.0"
-    superstruct "^1.0.3"
-    tweetnacl "^1.0.3"
-
-"@mysten/sui.js@^0.51.2":
-  version "0.51.2"
-  resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.51.2.tgz#40c54bf1df57fdeaf27ad11efddeaa20ff5e6a7b"
-  integrity sha512-RRG/VHhVvkQlWqodFZagRxVDo3SbXh4e3xTBplhPNNyybugbWj/V+wGrNv5/KtxfVxHBw6jTCoB798ijqPBq7g==
-  dependencies:
-    "@graphql-typed-document-node/core" "^3.2.0"
-    "@mysten/bcs" "0.11.1"
-    "@noble/curves" "^1.1.0"
-    "@noble/hashes" "^1.3.1"
-    "@scure/bip32" "^1.3.1"
-    "@scure/bip39" "^1.2.1"
-    "@suchipi/femver" "^1.0.0"
-    bech32 "^2.0.0"
-    gql.tada "^1.4.1"
-    graphql "^16.8.1"
     superstruct "^1.0.3"
     tweetnacl "^1.0.3"
 
@@ -2110,7 +2092,7 @@
   dependencies:
     tslib "^2.4.0"
 
-"@tanstack/query-core@5.36.0", "@tanstack/query-core@^5.28.0":
+"@tanstack/query-core@5.36.0":
   version "5.36.0"
   resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.36.0.tgz#905bd05b6a73e58d70d95912d84e979ed865ab6a"
   integrity sha512-B5BD3pg/mztDR36i77hGcyySKKeYrbM5mnogOROTBi1SUml5ByRK7PGUUl16vvubvQC+mSnqziFG/VIy/DE3FQ==

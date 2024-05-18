@@ -1,10 +1,18 @@
 import { useCurrentAccount } from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { normalizeStructTag } from '@mysten/sui.js/utils';
 import { Aftermath } from 'aftermath-ts-sdk';
 import invariant from 'tiny-invariant';
 
+import {
+  CLAMM_PACKAGE_ADDRESSES,
+  COIN_TO_WRAPPED,
+  SCALLOP_WRAPPED_COINS_TREASURY_CAPS,
+  WRAPPED_TO_COIN,
+} from '@/constants/clamm';
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { useHopSdk } from '@/hooks/use-hop-sdk';
+import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
 import { isSui } from '@/utils';
 
@@ -19,6 +27,8 @@ export const useSwap = () => {
   const { coinsMap } = useWeb3();
   const afRouter = useAftermathRouter();
   const currentAccount = useCurrentAccount();
+  const network = useNetwork();
+  const pkgs = CLAMM_PACKAGE_ADDRESSES[network];
 
   return async (values: SwapForm): Promise<TransactionBlock> => {
     invariant(values.route && currentAccount, 'Something went wrong');
@@ -39,6 +49,9 @@ export const useSwap = () => {
         +values.settings.slippage * 100
       );
     }
+
+    // Native Swap - Interest
+
     const route = values.route.routes[0];
 
     const auxTxb = new TransactionBlock();
@@ -63,6 +76,20 @@ export const useSwap = () => {
         auxTxb.pure(value.decimalPlaces(0).toFixed(0)),
       ]);
 
+      const wrappedCoin = COIN_TO_WRAPPED[network][normalizeStructTag(type)];
+
+      if (wrappedCoin) {
+        const cap = SCALLOP_WRAPPED_COINS_TREASURY_CAPS[network][wrappedCoin];
+
+        const coinOut = auxTxb.moveCall({
+          target: `${pkgs.SCALLOP_COINS_WRAPPER}::wrapped_scoin::mint`,
+          typeArguments: [type, wrappedCoin],
+          arguments: [auxTxb.object(cap), splittedCoin],
+        });
+
+        return coinOut;
+      }
+
       return splittedCoin;
     });
 
@@ -74,7 +101,25 @@ export const useSwap = () => {
       slippage: Number((+values.settings.slippage * 100).toFixed(0)),
     });
 
-    txb.transferObjects([coinOut], txb.pure(currentAccount.address));
+    const unwrappedCoin =
+      WRAPPED_TO_COIN[network][normalizeStructTag(values.to.type)];
+
+    if (unwrappedCoin) {
+      const cap =
+        SCALLOP_WRAPPED_COINS_TREASURY_CAPS[network][
+          normalizeStructTag(values.to.type)
+        ];
+
+      const coinY = auxTxb.moveCall({
+        target: `${pkgs.SCALLOP_COINS_WRAPPER}::wrapped_scoin::burn`,
+        typeArguments: [unwrappedCoin, normalizeStructTag(values.to.type)],
+        arguments: [auxTxb.object(cap), coinOut],
+      });
+
+      txb.transferObjects([coinY], txb.pure(currentAccount.address));
+    } else {
+      txb.transferObjects([coinOut], txb.pure(currentAccount.address));
+    }
 
     return txb as unknown as TransactionBlock;
   };
