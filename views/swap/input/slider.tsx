@@ -43,6 +43,7 @@ const SwapFormFieldSlider: FC = () => {
           ).toFixed(0)
         : 100
       : 0;
+
   return (
     <Box mx="s">
       <Slider

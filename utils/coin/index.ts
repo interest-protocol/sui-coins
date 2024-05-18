@@ -20,7 +20,7 @@ import {
   CoinObject,
   CoinsMap,
 } from '../../components/web3-manager/coins-manager/web3-manager.types';
-import { isSameAddress } from '../address';
+import { isSameStructTag } from '../address';
 import { ZERO_BIG_NUMBER } from '../big-number';
 import { getBasicCoinMetadata } from '../fn';
 import {
@@ -249,4 +249,4 @@ export async function getCoinOfValue({
   return coinOfValue;
 }
 
-export const isSui = (type: string) => isSameAddress(type, SUI_TYPE_ARG);
+export const isSui = (type: string) => isSameStructTag(type, SUI_TYPE_ARG);
