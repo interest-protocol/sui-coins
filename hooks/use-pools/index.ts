@@ -29,10 +29,14 @@ export const usePool = (poolId: string) => {
   );
 };
 
+interface UsePoolsReturn extends QueryPoolsReturn<InterestPool> {
+  done: boolean;
+}
+
 export const usePools = (page: number, findQuery = {}) => {
   const clamm = useClammSdk();
   const network = useNetwork();
-  return useSWR<QueryPoolsReturn<InterestPool>>(
+  return useSWR<UsePoolsReturn>(
     makeSWRKey([page, network, findQuery], usePools.name),
     async () => {
       const res = await fetch(
@@ -57,6 +61,7 @@ export const usePools = (page: number, findQuery = {}) => {
           handleCustomPools({ pool: x, network })
         ),
         totalPages: data.totalPages,
+        done: true,
       };
     },
     {

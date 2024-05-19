@@ -33,19 +33,22 @@ const CoinsManager: FC = () => {
   const { id, delay, updateCoins, updateLoading, updateError } = useCoins();
 
   useSWR(
-    makeSWRKey(
-      [id, network, currentAccount?.address],
-      suiClient.getAllCoins.name
-    ),
+    makeSWRKey([id, network, currentAccount?.address], CoinsManager.name),
     async () => {
       try {
         updateError(false);
         updateLoading(true);
-        if (!currentAccount) return {} as CoinsMap;
+        if (!currentAccount?.address) {
+          updateCoins({} as CoinsMap);
+          return;
+        }
 
         const coinsRaw = await getAllCoins(suiClient, currentAccount.address);
 
-        if (!coinsRaw.length) return {} as CoinsMap;
+        if (!coinsRaw.length) {
+          updateCoins({} as CoinsMap);
+          return;
+        }
 
         const coinsType = [
           ...new Set(coinsRaw.map(({ coinType }) => coinType)),
@@ -78,7 +81,10 @@ const CoinsManager: FC = () => {
           ({ coinType }) => dbCoinsMetadata[normalizeStructTag(coinType)]
         );
 
-        if (!filteredCoinsRaw.length) return {} as CoinsMap;
+        if (!filteredCoinsRaw.length) {
+          updateCoins({} as CoinsMap);
+          return;
+        }
 
         const coins = filteredCoinsRaw.reduce(
           (acc, { coinType, ...coinRaw }) => {

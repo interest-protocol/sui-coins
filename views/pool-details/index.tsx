@@ -14,10 +14,7 @@ import { PoolDetailsFormProps } from './pool-details.types';
 import PoolForm from './pool-form';
 import PoolInfo from './pool-info';
 
-const PoolDetails: FC<PoolDetailsFormProps> = ({
-  poolOptionView,
-  handleOptionTab,
-}) => {
+const PoolDetails: FC<PoolDetailsFormProps> = () => {
   const { push } = useRouter();
 
   const { pool, metadata } = usePoolDetails();
@@ -70,10 +67,7 @@ const PoolDetails: FC<PoolDetailsFormProps> = ({
         gridTemplateColumns="3fr 2fr"
         display={['flex', 'flex', 'flex', 'grid']}
       >
-        <PoolForm
-          poolOptionView={poolOptionView}
-          handleOptionTab={handleOptionTab}
-        />
+        <PoolForm />
         <PoolInfo />
       </Box>
     </Layout>

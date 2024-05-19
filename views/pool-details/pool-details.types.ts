@@ -1,9 +1,4 @@
-import { PoolOption } from '../pools/pools.types';
-
-export interface PoolDetailsFormProps {
-  poolOptionView: PoolOption;
-  handleOptionTab: (index: PoolOption) => void;
-}
+export interface PoolDetailsFormProps {}
 
 export enum PoolDetailsTabOption {
   Detail,

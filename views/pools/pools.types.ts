@@ -30,6 +30,7 @@ export interface PoolCardListContentProps {
   nextPage?: () => void;
   arePoolsLoading: boolean;
   pools?: readonly InterestPool[];
+  done: boolean;
 }
 export interface PoolToken extends CoinData {
   value: string;

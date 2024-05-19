@@ -1,5 +1,5 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { v4 } from 'uuid';
 

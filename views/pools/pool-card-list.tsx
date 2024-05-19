@@ -83,7 +83,7 @@ const Pools: FC = () => {
   );
 
   useEffect(() => {
-    setPools([]);
+    setPools(undefined);
   }, [filterProps, isFindingPool]);
 
   const safeData = data ?? { pools: [], totalPages: 0 };
@@ -97,9 +97,10 @@ const Pools: FC = () => {
       safeData &&
       safeData.totalPages &&
       page <= safeData.totalPages &&
+      !!safeData.pools.length &&
       !pools?.some(({ poolObjectId }) => dataIds.includes(poolObjectId))
     )
-      setPools((pools) => pools?.concat(safeData.pools));
+      setPools((pools) => (pools || [])?.concat(safeData.pools));
   }, [safeData, pools]);
 
   return (
@@ -107,8 +108,9 @@ const Pools: FC = () => {
       pools={pools}
       nextPage={nextPage}
       totalItems={safeData?.totalPages ?? 0}
-      arePoolsLoading={arePoolsLoading}
+      arePoolsLoading={arePoolsLoading || !data}
       hasMore={(safeData?.totalPages ?? 0) - page * PAGE_SIZE > 0}
+      done={!!data?.done}
     />
   );
 };
@@ -195,6 +197,7 @@ const Position: FC = () => {
       arePoolsLoading={arePoolsLoading || !pools}
       totalItems={data?.totalPages ?? 0}
       hasMore={(data?.totalPages ?? 0) - page * PAGE_SIZE > 0}
+      done={!!data?.done}
     />
   );
 };
@@ -205,6 +208,7 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
   nextPage,
   totalItems,
   arePoolsLoading,
+  done,
 }) => {
   const { network } = useSuiClientContext();
 
@@ -217,11 +221,13 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
     useGetCoinMetadata([...new Set(pools?.flatMap((pool) => pool.coinTypes))]);
 
   if (
-    arePoolsLoading ||
-    !pricesRecord ||
-    !coinMetadataMap ||
-    arePricesLoading ||
-    isCoinMetadataLoading
+    (arePoolsLoading ||
+      !pricesRecord ||
+      !coinMetadataMap ||
+      arePricesLoading ||
+      isCoinMetadataLoading ||
+      !pools) &&
+    !done
   )
     return (
       <Box
@@ -241,7 +247,7 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
       </Box>
     );
 
-  if (!pools || !pools.length)
+  if (!!pools && !pools.length && done)
     return (
       <Box width="100%" color="onSurface" my="3xl">
         <Typography size="small" variant="display">
@@ -274,11 +280,11 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
           '1fr 1fr 1fr',
         ]}
       >
-        {pools.map((pool) => (
+        {pools?.map((pool) => (
           <PoolCard
             key={v4()}
             pool={pool}
-            prices={pricesRecord}
+            prices={pricesRecord || {}}
             coinMetadata={coinMetadataMap || {}}
           />
         ))}
