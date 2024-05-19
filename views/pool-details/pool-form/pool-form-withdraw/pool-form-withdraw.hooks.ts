@@ -10,8 +10,7 @@ import {
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
-import { FixedPointMath } from '@/lib';
-import { getCoinOfValue, isScallopPool } from '@/utils';
+import { getCoinOfValue, getSafeValue, isScallopPool } from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
 
 export const useWithdraw = () => {
@@ -35,9 +34,12 @@ export const useWithdraw = () => {
 
     const initTxb = new TransactionBlock();
 
-    const coinValue = FixedPointMath.toBigNumber(coin.value, coin.decimals)
-      .decimalPlaces(0)
-      .toString();
+    const coinValue = getSafeValue({
+      coinValue: coin.value,
+      coinType: coin.type,
+      balance: lpCoinWallet.balance,
+      decimals: lpCoinWallet.decimals,
+    }).toString();
 
     const lpCoin = await getCoinOfValue({
       suiClient,
