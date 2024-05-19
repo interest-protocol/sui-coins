@@ -251,11 +251,11 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
       </Box>
     );
 
-  if (!pools)
+  if (!pools || !arePoolsLoading)
     return (
       <Box width="100%" color="white">
         <Typography size="small" variant="display">
-          No pool found!
+          No pools found!
         </Typography>
       </Box>
     );

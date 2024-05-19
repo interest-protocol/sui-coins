@@ -52,9 +52,9 @@ const devnetModel =
   mongoose.models[devnetname] ||
   mongoose.model<AMMPoolModel>(devnetname, AmmPoolSchema);
 
-const testnettModel =
+const testnetModel =
   mongoose.models[testnet] ||
   mongoose.model<AMMPoolModel>(testnet, AmmPoolSchema);
 
 export const getAmmPoolModel = (x: Network) =>
-  x === Network.TESTNET ? testnettModel : devnetModel;
+  x === Network.TESTNET ? testnetModel : devnetModel;

@@ -8,8 +8,3 @@ export interface OptionItemProps {
   withSubmenu?: boolean;
   withBorderTop?: boolean;
 }
-
-export interface MenuOptionsProps {
-  isMenuOpen: boolean;
-  handleDisconnect: () => void;
-}
