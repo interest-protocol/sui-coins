@@ -33,7 +33,7 @@ const SwapManagerField: FC<SwapManagerProps> = ({
   const [from] = useDebounce(useWatch({ control, name }), 900);
 
   const lock = useWatch({ control, name: 'lock' });
-  const decimals = useWatch({ control, name: 'to.decimals' });
+  const decimals = useWatch({ control, name: `${setValueName}.decimals` });
 
   const { error } = useSWR(
     makeSWRKey(

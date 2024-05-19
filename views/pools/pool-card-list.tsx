@@ -38,13 +38,13 @@ const Pools: FC = () => {
   const { data, isLoading: arePoolsLoading } = usePools(page);
   const [pools, setPools] = useState<ReadonlyArray<AmmPool>>([]);
 
-  const safeData = data ?? { pools: [], totalItems: 0 };
+  const safeData = data || { pools: [], totalItems: 0 };
 
   const nextPage = () => setPage(inc);
 
   useEffect(() => {
     if (page > Math.ceil(pools.length / PAGE_SIZE))
-      setPools([...pools, ...safeData.pools]);
+      setPools((pools) => pools.concat(safeData.pools));
   }, [safeData]);
 
   return (
@@ -251,7 +251,7 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
       </Box>
     );
 
-  if (!pools || !arePoolsLoading)
+  if (!pools && !arePoolsLoading)
     return (
       <Box width="100%" color="white">
         <Typography size="small" variant="display">

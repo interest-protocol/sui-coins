@@ -29,13 +29,12 @@ export const findAmount = async ({
 
   const txbArray = [] as TransactionBlock[];
 
-  const functionName = isAmountIn ? 'amount_out' : 'amount_in';
+  const functionName = isAmountIn ? 'amount_in' : 'amount_out';
 
-  const parsedRoutes = routes.map(([coinsPath, idsPath]) =>
-    isAmountIn
-      ? [coinsPath, idsPath]
-      : [coinsPath.slice().reverse(), idsPath.slice().reverse()]
-  );
+  const parsedRoutes = routes.map(([coinsPath, idsPath]) => [
+    coinsPath,
+    idsPath,
+  ]);
 
   parsedRoutes.forEach(([coinsPath, idsPath]) => {
     const txb = new TransactionBlock();
@@ -63,6 +62,8 @@ export const findAmount = async ({
         });
 
         txbArray.push(txb);
+
+        return;
       }
 
       amountIn = txb.moveCall({
@@ -89,8 +90,12 @@ export const findAmount = async ({
 
   return results.map(([result], index) => {
     invariant(result.length, 'Result is empty');
-    invariant(typeof result[0] === 'string', 'Value is not a string');
+    const i = result.length - 1;
+    invariant(typeof result[i] === 'string', 'Value is not a string');
 
-    return [...routes[index], { isAmountIn, amount: BigNumber(result[0]) }];
+    return [
+      ...routes[index],
+      { isAmountIn, amount: BigNumber(result[i] as string) },
+    ];
   });
 };

@@ -3,9 +3,9 @@ import { Network } from '@/constants/network';
 export const AMM_CURVES = {
   [Network.DEVNET]: {
     STABLE:
-      '0xf7a29e0a883d131f73307e1b730f016c20ca6310baae013c75fa889673d10055::curves::Stable',
+      '0x096e99cfb6d4443ea673745081d268a00e982652e4b8d836218e4452fd0bdc3d::curves::Stable',
     VOLATILE:
-      '0xf7a29e0a883d131f73307e1b730f016c20ca6310baae013c75fa889673d10055::curves::Volatile',
+      '0x096e99cfb6d4443ea673745081d268a00e982652e4b8d836218e4452fd0bdc3d::curves::Volatile',
   },
   [Network.TESTNET]: {
     STABLE:
