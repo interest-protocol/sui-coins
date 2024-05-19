@@ -9,7 +9,7 @@ import { v4 } from 'uuid';
 import { WRAPPED_CONVERSION_MAP } from '@/constants/clamm';
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { useNetwork } from '@/hooks/use-network';
-import { FixedPointMath } from '@/lib';
+import { FixedPointMath, Rounding } from '@/lib';
 import { formatDollars, formatMoney, parseBigNumberish } from '@/utils';
 import {
   getStableLiquidity,
@@ -70,7 +70,10 @@ const PoolInfoDetail: FC = () => {
 
   const statsData = [
     liquidity ? formatDollars(liquidity) : 'N/A',
-    formatDollars(FixedPointMath.toNumber(virtualPrice, 18), 9),
+    formatDollars(
+      FixedPointMath.toNumber(virtualPrice, 18, Rounding.ROUND_DOWN),
+      9
+    ),
   ];
 
   return (
@@ -117,7 +120,8 @@ const PoolInfoDetail: FC = () => {
                   ]?.price || 0n;
                 const priceN = FixedPointMath.toNumber(
                   BigNumber(price.toString()),
-                  18
+                  18,
+                  Rounding.ROUND_DOWN
                 );
 
                 const realPrice = priceN * firstCoinUSDPrice;
@@ -135,7 +139,8 @@ const PoolInfoDetail: FC = () => {
                         ? formatDollars(
                             FixedPointMath.toNumber(
                               BigNumber(String(balance)).times(realPrice),
-                              18
+                              18,
+                              Rounding.ROUND_DOWN
                             )
                           )
                         : 'N/A'
@@ -145,7 +150,8 @@ const PoolInfoDetail: FC = () => {
                         ? (+(
                             (FixedPointMath.toNumber(
                               parseBigNumberish(balance).times(realPrice),
-                              parseBigNumberish(clamm.PRECISION).e!
+                              parseBigNumberish(clamm.PRECISION).e!,
+                              Rounding.ROUND_DOWN
                             ) /
                               liquidity) *
                             100
@@ -162,14 +168,19 @@ const PoolInfoDetail: FC = () => {
                   type={type}
                   symbol={symbol}
                   value={formatMoney(
-                    FixedPointMath.toNumber(BigNumber(String(balance)), 18)
+                    FixedPointMath.toNumber(
+                      BigNumber(String(balance)),
+                      18,
+                      Rounding.ROUND_DOWN
+                    )
                   )}
                   conversion={
                     price
                       ? formatDollars(
                           FixedPointMath.toNumber(
                             BigNumber(String(balance)).times(price),
-                            18
+                            18,
+                            Rounding.ROUND_DOWN
                           )
                         )
                       : 'N/A'
@@ -179,7 +190,8 @@ const PoolInfoDetail: FC = () => {
                       ? (+(
                           (FixedPointMath.toNumber(
                             parseBigNumberish(balance).times(price),
-                            parseBigNumberish(clamm.PRECISION).e!
+                            parseBigNumberish(clamm.PRECISION).e!,
+                            Rounding.ROUND_DOWN
                           ) /
                             liquidity) *
                           100

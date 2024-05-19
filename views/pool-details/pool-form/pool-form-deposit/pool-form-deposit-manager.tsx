@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form';
 import { useDebounce } from 'use-debounce';
 
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
-import { FixedPointMath } from '@/lib';
+import { FixedPointMath, Rounding } from '@/lib';
 import { DotErrorSVG } from '@/svg';
 import { parseBigNumberish } from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
@@ -35,7 +35,11 @@ const DepositManager: FC = () => {
       setValue(
         'lpCoin.value',
         String(
-          FixedPointMath.toNumber(parseBigNumberish(value), lpCoinDecimals)
+          FixedPointMath.toNumber(
+            parseBigNumberish(value),
+            lpCoinDecimals,
+            Rounding.ROUND_DOWN
+          )
         )
       );
     } catch (e) {

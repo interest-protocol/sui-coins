@@ -12,7 +12,7 @@ import { useFormContext } from 'react-hook-form';
 import { TokenIcon } from '@/components';
 import { Network } from '@/constants';
 import { useWeb3 } from '@/hooks/use-web3';
-import { FixedPointMath } from '@/lib';
+import { FixedPointMath, Rounding } from '@/lib';
 import {
   isSui,
   parseInputEventToNumberString,
@@ -105,7 +105,8 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
             coinsMap[isSui(token.type) ? SUI_TYPE_ARG : token.type] ? (
               FixedPointMath.toNumber(
                 coinsMap[isSui(token.type) ? SUI_TYPE_ARG : token.type].balance,
-                token.decimals
+                token.decimals,
+                Rounding.ROUND_DOWN
               )
             ) : loading ? (
               <Box mt="-1rem" ml="s">

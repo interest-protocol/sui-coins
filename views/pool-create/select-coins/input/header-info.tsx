@@ -4,7 +4,7 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { useWeb3 } from '@/hooks/use-web3';
-import { FixedPointMath } from '@/lib';
+import { FixedPointMath, Rounding } from '@/lib';
 
 import { CreatePoolForm } from '../../pool-create.types';
 import { InputProps } from './input.types';
@@ -18,7 +18,8 @@ const HeaderInfo: FC<InputProps> = ({ index }) => {
 
   const balance = FixedPointMath.toNumber(
     BigNumber(coinsMap[type]?.balance || '0'),
-    coinsMap[type]?.decimals ?? decimals
+    coinsMap[type]?.decimals ?? decimals,
+    Rounding.ROUND_DOWN
   );
 
   return (

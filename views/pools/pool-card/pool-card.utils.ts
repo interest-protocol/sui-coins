@@ -8,7 +8,7 @@ import { BigNumber } from 'bignumber.js';
 import { isEmpty } from 'ramda';
 
 import { CoinMetadataWithType } from '@/interface';
-import { FixedPointMath } from '@/lib';
+import { FixedPointMath, Rounding } from '@/lib';
 
 export const isStablePool = (
   pool: InterestPool,
@@ -43,7 +43,8 @@ export const getStableLiquidity = (
       2 *
       FixedPointMath.toNumber(
         BigNumber(String(pool.state.balances[1])),
-        metadata[pool.coinTypes[1]].decimals
+        metadata[pool.coinTypes[1]].decimals,
+        Rounding.ROUND_DOWN
       ) *
       priceY
     );
@@ -53,7 +54,8 @@ export const getStableLiquidity = (
       2 *
       FixedPointMath.toNumber(
         BigNumber(String(pool.state.balances[0])),
-        metadata[pool.coinTypes[0]].decimals
+        metadata[pool.coinTypes[0]].decimals,
+        Rounding.ROUND_DOWN
       ) *
       priceX
     );
@@ -62,12 +64,14 @@ export const getStableLiquidity = (
     return (
       FixedPointMath.toNumber(
         BigNumber(String(pool.state.balances[1])),
-        metadata[pool.coinTypes[1]].decimals
+        metadata[pool.coinTypes[1]].decimals,
+        Rounding.ROUND_DOWN
       ) *
         priceY +
       FixedPointMath.toNumber(
         BigNumber(String(pool.state.balances[0])),
-        metadata[pool.coinTypes[0]].decimals
+        metadata[pool.coinTypes[0]].decimals,
+        Rounding.ROUND_DOWN
       ) *
         priceX
     );
@@ -97,22 +101,38 @@ export const getVolatileLiquidity = (
   if (!priceX && !!priceY)
     return (
       2 *
-      FixedPointMath.toNumber(BigNumber(String(pool.state.balances[1])), 18) *
+      FixedPointMath.toNumber(
+        BigNumber(String(pool.state.balances[1])),
+        18,
+        Rounding.ROUND_DOWN
+      ) *
       priceY
     );
 
   if (!priceY && !!priceX)
     return (
       2 *
-      FixedPointMath.toNumber(BigNumber(String(pool.state.balances[0])), 18) *
+      FixedPointMath.toNumber(
+        BigNumber(String(pool.state.balances[0])),
+        18,
+        Rounding.ROUND_DOWN
+      ) *
       priceX
     );
 
   if (priceX && priceY)
     return (
-      FixedPointMath.toNumber(BigNumber(String(pool.state.balances[1])), 18) *
+      FixedPointMath.toNumber(
+        BigNumber(String(pool.state.balances[1])),
+        18,
+        Rounding.ROUND_DOWN
+      ) *
         priceY +
-      FixedPointMath.toNumber(BigNumber(String(pool.state.balances[0])), 18) *
+      FixedPointMath.toNumber(
+        BigNumber(String(pool.state.balances[0])),
+        18,
+        Rounding.ROUND_DOWN
+      ) *
         priceX
     );
 

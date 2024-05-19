@@ -7,7 +7,7 @@ import { v4 } from 'uuid';
 import { WRAPPED_CONVERSION_MAP } from '@/constants/clamm';
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { useNetwork } from '@/hooks/use-network';
-import { FixedPointMath } from '@/lib';
+import { FixedPointMath, Rounding } from '@/lib';
 import { formatMoney, getSymbolByType, parseBigNumberish } from '@/utils';
 import { isStablePool } from '@/views/pools/pool-card/pool-card.utils';
 
@@ -105,7 +105,8 @@ const AdvanceDetail: FC = () => {
                   'Excess profit (over the 50% baseline) required to allow price re-pegging',
                 content: FixedPointMath.toNumber(
                   parseBigNumberish(pool.state.rebalancingParams.extraProfit),
-                  parseBigNumberish(clamm.PRECISION).e!
+                  parseBigNumberish(clamm.PRECISION).e!,
+                  Rounding.ROUND_DOWN
                 ),
               },
               {
@@ -114,7 +115,8 @@ const AdvanceDetail: FC = () => {
                   'Adjusts how quickly fees increase with greater imbalance',
                 content: FixedPointMath.toNumber(
                   parseBigNumberish(pool.state.fees.gammaFee),
-                  18
+                  18,
+                  Rounding.ROUND_DOWN
                 ),
               },
               {
@@ -124,7 +126,8 @@ const AdvanceDetail: FC = () => {
                   parseBigNumberish(
                     pool.state.rebalancingParams.adjustmentStep
                   ),
-                  18
+                  18,
+                  Rounding.ROUND_DOWN
                 ),
               },
               {
@@ -156,7 +159,8 @@ const AdvanceDetail: FC = () => {
 
             const priceN = FixedPointMath.toNumber(
               BigNumber(price.toString()),
-              18
+              18,
+              Rounding.ROUND_DOWN
             );
             return (
               <ItemToken
