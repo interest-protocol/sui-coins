@@ -8,7 +8,7 @@ import { WRAPPED_CONVERSION_MAP } from '@/constants/clamm';
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
-import { FixedPointMath } from '@/lib';
+import { FixedPointMath, Rounding } from '@/lib';
 import { DotErrorSVG } from '@/svg';
 import { parseBigNumberish } from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
@@ -51,7 +51,8 @@ const WithdrawManager: FC = () => {
                 ? String(
                     FixedPointMath.toNumber(
                       parseBigNumberish(minQuote),
-                      token.decimals
+                      token.decimals,
+                      Rounding.ROUND_DOWN
                     )
                   )
                 : '0',
@@ -77,7 +78,8 @@ const WithdrawManager: FC = () => {
           value: String(
             FixedPointMath.toNumber(
               parseBigNumberish(minQuotes[index]),
-              token.decimals
+              token.decimals,
+              Rounding.ROUND_DOWN
             )
           ),
         }))

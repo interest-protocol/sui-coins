@@ -12,7 +12,7 @@ import { EXPLORER_URL, Network } from '@/constants';
 import { useDialog } from '@/hooks/use-dialog';
 import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
-import { FixedPointMath } from '@/lib';
+import { FixedPointMath, Rounding } from '@/lib';
 import {
   showTXSuccessToast,
   signAndExecute,
@@ -113,7 +113,8 @@ const PoolFormDepositButton: FC = () => {
         +Number(coin1.value).toFixed(5) >
         +FixedPointMath.toNumber(
           coinsMap[coin1.type].balance,
-          coinsMap[coin1.type].decimals
+          coinsMap[coin1.type].decimals,
+          Rounding.ROUND_DOWN
         ).toFixed(5)
       ) {
         setValue(
@@ -127,7 +128,8 @@ const PoolFormDepositButton: FC = () => {
         +Number(coin2.value).toFixed(5) >
         +FixedPointMath.toNumber(
           coinsMap[coin2.type].balance,
-          coinsMap[coin2.type].decimals
+          coinsMap[coin2.type].decimals,
+          Rounding.ROUND_DOWN
         ).toFixed(5)
       ) {
         setValue(
