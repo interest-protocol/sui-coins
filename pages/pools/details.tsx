@@ -1,5 +1,4 @@
 import { NextPage } from 'next';
-import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { SEO } from '@/components';
