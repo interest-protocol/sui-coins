@@ -14,6 +14,7 @@ import { v4 } from 'uuid';
 import { SIDEBAR_ITEMS } from '@/components/layout/sidebar/sidebar.data';
 import ConnectWalletButton from '@/components/wallet/connect-wallet-button';
 import { DISPLAY_NETWORK, Network, wrapperVariants } from '@/constants';
+import { useWeb3 } from '@/hooks/use-web3';
 import { ArrowLeftSVG, SignOutSVG, SuiLogoSVG } from '@/svg';
 
 import Avatar from '../avatar';
@@ -24,6 +25,7 @@ const AccountSubMenu: FC<{ closeSubmenu: () => void }> = ({ closeSubmenu }) => {
   const accounts = useAccounts();
   const currentAccount = useCurrentAccount();
   const { mutate: selectAccount } = useSwitchAccount();
+  const { mutate } = useWeb3();
 
   return (
     <>
@@ -36,7 +38,10 @@ const AccountSubMenu: FC<{ closeSubmenu: () => void }> = ({ closeSubmenu }) => {
       {accounts.map((account) => (
         <OptionItem
           key={v4()}
-          onClick={() => selectAccount({ account })}
+          onClick={() => {
+            mutate();
+            selectAccount({ account });
+          }}
           selected={currentAccount?.address === account.address}
         >
           <Avatar withNameOrAddress account={account?.address} />

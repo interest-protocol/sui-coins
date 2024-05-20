@@ -13,7 +13,6 @@ import { Aggregator, ISwapSettings, SwapForm, SwapToken } from './swap.types';
 
 const SwapInitManager: FC = () => {
   const { coinsMap } = useWeb3();
-
   const form = useFormContext<SwapForm>();
   const { network } = useSuiClientContext();
   const {
@@ -29,7 +28,16 @@ const SwapInitManager: FC = () => {
   useEffect(() => {
     form.reset();
     const defaultSettings = form.getValues('settings');
-    form.setValue('settings', { ...defaultSettings, ...settings });
+    form.setValue('settings', {
+      ...defaultSettings,
+      ...settings,
+      ...(process.env.VERCEL_ENV === 'production' &&
+      settings.aggregator === Aggregator.Interest
+        ? {
+            aggregator: Aggregator.Hop,
+          }
+        : {}),
+    });
     updateURL(pathname);
   }, [network]);
 
@@ -88,14 +96,15 @@ const SwapInitManager: FC = () => {
 
   useEffect(() => {
     const defaultSettings = form.getValues('settings');
-    form.setValue('settings', { ...defaultSettings, ...settings });
+    form.setValue('settings', {
+      ...defaultSettings,
+      ...settings,
+    });
   }, [settings]);
 
   useEffect(() => {
     (async () => {
-      const searchParams = new URLSearchParams(
-        asPath.replace('/', '').replace('?', '')
-      );
+      const searchParams = new URLSearchParams(asPath.split('?')[1]);
 
       const [fromType, toType] = await Promise.all([
         setDefaultToken(from as `0x${string}`, 'from'),
@@ -118,4 +127,5 @@ const SwapInitManager: FC = () => {
 
   return null;
 };
+
 export default SwapInitManager;

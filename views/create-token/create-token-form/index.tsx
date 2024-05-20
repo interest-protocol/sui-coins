@@ -16,6 +16,8 @@ import toast from 'react-hot-toast';
 import { TextField } from '@/components';
 import { Network } from '@/constants';
 import { useWeb3 } from '@/hooks/use-web3';
+import { getBytecode } from '@/lib/move-template/coin';
+import initMoveByteCodeTemplate from '@/lib/move-template/move-bytecode-template';
 import { parseInputEventToNumberString, showTXSuccessToast } from '@/utils';
 import { throwTXIfNotSuccessful } from '@/utils';
 
@@ -23,8 +25,6 @@ import { ICreateTokenForm } from '../create-token.types';
 import { Blacklist } from './blacklist';
 import { validationSchema } from './create-token-form.validation';
 import FixedSupplyToggle from './fixed-supply-toggle';
-import initMoveByteCodeTemplate from './move-bytecode-template';
-import { getBytecode } from './template';
 import UploadImage from './upload-image';
 
 const CreateTokenForm: FC = () => {

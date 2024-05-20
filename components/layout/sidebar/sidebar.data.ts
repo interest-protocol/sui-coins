@@ -26,7 +26,7 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
   {
     name: 'pool',
     Icon: PoolSVG,
-    disabled: true,
+    disabled: false,
     path: Routes[RoutesEnum.Pools],
     networks: [Network.MAINNET, Network.TESTNET],
   },

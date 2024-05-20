@@ -1,5 +1,10 @@
+import { QuoteSwapReturn } from '@interest-protocol/clamm-sdk';
+import {
+  CoinPath,
+  PoolObjectIdPath,
+} from '@interest-protocol/clamm-sdk/dist/clamm/router/router.types';
 import { Box, Button, ProgressIndicator } from '@interest-protocol/ui-kit';
-import { useSuiClientContext } from '@mysten/dapp-kit';
+import { normalizeStructTag } from '@mysten/sui.js/utils';
 import { RouterCompleteTradeRoute } from 'aftermath-ts-sdk';
 import BigNumber from 'bignumber.js';
 import { FC, useEffect } from 'react';
@@ -9,15 +14,19 @@ import useSWR from 'swr';
 import { useDebounce } from 'use-debounce';
 
 import { TREASURY } from '@/constants';
-import { EXCHANGE_FEE } from '@/constants/dex';
+import { COIN_TO_WRAPPED, EXCHANGE_FEE } from '@/constants/clamm';
+import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { useHopSdk } from '@/hooks/use-hop-sdk';
+import { useNetwork } from '@/hooks/use-network';
 import { FixedPointMath } from '@/lib';
 import { JSONQuoteResponse } from '@/server/lib/hop/hop.utils';
 import { RefreshSVG } from '@/svg';
+import { parseBigNumberish } from '@/utils';
 
 import { SwapMessagesEnum } from './swap.data';
 import { useAftermathRouter } from './swap.hooks';
 import { Aggregator, SwapForm } from './swap.types';
+import { isNativeRoute } from './swap.utils';
 
 const countdownRenderer =
   (interval: string): CountdownRendererFn =>
@@ -36,10 +45,13 @@ const countdownRenderer =
   };
 
 const SwapUpdatePrice: FC = () => {
+  const clamm = useClammSdk();
   const hopSdk = useHopSdk();
-  const { network } = useSuiClientContext();
+  const network = useNetwork();
   const aftermathRouter = useAftermathRouter();
   const { control, setValue, getValues } = useFormContext<SwapForm>();
+
+  const native = getValues('settings.aggregator') === Aggregator.Interest;
 
   const coinInType = useWatch({
     control,
@@ -91,6 +103,50 @@ const SwapUpdatePrice: FC = () => {
 
   const disabled = !coinInValue || coinInValue.isZero() || !coinOutType;
 
+  const getRoutes = async () => {
+    try {
+      if (!native) {
+        return await (aggregator === Aggregator.Aftermath
+          ? aftermathRouter.getCompleteTradeRouteGivenAmountIn({
+              coinInType,
+              coinOutType,
+              referrer: TREASURY,
+              coinInAmount: BigInt(coinInValue.toFixed(0)),
+              externalFee: { recipient: TREASURY, feePercentage: EXCHANGE_FEE },
+            })
+          : hopSdk.quote(coinInType, coinOutType, coinInValue.toFixed(0)));
+      }
+
+      return await clamm
+        .getRoutesQuotes({
+          coinIn:
+            COIN_TO_WRAPPED[network][normalizeStructTag(coinInType)] ||
+            coinInType,
+          coinOut:
+            COIN_TO_WRAPPED[network][normalizeStructTag(coinOutType)] ||
+            coinOutType,
+          amount: BigInt(
+            coinInValue.decimalPlaces(0, BigNumber.ROUND_DOWN).toString()
+          ),
+        })
+        .then((value) => ({
+          ...value,
+          routes: value.routes.reduce(
+            ([acc], route) => [
+              acc && acc[2].amount >= route[2].amount ? acc : route,
+            ],
+            [] as [CoinPath, PoolObjectIdPath, QuoteSwapReturn][]
+          ),
+        }));
+    } catch (e) {
+      resetFields();
+      setValue('error', 'There is no market for these coins.');
+      throw e;
+    } finally {
+      setValue('fetchingPrices', false);
+    }
+  };
+
   const { mutate, error } = useSWR(
     `${coinInType}-${coinOutType}-${coinInValue?.toString()}-${network}-${aggregator}`,
     async () => {
@@ -103,32 +159,32 @@ const SwapUpdatePrice: FC = () => {
 
       setValue('fetchingPrices', true);
 
-      const data = await (aggregator === Aggregator.Aftermath
-        ? aftermathRouter.getCompleteTradeRouteGivenAmountIn({
-            coinInType,
-            coinOutType,
-            referrer: TREASURY,
-            coinInAmount: BigInt(coinInValue.toFixed(0)),
-            externalFee: { recipient: TREASURY, feePercentage: EXCHANGE_FEE },
-          })
-        : hopSdk.quote(coinInType, coinOutType, coinInValue.toFixed(0))
-      ).finally(() => {
-        setValue('fetchingPrices', false);
-      });
+      const data = await getRoutes();
 
       setValue('route', data);
 
-      const value = Number(
-        (aggregator === Aggregator.Aftermath
-          ? (FixedPointMath.toNumber(coinInValue, getValues('from.decimals')) *
-              10 ** (getValues('from.decimals') - getValues('to.decimals'))) /
-            (data as RouterCompleteTradeRoute).spotPrice
-          : FixedPointMath.toNumber(
-              BigNumber((data as JSONQuoteResponse).amount_out_with_fee),
+      const value = isNativeRoute(data)
+        ? String(
+            FixedPointMath.toNumber(
+              parseBigNumberish(data.routes[0][2].amount),
               getValues('to.decimals')
             )
-        ).toFixed(6)
-      ).toPrecision();
+          )
+        : Number(
+            (aggregator === Aggregator.Aftermath
+              ? (FixedPointMath.toNumber(
+                  coinInValue,
+                  getValues('from.decimals')
+                ) *
+                  10 **
+                    (getValues('from.decimals') - getValues('to.decimals'))) /
+                (data as RouterCompleteTradeRoute).spotPrice
+              : FixedPointMath.toNumber(
+                  BigNumber((data as JSONQuoteResponse).amount_out_with_fee),
+                  getValues('to.decimals')
+                )
+            ).toFixed(6)
+          ).toPrecision();
 
       setValue('to.display', value);
 

@@ -1,4 +1,4 @@
-import { SuiClient } from '@mysten/sui.js/client';
+import { FilterQuery } from 'mongoose';
 
 import { Network } from '@/constants';
 
@@ -6,6 +6,13 @@ export interface GetClammPoolsArgs {
   network: Network;
   page: number;
   limit: number;
+}
+
+export interface GetClammPoolsArgsWithFindQuery {
+  network: Network;
+  page: number;
+  limit: number;
+  findQuery: FilterQuery<any>;
 }
 
 export interface GetClammPoolsByCoinTypesArgs {

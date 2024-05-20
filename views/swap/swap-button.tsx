@@ -8,6 +8,7 @@ import {
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+import invariant from 'tiny-invariant';
 
 import { EXPLORER_URL, Network } from '@/constants';
 import { useDialog } from '@/hooks/use-dialog';
@@ -37,8 +38,6 @@ const SwapButton: FC = () => {
     formSwap.setValue('from.value', ZERO_BIG_NUMBER);
   };
 
-  const route = useWatch({ control: formSwap.control, name: 'route' });
-
   const swapping = useWatch({
     control: formSwap.control,
     name: 'swapping',
@@ -61,7 +60,7 @@ const SwapButton: FC = () => {
 
   const handleSwap = async () => {
     try {
-      if (!route || !currentAccount) throw new Error('Something went wrong');
+      invariant(currentAccount, 'Need to connect wallet');
 
       formSwap.setValue('swapping', true);
 

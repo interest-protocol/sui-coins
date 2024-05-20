@@ -6,13 +6,14 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import useSWR from 'swr';
 
-import { EXCHANGE_FEE } from '@/constants/dex';
+import { EXCHANGE_FEE } from '@/constants/clamm';
 import { FixedPointMath } from '@/lib';
 import { DotErrorSVG } from '@/svg';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { useSwap } from '../swap.hooks';
 import { SwapForm } from '../swap.types';
+import { isNativeRoute } from '../swap.utils';
 import { isAftermathRoute } from '../swap.utils';
 
 const SwapPreviewModalSummary: FC = () => {
@@ -29,9 +30,11 @@ const SwapPreviewModalSummary: FC = () => {
   const slippage = useWatch({ control, name: 'settings.slippage' });
 
   const trackKey = route
-    ? isAftermathRoute(route)
-      ? route.spotPrice
-      : route.amount_out_with_fee.toString()
+    ? isNativeRoute(route)
+      ? route?.routes[0][2].amount.toString()
+      : isAftermathRoute(route)
+        ? route.spotPrice
+        : route.amount_out_with_fee.toString()
     : 0;
 
   const { data: fees, isLoading } = useSWR(

@@ -7,7 +7,7 @@ import { useModal } from '@/hooks/use-modal';
 import { ThreeDotsSVG } from '@/svg';
 
 import { AGGREGATORS_LIST } from './swap.data';
-import { Aggregator, SwapForm } from './swap.types';
+import { Aggregator, AggregatorType, SwapForm } from './swap.types';
 import SwapSelectAggregatorModal from './swap-select-aggregator-modal';
 
 const SwapHeader: FC = () => {
@@ -19,8 +19,8 @@ const SwapHeader: FC = () => {
     name: 'settings',
   });
 
-  const onSelect = (aggregator: Aggregator) => {
-    setValue('settings.aggregator', aggregator);
+  const onSelect = (aggregator: AggregatorType) => {
+    setValue('settings.aggregator', aggregator as Aggregator);
     localStorage.setItem(
       `${LOCAL_STORAGE_VERSION}-sui-coins-settings`,
       JSON.stringify({
@@ -66,8 +66,8 @@ const SwapHeader: FC = () => {
         p="xs"
         variant="outline"
         borderRadius="full"
-        borderColor="outlineVariant"
         onClick={openModal}
+        borderColor="outlineVariant"
         PrefixIcon={
           <Box height="1.5rem" width="1.5rem" borderRadius="full">
             <img
