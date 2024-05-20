@@ -1,4 +1,5 @@
 import { Box, Button, Motion, RadioButton } from '@interest-protocol/ui-kit';
+import { not } from 'ramda';
 import { FC, useEffect, useId, useState } from 'react';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
@@ -33,7 +34,7 @@ const Dropdown: FC<DropdownProps> = ({ label, type, filterData, disabled }) => {
     )
       return;
 
-    setOpen(!false);
+    setOpen(false);
   };
 
   useEffect(() => {
@@ -54,7 +55,7 @@ const Dropdown: FC<DropdownProps> = ({ label, type, filterData, disabled }) => {
       setIsSelected(!isSelected);
       replace(tmpFilters);
     }
-    setOpen(!isOpen);
+    setOpen(not);
   };
 
   const dropdownRef = useClickOutsideListenerRef<HTMLDivElement>(closeDropdown);
