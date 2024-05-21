@@ -104,7 +104,6 @@ const IncineratorManager: FC = () => {
 
   useEffect(() => {
     if (!loading && !error) {
-      console.log('entrei', objects);
       if (!reset && delay !== undefined) setDelay(undefined);
       updateAssets();
     }
