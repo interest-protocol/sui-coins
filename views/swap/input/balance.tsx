@@ -24,7 +24,7 @@ const Balance: FC<InputProps> = ({ label }) => {
   );
 
   return (
-    <Box display="flex" color="onSurface" gap="0.5rem" alignItems="center">
+    <Box display="flex" color="outline" gap="0.5rem" alignItems="center">
       <Box width="1rem" height="1rem">
         <WalletSVG
           maxHeight="100%"

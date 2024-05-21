@@ -93,7 +93,11 @@ const SelectToken: FC<InputProps> = ({ label }) => {
   return (
     <Box
       position="relative"
-      minWidth={['8rem', '8rem', '8rem', '8rem', '10rem']}
+      minWidth={
+        currentToken?.type
+          ? ['6rem', '6rem', '6rem', '6rem', '8rem']
+          : ['8rem', '8rem', '8rem', '8rem', '10rem']
+      }
     >
       <Button
         p="xs"
