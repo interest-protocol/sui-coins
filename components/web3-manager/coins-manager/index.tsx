@@ -109,20 +109,6 @@ const CoinsManager: FC = () => {
                     { ...coinRaw, type: SUI_TYPE_ARG as `0x${string}` },
                   ]),
                 },
-                [type]: {
-                  ...acc[type],
-                  ...coinRaw,
-                  type,
-                  symbol,
-                  decimals,
-                  metadata,
-                  balance: BigNumber(coinRaw.balance).plus(
-                    acc[type]?.balance ?? ZERO_BIG_NUMBER
-                  ),
-                  objects: (acc[type]?.objects ?? []).concat([
-                    { ...coinRaw, type },
-                  ]),
-                },
               };
 
             return {
