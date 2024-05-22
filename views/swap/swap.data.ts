@@ -5,6 +5,6 @@ export const AGGREGATORS_LIST: Record<Aggregator, AggregatorPros> = {
     shortName: 'Native',
     url: 'https://www.interestprotocol.com/',
     name: 'Interest Protocol',
-    logo: '/images/aggregators/ipx.webp',
+    logo: 'https://www.interestprotocol.com/logo.png',
   },
 };

@@ -63,6 +63,7 @@ export { default as QuestionCircleSVG } from './question-circle';
 export { default as SearchSVG } from './search';
 export { default as SignOutSVG } from './sign-out';
 export { default as SOLChainSVG } from './sol-chain';
+export { default as SubtractBoxSVG } from './subtract-box';
 export { default as SuiCoinsSVG } from './suicoins-logo';
 export { default as SwapSVG } from './swap';
 export { default as SwapArrowSVG } from './swap-arrow';

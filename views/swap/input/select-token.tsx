@@ -27,7 +27,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
     name: label,
   });
 
-  const { symbol: currentSymbol } = currentToken ?? {
+  const { symbol: currentSymbol, type: currentType } = currentToken ?? {
     symbol: undefined,
     type: undefined,
   };
@@ -93,18 +93,16 @@ const SelectToken: FC<InputProps> = ({ label }) => {
   return (
     <Box
       position="relative"
-      minWidth={
-        currentToken?.type
-          ? ['6rem', '6rem', '6rem', '6rem', '8rem']
-          : ['8rem', '8rem', '8rem', '8rem', '10rem']
-      }
+      minWidth={['4rem', '8rem', '8rem', '8rem', '6.25rem']}
     >
       <Button
         p="xs"
+        pl={currentType ? 'xs' : '1rem !important'}
         width="100%"
         fontSize="xs"
         variant="tonal"
-        borderRadius="m"
+        height="2.5rem"
+        borderRadius="full"
         color="onSurface"
         border="1px solid"
         borderColor="outline"
@@ -138,7 +136,15 @@ const SelectToken: FC<InputProps> = ({ label }) => {
           alignItems="center"
           justifyContent="space-between"
         >
-          <Typography size="large" variant="label" p="xs">
+          <Typography
+            size="large"
+            variant="label"
+            overflow="hidden"
+            whiteSpace="nowrap"
+            fontFamily="Satoshi"
+            width={['0px', 'auto']}
+            display={[currentType ? 'none' : 'block', 'block']}
+          >
             {currentSymbol ?? 'Select Token'}
           </Typography>
           {currentSymbol ? (

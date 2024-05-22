@@ -4,7 +4,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 import { useWeb3 } from '@/hooks';
 import { FixedPointMath } from '@/lib';
-import { WalletSVG } from '@/svg';
+import { SubtractBoxSVG } from '@/svg';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { SwapForm } from '../swap.types';
@@ -26,7 +26,7 @@ const Balance: FC<InputProps> = ({ label }) => {
   return (
     <Box display="flex" color="outline" gap="0.5rem" alignItems="center">
       <Box width="1rem" height="1rem">
-        <WalletSVG
+        <SubtractBoxSVG
           maxHeight="100%"
           maxWidth="100%"
           width="100%"
