@@ -23,6 +23,7 @@ const AdvanceDetail = () => (
         <ItemStandard
           key={v4()}
           label={label}
+          loading={false}
           content={content}
           isCopyClipBoard={isCopyClipBoard}
           popupInfo={popupInfo}
