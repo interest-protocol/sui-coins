@@ -20,7 +20,14 @@ const Input: FC<InputProps> = ({ label }) => {
   return (
     <Box>
       <HeaderInfo label={label} />
-      <Box pl="l" pt="m" pb="xs" display="flex" justifyContent="space-between">
+      <Box
+        pl="l"
+        pt="l"
+        pb="m"
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+      >
         <SelectToken label={label} />
         <Box
           display="flex"
@@ -30,20 +37,25 @@ const Input: FC<InputProps> = ({ label }) => {
         >
           <TextField
             pl="-1rem"
-            fontSize="2xl"
+            fontSize={['3xl', '5xl']}
             lineHeight="l"
             placeholder="0"
             color="onSurface"
             textAlign="right"
             fontFamily="Satoshi"
+            nHover={{
+              border: 'none',
+            }}
             disabled={isFetching}
             Prefix={
               isFetching && <ProgressIndicator variant="loading" size={16} />
             }
             fieldProps={{
               width: '100%',
-              borderRadius: 'xs',
-              borderColor: 'transparent',
+              border: 'none',
+              nHover: {
+                border: 'none',
+              },
             }}
             {...register(`${label}.value`, {
               onChange: (v: ChangeEvent<HTMLInputElement>) => {
@@ -52,11 +64,16 @@ const Input: FC<InputProps> = ({ label }) => {
               },
             })}
           />
-          <AmountInDollar label={label} />
         </Box>
       </Box>
-      <Box pl="l" display="flex" alignItems="center">
+      <Box
+        pl="l"
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+      >
         <Balance label={label} />
+        <AmountInDollar label={label} />
       </Box>
       <Box pb={label === 'to' ? '2xl' : 's'}>
         {label === 'from' && (

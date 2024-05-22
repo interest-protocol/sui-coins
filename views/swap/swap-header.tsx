@@ -32,7 +32,7 @@ const SwapHeader: FC = () => {
   console.log('aggregator data :: ', Aggregator);
 
   return (
-    <Box display="flex" justifyContent="space-between" my="s" mx="m">
+    <Box display="flex" justifyContent="space-between" mt="s" mb="2xl" mx="m">
       <Typography
         size="large"
         fontWeight="700"
