@@ -40,6 +40,8 @@ export interface SwapForm {
   disabled: boolean;
   swapPath: SwapPath;
   readyToSwap: boolean;
+  focus: boolean;
+  swapping: boolean;
 }
 
 export interface AggregatorPros {

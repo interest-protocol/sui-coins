@@ -27,7 +27,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
     name: label,
   });
 
-  const { symbol: currentSymbol } = currentToken ?? {
+  const { symbol: currentSymbol, type: currentType } = currentToken ?? {
     symbol: undefined,
     type: undefined,
   };
@@ -93,29 +93,33 @@ const SelectToken: FC<InputProps> = ({ label }) => {
   return (
     <Box
       position="relative"
-      minWidth={['8rem', '8rem', '8rem', '8rem', '10rem']}
+      minWidth={['4rem', '8rem', '8rem', '8rem', '6.25rem']}
     >
       <Button
-        p="2xs"
-        fontSize="s"
+        p="xs"
+        pl={currentType ? 'xs' : '1rem !important'}
         width="100%"
+        fontSize="xs"
         variant="tonal"
+        height="2.5rem"
+        borderRadius="full"
         color="onSurface"
-        borderRadius="xs"
+        border="1px solid"
+        borderColor="outline"
         bg="highestContainer"
         onClick={openModal}
         {...(Icon && {
           PrefixIcon: (
             <Box
               as="span"
-              width="2.5rem"
-              height="2.5rem"
+              width="2rem"
+              height="2rem"
               bg="onSurface"
-              color="onPrimary"
-              borderRadius="xs"
               display="flex"
-              justifyContent="center"
+              borderRadius="m"
+              color="onPrimary"
               alignItems="center"
+              justifyContent="center"
             >
               <TokenIcon
                 network={network}
@@ -126,14 +130,29 @@ const SelectToken: FC<InputProps> = ({ label }) => {
           ),
         })}
       >
-        <Typography size="large" variant="label" p="xs">
-          {currentSymbol ?? 'Select Token'}
-        </Typography>
-        {currentSymbol ? (
-          <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-        ) : (
-          <ChevronRightSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-        )}
+        <Box
+          width="100%"
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          <Typography
+            size="large"
+            variant="label"
+            overflow="hidden"
+            whiteSpace="nowrap"
+            fontFamily="Satoshi"
+            width={['0px', 'auto']}
+            display={[currentType ? 'none' : 'block', 'block']}
+          >
+            {currentSymbol ?? 'Select Token'}
+          </Typography>
+          {currentSymbol ? (
+            <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+          ) : (
+            <ChevronRightSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+          )}
+        </Box>
       </Button>
     </Box>
   );

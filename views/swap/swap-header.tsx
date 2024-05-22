@@ -17,22 +17,8 @@ const SwapHeader: FC = () => {
     name: 'settings',
   });
 
-  useEffect(() => {
-    setValue('settings.aggregator', Aggregator.Native);
-    localStorage.setItem(
-      `${LOCAL_STORAGE_VERSION}-movement-settings`,
-      JSON.stringify({
-        slippage: settings.slippage,
-        interval: settings.interval,
-        Aggregator,
-      })
-    );
-  }, [settings]);
-
-  console.log('aggregator data :: ', Aggregator);
-
   return (
-    <Box display="flex" justifyContent="space-between" my="s" mx="m">
+    <Box display="flex" justifyContent="space-between">
       <Typography
         size="large"
         fontWeight="700"
