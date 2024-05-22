@@ -1,86 +1,86 @@
-import { Box, Button } from '@interest-protocol/ui-kit';
-import { useRouter } from 'next/router';
+import { Box } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { v4 } from 'uuid';
 
 import Layout from '@/components/layout';
-import { SwapSVG } from '@/svg';
-import { updateURL } from '@/utils';
 
 import Input from './input';
+import SwapFormFieldSlider from './input/swap-manager-slider';
 import ManageSlippage from './manage-slippage';
-import { SwapForm } from './swap.types';
+import SwapFlipToken from './swap-flip-token';
+import SwapHeader from './swap-header';
 import SwapManager from './swap-manager';
 import SwapPath from './swap-manager/swap-path';
 import SwapPreviewButton from './swap-preview-button';
 
-const Swap: FC = () => {
-  const { pathname } = useRouter();
-  const form = useFormContext<SwapForm>();
-
-  const { getValues, setValue } = form;
-
-  const flipToken = () => {
-    const tmpTo = getValues('to');
-    const tmpFrom = getValues('from');
-    setValue('to', { ...tmpFrom, value: '' });
-    setValue('from', { ...tmpTo, value: '' });
-
-    updateURL(`${pathname}?from=${tmpTo.type}&to=${tmpFrom.type}`);
-  };
-
-  return (
-    <Layout title="Swap">
-      <Box
-        mx="auto"
-        display="flex"
-        borderRadius="2xl"
-        flexDirection="column"
-        px={['xl', 'xl', 'xl', '7xl']}
-        width={['100%', '100%', '100%', '39.75rem']}
-      >
-        <Box py="xl" px="m" my="xs" borderRadius="xs" bg="container">
-          <Input label="from" />
-          <Box my="0.25rem" position="relative">
-            <Box
-              left="45%"
-              borderRadius="s"
-              position="absolute"
-              border="7px solid"
-              borderColor="surface"
-            >
-              <Button
-                isIcon
-                bg="container"
-                variant="tonal"
-                color="primary"
-                onClick={flipToken}
-              >
-                <SwapSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
-              </Button>
-            </Box>
-          </Box>
+const Swap: FC = () => (
+  <Layout>
+    <Box
+      mx="auto"
+      mt="3.5rem"
+      display="flex"
+      borderRadius="l"
+      flexDirection="column"
+      px={['2xs', 'xl', 'xl', '7xl']}
+      width={['100%', '100%', '100%', '39.75rem']}
+    >
+      <Box bg="container" borderRadius="s" p="xl">
+        <SwapHeader />
+        <Box display="flex" flexDirection="column" gap="5xl">
+          <Input
+            label="from"
+            slider={
+              <Box px="s">
+                <SwapFormFieldSlider />
+              </Box>
+            }
+          />
         </Box>
-        <Box py="xl" px="m" borderRadius="xs" bg="container">
-          <Input label="to" />
+        <Box
+          display="flex"
+          position="relative"
+          alignContent="center"
+          justifyContent="center"
+        >
+          <Box width="100%" height="0.313rem" bg="lowContainer" />
           <Box
-            mt="l"
-            mb="l"
+            gap="s"
+            my="-1.5rem"
+            width="100%"
             display="flex"
+            position="absolute"
             alignItems="center"
             justifyContent="center"
           >
-            <SwapPreviewButton />
+            {[<SwapFlipToken key={v4()} />].map((button) => (
+              <Box
+                key={v4()}
+                display="flex"
+                width="3.25rem"
+                height="3.25rem"
+                borderRadius="full"
+                border="5px solid"
+                alignItems="center"
+                borderColor="lowContainer"
+                justifyContent="center"
+              >
+                {button}
+              </Box>
+            ))}
           </Box>
         </Box>
-        <SwapPath />
-        <Box my="xs" bg="container" borderRadius="xs">
-          <ManageSlippage />
+        <Box py="xl" borderRadius="xs" bg="container" my="m">
+          <Input label="to" />
         </Box>
+        <SwapPreviewButton />
       </Box>
-      <SwapManager />
-    </Layout>
-  );
-};
+      <SwapPath />
+      <Box my="xs" bg="container" borderRadius="xs">
+        <ManageSlippage />
+      </Box>
+    </Box>
+    <SwapManager />
+  </Layout>
+);
 
 export default Swap;

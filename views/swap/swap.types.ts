@@ -10,7 +10,9 @@ import {
 } from '@/views/swap/swap-manager/swap-manager.types';
 
 export interface ISwapSettings {
+  interval: string;
   slippage: string;
+  aggregator: Aggregator;
 }
 
 export interface SwapToken extends CoinData {
@@ -18,6 +20,18 @@ export interface SwapToken extends CoinData {
   usdPrice: number | null;
   isFetchingSwap?: boolean;
 }
+
+interface SwapTypeArgs {
+  coinIn: string;
+  coinOut: string;
+  lpCoin: string;
+}
+
+export enum Aggregator {
+  Native = 'Native',
+}
+
+export type SwapPath = ReadonlyArray<SwapTypeArgs>;
 
 export interface SwapForm {
   to: SwapToken;
@@ -31,6 +45,15 @@ export interface SwapForm {
   routeWithAmount: RouteWithAmount | [];
   readyToSwap: boolean;
   poolsMap: PoolsMap | null | undefined;
+  focus: boolean;
+  swapping: boolean;
+}
+
+export interface AggregatorPros {
+  url: string;
+  logo: string;
+  name: string;
+  shortName: 'Native';
 }
 
 export interface SwapPreviewModalProps {

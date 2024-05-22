@@ -18,7 +18,12 @@ import { useWeb3 } from '@/hooks';
 import { getCoin, isSui } from '@/utils';
 import { updateURL } from '@/utils/url';
 import Swap from '@/views/swap';
-import { ISwapSettings, SwapForm, SwapToken } from '@/views/swap/swap.types';
+import {
+  Aggregator,
+  ISwapSettings,
+  SwapForm,
+  SwapToken,
+} from '@/views/swap/swap.types';
 
 const SwapPage: NextPage = () => {
   const network = useNetwork();
@@ -30,8 +35,8 @@ const SwapPage: NextPage = () => {
   } = useRouter();
 
   const settings = useReadLocalStorage<ISwapSettings>(
-    `${LOCAL_STORAGE_VERSION}-movement-settings`
-  ) ?? { slippage: '0.1' };
+    `${LOCAL_STORAGE_VERSION}-movement-coins-settings`
+  ) ?? { interval: '10', slippage: '0.1', aggregator: Aggregator.Native };
 
   const form = useForm<SwapForm>({
     defaultValues: {
