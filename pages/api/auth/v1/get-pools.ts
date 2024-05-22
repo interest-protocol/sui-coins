@@ -5,29 +5,27 @@ import invariant from 'tiny-invariant';
 import { Network } from '@/constants';
 import dbConnect from '@/server';
 import { getAllPools, handleServerError } from '@/server/utils/amm-pools';
-import { movementClient } from '@/utils';
 
 const handler: NextApiHandler = async (req, res) => {
   try {
     if (req.method === 'GET') {
       await dbConnect();
 
-      const client = movementClient[Network.DEVNET];
-      const pageNumber = pathOr(1, ['query', 'pageNumber'], req);
-      const network = pathOr(Network.DEVNET, ['query', 'network'], req);
+      const page = +pathOr(1, ['query', 'page'], req);
+      const findQuery = JSON.parse(pathOr('{}', ['query', 'find'], req));
 
-      invariant(Object.values(Network).includes(network), 'Invalid network');
-      invariant(client, 'Movement client not found');
+      // Prevent ppl from passing malicious strings to DB queries
+      invariant(!isNaN(page), 'Page must be a number');
 
-      const [pools, totalItems] = await getAllPools({
-        client,
-        network,
-        pageNumber,
+      const [pools, totalPages] = await getAllPools({
+        page,
+        findQuery,
+        network: Network.DEVNET,
       });
 
       res.status(200).json({
         pools,
-        totalItems,
+        totalPages,
       });
     }
 

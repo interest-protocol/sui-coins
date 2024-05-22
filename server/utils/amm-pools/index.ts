@@ -8,7 +8,7 @@ import { AMMPoolModel, getAmmPoolModel } from '@/server/model/amm-pool';
 import { fetchPool, fetchPools } from '@/utils';
 
 import {
-  GetAllPoolsArgs,
+  GetPoolsArgsWithFindQuery,
   GetPoolsByCoinTypes,
   GetPoolsByLpCoins,
   SavePoolArgs,
@@ -41,29 +41,21 @@ export const savePool = async ({ client, poolId, network }: SavePoolArgs) => {
 };
 
 export const getAllPools = async ({
-  client,
+  page,
   network,
-  pageNumber,
-}: GetAllPoolsArgs): Promise<[AmmPool[], number]> => {
+  findQuery,
+}: GetPoolsArgsWithFindQuery): Promise<[AMMPoolModel[], number]> => {
   const ammPoolModel = getAmmPoolModel(network);
 
-  const totalItems = await ammPoolModel.countDocuments();
-
   const pools = await ammPoolModel
-    .find({})
-    .skip((pageNumber - 1) * PAGE_SIZE)
+    .find(findQuery)
+    .skip((page - 1) * PAGE_SIZE)
     .limit(PAGE_SIZE);
 
-  if (!pools || !pools.length) return [[], 0];
+  const totalCount = await ammPoolModel.countDocuments();
+  const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
-  return [
-    await fetchPools(
-      client,
-      pools.map((x) => x.poolObjectId),
-      pools.map((x) => x.stateId)
-    ),
-    totalItems,
-  ];
+  return [pools, totalPages];
 };
 
 export const getPoolsByCoinTypes = async ({

@@ -1,8 +1,8 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Model, Schema } from 'mongoose';
 
 import { Network } from '@/constants';
 
-export interface AMMPoolModel extends Document {
+export interface AMMPool {
   poolObjectId: string;
   stateId: string;
   coinX: string;
@@ -10,6 +10,8 @@ export interface AMMPoolModel extends Document {
   isVolatile: boolean;
   lpCoinType: string;
 }
+
+export type AMMPoolModel = AMMPool & Document;
 
 const modelName = 'MovementAMMPool';
 
@@ -49,11 +51,11 @@ export const AmmPoolSchema = new Schema({
 });
 
 const devnetModel =
-  mongoose.models[devnetname] ||
+  (mongoose.models[devnetname] as Model<AMMPoolModel>) ||
   mongoose.model<AMMPoolModel>(devnetname, AmmPoolSchema);
 
 const testnetModel =
-  mongoose.models[testnet] ||
+  (mongoose.models[testnet] as Model<AMMPoolModel>) ||
   mongoose.model<AMMPoolModel>(testnet, AmmPoolSchema);
 
 export const getAmmPoolModel = (x: Network) =>

@@ -10,8 +10,8 @@ import { getSymbolByType, isSui } from '@/utils';
 import { PoolCardTokenInfoProps } from './pool-card.types';
 
 const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({
-  coinMetadata,
   coinTypes,
+  coinMetadata,
 }) => {
   const network = useNetwork();
 
@@ -48,8 +48,8 @@ const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({
           variant="body"
           fontSize="1rem"
           fontWeight="700"
-          lineHeight="1.7rem"
           color="onSurface"
+          lineHeight="1.7rem"
         >
           {coinTypes.reduce(
             (acc, type) =>

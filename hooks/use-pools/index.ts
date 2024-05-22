@@ -1,10 +1,13 @@
 import { useSuiClient } from '@mysten/dapp-kit';
+import { getSuiObjectResponseFields } from '@polymedia/suits';
+import { keys } from 'ramda';
 import useSWR from 'swr';
 
 import { AmmPool, AmmServerPool } from '@/interface';
 import { convertServerPoolToClientPool, fetchPool, makeSWRKey } from '@/utils';
 
 import { UsePoolsFetchReturn, UsePoolsReturn } from './use-pools.types';
+import { parsePool } from './use-pools.utils';
 
 export const usePool = (parentId: string) => {
   const client = useSuiClient();
@@ -26,16 +29,19 @@ export const usePool = (parentId: string) => {
   );
 };
 
-export const usePools = (page: number = 1) =>
+export const usePools = (page: number = 1, findQuery = {}) =>
   useSWR<UsePoolsReturn>(
-    `/api/auth/v1/get-pools?pageNumber=${page}`,
+    `/api/auth/v1/get-pools?page=${page}&find=${JSON.stringify(findQuery)}`,
     async () => {
-      const res = await fetch(`/api/auth/v1/get-pools?pageNumber=${page}`);
-      const { pools, totalItems } = (await res.json()) as UsePoolsFetchReturn;
+      const res = await fetch(
+        `/api/auth/v1/get-pools?page=${page}&find=${JSON.stringify(findQuery)}`
+      );
+      const { pools, totalPages } = (await res.json?.()) as UsePoolsFetchReturn;
 
       return {
-        pools: pools.map((x) => convertServerPoolToClientPool(x)),
-        totalItems,
+        done: true,
+        totalPages,
+        pools: pools ?? [],
       };
     },
     {
@@ -44,3 +50,25 @@ export const usePools = (page: number = 1) =>
       refreshWhenHidden: false,
     }
   );
+
+export const usePoolsMetadata = (poolStateIds: Record<string, string>) => {
+  const suiClient = useSuiClient();
+
+  return useSWR(poolStateIds, async () => {
+    const data = await suiClient.multiGetObjects({
+      ids: keys(poolStateIds),
+      options: { showContent: true },
+    });
+
+    return data.reduce(
+      (acc, state) => ({
+        ...acc,
+        [poolStateIds[state.data!.objectId]]: {
+          poolId: poolStateIds[state.data!.objectId],
+          ...parsePool(getSuiObjectResponseFields(state)),
+        },
+      }),
+      {} as Record<string, AmmPool>
+    );
+  });
+};

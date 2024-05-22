@@ -1,4 +1,5 @@
 import { SuiClient } from '@mysten/sui.js/client';
+import { FilterQuery } from 'mongoose';
 
 import { Network } from '@/constants';
 
@@ -8,10 +9,10 @@ export interface SavePoolArgs {
   poolId: string;
 }
 
-export interface GetAllPoolsArgs {
-  client: SuiClient;
+export interface GetPoolsArgsWithFindQuery {
+  page: number;
   network: Network;
-  pageNumber: number;
+  findQuery: FilterQuery<any>;
 }
 
 export interface GetPoolsByCoinTypes {

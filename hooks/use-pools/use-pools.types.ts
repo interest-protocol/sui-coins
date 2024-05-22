@@ -1,11 +1,12 @@
-import { AmmPool, AmmServerPool } from '@/interface';
+import { AMMPool } from '@/server/model/amm-pool';
 
 export interface UsePoolsFetchReturn {
-  pools: readonly AmmServerPool[];
-  totalItems: number;
+  totalPages: number;
+  pools: ReadonlyArray<AMMPool>;
 }
 
 export interface UsePoolsReturn {
-  pools: readonly AmmPool[];
-  totalItems: number;
+  done: boolean;
+  totalPages: number;
+  pools: ReadonlyArray<AMMPool>;
 }

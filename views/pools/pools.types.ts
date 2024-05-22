@@ -1,10 +1,17 @@
 import { AmmPool } from '@/interface';
+import { AMMPool } from '@/server/model/amm-pool';
 
 import { ISwapSettings } from '../swap/swap.types';
+import { FormFilterValue } from './pool-card/pool-card.types';
+
+export interface AMMPoolWithMetadata extends AMMPool {
+  metadata?: AmmPool;
+}
 
 export enum FilterTypeEnum {
   ALGORITHM = 'algorithm',
   POOL_TYPE = 'pool_type',
+  CATEGORY = 'category',
 }
 
 export enum PoolTabEnum {
@@ -22,11 +29,12 @@ export interface PoolCardListProps {
 }
 
 export interface PoolCardListContentProps {
+  done: boolean;
   hasMore?: boolean;
   totalItems?: number;
   nextPage?: () => void;
   arePoolsLoading: boolean;
-  pools: readonly AmmPool[];
+  pools?: ReadonlyArray<AMMPoolWithMetadata>;
 }
 
 export interface CoinData {
@@ -43,6 +51,7 @@ export interface PoolToken extends CoinData {
 export interface PoolForm {
   error: string | null;
   lpCoin: PoolToken;
+  tokenSelected?: string;
   explorerLink: string;
   isFindingPool: boolean;
   settings: ISwapSettings;
@@ -53,5 +62,5 @@ export interface PoolForm {
 
 export interface FilterItemProps {
   type: FilterTypeEnum;
-  description: string;
+  value: FormFilterValue;
 }
