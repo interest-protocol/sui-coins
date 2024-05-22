@@ -3,7 +3,6 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import TokenIcon from '@/components/token-icon';
-import { TOKEN_ICONS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
 import { CoinData } from '@/interface';
@@ -25,8 +24,6 @@ const SelectToken: FC<InputProps> = ({ index }) => {
   });
 
   const { symbol: currentSymbol } = currentToken;
-
-  const Icon = currentSymbol ? TOKEN_ICONS[network][currentSymbol] : null;
 
   const onSelect = async ({ type, decimals, symbol }: CoinData) => {
     if (getValues('tokens')?.some((token) => token.type === type)) return;
@@ -71,29 +68,18 @@ const SelectToken: FC<InputProps> = ({ index }) => {
         borderRadius="xs"
         bg="highestContainer"
         onClick={openModal}
-        {...(Icon && {
+        {...(currentSymbol && {
           PrefixIcon: (
-            <Box
-              as="span"
-              width="2.5rem"
-              height="2.5rem"
-              bg="onSurface"
-              color="onPrimary"
-              borderRadius="xs"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <TokenIcon
-                network={network}
-                symbol={currentSymbol}
-                type={currentToken.type}
-              />
-            </Box>
+            <TokenIcon
+              withBg
+              network={network}
+              symbol={currentSymbol}
+              type={currentToken.type}
+            />
           ),
         })}
       >
-        <Typography size="large" variant="label" p="xs">
+        <Typography size="large" variant="label" p="xs" whiteSpace="nowrap">
           {currentSymbol || 'Select Token'}
         </Typography>
         {currentSymbol ? (

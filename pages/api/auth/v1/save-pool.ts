@@ -3,7 +3,7 @@ import invariant from 'tiny-invariant';
 
 import { Network } from '@/constants';
 import dbConnect from '@/server';
-import { handleServerError, savePool } from '@/server/utils';
+import { handleServerError, savePool } from '@/server/utils/amm-pools';
 import { movementClient } from '@/utils';
 
 interface Body {
@@ -15,7 +15,11 @@ const handler: NextApiHandler = async (req, res) => {
   try {
     if (req.method === 'POST') {
       await dbConnect();
-      const { network, poolId } = req.body as Body;
+
+      const body = req.body as Body;
+
+      const network = body.network;
+      const poolId = body.poolId;
 
       invariant(network && poolId, 'invalid body');
 
@@ -23,7 +27,11 @@ const handler: NextApiHandler = async (req, res) => {
 
       invariant(client, 'Movement client not found');
 
-      const result = await savePool(client, poolId);
+      const result = await savePool({
+        client,
+        network,
+        poolId,
+      });
 
       res.status(200).json(result);
     }

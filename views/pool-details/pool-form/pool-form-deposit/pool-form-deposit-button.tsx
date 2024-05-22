@@ -1,11 +1,15 @@
 import { Button, Motion } from '@interest-protocol/ui-kit';
-import { useCurrentAccount, useSignTransactionBlock } from '@mysten/dapp-kit';
+import {
+  useCurrentAccount,
+  useSignTransactionBlock,
+  useSuiClient,
+} from '@mysten/dapp-kit';
 import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { EXPLORER_URL } from '@/constants';
 import { useNetwork } from '@/context/network';
-import { useDialog, useMovementClient, useWeb3 } from '@/hooks';
+import { useDialog, useWeb3 } from '@/hooks';
 import { useModal } from '@/hooks/use-modal';
 import { FixedPointMath } from '@/lib';
 import { showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
@@ -18,8 +22,8 @@ import { useDeposit } from './pool-form-deposit.hooks';
 const PoolFormDepositButton: FC = () => {
   const network = useNetwork();
   const deposit = useDeposit();
+  const client = useSuiClient();
   const { pool } = usePoolDetails();
-  const client = useMovementClient();
   const account = useCurrentAccount();
   const { coinsMap, mutate } = useWeb3();
   const { dialog, handleClose } = useDialog();

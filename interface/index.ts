@@ -12,8 +12,8 @@ export interface CoinData {
 export type LocalTokenMetadataRecord = Record<string, CoinData>;
 
 export enum PoolTypeEnum {
-  'clamm' = 'clamm',
-  'amm' = 'amm',
+  CLAMM = 'CLAMM',
+  AMM = 'AMM',
 }
 
 export interface LocalCoinMetadata {
@@ -25,11 +25,6 @@ export interface LocalCoinMetadata {
 export interface PoolPageProps {
   objectId: string;
   stateId: string;
-}
-
-export interface RegistryPool {
-  poolId: string;
-  lpCoinType: string;
 }
 
 export interface CoinMetadataWithType extends CoinMetadata {

@@ -5,10 +5,14 @@ import { PACKAGES } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks';
 import { FixedPointMath } from '@/lib';
-import { createObjectsParameter, getAmountMinusSlippage } from '@/utils';
+import {
+  createObjectsParameter,
+  getAmountMinusSlippage,
+  getSafeValue,
+} from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
 
-import { getAmmLpCoinAmount, getSafeValue } from '../pool-form.utils';
+import { getAmmLpCoinAmount } from '../pool-form.utils';
 
 export const useDeposit = () => {
   const network = useNetwork();
@@ -34,9 +38,19 @@ export const useDeposit = () => {
 
     const txb = new TransactionBlock();
 
-    const amount0 = getSafeValue(coin0, walletCoin0.balance);
+    const amount0 = getSafeValue({
+      coinValue: coin0.value,
+      coinType: coin0.type,
+      decimals: coin0.decimals,
+      balance: walletCoin0.balance,
+    });
 
-    const amount1 = getSafeValue(coin1, walletCoin1.balance);
+    const amount1 = getSafeValue({
+      coinValue: coin1.value,
+      coinType: coin1.type,
+      decimals: coin1.decimals,
+      balance: walletCoin1.balance,
+    });
 
     const coin0InList = createObjectsParameter({
       coinsMap,

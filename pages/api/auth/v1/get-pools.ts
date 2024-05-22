@@ -1,23 +1,32 @@
 import { NextApiHandler } from 'next';
+import { pathOr } from 'ramda';
 import invariant from 'tiny-invariant';
 
 import { Network } from '@/constants';
 import dbConnect from '@/server';
-import { getAllPools, handleServerError } from '@/server/utils';
-import { movementClient } from '@/utils';
+import { getAllPools, handleServerError } from '@/server/utils/amm-pools';
 
 const handler: NextApiHandler = async (req, res) => {
   try {
     if (req.method === 'GET') {
       await dbConnect();
 
-      const client = movementClient[Network.DEVNET];
+      const page = +pathOr(1, ['query', 'page'], req);
+      const findQuery = JSON.parse(pathOr('{}', ['query', 'find'], req));
 
-      invariant(client, 'Movement client not found');
+      // Prevent ppl from passing malicious strings to DB queries
+      invariant(!isNaN(page), 'Page must be a number');
 
-      const result = await getAllPools(client);
+      const [pools, totalPages] = await getAllPools({
+        page,
+        findQuery,
+        network: Network.DEVNET,
+      });
 
-      res.status(200).json(result);
+      res.status(200).json({
+        pools,
+        totalPages,
+      });
     }
 
     res.status(405).send('Method Not Allowed!');

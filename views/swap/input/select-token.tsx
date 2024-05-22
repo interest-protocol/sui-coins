@@ -4,12 +4,11 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import TokenIcon from '@/components/token-icon';
-import { TOKEN_ICONS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
 import { CoinData } from '@/interface';
 import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
-import { updateURL } from '@/utils';
+import { isSui, updateURL } from '@/utils';
 import SelectTokenModal from '@/views/components/select-token-modal';
 
 import { SwapForm } from '../swap.types';
@@ -31,8 +30,6 @@ const SelectToken: FC<InputProps> = ({ label }) => {
     symbol: undefined,
     type: undefined,
   };
-
-  const Icon = TOKEN_ICONS[network][currentSymbol];
 
   const changeURL = (type: string) => {
     const searchParams = new URLSearchParams(location.search);
@@ -62,10 +59,13 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       usdPrice: currentToken.usdPrice,
     });
 
-    fetch(`/api/auth/v1/coin-price?symbol=${symbol}`)
+    fetch(`/api/auth/v1/coin-price?symbol=${isSui(type) ? 'SUI' : symbol}`)
       .then((response) => response.json())
       .then((data) =>
-        setValue(`${label}.usdPrice`, data[symbol][0].quote.USD.price)
+        setValue(
+          `${label}.usdPrice`,
+          data[isSui(type) ? 'SUI' : symbol][0].quote.USD.price
+        )
       )
       .catch(() => null);
     setValue(`${label === 'from' ? 'to' : 'from'}.value`, '');
@@ -108,7 +108,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
         borderColor="outline"
         bg="highestContainer"
         onClick={openModal}
-        {...(Icon && {
+        {...(currentSymbol && {
           PrefixIcon: (
             <Box
               as="span"

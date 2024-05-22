@@ -17,34 +17,23 @@ import { POOL_INFORMATION, POOL_STATISTICS, SVGMap } from './pool-info.data';
 const PoolDetail = () => {
   const { pool, metadata, prices, loading } = usePoolDetails();
 
-  if (loading)
-    return (
-      <Box p="xl" textAlign="center">
-        Loading Pool...
-      </Box>
-    );
+  const infoData = pool
+    ? [
+        pool.poolId ?? '',
+        pool.poolType.toLocaleUpperCase() ?? '',
+        pool.isVolatile ? 'Volatile' : 'Stable',
+      ]
+    : ['', '', ''];
 
-  if (!pool)
-    return (
-      <Box p="xl" textAlign="center">
-        Pool not found
-      </Box>
-    );
+  const liquidity = pool ? getLiquidity(pool, metadata || {}, prices || {}) : 0;
 
-  const infoData = [
-    pool.poolId,
-    pool.poolType.toLocaleUpperCase(),
-    pool.isVolatile ? 'Volatile' : 'Stable',
-  ];
-
-  const liquidity = getLiquidity(pool, metadata || {}, prices || {});
-
-  const virtualPrice = liquidity
-    ? FixedPointMath.toNumber(
-        FixedPointMath.toBigNumber(liquidity).div(pool.lpCoinSupply),
-        0
-      )
-    : 0;
+  const virtualPrice =
+    pool && liquidity
+      ? FixedPointMath.toNumber(
+          FixedPointMath.toBigNumber(liquidity).div(pool.lpCoinSupply),
+          0
+        )
+      : 0;
 
   const statsData = liquidity
     ? [formatDollars(liquidity), formatDollars(virtualPrice, 9)]
@@ -52,13 +41,13 @@ const PoolDetail = () => {
 
   const coinXMetadata: CoinMetadataWithType = propOr(
     {} as typeof metadata,
-    pool.coinTypes.coinX,
+    pool ? pool.coinTypes.coinX : '',
     metadata || {}
   );
 
   const coinYMetadata: CoinMetadataWithType = propOr(
     {} as typeof metadata,
-    pool.coinTypes.coinY,
+    pool ? pool.coinTypes.coinY : '',
     metadata || {}
   );
 
@@ -71,6 +60,7 @@ const PoolDetail = () => {
           <ItemStandard
             key={v4()}
             label={label}
+            loading={loading}
             popupInfo={popupInfo}
             content={infoData[index]}
             isCopyClipBoard={isCopyClipBoard}
@@ -84,6 +74,7 @@ const PoolDetail = () => {
           <ItemStandard
             key={v4()}
             label={label}
+            loading={loading}
             popupInfo={popupInfo}
             content={statsData[index]}
             isCopyClipBoard={isCopyClipBoard}
@@ -150,6 +141,7 @@ const PoolDetail = () => {
               />
             ))}
             <ItemStandard
+              loading={loading}
               label="Total Supply"
               labelColor="outline"
               content={formatMoney(FixedPointMath.toNumber(pool.lpCoinSupply))}

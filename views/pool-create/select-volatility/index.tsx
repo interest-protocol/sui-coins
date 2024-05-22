@@ -1,7 +1,7 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import PoolCreateButton from '../pool-create-button';
+import PoolCreateButton from '../pool-next-button';
 import SelectStableCard from './select-stable-card';
 import SelectVolatileCard from './select-volatile-card';
 

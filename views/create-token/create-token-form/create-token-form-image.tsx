@@ -1,19 +1,16 @@
 import { Box, Theme, Typography, useTheme } from '@interest-protocol/ui-kit';
 import { propOr } from 'ramda';
 import { ChangeEventHandler, DragEventHandler, FC, useState } from 'react';
-import { UseFormSetValue } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { FolderSVG } from '@/svg';
 
-import { ICreateTokenForm } from '../create-token.types';
+import { CreateTokenFormImageProps } from '../create-token.types';
 import { getBase64 } from '../create-token.utils';
 
-const UploadImage: FC<{ setValue: UseFormSetValue<ICreateTokenForm> }> = ({
-  setValue,
-}) => {
-  const [dragging, setDragging] = useState(false);
+const CreateTokenFormImage: FC<CreateTokenFormImageProps> = ({ setValue }) => {
   const { colors } = useTheme() as Theme;
+  const [dragging, setDragging] = useState(false);
 
   const handleChangeFile: ChangeEventHandler<HTMLInputElement> = async (e) => {
     const file = e.target.files?.[0];
@@ -121,4 +118,4 @@ const UploadImage: FC<{ setValue: UseFormSetValue<ICreateTokenForm> }> = ({
   );
 };
 
-export default UploadImage;
+export default CreateTokenFormImage;

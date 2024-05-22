@@ -1,4 +1,4 @@
-export const Blacklist = [
+export const CREATE_TOKEN_BLACKLIST = [
   'MOVE',
   'SUI',
   'ETH',

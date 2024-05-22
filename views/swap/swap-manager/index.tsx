@@ -1,18 +1,17 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks';
+import { findRoutes } from '@/utils';
 import { SwapForm } from '@/views/swap/swap.types';
-import { findSwapPaths } from '@/views/swap/swap-manager/swap-manager.utils';
+import { useGetDex } from '@/views/swap/swap-manager/swap-manager.hooks';
 
 import SwapManagerField from './swap-manager-field';
 import { SwapMessages } from './swap-messages';
 
 const SwapManager: FC = () => {
-  const { account } = useWeb3();
-  const network = useNetwork();
   const formSwap = useFormContext<SwapForm>();
+  const { account } = useWeb3();
 
   const [error, setError] = useState(false);
   const [isZeroSwapAmountIn, setIsZeroSwapAmountIn] = useState(false);
@@ -46,23 +45,35 @@ const SwapManager: FC = () => {
     name: 'to.type',
   });
 
-  const swapPaths = findSwapPaths({
-    network,
-    coinInType,
-    coinOutType,
-  });
+  const {
+    data,
+    isLoading,
+    error: dexError,
+  } = useGetDex({ coinInType, coinOutType });
 
-  const hasNoMarket = !swapPaths.length;
+  useEffect(() => {
+    formSwap.setValue(
+      'error',
+      !isLoading && dexError && !data ? 'Error fetching the pools' : undefined
+    );
+  }, [dexError]);
+
+  if (isLoading || !data) return null;
+
+  const routes = findRoutes(data.dex, coinInType, coinOutType);
+
+  const hasNoMarket = !routes.length;
 
   return (
     <>
       <SwapManagerField
+        poolsMap={data.poolsMap}
         name="from"
         setValueName="to"
         account={account}
         setError={setError}
+        routes={routes}
         type={coinOutType}
-        swapPaths={swapPaths}
         hasNoMarket={hasNoMarket}
         control={formSwap.control}
         setValue={formSwap.setValue}
@@ -71,12 +82,13 @@ const SwapManager: FC = () => {
         setIsFetchingSwapAmount={setIsFetchingSwapAmountOut}
       />
       <SwapManagerField
+        poolsMap={data.poolsMap}
         name="to"
         setValueName="from"
         account={account}
         type={coinInType}
+        routes={routes}
         setError={setError}
-        swapPaths={swapPaths}
         hasNoMarket={hasNoMarket}
         control={formSwap.control}
         setValue={formSwap.setValue}

@@ -1,3 +1,4 @@
+import { normalizeStructTag } from '@mysten/sui.js/utils';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import { Network } from '@/constants';
@@ -5,7 +6,7 @@ import dbConnect from '@/server';
 import getCoinMetadata from '@/server/lib/coin-metadata/get-coin-metadata';
 import getCoinMetadataList from '@/server/lib/coin-metadata/get-coin-metadata-list';
 import coinMetadata from '@/server/model/coin-metadata';
-import { handleServerError } from '@/server/utils';
+import { handleServerError } from '@/server/utils/amm-pools';
 import { isInvalidNetwork } from '@/utils';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -21,7 +22,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         return res.status(400).send({ message: 'Missing valid network' });
 
       if (type) {
-        const doc = await getCoinMetadata(type, network);
+        const doc = await getCoinMetadata(normalizeStructTag(type), network);
 
         return res.status(200).json(doc);
       }

@@ -1,6 +1,6 @@
 import { NextApiHandler } from 'next';
 
-import { handleServerError } from '@/server/utils';
+import { handleServerError } from '@/server/utils/amm-pools';
 
 const handler: NextApiHandler = async (req, res) => {
   try {

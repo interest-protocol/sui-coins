@@ -1,19 +1,15 @@
 import { COINS_MAP } from '@/constants/coins';
-import { AmmPool } from '@/interface';
 
-export const getAllSymbols = (pools: ReadonlyArray<AmmPool>) => [
+export const getAllSymbols = (types: ReadonlyArray<string>) => [
   ...new Set(
-    pools.flatMap(
-      (x) =>
-        Object.values(x.coinTypes)
-          .map((x) => {
-            if (!COINS_MAP[x]) return null;
+    types
+      .map((x) => {
+        if (!COINS_MAP[x]) return null;
 
-            const symbol = COINS_MAP[x].symbol.toLowerCase();
+        const symbol = COINS_MAP[x].symbol.toLowerCase();
 
-            return symbol === 'move' ? 'sui' : symbol;
-          })
-          .filter((x) => !!x) as string[]
-    )
+        return symbol === 'move' ? 'sui' : symbol;
+      })
+      .filter((x) => !!x) as string[]
   ),
 ];

@@ -1,4 +1,5 @@
 import { Box, Button, Motion, RadioButton } from '@interest-protocol/ui-kit';
+import { not } from 'ramda';
 import { FC, useEffect, useId, useState } from 'react';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
@@ -6,6 +7,7 @@ import { v4 } from 'uuid';
 import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
 import { ArrowDownSVG, ArrowUpSVG } from '@/svg';
 
+import { FormFilterValue } from '../../pool-card/pool-card.types';
 import { FilterItemProps, PoolForm } from '../../pools.types';
 import { DropdownProps } from './dropdown.types';
 
@@ -21,7 +23,7 @@ const Dropdown: FC<DropdownProps> = ({ label, type, filterData, disabled }) => {
   const [isOpen, setOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<FilterItemProps>({
     type: type,
-    description: '',
+    value: '' as FormFilterValue,
   });
 
   const [isSelected, setIsSelected] = useState(false);
@@ -33,28 +35,28 @@ const Dropdown: FC<DropdownProps> = ({ label, type, filterData, disabled }) => {
     )
       return;
 
-    setOpen(!false);
+    setOpen(false);
   };
 
   useEffect(() => {
     const fieldSelected = fields?.filter((field) => field.type == type)[0];
     setSelectedOption({
       type: type,
-      description: fieldSelected?.description || '',
+      value: fieldSelected?.value || '',
     });
   }, [fields]);
 
   const handleSelect = (option: FilterItemProps) => {
-    if (option.description != selectedOption.description) {
+    if (option.value != selectedOption.value) {
       const tmpFilters = fields?.filter(
-        (field) => selectedOption.description != field.description
+        (field) => selectedOption.value != field.value
       );
       tmpFilters.push({ ...option });
       setSelectedOption(option);
       setIsSelected(!isSelected);
       replace(tmpFilters);
     }
-    setOpen(!isOpen);
+    setOpen(not);
   };
 
   const dropdownRef = useClickOutsideListenerRef<HTMLDivElement>(closeDropdown);
@@ -110,31 +112,25 @@ const Dropdown: FC<DropdownProps> = ({ label, type, filterData, disabled }) => {
                 flexDirection="column"
                 cursor={disabled ? 'not-allowed' : 'pointer'}
               >
-                {filterData.map((value) => {
-                  return (
-                    <Box
-                      p="l"
-                      gap="xs"
-                      key={v4()}
-                      color="onSurface"
-                      display="flex"
-                      justifyContent="space-between"
-                      borderRadius="xs"
-                      onClick={() => handleSelect(value)}
-                      nHover={{
-                        backgroundColor: 'lowestContainer',
-                      }}
-                      textTransform="capitalize"
-                    >
-                      {value.description}
-                      <RadioButton
-                        defaultValue={
-                          selectedOption.description === value.description
-                        }
-                      />
-                    </Box>
-                  );
-                })}
+                {filterData.map((value) => (
+                  <Box
+                    p="l"
+                    gap="xs"
+                    key={v4()}
+                    display="flex"
+                    color="onSurface"
+                    borderRadius="xs"
+                    textTransform="capitalize"
+                    justifyContent="space-between"
+                    nHover={{ bg: 'lowestContainer' }}
+                    onClick={() => handleSelect(value)}
+                  >
+                    {value.value}
+                    <RadioButton
+                      defaultValue={selectedOption.value === value.value}
+                    />
+                  </Box>
+                ))}
               </Box>
             </div>
           </Motion>

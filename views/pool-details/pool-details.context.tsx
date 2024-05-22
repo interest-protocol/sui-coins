@@ -44,11 +44,13 @@ export const PoolDetailsProvider: FC<
     isLoading: isMetadataLoading,
   } = useGetCoinMetadata(pool ? Object.values(pool.coinTypes) : []);
 
+  const types = pool ? [pool.coinTypes.coinX, pool.coinTypes.coinY] : [];
+
   const {
     data: prices,
     isLoading: isPricesLoading,
     error: pricesError,
-  } = useGetMultipleTokenPriceBySymbol(getAllSymbols(pool ? [pool] : []));
+  } = useGetMultipleTokenPriceBySymbol(getAllSymbols(types));
 
   const loading =
     isPoolLoading ||

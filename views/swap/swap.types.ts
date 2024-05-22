@@ -4,6 +4,10 @@ import { UseFormReturn } from 'react-hook-form';
 import { Network } from '@/constants';
 import { CoinsMap } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { CoinData } from '@/interface';
+import {
+  PoolsMap,
+  RouteWithAmount,
+} from '@/views/swap/swap-manager/swap-manager.types';
 
 export interface ISwapSettings {
   interval: string;
@@ -38,8 +42,9 @@ export interface SwapForm {
   loading: boolean;
   maxValue: boolean;
   disabled: boolean;
-  swapPath: SwapPath;
+  routeWithAmount: RouteWithAmount | [];
   readyToSwap: boolean;
+  poolsMap: PoolsMap | null | undefined;
   focus: boolean;
   swapping: boolean;
 }
