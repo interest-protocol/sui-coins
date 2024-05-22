@@ -39,6 +39,11 @@ export const COINS = [
   },
   {
     decimals: 9,
+    symbol: 'BTC',
+    type: BTC_TYPE,
+  },
+  {
+    decimals: 9,
     symbol: 'ETH',
     type: ETH_TYPE,
   },
@@ -47,6 +52,11 @@ export const COINS = [
     symbol: 'USDC',
     type: USDC_TYPE,
   },
+  {
+    decimals: 6,
+    symbol: 'USDT',
+    type: USDT_TYPE,
+  },
 ];
 
 export const COINS_MAP = {
@@ -54,6 +64,11 @@ export const COINS_MAP = {
     decimals: 9,
     symbol: 'MOVE',
     type: SUI_TYPE_ARG,
+  },
+  [BTC_TYPE]: {
+    decimals: 9,
+    symbol: 'BTC',
+    type: BTC_TYPE,
   },
   [ETH_TYPE]: {
     decimals: 9,
@@ -64,5 +79,10 @@ export const COINS_MAP = {
     decimals: 6,
     symbol: 'USDC',
     type: USDC_TYPE,
+  },
+  [USDT_TYPE]: {
+    decimals: 6,
+    symbol: 'USDT',
+    type: USDT_TYPE,
   },
 } as Record<string, LocalCoinMetadata>;

@@ -2,6 +2,8 @@ import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { FC, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
+import { CoinData } from '@/interface';
+
 import { PoolForm } from '../pools.types';
 import { FindPoolModalProps } from './find-pool-modal.types';
 
@@ -9,25 +11,16 @@ const SearchButton: FC<FindPoolModalProps> = ({ closeModal }) => {
   const { setValue, getValues } = useFormContext<PoolForm>();
   const [isError, setError] = useState(false);
 
-  const handleSearch = () => setValue('isFindingPool', true);
+  const tokenListData = getValues('tokenList');
 
-  const handleFindPool = async () => {
-    const tokenListData = getValues('tokenList');
+  const hasEmptyKeys = (token: ReadonlyArray<CoinData>) =>
+    token.some((obj) => !obj.type);
 
-    if (tokenListData.every(({ type }) => type)) {
-      handleSearch();
-      closeModal();
-      return;
-    }
-
-    setError(true);
-
-    const timeout = setTimeout(() => {
-      setError(false);
-      clearTimeout(timeout);
-    }, 3000);
-
-    return;
+  const handleFindPool = () => {
+    if (hasEmptyKeys(tokenListData)) return setError(true);
+    setValue('filterList', []);
+    setValue('isFindingPool', true);
+    closeModal();
   };
 
   return (

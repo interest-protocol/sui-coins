@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import { Network } from '@/constants';
-import { ETHSVG, MOVESVG, USDCSVG } from '@/svg';
+import { BTCSVG, ETHSVG, MOVESVG, USDCSVG, USDTSVG } from '@/svg';
 
 import { SVGProps } from '../svg/svg.types';
 
@@ -11,12 +11,16 @@ export const TOKEN_ICONS: Record<
 > = {
   [Network.TESTNET]: {
     ETH: ETHSVG,
+    BTC: BTCSVG,
     USDC: USDCSVG,
     MOVE: MOVESVG,
+    USDT: USDTSVG,
   },
   [Network.DEVNET]: {
     ETH: ETHSVG,
+    BTC: BTCSVG,
     USDC: USDCSVG,
     MOVE: MOVESVG,
+    USDT: USDTSVG,
   },
 };

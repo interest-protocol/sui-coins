@@ -4,7 +4,7 @@ export const MAX_NUMBER_INPUT_VALUE = 9000000000000000;
 
 export const LOCAL_STORAGE_VERSION = 'v4';
 
-export const PAGE_SIZE = 3;
+export const PAGE_SIZE = 50;
 
 export const RPC_URL = {
   [Network.DEVNET]: 'https://sui.devnet.m2.movementlabs.xyz:443',
