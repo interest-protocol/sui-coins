@@ -203,11 +203,19 @@ export const getSafeValue = ({
   balance,
   decimals,
 }: GetSafeValueArgs) => {
-  const amount0 = FixedPointMath.toBigNumber(coinValue, decimals).decimalPlaces(
+  const amount = FixedPointMath.toBigNumber(coinValue, decimals).decimalPlaces(
     0
   );
-  const safeBalance = isSui(coinType) ? balance.minus(1_000_000_000) : balance;
-  const safeAmount0 = amount0.gt(safeBalance) ? safeBalance : amount0;
 
-  return safeAmount0.isNegative() ? BigNumber(0) : safeAmount0;
+  const safeBalance = isSui(coinType) ? balance.minus(100_000_000) : balance;
+
+  if (safeBalance.isNegative() || safeBalance.isZero())
+    throw new Error('Not enough balance');
+
+  const safeAmount = amount.gt(safeBalance) ? safeBalance : amount;
+
+  if (safeAmount.isNegative() || safeAmount.isZero())
+    throw new Error('Not valid amount');
+
+  return safeAmount;
 };

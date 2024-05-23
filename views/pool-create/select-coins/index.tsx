@@ -8,6 +8,7 @@ import { MinusSVG, PlusSVG } from '@/svg';
 import { CreatePoolForm } from '../pool-create.types';
 import PoolCreateButton from '../pool-next-button';
 import Input from './input';
+import SelectCoinsError from './select-coins-error';
 
 const SelectCoins: FC = () => {
   const { control } = useFormContext<CreatePoolForm>();
@@ -78,6 +79,7 @@ const SelectCoins: FC = () => {
                 Add Coin
               </Button>
             )}
+          <SelectCoinsError />
         </Box>
       </Box>
       <PoolCreateButton />

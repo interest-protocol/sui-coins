@@ -13,9 +13,12 @@ import { PoolDetailAccordionItemStandardProps } from './components/accordion/acc
 import ItemStandard from './components/accordion/item-standard';
 import ItemToken from './components/accordion/item-token';
 import { POOL_INFORMATION, POOL_STATISTICS, SVGMap } from './pool-info.data';
+import PoolInfoLoading from './pool-info-loading';
 
 const PoolDetail = () => {
   const { pool, metadata, prices, loading } = usePoolDetails();
+
+  if (loading) return <PoolInfoLoading />;
 
   const infoData = pool
     ? [

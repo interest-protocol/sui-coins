@@ -12,7 +12,7 @@ import { useNetwork } from '@/context/network';
 import { useDialog, useWeb3 } from '@/hooks';
 import { useModal } from '@/hooks/use-modal';
 import { FixedPointMath } from '@/lib';
-import { showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
+import { isSui, showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
 
 import { usePoolDetails } from '../../pool-details.context';
@@ -107,6 +107,36 @@ const PoolFormDepositButton: FC = () => {
       )
         return;
 
+      if (isSui(coin1.type)) {
+        if (
+          +Number(coin1.value).toFixed(5) >
+          +FixedPointMath.toNumber(
+            coinsMap[coin1.type].balance,
+            coinsMap[coin1.type].decimals
+          ).toFixed(5)
+        ) {
+          setValue(
+            'error',
+            `The ${coin1.symbol} amount is superior than your balance, try to reduce`
+          );
+          return;
+        }
+
+        if (
+          +Number(coin1.value).toFixed(5) >
+          +FixedPointMath.toNumber(
+            coinsMap[coin1.type].balance.minus(100_000_000),
+            coinsMap[coin1.type].decimals
+          ).toFixed(5)
+        ) {
+          setValue(
+            'error',
+            `The ${coin1.symbol} amount is superior than safe balance, try to leave at least 0.1 MOVE`
+          );
+          return;
+        }
+      }
+
       if (
         +Number(coin1.value).toFixed(5) >
         +FixedPointMath.toNumber(
@@ -119,6 +149,36 @@ const PoolFormDepositButton: FC = () => {
           `The ${coin1.symbol} amount is superior than your balance, try to reduce`
         );
         return;
+      }
+
+      if (isSui(coin2.type)) {
+        if (
+          +Number(coin2.value).toFixed(5) >
+          +FixedPointMath.toNumber(
+            coinsMap[coin2.type].balance,
+            coinsMap[coin2.type].decimals
+          ).toFixed(5)
+        ) {
+          setValue(
+            'error',
+            `The ${coin2.symbol} amount is superior than your balance, try to reduce`
+          );
+          return;
+        }
+
+        if (
+          +Number(coin2.value).toFixed(5) >
+          +FixedPointMath.toNumber(
+            coinsMap[coin2.type].balance.minus(100_000_000),
+            coinsMap[coin2.type].decimals
+          ).toFixed(5)
+        ) {
+          setValue(
+            'error',
+            `The ${coin2.symbol} amount is superior than safe balance, try to leave at least 0.1 MOVE`
+          );
+          return;
+        }
       }
 
       if (
