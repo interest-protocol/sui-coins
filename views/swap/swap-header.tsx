@@ -1,16 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
-import { LOCAL_STORAGE_VERSION } from '@/constants';
-
 import { AGGREGATORS_LIST } from './swap.data';
-import { Aggregator, SwapForm } from './swap.types';
+import { SwapForm } from './swap.types';
 
 const SwapHeader: FC = () => {
-  const { control, setValue } = useFormContext<SwapForm>();
+  const { control } = useFormContext<SwapForm>();
 
   const settings = useWatch({
     control,

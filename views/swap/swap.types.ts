@@ -28,7 +28,7 @@ interface SwapTypeArgs {
 }
 
 export enum Aggregator {
-  Native = 'Native',
+  Interest = 'Interest',
 }
 
 export type SwapPath = ReadonlyArray<SwapTypeArgs>;
@@ -49,11 +49,11 @@ export interface SwapForm {
   swapping: boolean;
 }
 
-export interface AggregatorPros {
+export interface AggregatorProps {
   url: string;
   logo: string;
   name: string;
-  shortName: 'Native';
+  shortName: 'Interest';
 }
 
 export interface SwapPreviewModalProps {
