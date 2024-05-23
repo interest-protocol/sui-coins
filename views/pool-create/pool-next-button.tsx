@@ -99,7 +99,7 @@ const PoolNextButton: FC = () => {
       <Button
         mx="auto"
         variant="filled"
-        disabled={isDisabled}
+        disabled={isDisabled || !!error}
         PrefixIcon={
           loading ? <ProgressIndicator variant="loading" size={16} /> : null
         }
