@@ -39,7 +39,7 @@ const SwapPath: FC = () => {
       display="flex"
       bg="container"
       color="onSurface"
-      borderRadius="xs"
+      borderRadius="s"
       alignItems="center"
       justifyContent="center"
     >

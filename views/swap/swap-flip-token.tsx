@@ -33,7 +33,7 @@ const SwapFlipToken: FC = () => {
       isIcon
       p="xs"
       variant="text"
-      bg="onPrimary"
+      bg="container"
       width="1.5rem"
       height="1.5rem"
       color="onSurface"

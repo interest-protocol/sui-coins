@@ -21,6 +21,8 @@ const Swap: FC = () => (
       display="flex"
       borderRadius="l"
       flexDirection="column"
+      alignContent="center"
+      justifyContent="center"
       px={['2xs', 'xl', 'xl', '7xl']}
       width={['100%', '100%', '100%', '39.75rem']}
     >
@@ -75,7 +77,7 @@ const Swap: FC = () => (
         <SwapPreviewButton />
       </Box>
       <SwapPath />
-      <Box my="xs" bg="container" borderRadius="xs">
+      <Box my="xs" bg="container" borderRadius="s">
         <ManageSlippage />
       </Box>
     </Box>

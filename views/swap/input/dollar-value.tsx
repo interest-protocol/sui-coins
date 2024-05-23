@@ -25,9 +25,9 @@ const AmountInDollar: FC<InputProps> = ({ label }) => {
   return (
     <Box display="flex" gap="s" alignItems="center">
       <Typography
-        size="small"
+        size="medium"
         variant="body"
-        color={value ? 'onSurface' : 'outline'}
+        color={value ? 'outline' : 'onSurface'}
       >
         {usdPrice && value
           ? formatDollars(
