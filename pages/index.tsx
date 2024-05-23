@@ -36,7 +36,7 @@ const SwapPage: NextPage = () => {
 
   const settings = useReadLocalStorage<ISwapSettings>(
     `${LOCAL_STORAGE_VERSION}-movement-coins-settings`
-  ) ?? { interval: '10', slippage: '0.1', aggregator: Aggregator.Native };
+  ) ?? { interval: '10', slippage: '0.1', aggregator: Aggregator.Interest };
 
   const form = useForm<SwapForm>({
     defaultValues: {
