@@ -5,6 +5,7 @@ import { inc, values } from 'ramda';
 import { FC, useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { useIsMounted } from 'usehooks-ts';
 import { v4 } from 'uuid';
 
 import { Network, PAGE_SIZE } from '@/constants';
@@ -29,6 +30,7 @@ import {
 } from './pools.types';
 
 const Pools: FC = () => {
+  const isMounted = useIsMounted();
   const [page, setPage] = useState(1);
   const { network } = useSuiClientContext();
   const formContext = useFormContext<PoolForm>();
@@ -118,9 +120,9 @@ const Pools: FC = () => {
     <>
       <PoolsCardListManager pools={pools} setPools={setPools} />
       <PoolCardListContent
-        done={!!data?.done}
         nextPage={nextPage}
         pools={values(pools)}
+        done={isMounted() && !!data?.done}
         totalItems={safeData?.totalPages ?? 0}
         arePoolsLoading={arePoolsLoading || !data}
         hasMore={(safeData?.totalPages ?? 0) - page * PAGE_SIZE > 0}
@@ -131,6 +133,7 @@ const Pools: FC = () => {
 
 const Position: FC = () => {
   const { coins } = useWeb3();
+  const isMounted = useIsMounted();
   const [page, setPage] = useState(1);
   const formContext = useFormContext<PoolForm>();
   const { network } = useSuiClientContext();
@@ -217,9 +220,9 @@ const Position: FC = () => {
     <>
       <PoolsCardListManager pools={pools} setPools={setPools} />
       <PoolCardListContent
-        done={!!data?.done}
         nextPage={nextPage}
         pools={values(pools)}
+        done={isMounted() && !!data?.done}
         totalItems={data?.totalPages ?? 0}
         arePoolsLoading={arePoolsLoading || !pools}
         hasMore={(data?.totalPages ?? 0) - page * PAGE_SIZE > 0}
