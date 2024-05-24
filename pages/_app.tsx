@@ -27,7 +27,6 @@ const MyApp = ({ Component, pageProps }: AppProps<NextPage>): ReactNode => (
         <Component {...pageProps} />
       </StrictMode>
     </Provider>
-
     <VercelAnalytics />
   </>
 );

@@ -54,7 +54,9 @@ const SwapManager: FC = () => {
   useEffect(() => {
     formSwap.setValue(
       'error',
-      !isLoading && dexError && !data ? 'Error fetching the pools' : undefined
+      !isLoading && !data && coinInType && coinOutType && dexError
+        ? 'Error fetching the pools'
+        : undefined
     );
   }, [dexError]);
 
