@@ -12,11 +12,12 @@ const SelectTypeCLAMM: FC = () => {
 
   return (
     <SelectTypeCard
+      disabled
       title="CLAMM"
       isSelected={type === 'CLAMM'}
       illustration={<Illustration />}
       onSelect={() => setValue('type', 'CLAMM')}
-      description="The LP uses the capital efficiently"
+      description="Internal oracles to move the liquidity efficiently"
     />
   );
 };

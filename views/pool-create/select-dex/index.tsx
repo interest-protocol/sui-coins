@@ -8,7 +8,7 @@ import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
 import { ChevronDownSVG } from '@/svg';
 
 import { CreatePoolForm } from '../pool-create.types';
-import PoolCreateButton from '../pool-create-button';
+import PoolCreateButton from '../pool-next-button';
 import { DATA } from './select-dex.data';
 
 const BOX_ID = 'select-dex';

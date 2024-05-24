@@ -4,12 +4,11 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import TokenIcon from '@/components/token-icon';
-import { TOKEN_ICONS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
 import { CoinData } from '@/interface';
 import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
-import { updateURL } from '@/utils';
+import { isSui, updateURL } from '@/utils';
 import SelectTokenModal from '@/views/components/select-token-modal';
 
 import { SwapForm } from '../swap.types';
@@ -27,12 +26,10 @@ const SelectToken: FC<InputProps> = ({ label }) => {
     name: label,
   });
 
-  const { symbol: currentSymbol } = currentToken ?? {
+  const { symbol: currentSymbol, type: currentType } = currentToken ?? {
     symbol: undefined,
     type: undefined,
   };
-
-  const Icon = TOKEN_ICONS[network][currentSymbol];
 
   const changeURL = (type: string) => {
     const searchParams = new URLSearchParams(location.search);
@@ -62,10 +59,13 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       usdPrice: currentToken.usdPrice,
     });
 
-    fetch(`/api/v1/coin-price?symbol=${symbol}`)
+    fetch(`/api/auth/v1/coin-price?symbol=${isSui(type) ? 'SUI' : symbol}`)
       .then((response) => response.json())
       .then((data) =>
-        setValue(`${label}.usdPrice`, data[symbol][0].quote.USD.price)
+        setValue(
+          `${label}.usdPrice`,
+          data[isSui(type) ? 'SUI' : symbol][0].quote.USD.price
+        )
       )
       .catch(() => null);
     setValue(`${label === 'from' ? 'to' : 'from'}.value`, '');
@@ -93,29 +93,33 @@ const SelectToken: FC<InputProps> = ({ label }) => {
   return (
     <Box
       position="relative"
-      minWidth={['8rem', '8rem', '8rem', '8rem', '10rem']}
+      minWidth={['4rem', '8rem', '8rem', '8rem', '6.25rem']}
     >
       <Button
-        p="2xs"
-        fontSize="s"
+        p="xs"
+        pl={currentType ? 'xs' : '1rem !important'}
         width="100%"
+        fontSize="xs"
         variant="tonal"
+        height="2.5rem"
+        borderRadius="full"
         color="onSurface"
-        borderRadius="xs"
+        border="1px solid"
+        borderColor="outline"
         bg="highestContainer"
         onClick={openModal}
-        {...(Icon && {
+        {...(currentSymbol && {
           PrefixIcon: (
             <Box
               as="span"
-              width="2.5rem"
-              height="2.5rem"
+              width="2rem"
+              height="2rem"
               bg="onSurface"
-              color="onPrimary"
-              borderRadius="xs"
               display="flex"
-              justifyContent="center"
+              borderRadius="m"
+              color="onPrimary"
               alignItems="center"
+              justifyContent="center"
             >
               <TokenIcon
                 network={network}
@@ -126,14 +130,29 @@ const SelectToken: FC<InputProps> = ({ label }) => {
           ),
         })}
       >
-        <Typography size="large" variant="label" p="xs">
-          {currentSymbol ?? 'Select Token'}
-        </Typography>
-        {currentSymbol ? (
-          <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-        ) : (
-          <ChevronRightSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-        )}
+        <Box
+          width="100%"
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          <Typography
+            size="large"
+            variant="label"
+            overflow="hidden"
+            whiteSpace="nowrap"
+            fontFamily="Satoshi"
+            width={['0px', 'auto']}
+            display={[currentType ? 'none' : 'block', 'block']}
+          >
+            {currentSymbol ?? 'Select Token'}
+          </Typography>
+          {currentSymbol ? (
+            <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+          ) : (
+            <ChevronRightSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+          )}
+        </Box>
       </Button>
     </Box>
   );

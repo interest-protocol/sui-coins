@@ -9,7 +9,7 @@ const useGetMultipleTokenPriceBySymbol = (
     async () => {
       if (!symbols.length) return {} as Record<string, number>;
 
-      const res = await fetch(`/api/v1/coin-price?symbol=${symbols}`);
+      const res = await fetch(`/api/auth/v1/coin-price?symbol=${symbols}`);
 
       const data = await res.json();
 

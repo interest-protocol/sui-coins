@@ -14,7 +14,7 @@ export const useGetCoinMetadata = (coinsType: ReadonlyArray<string>) => {
 
       return fetch(
         encodeURI(
-          `/api/v1/coin-metadata?network=${network}&type_list=${coinsType.join(
+          `/api/auth/v1/coin-metadata?network=${network}&type_list=${coinsType.join(
             ','
           )}`
         )

@@ -1,14 +1,19 @@
 import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { SUI_CLOCK_OBJECT_ID } from '@mysten/sui.js/utils';
 import { WalletAccount } from '@wallet-standard/base';
 
 import { PACKAGES } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks';
 import { FixedPointMath } from '@/lib';
-import { createObjectsParameter, getAmountMinusSlippage } from '@/utils';
+import {
+  createObjectsParameter,
+  getAmountMinusSlippage,
+  getSafeValue,
+} from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
 
-import { getAmmXYAmount, getSafeValue } from '../pool-form.utils';
+import { getAmmXYAmount } from '../pool-form.utils';
 
 export const useWithdraw = () => {
   const network = useNetwork();
@@ -30,7 +35,12 @@ export const useWithdraw = () => {
 
     const txb = new TransactionBlock();
 
-    const amount = getSafeValue(lpCoin, lpCoinWallet.balance);
+    const amount = getSafeValue({
+      coinType: lpCoin.type,
+      coinValue: lpCoin.value,
+      decimals: lpCoin.decimals,
+      balance: lpCoinWallet.balance,
+    });
 
     const lpCoinInList = createObjectsParameter({
       coinsMap,
@@ -65,6 +75,7 @@ export const useWithdraw = () => {
       typeArguments: [coin0.type, coin1.type, lpCoin.type],
       arguments: [
         txb.object(pool.poolId),
+        txb.object(SUI_CLOCK_OBJECT_ID),
         lpCoinIn,
         txb.pure(minimumXAmount),
         txb.pure(minimumYAmount),

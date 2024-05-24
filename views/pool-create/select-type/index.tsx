@@ -1,7 +1,7 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import PoolCreateButton from '../pool-create-button';
+import PoolNextButton from '../pool-next-button';
 import SelectTypeAMM from './select-type-amm';
 import SelectTypeCLAMM from './select-type-clamm';
 
@@ -19,7 +19,7 @@ const SelectType: FC = () => (
         <SelectTypeCLAMM />
       </Box>
     </Box>
-    <PoolCreateButton />
+    <PoolNextButton />
   </>
 );
 

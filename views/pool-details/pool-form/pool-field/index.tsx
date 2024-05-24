@@ -7,10 +7,10 @@ import {
 import { ChangeEvent, FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
+import { TokenIcon } from '@/components';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks';
-import { FixedPointMath, TOKEN_ICONS } from '@/lib';
-import { DefaultTokenSVG } from '@/svg';
+import { FixedPointMath } from '@/lib';
 import { parseInputEventToNumberString } from '@/utils';
 import { PoolForm, PoolOption } from '@/views/pools/pools.types';
 
@@ -28,8 +28,6 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
     : 'lpCoin';
 
   const token = getValues(fieldName);
-
-  const Icon = token ? TOKEN_ICONS[network][token.symbol] : DefaultTokenSVG;
 
   const handleDepositLock = () => {
     if ('tokenList.0' === fieldName) {
@@ -57,40 +55,29 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
 
         setValue(
           `${fieldName}.value`,
-          (+(
-            coinsMap[token.type]
-              ? FixedPointMath.toNumber(
-                  coinsMap[token.type].balance,
-                  token.decimals
-                )
-              : 0
-          ).toFixed(5)).toPrecision()
+          (+(coinsMap[token.type]
+            ? FixedPointMath.toNumber(
+                coinsMap[token.type].balance,
+                token.decimals
+              )
+            : 0)).toPrecision()
         );
       }}
       {...register(`${fieldName}.value`, {
         onChange: (v: ChangeEvent<HTMLInputElement>) => {
           if (isDeposit) handleDepositLock();
 
-          setValue(
-            `${fieldName}.value`,
-            (+Number(parseInputEventToNumberString(v)).toFixed(5)).toPrecision()
-          );
+          setValue(`${fieldName}.value`, parseInputEventToNumberString(v));
         },
       })}
       TokenIcon={
-        Icon && (
-          <Box
-            bg="onSurface"
-            width="2.5rem"
-            display="flex"
-            height="2.5rem"
-            borderRadius="xs"
-            alignItems="center"
-            justifyContent="center"
-            color="lowestContainer"
-          >
-            <Icon maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
-          </Box>
+        token && (
+          <TokenIcon
+            withBg
+            network={network}
+            type={token.type}
+            symbol={token.symbol}
+          />
         )
       }
       Label={

@@ -1,38 +1,33 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
-import { useFormContext, UseFormReturn, useWatch } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
-import { COINS_SVG_MAP_V2 } from '@/constants/coins';
+import { TokenIcon } from '@/components';
+import { useNetwork } from '@/context/network';
 import { SwapArrowSVG } from '@/svg';
+import { getSymbolByType, isSui } from '@/utils';
 import { SwapForm } from '@/views/swap/swap.types';
 
 const SwapPath: FC = () => {
-  const formSwap: UseFormReturn<SwapForm> = useFormContext();
+  const network = useNetwork();
+  const formSwap = useFormContext<SwapForm>();
 
   const readyToSwap = useWatch({
     control: formSwap.control,
     name: 'readyToSwap',
   });
-  const swapPath = useWatch({ control: formSwap.control, name: 'swapPath' });
+  const swapPath = useWatch({
+    control: formSwap.control,
+    name: 'routeWithAmount',
+  });
 
   if (!readyToSwap || !swapPath || !swapPath.length) return null;
 
-  const coinIn = swapPath[0].coinIn;
-  const baseToken = swapPath.length == 2 ? swapPath[0].coinOut : '';
-  const coinOut =
-    swapPath.length == 1 ? swapPath[0].coinOut : swapPath[1].coinOut;
+  const [coinsPath, ,] = swapPath;
 
-  const CoinInIcon =
-    COINS_SVG_MAP_V2[coinIn as keyof typeof COINS_SVG_MAP_V2] ??
-    COINS_SVG_MAP_V2.default;
-
-  const CoinOutIcon =
-    COINS_SVG_MAP_V2[coinOut as keyof typeof COINS_SVG_MAP_V2] ??
-    COINS_SVG_MAP_V2.default;
-
-  const BaseTokenIcon =
-    COINS_SVG_MAP_V2[baseToken as keyof typeof COINS_SVG_MAP_V2] ??
-    COINS_SVG_MAP_V2.default;
+  const coinIn = coinsPath[0];
+  const baseTokens = coinsPath.slice(1, -1);
+  const coinOut = coinsPath[coinsPath.length - 1];
 
   return (
     <Box
@@ -44,33 +39,30 @@ const SwapPath: FC = () => {
       display="flex"
       bg="container"
       color="onSurface"
-      borderRadius="xs"
+      borderRadius="s"
       alignItems="center"
       justifyContent="center"
     >
-      <CoinInIcon
-        width="100%"
-        height="100%"
-        maxWidth="1.5rem"
-        maxHeight="1.5rem"
+      <TokenIcon
+        type={coinIn}
+        network={network}
+        symbol={isSui(coinIn) ? 'MOVE' : getSymbolByType(coinIn)}
       />
       <SwapArrowSVG width="100%" maxWidth="5rem" maxHeight="0.75rem" />
-      {baseToken && (
+      {baseTokens.map((baseToken) => (
         <>
-          <BaseTokenIcon
-            width="100%"
-            height="100%"
-            maxWidth="1.5rem"
-            maxHeight="1.5rem"
+          <TokenIcon
+            type={baseToken}
+            network={network}
+            symbol={isSui(baseToken) ? 'MOVE' : getSymbolByType(baseToken)}
           />
           <SwapArrowSVG width="100%" maxWidth="5rem" maxHeight="0.75rem" />
         </>
-      )}
-      <CoinOutIcon
-        width="100%"
-        height="100%"
-        maxWidth="1.5rem"
-        maxHeight="1.5rem"
+      ))}
+      <TokenIcon
+        type={coinOut}
+        network={network}
+        symbol={isSui(coinOut) ? 'MOVE' : getSymbolByType(coinOut)}
       />
     </Box>
   );

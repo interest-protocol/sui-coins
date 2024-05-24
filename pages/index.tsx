@@ -15,10 +15,15 @@ import { COINS_MAP } from '@/constants/coins';
 import { ModalProvider } from '@/context/modal';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks';
-import { getCoin } from '@/utils';
+import { getCoin, isSui } from '@/utils';
 import { updateURL } from '@/utils/url';
 import Swap from '@/views/swap';
-import { ISwapSettings, SwapForm, SwapToken } from '@/views/swap/swap.types';
+import {
+  Aggregator,
+  ISwapSettings,
+  SwapForm,
+  SwapToken,
+} from '@/views/swap/swap.types';
 
 const SwapPage: NextPage = () => {
   const network = useNetwork();
@@ -31,7 +36,7 @@ const SwapPage: NextPage = () => {
 
   const settings = useReadLocalStorage<ISwapSettings>(
     `${LOCAL_STORAGE_VERSION}-movement-coins-settings`
-  ) ?? { interval: '10', slippage: '0.1' };
+  ) ?? { interval: '10', slippage: '0.1', aggregator: Aggregator.Interest };
 
   const form = useForm<SwapForm>({
     defaultValues: {
@@ -57,10 +62,13 @@ const SwapPage: NextPage = () => {
 
       form.setValue(field, token);
 
-      fetch(`/api/v1/coin-price?symbol=${symbol}`)
+      fetch(`/api/auth/v1/coin-price?symbol=${isSui(type) ? 'SUI' : symbol}`)
         .then((response) => response.json())
         .then((data) =>
-          form.setValue(`${field}.usdPrice`, data[symbol][0].quote.USD.price)
+          form.setValue(
+            `${field}.usdPrice`,
+            data[isSui(type) ? 'SUI' : symbol][0].quote.USD.price
+          )
         )
         .catch(() => null);
 
@@ -88,10 +96,13 @@ const SwapPage: NextPage = () => {
 
       form.setValue(field, token);
 
-      fetch(`/api/v1/coin-price?symbol=${symbol}`)
+      fetch(`/api/auth/v1/coin-price?symbol=${isSui(type) ? 'SUI' : symbol}`)
         .then((response) => response.json?.())
         .then((data) =>
-          form.setValue(`${field}.usdPrice`, data[symbol][0].quote.USD.price)
+          form.setValue(
+            `${field}.usdPrice`,
+            data[isSui(type) ? 'SUI' : symbol][0].quote.USD.price
+          )
         )
         .catch(console.log);
 

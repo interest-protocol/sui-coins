@@ -5,7 +5,3 @@ export interface AvatarProps {
   isLarge?: boolean;
   withNameOrAddress?: boolean;
 }
-
-export interface SuiNetworkProps {
-  closeDropdown: () => void;
-}

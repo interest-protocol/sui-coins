@@ -1,6 +1,7 @@
 import type { Token } from '@interest-protocol/sui-tokens';
 import { CoinStruct } from '@mysten/sui.js/dist/cjs/client';
-import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import { normalizeStructTag } from '@mysten/sui.js/utils';
+import { normalizeSuiObjectId, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
 import { propOr } from 'ramda';
 
@@ -14,10 +15,15 @@ import {
   CoinsMap,
 } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { CoinMetadataWithType } from '@/interface';
+import { FixedPointMath } from '@/lib';
 
-import { isSameAddress } from '../address';
+import { isSameStructTag } from '../address';
 import { getBasicCoinMetadata } from '../fn';
-import { CreateVectorParameterArgs, GetCoinsArgs } from './coin.types';
+import {
+  CreateVectorParameterArgs,
+  GetCoinsArgs,
+  GetSafeValueArgs,
+} from './coin.types';
 
 export const isSymbol = (text: string): boolean =>
   new RegExp(/^[A-Z-]+$/g).test(text);
@@ -102,8 +108,20 @@ export const createObjectsParameter = ({
   }
 
   return coinsMap[type]
-    ? coinsMap[type].objects.map((x) => txb.object(x.coinObjectId))
+    ? coinsMap[type].objects.map((x) =>
+        txb.objectRef({
+          objectId: normalizeSuiObjectId(x.coinObjectId),
+          digest: x.digest,
+          version: x.version,
+        })
+      )
     : [];
+};
+
+export const isLpCoinType = (x: string) => {
+  const normalized = normalizeStructTag(x.trim());
+  const OTW = normalized.split('::')[2];
+  return OTW.startsWith('IPX_V') || OTW.startsWith('IPX_S');
 };
 
 export const normalizeSuiType = (x: string) => {
@@ -145,7 +163,7 @@ export const getCoin = async (
   new Promise((resolve) => {
     if (coinsMap[type]) return resolve(coinObjectToToken(coinsMap[type]));
 
-    fetch(`/api/v1/coin-metadata?network=${network}&type=${type}`)
+    fetch(`/api/auth/v1/coin-metadata?network=${network}&type=${type}`)
       .then((res) => res.json())
       .then((metadata: CoinMetadataWithType) =>
         resolve(coinMetadataToToken(metadata))
@@ -153,7 +171,7 @@ export const getCoin = async (
       .catch(() => resolve({ type, ...getBasicCoinMetadata(type) }));
   });
 
-export const isSui = (type: string) => isSameAddress(type, SUI_TYPE_ARG);
+export const isSui = (type: string) => isSameStructTag(type, SUI_TYPE_ARG);
 
 export const getCoins = async ({
   suiClient,
@@ -177,4 +195,27 @@ export const getCoins = async ({
   });
 
   return [...data, ...newData];
+};
+
+export const getSafeValue = ({
+  coinValue,
+  coinType,
+  balance,
+  decimals,
+}: GetSafeValueArgs) => {
+  const amount = FixedPointMath.toBigNumber(coinValue, decimals).decimalPlaces(
+    0
+  );
+
+  const safeBalance = isSui(coinType) ? balance.minus(100_000_000) : balance;
+
+  if (safeBalance.isNegative() || safeBalance.isZero())
+    throw new Error('Not enough balance');
+
+  const safeAmount = amount.gt(safeBalance) ? safeBalance : amount;
+
+  if (safeAmount.isNegative() || safeAmount.isZero())
+    throw new Error('Not valid amount');
+
+  return safeAmount;
 };

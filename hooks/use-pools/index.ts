@@ -1,95 +1,25 @@
-import { SuiObjectResponse } from '@mysten/sui.js/client';
+import { useSuiClient } from '@mysten/dapp-kit';
 import { getSuiObjectResponseFields } from '@polymedia/suits';
-import BigNumber from 'bignumber.js';
-import { pathOr } from 'ramda';
+import { keys } from 'ramda';
 import useSWR from 'swr';
 
-import { STATE_KEY_TO_POOL_ID } from '@/constants/coins';
-import { AmmPool, PoolTypeEnum } from '@/interface';
-import { makeSWRKey } from '@/utils';
-import { getPoolCoinTypes } from '@/utils/pool';
+import { AmmPool, AmmServerPool } from '@/interface';
+import { convertServerPoolToClientPool, fetchPool, makeSWRKey } from '@/utils';
 
-import { useMovementClient } from '../use-movement-client';
-
-const parsePool = (x: SuiObjectResponse): AmmPool => ({
-  poolId: STATE_KEY_TO_POOL_ID[pathOr('', ['id', 'id'], x)],
-  stateId: pathOr('', ['id', 'id'], x),
-  adminBalanceX: BigNumber(
-    pathOr('0', ['value', 'fields', 'admin_balance_x'], x)
-  ),
-  adminBalanceY: BigNumber(
-    pathOr('0', ['value', 'fields', 'admin_balance_y'], x)
-  ),
-  balanceX: BigNumber(pathOr('0', ['value', 'fields', 'balance_x'], x)),
-  balanceY: BigNumber(pathOr('0', ['value', 'fields', 'balance_y'], x)),
-  decimalsX: BigNumber(pathOr('0', ['value', 'fields', 'decimals_x'], x)).e!,
-  decimalsY: BigNumber(pathOr('0', ['value', 'fields', 'decimals_y'], x)).e!,
-  fees: {
-    feeIn: BigNumber(
-      pathOr('0', ['value', 'fields', 'fees', 'fields', 'fee_in_percent'], x)
-    ),
-    feeOut: BigNumber(
-      pathOr('0', ['value', 'fields', 'fees', 'fields', 'fee_out_percent'], x)
-    ),
-    adminFee: BigNumber(
-      pathOr('0', ['value', 'fields', 'fees', 'fields', 'admin_fee_percent'], x)
-    ),
-  },
-  lpCoinSupply: BigNumber(
-    pathOr(
-      '0',
-      [
-        'value',
-        'fields',
-        'lp_coin_cap',
-        'fields',
-        'total_supply',
-        'fields',
-        'value',
-      ],
-      x
-    )
-  ),
-  type: pathOr('', ['value', 'type'], x),
-  coinTypes: getPoolCoinTypes(pathOr('', ['value', 'type'], x)),
-  poolType: PoolTypeEnum.amm,
-  isVolatile: pathOr(
-    true,
-    ['value', 'fields', 'fees', 'fields', 'volatile'],
-    x
-  ),
-});
+import { UsePoolsFetchReturn, UsePoolsReturn } from './use-pools.types';
+import { parsePool } from './use-pools.utils';
 
 export const usePool = (parentId: string) => {
-  const client = useMovementClient();
+  const client = useSuiClient();
 
   return useSWR<AmmPool | null>(
     makeSWRKey([], usePool.name + parentId),
     async () => {
       if (!parentId) return null;
 
-      const { data } = await client.getDynamicFields({ parentId });
+      const pool = (await fetchPool(client, parentId)) as AmmServerPool | null;
 
-      if (!data.length) return null;
-
-      const objectId = data[0].objectId;
-
-      const { data: poolData } = await client.getObject({
-        id: objectId,
-        options: { showContent: true, showType: true },
-      });
-
-      if (!poolData || !poolData.content) return null;
-
-      const fields: null | SuiObjectResponse = pathOr(
-        null,
-        ['content', 'fields'],
-        poolData
-      );
-
-      if (!fields) return null;
-
-      return parsePool(fields);
+      return pool ? convertServerPoolToClientPool(pool) : null;
     },
     {
       revalidateOnFocus: false,
@@ -99,22 +29,20 @@ export const usePool = (parentId: string) => {
   );
 };
 
-export const usePools = (poolAddresses: string[]) => {
-  const client = useMovementClient();
-
-  return useSWR<ReadonlyArray<AmmPool>>(
-    makeSWRKey([], usePools.name + poolAddresses),
+export const usePools = (page: number = 1, findQuery = {}) =>
+  useSWR<UsePoolsReturn>(
+    `/api/auth/v1/get-pools?page=${page}&find=${JSON.stringify(findQuery)}`,
     async () => {
-      if (!poolAddresses.length) return [];
+      const res = await fetch(
+        `/api/auth/v1/get-pools?page=${page}&find=${JSON.stringify(findQuery)}`
+      );
+      const { pools, totalPages } = (await res.json?.()) as UsePoolsFetchReturn;
 
-      const pools = await client.multiGetObjects({
-        ids: poolAddresses,
-        options: {
-          showContent: true,
-        },
-      });
-
-      return pools.map((x) => parsePool(getSuiObjectResponseFields(x)));
+      return {
+        done: true,
+        totalPages,
+        pools: pools ?? [],
+      };
     },
     {
       revalidateOnFocus: false,
@@ -122,4 +50,25 @@ export const usePools = (poolAddresses: string[]) => {
       refreshWhenHidden: false,
     }
   );
+
+export const usePoolsMetadata = (poolStateIds: Record<string, string>) => {
+  const suiClient = useSuiClient();
+
+  return useSWR(poolStateIds, async () => {
+    const data = await suiClient.multiGetObjects({
+      ids: keys(poolStateIds),
+      options: { showContent: true },
+    });
+
+    return data.reduce(
+      (acc, state) => ({
+        ...acc,
+        [poolStateIds[state.data!.objectId]]: {
+          poolId: poolStateIds[state.data!.objectId],
+          ...parsePool(getSuiObjectResponseFields(state)),
+        },
+      }),
+      {} as Record<string, AmmPool>
+    );
+  });
 };

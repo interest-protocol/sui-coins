@@ -39,7 +39,7 @@ export const useGetAllCoins = () => {
 
       const dbCoinsMetadata: Record<string, CoinMetadataWithType> = await fetch(
         encodeURI(
-          `/api/v1/coin-metadata?network=${network}&type_list=${coinsType.join(
+          `/api/auth/v1/coin-metadata?network=${network}&type_list=${coinsType.join(
             ','
           )}`
         )

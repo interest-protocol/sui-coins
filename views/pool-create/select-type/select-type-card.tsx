@@ -1,10 +1,13 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import type { FC } from 'react';
 
+import { noop } from '@/utils';
+
 import type { SelectTypeCardProps } from './select-volatibility.types';
 
 const SelectTypeCard: FC<SelectTypeCardProps> = ({
   title,
+  disabled,
   onSelect,
   isSelected,
   description,
@@ -15,14 +18,15 @@ const SelectTypeCard: FC<SelectTypeCardProps> = ({
     gap="xl"
     width="16rem"
     display="flex"
-    cursor="pointer"
     borderRadius="xs"
-    onClick={onSelect}
     alignItems="center"
     flexDirection="column"
+    opacity={disabled ? 0.7 : 1}
+    onClick={disabled ? noop : onSelect}
     transition="scale 300ms ease-in-out"
-    nHover={{ boxShadow: '0 2rem 3rem #0004', scale: '1.02' }}
+    cursor={disabled ? 'not-allowed' : 'pointer'}
     bg={isSelected ? 'primary' : 'lowestContainer'}
+    nHover={!disabled && { boxShadow: '0 2rem 3rem #0004', scale: '1.02' }}
   >
     <Box color={isSelected ? '#0053DB' : 'primary'}>{illustration}</Box>
     <Box color={isSelected ? '#00174B' : 'onSurface'}>

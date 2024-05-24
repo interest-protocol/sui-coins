@@ -1,12 +1,12 @@
 import { NextPage } from 'next';
 
 import { SEO } from '@/components';
-import Pools from '@/views/faucet';
+import Faucet from '@/views/faucet';
 
 const PoolsPage: NextPage = () => (
   <>
     <SEO pageTitle="Faucet" />
-    <Pools />
+    <Faucet />
   </>
 );
 

@@ -9,16 +9,12 @@ import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
 
-import { CONTROLLERS_MAP } from '@/constants';
-import { COINS } from '@/constants/coins';
-import { TOKEN_SYMBOL } from '@/constants/coins';
-import { MINT_MODULE_NAME_MAP, PACKAGES } from '@/constants/packages';
+import { TokenIcon } from '@/components';
+import { COINS, FAUCET_AMOUNT, TREASURY_CAP_MAP } from '@/constants';
 import { useNetwork } from '@/context/network';
-import { useUserMintEpoch, useWeb3 } from '@/hooks';
+import { useWeb3 } from '@/hooks';
 import { useModal } from '@/hooks/use-modal';
-import { useSuiSystemState } from '@/hooks/use-sui-system-state';
 import { CoinData } from '@/interface';
-import { TOKEN_ICONS } from '@/lib';
 import { ChevronDownSVG } from '@/svg';
 import { showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
 import { requestMov } from '@/views/faucet/faucet.utils';
@@ -34,17 +30,6 @@ const MintForm: FC = () => {
   const signTransactionBlock = useSignTransactionBlock();
   const currentAccount = useCurrentAccount();
 
-  const SelectedIcon = TOKEN_ICONS[network][selected.symbol];
-
-  const { data } = useSuiSystemState();
-
-  const lastMintEpoch = useUserMintEpoch();
-
-  const isSameEpoch =
-    !!Number(data?.epoch) &&
-    (lastMintEpoch as Record<TOKEN_SYMBOL, string>)[selected.symbol] ===
-      data?.epoch;
-
   const handleMint = async () => {
     try {
       if (!selected) throw new Error('Token not found');
@@ -54,14 +39,15 @@ const MintForm: FC = () => {
 
       if (selected.type === SUI_TYPE_ARG) return requestMov(account, network);
 
-      const minted_coin = transactionBlock.moveCall({
-        target: `${PACKAGES[network].COINS}::${
-          MINT_MODULE_NAME_MAP[selected.type]
-        }::mint`,
-        arguments: [transactionBlock.object(CONTROLLERS_MAP[selected.type])],
+      transactionBlock.moveCall({
+        target: `0x2::coin::mint_and_transfer`,
+        typeArguments: [selected.type],
+        arguments: [
+          transactionBlock.object(TREASURY_CAP_MAP[selected.type]),
+          transactionBlock.pure.u64(FAUCET_AMOUNT[selected.type]),
+          transactionBlock.pure.address(account),
+        ],
       });
-
-      transactionBlock.transferObjects([minted_coin], account);
 
       const { transactionBlockBytes, signature } =
         await signTransactionBlock.mutateAsync({
@@ -89,7 +75,7 @@ const MintForm: FC = () => {
   };
 
   const onSelect = async ({ decimals, symbol, type }: CoinData) => {
-    setSelected({ symbol: symbol as TOKEN_SYMBOL, type, decimals });
+    setSelected({ symbol: symbol, type, decimals });
     handleClose();
   };
 
@@ -100,7 +86,7 @@ const MintForm: FC = () => {
         initial={{ scale: 0.85 }}
         transition={{ duration: 0.3 }}
       >
-        <SelectTokenModal closeModal={handleClose} onSelect={onSelect} />
+        <SelectTokenModal closeModal={handleClose} onSelect={onSelect} simple />
       </Motion>,
       {
         isOpen: true,
@@ -111,11 +97,13 @@ const MintForm: FC = () => {
     );
 
   const onMint = () => {
-    toast.promise(handleMint(), {
-      loading: 'Loading',
-      success: `${selected.symbol} minted successfully`,
-      error: 'You can only mint once every 24 hours',
-    });
+    toast
+      .promise(handleMint(), {
+        loading: 'Loading',
+        success: `${selected.symbol} minted successfully`,
+        error: 'Something went wrong',
+      })
+      .catch(console.log);
   };
 
   return (
@@ -153,21 +141,12 @@ const MintForm: FC = () => {
               color: 'unset',
             }}
             PrefixIcon={
-              <Box
-                display="flex"
-                bg="onSurface"
-                width="2.5rem"
-                height="2rem"
-                borderRadius="xs"
-                alignItems="center"
-                justifyContent="center"
-              >
-                <SelectedIcon
-                  width="100%"
-                  maxWidth="1.5rem"
-                  maxHeight="1.25rem"
-                />
-              </Box>
+              <TokenIcon
+                withBg
+                network={network}
+                type={selected.type}
+                symbol={selected.symbol}
+              />
             }
             SuffixIcon={
               <Box
@@ -193,20 +172,10 @@ const MintForm: FC = () => {
               {selected.symbol}
             </Typography>
           </Button>
-          {isSameEpoch && (
-            <Typography variant="body" size="small" color="error" mt="xs">
-              You cannot mint more {selected.symbol}
-            </Typography>
-          )}
         </Box>
       </Box>
       <Box display="flex" justifyContent="center">
-        <Button
-          disabled={isSameEpoch}
-          variant="filled"
-          onClick={onMint}
-          color="surface"
-        >
+        <Button color="surface" variant="filled" onClick={onMint}>
           Mint
         </Button>
       </Box>

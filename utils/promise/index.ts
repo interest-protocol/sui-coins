@@ -11,3 +11,5 @@ export const sleep = (delay: number) =>
 
 export const pauseUtilNextTx = (txInitTimeMS: number) =>
   sleep(RATE_LIMIT_DELAY - (Date.now() - txInitTimeMS));
+
+export const swrFetcher = (url: string) => fetch(url).then((r) => r.json());

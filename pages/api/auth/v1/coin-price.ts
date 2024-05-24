@@ -1,5 +1,7 @@
 import { NextApiHandler } from 'next';
 
+import { handleServerError } from '@/server/utils/amm-pools';
+
 const handler: NextApiHandler = async (req, res) => {
   try {
     if (req.method === 'GET') {
@@ -25,7 +27,9 @@ const handler: NextApiHandler = async (req, res) => {
 
     res.status(405).send('Method Not Allowed!');
   } catch (e) {
-    res.status(500).send(e);
+    res.status(500).json({
+      message: handleServerError(e),
+    });
   }
 };
 

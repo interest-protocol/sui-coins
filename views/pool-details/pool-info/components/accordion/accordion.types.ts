@@ -16,6 +16,7 @@ export interface PoolDetailAccordionItemData {
 }
 export interface PoolDetailAccordionItemStandardProps
   extends PoolDetailAccordionItemData {
+  loading: boolean;
   content: string | number;
 }
 

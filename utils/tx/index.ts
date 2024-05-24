@@ -33,11 +33,11 @@ export const getReturnValuesFromInspectResults = (
 };
 
 export const signAndExecute = async ({
+  txb,
+  options,
   suiClient,
   currentAccount,
-  txb,
   signTransactionBlock,
-  options,
 }: SignAndExecuteArgs) => {
   const { signature, transactionBlockBytes } =
     await signTransactionBlock.mutateAsync({

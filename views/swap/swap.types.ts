@@ -4,9 +4,15 @@ import { UseFormReturn } from 'react-hook-form';
 import { Network } from '@/constants';
 import { CoinsMap } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { CoinData } from '@/interface';
+import {
+  PoolsMap,
+  RouteWithAmount,
+} from '@/views/swap/swap-manager/swap-manager.types';
 
 export interface ISwapSettings {
+  interval: string;
   slippage: string;
+  aggregator: Aggregator;
 }
 
 export interface SwapToken extends CoinData {
@@ -21,6 +27,10 @@ interface SwapTypeArgs {
   lpCoin: string;
 }
 
+export enum Aggregator {
+  Interest = 'Interest',
+}
+
 export type SwapPath = ReadonlyArray<SwapTypeArgs>;
 
 export interface SwapForm {
@@ -32,8 +42,18 @@ export interface SwapForm {
   loading: boolean;
   maxValue: boolean;
   disabled: boolean;
-  swapPath: SwapPath;
+  routeWithAmount: RouteWithAmount | [];
   readyToSwap: boolean;
+  poolsMap: PoolsMap | null | undefined;
+  focus: boolean;
+  swapping: boolean;
+}
+
+export interface AggregatorProps {
+  url: string;
+  logo: string;
+  name: string;
+  shortName: 'Interest';
 }
 
 export interface SwapPreviewModalProps {

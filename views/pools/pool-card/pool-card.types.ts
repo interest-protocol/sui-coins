@@ -1,10 +1,16 @@
 import { ReactNode } from 'react';
 
-import { AmmPool, CoinMetadataWithType } from '@/interface';
+import { CoinMetadataWithType } from '@/interface';
 
-export enum AlgorithmEnum {
+import { AMMPoolWithMetadata } from '../pools.types';
+
+export enum FormFilterValue {
+  'official' = 'official',
+  'all' = 'all',
   'stable' = 'stable',
   'volatile' = 'volatile',
+  'clamm' = 'clamm',
+  'amm' = 'amm',
 }
 
 export interface PoolCardHeaderProps {
@@ -25,7 +31,7 @@ export interface PoolCardTradeProps {
 }
 
 export interface PoolCardProps {
-  pool: AmmPool;
+  pool: AMMPoolWithMetadata;
   prices: Record<string, number>;
   coinMetadata: Record<string, CoinMetadataWithType>;
 }

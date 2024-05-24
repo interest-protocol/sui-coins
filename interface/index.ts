@@ -12,8 +12,8 @@ export interface CoinData {
 export type LocalTokenMetadataRecord = Record<string, CoinData>;
 
 export enum PoolTypeEnum {
-  'clamm' = 'clamm',
-  'amm' = 'amm',
+  CLAMM = 'CLAMM',
+  AMM = 'AMM',
 }
 
 export interface LocalCoinMetadata {
@@ -27,20 +27,15 @@ export interface PoolPageProps {
   stateId: string;
 }
 
-export interface RegistryPool {
-  poolId: string;
-  lpCoinType: string;
-}
-
 export interface CoinMetadataWithType extends CoinMetadata {
   type: `0x${string}`;
 }
 
-export interface AmmPoolFees {
-  adminFee: BigNumber;
+export interface AmmPoolFees<T> {
+  adminFee: T;
   // 18 decimals
-  feeIn: BigNumber;
-  feeOut: BigNumber;
+  feeIn: T;
+  feeOut: T;
 }
 
 export interface AmmPoolCoinTypes {
@@ -49,24 +44,28 @@ export interface AmmPoolCoinTypes {
   lpCoin: string;
 }
 
-export interface AmmPool {
+interface AmmPoolRaw<T> {
   poolId: string;
   stateId: string;
   // we do not use
-  adminBalanceX: BigNumber;
-  adminBalanceY: BigNumber;
-  balanceX: BigNumber;
-  balanceY: BigNumber;
+  adminBalanceX: T;
+  adminBalanceY: T;
+  balanceX: T;
+  balanceY: T;
   decimalsX: number;
   decimalsY: number;
-  fees: AmmPoolFees;
+  fees: AmmPoolFees<T>;
   // 9 Decimals
-  lpCoinSupply: BigNumber;
+  lpCoinSupply: T;
   type: string;
   coinTypes: AmmPoolCoinTypes;
   poolType: PoolTypeEnum;
   isVolatile: boolean;
 }
+
+export type AmmServerPool = AmmPoolRaw<string>;
+
+export type AmmPool = AmmPoolRaw<BigNumber>;
 
 export interface Token {
   name?: string;
