@@ -1,7 +1,7 @@
-import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
 
 import { FixedPointMath } from '@/lib';
+import { isSui } from '@/utils';
 import { PoolToken } from '@/views/pools/pools.types';
 
 export const getAmmOptimalCoin0Value = (
@@ -82,14 +82,20 @@ export const getAmmXYAmount = (
 };
 
 export const getSafeValue = (coin: PoolToken, balance: BigNumber) => {
-  const amount0 = FixedPointMath.toBigNumber(
+  const amount = FixedPointMath.toBigNumber(
     coin.value,
     coin.decimals
   ).decimalPlaces(0);
-  const safeAmount0 = amount0.gt(balance) ? balance : amount0;
-  const minusOne = safeAmount0.minus(1_000_000_000);
-  if (coin.symbol === SUI_TYPE_ARG)
-    return minusOne.isNegative() ? BigNumber(0) : minusOne;
 
-  return safeAmount0;
+  const safeBalance = isSui(coin.type) ? balance.minus(100_000_000) : balance;
+
+  if (safeBalance.isNegative() || safeBalance.isZero())
+    throw new Error('Not enough balance');
+
+  const safeAmount = amount.gt(safeBalance) ? safeBalance : amount;
+
+  if (safeAmount.isNegative() || safeAmount.isZero())
+    throw new Error('Not valid amount');
+
+  return safeAmount;
 };
