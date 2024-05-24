@@ -55,14 +55,12 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
 
         setValue(
           `${fieldName}.value`,
-          (+(
-            coinsMap[token.type]
-              ? FixedPointMath.toNumber(
-                  coinsMap[token.type].balance,
-                  token.decimals
-                )
-              : 0
-          ).toFixed(5)).toPrecision()
+          (+(coinsMap[token.type]
+            ? FixedPointMath.toNumber(
+                coinsMap[token.type].balance,
+                token.decimals
+              )
+            : 0)).toPrecision()
         );
       }}
       {...register(`${fieldName}.value`, {
