@@ -65,7 +65,7 @@ const PoolCard: FC<PoolCardProps> = ({ pool, prices, coinMetadata }) => (
                       ? `${formatDollars(getLiquidity(pool.metadata, coinMetadata, prices))}`
                       : 0
                   : pool.metadata
-                    ? `${FixedPointMath.toNumber(pool.metadata.fees.feeIn, 15)}% / ${FixedPointMath.toNumber(pool.metadata.fees.feeOut, 15)}%`
+                    ? `${FixedPointMath.toNumber(pool.metadata.fees.feeIn, 16)}% / ${FixedPointMath.toNumber(pool.metadata.fees.feeOut, 16)}%`
                     : '0% /0%'
             }
           />
