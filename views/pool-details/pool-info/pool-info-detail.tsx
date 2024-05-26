@@ -24,7 +24,9 @@ const PoolDetail = () => {
     ? [
         pool.poolId ?? '',
         pool.poolType.toLocaleUpperCase() ?? '',
-        pool.isVolatile ? 'Volatile' : 'Stable',
+        pool.coinTypes.lpCoin.split('::')[1].startsWith('ipx_v')
+          ? 'Volatile'
+          : 'Stable',
       ]
     : ['', '', ''];
 

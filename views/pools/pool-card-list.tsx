@@ -61,7 +61,15 @@ const Pools: FC = () => {
       if (filterProp.type === FilterTypeEnum.ALGORITHM) {
         const isVolatile = filterProp.value === FormFilterValue.volatile;
 
-        return [...acc, { isVolatile }];
+        return [
+          ...acc,
+          {
+            lpCoinType: {
+              $regex: isVolatile ? 'ipx_v' : 'ipx_s',
+              $options: 'i',
+            },
+          },
+        ];
       }
 
       return acc;
@@ -156,7 +164,16 @@ const Position: FC = () => {
 
       if (filterProp.type === FilterTypeEnum.ALGORITHM) {
         const isVolatile = filterProp.value === FormFilterValue.volatile;
-        return [...acc, { isVolatile }];
+
+        return [
+          ...acc,
+          {
+            lpCoinType: {
+              $regex: isVolatile ? 'ipx_v' : 'ipx_s',
+              $options: 'i',
+            },
+          },
+        ];
       }
 
       return acc;

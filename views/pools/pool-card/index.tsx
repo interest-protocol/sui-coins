@@ -42,7 +42,9 @@ const PoolCard: FC<PoolCardProps> = ({ pool, prices, coinMetadata }) => (
       <PoolCardHeader
         tags={[
           PoolTypeEnum.AMM,
-          FormFilterValue[pool.isVolatile ? 'volatile' : 'stable'],
+          FormFilterValue[
+            pool.lpCoinType.includes('ipx_v') ? 'volatile' : 'stable'
+          ],
         ]}
       />
       <PoolCardInfo
