@@ -32,7 +32,7 @@ export const savePool = async ({ client, poolId, network }: SavePoolArgs) => {
     coinX: pool.coinTypes.coinX,
     coinY: pool.coinTypes.coinY,
     lpCoinType: pool.coinTypes.lpCoin,
-    isVolatile: pool.coinTypes.lpCoin.includes('ipx_v'),
+    isVolatile: pool.isVolatile,
   });
 
   await newPool.save();
