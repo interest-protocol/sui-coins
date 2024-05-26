@@ -156,6 +156,7 @@ const Position: FC = () => {
 
       if (filterProp.type === FilterTypeEnum.ALGORITHM) {
         const isVolatile = filterProp.value === FormFilterValue.volatile;
+
         return [...acc, { isVolatile }];
       }
 
