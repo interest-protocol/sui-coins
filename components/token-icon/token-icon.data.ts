@@ -15,6 +15,7 @@ export const TOKEN_ICONS: Record<
     USDC: USDCSVG,
     MOVE: MOVESVG,
     USDT: USDTSVG,
+    RUCO: '/images/ruco.webp',
   },
   [Network.DEVNET]: {
     ETH: ETHSVG,
@@ -22,5 +23,6 @@ export const TOKEN_ICONS: Record<
     USDC: USDCSVG,
     MOVE: MOVESVG,
     USDT: USDTSVG,
+    RUCO: '/images/ruco.webp',
   },
 };

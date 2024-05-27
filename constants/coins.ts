@@ -13,6 +13,9 @@ export const USDC_TYPE = `${MOVEMENT_MOCK_COINS_PACKAGE}::usdc::USDC`;
 
 export const USDT_TYPE = `${MOVEMENT_MOCK_COINS_PACKAGE}::usdt::USDT`;
 
+export const RUCO_TYPE =
+  '0x66e2b5b7888b2b04c94ef12f8a035d144c2397bfa022a3ea6cae696d9d833957::ruco::RUCO';
+
 export const TREASURY_CAP_MAP = {
   [USDC_TYPE]:
     '0x21101a4b9c057b28582476a1a4899808ceb6a140dd1b7052195cc88274892427',
@@ -31,7 +34,7 @@ export const FAUCET_AMOUNT = {
   [USDT_TYPE]: '7000000000000',
 } as Record<string, string>;
 
-export const COINS = [
+export const FAUCET_COINS = [
   {
     decimals: 9,
     symbol: 'MOVE',
@@ -52,10 +55,14 @@ export const COINS = [
     symbol: 'USDC',
     type: USDC_TYPE,
   },
+];
+
+export const COINS = [
+  ...FAUCET_COINS,
   {
-    decimals: 6,
-    symbol: 'USDT',
-    type: USDT_TYPE,
+    decimals: 9,
+    symbol: 'RUCO',
+    type: RUCO_TYPE,
   },
 ];
 
@@ -84,5 +91,10 @@ export const COINS_MAP = {
     decimals: 6,
     symbol: 'USDT',
     type: USDT_TYPE,
+  },
+  [RUCO_TYPE]: {
+    decimals: 9,
+    symbol: 'RUCO',
+    type: RUCO_TYPE,
   },
 } as Record<string, LocalCoinMetadata>;

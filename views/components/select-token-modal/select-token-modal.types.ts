@@ -9,6 +9,7 @@ export interface TokenModalItemProps
 }
 
 export interface SelectTokenModalProps {
+  faucet?: boolean;
   simple?: boolean;
   closeModal: () => void;
   onSelect: (coin: CoinData) => void;
@@ -29,7 +30,8 @@ export interface SearchTokenForm {
   filter: TokenOrigin;
 }
 
-export interface SelectTokenModalBodyProps {
+export interface SelectTokenModalBodyProps
+  extends Pick<SelectTokenModalProps, 'faucet'> {
   control: Control<SearchTokenForm>;
   handleSelectToken: (coin: CoinData) => void;
 }
