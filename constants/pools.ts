@@ -11,9 +11,24 @@ const BTC_ETH_VOL =
 const USDT_ETH_VOL =
   '0x85edea93cf5f229d9f10d6cb0318a6b47ef1b79fd6be5c1a4f95ebb3eecad00d';
 
+const MOVE_RUCO_VOL =
+  '0x0da4d05c64dbfe603baf0af56fc87a20499cf985d6df82a8a5f0f3ac7d54037e';
+
 const OFFICIAL_POOLS = {
-  [Network.DEVNET]: [USDC_ETH_VOL, MOVE_ETH_VOL, BTC_ETH_VOL, USDT_ETH_VOL],
-  [Network.TESTNET]: [USDC_ETH_VOL, MOVE_ETH_VOL, BTC_ETH_VOL, USDT_ETH_VOL],
+  [Network.DEVNET]: [
+    USDC_ETH_VOL,
+    MOVE_ETH_VOL,
+    BTC_ETH_VOL,
+    USDT_ETH_VOL,
+    MOVE_RUCO_VOL,
+  ],
+  [Network.TESTNET]: [
+    USDC_ETH_VOL,
+    MOVE_ETH_VOL,
+    BTC_ETH_VOL,
+    USDT_ETH_VOL,
+    MOVE_RUCO_VOL,
+  ],
 };
 
 export const CATEGORY_POOLS = {

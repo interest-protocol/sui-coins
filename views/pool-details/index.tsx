@@ -63,10 +63,10 @@ const PoolDetails: FC<PoolDetailsFormProps> = ({
         mx="auto"
         maxWidth="65rem"
         overflow="hidden"
-        alignItems="start"
         flexDirection="column"
         gridTemplateColumns="3fr 2fr"
         display={['flex', 'flex', 'flex', 'grid']}
+        alignItems={['unset', 'unset', 'unset', 'start']}
       >
         <PoolForm
           poolOptionView={poolOptionView}

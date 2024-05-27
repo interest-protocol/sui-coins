@@ -86,7 +86,12 @@ const MintForm: FC = () => {
         initial={{ scale: 0.85 }}
         transition={{ duration: 0.3 }}
       >
-        <SelectTokenModal closeModal={handleClose} onSelect={onSelect} simple />
+        <SelectTokenModal
+          simple
+          faucet
+          onSelect={onSelect}
+          closeModal={handleClose}
+        />
       </Motion>,
       {
         isOpen: true,
@@ -135,11 +140,9 @@ const MintForm: FC = () => {
             p="xs"
             variant="outline"
             borderRadius="xs"
-            borderColor="outlineVariant"
             onClick={openModal}
-            nHover={{
-              color: 'unset',
-            }}
+            borderColor="outlineVariant"
+            nHover={{ color: 'unset' }}
             PrefixIcon={
               <TokenIcon
                 withBg

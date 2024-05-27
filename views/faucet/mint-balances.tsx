@@ -3,15 +3,15 @@ import { FC } from 'react';
 import { v4 } from 'uuid';
 
 import { TokenIcon } from '@/components';
-import { COINS } from '@/constants/coins';
+import { FAUCET_COINS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks';
 import { FixedPointMath } from '@/lib';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 const MintBalances: FC = () => {
-  const { coinsMap } = useWeb3();
   const network = useNetwork();
+  const { coinsMap } = useWeb3();
 
   return (
     <Box
@@ -36,7 +36,7 @@ const MintBalances: FC = () => {
         borderRadius="s"
         flexDirection="column"
       >
-        {COINS.map(({ symbol, type }) => (
+        {FAUCET_COINS.map(({ symbol, type }) => (
           <Box key={v4()} display="flex" justifyContent="space-between">
             <Box display="flex" alignItems="center" gap="l">
               <Box

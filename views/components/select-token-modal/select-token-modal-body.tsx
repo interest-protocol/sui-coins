@@ -3,7 +3,7 @@ import { useWatch } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
 
 import { LOCAL_STORAGE_VERSION } from '@/constants';
-import { COINS } from '@/constants/coins';
+import { COINS, FAUCET_COINS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { useWeb3 } from '@/hooks/use-web3';
@@ -17,6 +17,7 @@ import {
 } from './select-token-modal.types';
 
 const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
+  faucet,
   control,
   handleSelectToken: onSelectToken,
 }) => {
@@ -33,12 +34,12 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
     return (
       <ModalTokenBody
         handleSelectToken={onSelectToken}
-        tokens={COINS?.sort(({ type }) =>
-          favoriteTokenTypes?.includes(type) ? -1 : 1
-        ).filter(
-          ({ symbol, type }) =>
-            type.includes(search) || symbol.toLowerCase().includes(search)
-        )}
+        tokens={(faucet ? FAUCET_COINS : COINS)
+          ?.sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
+          .filter(
+            ({ symbol, type }) =>
+              type.includes(search) || symbol.toLowerCase().includes(search)
+          )}
       />
     );
 
