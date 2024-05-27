@@ -1,3 +1,4 @@
+import { pathOr } from 'ramda';
 import useSWR, { SWRConfiguration } from 'swr';
 
 const useGetMultipleTokenPriceBySymbol = (
@@ -16,10 +17,16 @@ const useGetMultipleTokenPriceBySymbol = (
       return symbols.reduce(
         (acc, symbol) => {
           const obj = data[symbol.toUpperCase()];
+
+          const price =
+            Array.isArray(obj) && !!obj.length
+              ? pathOr(0, ['quote', 'USD', 'price'], obj[0])
+              : 0;
+
           return {
             ...acc,
             ...(obj && {
-              [symbol === 'sui' ? 'move' : symbol]: obj[0].quote.USD.price,
+              [symbol === 'sui' ? 'move' : symbol]: price,
             }),
           };
         },
