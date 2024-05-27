@@ -8,10 +8,6 @@ export const getLiquidity = (
   metadata: Record<string, CoinMetadataWithType>,
   prices: Record<string, number>
 ): number => {
-  console.log({
-    prices,
-    metadata,
-  });
   if (isEmpty(prices)) return 0;
 
   const priceX = metadata[pool.coinTypes.coinX]
