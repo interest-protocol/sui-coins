@@ -246,11 +246,16 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
 
   const symbols = getAllSymbols(types);
 
-  const { data: pricesRecord, isLoading: arePricesLoading } =
-    useGetMultipleTokenPriceBySymbol(symbols);
+  const {
+    data: pricesRecord,
+    isLoading: arePricesLoading,
+    error: pricesError,
+  } = useGetMultipleTokenPriceBySymbol(symbols);
 
   const { data: coinMetadataMap, isLoading: isCoinMetadataLoading } =
     useGetCoinMetadata(types);
+
+  console.log({ pricesError });
 
   if (
     (arePoolsLoading ||
