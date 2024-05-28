@@ -1,5 +1,7 @@
 import { Aggregator, AggregatorProps } from './swap.types';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 export const AGGREGATORS_LIST: Record<Aggregator, AggregatorProps> = {
   [Aggregator.Hop]: {
     url: 'https://hop.ag/',
@@ -13,13 +15,15 @@ export const AGGREGATORS_LIST: Record<Aggregator, AggregatorProps> = {
     url: 'https://aftermath.finance/',
     logo: '/images/aggregators/aftermath.webp',
   },
-  [Aggregator.Interest]: {
-    url: '',
-    name: 'Interest',
-    shortName: Aggregator.Interest,
-    logo: 'https://interestprotocol.com/logo.png',
-    disabled: process.env.VERCEL_ENV === 'production',
-  },
+  ...(process.env.VERCEL_ENV === 'production' && {
+    [Aggregator.Interest]: {
+      url: '',
+      name: 'Interest',
+      shortName: Aggregator.Interest,
+      logo: 'https://interestprotocol.com/logo.png',
+      disabled: process.env.VERCEL_ENV === 'production',
+    },
+  }),
 };
 
 export enum SwapMessagesEnum {
