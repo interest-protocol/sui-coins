@@ -16,7 +16,7 @@
     "@emotion/react": "^11.11.1",
     "@hookform/resolvers": "^3.3.2",
     "@hop.ag/sdk": "^1.0.3",
-    "@interest-protocol/clamm-sdk": "^8.3.0-alpha",
+    "@interest-protocol/clamm-sdk": "8.4.0-alpha",
     "@interest-protocol/sui-tokens": "1.4.0",
     "@interest-protocol/ui-kit": "^0.2.26-alpha",
     "@mysten/dapp-kit": "^0.13.0",

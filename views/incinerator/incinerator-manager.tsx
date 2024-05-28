@@ -1,4 +1,4 @@
-import { useCurrentAccount } from '@mysten/dapp-kit';
+import { useCurrentAccount, useSuiClientContext } from '@mysten/dapp-kit';
 import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
@@ -14,11 +14,13 @@ import {
 } from './incinerator.types';
 
 const IncineratorManager: FC = () => {
+  const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
   const { control, setValue } = useFormContext<IncineratorForm>();
   const {
     delay,
     error,
+    mutate,
     objects,
     loading,
     coinsMap,
@@ -91,17 +93,17 @@ const IncineratorManager: FC = () => {
   }, [checked]);
 
   useEffect(() => {
-    if (
-      !reset &&
-      !error &&
-      !loading &&
-      displayObjects[tab].every(({ type }) => type)
-    )
-      updateAssets();
+    if (!reset && !error && !loading) updateAssets();
   }, [tab, currentAccount, search]);
 
   useEffect(() => {
-    if (!loading && !error && displayObjects[tab].every(({ type }) => type)) {
+    mutate();
+    setValue('reset', true);
+    setValue('empty', true);
+  }, [network]);
+
+  useEffect(() => {
+    if (!loading && !error) {
       if (!reset && delay !== undefined) setDelay(undefined);
       updateAssets();
     }

@@ -892,10 +892,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-2.0.3.tgz#4a2868d75d6d6963e423bcf90b7fd1be343409d3"
   integrity sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==
 
-"@interest-protocol/clamm-sdk@^8.3.0-alpha":
-  version "8.3.0-alpha"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/clamm-sdk/-/clamm-sdk-8.3.0-alpha.tgz#32f4c8542000e7dd22cf1f172860d898a7a86775"
-  integrity sha512-4Vb1LSYd3/3okE6Q6NdrsMRYmx+JtaiXkRY4JY2DfPLQb2ctgjateIXgpv8pY1lmwYBc1klO+ctauaNc9Pc2qw==
+"@interest-protocol/clamm-sdk@8.4.0-alpha":
+  version "8.4.0-alpha"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/clamm-sdk/-/clamm-sdk-8.4.0-alpha.tgz#32fc5b6f4050f3c6884be024dcd60d6be10c05e9"
+  integrity sha512-YuRD81hf3HX2rQIvKFAFkMsAwuFX3ISErCju6o50qURsUNeciJTYpPJdWQJn93MkE1YNtW03x4WCOTXBdVKT2w==
   dependencies:
     "@mysten/sui.js" "^0.54.1"
     just-camel-case "^6.2.0"

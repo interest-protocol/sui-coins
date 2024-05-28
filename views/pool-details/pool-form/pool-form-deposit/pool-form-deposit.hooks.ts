@@ -13,6 +13,7 @@ import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import {
   getAmountMinusSlippage,
+  getSafeValue,
   isScallopPool,
   isSui,
   parseBigNumberish,
@@ -54,13 +55,16 @@ export const useDeposit = () => {
         return coinZero;
       }
 
+      const safeValue = getSafeValue({
+        coinValue: value,
+        coinType: type,
+        balance: coinsMap[type].balance,
+        decimals: coinsMap[type].decimals,
+      });
+
       if (isSui(type)) {
         const [splittedCoin] = initTxb.splitCoins(initTxb.gas, [
-          initTxb.pure(
-            FixedPointMath.toBigNumber(value, coinsMap[type].decimals)
-              .decimalPlaces(0)
-              .toString()
-          ),
+          initTxb.pure.u64(safeValue.toString()),
         ]);
 
         return splittedCoin;
@@ -77,11 +81,7 @@ export const useDeposit = () => {
         );
 
       const [splittedCoin] = initTxb.splitCoins(firstCoinObject, [
-        initTxb.pure(
-          FixedPointMath.toBigNumber(value, coinsMap[type].decimals)
-            .decimalPlaces(0)
-            .toString()
-        ),
+        initTxb.pure.u64(safeValue.toString()),
       ]);
 
       if (isScallop && !!WRAPPED_CONVERSION_MAP[network][type]) {
@@ -102,31 +102,11 @@ export const useDeposit = () => {
       return splittedCoin;
     });
 
-    const minAmountQuote = await clamm.quoteAddLiquidity({
-      pool: pool.poolObjectId,
-      amounts: tokenList.map(({ value, decimals }) =>
-        BigInt(
-          FixedPointMath.toBigNumber(value, decimals)
-            .decimalPlaces(0)
-            .toString()
-        )
-      ),
-    });
-
-    const minAmountWithSlippage = getAmountMinusSlippage(
-      parseBigNumberish(minAmountQuote),
-      settings.slippage
-    )
-      .decimalPlaces(0)
-      .toString();
-
-    const minAmount = BigInt(minAmountWithSlippage);
-
     const { lpCoin, txb } = await clamm.addLiquidity({
-      minAmount,
       coinsIn: coins,
       txb: initTxb as any,
       pool: pool.poolObjectId,
+      slippage: +settings.slippage,
     });
 
     txb.transferObjects([lpCoin], txb.pure.address(currentAccount.address));
