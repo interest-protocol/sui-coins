@@ -15,7 +15,7 @@ export const AGGREGATORS_LIST: Record<Aggregator, AggregatorProps> = {
     url: 'https://aftermath.finance/',
     logo: '/images/aggregators/aftermath.webp',
   },
-  ...(process.env.VERCEL_ENV === 'production' && {
+  ...(process.env.VERCEL_ENV !== 'production' && {
     [Aggregator.Interest]: {
       url: '',
       name: 'Interest',
