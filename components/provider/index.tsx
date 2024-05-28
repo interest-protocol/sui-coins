@@ -1,5 +1,4 @@
 import { WalletProvider } from '@mysten/dapp-kit';
-import { registerStashedWallet } from '@mysten/zksend';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { FC, PropsWithChildren } from 'react';
 
@@ -9,8 +8,6 @@ import { SuiNsProvider } from '@/context/suins';
 import ThemeManager from '../theme-manager';
 
 const queryClient = new QueryClient();
-
-registerStashedWallet('SuiCoins', { origin: 'https://getstashed.com' });
 
 const Provider: FC<PropsWithChildren> = ({ children }) => (
   <ThemeManager>
