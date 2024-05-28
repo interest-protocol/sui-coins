@@ -54,12 +54,13 @@ const SwapSelectAggregatorModal: FC<SwapSelectAggregatorModalProps> = ({
           p="l"
           key={v4()}
           display="flex"
-          cursor="pointer"
           alignItems="center"
-          nHover={{ bg: '#0053DB14' }}
           justifyContent="space-between"
           transition="all 300ms ease-in-out"
-          opacity={data.disabled ? '0.7' : 1}
+          opacity={data.disabled ? 0.6 : 1}
+          nHover={!data.disabled && { bg: '#0053DB14' }}
+          cursor={data.disabled ? 'not-allowed' : 'pointer'}
+          bg={aggregatorSelected.name == data.name ? '#0053DB14' : 'unset'}
           onClick={() =>
             !data.disabled &&
             onSelect(
@@ -69,7 +70,6 @@ const SwapSelectAggregatorModal: FC<SwapSelectAggregatorModalProps> = ({
                 | 'interest'
             )
           }
-          bg={aggregatorSelected.name == data.name ? '#0053DB14' : 'unset'}
         >
           <Box display="flex" alignItems="center" gap="m">
             <Box width="2.5rem" height="2.5rem">
