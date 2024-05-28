@@ -1,3 +1,4 @@
+import type { GetRouteQuotesReturn } from '@interest-protocol/clamm-sdk';
 import type { Token } from '@interest-protocol/sui-tokens';
 import type { RouterCompleteTradeRoute } from 'aftermath-ts-sdk';
 import type BigNumber from 'bignumber.js';
@@ -17,11 +18,13 @@ export interface SwapToken extends Token {
 
 export enum Aggregator {
   Hop = 'hop',
+  Interest = 'interest',
   Aftermath = 'aftermath',
 }
 
 export interface SwapForm {
   to: SwapToken;
+  focus: boolean;
   loading: boolean;
   swapping: boolean;
   explorerLink: string;
@@ -31,22 +34,31 @@ export interface SwapForm {
   settings: ISwapSettings;
   lastFetchDate: number | null;
   from: SwapToken & { value: BigNumber };
-  route: RouterCompleteTradeRoute | JSONQuoteResponse | null;
-  focus: boolean;
+  route:
+    | RouterCompleteTradeRoute
+    | GetRouteQuotesReturn
+    | JSONQuoteResponse
+    | null;
 }
 
 export interface SwapPreviewModalProps {
   onClose: () => void;
 }
 
-export interface AggregatorPros {
+export type AggregatorType =
+  | `${Aggregator.Hop}`
+  | `${Aggregator.Aftermath}`
+  | 'interest';
+
+export interface AggregatorProps {
   url: string;
   logo: string;
   name: string;
-  shortName: 'hop' | 'aftermath';
+  disabled?: boolean;
+  shortName: AggregatorType;
 }
 
 export interface SwapSelectAggregatorModalProps {
-  aggregatorSelected: AggregatorPros;
-  onSelect: (aggregator: Aggregator) => void;
+  aggregatorSelected: AggregatorProps;
+  onSelect: (aggregator: AggregatorType) => void;
 }

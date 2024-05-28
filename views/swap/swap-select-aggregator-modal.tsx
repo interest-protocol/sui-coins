@@ -1,5 +1,5 @@
 import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
-import { toPairs } from 'ramda';
+import { values } from 'ramda';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
@@ -7,7 +7,11 @@ import { useModal } from '@/hooks/use-modal';
 import { CheckSVG, TimesSVG } from '@/svg';
 
 import { AGGREGATORS_LIST } from './swap.data';
-import { SwapSelectAggregatorModalProps } from './swap.types';
+import {
+  Aggregator,
+  AggregatorProps,
+  SwapSelectAggregatorModalProps,
+} from './swap.types';
 
 const SwapSelectAggregatorModal: FC<SwapSelectAggregatorModalProps> = ({
   onSelect,
@@ -39,25 +43,32 @@ const SwapSelectAggregatorModal: FC<SwapSelectAggregatorModalProps> = ({
       >
         <Box />
         <Typography variant="title" size="large">
-          Select Aggregator
+          Select DEX
         </Typography>
         <Button variant="text" isIcon onClick={handleClose} mr="-0.5rem">
           <TimesSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
         </Button>
       </Box>
-      {toPairs(AGGREGATORS_LIST).map(([aggregator, data]) => (
+      {values(AGGREGATORS_LIST).map((data: AggregatorProps) => (
         <Box
           p="l"
           key={v4()}
           display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-          nHover={{
-            bg: '#0053DB14',
-          }}
           cursor="pointer"
+          alignItems="center"
+          nHover={{ bg: '#0053DB14' }}
+          justifyContent="space-between"
           transition="all 300ms ease-in-out"
-          onClick={() => onSelect(aggregator)}
+          opacity={data.disabled ? '0.7' : 1}
+          onClick={() =>
+            !data.disabled &&
+            onSelect(
+              data.shortName as
+                | `${Aggregator.Hop}`
+                | `${Aggregator.Aftermath}`
+                | 'interest'
+            )
+          }
           bg={aggregatorSelected.name == data.name ? '#0053DB14' : 'unset'}
         >
           <Box display="flex" alignItems="center" gap="m">

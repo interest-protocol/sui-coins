@@ -26,9 +26,9 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
   {
     name: 'pool',
     Icon: PoolSVG,
-    disabled: true,
     path: Routes[RoutesEnum.Pools],
     networks: [Network.MAINNET, Network.TESTNET],
+    disabled: process.env.VERCEL_ENV === 'production',
   },
   {
     disabled: false,

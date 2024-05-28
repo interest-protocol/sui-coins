@@ -3,16 +3,14 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { AGGREGATORS_LIST } from './swap.data';
-import { SwapForm } from './swap.types';
+import { Aggregator, SwapForm } from './swap.types';
 
 const SwapPoweredBy: FC = () => {
   const { control } = useFormContext<SwapForm>();
 
-  const settings = useWatch({ control, name: 'settings' });
+  const aggregator = useWatch({ control, name: 'settings.aggregator' });
 
-  const aggregator = settings.aggregator ?? null;
-
-  if (!aggregator) return null;
+  if (!aggregator || aggregator === Aggregator.Interest) return null;
 
   return (
     <a

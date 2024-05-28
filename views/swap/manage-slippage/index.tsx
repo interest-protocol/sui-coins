@@ -11,13 +11,9 @@ const ManageSlippage: FC = () => {
   const handleManageView = () => setOpenManage(not);
 
   return (
-    <Box>
-      <Box display="flex" flexDirection="column">
-        <SlippageInfo isOpen={openManage} handleManageView={handleManageView} />
-        {openManage && (
-          <ManageSlippageForm handleManageView={handleManageView} />
-        )}
-      </Box>
+    <Box display="flex" flexDirection="column">
+      <SlippageInfo isOpen={openManage} handleManageView={handleManageView} />
+      {openManage && <ManageSlippageForm handleManageView={handleManageView} />}
     </Box>
   );
 };
