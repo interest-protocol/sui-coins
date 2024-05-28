@@ -19,7 +19,7 @@
     "@interest-protocol/clamm-sdk": "8.4.0-alpha",
     "@interest-protocol/sui-tokens": "1.4.0",
     "@interest-protocol/ui-kit": "^0.2.26-alpha",
-    "@mysten/dapp-kit": "^0.13.0",
+    "@mysten/dapp-kit": "^0.13.2",
     "@mysten/sui.js": "^0.54.1",
     "@mysten/suins-toolkit": "^0.4.10",
     "@mysten/zksend": "^0.8.0",
