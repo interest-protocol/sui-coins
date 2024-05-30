@@ -1343,17 +1343,6 @@
     nanostores "^0.9.3"
     valibot "^0.25.0"
 
-"@mysten/zksend@^0.8.0":
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/@mysten/zksend/-/zksend-0.8.0.tgz#5f44ecd3b835a6156f44a7d21bdb1a23546b83c4"
-  integrity sha512-SB8OZadpx1LJtg8TNEkFWPL1/NODYr/pm3P2nIPj0pdiDWUR5mEx+EsJnhwNdLo405ZPV1z7jm7NA3rB+4IS/g==
-  dependencies:
-    "@mysten/sui.js" "0.54.1"
-    "@mysten/wallet-standard" "0.11.6"
-    mitt "^3.0.1"
-    nanostores "^0.9.3"
-    valibot "^0.25.0"
-
 "@next/env@14.0.1":
   version "14.0.1"
   resolved "https://registry.yarnpkg.com/@next/env/-/env-14.0.1.tgz#7d03c9042c205a320aef2ea3f83c2d16b6825563"
@@ -2006,14 +1995,6 @@
   dependencies:
     "@noble/hashes" "~1.4.0"
     "@scure/base" "~1.1.6"
-
-"@shinami/clients@^0.7.3":
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/@shinami/clients/-/clients-0.7.3.tgz#ce34192c40e40ad1b90223036e542511926f284f"
-  integrity sha512-YLWrqE+s70v00kyJ+Py+burb7UQcY1gXpsk6SVxenMa+cPPrc24L9Ao1obAlJiVqxbAuLQT29DzD0o6eAI7BKg==
-  dependencies:
-    "@open-rpc/client-js" "^1.8.1"
-    superstruct "^1.0.3"
 
 "@sigstore/bundle@^1.1.0":
   version "1.1.0"
