@@ -2,7 +2,7 @@ import { SuiClient } from '@mysten/sui.js/client';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import BigNumber from 'bignumber.js';
 
-import { CoinsMap } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { CoinsMap } from '@/components/web3-manager/coins-manager/coins-manager.types';
 
 export interface CreateVectorParameterArgs {
   txb: TransactionBlock;
