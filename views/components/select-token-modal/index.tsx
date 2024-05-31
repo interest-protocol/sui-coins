@@ -62,7 +62,17 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
       >
         <Box />
         <Typography variant="title" size="large">
-          Select Token
+          <Typography as="span" size="large" variant="title">
+            Select
+          </Typography>{' '}
+          <Typography
+            as="span"
+            size="large"
+            variant="title"
+            display={['none', 'none', 'unset']}
+          >
+            Token
+          </Typography>
         </Typography>
         <Button variant="text" isIcon onClick={closeModal} mr="-0.5rem">
           <TimesSVG maxWidth="1rem" maxHeight="1rem" width="100%" />

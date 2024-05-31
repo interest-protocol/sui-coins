@@ -32,14 +32,13 @@ const PoolDetail = () => {
 
   const virtualPrice =
     pool && liquidity
-      ? FixedPointMath.toNumber(
-          FixedPointMath.toBigNumber(liquidity).div(pool.lpCoinSupply),
-          0
-        )
-      : 0;
+      ? FixedPointMath.toBigNumber(liquidity, 9)
+          .div(pool.lpCoinSupply)
+          .toString()
+      : '0';
 
   const statsData = liquidity
-    ? [formatDollars(liquidity), formatDollars(virtualPrice, 9)]
+    ? [formatDollars(liquidity), formatDollars(+virtualPrice, 9)]
     : ['', ''];
 
   const coinXMetadata: CoinMetadataWithType = propOr(

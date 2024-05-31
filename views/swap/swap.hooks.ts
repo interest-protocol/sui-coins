@@ -11,7 +11,7 @@ import { FixedPointMath } from '@/lib';
 import { createObjectsParameter, getSafeValue, ZERO_BIG_NUMBER } from '@/utils';
 
 import { SwapArgs, SwapForm } from './swap.types';
-import { getAmountMinusSlippage } from './swap.utils';
+// import { getAmountMinusSlippage } from './swap.utils';
 
 export const useSwap = () => {
   const network = useNetwork();
@@ -51,8 +51,7 @@ const swap = async ({
   network,
   isZeroSwap = false,
 }: SwapArgs) => {
-  const { settings, from, to, routeWithAmount, poolsMap } =
-    formSwap.getValues();
+  const { from, to, routeWithAmount, poolsMap } = formSwap.getValues();
 
   if (!poolsMap) throw new Error('Pools map is missing');
 
@@ -88,12 +87,12 @@ const swap = async ({
 
   const amountIn = safeAmount.gt(amount) ? safeAmount : amount;
 
-  const amountOut = FixedPointMath.toBigNumber(
-    to.value,
-    to.decimals
-  ).decimalPlaces(0, BigNumber.ROUND_DOWN);
+  // const amountOut = FixedPointMath.toBigNumber(
+  //   to.value,
+  //   to.decimals
+  // ).decimalPlaces(0, BigNumber.ROUND_DOWN);
 
-  const minAmountOut = getAmountMinusSlippage(amountOut, settings.slippage);
+  // const minAmountOut = getAmountMinusSlippage(amountOut, settings.slippage);
 
   const txb = new TransactionBlock();
 
@@ -152,7 +151,7 @@ const swap = async ({
         txb.object(id),
         txb.object(SUI_CLOCK_OBJECT_ID),
         assetIn,
-        txb.pure.u64(minAmountOut.toString()),
+        txb.pure.u64('0'),
       ],
     });
   });
