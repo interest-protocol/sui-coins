@@ -3,10 +3,10 @@ import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
 
+import { CoinObject } from '@/components/web3-manager/coins-manager/coins-manager.types';
 import { LOCAL_STORAGE_VERSION } from '@/constants';
 import { COINS, FAUCET_COINS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { useWeb3 } from '@/hooks/use-web3';
 
 import FetchingToken from './fetching-token';
