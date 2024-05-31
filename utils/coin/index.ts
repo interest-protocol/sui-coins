@@ -8,7 +8,7 @@ import { propOr } from 'ramda';
 import {
   Web3ManagerState,
   Web3ManagerSuiObject,
-} from '@/components/web3-provider/web3-manager.types';
+} from '@/components/provider/web3-manager.types';
 import { Network } from '@/constants';
 import {
   CoinObject,

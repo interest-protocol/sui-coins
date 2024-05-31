@@ -1,3 +1,4 @@
+import { isValidSuiAddress } from '@mysten/sui.js/utils';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
@@ -10,6 +11,7 @@ import { useWeb3 } from '@/hooks/use-web3';
 
 import FetchingToken from './fetching-token';
 import ModalTokenBody from './modal-token-body';
+import ModalTokenSearch from './modal-token-search';
 import NotFound from './not-found';
 import {
   SelectTokenModalBodyProps,
@@ -22,7 +24,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   handleSelectToken: onSelectToken,
 }) => {
   const network = useNetwork();
-  const { coins, isFetchingCoinBalances } = useWeb3();
+  const { coins, loading } = useWeb3();
   const favoriteTokenTypes = useReadLocalStorage<ReadonlyArray<string>>(
     `${LOCAL_STORAGE_VERSION}-movement-${network}-favorite-tokens`
   );
@@ -30,7 +32,10 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   const filterSelected = useWatch({ control, name: 'filter' });
   const search = useWatch({ control, name: 'search' });
 
-  if (filterSelected === TokenOrigin.Strict && COINS)
+  const isSearchAddress =
+    isValidSuiAddress(search.split('::')[0]) && search.split('::').length > 2;
+
+  if (!isSearchAddress && filterSelected === TokenOrigin.Strict && COINS)
     return (
       <ModalTokenBody
         handleSelectToken={onSelectToken}
@@ -43,13 +48,17 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
       />
     );
 
-  if (isFetchingCoinBalances) return <FetchingToken />;
+  if (loading) return <FetchingToken />;
 
   const noWalletToShow = filterSelected == TokenOrigin.Wallet && !coins?.length;
 
-  if (noWalletToShow) return <NotFound />;
+  if (!isSearchAddress && noWalletToShow) return <NotFound />;
 
-  if (filterSelected === TokenOrigin.Wallet && !noWalletToShow)
+  if (
+    !isSearchAddress &&
+    filterSelected === TokenOrigin.Wallet &&
+    !noWalletToShow
+  )
     return (
       <ModalTokenBody
         handleSelectToken={onSelectToken}
@@ -60,6 +69,11 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
               symbol?.toLowerCase().includes(search) || type?.includes(search)
           )}
       />
+    );
+
+  if (isSearchAddress)
+    return (
+      <ModalTokenSearch search={search} handleSelectToken={onSelectToken} />
     );
 
   return <NotFound />;
