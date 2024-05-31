@@ -11,7 +11,7 @@ import { FixedPointMath } from '@/lib';
 import { createObjectsParameter, getSafeValue, ZERO_BIG_NUMBER } from '@/utils';
 
 import { SwapArgs, SwapForm } from './swap.types';
-// import { getAmountMinusSlippage } from './swap.utils';
+import { getAmountMinusSlippage } from './swap.utils';
 
 export const useSwap = () => {
   const network = useNetwork();
@@ -51,7 +51,8 @@ const swap = async ({
   network,
   isZeroSwap = false,
 }: SwapArgs) => {
-  const { from, to, routeWithAmount, poolsMap } = formSwap.getValues();
+  const { from, to, routeWithAmount, poolsMap, settings } =
+    formSwap.getValues();
 
   if (!poolsMap) throw new Error('Pools map is missing');
 
@@ -87,12 +88,7 @@ const swap = async ({
 
   const amountIn = safeAmount.gt(amount) ? safeAmount : amount;
 
-  // const amountOut = FixedPointMath.toBigNumber(
-  //   to.value,
-  //   to.decimals
-  // ).decimalPlaces(0, BigNumber.ROUND_DOWN);
-
-  // const minAmountOut = getAmountMinusSlippage(amountOut, settings.slippage);
+  const minAmountIn = getAmountMinusSlippage(amountIn, settings.slippage);
 
   const txb = new TransactionBlock();
 
@@ -100,7 +96,7 @@ const swap = async ({
     coinsMap,
     txb,
     type: from.type,
-    amount: amountIn.toString(),
+    amount: minAmountIn.toString(),
   });
 
   const coinIn = txb.moveCall({
@@ -108,7 +104,7 @@ const swap = async ({
     typeArguments: [from.type],
     arguments: [
       txb.makeMoveVec({ objects: coinInList }),
-      txb.pure.u64(amountIn.toString()),
+      txb.pure.u64(minAmountIn.toString()),
     ],
   });
 

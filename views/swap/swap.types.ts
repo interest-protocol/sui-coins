@@ -10,7 +10,6 @@ import {
 } from '@/views/swap/swap-manager/swap-manager.types';
 
 export interface ISwapSettings {
-  interval: string;
   slippage: string;
   aggregator: Aggregator;
 }
