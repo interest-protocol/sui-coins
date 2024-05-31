@@ -12,8 +12,8 @@ import {
 
 export const useGetPoolsByLpCoinTypes = () => {
   const network = useNetwork();
-  const account = useCurrentAccount();
   const { coins } = useWeb3();
+  const account = useCurrentAccount();
 
   const lpCoins = coins.filter((x) => isLpCoinType(x.type)).map((x) => x.type);
 
