@@ -1,3 +1,4 @@
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import useSWR from 'swr';
 
 import { useNetwork } from '@/context/network';
@@ -11,7 +12,8 @@ import {
 
 export const useGetPoolsByLpCoinTypes = () => {
   const network = useNetwork();
-  const { coins, account } = useWeb3();
+  const account = useCurrentAccount();
+  const { coins } = useWeb3();
 
   const lpCoins = coins.filter((x) => isLpCoinType(x.type)).map((x) => x.type);
 
