@@ -55,6 +55,11 @@ export const FAUCET_COINS = [
     symbol: 'USDC',
     type: USDC_TYPE,
   },
+  {
+    decimals: 6,
+    symbol: 'USDT',
+    type: USDT_TYPE,
+  },
 ];
 
 export const COINS = [
