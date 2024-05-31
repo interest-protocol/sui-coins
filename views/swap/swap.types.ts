@@ -1,8 +1,8 @@
 import { WalletAccount } from '@wallet-standard/base';
 import { UseFormReturn } from 'react-hook-form';
 
+import { CoinsMap } from '@/components/web3-manager/coins-manager/coins-manager.types';
 import { Network } from '@/constants';
-import { CoinsMap } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { CoinData } from '@/interface';
 import {
   PoolsMap,
