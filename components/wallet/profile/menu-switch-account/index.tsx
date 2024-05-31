@@ -62,10 +62,10 @@ const MenuSwitchAccount: FC<MenuSwitchAccountProps> = ({
           disabled={walletAccount.address === account}
           onClick={() => {
             if (!(walletAccount.address === account)) {
-              mutate().then(() => {
-                selectAccount({ account: walletAccount });
-                onBack();
-              });
+              mutate();
+
+              selectAccount({ account: walletAccount });
+              onBack();
             }
           }}
         >
