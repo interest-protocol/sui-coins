@@ -25,10 +25,11 @@ const Wallet: FC = () => {
               rel="noreferrer"
             >
               <Button
+                bg="#FFDA34"
+                color="#000000"
                 variant="filled"
                 p={['xs', 'xs', 's']}
-                bg="warningContainer"
-                color="onWarningContainer"
+                nHover={{ bg: 'warning' }}
               >
                 Feedback
               </Button>
