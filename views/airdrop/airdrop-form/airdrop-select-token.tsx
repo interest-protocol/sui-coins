@@ -3,8 +3,8 @@ import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { TokenIcon } from '@/components';
+import { CoinObject } from '@/components/web3-manager/coins-manager/coins-manager.types';
 import { useNetwork } from '@/context/network';
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { useModal } from '@/hooks/use-modal';
 import useTokenPriceBySymbol from '@/hooks/use-token-price';
 import { CoinData } from '@/interface';
