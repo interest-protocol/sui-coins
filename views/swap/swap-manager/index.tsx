@@ -2,6 +2,7 @@ import { useCurrentAccount } from '@mysten/dapp-kit';
 import { FC, useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { DEAD_ADDRESS } from '@/constants';
 import { findRoutes } from '@/utils';
 import { SwapForm } from '@/views/swap/swap.types';
 import { useGetDex } from '@/views/swap/swap-manager/swap-manager.hooks';
@@ -76,7 +77,7 @@ const SwapManager: FC = () => {
         setError={setError}
         poolsMap={data.poolsMap}
         hasNoMarket={hasNoMarket}
-        account={account!.address}
+        account={account?.address || DEAD_ADDRESS}
         control={formSwap.control}
         setValue={formSwap.setValue}
         setIsZeroSwapAmount={setIsZeroSwapAmountOut}
@@ -92,7 +93,7 @@ const SwapManager: FC = () => {
         poolsMap={data.poolsMap}
         hasNoMarket={hasNoMarket}
         control={formSwap.control}
-        account={account!.address}
+        account={account?.address || DEAD_ADDRESS}
         setValue={formSwap.setValue}
         setIsZeroSwapAmount={setIsZeroSwapAmountIn}
         isFetchingSwapAmount={!!isFetchingSwapAmountIn}

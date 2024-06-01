@@ -1,3 +1,5 @@
+import { normalizeSuiAddress } from '@mysten/sui.js/src/utils';
+
 import { Network } from './network';
 
 export const MAX_NUMBER_INPUT_VALUE = 9000000000000000;
@@ -5,6 +7,8 @@ export const MAX_NUMBER_INPUT_VALUE = 9000000000000000;
 export const LOCAL_STORAGE_VERSION = 'v4';
 
 export const PAGE_SIZE = 50;
+
+export const DEAD_ADDRESS = normalizeSuiAddress('0x0');
 
 export const RPC_URL = {
   [Network.DEVNET]: 'https://sui.devnet.m2.movementlabs.xyz:443',
