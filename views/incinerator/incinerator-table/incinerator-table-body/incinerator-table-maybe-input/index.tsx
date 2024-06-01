@@ -27,6 +27,10 @@ const IncineratorTableMaybeInput: FC<IncineratorTableRowProps> = ({
 
   const handleEditing: MouseEventHandler = (e) => {
     e.stopPropagation();
+    getValues('objects').map((_, index) =>
+      setValue(`objects.${index}.isEditing`, false)
+    );
+
     setValue(`objects.${index}.active`, true);
     setValue(`objects.${index}.isEditing`, true);
   };

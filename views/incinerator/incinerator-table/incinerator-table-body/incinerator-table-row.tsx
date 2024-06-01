@@ -18,7 +18,13 @@ const IncineratorTableRow: FC<IncineratorTableRowProps> = ({ index }) => {
   const object = getValues(`objects.${index}`);
   const active = useWatch({ control, name: `objects.${index}.active` });
 
-  const handleCheck = () => setValue(`objects.${index}.active`, !active);
+  if (!object) return null;
+
+  const handleCheck = () => {
+    if (getValues(`objects.${index}.isEditing`)) return;
+
+    setValue(`objects.${index}.active`, !active);
+  };
 
   return (
     <Box

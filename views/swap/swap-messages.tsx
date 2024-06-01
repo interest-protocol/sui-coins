@@ -1,15 +1,24 @@
-import { Box, Typography } from '@interest-protocol/ui-kit';
+import { Box, Theme, Typography, useTheme } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
 
 import { DotErrorSVG } from '@/svg';
 
+import { SwapMessagesEnum } from './swap.data';
+
 const SwapMessages: FC = () => {
+  const { colors } = useTheme() as Theme;
+
   const { control } = useWatch();
 
   const error = useWatch({ control, name: 'error' });
 
   if (!error) return null;
+
+  const isCustomErrorBoxMessage = [
+    SwapMessagesEnum.leastOneSui,
+    SwapMessagesEnum.notEnoughToken,
+  ].includes(error);
 
   return (
     <Box
@@ -19,11 +28,16 @@ const SwapMessages: FC = () => {
       display="flex"
       borderRadius="xs"
       border="1px solid"
-      bg="errorContainer"
-      color="onErrorContainer"
-      borderColor="onErrorContainer"
+      bg={isCustomErrorBoxMessage ? 'lowContainer' : 'errorContainer'}
+      color={isCustomErrorBoxMessage ? 'outline' : 'onErrorContainer'}
+      borderColor={isCustomErrorBoxMessage ? 'outline' : 'onErrorContainer'}
     >
-      <DotErrorSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+      <DotErrorSVG
+        dotColor={isCustomErrorBoxMessage ? colors.lowContainer : colors.error}
+        maxHeight="1rem"
+        maxWidth="1rem"
+        width="100%"
+      />
       <Typography variant="label" size="medium">
         {error}
       </Typography>

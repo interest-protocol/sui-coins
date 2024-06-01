@@ -40,6 +40,7 @@ export interface AccordionItemProps {
   path: string;
   beta?: boolean;
   disabled: boolean;
+  Icon: FC<SVGProps>;
   networks: ReadonlyArray<Network>;
 }
 

@@ -1,4 +1,4 @@
-import { Button, TextField } from '@interest-protocol/ui-kit';
+import { Box, Button, TextField } from '@interest-protocol/ui-kit';
 import {
   type FC,
   type KeyboardEventHandler,
@@ -27,29 +27,30 @@ const IncineratorTableInputMax: FC<IncineratorTableRowProps> = ({ index }) => {
   const handleMax: MouseEventHandler<HTMLButtonElement> = (e) => {
     e?.stopPropagation();
 
-    const display = getValues(`objects.${index}.display`);
+    const type = getValues(`objects.${index}.display.type`);
 
-    const balance = coinsMap[`${display?.type}`]
-      ? FixedPointMath.toNumber(
-          coinsMap[`${display?.type}`].balance,
-          coinsMap[`${display?.type}`].decimals
-        )
+    const balance = coinsMap[type]
+      ? FixedPointMath.toNumber(coinsMap[type].balance, coinsMap[type].decimals)
       : 0;
 
     setValue(`objects.${index}.value`, `${balance}`);
   };
+
   return (
     <Button
       p="xs"
+      right="1rem"
       type="button"
       mr="-0.75rem"
       variant="text"
+      position="absolute"
       onClick={handleMax}
     >
       max
     </Button>
   );
 };
+
 const IncineratorTableInput: FC<IncineratorTableRowProps> = ({ index }) => {
   const { control, setValue, getValues } = useFormContext<IncineratorForm>();
 
@@ -84,39 +85,44 @@ const IncineratorTableInput: FC<IncineratorTableRowProps> = ({ index }) => {
 
   useEffect(() => {
     document.addEventListener('keydown', handleDocumentKeyDown);
-
-    return () => {
-      document.removeEventListener('keydown', handleDocumentKeyDown);
-    };
+    return () => document.removeEventListener('keydown', handleDocumentKeyDown);
   }, []);
 
   return (
     <>
-      <TextField
-        placeholder="0"
-        fontWeight="500"
-        onKeyDown={onKeyDown}
-        defaultValue={oldValue}
-        onClick={(e) => e.stopPropagation()}
-        fieldProps={{
-          height: '2.5rem',
-          borderRadius: 'xs',
-          bg: 'lowestContainer',
-        }}
-        Suffix={<IncineratorTableInputMax index={index} />}
-        onChange={(e) =>
-          setValue(
-            `objects.${index}.value`,
-            parseInputEventToNumberString(
-              e,
-              FixedPointMath.toNumber(
-                (display as CoinObject)?.balance ?? ZERO_BIG_NUMBER,
-                (display as CoinObject)?.decimals ?? 0
+      <Box position="relative" display="flex" alignItems="center">
+        <Box>
+          <TextField
+            // eslint-disable-next-line jsx-a11y/no-autofocus
+            autoFocus
+            width="100%"
+            placeholder="0"
+            fontWeight="500"
+            onKeyDown={onKeyDown}
+            defaultValue={oldValue}
+            onClick={(e) => e.stopPropagation()}
+            fieldProps={{
+              height: '2.5rem',
+              borderRadius: 'xs',
+              bg: 'lowestContainer',
+              onClick: (e) => e?.stopPropagation(),
+            }}
+            onChange={(e) =>
+              setValue(
+                `objects.${index}.value`,
+                parseInputEventToNumberString(
+                  e,
+                  FixedPointMath.toNumber(
+                    (display as CoinObject)?.balance ?? ZERO_BIG_NUMBER,
+                    (display as CoinObject)?.decimals ?? 0
+                  )
+                )
               )
-            )
-          )
-        }
-      />
+            }
+          />
+        </Box>
+        <IncineratorTableInputMax index={index} />
+      </Box>
       <IncineratorTableRowActionButton
         handleCancel={handleCancel}
         handleApprove={handleApprove}

@@ -3,8 +3,11 @@ import {
   AirdropSVG,
   CirclePlusSVG,
   DoubleChevronSVG,
+  FireSVG,
+  MemechanSVG,
   MenuSVG,
   PoolSVG,
+  UploadSVG,
 } from '@/svg';
 
 import { MenuItemProps } from './sidebar.types';
@@ -25,9 +28,9 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
   {
     name: 'pool',
     Icon: PoolSVG,
-    disabled: true,
     path: Routes[RoutesEnum.Pools],
     networks: [Network.MAINNET, Network.TESTNET],
+    disabled: true,
   },
   {
     disabled: false,
@@ -44,26 +47,34 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     networks: [Network.MAINNET, Network.TESTNET],
   },
   {
-    name: 'more',
+    beta: true,
+    Icon: FireSVG,
     disabled: false,
+    name: 'incinerator',
+    path: Routes[RoutesEnum.Incinerator],
+    networks: [Network.MAINNET, Network.TESTNET],
+  },
+  {
+    name: 'more',
     Icon: MenuSVG,
+    disabled: false,
+    networks: [Network.MAINNET, Network.TESTNET],
     accordionList: [
       {
         beta: true,
         name: 'zkSend',
         disabled: false,
+        Icon: UploadSVG,
         path: Routes[RoutesEnum.Send],
         networks: [Network.MAINNET, Network.TESTNET],
       },
       {
-        beta: true,
         disabled: false,
-        name: 'incinerator',
-        path: Routes[RoutesEnum.Incinerator],
-        networks: [Network.MAINNET, Network.TESTNET],
+        name: 'memechan',
+        Icon: MemechanSVG,
+        networks: [Network.MAINNET],
+        path: 'https://memechan.gg',
       },
     ],
-    path: Routes[RoutesEnum.Airdrop],
-    networks: [Network.MAINNET, Network.TESTNET],
   },
 ];

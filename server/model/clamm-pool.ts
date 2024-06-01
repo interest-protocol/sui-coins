@@ -1,4 +1,5 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import { PoolMetadata } from '@interest-protocol/clamm-sdk';
+import mongoose, { Document, Model, Schema } from 'mongoose';
 
 import { Network } from '@/constants';
 
@@ -7,6 +8,7 @@ export interface ClammPoolModel extends Document {
   lpCoinType: string;
   isStable: boolean;
   coinTypes: readonly string[];
+  hooks?: PoolMetadata['hooks'] | null;
 }
 
 const modelName = 'ClammPool';
@@ -32,15 +34,19 @@ export const ClammPoolSchema = new Schema({
     index: true,
     required: true,
   },
+  hooks: {
+    type: Object,
+    default: null,
+  },
 });
 
 const mainnetModel =
-  mongoose.models[modelName] ||
+  (mongoose.models[modelName] as Model<ClammPoolModel>) ||
   mongoose.model<ClammPoolModel>(modelName, ClammPoolSchema);
 
 const testnetModel =
-  mongoose.models[testnetModelName] ||
+  (mongoose.models[testnetModelName] as Model<ClammPoolModel>) ||
   mongoose.model<ClammPoolModel>(testnetModelName, ClammPoolSchema);
 
-export const getClammPoolModel = (network: Network): typeof mainnetModel =>
+export const getClammPoolModel = (network: Network) =>
   network === Network.MAINNET ? mainnetModel : testnetModel;

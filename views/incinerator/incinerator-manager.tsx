@@ -3,6 +3,7 @@ import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { CoinObject } from '@/components/web3-manager/coins-manager/web3-manager.types';
+import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import { getKindFromObjectData } from '@/utils';
@@ -14,13 +15,23 @@ import {
 } from './incinerator.types';
 
 const IncineratorManager: FC = () => {
+  const network = useNetwork();
   const currentAccount = useCurrentAccount();
   const { control, setValue } = useFormContext<IncineratorForm>();
-  const { objects, coinsMap, ownedNfts, otherObjects, coinsObjects, setDelay } =
-    useWeb3();
+  const {
+    delay,
+    error,
+    mutate,
+    objects,
+    loading,
+    coinsMap,
+    setDelay,
+    ownedNfts,
+    otherObjects,
+    coinsObjects,
+  } = useWeb3();
 
   const tab = useWatch({ control, name: 'tab' });
-  const empty = useWatch({ control, name: 'empty' });
   const reset = useWatch({ control, name: 'reset' });
   const search = useWatch({ control, name: 'search' });
   const checked = useWatch({ control, name: 'checked' });
@@ -35,6 +46,8 @@ const IncineratorManager: FC = () => {
 
   const updateAssets = () => {
     if (reset) setValue('reset', false);
+
+    setValue('empty', !displayObjects[tab].length);
 
     setValue(
       'objects',
@@ -77,32 +90,25 @@ const IncineratorManager: FC = () => {
     formObjects.map((_, index) => setValue(`objects.${index}.active`, checked));
 
   useEffect(() => {
-    updateChecked();
+    if (displayObjects[tab].length) updateChecked();
   }, [checked]);
 
   useEffect(() => {
-    if (displayObjects[tab].every((type) => type)) {
-      updateAssets();
-    }
+    if (!reset && !error && !loading) updateAssets();
   }, [tab, currentAccount, search]);
 
   useEffect(() => {
-    if (displayObjects[tab].every((type) => type)) {
-      if (reset) {
-        updateAssets();
-        return;
-      }
-      if (formObjects.length !== displayObjects[tab].length) {
-        updateAssets();
-        setDelay(undefined);
-        return;
-      }
-    }
-  }, [objects]);
+    mutate();
+    setValue('reset', true);
+    setValue('empty', true);
+  }, [network]);
 
   useEffect(() => {
-    if (!formObjects.length !== empty) setValue('empty', !formObjects.length);
-  }, [formObjects]);
+    if (!loading && !error) {
+      if (!reset && delay !== undefined) setDelay(undefined);
+      updateAssets();
+    }
+  }, [objects, loading]);
 
   return null;
 };

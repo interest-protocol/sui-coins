@@ -49,3 +49,18 @@ export interface ZkSendLinkData {
   digest: string;
   links: ReadonlyArray<string>;
 }
+
+export interface LocalCoinMetadata {
+  decimals: number;
+  symbol: string;
+  type: string;
+}
+
+export interface PoolPageProps {
+  objectId: string;
+  stateId: string;
+}
+
+export interface CoinMetadataWithType extends CoinMetadata {
+  type: `0x${string}`;
+}

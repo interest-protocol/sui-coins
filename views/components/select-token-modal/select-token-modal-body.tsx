@@ -71,14 +71,22 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
     return (
       <ModalTokenBody
         handleSelectToken={handleSelectToken}
-        tokens={STRICT_TOKENS[network as Network]
-          ?.sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
-          .filter(
+        tokens={[
+          ...STRICT_TOKENS[network as Network].filter(
             ({ symbol, type }) =>
-              !search ||
-              symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
-              type.includes(search)
-          )}
+              (!search ||
+                symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+                type.includes(search)) &&
+              favoriteTokenTypes?.includes(type)
+          ),
+          ...STRICT_TOKENS[network as Network].filter(
+            ({ symbol, type }) =>
+              (!search ||
+                symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+                type.includes(search)) &&
+              !favoriteTokenTypes?.includes(type)
+          ),
+        ]}
       />
     );
 
@@ -91,14 +99,22 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
     return (
       <ModalTokenBody
         handleSelectToken={handleSelectToken}
-        tokens={WORMHOLE_TOKENS[network as Network]
-          ?.sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
-          .filter(
+        tokens={[
+          ...WORMHOLE_TOKENS[network as Network].filter(
             ({ symbol, type }) =>
-              !search ||
-              symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
-              type.includes(search)
-          )}
+              (!search ||
+                symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+                type.includes(search)) &&
+              favoriteTokenTypes?.includes(type)
+          ),
+          ...WORMHOLE_TOKENS[network as Network].filter(
+            ({ symbol, type }) =>
+              (!search ||
+                symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+                type.includes(search)) &&
+              !favoriteTokenTypes?.includes(type)
+          ),
+        ]}
       />
     );
 
@@ -111,14 +127,22 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
     return (
       <ModalTokenBody
         handleSelectToken={handleSelectToken}
-        tokens={CELER_TOKENS[network as Network]
-          ?.sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
-          .filter(
+        tokens={[
+          ...CELER_TOKENS[network as Network].filter(
             ({ symbol, type }) =>
-              !search ||
-              symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
-              type.includes(search)
-          )}
+              (!search ||
+                symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+                type.includes(search)) &&
+              favoriteTokenTypes?.includes(type)
+          ),
+          ...CELER_TOKENS[network as Network].filter(
+            ({ symbol, type }) =>
+              (!search ||
+                symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+                type.includes(search)) &&
+              !favoriteTokenTypes?.includes(type)
+          ),
+        ]}
       />
     );
 

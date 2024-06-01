@@ -20,7 +20,7 @@ import IncineratorTokenObject from './incinerator-token-object';
 
 const IncineratorButton: FC = () => {
   const burn = useBurn();
-  const { setDelay } = useWeb3();
+  const { setDelay, mutate } = useWeb3();
   const { network } = useSuiClientContext();
   const { setModal, handleClose } = useModal();
   const { control, setValue } = useFormContext<IncineratorForm>();
@@ -28,6 +28,12 @@ const IncineratorButton: FC = () => {
   const allObjects = useWatch({ control, name: 'objects' });
 
   const objects = allObjects.filter(prop('active'));
+
+  const refresh = () => {
+    mutate();
+    setDelay(10000);
+    setValue('reset', true);
+  };
 
   const copy = (type: string) => {
     navigator.clipboard.writeText(type);
@@ -56,8 +62,7 @@ const IncineratorButton: FC = () => {
     } catch (e) {
       toast.error((e as any).message ?? 'Something went wrong');
     } finally {
-      setValue('reset', true);
-      setDelay(10000);
+      refresh();
       toast.dismiss(toasterId);
     }
   };
