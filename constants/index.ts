@@ -1,4 +1,4 @@
-import { normalizeSuiAddress } from '@mysten/sui.js/src/utils';
+import { normalizeSuiAddress } from '@mysten/sui.js/utils';
 
 import { Network } from './network';
 
