@@ -52,6 +52,7 @@ const SwapPath: FC = () => {
       {baseTokens.map((baseToken) => (
         <>
           <TokenIcon
+            key={baseToken}
             type={baseToken}
             network={network}
             symbol={isSui(baseToken) ? 'MOVE' : getSymbolByType(baseToken)}
