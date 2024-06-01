@@ -22,6 +22,8 @@
     "@mysten/dapp-kit": "^0.13.2",
     "@mysten/sui.js": "^0.54.1",
     "@mysten/suins-toolkit": "^0.4.10",
+    "@mysten/zksend": "^0.8.0",
+    "@shinami/clients": "^0.7.3",
     "@stylin.js/react": "^1.0.4-alpha.0",
     "@tanstack/react-query": "^5.7.2",
     "@vercel/analytics": "^1.1.1",

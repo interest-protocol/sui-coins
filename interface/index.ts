@@ -44,6 +44,12 @@ export interface NFTCollectionMetadata {
   updatedAt?: number;
 }
 
+export interface ZkSendLinkData {
+  id: string;
+  digest: string;
+  links: ReadonlyArray<string>;
+}
+
 export interface LocalCoinMetadata {
   decimals: number;
   symbol: string;
