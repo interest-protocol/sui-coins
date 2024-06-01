@@ -1,10 +1,10 @@
 import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
-import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
-import { normalizeStructTag } from '@mysten/sui.js/utils';
+import { normalizeStructTag, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import useSWR from 'swr';
 
+import { Network } from '@/constants';
 import { METADATA } from '@/constants/metadata';
 import { useCoins } from '@/hooks/use-coins';
 import { useNetwork } from '@/hooks/use-network';
@@ -27,8 +27,8 @@ const getAllCoins: TGetAllCoins = async (provider, account, cursor = null) => {
 };
 
 const CoinsManager: FC = () => {
-  const suiClient = useSuiClient();
   const network = useNetwork();
+  const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
   const { id, delay, updateCoins, updateLoading, updateError } = useCoins();
 
@@ -66,7 +66,8 @@ const CoinsManager: FC = () => {
             .then((data: ReadonlyArray<CoinMetadataWithType>) =>
               data.reduce((acc, item) => {
                 const override =
-                  METADATA[network][normalizeStructTag(item.type)] || item;
+                  METADATA[network as Network][normalizeStructTag(item.type)] ||
+                  item;
                 return {
                   ...acc,
                   [normalizeStructTag(override.type)]: {

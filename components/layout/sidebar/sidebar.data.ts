@@ -4,6 +4,8 @@ import {
   CirclePlusSVG,
   DoubleChevronSVG,
   FireSVG,
+  MemechanSVG,
+  MenuSVG,
   PoolSVG,
   UploadSVG,
 } from '@/svg';
@@ -46,18 +48,33 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
   },
   {
     beta: true,
-    name: 'zkSend',
-    disabled: false,
-    Icon: UploadSVG,
-    path: Routes[RoutesEnum.Send],
-    networks: [Network.MAINNET, Network.TESTNET],
-  },
-  {
-    beta: true,
     Icon: FireSVG,
     disabled: false,
     name: 'incinerator',
     path: Routes[RoutesEnum.Incinerator],
     networks: [Network.MAINNET, Network.TESTNET],
+  },
+  {
+    name: 'more',
+    Icon: MenuSVG,
+    disabled: false,
+    networks: [Network.MAINNET, Network.TESTNET],
+    accordionList: [
+      {
+        beta: true,
+        name: 'zkSend',
+        disabled: false,
+        Icon: UploadSVG,
+        path: Routes[RoutesEnum.Send],
+        networks: [Network.MAINNET, Network.TESTNET],
+      },
+      {
+        disabled: false,
+        name: 'memechan',
+        Icon: MemechanSVG,
+        networks: [Network.MAINNET],
+        path: 'https://memechan.gg',
+      },
+    ],
   },
 ];

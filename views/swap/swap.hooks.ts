@@ -8,7 +8,6 @@ import {
   CLAMM_PACKAGE_ADDRESSES,
   COIN_TO_WRAPPED,
   SCALLOP_WRAPPED_COINS_TREASURY_CAPS,
-  WRAPPED_TO_COIN,
 } from '@/constants/clamm';
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { useHopSdk } from '@/hooks/use-hop-sdk';
