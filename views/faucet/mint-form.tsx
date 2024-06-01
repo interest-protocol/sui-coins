@@ -24,7 +24,8 @@ import SelectTokenModal from '../components/select-token-modal';
 const MintForm: FC = () => {
   const [selected, setSelected] = useState(COINS[0]);
   const network = useNetwork();
-  const { account, mutate } = useWeb3();
+  const { mutate } = useWeb3();
+  const account = useCurrentAccount();
   const { setModal, handleClose } = useModal();
   const client = useSuiClient();
   const signTransactionBlock = useSignTransactionBlock();
@@ -37,7 +38,8 @@ const MintForm: FC = () => {
 
       const transactionBlock = new TransactionBlock();
 
-      if (selected.type === SUI_TYPE_ARG) return requestMov(account, network);
+      if (selected.type === SUI_TYPE_ARG)
+        return requestMov(account.address, network);
 
       transactionBlock.moveCall({
         target: `0x2::coin::mint_and_transfer`,
@@ -45,7 +47,7 @@ const MintForm: FC = () => {
         arguments: [
           transactionBlock.object(TREASURY_CAP_MAP[selected.type]),
           transactionBlock.pure.u64(FAUCET_AMOUNT[selected.type]),
-          transactionBlock.pure.address(account),
+          transactionBlock.pure.address(account.address),
         ],
       });
 

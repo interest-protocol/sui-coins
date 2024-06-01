@@ -43,5 +43,5 @@ export interface ModalTokenBodyProps {
 
 export interface ModalTokenSearchProps {
   search: string;
-  handleSelectToken: (type: string) => void;
+  handleSelectToken: (coin: CoinData) => void;
 }

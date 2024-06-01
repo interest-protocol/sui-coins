@@ -1,8 +1,7 @@
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { FC, useId } from 'react';
 import useSWR from 'swr';
 import { v4 } from 'uuid';
-
-import { useNetwork } from '@/context/network';
 
 import FetchingToken from './fetching-token';
 import NotFound from './not-found';
@@ -14,7 +13,7 @@ const ModalTokenSearch: FC<ModalTokenSearchProps> = ({
   handleSelectToken,
 }) => {
   const id = useId();
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
   const {
     error,
     isLoading,
@@ -32,10 +31,10 @@ const ModalTokenSearch: FC<ModalTokenSearchProps> = ({
   return (
     <TokenModalItem
       key={v4()}
-      type={search}
       selected={false}
+      type={search as `0x${string}`}
       symbol={tokenMetadata!.symbol}
-      onClick={() => handleSelectToken(search)}
+      onClick={() => handleSelectToken(tokenMetadata)}
     />
   );
 };

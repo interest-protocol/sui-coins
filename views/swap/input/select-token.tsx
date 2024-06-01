@@ -56,7 +56,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       symbol,
       decimals,
       value: '',
-      usdPrice: currentToken.usdPrice,
+      usdPrice: currentToken?.usdPrice,
     });
 
     fetch(`/api/auth/v1/coin-price?symbol=${isSui(type) ? 'SUI' : symbol}`)

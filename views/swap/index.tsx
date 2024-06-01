@@ -60,11 +60,11 @@ const Swap: FC = () => (
                 display="flex"
                 width="3.25rem"
                 height="3.25rem"
-                borderRadius="full"
                 border="5px solid"
                 alignItems="center"
-                borderColor="lowContainer"
+                borderRadius="full"
                 justifyContent="center"
+                borderColor="lowContainer"
               >
                 {button}
               </Box>

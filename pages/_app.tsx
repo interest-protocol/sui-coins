@@ -8,7 +8,7 @@ import Head from 'next/head';
 import NextProgress from 'next-progress';
 import { ReactNode, StrictMode } from 'react';
 
-const Provider = dynamic(() => import('@/components/web3-provider'), {
+const Provider = dynamic(() => import('@/components/provider'), {
   ssr: false,
 });
 
