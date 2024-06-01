@@ -1,8 +1,9 @@
-import { useCurrentAccount, useSuiClientContext } from '@mysten/dapp-kit';
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { CoinObject } from '@/components/web3-manager/coins-manager/web3-manager.types';
+import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import { getKindFromObjectData } from '@/utils';
@@ -14,7 +15,7 @@ import {
 } from './incinerator.types';
 
 const IncineratorManager: FC = () => {
-  const { network } = useSuiClientContext();
+  const network = useNetwork();
   const currentAccount = useCurrentAccount();
   const { control, setValue } = useFormContext<IncineratorForm>();
   const {

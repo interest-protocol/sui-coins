@@ -61,7 +61,6 @@ const IncineratorTableInput: FC<IncineratorTableRowProps> = ({ index }) => {
     e?.stopPropagation();
 
     const value = getValues(`objects.${index}.value`);
-
     setOldValue(value);
 
     setValue(`objects.${index}.isEditing`, false);
