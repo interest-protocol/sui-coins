@@ -1,5 +1,4 @@
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { TransactionObjectArgument } from '@mysten/sui.js/transactions';
 import { SUI_CLOCK_OBJECT_ID } from '@mysten/sui.js/utils';
 import { devInspectAndGetReturnValues } from '@polymedia/suits';
 import BigNumber from 'bignumber.js';
@@ -38,8 +37,7 @@ export const findAmount = async ({
 
   parsedRoutes.forEach(([coinsPath, idsPath]) => {
     const txb = new TransactionBlock();
-
-    let amountIn: string | TransactionObjectArgument | any = amount;
+    let amountIn: any = txb.pure.u64(amount.toString());
 
     idsPath.forEach((id, index) => {
       const isFirstCall = index === 0;
@@ -57,7 +55,7 @@ export const findAmount = async ({
           arguments: [
             txb.object(id),
             txb.object(SUI_CLOCK_OBJECT_ID),
-            isFirstCall ? txb.pure.u64(amountIn.toString()) : amountIn,
+            amountIn,
           ],
         });
 
@@ -73,11 +71,7 @@ export const findAmount = async ({
           coinsPath[index + 1],
           poolMetadata.coinTypes.lpCoin,
         ],
-        arguments: [
-          txb.object(id),
-          txb.object(SUI_CLOCK_OBJECT_ID),
-          isFirstCall ? txb.pure.u64(amountIn.toString()) : amountIn,
-        ],
+        arguments: [txb.object(id), txb.object(SUI_CLOCK_OBJECT_ID), amountIn],
       });
     });
   });
@@ -88,14 +82,16 @@ export const findAmount = async ({
 
   const results = await Promise.all(promises);
 
-  return results.map(([result], index) => {
+  return results.map((result, index) => {
     invariant(result.length, 'Result is empty');
     const i = result.length - 1;
-    invariant(typeof result[i] === 'string', 'Value is not a string');
+    invariant(result[i].length, 'Result is empty');
+
+    invariant(typeof result[i][0] === 'string', 'Value is not a string');
 
     return [
       ...routes[index],
-      { isAmountIn, amount: BigNumber(result[i] as string) },
+      { isAmountIn, amount: BigNumber(result[i][0] as string) },
     ];
   });
 };
