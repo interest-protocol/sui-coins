@@ -88,7 +88,12 @@ const swap = async ({
 
   const amountIn = safeAmount.gt(amount) ? safeAmount : amount;
 
-  const minAmountIn = getAmountMinusSlippage(amountIn, settings.slippage);
+  const amountOut = FixedPointMath.toBigNumber(
+    to.value,
+    to.decimals
+  ).decimalPlaces(0, BigNumber.ROUND_DOWN);
+
+  const minAmountOut = getAmountMinusSlippage(amountOut, settings.slippage);
 
   const txb = new TransactionBlock();
 
@@ -96,7 +101,7 @@ const swap = async ({
     coinsMap,
     txb,
     type: from.type,
-    amount: minAmountIn.toString(),
+    amount: amountIn.toString(),
   });
 
   const coinIn = txb.moveCall({
@@ -104,7 +109,7 @@ const swap = async ({
     typeArguments: [from.type],
     arguments: [
       txb.makeMoveVec({ objects: coinInList }),
-      txb.pure.u64(minAmountIn.toString()),
+      txb.pure.u64(amountIn.toString()),
     ],
   });
 
@@ -129,7 +134,7 @@ const swap = async ({
           txb.object(id),
           txb.object(SUI_CLOCK_OBJECT_ID),
           assetIn,
-          txb.pure.u64('0'),
+          txb.pure.u64(minAmountOut.toString()),
         ],
       });
 
