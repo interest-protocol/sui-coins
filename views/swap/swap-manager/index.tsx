@@ -1,7 +1,7 @@
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import { FC, useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { useWeb3 } from '@/hooks';
 import { findRoutes } from '@/utils';
 import { SwapForm } from '@/views/swap/swap.types';
 import { useGetDex } from '@/views/swap/swap-manager/swap-manager.hooks';
@@ -10,8 +10,8 @@ import SwapManagerField from './swap-manager-field';
 import { SwapMessages } from './swap-messages';
 
 const SwapManager: FC = () => {
+  const account = useCurrentAccount();
   const formSwap = useFormContext<SwapForm>();
-  const { account } = useWeb3();
 
   const [error, setError] = useState(false);
   const [isZeroSwapAmountIn, setIsZeroSwapAmountIn] = useState(false);
@@ -69,14 +69,14 @@ const SwapManager: FC = () => {
   return (
     <>
       <SwapManagerField
-        poolsMap={data.poolsMap}
         name="from"
-        setValueName="to"
-        account={account}
-        setError={setError}
         routes={routes}
+        setValueName="to"
         type={coinOutType}
+        setError={setError}
+        poolsMap={data.poolsMap}
         hasNoMarket={hasNoMarket}
+        account={account!.address}
         control={formSwap.control}
         setValue={formSwap.setValue}
         setIsZeroSwapAmount={setIsZeroSwapAmountOut}
@@ -84,15 +84,15 @@ const SwapManager: FC = () => {
         setIsFetchingSwapAmount={setIsFetchingSwapAmountOut}
       />
       <SwapManagerField
-        poolsMap={data.poolsMap}
         name="to"
-        setValueName="from"
-        account={account}
-        type={coinInType}
         routes={routes}
+        type={coinInType}
+        setValueName="from"
         setError={setError}
+        poolsMap={data.poolsMap}
         hasNoMarket={hasNoMarket}
         control={formSwap.control}
+        account={account!.address}
         setValue={formSwap.setValue}
         setIsZeroSwapAmount={setIsZeroSwapAmountIn}
         isFetchingSwapAmount={!!isFetchingSwapAmountIn}

@@ -1,8 +1,15 @@
+import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import { isValidSuiObjectId } from '@mysten/sui.js/utils';
 import { toString } from 'ramda';
 import invariant from 'tiny-invariant';
 
-import { PAGE_SIZE } from '@/constants';
+import {
+  BTC_TYPE,
+  ETH_TYPE,
+  PAGE_SIZE,
+  USDC_TYPE,
+  USDT_TYPE,
+} from '@/constants';
 import { AmmPool } from '@/interface';
 import { AMMPoolModel, getAmmPoolModel } from '@/server/model/amm-pool';
 import { fetchPool, fetchPools } from '@/utils';
@@ -58,24 +65,45 @@ export const getAllPools = async ({
   return [pools, totalPages];
 };
 
+const baseCoins = [USDT_TYPE, USDC_TYPE, BTC_TYPE, ETH_TYPE, SUI_TYPE_ARG];
+
 export const getPoolsByCoinTypes = async ({
   client,
   network,
   coinInType,
   coinOutType,
 }: GetPoolsByCoinTypes): Promise<readonly AmmPool[]> => {
+  const basePools = baseCoins.flatMap((baseType) => [
+    {
+      coinX: baseType,
+      coinY: coinOutType,
+    },
+    {
+      coinX: coinOutType,
+      coinY: baseType,
+    },
+    {
+      coinX: baseType,
+      coinY: coinInType,
+    },
+    {
+      coinX: coinInType,
+      coinY: baseType,
+    },
+  ]);
+
   const query = {
     $or: [
-      { coinX: coinInType },
-      { coinX: coinOutType },
-      { coinY: coinInType },
-      { coinY: coinOutType },
-    ],
+      { coinX: coinInType, coinY: coinOutType },
+      { coinX: coinOutType, coinY: coinInType },
+    ].concat(basePools),
   };
 
   const ammPoolModel = getAmmPoolModel(network);
 
-  const pools = (await ammPoolModel.find(query)) as readonly AMMPoolModel[];
+  const pools = (await ammPoolModel
+    .find(query)
+    .limit(50)) as readonly AMMPoolModel[];
 
   if (!pools || !pools.length) return [];
 

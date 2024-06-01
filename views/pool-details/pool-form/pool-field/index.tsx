@@ -18,7 +18,7 @@ import { PoolFieldsProps } from './pool-field.types';
 
 const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
   const network = useNetwork();
-  const { coinsMap, isFetchingCoinBalances } = useWeb3();
+  const { coinsMap, loading } = useWeb3();
   const { register, setValue, getValues } = useFormContext<PoolForm>();
 
   const isDeposit = poolOptionView === PoolOption.Deposit;
@@ -92,7 +92,7 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
         >
           Balance:{' '}
           <Typography size="medium" variant="label" color="primary" as="span">
-            {isFetchingCoinBalances ? (
+            {loading ? (
               <Box mt="-1rem" ml="s">
                 <ProgressIndicator variant="loading" size={16} />
               </Box>
