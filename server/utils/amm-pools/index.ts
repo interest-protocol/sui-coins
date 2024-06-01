@@ -101,7 +101,9 @@ export const getPoolsByCoinTypes = async ({
 
   const ammPoolModel = getAmmPoolModel(network);
 
-  const pools = (await ammPoolModel.find(query)) as readonly AMMPoolModel[];
+  const pools = (await ammPoolModel
+    .find(query)
+    .limit(50)) as readonly AMMPoolModel[];
 
   if (!pools || !pools.length) return [];
 

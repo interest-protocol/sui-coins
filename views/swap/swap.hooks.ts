@@ -95,6 +95,11 @@ const swap = async ({
 
   const minAmountOut = getAmountMinusSlippage(amountOut, settings.slippage);
 
+  console.log({
+    amountOut: amountOut.toString(),
+    amountOutAfterSlippage: minAmountOut.toString(),
+  });
+
   const txb = new TransactionBlock();
 
   const coinInList = createObjectsParameter({
@@ -134,7 +139,7 @@ const swap = async ({
           txb.object(id),
           txb.object(SUI_CLOCK_OBJECT_ID),
           assetIn,
-          txb.pure.u64(minAmountOut.toString()),
+          txb.pure.u64('0'),
         ],
       });
 
