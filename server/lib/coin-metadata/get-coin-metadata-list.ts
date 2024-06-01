@@ -14,7 +14,13 @@ const getCoinMetadataList = async (
   const Model = COIN_METADATA_MODEL_MAP[network];
   const movClient = MOVE_CLIENT_PROVIDER_MAP[network];
 
-  const docs: Array<CoinMetadataModel> = await Model.find({ type: typeList });
+  const metadataBatches = chunk<string>(typeList, 50);
+
+  const docs: Array<CoinMetadataModel> = [];
+
+  for (const list of metadataBatches) {
+    docs.push(...(await Model.find({ type: typeList }).limit(50)));
+  }
 
   const docsMap = docs.reduce(
     (acc, curr) => ({ ...acc, [curr.type]: curr }),
