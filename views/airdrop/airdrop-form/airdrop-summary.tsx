@@ -117,7 +117,7 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
             opacity="0.80"
             color="disabled"
           >
-            Total SUI fee
+            Total MOVE fee
           </Typography>
           <Box textAlign="right">
             <Typography
@@ -133,7 +133,7 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
             </Typography>
             {airdropFee.gt(coinsMap[SUI_TYPE_ARG].balance) && (
               <Typography size="small" variant="body" color="error">
-                Not enough SUI
+                Not enough MOVE
               </Typography>
             )}
           </Box>

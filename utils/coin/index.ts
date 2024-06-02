@@ -9,7 +9,7 @@ import {
   CoinObject,
   CoinsMap,
 } from '@/components/web3-manager/coins-manager/coins-manager.types';
-import { Network } from '@/constants';
+import { MOVE_TYPE_ARG, Network } from '@/constants';
 import { CoinMetadataWithType } from '@/interface';
 import { FixedPointMath } from '@/lib';
 
@@ -167,7 +167,8 @@ export const getCoin = async (
       .catch(() => resolve({ type, ...getBasicCoinMetadata(type) }));
   });
 
-export const isSui = (type: string) => isSameStructTag(type, SUI_TYPE_ARG);
+export const isSui = (type: string) =>
+  isSameStructTag(type, SUI_TYPE_ARG) || isSameStructTag(type, MOVE_TYPE_ARG);
 
 export const getCoins = async ({
   suiClient,

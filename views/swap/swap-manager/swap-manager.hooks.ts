@@ -20,6 +20,12 @@ export const useGetDex = ({ coinInType, coinOutType }: UseGetDexArgs) => {
   return useSWR<UseGetDexReturn>(
     makeSWRKey([network, key], `/api/auth/v1/get-pools-by-cointypes`),
     async () => {
+      if (!coinInType || !coinOutType)
+        return {
+          poolsMap: {},
+          dex: {},
+        };
+
       if (cache.has(key)) return cache.get(key)!;
 
       const fetchRes = await fetch(

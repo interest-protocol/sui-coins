@@ -26,8 +26,6 @@ export const findAmount = async ({
       },
     ]);
 
-  const txbArray = [] as TransactionBlock[];
-
   const functionName = isAmountIn ? 'amount_in' : 'amount_out';
 
   const parsedRoutes = routes.map(([coinsPath, idsPath]) => [
@@ -35,8 +33,9 @@ export const findAmount = async ({
     idsPath,
   ]);
 
+  const txb = new TransactionBlock();
+
   parsedRoutes.forEach(([coinsPath, idsPath]) => {
-    const txb = new TransactionBlock();
     let amountIn: any = txb.pure.u64(amount.toString());
 
     idsPath.forEach((id, index) => {
@@ -59,8 +58,6 @@ export const findAmount = async ({
           ],
         });
 
-        txbArray.push(txb);
-
         return;
       }
 
@@ -76,22 +73,24 @@ export const findAmount = async ({
     });
   });
 
-  const promises = txbArray.map((t) =>
-    devInspectAndGetReturnValues(client as any, t as any)
+  const results = await devInspectAndGetReturnValues(
+    client as never,
+    txb as never
   );
 
-  const results = await Promise.all(promises);
+  let x = results;
 
-  return results.map((result, index) => {
-    invariant(result.length, 'Result is empty');
-    const i = result.length - 1;
-    invariant(result[i].length, 'Result is empty');
+  return routes.map((route) => {
+    const pools = route[1];
+    const r = x.slice(0, pools.length);
+    x = x.slice(pools.length);
 
-    invariant(typeof result[i][0] === 'string', 'Value is not a string');
+    invariant(r.length, 'Result is empty');
+    const i = r.length - 1;
+    invariant(r[i].length, 'Result is empty');
 
-    return [
-      ...routes[index],
-      { isAmountIn, amount: BigNumber(result[i][0] as string) },
-    ];
+    invariant(typeof r[i][0] === 'string', 'Value is not a string');
+
+    return [...route, { isAmountIn, amount: BigNumber(r[i][0] as string) }];
   });
 };

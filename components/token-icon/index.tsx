@@ -46,6 +46,7 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
     return (
       <Box
         display="flex"
+        overflow="hidden"
         position="relative"
         alignItems="center"
         justifyContent="center"

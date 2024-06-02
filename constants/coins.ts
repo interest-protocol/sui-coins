@@ -2,6 +2,8 @@ import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 
 import { LocalCoinMetadata } from '@/interface';
 
+export const MOVE_TYPE_ARG = '0x2::move::MOVE';
+
 const MOVEMENT_MOCK_COINS_PACKAGE =
   '0x6c4e7af6322e89ac676b463e05399607285e8aa64d092cfca849b058cba798af';
 
@@ -103,3 +105,5 @@ export const COINS_MAP = {
     type: RUCO_TYPE,
   },
 } as Record<string, LocalCoinMetadata>;
+
+export const PRICE_BLACKLIST = ['RUCO'];

@@ -74,9 +74,8 @@ const Pools: FC = () => {
     isFindingPool
       ? {
           $and: [
-            ...tokenList.map(({ type }) => ({
-              coinTypes: { $in: [type] },
-            })),
+            { coinX: { $in: tokenList?.map(({ type }) => type) } },
+            { coinY: { $in: tokenList?.map(({ type }) => type) } },
           ],
         }
       : query.length
@@ -143,6 +142,13 @@ const Position: FC = () => {
     name: 'filterList',
   });
 
+  const isFindingPool = useWatch({
+    control: formContext.control,
+    name: 'isFindingPool',
+  });
+
+  const tokenList = formContext.getValues('tokenList');
+
   const filterQuery = filterProps.reduce(
     (acc, filterProp) => {
       if (
@@ -185,7 +191,15 @@ const Position: FC = () => {
 
   const [pools, setPools] = useState<Record<string, AMMPoolWithMetadata>>({});
   const { data, isLoading: arePoolsLoading } = usePools(page, {
-    $and: filterQuery,
+    $and: [
+      ...filterQuery,
+      ...(isFindingPool
+        ? [
+            { coinX: { $in: tokenList?.map(({ type }) => type) } },
+            { coinY: { $in: tokenList?.map(({ type }) => type) } },
+          ]
+        : []),
+    ],
   });
 
   useEffect(() => {

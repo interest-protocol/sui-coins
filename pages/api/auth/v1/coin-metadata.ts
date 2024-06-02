@@ -5,7 +5,6 @@ import { Network } from '@/constants';
 import dbConnect from '@/server';
 import getCoinMetadata from '@/server/lib/coin-metadata/get-coin-metadata';
 import getCoinMetadataList from '@/server/lib/coin-metadata/get-coin-metadata-list';
-import coinMetadata from '@/server/model/coin-metadata';
 import { handleServerError } from '@/server/utils/amm-pools';
 import { isInvalidNetwork } from '@/utils';
 
@@ -32,14 +31,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
         return res.status(200).json(data);
       }
-
-      const data = await coinMetadata.find({});
-
-      return res.status(200).json(data);
     }
 
-    res.status(405).send('Method not allowed!');
-    return;
+    return res.status(405).send('Method not allowed!');
   } catch (e) {
     res.status(500).json({
       message: handleServerError(e),

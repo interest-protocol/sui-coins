@@ -149,7 +149,7 @@ const SwapPreviewModalSummary: FC = () => {
                   color="onSurface"
                   mr="0.5rem"
                 >
-                  {fees ? `~${fees[0] ?? 0} SUI` : '--'}
+                  {fees ? `~${fees[0] ?? 0} MOVE` : '--'}
                 </Typography>
               )}
             </Typography>
@@ -183,7 +183,7 @@ const SwapPreviewModalSummary: FC = () => {
                   color="onSurface"
                   mr="0.5rem"
                 >
-                  {fees ? `~${fees[1] ?? 0} SUI` : '--'}
+                  {fees ? `~${fees[1] ?? 0} MOVE` : '--'}
                 </Typography>
               )}
             </Typography>

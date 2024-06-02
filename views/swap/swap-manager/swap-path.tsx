@@ -1,6 +1,7 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+import { v4 } from 'uuid';
 
 import { TokenIcon } from '@/components';
 import { useNetwork } from '@/context/network';
@@ -49,17 +50,20 @@ const SwapPath: FC = () => {
         symbol={isSui(coinIn) ? 'MOVE' : getSymbolByType(coinIn)}
       />
       <SwapArrowSVG width="100%" maxWidth="5rem" maxHeight="0.75rem" />
-      {baseTokens.map((baseToken) => (
-        <>
-          <TokenIcon
-            key={baseToken}
-            type={baseToken}
-            network={network}
-            symbol={isSui(baseToken) ? 'MOVE' : getSymbolByType(baseToken)}
-          />
-          <SwapArrowSVG width="100%" maxWidth="5rem" maxHeight="0.75rem" />
-        </>
-      ))}
+      {baseTokens.flatMap((baseToken) => [
+        <TokenIcon
+          key={v4()}
+          type={baseToken}
+          network={network}
+          symbol={isSui(baseToken) ? 'MOVE' : getSymbolByType(baseToken)}
+        />,
+        <SwapArrowSVG
+          key={v4()}
+          width="100%"
+          maxWidth="5rem"
+          maxHeight="0.75rem"
+        />,
+      ])}
       <TokenIcon
         type={coinOut}
         network={network}

@@ -67,7 +67,7 @@ const FilterSelectedItem: FC = () => {
           </Button>
         </Box>
       ))}
-      {isFindingPool && tokens?.length && (
+      {isFindingPool && !!tokens?.length && (
         <Box
           key={v4()}
           display="flex"

@@ -14,7 +14,6 @@ const FromInput: FC = () => {
   const { register, setValue, control } = useFormContext<SwapForm>();
 
   useWatch({ control, name: 'focus' });
-  const swapping = useWatch({ control, name: 'swapping' });
 
   return (
     <>
@@ -34,7 +33,6 @@ const FromInput: FC = () => {
               placeholder="0"
               color="onSurface"
               textAlign="right"
-              disabled={swapping}
               fontFamily="Satoshi"
               fontSize={['3xl', '5xl']}
               fieldProps={{

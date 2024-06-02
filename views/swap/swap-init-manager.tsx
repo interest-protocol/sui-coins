@@ -6,7 +6,12 @@ import { FC, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
 
-import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
+import {
+  LOCAL_STORAGE_VERSION,
+  MOVE_TYPE_ARG,
+  Network,
+  PRICE_BLACKLIST,
+} from '@/constants';
 import { useWeb3 } from '@/hooks/use-web3';
 import { getCoin, isSui, updateURL } from '@/utils';
 
@@ -38,7 +43,7 @@ const SwapInitManager: FC = () => {
   ): Promise<SwapToken | null> => {
     if (isSui(type)) {
       const decimals = 9;
-      const symbol = 'SUI';
+      const symbol = 'MOVE';
       const type = SUI_TYPE_ARG;
 
       return {
@@ -73,17 +78,18 @@ const SwapInitManager: FC = () => {
 
     form.setValue(field, token);
 
-    fetch(`/api/auth/v1/coin-price?symbol=${token.symbol}`)
-      .then((response) => response.json?.())
-      .then((data) =>
-        form.setValue(
-          `${field}.usdPrice`,
-          data[token.symbol][0].quote.USD.price
+    if (!PRICE_BLACKLIST.includes(token.symbol))
+      fetch(`/api/auth/v1/coin-price?symbol=${token.symbol}`)
+        .then((response) => response.json?.())
+        .then((data) =>
+          form.setValue(
+            `${field}.usdPrice`,
+            data[token.symbol][0].quote.USD.price
+          )
         )
-      )
-      .catch(console.log);
+        .catch(console.log);
 
-    return token.type;
+    return isSui(token.type) ? MOVE_TYPE_ARG : token.type;
   };
 
   useEffect(() => {
