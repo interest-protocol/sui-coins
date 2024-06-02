@@ -59,7 +59,7 @@ export const getAllPools = async ({
     .skip((page - 1) * PAGE_SIZE)
     .limit(PAGE_SIZE);
 
-  const totalCount = await ammPoolModel.countDocuments();
+  const totalCount = await ammPoolModel.countDocuments(findQuery);
   const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
   return [pools, totalPages];
