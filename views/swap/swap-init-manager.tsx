@@ -1,5 +1,5 @@
 import { useSuiClientContext } from '@mysten/dapp-kit';
-import { normalizeStructTag, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import { useRouter } from 'next/router';
 import { mergeAll } from 'ramda';
 import { FC, useEffect } from 'react';
@@ -39,7 +39,7 @@ const SwapInitManager: FC = () => {
     if (isSui(type)) {
       const decimals = 9;
       const symbol = 'MOVE';
-      const type = normalizeStructTag(SUI_TYPE_ARG);
+      const type = SUI_TYPE_ARG;
 
       return {
         type,
@@ -70,6 +70,8 @@ const SwapInitManager: FC = () => {
     const token = await getSwapToken(value);
 
     if (!token) return;
+
+    console.log({ field, token });
 
     form.setValue(field, token);
 
