@@ -71,8 +71,6 @@ const SwapInitManager: FC = () => {
 
     if (!token) return;
 
-    console.log({ field, token });
-
     form.setValue(field, token);
 
     fetch(`/api/auth/v1/coin-price?symbol=${token.symbol}`)
