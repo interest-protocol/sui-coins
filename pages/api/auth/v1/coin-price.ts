@@ -1,6 +1,5 @@
 import { NextApiHandler } from 'next';
 
-import { PRICE_BLACKLIST } from '@/constants';
 import { handleServerError } from '@/server/utils/amm-pools';
 
 const handler: NextApiHandler = async (req, res) => {
@@ -10,13 +9,6 @@ const handler: NextApiHandler = async (req, res) => {
       const symbol = req.query.symbol;
 
       if (!id && !symbol) return res.status(400).send('Invalid params');
-
-      if (
-        symbol &&
-        typeof symbol === 'string' &&
-        PRICE_BLACKLIST.includes(symbol)
-      )
-        throw new Error('Blacklisted token');
 
       const result = await fetch(
         `https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?${

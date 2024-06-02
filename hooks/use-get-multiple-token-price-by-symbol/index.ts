@@ -1,6 +1,8 @@
 import { pathOr } from 'ramda';
 import useSWR, { SWRConfiguration } from 'swr';
 
+import { PRICE_BLACKLIST } from '@/constants';
+
 const useGetMultipleTokenPriceBySymbol = (
   symbols: ReadonlyArray<string>,
   config: SWRConfiguration = {}
@@ -10,11 +12,15 @@ const useGetMultipleTokenPriceBySymbol = (
     async () => {
       if (!symbols.length) return {} as Record<string, number>;
 
-      const res = await fetch(`/api/auth/v1/coin-price?symbol=${symbols}`);
+      const validSymbols = symbols.filter(
+        (symbol) => !PRICE_BLACKLIST.includes(symbol)
+      );
+
+      const res = await fetch(`/api/auth/v1/coin-price?symbol=${validSymbols}`);
 
       const data = await res.json();
 
-      return symbols.reduce(
+      return validSymbols.reduce(
         (acc, symbol) => {
           const obj = data[symbol.toUpperCase()];
 

@@ -4,7 +4,7 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import TokenIcon from '@/components/token-icon';
-import { MOVE_TYPE_ARG } from '@/constants';
+import { MOVE_TYPE_ARG, PRICE_BLACKLIST } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
 import { CoinData } from '@/interface';
@@ -56,15 +56,17 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       usdPrice: currentToken?.usdPrice,
     });
 
-    fetch(`/api/auth/v1/coin-price?symbol=${isSui(type) ? 'MOVE' : symbol}`)
-      .then((response) => response.json())
-      .then((data) =>
-        setValue(
-          `${label}.usdPrice`,
-          data[isSui(type) ? 'MOVE' : symbol][0].quote.USD.price
+    if (!PRICE_BLACKLIST.includes(symbol))
+      fetch(`/api/auth/v1/coin-price?symbol=${isSui(type) ? 'SUI' : symbol}`)
+        .then((response) => response.json())
+        .then((data) =>
+          setValue(
+            `${label}.usdPrice`,
+            data[isSui(type) ? 'MOVE' : symbol][0].quote.USD.price
+          )
         )
-      )
-      .catch(() => null);
+        .catch(() => null);
+
     setValue(`${label === 'from' ? 'to' : 'from'}.value`, '');
 
     changeURL(type);
