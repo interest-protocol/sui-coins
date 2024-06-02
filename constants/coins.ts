@@ -105,3 +105,5 @@ export const COINS_MAP = {
     type: RUCO_TYPE,
   },
 } as Record<string, LocalCoinMetadata>;
+
+export const PRICE_BLACKLIST = ['RUCO'];
