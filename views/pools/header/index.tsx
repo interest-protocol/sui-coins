@@ -1,14 +1,18 @@
 import { Box, Tabs, Typography } from '@interest-protocol/ui-kit';
 import { FC, useCallback, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { v4 } from 'uuid';
 
 import useEventListener from '@/hooks/use-event-listener';
 
+import { FormFilterValue } from '../pool-card/pool-card.types';
+import { FilterTypeEnum, PoolForm } from '../pools.types';
 import CreatePoolButton from './create-pool-button';
 import FindPoolButton from './find-pool-button';
 import { HeaderProps } from './header.types';
 
 const Header: FC<HeaderProps> = ({ currentTab, setTab }) => {
+  const { setValue } = useFormContext<PoolForm>();
   const [showSearchField, setShowSearchField] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -37,7 +41,20 @@ const Header: FC<HeaderProps> = ({ currentTab, setTab }) => {
       >
         <Tabs
           type="square"
-          onChangeTab={setTab}
+          onChangeTab={(index: number) => {
+            setTab(index);
+            setValue(
+              'filterList',
+              index
+                ? []
+                : [
+                    {
+                      type: FilterTypeEnum.CATEGORY,
+                      value: FormFilterValue.official,
+                    },
+                  ]
+            );
+          }}
           defaultTabIndex={currentTab}
           items={['Pools', 'My Position'].map((tab) => (
             <Typography
