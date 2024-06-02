@@ -43,6 +43,8 @@ const Header: FC<HeaderProps> = ({ currentTab, setTab }) => {
           type="square"
           onChangeTab={(index: number) => {
             setTab(index);
+            setValue('isFindingPool', false);
+            setValue('tokenList', []);
             setValue(
               'filterList',
               index
@@ -54,7 +56,6 @@ const Header: FC<HeaderProps> = ({ currentTab, setTab }) => {
                     },
                   ]
             );
-            setValue('tokenList', []);
           }}
           defaultTabIndex={currentTab}
           items={['Pools', 'My Position'].map((tab) => (
