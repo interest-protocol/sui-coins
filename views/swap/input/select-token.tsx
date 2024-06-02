@@ -4,6 +4,7 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import TokenIcon from '@/components/token-icon';
+import { MOVE_TYPE_ARG } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
 import { CoinData } from '@/interface';
@@ -33,13 +34,9 @@ const SelectToken: FC<InputProps> = ({ label }) => {
 
   const changeURL = (type: string) => {
     const searchParams = new URLSearchParams(location.search);
-    searchParams.set(label, type);
+    searchParams.set(label, isSui(type) ? MOVE_TYPE_ARG : type);
 
-    updateURL(
-      `${pathname}?from=${searchParams.get('from')}&to=${searchParams.get(
-        'to'
-      )}`
-    );
+    updateURL(`${pathname}?${searchParams.toString()}`);
   };
 
   const oppositeType = useWatch({
@@ -59,12 +56,12 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       usdPrice: currentToken?.usdPrice,
     });
 
-    fetch(`/api/auth/v1/coin-price?symbol=${isSui(type) ? 'SUI' : symbol}`)
+    fetch(`/api/auth/v1/coin-price?symbol=${isSui(type) ? 'MOVE' : symbol}`)
       .then((response) => response.json())
       .then((data) =>
         setValue(
           `${label}.usdPrice`,
-          data[isSui(type) ? 'SUI' : symbol][0].quote.USD.price
+          data[isSui(type) ? 'MOVE' : symbol][0].quote.USD.price
         )
       )
       .catch(() => null);

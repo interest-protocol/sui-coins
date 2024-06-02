@@ -3,8 +3,9 @@ import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { MOVE_TYPE_ARG } from '@/constants';
 import { SwapSVG } from '@/svg';
-import { updateURL } from '@/utils';
+import { isSui, updateURL } from '@/utils';
 
 import { SwapForm } from './swap.types';
 
@@ -22,10 +23,22 @@ const SwapFlipToken: FC = () => {
     if (swapping) return;
     const tmpTo = to;
     const tmpFrom = from;
+
     setValue('to', { ...tmpFrom, value: '' });
     setValue('from', { ...tmpTo, value: '' });
 
-    updateURL(`${pathname}?from=${tmpTo.type}&to=${tmpFrom.type}`);
+    const searchParams = new URLSearchParams();
+
+    if (tmpTo.type)
+      searchParams.set('from', isSui(tmpTo.type) ? MOVE_TYPE_ARG : tmpTo.type);
+
+    if (tmpFrom.type)
+      searchParams.set(
+        'to',
+        isSui(tmpFrom.type) ? MOVE_TYPE_ARG : tmpFrom.type
+      );
+
+    updateURL(`${pathname}?${searchParams.toString()}`);
   };
 
   return (

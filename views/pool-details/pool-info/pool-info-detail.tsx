@@ -89,11 +89,11 @@ const PoolDetail = () => {
             {[
               {
                 symbol:
-                  coinXMetadata?.symbol === 'SUI'
+                  coinXMetadata?.symbol === 'MOVE'
                     ? 'MOVE'
                     : coinXMetadata?.symbol,
                 Icon: SVGMap[
-                  coinXMetadata?.symbol === 'SUI'
+                  coinXMetadata?.symbol === 'MOVE'
                     ? 'MOVE'
                     : coinXMetadata?.symbol
                 ],
@@ -101,7 +101,7 @@ const PoolDetail = () => {
                 decimals: pool.decimalsX,
                 price:
                   prices[
-                    (coinXMetadata?.symbol === 'SUI'
+                    (coinXMetadata?.symbol === 'MOVE'
                       ? 'MOVE'
                       : coinXMetadata.symbol
                     ).toLowerCase()
@@ -114,7 +114,7 @@ const PoolDetail = () => {
                 decimals: pool.decimalsY,
                 price:
                   prices[
-                    (coinYMetadata?.symbol === 'SUI'
+                    (coinYMetadata?.symbol === 'MOVE'
                       ? 'MOVE'
                       : coinYMetadata.symbol
                     ).toLowerCase()

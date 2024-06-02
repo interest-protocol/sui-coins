@@ -1,12 +1,12 @@
 import { useSuiClientContext } from '@mysten/dapp-kit';
-import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import { normalizeStructTag, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import { useRouter } from 'next/router';
 import { mergeAll } from 'ramda';
 import { FC, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
 
-import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
+import { LOCAL_STORAGE_VERSION, MOVE_TYPE_ARG, Network } from '@/constants';
 import { useWeb3 } from '@/hooks/use-web3';
 import { getCoin, isSui, updateURL } from '@/utils';
 
@@ -38,8 +38,8 @@ const SwapInitManager: FC = () => {
   ): Promise<SwapToken | null> => {
     if (isSui(type)) {
       const decimals = 9;
-      const symbol = 'SUI';
-      const type = SUI_TYPE_ARG;
+      const symbol = 'MOVE';
+      const type = normalizeStructTag(SUI_TYPE_ARG);
 
       return {
         type,
@@ -69,6 +69,8 @@ const SwapInitManager: FC = () => {
 
     const token = await getSwapToken(value);
 
+    console.log({ token });
+
     if (!token) return;
 
     form.setValue(field, token);
@@ -83,7 +85,7 @@ const SwapInitManager: FC = () => {
       )
       .catch(console.log);
 
-    return token.type;
+    return isSui(token.type) ? MOVE_TYPE_ARG : token.type;
   };
 
   useEffect(() => {
