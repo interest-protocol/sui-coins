@@ -6,7 +6,7 @@ import ErrorPage from '@/views/error';
 const NotFoundPage: NextPage = () => (
   <>
     <SEO pageTitle="Not Found" />
-    <ErrorPage />
+    <ErrorPage message="Page not found" />
   </>
 );
 
