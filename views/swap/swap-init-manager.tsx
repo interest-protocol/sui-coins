@@ -69,8 +69,6 @@ const SwapInitManager: FC = () => {
 
     const token = await getSwapToken(value);
 
-    console.log({ token });
-
     if (!token) return;
 
     form.setValue(field, token);
