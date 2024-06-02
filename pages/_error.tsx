@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 
-import { SEO } from '@/components';
+import { SEO, ThemeManager } from '@/components';
 import Error from '@/views/error';
 
 interface Props {
@@ -8,10 +8,10 @@ interface Props {
 }
 
 const ErrorPage: NextPage<Props> = ({ statusCode }) => (
-  <>
+  <ThemeManager>
     <SEO pageTitle="Error" />
     <Error message={`Occurred an error (${statusCode})`} />
-  </>
+  </ThemeManager>
 );
 
 ErrorPage.getInitialProps = ({ res, err }) => {

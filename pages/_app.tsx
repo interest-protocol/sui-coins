@@ -8,14 +8,12 @@ import Head from 'next/head';
 import NextProgress from 'next-progress';
 import { ReactNode, StrictMode } from 'react';
 
-import ErrorBoundary from '@/components/error-boundary';
-
 const Provider = dynamic(() => import('@/components/provider'), {
   ssr: false,
 });
 
 const MyApp = ({ Component, pageProps }: AppProps<NextPage>): ReactNode => (
-  <ErrorBoundary>
+  <>
     <Head>
       <title>Movement</title>
       <meta
@@ -30,7 +28,7 @@ const MyApp = ({ Component, pageProps }: AppProps<NextPage>): ReactNode => (
       </StrictMode>
     </Provider>
     <VercelAnalytics />
-  </ErrorBoundary>
+  </>
 );
 
 export default MyApp;
