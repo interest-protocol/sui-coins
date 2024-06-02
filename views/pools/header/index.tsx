@@ -54,6 +54,7 @@ const Header: FC<HeaderProps> = ({ currentTab, setTab }) => {
                     },
                   ]
             );
+            setValue('tokenList', []);
           }}
           defaultTabIndex={currentTab}
           items={['Pools', 'My Position'].map((tab) => (
