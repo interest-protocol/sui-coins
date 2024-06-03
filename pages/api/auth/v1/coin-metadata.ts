@@ -30,10 +30,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
         return res.status(200).json(data);
       }
-
-      const data = await coinMetadata.find({});
-
-      return res.status(200).json(data);
     }
 
     res.status(405).send('Method not allowed!');

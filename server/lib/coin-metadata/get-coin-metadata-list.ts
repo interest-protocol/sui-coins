@@ -16,9 +16,19 @@ const getCoinMetadataList = async (
 
   const uniqueTypeList = [...new Set(typeList)];
 
-  const docs: Array<CoinMetadataModel> = await Model.find({
-    type: uniqueTypeList,
-  });
+  const batches = chunk(uniqueTypeList, 50);
+
+  const promises = [];
+
+  for (const elem of batches) {
+    promises.push(
+      Model.find({
+        type: uniqueTypeList,
+      })
+    );
+  }
+
+  const docs: Array<CoinMetadataModel> = await Promise.all(promises);
 
   const docsMap = docs.reduce(
     (acc, curr) => ({ ...acc, [curr.type]: curr }),
