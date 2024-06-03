@@ -1,10 +1,9 @@
 import { InterestPool } from '@interest-protocol/clamm-sdk';
-import { Box, ProgressIndicator, Typography } from '@interest-protocol/ui-kit';
+import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
 import { inc } from 'ramda';
 import { FC, useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import InfiniteScroll from 'react-infinite-scroll-component';
 import { v4 } from 'uuid';
 
 import { Network, PAGE_SIZE } from '@/constants';
@@ -109,7 +108,6 @@ const Pools: FC = () => {
       nextPage={nextPage}
       totalItems={safeData?.totalPages ?? 0}
       arePoolsLoading={arePoolsLoading || !data}
-      hasMore={(safeData?.totalPages ?? 0) - page * PAGE_SIZE > 0}
       done={!!data?.done}
     />
   );
@@ -196,7 +194,6 @@ const Position: FC = () => {
       nextPage={nextPage}
       arePoolsLoading={arePoolsLoading || !pools}
       totalItems={data?.totalPages ?? 0}
-      hasMore={(data?.totalPages ?? 0) - page * PAGE_SIZE > 0}
       done={!!data?.done}
     />
   );
@@ -204,13 +201,19 @@ const Position: FC = () => {
 
 const PoolCardListContent: FC<PoolCardListContentProps> = ({
   pools,
-  hasMore,
   nextPage,
   totalItems,
   arePoolsLoading,
   done,
 }) => {
   const { network } = useSuiClientContext();
+  const hasPoolsList = !!(pools && pools.length);
+
+  const hasMore = !!(
+    totalItems &&
+    hasPoolsList &&
+    totalItems > Math.ceil(pools.length / PAGE_SIZE)
+  );
 
   const symbols = getAllSymbols(pools || [], network as Network);
 
@@ -257,16 +260,7 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
     );
 
   return (
-    <InfiniteScroll
-      hasMore={!!hasMore}
-      dataLength={totalItems ?? 0}
-      next={() => nextPage?.()}
-      loader={
-        <Box pt="3xl" width="100%" display="flex" justifyContent="center">
-          <ProgressIndicator variant="loading" />
-        </Box>
-      }
-    >
+    <>
       <Box
         gap="xs"
         borderRadius="xs"
@@ -288,8 +282,16 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
             coinMetadata={coinMetadataMap || {}}
           />
         ))}
+        {arePoolsLoading && <PoolCardSkeleton />}
       </Box>
-    </InfiniteScroll>
+      {hasMore && (
+        <Box mx="m" display="flex" justifyContent="center">
+          <Button variant="filled" onClick={nextPage}>
+            Load more
+          </Button>
+        </Box>
+      )}
+    </>
   );
 };
 
