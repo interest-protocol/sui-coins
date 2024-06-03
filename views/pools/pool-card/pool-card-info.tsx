@@ -5,6 +5,7 @@ import Skeleton from 'react-loading-skeleton';
 import { v4 } from 'uuid';
 
 import { TokenIcon } from '@/components';
+import { COINS } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { getSymbolByType, isSui } from '@/utils';
 
@@ -37,9 +38,15 @@ const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({
           <TokenIcon
             withBg
             key={v4()}
-            type={type}
             network={network}
-            symbol={isSui(type) ? 'MOVE' : getSymbolByType(type)}
+            symbol={
+              isSui(type)
+                ? 'MOVE'
+                : coinMetadata[type]?.symbol ?? getSymbolByType(type)
+            }
+            {...(COINS.some((coin) => coin.type === type)
+              ? { type }
+              : { url: coinMetadata[type]?.iconUrl ?? '' })}
           />
         ))}
       </Box>
@@ -60,7 +67,7 @@ const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({
             pathOr('', [type, 'symbol'], coinMetadata).replace(
               'SUI',
               'MOVE'
-            ) || <Skeleton height="%" width="4rem" />,
+            ) || <Skeleton width="4rem" />,
           ])}
         </Typography>
       </Box>

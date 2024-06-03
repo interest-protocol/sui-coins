@@ -35,12 +35,68 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
       if (TokenIcon || !isTypeBased(props)) return null;
 
       const data = await fetch(
-        `/api/auth/v1/coin-metadata?network=${network}&type=${type.toLowerCase()}`
+        `/api/auth/v1/coin-metadata?network=${network}&type=${type}`
       ).then((res) => res.json());
 
       return data.iconUrl;
     }
   );
+
+  if (TokenIcon && typeof TokenIcon === 'string')
+    return (
+      <Box
+        display="flex"
+        position="relative"
+        alignItems="center"
+        justifyContent="center"
+        width={`calc(${size} * 1.66)`}
+        height={`calc(${size} * 1.66)`}
+        borderRadius={rounded ? 'full' : 'xs'}
+        {...(withBg && { bg: 'onSurface', color: 'surface' })}
+      >
+        <Box
+          overflow="hidden"
+          width={`calc(${size} * 1.66)`}
+          height={`calc(${size} * 1.66)`}
+          borderRadius={rounded ? 'full' : 'xs'}
+        >
+          {isLoading && (
+            <Box position="absolute" top="-0.5rem" left="0.9rem">
+              <ProgressIndicator size={16} variant="loading" />
+            </Box>
+          )}
+          {TokenIcon && <img src={TokenIcon} width="100%" alt={symbol} />}
+        </Box>
+      </Box>
+    );
+
+  if (TokenIcon)
+    return (
+      <Box
+        display="flex"
+        position="relative"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Box
+          display="flex"
+          overflow="hidden"
+          position="relative"
+          alignItems="center"
+          justifyContent="center"
+          width={`calc(${size} * 1.66)`}
+          height={`calc(${size} * 1.66)`}
+          borderRadius={rounded ? 'full' : 'xs'}
+          {...(withBg && { bg: 'onSurface', color: 'surface' })}
+        >
+          <TokenIcon
+            width="100%"
+            maxWidth={size ?? '1.5rem'}
+            maxHeight={size ?? '1.5rem'}
+          />
+        </Box>
+      </Box>
+    );
 
   if (!isTypeBased(props))
     return (
@@ -89,30 +145,7 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
       </Box>
     );
 
-  if (!TokenIcon && !iconSrc && !isLoading)
-    return (
-      <Box
-        bg="black"
-        color="white"
-        display="flex"
-        overflow="hidden"
-        position="relative"
-        alignItems="center"
-        justifyContent="center"
-        width={`calc(${size} * 1.66)`}
-        height={`calc(${size} * 1.66)`}
-        borderRadius={rounded || !withBg ? 'full' : 'xs'}
-        {...(withBg && { bg: 'onSurface', color: 'surface' })}
-      >
-        <DefaultTokenSVG
-          width="100%"
-          maxWidth={size ?? '1.5rem'}
-          maxHeight={size ?? '1.5rem'}
-        />
-      </Box>
-    );
-
-  if ((!TokenIcon && (isLoading || iconSrc)) || typeof TokenIcon === 'string')
+  if (isLoading || iconSrc)
     return (
       <Box
         display="flex"
@@ -144,28 +177,23 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
 
   return (
     <Box
+      bg="black"
+      color="white"
       display="flex"
+      overflow="hidden"
       position="relative"
       alignItems="center"
       justifyContent="center"
+      width={`calc(${size} * 1.66)`}
+      height={`calc(${size} * 1.66)`}
+      borderRadius={rounded || !withBg ? 'full' : 'xs'}
+      {...(withBg && { bg: 'onSurface', color: 'surface' })}
     >
-      <Box
-        display="flex"
-        overflow="hidden"
-        position="relative"
-        alignItems="center"
-        justifyContent="center"
-        width={`calc(${size} * 1.66)`}
-        height={`calc(${size} * 1.66)`}
-        borderRadius={rounded ? 'full' : 'xs'}
-        {...(withBg && { bg: 'onSurface', color: 'surface' })}
-      >
-        <TokenIcon
-          width="100%"
-          maxWidth={size ?? '1.5rem'}
-          maxHeight={size ?? '1.5rem'}
-        />
-      </Box>
+      <DefaultTokenSVG
+        width="100%"
+        maxWidth={size ?? '1.5rem'}
+        maxHeight={size ?? '1.5rem'}
+      />
     </Box>
   );
 };
