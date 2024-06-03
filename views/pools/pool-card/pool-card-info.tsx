@@ -1,6 +1,7 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import { pathOr } from 'ramda';
 import { FC } from 'react';
+import Skeleton from 'react-loading-skeleton';
 import { v4 } from 'uuid';
 
 import { TokenIcon } from '@/components';
@@ -44,18 +45,23 @@ const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({
       </Box>
       <Box display="flex" flexDirection="column" alignItems="center">
         <Typography
+          gap="xs"
           size="small"
           variant="body"
+          display="flex"
           fontSize="1rem"
           fontWeight="700"
           color="onSurface"
+          textAlign="center"
           lineHeight="1.7rem"
         >
-          {coinTypes.reduce(
-            (acc, type) =>
-              `${acc ? `${acc} • ` : ''}${pathOr('', [type, 'symbol'], coinMetadata).replace('SUI', 'MOVE')}`,
-            ''
-          )}
+          {coinTypes.flatMap((type, index) => [
+            index ? <>{' • '}</> : '',
+            pathOr('', [type, 'symbol'], coinMetadata).replace(
+              'SUI',
+              'MOVE'
+            ) || <Skeleton height="%" width="4rem" />,
+          ])}
         </Typography>
       </Box>
     </Box>

@@ -1,10 +1,9 @@
-import { Box, ProgressIndicator, Typography } from '@interest-protocol/ui-kit';
+import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
 import { FilterQuery } from 'mongoose';
 import { inc, values } from 'ramda';
 import { FC, useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import InfiniteScroll from 'react-infinite-scroll-component';
 import { useIsMounted } from 'usehooks-ts';
 import { v4 } from 'uuid';
 
@@ -249,11 +248,18 @@ const Position: FC = () => {
 const PoolCardListContent: FC<PoolCardListContentProps> = ({
   done,
   pools,
-  hasMore,
   nextPage,
   totalItems,
   arePoolsLoading,
 }) => {
+  const hasPoolsList = !!(pools && pools.length);
+
+  const hasMore = !!(
+    totalItems &&
+    hasPoolsList &&
+    totalItems > Math.ceil(pools.length / PAGE_SIZE)
+  );
+
   const types = [
     ...new Set(pools?.flatMap((pool) => [pool.coinX, pool.coinY])),
   ];
@@ -267,6 +273,7 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
     useGetCoinMetadata(types);
 
   if (
+    !hasPoolsList &&
     (arePoolsLoading ||
       !pricesRecord ||
       !coinMetadataMap ||
@@ -303,16 +310,7 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
     );
 
   return (
-    <InfiniteScroll
-      hasMore={!!hasMore}
-      dataLength={totalItems ?? 0}
-      next={() => nextPage?.()}
-      loader={
-        <Box pt="3xl" width="100%" display="flex" justifyContent="center">
-          <ProgressIndicator variant="loading" />
-        </Box>
-      }
-    >
+    <>
       <Box
         gap="xs"
         borderRadius="xs"
@@ -334,8 +332,16 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
             coinMetadata={coinMetadataMap || {}}
           />
         ))}
+        {arePoolsLoading && <PoolCardSkeleton />}
       </Box>
-    </InfiniteScroll>
+      {hasMore && (
+        <Box mx="m" display="flex" justifyContent="center">
+          <Button variant="filled" onClick={nextPage}>
+            Load more
+          </Button>
+        </Box>
+      )}
+    </>
   );
 };
 

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import useSWR from 'swr';
 
 import { useNetwork } from '@/context/network';
@@ -6,31 +7,38 @@ import { isSui, makeSWRKey } from '@/utils';
 
 export const useGetCoinMetadata = (coinsType: ReadonlyArray<string>) => {
   const network = useNetwork();
+  const [metadata, setMetadata] =
+    useState<Record<string, CoinMetadataWithType>>();
 
-  return useSWR<Record<string, CoinMetadataWithType>>(
+  const { isLoading } = useSWR(
     makeSWRKey([], useGetCoinMetadata.name + coinsType + network),
     async () => {
       if (!coinsType.length) return {};
 
-      return fetch(
+      const coinsToFetch = coinsType.filter((type) => !metadata?.[type]);
+
+      await fetch(
         encodeURI(
-          `/api/auth/v1/coin-metadata?network=${network}&type_list=${coinsType.join(
+          `/api/auth/v1/coin-metadata?network=${network}&type_list=${coinsToFetch.join(
             ','
           )}`
         )
       )
         .then((res) => res.json())
         .then((data: ReadonlyArray<CoinMetadataWithType>) =>
-          data.reduce(
-            (acc, { symbol, ...item }) => ({
-              ...acc,
-              [item.type]: {
-                ...item,
-                symbol: isSui(item.type) ? 'MOVE' : symbol,
-              },
-            }),
-            {}
-          )
+          setMetadata((oldData) => ({
+            ...oldData,
+            ...data.reduce(
+              (acc, { symbol, ...item }) => ({
+                ...acc,
+                [item.type]: {
+                  ...item,
+                  symbol: isSui(item.type) ? 'MOVE' : symbol,
+                },
+              }),
+              {}
+            ),
+          }))
         );
     },
     {
@@ -39,4 +47,6 @@ export const useGetCoinMetadata = (coinsType: ReadonlyArray<string>) => {
       refreshWhenHidden: false,
     }
   );
+
+  return { isLoading, data: metadata };
 };
