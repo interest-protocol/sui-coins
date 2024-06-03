@@ -84,7 +84,7 @@ const SwapInitManager: FC = () => {
         .then((data) =>
           form.setValue(
             `${field}.usdPrice`,
-            data[token.symbol][0].quote.USD.price
+            data[token.symbol][0]?.quote?.USD?.price ?? null
           )
         )
         .catch(console.log);

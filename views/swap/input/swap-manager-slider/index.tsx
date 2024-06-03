@@ -43,8 +43,10 @@ const SwapFormFieldSlider: FC = () => {
           setValue('maxValue', value === 100);
           setValue(
             'from.value',
-            `${(Number(value / 100) * balance).toPrecision(6)}`
+            `${Number((Number(value / 100) * balance).toFixed(6)).toPrecision()}`
           );
+
+          if (getValues('focus')) setValue('focus', false);
         }}
       />
     </Box>
