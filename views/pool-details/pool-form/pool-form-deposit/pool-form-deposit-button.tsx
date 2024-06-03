@@ -33,6 +33,8 @@ const PoolFormDepositButton: FC = () => {
 
   const tokenList = useWatch({ control, name: 'tokenList' });
 
+  const ableToClick = tokenList.some(({ value }) => Number(value));
+
   const handleDeposit = async () => {
     try {
       if (!account) return;
@@ -202,6 +204,7 @@ const PoolFormDepositButton: FC = () => {
 
   const addDeposit = () =>
     !error &&
+    ableToClick &&
     setModal(
       <Motion
         animate={{ scale: 1 }}
@@ -224,9 +227,9 @@ const PoolFormDepositButton: FC = () => {
       mt="xl"
       mx="auto"
       variant="filled"
-      disabled={!!error}
       width="max-content"
       onClick={addDeposit}
+      disabled={!!error || !ableToClick}
     >
       Deposit
     </Button>

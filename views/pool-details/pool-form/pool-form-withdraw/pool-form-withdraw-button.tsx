@@ -29,6 +29,9 @@ const PoolFormWithdrawButton: FC = () => {
   const { getValues, control, setValue } = useFormContext<PoolForm>();
 
   const error = useWatch({ control, name: 'error' });
+  const lpCoin = useWatch({ control, name: 'lpCoin' });
+
+  const ableToClick = Boolean(Number(lpCoin));
 
   const handleWithdraw = async () => {
     try {
@@ -115,9 +118,9 @@ const PoolFormWithdrawButton: FC = () => {
       mt="xl"
       mx="auto"
       variant="filled"
-      disabled={!!error}
       width="max-content"
       onClick={removeLiquidity}
+      disabled={!!error || !ableToClick}
     >
       Withdraw
     </Button>
