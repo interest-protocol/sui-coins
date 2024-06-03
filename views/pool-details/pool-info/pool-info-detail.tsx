@@ -12,7 +12,7 @@ import Accordion from './components/accordion';
 import { PoolDetailAccordionItemStandardProps } from './components/accordion/accordion.types';
 import ItemStandard from './components/accordion/item-standard';
 import ItemToken from './components/accordion/item-token';
-import { POOL_INFORMATION, POOL_STATISTICS, SVGMap } from './pool-info.data';
+import { POOL_INFORMATION, POOL_STATISTICS } from './pool-info.data';
 import PoolInfoLoading from './pool-info-loading';
 
 const PoolDetail = () => {
@@ -88,15 +88,11 @@ const PoolDetail = () => {
           <>
             {[
               {
+                type: coinXMetadata?.type,
                 symbol:
                   coinXMetadata?.symbol === 'MOVE'
                     ? 'MOVE'
                     : coinXMetadata?.symbol,
-                Icon: SVGMap[
-                  coinXMetadata?.symbol === 'MOVE'
-                    ? 'MOVE'
-                    : coinXMetadata?.symbol
-                ],
                 balance: pool.balanceX,
                 decimals: pool.decimalsX,
                 price:
@@ -108,8 +104,8 @@ const PoolDetail = () => {
                   ] ?? 0,
               },
               {
+                type: coinYMetadata?.type,
                 symbol: coinYMetadata?.symbol,
-                Icon: SVGMap[coinYMetadata?.symbol],
                 balance: pool.balanceY,
                 decimals: pool.decimalsY,
                 price:
@@ -120,10 +116,11 @@ const PoolDetail = () => {
                     ).toLowerCase()
                   ] ?? 0,
               },
-            ].map(({ symbol, Icon, balance, decimals, price }) => (
+            ].map(({ type, symbol, balance, decimals, price }) => (
               <ItemToken
                 key={v4()}
-                Icon={Icon}
+                type={type}
+                symbol={symbol}
                 percentage={
                   (+(
                     (FixedPointMath.toNumber(balance.times(price), decimals) /
