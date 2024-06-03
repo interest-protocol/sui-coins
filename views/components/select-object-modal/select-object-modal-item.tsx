@@ -82,9 +82,11 @@ const ObjectModalItem: FC<ObjectModalItemProps> = ({
       <Box display="flex" alignItems="center">
         <TokenIcon
           withBg
+          url={url}
           size="1.6rem"
           symbol={symbol}
-          {...(url ? { url } : { type: coinType, network: network as Network })}
+          type={coinType}
+          network={network as Network}
         />
         <Box
           ml="1rem"
