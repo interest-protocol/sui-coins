@@ -23,7 +23,7 @@ const getCoinMetadataList = async (
   for (const elem of batches) {
     promises.push(
       Model.find({
-        type: uniqueTypeList,
+        type: elem,
       })
     );
   }

@@ -4,7 +4,6 @@ import { Network } from '@/constants';
 import dbConnect from '@/server';
 import getCoinMetadata from '@/server/lib/coin-metadata/get-coin-metadata';
 import getCoinMetadataList from '@/server/lib/coin-metadata/get-coin-metadata-list';
-import coinMetadata from '@/server/model/coin-metadata';
 import { isInvalidNetwork } from '@/utils';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
