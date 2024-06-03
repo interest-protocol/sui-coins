@@ -10,7 +10,7 @@ export const useGetCoinMetadata = (coinsType: ReadonlyArray<string>) => {
   const [metadata, setMetadata] =
     useState<Record<string, CoinMetadataWithType>>();
 
-  const { isLoading } = useSWR(
+  const swr = useSWR(
     makeSWRKey([], useGetCoinMetadata.name + coinsType + network),
     async () => {
       if (!coinsType.length) return {};
@@ -48,5 +48,5 @@ export const useGetCoinMetadata = (coinsType: ReadonlyArray<string>) => {
     }
   );
 
-  return { isLoading, data: metadata };
+  return { ...swr, data: metadata };
 };
