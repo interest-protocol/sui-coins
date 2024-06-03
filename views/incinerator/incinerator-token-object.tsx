@@ -30,9 +30,11 @@ const IncineratorTokenObject: FC<IncineratorTokenObjectProps> = ({
     <Box display="flex" gap="s" alignItems="center">
       <TokenIcon
         withBg
+        url={url}
         size="1.6rem"
+        type={coinType}
         symbol={symbol}
-        {...(url ? { url } : { type: coinType, network: network as Network })}
+        network={network as Network}
       />
       <Box>
         <TooltipWrapper

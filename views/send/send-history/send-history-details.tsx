@@ -108,10 +108,11 @@ const SendHistoryDetailsModal: FC<{
               <Box gap="s" display="flex" alignItems="center">
                 <TokenIcon
                   withBg
+                  url={url}
+                  type={type}
                   loaderSize={12}
                   symbol={symbol}
                   network={network as Network}
-                  {...(url ? { url } : { network: network as Network, type })}
                 />
                 <Typography variant="label" size="large">
                   {displayName || symbol || formatAddress(type)}

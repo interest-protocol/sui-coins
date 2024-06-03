@@ -68,11 +68,12 @@ const SendAssetDetails: FC<SendAssetDetailsProps> = ({ assets, network }) => {
             <Box gap="s" display="flex" alignItems="center">
               <TokenIcon
                 withBg
+                url={url}
                 size="1rem"
+                type={type}
                 loaderSize={12}
                 symbol={symbol}
                 network={network}
-                {...(url ? { url } : { network, type })}
               />
               <Typography variant="label" size="large">
                 {displayName || symbol || formatAddress(type)}
