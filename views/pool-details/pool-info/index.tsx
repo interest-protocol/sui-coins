@@ -3,7 +3,6 @@ import { FC, useState } from 'react';
 
 import { PoolDetailsTabOption } from '../pool-details.types';
 import DetailTabs from './components/detail-tabs';
-import PoolInfoAdvanced from './pool-info-advanced';
 import PoolInfoDetail from './pool-info-detail';
 
 const PoolInfo: FC = () => {
@@ -26,11 +25,7 @@ const PoolInfo: FC = () => {
           pool?.poolType === 'amm' ? [] : ['Advance Details']
         )}
       />
-      {poolDetailsView === PoolDetailsTabOption.Detail ? (
-        <PoolInfoDetail />
-      ) : (
-        pool?.poolType !== 'amm' && <PoolInfoAdvanced />
-      )}
+      {poolDetailsView === PoolDetailsTabOption.Detail && <PoolInfoDetail />}
     </Box>
   );
 };

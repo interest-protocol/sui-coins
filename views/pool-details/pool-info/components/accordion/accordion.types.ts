@@ -1,6 +1,4 @@
-import { FC, ReactNode } from 'react';
-
-import { SVGProps } from '@/components/svg/svg.types';
+import type { ReactNode } from 'react';
 
 export interface PoolDetailAccordionProps {
   title: string;
@@ -21,9 +19,10 @@ export interface PoolDetailAccordionItemStandardProps
 }
 
 export interface PoolDetailAccordionItemCoinProps {
+  type: string;
   value: string;
+  symbol: string;
   coinName: string;
-  Icon?: FC<SVGProps>;
   conversion?: string;
   percentage?: string;
 }

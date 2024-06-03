@@ -1,9 +1,11 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import { pathOr } from 'ramda';
 import { FC } from 'react';
+import Skeleton from 'react-loading-skeleton';
 import { v4 } from 'uuid';
 
 import { TokenIcon } from '@/components';
+import { COINS } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { getSymbolByType, isSui } from '@/utils';
 
@@ -36,26 +38,37 @@ const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({
           <TokenIcon
             withBg
             key={v4()}
-            type={type}
             network={network}
-            symbol={isSui(type) ? 'MOVE' : getSymbolByType(type)}
+            symbol={
+              isSui(type)
+                ? 'MOVE'
+                : coinMetadata[type]?.symbol ?? getSymbolByType(type)
+            }
+            {...(COINS.some((coin) => coin.type === type)
+              ? { type }
+              : { url: coinMetadata[type]?.iconUrl ?? '' })}
           />
         ))}
       </Box>
       <Box display="flex" flexDirection="column" alignItems="center">
         <Typography
+          gap="xs"
           size="small"
           variant="body"
+          display="flex"
           fontSize="1rem"
           fontWeight="700"
           color="onSurface"
+          textAlign="center"
           lineHeight="1.7rem"
         >
-          {coinTypes.reduce(
-            (acc, type) =>
-              `${acc ? `${acc} • ` : ''}${pathOr('', [type, 'symbol'], coinMetadata).replace('SUI', 'MOVE')}`,
-            ''
-          )}
+          {coinTypes.flatMap((type, index) => [
+            index ? <>{' • '}</> : '',
+            pathOr('', [type, 'symbol'], coinMetadata).replace(
+              'SUI',
+              'MOVE'
+            ) || <Skeleton width="4rem" />,
+          ])}
         </Typography>
       </Box>
     </Box>
