@@ -1,6 +1,6 @@
 import { Chain } from '@interest-protocol/sui-tokens';
 import { Box, ProgressIndicator } from '@interest-protocol/ui-kit';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import useSWR from 'swr';
 
 import { Network } from '@/constants';
@@ -49,6 +49,10 @@ const TokenIcon: FC<TokenIconProps> = ({
   const isMainnet = network === Network.MAINNET;
   const TokenIcon = TOKEN_ICONS[network]?.[isMainnet ? type : symbol] ?? null;
 
+  const [loading, setLoading] = useState(true);
+
+  const stopLoading = () => setLoading(false);
+
   const { data: iconSrc, isLoading } = useSWR(
     `${network}-${type}-${url}`,
     async () => {
@@ -86,14 +90,12 @@ const TokenIcon: FC<TokenIconProps> = ({
           height={`calc(${size} * 1.66)`}
           borderRadius={rounded ? 'full' : 'xs'}
         >
-          {isLoading && (
+          {loading && (
             <Box position="absolute" top="-0.5rem" left="0.9rem">
               <ProgressIndicator size={16} variant="loading" />
             </Box>
           )}
-          {(iconSrc || TokenIcon) && (
-            <img src={TokenIcon} width="100%" alt={symbol} />
-          )}
+          <img width="100%" alt={symbol} src={TokenIcon} onLoad={stopLoading} />
         </Box>
         {ChainIcon && (
           <Box position="absolute" bottom="-0.3rem" right="-0.5rem">
@@ -155,16 +157,22 @@ const TokenIcon: FC<TokenIconProps> = ({
           height={`calc(${size} * 1.66)`}
           borderRadius={rounded ? 'full' : 'xs'}
         >
-          <Box
-            display="flex"
-            position="absolute"
-            alignItems="center"
-            justifyContent="center"
-            width={`calc(${size} * 1.66)`}
-            height={`calc(${size} * 1.66)`}
-          >
-            <ProgressIndicator size={loaderSize} variant="loading" />
-          </Box>
+          {loading && (
+            <Box
+              display="flex"
+              position="absolute"
+              alignItems="center"
+              justifyContent="center"
+              width={`calc(${size} * 1.66)`}
+              height={`calc(${size} * 1.66)`}
+            >
+              <ProgressIndicator
+                size={loaderSize}
+                variant="loading"
+                onLoad={stopLoading}
+              />
+            </Box>
+          )}
           <img
             src={url}
             alt={symbol}
@@ -192,13 +200,13 @@ const TokenIcon: FC<TokenIconProps> = ({
           height={`calc(${size} * 1.66)`}
           borderRadius={rounded ? 'full' : 'xs'}
         >
-          {isLoading && (
+          {(isLoading || loading) && (
             <Box position="absolute" top="-0.5rem" left="0.9rem">
               <ProgressIndicator size={16} variant="loading" />
             </Box>
           )}
-          {(iconSrc || TokenIcon) && (
-            <img src={TokenIcon ?? iconSrc} width="100%" alt={symbol} />
+          {iconSrc && (
+            <img src={iconSrc} width="100%" alt={symbol} onLoad={stopLoading} />
           )}
         </Box>
         {ChainIcon && (
