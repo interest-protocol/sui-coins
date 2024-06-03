@@ -25,7 +25,6 @@ export interface PoolCardListProps {
 }
 
 export interface PoolCardListContentProps {
-  hasMore?: boolean;
   totalItems?: number;
   nextPage?: () => void;
   arePoolsLoading: boolean;
