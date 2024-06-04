@@ -1,5 +1,5 @@
 import { Box, ProgressIndicator } from '@interest-protocol/ui-kit';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import useSWR from 'swr';
 
 import { DefaultTokenSVG } from '@/svg';
@@ -26,6 +26,10 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
     size: '1.5rem',
     ...props,
   } as TypeBasedIcon;
+
+  const [loading, setLoading] = useState(true);
+
+  const stopLoad = () => setLoading(false);
 
   const TokenIcon = TOKEN_ICONS[network]?.[symbol] ?? null;
 
@@ -60,12 +64,12 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
           height={`calc(${size} * 1.66)`}
           borderRadius={rounded ? 'full' : 'xs'}
         >
-          {isLoading && (
+          {loading && (
             <Box position="absolute" top="-0.5rem" left="0.9rem">
               <ProgressIndicator size={16} variant="loading" />
             </Box>
           )}
-          {TokenIcon && <img src={TokenIcon} width="100%" alt={symbol} />}
+          <img src={TokenIcon} width="100%" alt={symbol} onLoad={stopLoad} />
         </Box>
       </Box>
     );
@@ -111,13 +115,13 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
         borderRadius={rounded ? 'full' : 'xs'}
         {...(!props.url && { bg: 'onSurface', color: 'surface' })}
       >
-        {props.url ? (
-          <Box
-            overflow="hidden"
-            width={`calc(${size} * 1.66)`}
-            height={`calc(${size} * 1.66)`}
-            borderRadius={rounded ? 'full' : 'xs'}
-          >
+        <Box
+          overflow="hidden"
+          width={`calc(${size} * 1.66)`}
+          height={`calc(${size} * 1.66)`}
+          borderRadius={rounded ? 'full' : 'xs'}
+        >
+          {loading && (
             <Box
               display="flex"
               position="absolute"
@@ -128,20 +132,15 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
             >
               <ProgressIndicator size={loaderSize} variant="loading" />
             </Box>
-            <img
-              alt={symbol}
-              width="100%"
-              src={props.url}
-              style={{ position: 'relative' }}
-            />
-          </Box>
-        ) : (
-          <DefaultTokenSVG
+          )}
+          <img
+            alt={symbol}
             width="100%"
-            maxWidth={size ?? '1.5rem'}
-            maxHeight={size ?? '1.5rem'}
+            src={props.url}
+            onLoad={stopLoad}
+            style={{ position: 'relative' }}
           />
-        )}
+        </Box>
       </Box>
     );
 
@@ -168,9 +167,7 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
               <ProgressIndicator size={16} variant="loading" />
             </Box>
           )}
-          {(iconSrc || TokenIcon) && (
-            <img src={TokenIcon ?? iconSrc} width="100%" alt={symbol} />
-          )}
+          {iconSrc && <img src={iconSrc} width="100%" alt={symbol} />}
         </Box>
       </Box>
     );
