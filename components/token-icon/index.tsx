@@ -28,8 +28,10 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
   } as TypeBasedIcon;
 
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
 
   const stopLoad = () => setLoading(false);
+  const errorOnLoad = () => setLoadError(true);
 
   const TokenIcon = TOKEN_ICONS[network]?.[symbol] ?? null;
 
@@ -45,6 +47,29 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
       return data.iconUrl;
     }
   );
+
+  if (loadError)
+    return (
+      <Box
+        bg="black"
+        color="white"
+        display="flex"
+        overflow="hidden"
+        position="relative"
+        alignItems="center"
+        justifyContent="center"
+        width={`calc(${size} * 1.66)`}
+        height={`calc(${size} * 1.66)`}
+        borderRadius={rounded || !withBg ? 'full' : 'xs'}
+        {...(withBg && { bg: 'onSurface', color: 'surface' })}
+      >
+        <DefaultTokenSVG
+          width="100%"
+          maxWidth={size ?? '1.5rem'}
+          maxHeight={size ?? '1.5rem'}
+        />
+      </Box>
+    );
 
   if (TokenIcon && typeof TokenIcon === 'string')
     return (
@@ -66,10 +91,16 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
         >
           {loading && (
             <Box position="absolute" top="-0.5rem" left="0.9rem">
-              <ProgressIndicator size={16} variant="loading" />
+              <ProgressIndicator size={loaderSize} variant="loading" />
             </Box>
           )}
-          <img src={TokenIcon} width="100%" alt={symbol} onLoad={stopLoad} />
+          <img
+            width="100%"
+            alt={symbol}
+            src={TokenIcon}
+            onLoad={stopLoad}
+            onError={errorOnLoad}
+          />
         </Box>
       </Box>
     );
@@ -106,14 +137,12 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
     return (
       <Box
         display="flex"
-        overflow="hidden"
         position="relative"
         alignItems="center"
         justifyContent="center"
         width={`calc(${size} * 1.66)`}
         height={`calc(${size} * 1.66)`}
         borderRadius={rounded ? 'full' : 'xs'}
-        {...(!props.url && { bg: 'onSurface', color: 'surface' })}
       >
         <Box
           overflow="hidden"
@@ -122,23 +151,16 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
           borderRadius={rounded ? 'full' : 'xs'}
         >
           {loading && (
-            <Box
-              display="flex"
-              position="absolute"
-              alignItems="center"
-              justifyContent="center"
-              width={`calc(${size} * 1.66)`}
-              height={`calc(${size} * 1.66)`}
-            >
+            <Box position="absolute" top="-0.5rem" left="0.9rem">
               <ProgressIndicator size={loaderSize} variant="loading" />
             </Box>
           )}
           <img
-            alt={symbol}
             width="100%"
+            alt={symbol}
             src={props.url}
             onLoad={stopLoad}
-            style={{ position: 'relative' }}
+            onError={errorOnLoad}
           />
         </Box>
       </Box>
@@ -164,10 +186,18 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
         >
           {isLoading && (
             <Box position="absolute" top="-0.5rem" left="0.9rem">
-              <ProgressIndicator size={16} variant="loading" />
+              <ProgressIndicator size={loaderSize} variant="loading" />
             </Box>
           )}
-          {iconSrc && <img src={iconSrc} width="100%" alt={symbol} />}
+          {iconSrc && (
+            <img
+              width="100%"
+              alt={symbol}
+              src={iconSrc}
+              onLoad={stopLoad}
+              onError={errorOnLoad}
+            />
+          )}
         </Box>
       </Box>
     );
