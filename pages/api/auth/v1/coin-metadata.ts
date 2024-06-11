@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import NextCors from 'nextjs-cors';
 
 import { Network } from '@/constants';
 import dbConnect from '@/server';
