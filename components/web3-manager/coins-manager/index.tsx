@@ -56,7 +56,10 @@ const CoinsManager: FC = () => {
 
         const dbCoinsMetadata: Record<string, CoinMetadataWithType> =
           await fetchCoinMetadata({ network, coinsType })
-            .then((res) => res.json())
+            .then((res) => {
+              console.log({ headers: res.headers });
+              return res.json();
+            })
             .then((data: ReadonlyArray<CoinMetadataWithType>) =>
               data.reduce((acc, item) => {
                 const override =
@@ -128,7 +131,8 @@ const CoinsManager: FC = () => {
         ) as unknown as CoinsMap;
 
         updateCoins(coins);
-      } catch {
+      } catch (e) {
+        console.log({ e });
         updateError(true);
       } finally {
         updateLoading(false);
