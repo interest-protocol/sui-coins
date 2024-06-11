@@ -41,6 +41,7 @@ const TokenIcon: FC<TokenIconProps> = ({
   type,
   symbol,
   withBg,
+  simple,
   network,
   rounded,
   size = '1.5rem',
@@ -120,14 +121,16 @@ const TokenIcon: FC<TokenIconProps> = ({
             </Box>
           )}
           <img
-            width="100%"
             alt={symbol}
+            width="100%"
+            height="100%"
             src={TokenIcon}
             onLoad={stopLoading}
             onError={onLoadError}
+            style={{ objectFit: 'cover', position: 'relative' }}
           />
         </Box>
-        {ChainIcon && (
+        {!simple && ChainIcon && (
           <Box position="absolute" bottom="-0.3rem" right="-0.5rem">
             <ChainIcon maxHeight={size} maxWidth={size} width="100%" />
           </Box>
@@ -160,7 +163,7 @@ const TokenIcon: FC<TokenIconProps> = ({
             maxHeight={size ?? '1.5rem'}
           />
         </Box>
-        {ChainIcon && (
+        {!simple && ChainIcon && (
           <Box position="absolute" bottom="-0.3rem" right="-0.5rem">
             <ChainIcon maxHeight={size} maxWidth={size} width="100%" />
           </Box>
@@ -207,9 +210,10 @@ const TokenIcon: FC<TokenIconProps> = ({
             src={url}
             alt={symbol}
             width="100%"
+            height="100%"
             onLoad={stopLoading}
             onError={onLoadError}
-            style={{ position: 'relative' }}
+            style={{ objectFit: 'cover', position: 'relative' }}
           />
         </Box>
       </Box>
@@ -239,15 +243,17 @@ const TokenIcon: FC<TokenIconProps> = ({
           )}
           {iconSrc && (
             <img
-              src={iconSrc}
-              width="100%"
               alt={symbol}
+              width="100%"
+              height="100%"
+              src={iconSrc}
               onLoad={stopLoading}
               onError={onLoadError}
+              style={{ objectFit: 'cover', position: 'relative' }}
             />
           )}
         </Box>
-        {ChainIcon && (
+        {!simple && ChainIcon && (
           <Box position="absolute" bottom="-0.3rem" right="-0.5rem">
             <ChainIcon maxHeight={size} maxWidth={size} width="100%" />
           </Box>

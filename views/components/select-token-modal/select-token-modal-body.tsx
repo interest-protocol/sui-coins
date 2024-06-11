@@ -10,6 +10,7 @@ import {
   CELER_TOKENS,
   CELER_TOKENS_TYPE,
   STRICT_TOKENS,
+  STRICT_TOKENS_MAP,
   STRICT_TOKENS_TYPE,
   WORMHOLE_TOKENS,
   WORMHOLE_TOKENS_TYPE,
@@ -44,9 +45,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   const handleSelectToken = async (type: string, chain?: Chain) => {
     if (coinsMap[type]) return onSelectToken(coinsMap[type]);
 
-    const token = STRICT_TOKENS[network as Network].find(
-      (token) => token.type === type
-    );
+    const token = STRICT_TOKENS_MAP[network as Network][type];
 
     if (token) return onSelectToken(coinDataToCoinObject(token));
 
