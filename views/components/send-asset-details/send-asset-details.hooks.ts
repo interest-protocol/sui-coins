@@ -4,6 +4,7 @@ import type { LinkAssets } from '@mysten/zksend/dist/cjs/links/utils';
 import useSWR from 'swr';
 
 import { CoinMetadataWithType } from '@/interface';
+import { fetchCoinMetadata } from '@/utils';
 
 export const useAssetsNFTs = (nfts: LinkAssets['nfts']) => {
   const suiClient = useSuiClient();
@@ -32,21 +33,16 @@ export const useAssetsNFTs = (nfts: LinkAssets['nfts']) => {
 
 export const useAssetsBalances = (balances: LinkAssets['balances']) => {
   const { network } = useSuiClientContext();
-  const typeList = balances.reduce(
-    (acc, { coinType }) => (acc ? `${acc},${coinType}` : coinType),
-    ''
-  );
+  const typeList = balances.map((x) => x.coinType);
 
   return useSWR<ReadonlyArray<CoinMetadataWithType>>(
     `coins-${network}-${typeList}`,
     () => {
       if (!balances) return [];
 
-      return fetch(
-        encodeURI(
-          `/api/auth/v1/coin-metadata?network=${network}&type_list=${typeList}`
-        )
-      ).then((response) => response.json?.());
+      return fetchCoinMetadata({ network, coinsType: typeList }).then(
+        (response) => response.json?.()
+      );
     }
   );
 };
