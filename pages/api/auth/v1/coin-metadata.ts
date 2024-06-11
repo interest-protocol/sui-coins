@@ -14,7 +14,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const network = req.query.network as Network;
     const typeList = req.body.coinsType;
 
-    return res.status(200).json([req.method, typeList, network, type]);
+    return res
+      .status(200)
+      .json([
+        req.method,
+        typeList,
+        network,
+        req.method === 'POST',
+        typeof req.method,
+      ]);
 
     if (isInvalidNetwork(network))
       return res.status(400).send({ message: 'Missing valid network' });
