@@ -57,7 +57,6 @@ const CoinsManager: FC = () => {
         const dbCoinsMetadata: Record<string, CoinMetadataWithType> =
           await fetchCoinMetadata({ network, coinsType })
             .then((res) => {
-              console.log({ headers: res.headers });
               return res.json();
             })
             .then((data: ReadonlyArray<CoinMetadataWithType>) =>
@@ -131,8 +130,7 @@ const CoinsManager: FC = () => {
         ) as unknown as CoinsMap;
 
         updateCoins(coins);
-      } catch (e) {
-        console.log({ e });
+      } catch {
         updateError(true);
       } finally {
         updateLoading(false);
