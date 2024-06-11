@@ -29,8 +29,9 @@ const getCoinMetadataList = async (
   }
 
   const docs: Array<CoinMetadataModel> = await Promise.all(promises);
+  const flattenedDocs = docs.flatMap((x) => x);
 
-  const docsMap = docs.reduce(
+  const docsMap = flattenedDocs.reduce(
     (acc, curr) => ({ ...acc, [curr.type]: curr }),
     {} as Record<string, CoinMetadataModel>
   );
@@ -83,7 +84,7 @@ const getCoinMetadataList = async (
   }
 
   return [
-    ...docs,
+    ...flattenedDocs,
     ...missingCoinsMetadata.map(({ hasMetadata, ...metadata }) => metadata),
   ];
 };

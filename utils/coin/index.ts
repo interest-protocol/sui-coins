@@ -15,6 +15,7 @@ import {
 } from '@/constants/coins';
 import { CoinData, CoinMetadataWithType } from '@/interface';
 import { FixedPointMath } from '@/lib';
+import { fetchCoinMetadata } from '@/utils/fetch';
 
 import {
   CoinObject,
@@ -99,7 +100,7 @@ export const getCoin = async (
 
     if (coinsMap[type]) return resolve(coinObjectToToken(coinsMap[type]));
 
-    fetch(`/api/auth/v1/coin-metadata?network=${network}&type=${type}`)
+    fetchCoinMetadata({ network, type })
       .then((res) => res.json())
       .then((metadata: CoinMetadataWithType) =>
         resolve(coinMetadataToToken(metadata))
