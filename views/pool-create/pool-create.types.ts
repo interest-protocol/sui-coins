@@ -2,6 +2,7 @@ import { CoinData } from '@/interface';
 
 export interface Token extends CoinData {
   value: string;
+  usdPrice: number | null;
 }
 
 export enum CreatePoolStep {
