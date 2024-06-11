@@ -17,16 +17,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method !== 'POST')
       return res.status(405).json({ message: 'Method not allowed' });
 
-    return res
-      .status(200)
-      .json([
-        req.method,
-        typeList,
-        network,
-        req.method === 'POST',
-        typeof req.method,
-      ]);
-
     if (isInvalidNetwork(network))
       return res.status(400).send({ message: 'Missing valid network' });
 
