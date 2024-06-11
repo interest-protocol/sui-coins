@@ -10,8 +10,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     await dbConnect();
 
-    if (req.method !== 'POST')
-      return res.status(405).json({ message: 'Method not allowed' });
+    return res.status(200).json([]);
 
     const type = req.query.type as string;
     const network = req.query.network as Network;
