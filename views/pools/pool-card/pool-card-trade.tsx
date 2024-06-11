@@ -25,12 +25,18 @@ const PoolCardTrade: FC<PoolCardTradeProps> = ({
       size="medium"
       color="outline"
       variant="body"
+      fontWeight="400"
       textTransform="capitalize"
     >
       {description}
     </Typography>
     <Box display="flex" gap="xs" alignItems="center">
-      <Typography color="onSurface" size="medium" variant="body">
+      <Typography
+        size="medium"
+        variant="body"
+        color="onSurface"
+        fontWeight="400"
+      >
         {amount}
       </Typography>
       <TooltipWrapper

@@ -1,20 +1,12 @@
 import { Network } from '@/constants';
 
-interface BaseTokenIconProps {
+export interface TokenIconProps {
+  type: string;
   size?: string;
   symbol: string;
   withBg?: boolean;
+  network: Network;
   rounded?: boolean;
   loaderSize?: number;
+  url?: string | null;
 }
-
-export interface TypeBasedIcon extends BaseTokenIconProps {
-  type: string;
-  network: Network;
-}
-
-export interface UrlBasedIcon extends BaseTokenIconProps {
-  url: string;
-}
-
-export type TokenIconProps = TypeBasedIcon | UrlBasedIcon;

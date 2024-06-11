@@ -92,9 +92,9 @@ const SelectObject: FC<SendFormSelectObjectProps> = ({ index }) => {
               withBg
               size="1rem"
               symbol={symbol}
-              {...(url
-                ? { url }
-                : { network: network as Network, type: coinType })}
+              url={url}
+              network={network as Network}
+              type={coinType}
             />
           ),
         })}

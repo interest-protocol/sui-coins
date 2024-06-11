@@ -23,7 +23,10 @@ const SendBulkSummary: FC = () => {
 
   const displayAmountToSend =
     Number(value) && Number(quantity)
-      ? `${FixedPointMath.toNumber(FixedPointMath.toBigNumber(value, decimals).times(Number(quantity)), decimals)} ${symbol}`
+      ? `${FixedPointMath.toNumber(
+          FixedPointMath.toBigNumber(value, decimals).times(Number(quantity)),
+          decimals
+        )} ${symbol}`
       : '--';
 
   return (

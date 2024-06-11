@@ -15,7 +15,7 @@ import {
   WORMHOLE_TOKENS_TYPE,
 } from '@/constants/coins';
 import { useWeb3 } from '@/hooks/use-web3';
-import { coinDataToCoinObject } from '@/utils';
+import { coinDataToCoinObject, fetchCoinMetadata } from '@/utils';
 
 import { CoinObject } from '../../../components/web3-manager/coins-manager/web3-manager.types';
 import FetchingToken from './fetching-token';
@@ -50,10 +50,8 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
 
     if (token) return onSelectToken(coinDataToCoinObject(token));
 
-    const metadata = await fetch(
-      `/api/auth/v1/coin-metadata?type=${type}&network=${network}`
-    ).then((response) =>
-      response.status === 200 ? response.json() : response
+    const metadata = await fetchCoinMetadata({ type, network }).then(
+      (response) => (response.status === 200 ? response.json() : response)
     );
 
     return onSelectToken({ ...metadataToCoin(metadata), chain });

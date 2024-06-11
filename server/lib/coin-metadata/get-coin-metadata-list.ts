@@ -16,11 +16,22 @@ const getCoinMetadataList = async (
 
   const uniqueTypeList = [...new Set(typeList)];
 
-  const docs: Array<CoinMetadataModel> = await Model.find({
-    type: uniqueTypeList,
-  });
+  const batches = chunk(uniqueTypeList, 50);
 
-  const docsMap = docs.reduce(
+  const promises = [];
+
+  for (const elem of batches) {
+    promises.push(
+      Model.find({
+        type: elem,
+      })
+    );
+  }
+
+  const docs: Array<CoinMetadataModel> = await Promise.all(promises);
+  const flattenedDocs = docs.flatMap((x) => x);
+
+  const docsMap = flattenedDocs.reduce(
     (acc, curr) => ({ ...acc, [curr.type]: curr }),
     {} as Record<string, CoinMetadataModel>
   );
@@ -73,7 +84,7 @@ const getCoinMetadataList = async (
   }
 
   return [
-    ...docs,
+    ...flattenedDocs,
     ...missingCoinsMetadata.map(({ hasMetadata, ...metadata }) => metadata),
   ];
 };

@@ -39,6 +39,7 @@ const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({
               key={v4()}
               type={type}
               network={network as Network}
+              url={coinMetadata[type]?.iconUrl}
               symbol={coinMetadata[type]?.symbol ?? ''}
             />
           ))}

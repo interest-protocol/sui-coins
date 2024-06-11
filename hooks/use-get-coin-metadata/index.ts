@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import { METADATA } from '@/constants/metadata';
 import { useNetwork } from '@/hooks/use-network';
 import { CoinMetadataWithType } from '@/interface';
-import { makeSWRKey } from '@/utils';
+import { fetchCoinMetadata, makeSWRKey } from '@/utils';
 
 export const useGetCoinMetadata = (coinsType: ReadonlyArray<string>) => {
   const network = useNetwork();
@@ -14,13 +14,7 @@ export const useGetCoinMetadata = (coinsType: ReadonlyArray<string>) => {
     async () => {
       if (!coinsType.length) return {};
 
-      return fetch(
-        encodeURI(
-          `/api/auth/v1/coin-metadata?network=${network}&type_list=${coinsType.join(
-            ','
-          )}`
-        )
-      )
+      return fetchCoinMetadata({ network, coinsType })
         .then((res) => res.json())
         .then((data: ReadonlyArray<CoinMetadataWithType>) =>
           data

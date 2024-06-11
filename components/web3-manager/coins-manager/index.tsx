@@ -9,7 +9,7 @@ import { METADATA } from '@/constants/metadata';
 import { useCoins } from '@/hooks/use-coins';
 import { useNetwork } from '@/hooks/use-network';
 import { CoinMetadataWithType } from '@/interface';
-import { isSui, makeSWRKey, ZERO_BIG_NUMBER } from '@/utils';
+import { fetchCoinMetadata, isSui, makeSWRKey, ZERO_BIG_NUMBER } from '@/utils';
 
 import { CoinsMap, TGetAllCoins } from './web3-manager.types';
 
@@ -55,13 +55,7 @@ const CoinsManager: FC = () => {
         ];
 
         const dbCoinsMetadata: Record<string, CoinMetadataWithType> =
-          await fetch(
-            encodeURI(
-              `/api/auth/v1/coin-metadata?network=${network}&type_list=${coinsType.join(
-                ','
-              )}`
-            )
-          )
+          await fetchCoinMetadata({ network, coinsType })
             .then((res) => res.json())
             .then((data: ReadonlyArray<CoinMetadataWithType>) =>
               data.reduce((acc, item) => {

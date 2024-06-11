@@ -17,6 +17,7 @@ export const CoinMetadataSchema = new Schema({
     type: String,
     required: true,
     index: true,
+    unique: true,
   },
   name: {
     type: String,
