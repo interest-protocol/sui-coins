@@ -13,8 +13,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method !== 'POST')
       return res.status(405).json({ message: 'Method not allowed' });
 
-    const type = req.query.type as string;
-    const network = req.query.network as Network;
+    const type = req.body.type as string;
+    const network = req.body.network as Network;
     const typeList = req.body.coinsType;
 
     if (isInvalidNetwork(network))
