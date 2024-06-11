@@ -10,12 +10,9 @@ import { isInvalidNetwork } from '@/utils';
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     await dbConnect();
-    await NextCors(req, res, {
-      // Options
-      methods: ['POST'],
-      origin: '*',
-      optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-    });
+
+    if (req.method !== 'POST')
+      return res.status(405).json({ message: 'Method not allowed' });
 
     const type = req.query.type as string;
     const network = req.query.network as Network;
