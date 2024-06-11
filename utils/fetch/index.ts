@@ -6,7 +6,7 @@ export const fetchCoinMetadata = ({
   type = '',
 }: FetchCoinMetadata) =>
   fetch(
-    `/api/auth/v1/coin-metadata?network=${network}`.concat(
+    `/api/v1/coin-metadata?network=${network}`.concat(
       type ? `&type=${type}` : ''
     ),
     {
