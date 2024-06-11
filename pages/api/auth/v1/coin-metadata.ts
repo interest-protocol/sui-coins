@@ -10,11 +10,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     await dbConnect();
 
-    return res.status(200).json([]);
-
     const type = req.query.type as string;
     const network = req.query.network as Network;
     const typeList = req.body.coinsType;
+
+    return res.status(200).json([req.method, typeList, network, type]);
 
     if (isInvalidNetwork(network))
       return res.status(400).send({ message: 'Missing valid network' });
