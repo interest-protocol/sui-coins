@@ -10,8 +10,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     await dbConnect();
 
-    const type = req.query.type as string;
-    const network = req.query.network as Network;
+    const type = req.body.type as string;
+    const network = req.body.network as Network;
     const typeList = req.body.coinsType;
 
     if (isInvalidNetwork(network))
