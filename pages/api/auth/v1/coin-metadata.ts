@@ -15,7 +15,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const typeList = req.body.coinsType;
 
     if (req.method !== 'POST')
-      return res.status(405).json({ message: 'Method not allowed' });
+      return res.status(405).json({ message: req.method });
 
     if (isInvalidNetwork(network))
       return res.status(400).send({ message: 'Missing valid network' });
