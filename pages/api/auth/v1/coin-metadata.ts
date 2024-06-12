@@ -24,7 +24,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     if (!!typeList && Array.isArray(typeList) && !!typeList.length) {
-      const [data] = await getCoinMetadataList(typeList, network);
+      const data = await getCoinMetadataList(typeList, network);
 
       return res.status(200).json(data);
     }
