@@ -3,32 +3,17 @@ import { normalizeStructTag } from '@mysten/sui.js/utils';
 import { Network } from '@/constants';
 import { CoinMetadataWithType } from '@/interface';
 
-import { isSameStructTag } from '../address';
 import coinMetadataJsonRaw from './coin-metadata.json';
+import {
+  FetchCoinMetadata,
+  FetchCoinMetadataMultipleTypeArg,
+  FetchCoinMetadataSingleTypeArg,
+} from './coin-metadata.types';
 
-const coinMetadataJson = coinMetadataJsonRaw as unknown as Record<
+const coinMetadataMap = coinMetadataJsonRaw as unknown as Record<
   Network,
   Record<string, CoinMetadataWithType>
 >;
-
-interface FetchCoinMetadataBaseArgs {
-  network: Network;
-}
-
-interface FetchCoinMetadataSingleTypeArg extends FetchCoinMetadataBaseArgs {
-  type: string;
-}
-
-interface FetchCoinMetadataMultipleTypeArg extends FetchCoinMetadataBaseArgs {
-  types: ReadonlyArray<string>;
-}
-
-interface FetchCoinMetadata {
-  (args: FetchCoinMetadataSingleTypeArg): Promise<CoinMetadataWithType>;
-  (
-    args: FetchCoinMetadataMultipleTypeArg
-  ): Promise<ReadonlyArray<CoinMetadataWithType>>;
-}
 
 const isSingleType = (
   args: FetchCoinMetadataSingleTypeArg | FetchCoinMetadataMultipleTypeArg
@@ -38,7 +23,7 @@ const isSingleType = (
 export const fetchCoinMetadata: FetchCoinMetadata = async (args) => {
   if (isSingleType(args)) {
     const localMetadata =
-      coinMetadataJson[args.network][normalizeStructTag(args.type as string)];
+      coinMetadataMap[args.network][normalizeStructTag(args.type as string)];
 
     if (localMetadata) return localMetadata;
 
@@ -53,12 +38,14 @@ export const fetchCoinMetadata: FetchCoinMetadata = async (args) => {
 
   const uniqueTypes = Array.from(new Set(args.types));
 
-  const localMetadatas = uniqueTypes.map(
-    (type) => coinMetadataJson[args.network][normalizeStructTag(type)]
-  );
+  const localMetadatas = uniqueTypes.reduce((acc, type) => {
+    const metadata = coinMetadataMap[args.network][normalizeStructTag(type)];
+    if (!metadata) return acc;
+    return [...acc, metadata];
+  }, [] as ReadonlyArray<CoinMetadataWithType>);
 
   const missingTypes = uniqueTypes.filter(
-    (type) => !localMetadatas.some((data) => isSameStructTag(type, data.type))
+    (type) => !coinMetadataMap[args.network][normalizeStructTag(type)]
   );
 
   if (!missingTypes.length) return localMetadatas;
