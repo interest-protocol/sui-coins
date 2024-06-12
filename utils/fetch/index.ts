@@ -5,7 +5,7 @@ export const fetchCoinMetadata = ({
   coinsType = [],
   type,
 }: FetchCoinMetadata) =>
-  fetch('/api/v1/coin-metadata', {
+  fetch('/api/auth/v1/coin-metadata', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
