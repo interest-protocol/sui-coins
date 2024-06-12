@@ -3,6 +3,9 @@ import { FC } from 'react';
 import { v4 } from 'uuid';
 
 import Layout from '@/components/layout';
+import { Network } from '@/constants';
+import { WS_SUI_TYPE, WS_USDC_TYPE } from '@/constants/clamm';
+import { fetchCoinMetadata } from '@/utils';
 
 import Input from './input';
 import Slider from './input/slider';
@@ -14,47 +17,55 @@ import SwapPath from './swap-path';
 import SwapPoweredBy from './swap-powered-by';
 import SwapUpdatePrice from './swap-update-price';
 
-const Swap: FC = () => (
-  <Layout>
-    <Box
-      mx="auto"
-      mt="3.5rem"
-      display="flex"
-      borderRadius="l"
-      flexDirection="column"
-      px={['2xs', 'xl', 'xl', '7xl']}
-      width={['100%', '100%', '100%', '39.75rem']}
-    >
-      <Box bg="lowestContainer" borderRadius="s" p="xl">
-        <SwapHeader />
-        <Box display="flex" flexDirection="column" gap="5xl">
-          <Input
-            label="from"
-            slider={
-              <Box px="s">
-                <Slider />
-              </Box>
-            }
-          />
-        </Box>
-        <Box
-          display="flex"
-          position="relative"
-          alignContent="center"
-          justifyContent="center"
-        >
-          <Box width="100%" height="0.313rem" bg="lowContainer" />
+const Swap: FC = () => {
+  fetchCoinMetadata({
+    types: [WS_SUI_TYPE, WS_USDC_TYPE],
+    network: Network.MAINNET,
+  }).then(console.log);
+
+  return (
+    <Layout>
+      <Box
+        mx="auto"
+        mt="3.5rem"
+        display="flex"
+        borderRadius="l"
+        flexDirection="column"
+        px={['2xs', 'xl', 'xl', '7xl']}
+        width={['100%', '100%', '100%', '39.75rem']}
+      >
+        <Box bg="lowestContainer" borderRadius="s" p="xl">
+          <SwapHeader />
+          <Box display="flex" flexDirection="column" gap="5xl">
+            <Input
+              label="from"
+              slider={
+                <Box px="s">
+                  <Slider />
+                </Box>
+              }
+            />
+          </Box>
           <Box
-            gap="s"
-            my="-1.5rem"
-            width="100%"
             display="flex"
-            position="absolute"
-            alignItems="center"
+            position="relative"
+            alignContent="center"
             justifyContent="center"
           >
-            {[<SwapFlipToken key={v4()} />, <SwapUpdatePrice key={v4()} />].map(
-              (button) => (
+            <Box width="100%" height="0.313rem" bg="lowContainer" />
+            <Box
+              gap="s"
+              my="-1.5rem"
+              width="100%"
+              display="flex"
+              position="absolute"
+              alignItems="center"
+              justifyContent="center"
+            >
+              {[
+                <SwapFlipToken key={v4()} />,
+                <SwapUpdatePrice key={v4()} />,
+              ].map((button) => (
                 <Box
                   key={v4()}
                   display="flex"
@@ -68,22 +79,22 @@ const Swap: FC = () => (
                 >
                   {button}
                 </Box>
-              )
-            )}
+              ))}
+            </Box>
           </Box>
+          <Box py="xl" borderRadius="xs" bg="lowestContainer" my="m">
+            <Input label="to" />
+          </Box>
+          <PreviewSwapButton />
+          <SwapPoweredBy />
         </Box>
-        <Box py="xl" borderRadius="xs" bg="lowestContainer" my="m">
-          <Input label="to" />
+        <SwapPath />
+        <Box my="xs" bg="lowestContainer" borderRadius="xs">
+          <ManageSlippage />
         </Box>
-        <PreviewSwapButton />
-        <SwapPoweredBy />
       </Box>
-      <SwapPath />
-      <Box my="xs" bg="lowestContainer" borderRadius="xs">
-        <ManageSlippage />
-      </Box>
-    </Box>
-  </Layout>
-);
+    </Layout>
+  );
+};
 
 export default Swap;
