@@ -3,12 +3,12 @@ import { FetchCoinMetadata } from './fetch.types';
 export const fetchCoinMetadata = ({
   network,
   coinsType = [],
-  type = '',
+  type,
 }: FetchCoinMetadata) =>
-  fetch(`/api/auth/v1/coin-metadata?network=${network}&type=${type}`, {
+  fetch('/api/auth/v1/coin-metadata', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ coinsType }),
+    body: JSON.stringify({ coinsType, network, type: type ? type : null }),
   });

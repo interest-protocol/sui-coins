@@ -56,7 +56,9 @@ const CoinsManager: FC = () => {
 
         const dbCoinsMetadata: Record<string, CoinMetadataWithType> =
           await fetchCoinMetadata({ network, coinsType })
-            .then((res) => res.json())
+            .then((res) => {
+              return res.json();
+            })
             .then((data: ReadonlyArray<CoinMetadataWithType>) =>
               data.reduce((acc, item) => {
                 const override =
