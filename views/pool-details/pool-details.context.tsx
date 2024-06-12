@@ -3,7 +3,6 @@ import { useSuiClientContext } from '@mysten/dapp-kit';
 import { createContext, FC, PropsWithChildren, useContext } from 'react';
 
 import { Network } from '@/constants';
-import { METADATA } from '@/constants/metadata';
 import { useGetCoinMetadata } from '@/hooks/use-get-coin-metadata';
 import useGetMultipleTokenPriceBySymbol from '@/hooks/use-get-multiple-token-price-by-symbol';
 import { usePool } from '@/hooks/use-pools';

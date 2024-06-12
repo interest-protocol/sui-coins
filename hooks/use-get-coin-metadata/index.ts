@@ -14,18 +14,16 @@ export const useGetCoinMetadata = (coinsType: ReadonlyArray<string>) => {
     async () => {
       if (!coinsType.length) return {};
 
-      return fetchCoinMetadata({ network, coinsType })
-        .then((res) => res.json())
-        .then((data: ReadonlyArray<CoinMetadataWithType>) =>
-          data
-            .map((metadata) => {
-              const override =
-                METADATA[network][normalizeStructTag(metadata.type)];
+      return fetchCoinMetadata({ network, types: coinsType }).then((data) =>
+        data
+          .map((metadata) => {
+            const override =
+              METADATA[network][normalizeStructTag(metadata.type)];
 
-              return override || metadata;
-            })
-            .reduce((acc, item) => ({ ...acc, [item.type]: item }), {})
-        );
+            return override || metadata;
+          })
+          .reduce((acc, item) => ({ ...acc, [item.type]: item }), {})
+      );
     },
     {
       revalidateOnFocus: false,
