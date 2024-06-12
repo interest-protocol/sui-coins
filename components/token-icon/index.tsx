@@ -61,10 +61,7 @@ const TokenIcon: FC<TokenIconProps> = ({
     async () => {
       if (TokenIcon || url) return null;
 
-      const data = await fetchCoinMetadata({ network, type }).then((res) =>
-        res.json()
-      );
-
+      const data = await fetchCoinMetadata({ network, type });
       return data.iconUrl;
     }
   );

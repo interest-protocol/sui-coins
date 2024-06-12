@@ -15,7 +15,6 @@ import {
 } from '@/constants/coins';
 import { CoinData, CoinMetadataWithType } from '@/interface';
 import { FixedPointMath } from '@/lib';
-import { fetchCoinMetadata } from '@/utils/fetch';
 
 import {
   CoinObject,
@@ -23,6 +22,7 @@ import {
 } from '../../components/web3-manager/coins-manager/web3-manager.types';
 import { isSameStructTag } from '../address';
 import { ZERO_BIG_NUMBER } from '../big-number';
+import { fetchCoinMetadata } from '../coin-metadata';
 import { getBasicCoinMetadata } from '../fn';
 import {
   GetCoinOfValueArgs,
@@ -101,9 +101,8 @@ export const getCoin = async (
     if (coinsMap[type]) return resolve(coinObjectToToken(coinsMap[type]));
 
     fetchCoinMetadata({ network, type })
-      .then((res) => res.json())
-      .then((metadata: CoinMetadataWithType) =>
-        resolve(coinMetadataToToken(metadata))
+      .then((metadata) =>
+        resolve(coinMetadataToToken(metadata as CoinMetadataWithType))
       )
       .catch(() => resolve({ type, ...getBasicCoinMetadata(type) }));
   });
