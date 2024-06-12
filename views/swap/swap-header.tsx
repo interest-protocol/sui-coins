@@ -1,15 +1,8 @@
 import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
-import { normalizeStructTag } from '@mysten/sui.js/utils';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { LOCAL_STORAGE_VERSION } from '@/constants';
-import {
-  SCALLOP_SUI_TYPE,
-  SCALLOP_USDC_TYPE,
-  WS_SUI_TYPE,
-  WS_USDC_TYPE,
-} from '@/constants/clamm';
 import { useModal } from '@/hooks/use-modal';
 import { ThreeDotsSVG } from '@/svg';
 
@@ -18,12 +11,6 @@ import { Aggregator, AggregatorType, SwapForm } from './swap.types';
 import SwapSelectAggregatorModal from './swap-select-aggregator-modal';
 
 const SwapHeader: FC = () => {
-  console.log(
-    [SCALLOP_SUI_TYPE, SCALLOP_USDC_TYPE, WS_SUI_TYPE, WS_USDC_TYPE].map(
-      normalizeStructTag
-    )
-  );
-
   const { setModal, handleClose } = useModal();
   const { control, setValue } = useFormContext<SwapForm>();
 
