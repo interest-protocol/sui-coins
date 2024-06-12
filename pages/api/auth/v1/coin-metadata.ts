@@ -10,9 +10,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     await dbConnect();
 
-    if (req.method !== 'POST')
-      return res.status(405).json({ message: 'Method not allowed' });
-
     const type = req.body.type as string;
     const network = req.body.network as Network;
     const typeList = req.body.coinsType;
@@ -26,11 +23,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(200).json(doc);
     }
 
-    if (typeList && Array.isArray(typeList) && typeList.length) {
+    if (!!typeList && Array.isArray(typeList) && !!typeList.length) {
       const data = await getCoinMetadataList(typeList, network);
 
       return res.status(200).json(data);
     }
+
+    return res.status(404).json({ message: 'No coin type requested' });
   } catch (e) {
     res.status(500).send(e);
   }
