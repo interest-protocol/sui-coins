@@ -55,24 +55,20 @@ const CoinsManager: FC = () => {
         ];
 
         const dbCoinsMetadata: Record<string, CoinMetadataWithType> =
-          await fetchCoinMetadata({ network, coinsType })
-            .then((res) => {
-              return res.json();
-            })
-            .then((data: ReadonlyArray<CoinMetadataWithType>) =>
-              data.reduce((acc, item) => {
-                const override =
-                  METADATA[network as Network][normalizeStructTag(item.type)] ||
-                  item;
-                return {
-                  ...acc,
-                  [normalizeStructTag(override.type)]: {
-                    ...override,
-                    type: normalizeStructTag(override.type),
-                  },
-                };
-              }, {})
-            );
+          await fetchCoinMetadata({ network, types: coinsType }).then((data) =>
+            data.reduce((acc, item) => {
+              const override =
+                METADATA[network as Network][normalizeStructTag(item.type)] ||
+                item;
+              return {
+                ...acc,
+                [normalizeStructTag(override.type)]: {
+                  ...override,
+                  type: normalizeStructTag(override.type),
+                },
+              };
+            }, {})
+          );
 
         const filteredCoinsRaw = coinsRaw.filter(
           ({ coinType }) => dbCoinsMetadata[normalizeStructTag(coinType)]
