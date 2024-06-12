@@ -14,8 +14,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const network = req.body.network as Network;
     const typeList = req.body.coinsType;
 
-    return res.status(200).send([]);
-
     if (isInvalidNetwork(network))
       return res.status(400).send({ message: 'Missing valid network' });
 
@@ -25,8 +23,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(200).json(doc);
     }
 
-    if (!!typeList && Array.isArray(typeList) && typeList.length) {
-      console.log(' got here');
+    if (!!typeList && Array.isArray(typeList) && !!typeList.length) {
       const data = await getCoinMetadataList(typeList, network);
 
       return res.status(200).json(data);
