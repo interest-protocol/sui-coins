@@ -1,8 +1,15 @@
+import { normalizeStructTag } from '@mysten/sui.js/utils';
+
 import { Network } from '@/constants';
-import { CoinMetadataModel } from '@/server/model/coin-metadata';
+import { CoinMetadataWithType } from '@/interface';
 
 import { isSameStructTag } from '../address';
-import coinMetadataJson from './coin-metadata.json';
+import coinMetadataJsonRaw from './coin-metadata.json';
+
+const coinMetadataJson = coinMetadataJsonRaw as unknown as Record<
+  Network,
+  Record<string, CoinMetadataWithType>
+>;
 
 interface FetchCoinMetadataBaseArgs {
   network: Network;
@@ -17,10 +24,10 @@ interface FetchCoinMetadataMultipleTypeArg extends FetchCoinMetadataBaseArgs {
 }
 
 interface FetchCoinMetadata {
-  (args: FetchCoinMetadataSingleTypeArg): Promise<CoinMetadataModel>;
+  (args: FetchCoinMetadataSingleTypeArg): Promise<CoinMetadataWithType>;
   (
     args: FetchCoinMetadataMultipleTypeArg
-  ): Promise<ReadonlyArray<CoinMetadataModel>>;
+  ): Promise<ReadonlyArray<CoinMetadataWithType>>;
 }
 
 const isSingleType = (
@@ -30,9 +37,8 @@ const isSingleType = (
 
 export const fetchCoinMetadata: FetchCoinMetadata = async (args) => {
   if (isSingleType(args)) {
-    const localMetadata = coinMetadataJson[args.network].find(({ type }) =>
-      isSameStructTag(type, args.type)
-    );
+    const localMetadata =
+      coinMetadataJson[args.network][normalizeStructTag(args.type as string)];
 
     if (localMetadata) return localMetadata;
 
@@ -47,8 +53,8 @@ export const fetchCoinMetadata: FetchCoinMetadata = async (args) => {
 
   const uniqueTypes = Array.from(new Set(args.types));
 
-  const localMetadatas = coinMetadataJson[args.network].filter((data) =>
-    uniqueTypes.some((type) => isSameStructTag(type, data.type))
+  const localMetadatas = uniqueTypes.map(
+    (type) => coinMetadataJson[args.network][normalizeStructTag(type)]
   );
 
   const missingTypes = uniqueTypes.filter(

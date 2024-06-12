@@ -28,9 +28,7 @@ const getCoinMetadataList = async (
     );
   }
 
-  const docs: Array<CoinMetadataModel> = (await Promise.all(promises)).flatMap(
-    (list) => list
-  );
+  const docs: Array<Array<CoinMetadataModel>> = await Promise.all(promises);
   const flattenedDocs = docs.flatMap((x) => x);
 
   const docsMap = flattenedDocs.reduce(
