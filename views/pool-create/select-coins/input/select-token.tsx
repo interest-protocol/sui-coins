@@ -1,21 +1,20 @@
 import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
-import { useSuiClientContext } from '@mysten/dapp-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import TokenIcon from '@/components/token-icon';
-import { Network } from '@/constants';
-import { TOKEN_ICONS } from '@/constants/coins';
 import { useModal } from '@/hooks/use-modal';
+import { useNetwork } from '@/hooks/use-network';
 import { CoinData } from '@/interface';
-import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
+import { ChevronRightSVG } from '@/svg';
+import { isSui } from '@/utils';
 import SelectTokenModal from '@/views/components/select-token-modal';
 
 import { CreatePoolForm } from '../../pool-create.types';
 import { InputProps } from './input.types';
 
-const SelectToken: FC<InputProps> = ({ index }) => {
-  const { network } = useSuiClientContext();
+const SelectToken: FC<InputProps> = ({ index, isMobile }) => {
+  const network = useNetwork();
   const { setModal, handleClose } = useModal();
 
   const { setValue, control, getValues } = useFormContext<CreatePoolForm>();
@@ -27,10 +26,6 @@ const SelectToken: FC<InputProps> = ({ index }) => {
 
   const { symbol: currentSymbol } = currentToken;
 
-  const Icon = currentSymbol
-    ? TOKEN_ICONS[network as Network][currentSymbol]
-    : null;
-
   const onSelect = async ({ type, decimals, symbol }: CoinData) => {
     if (getValues('tokens')?.some((token) => token.type === type)) return;
 
@@ -39,7 +34,18 @@ const SelectToken: FC<InputProps> = ({ index }) => {
       symbol,
       decimals,
       value: '',
+      usdPrice: currentToken?.usdPrice,
     });
+
+    fetch(`/api/auth/v1/coin-price?symbol=${isSui(type) ? 'SUI' : symbol}`)
+      .then((response) => response.json())
+      .then((data) =>
+        setValue(
+          `tokens.${index}.usdPrice`,
+          data[isSui(type) ? 'SUI' : symbol][0].quote.USD.price
+        )
+      )
+      .catch(() => null);
   };
 
   const openModal = () =>
@@ -70,38 +76,31 @@ const SelectToken: FC<InputProps> = ({ index }) => {
         fontSize="s"
         width="100%"
         variant="tonal"
+        bg={currentSymbol ? 'transparent' : 'highestContainer'}
         color="onSurface"
         borderRadius="xs"
-        bg="highestContainer"
         onClick={openModal}
-        {...(Icon && {
+        {...(currentSymbol && {
           PrefixIcon: (
-            <Box
-              as="span"
-              width="2.5rem"
-              height="2.5rem"
-              bg="onSurface"
-              color="onPrimary"
-              borderRadius="xs"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <TokenIcon
-                symbol={currentSymbol}
-                type={currentToken.type}
-                network={network as Network}
-              />
-            </Box>
+            <TokenIcon
+              withBg
+              network={network}
+              symbol={currentSymbol}
+              type={currentToken.type}
+            />
           ),
         })}
       >
-        <Typography size="large" variant="label" p="xs">
-          {currentSymbol || 'Select Token'}
+        <Typography
+          p="xs"
+          variant="label"
+          whiteSpace="nowrap"
+          width="100%"
+          size={isMobile ? 'large' : 'small'}
+        >
+          {currentSymbol || 'Select token'}
         </Typography>
-        {currentSymbol ? (
-          <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-        ) : (
+        {!currentSymbol && (
           <ChevronRightSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
         )}
       </Button>

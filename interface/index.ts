@@ -13,6 +13,11 @@ export interface CoinData {
 
 export type LocalTokenMetadataRecord = Record<string, CoinData>;
 
+export enum PoolTypeEnum {
+  CLAMM = 'CLAMM',
+  AMM = 'AMM',
+}
+
 export type DexMarket = Record<string, Record<string, string>>;
 
 export interface FormattedNumber {
