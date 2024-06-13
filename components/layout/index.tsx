@@ -2,7 +2,6 @@ import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC, PropsWithChildren } from 'react';
 
 import ErrorBoundary from '../error-boundary';
-import Footer from './footer';
 import Header from './header';
 import { LayoutProps } from './layout.types';
 import Sidebar from './sidebar';
@@ -40,7 +39,6 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({ title, children }) => (
                 {children}
               </Box>
             </Box>
-            <Footer />
           </Box>
         </Box>
       </Box>
