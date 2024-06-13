@@ -70,7 +70,7 @@ const SelectCoins: FC = () => {
                 color="onSurface"
                 onClick={() =>
                   append({
-                    type: '',
+                    type: '' as `0x${string}`,
                     symbol: '',
                     decimals: 0,
                     value: '',

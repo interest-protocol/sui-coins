@@ -9,7 +9,7 @@ import { getLpCoinBytecode } from '@/lib/move-template/lp-coin';
 import initMoveByteCodeTemplate from '@/lib/move-template/move-bytecode-template';
 import { isSui } from '@/utils';
 
-import { Token } from './pool-create.types';
+import { GetByteCodeArgs, Token } from './pool-create.types';
 
 export const useCreateLpCoin = () => {
   const currentAccount = useCurrentAccount();
@@ -41,7 +41,7 @@ export const useCreateLpCoin = () => {
     const txb = new TransactionBlock();
 
     const [upgradeCap] = txb.publish({
-      modules: [[...getLpCoinBytecode(info)]],
+      modules: [[...getLpCoinBytecode(info as GetByteCodeArgs)]],
       dependencies: [normalizeSuiAddress('0x1'), normalizeSuiAddress('0x2')],
     });
 
