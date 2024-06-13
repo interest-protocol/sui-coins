@@ -17,7 +17,7 @@ const Swap: FC = () => (
   <Layout>
     <Box
       mx="auto"
-      mt="auto"
+      mt="3.5rem"
       display="flex"
       borderRadius="l"
       flexDirection="column"
@@ -25,7 +25,6 @@ const Swap: FC = () => (
       justifyContent="center"
       px={['2xs', 'xl', 'xl', '7xl']}
       width={['100%', '100%', '100%', '39.75rem']}
-      height="65rem"
     >
       <Box bg="container" borderRadius="s" p="xl">
         <SwapHeader />
