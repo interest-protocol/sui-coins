@@ -26,6 +26,11 @@ export interface GetByteCodeArgs {
   description: string;
   coinTypes: string[];
   isStable: boolean;
+  decimals: number;
+  totalSupply: bigint;
+  name: string;
+  symbol: string;
+  recipient: string;
 }
 
 export interface ExtractedCoinData {
