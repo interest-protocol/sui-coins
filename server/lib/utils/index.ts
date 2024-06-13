@@ -1,7 +1,8 @@
 import { getFullnodeUrl, SuiClient } from '@mysten/sui.js/client';
+import { Model } from 'mongoose';
 
 import { Network } from '@/constants';
-import CoinMetadata from '@/server/model/coin-metadata';
+import CoinMetadata, { CoinMetadataModel } from '@/server/model/coin-metadata';
 import CoinMetadataTestnet from '@/server/model/coin-metadata-testnet';
 
 const testnetClient = new SuiClient({
@@ -20,4 +21,4 @@ export const SUI_CLIENT_PROVIDER_MAP = {
 export const COIN_METADATA_MODEL_MAP = {
   [Network.MAINNET]: CoinMetadata,
   [Network.TESTNET]: CoinMetadataTestnet,
-} as Record<Network, ReturnType<typeof mongoose.model>>;
+} as Record<Network, Model<CoinMetadataModel>>;

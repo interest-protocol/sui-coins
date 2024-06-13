@@ -22,6 +22,7 @@ import {
 } from '../../components/web3-manager/coins-manager/web3-manager.types';
 import { isSameStructTag } from '../address';
 import { ZERO_BIG_NUMBER } from '../big-number';
+import { fetchCoinMetadata } from '../coin-metadata';
 import { getBasicCoinMetadata } from '../fn';
 import {
   GetCoinOfValueArgs,
@@ -99,10 +100,9 @@ export const getCoin = async (
 
     if (coinsMap[type]) return resolve(coinObjectToToken(coinsMap[type]));
 
-    fetch(`/api/auth/v1/coin-metadata?network=${network}&type=${type}`)
-      .then((res) => res.json())
-      .then((metadata: CoinMetadataWithType) =>
-        resolve(coinMetadataToToken(metadata))
+    fetchCoinMetadata({ network, type })
+      .then((metadata) =>
+        resolve(coinMetadataToToken(metadata as CoinMetadataWithType))
       )
       .catch(() => resolve({ type, ...getBasicCoinMetadata(type) }));
   });

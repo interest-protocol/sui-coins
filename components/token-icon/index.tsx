@@ -20,6 +20,7 @@ import {
   MATICChainSVG,
   SOLChainSVG,
 } from '@/svg';
+import { fetchCoinMetadata } from '@/utils';
 
 import FTMChain from '../svg/ftm-chain';
 import { SVGProps } from '../svg/svg.types';
@@ -60,10 +61,7 @@ const TokenIcon: FC<TokenIconProps> = ({
     async () => {
       if (TokenIcon || url) return null;
 
-      const data = await fetch(
-        `/api/auth/v1/coin-metadata?network=${network}&type=${type}`
-      ).then((res) => res.json());
-
+      const data = await fetchCoinMetadata({ network, type });
       return data.iconUrl;
     }
   );

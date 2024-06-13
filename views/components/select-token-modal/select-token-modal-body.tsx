@@ -1,5 +1,4 @@
 import { Chain } from '@interest-protocol/sui-tokens';
-import { useSuiClientContext } from '@mysten/dapp-kit';
 import { isValidSuiAddress } from '@mysten/sui.js/utils';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
@@ -14,8 +13,10 @@ import {
   WORMHOLE_TOKENS,
   WORMHOLE_TOKENS_TYPE,
 } from '@/constants/coins';
+import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
-import { coinDataToCoinObject } from '@/utils';
+import { CoinMetadataWithType } from '@/interface';
+import { coinDataToCoinObject, fetchCoinMetadata } from '@/utils';
 
 import { CoinObject } from '../../../components/web3-manager/coins-manager/web3-manager.types';
 import FetchingToken from './fetching-token';
@@ -32,7 +33,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   control,
   handleSelectToken: onSelectToken,
 }) => {
-  const { network } = useSuiClientContext();
+  const network = useNetwork();
   const { coins, coinsMap, loading } = useWeb3();
   const favoriteTokenTypes = useReadLocalStorage<ReadonlyArray<string>>(
     `${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-tokens`
@@ -50,13 +51,12 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
 
     if (token) return onSelectToken(coinDataToCoinObject(token));
 
-    const metadata = await fetch(
-      `/api/auth/v1/coin-metadata?type=${type}&network=${network}`
-    ).then((response) =>
-      response.status === 200 ? response.json() : response
-    );
+    const metadata = await fetchCoinMetadata({ type, network });
 
-    return onSelectToken({ ...metadataToCoin(metadata), chain });
+    return onSelectToken({
+      ...metadataToCoin(metadata as CoinMetadataWithType),
+      chain,
+    });
   };
 
   const isSearchAddress =
