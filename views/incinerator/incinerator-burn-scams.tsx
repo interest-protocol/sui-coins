@@ -25,7 +25,12 @@ const IncineratorBurnScams: FC = () => {
 
     const selectObjects = objects.reduce(
       (acc, curr, index) => {
-        if (!data.includes(curr.type)) return acc;
+        console.log({ curr });
+
+        if (
+          !data.includes(curr.kind === 'Coin' ? curr.display!.type : curr.type)
+        )
+          return acc;
 
         setValue(`objects.${index}.active`, true);
 

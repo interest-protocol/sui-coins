@@ -51,7 +51,7 @@ const IncineratorTokenObject: FC<IncineratorTokenObjectProps> = ({
             <Typography size="medium" variant="body" whiteSpace="nowrap">
               {type === displayName ? formatAddress(type) : displayName}
             </Typography>
-            {data?.includes(type) && (
+            {data?.includes(kind === 'Coin' ? display!.type : type) && (
               <Box color="error">
                 <BurnSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
               </Box>
