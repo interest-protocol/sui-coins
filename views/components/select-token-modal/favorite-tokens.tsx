@@ -81,7 +81,7 @@ const FavoriteTokens: FC<{ onSelectToken: (coin: CoinObject) => void }> = ({
               />
             }
           >
-            {symbol}
+            {symbol.slice(0, 6)}
           </Button>
         ))}
     </Box>
