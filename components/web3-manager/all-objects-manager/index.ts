@@ -6,10 +6,10 @@ import {
 import { FC } from 'react';
 import useSWR from 'swr';
 
+import { OBJECT_GUARDIANS_BLOCKLIST } from '@/constants/guardians';
 import { useObjects } from '@/hooks/use-objects';
 import { makeSWRKey } from '@/utils';
 
-import { OBJECT_GUARDIANS_BLOCKLIST } from './all-objects.data';
 import { ObjectData, TGetAllObjects } from './all-objects.types';
 
 const getAllObjects: TGetAllObjects = async (

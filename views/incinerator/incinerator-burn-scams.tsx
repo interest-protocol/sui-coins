@@ -16,7 +16,8 @@ const IncineratorBurnScams: FC = () => {
 
   const objects = useWatch({ control, name: 'objects' });
 
-  const disabled = isLoading || !!error;
+  const disabled =
+    isLoading || !!error || !objects.some(({ type }) => data?.includes(type));
 
   const onSelectScams = () => {
     if (disabled) return;
@@ -32,6 +33,8 @@ const IncineratorBurnScams: FC = () => {
       },
       [] as IncineratorForm['objects']
     );
+
+    if (!selectObjects.length) return;
 
     onBurn({ objects: selectObjects });
   };
