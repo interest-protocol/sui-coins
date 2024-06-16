@@ -23,7 +23,7 @@ const IncineratorPage: NextPage = () => {
 
   return (
     <FormProvider {...form}>
-      <Layout features={['objects', 'coins']}>
+      <Layout features={['objects', 'coins']} withBlocked>
         <SEO pageTitle="Incinerator" />
         <Incinerator />
       </Layout>
