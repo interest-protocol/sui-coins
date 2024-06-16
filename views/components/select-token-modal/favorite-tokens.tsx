@@ -59,29 +59,31 @@ const FavoriteTokens: FC<{ onSelectToken: (coin: CoinObject) => void }> = ({
 
   return (
     <Box display="flex" gap="xs" flexWrap="wrap">
-      {[...defaultFavoriteTokens, ...favoriteTokens].map(({ type, symbol }) => (
-        <Button
-          p="2xs"
-          key={v4()}
-          variant="outline"
-          borderRadius="full"
-          borderColor="outlineVariant"
-          onClick={() => handleSelectToken(type)}
-          PrefixIcon={
-            <TokenIcon
-              simple
-              withBg
-              rounded
-              type={type}
-              size="0.9rem"
-              symbol={symbol}
-              network={network}
-            />
-          }
-        >
-          {symbol}
-        </Button>
-      ))}
+      {[...defaultFavoriteTokens, ...favoriteTokens]
+        .slice(0, 12)
+        .map(({ type, symbol }) => (
+          <Button
+            p="2xs"
+            key={v4()}
+            variant="outline"
+            borderRadius="full"
+            borderColor="outlineVariant"
+            onClick={() => handleSelectToken(type)}
+            PrefixIcon={
+              <TokenIcon
+                simple
+                withBg
+                rounded
+                type={type}
+                size="0.9rem"
+                symbol={symbol}
+                network={network}
+              />
+            }
+          >
+            {symbol}
+          </Button>
+        ))}
     </Box>
   );
 };
