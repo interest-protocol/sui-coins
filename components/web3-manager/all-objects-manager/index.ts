@@ -30,7 +30,7 @@ const getAllObjects: TGetAllObjects = async (
   return [...data, ...newData];
 };
 
-const AllObjectsManager: FC = () => {
+const AllObjectsManager: FC<{ withBlocked?: boolean }> = ({ withBlocked }) => {
   const suiClient = useSuiClient();
   const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
@@ -71,7 +71,10 @@ const AllObjectsManager: FC = () => {
             if (!objectRaw.data?.content?.dataType) return acc;
             if (objectRaw.data.content.dataType !== 'moveObject') return acc;
             if (!objectRaw.data.content.hasPublicTransfer) return acc;
-            if (objectGuardiansBlocklist.includes(objectRaw.data.type!))
+            if (
+              !withBlocked &&
+              objectGuardiansBlocklist.includes(objectRaw.data.type!)
+            )
               return acc;
 
             return [

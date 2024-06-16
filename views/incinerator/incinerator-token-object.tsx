@@ -5,6 +5,8 @@ import { FC } from 'react';
 
 import { TokenIcon } from '@/components';
 import { Network } from '@/constants';
+import { useBlocklist } from '@/hooks/use-blocklist';
+import { BurnSVG } from '@/svg';
 import { getSymbolByType } from '@/utils';
 
 import { CoinObject } from '../../components/web3-manager/coins-manager/web3-manager.types';
@@ -13,6 +15,7 @@ import { IncineratorTokenObjectProps } from './incinerator.types';
 const IncineratorTokenObject: FC<IncineratorTokenObjectProps> = ({
   object,
 }) => {
+  const { data } = useBlocklist();
   const { display, type, kind } = object;
   const { network } = useSuiClientContext();
   const displayName = display
@@ -44,9 +47,16 @@ const IncineratorTokenObject: FC<IncineratorTokenObjectProps> = ({
           tooltipContent={type}
           tooltipPosition="top"
         >
-          <Typography size="medium" variant="body" whiteSpace="nowrap">
-            {type === displayName ? formatAddress(type) : displayName}
-          </Typography>
+          <Box display="flex" gap="xs">
+            <Typography size="medium" variant="body" whiteSpace="nowrap">
+              {type === displayName ? formatAddress(type) : displayName}
+            </Typography>
+            {data?.includes(type) && (
+              <Box color="error">
+                <BurnSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+              </Box>
+            )}
+          </Box>
         </TooltipWrapper>
         <Typography
           as="span"
@@ -55,7 +65,7 @@ const IncineratorTokenObject: FC<IncineratorTokenObjectProps> = ({
           color="outline"
           whiteSpace="nowrap"
         >
-          Type: {kind}
+          Kind: {kind}
         </Typography>
       </Box>
     </Box>

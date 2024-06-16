@@ -18,6 +18,7 @@ export { default as BoxDownSVG } from './box-down';
 export { default as BSCChainSVG } from './bsc-chain';
 export { default as BTCSVG } from './btc';
 export { default as BTCChainSVG } from './btc-chain';
+export { default as BurnSVG } from './burn';
 export { default as CaretRightSVG } from './caret-right';
 export { default as CaretUpSVG } from './caret-up';
 export { default as CELOSVG } from './celo';
