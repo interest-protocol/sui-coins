@@ -73,7 +73,7 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
         name: 'memechan',
         Icon: MemechanSVG,
         networks: [Network.MAINNET],
-        path: 'https://memechan.gg',
+        path: 'https://sui.memechan.gg',
       },
     ],
   },
