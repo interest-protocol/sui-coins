@@ -48,11 +48,11 @@ const AllObjectsManager: FC<{ withBlocked?: boolean }> = ({ withBlocked }) => {
         updateLoading(true);
 
         if (!currentAccount)
-          return {
+          return updateAllObjects({
             coinsObjects: [],
             ownedNfts: [],
             otherObjects: [],
-          };
+          });
 
         const objectsRaw = await getAllObjects(
           suiClient,
@@ -90,11 +90,11 @@ const AllObjectsManager: FC<{ withBlocked?: boolean }> = ({ withBlocked }) => {
         );
 
         if (!objects.length)
-          return {
+          return updateAllObjects({
             coinsObjects: [],
             ownedNfts: [],
             otherObjects: [],
-          };
+          });
 
         const [coinsObjects, ownedNfts, otherObjects] = [
           objects.filter((object) =>
