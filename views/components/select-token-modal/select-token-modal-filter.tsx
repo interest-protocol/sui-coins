@@ -17,6 +17,7 @@ const SelectTokenFilter: FC<SelectTokenFilterProps> = ({
 
   return (
     <Box
+      mt="s"
       gap="s"
       display="grid"
       flexWrap="wrap"

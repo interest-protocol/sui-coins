@@ -6,10 +6,10 @@ import {
 import { FC } from 'react';
 import useSWR from 'swr';
 
+import { OBJECT_GUARDIANS_BLOCKLIST } from '@/constants/guardians';
 import { useObjects } from '@/hooks/use-objects';
 import { makeSWRKey } from '@/utils';
 
-import { OBJECT_GUARDIANS_BLOCKLIST } from './all-objects.data';
 import { ObjectData, TGetAllObjects } from './all-objects.types';
 
 const getAllObjects: TGetAllObjects = async (
@@ -30,7 +30,7 @@ const getAllObjects: TGetAllObjects = async (
   return [...data, ...newData];
 };
 
-const AllObjectsManager: FC = () => {
+const AllObjectsManager: FC<{ withBlocked?: boolean }> = ({ withBlocked }) => {
   const suiClient = useSuiClient();
   const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
@@ -48,11 +48,11 @@ const AllObjectsManager: FC = () => {
         updateLoading(true);
 
         if (!currentAccount)
-          return {
+          return updateAllObjects({
             coinsObjects: [],
             ownedNfts: [],
             otherObjects: [],
-          };
+          });
 
         const objectsRaw = await getAllObjects(
           suiClient,
@@ -71,7 +71,10 @@ const AllObjectsManager: FC = () => {
             if (!objectRaw.data?.content?.dataType) return acc;
             if (objectRaw.data.content.dataType !== 'moveObject') return acc;
             if (!objectRaw.data.content.hasPublicTransfer) return acc;
-            if (objectGuardiansBlocklist.includes(objectRaw.data.type!))
+            if (
+              !withBlocked &&
+              objectGuardiansBlocklist.includes(objectRaw.data.type!)
+            )
               return acc;
 
             return [
@@ -87,11 +90,11 @@ const AllObjectsManager: FC = () => {
         );
 
         if (!objects.length)
-          return {
+          return updateAllObjects({
             coinsObjects: [],
             ownedNfts: [],
             otherObjects: [],
-          };
+          });
 
         const [coinsObjects, ownedNfts, otherObjects] = [
           objects.filter((object) =>

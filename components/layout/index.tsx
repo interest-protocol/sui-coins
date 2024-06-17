@@ -14,12 +14,13 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
   children,
   features,
   noSidebar,
+  withBlocked,
 }) => (
   <Box display="flex" height="100vh" overflow="hidden" bg="surface">
     {!noSidebar && <Sidebar />}
     <Box as="aside" position="relative" flex="1">
       <Header withLogo={noSidebar} />
-      <Web3Manager features={features} />
+      <Web3Manager features={features} withBlocked={withBlocked} />
       <ModalProvider>
         <Box width="100%" overflowY="auto">
           <Box

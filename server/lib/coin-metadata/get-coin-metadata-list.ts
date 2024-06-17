@@ -40,7 +40,7 @@ const getCoinMetadataList = async (
     ...new Set(uniqueTypeList.filter((type) => !docsMap[type])),
   ];
 
-  if (!missingCoinsType.length) return docs;
+  if (!missingCoinsType.length) return flattenedDocs;
 
   const missingCoinsTypeBatches = chunk<string>(missingCoinsType, 10);
 
