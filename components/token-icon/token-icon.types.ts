@@ -4,6 +4,7 @@ export interface TokenIconProps {
   type: string;
   size?: string;
   symbol: string;
+  simple?: boolean;
   withBg?: boolean;
   network: Network;
   rounded?: boolean;

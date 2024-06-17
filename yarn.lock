@@ -902,10 +902,10 @@
     ramda "^0.29.1"
     tiny-invariant "^1.3.3"
 
-"@interest-protocol/sui-tokens@^1.5.1":
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/sui-tokens/-/sui-tokens-1.5.1.tgz#c4cf0f1a91858caf052687cf1b72999c985fe9b2"
-  integrity sha512-lpuYdlKKP4yxKYn2EoZUg87f0r791DHPNFCAQFc6A9f/HmkuQEXyaEn6Ed4JFkNqPpLT4wMThgtgwuLL/0ahRw==
+"@interest-protocol/sui-tokens@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/sui-tokens/-/sui-tokens-1.7.0.tgz#0b6a171877dbd728b0bc290c7f30969d82f787f5"
+  integrity sha512-p9UB5/d5J6oswMWixZWdlu6WSdsCmswBUZ2jndCV8Pzf3NsGwLWCIQueqP8W6iXTvyl9kAVeax71alBc5jOb+g==
 
 "@interest-protocol/ui-kit@^0.2.26-alpha":
   version "0.2.26-alpha"
