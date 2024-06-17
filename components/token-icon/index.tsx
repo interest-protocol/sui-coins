@@ -118,11 +118,13 @@ const TokenIcon: FC<TokenIconProps> = ({
             </Box>
           )}
           <img
-            width="100%"
             alt={symbol}
+            width="100%"
+            height="100%"
             src={TokenIcon}
             onLoad={stopLoading}
             onError={onLoadError}
+            style={{ objectFit: 'cover', position: 'relative' }}
           />
         </Box>
         {ChainIcon && (
@@ -205,9 +207,10 @@ const TokenIcon: FC<TokenIconProps> = ({
             src={url}
             alt={symbol}
             width="100%"
+            height="100%"
             onLoad={stopLoading}
             onError={onLoadError}
-            style={{ position: 'relative' }}
+            style={{ objectFit: 'cover', position: 'relative' }}
           />
         </Box>
       </Box>
@@ -237,11 +240,13 @@ const TokenIcon: FC<TokenIconProps> = ({
           )}
           {iconSrc && (
             <img
-              src={iconSrc}
-              width="100%"
               alt={symbol}
+              width="100%"
+              height="100%"
+              src={iconSrc}
               onLoad={stopLoading}
               onError={onLoadError}
+              style={{ objectFit: 'cover', position: 'relative' }}
             />
           )}
         </Box>

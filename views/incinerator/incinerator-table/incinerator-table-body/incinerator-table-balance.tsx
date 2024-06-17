@@ -4,6 +4,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
+import { formatMoney } from '@/utils';
 
 import {
   IncineratorForm,
@@ -27,7 +28,7 @@ const IncineratorTableBalance: FC<IncineratorTableRowProps> = ({ index }) => {
 
   return (
     <Typography pr="m" as="td" size="large" variant="body" whiteSpace="nowrap">
-      {balance}
+      {isCoin ? formatMoney(balance) : balance}
     </Typography>
   );
 };
