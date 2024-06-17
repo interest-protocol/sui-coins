@@ -11,6 +11,7 @@ import { useForm } from 'react-hook-form';
 import { SearchSVG, TimesSVG } from '@/svg';
 
 import { CoinObject } from '../../../components/web3-manager/coins-manager/web3-manager.types';
+import FavoriteTokens from './favorite-tokens';
 import {
   SearchTokenForm,
   SelectTokenModalProps,
@@ -42,44 +43,47 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
       display="flex"
       bg="onPrimary"
       height="41rem"
-      minWidth="22rem"
       maxHeight="90vh"
-      maxWidth="25rem"
       overflow="hidden"
       color="onSurface"
       borderRadius="xs"
       flexDirection="column"
       boxShadow="0 0 5px #3334"
+      width={['100%', '25rem']}
+      maxWidth={['25rem', 'unset']}
       transition={{ duration: 0.3 }}
     >
       <Box
-        p="m"
-        display="grid"
+        py="s"
+        px="l"
+        display="flex"
         alignItems="center"
         justifyContent="space-between"
-        gridTemplateColumns="2rem auto 2rem"
       >
-        <Box />
-        <Typography variant="title" size="large">
+        <Typography variant="title" size="large" fontSize="xl">
           Select Token
         </Typography>
         <Button variant="text" isIcon onClick={closeModal} mr="-0.5rem">
-          <TimesSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+          <TimesSVG maxWidth="0.8rem" maxHeight="0.8rem" width="100%" />
         </Button>
       </Box>
-      <Box mx="xl" mt="l" display="flex" gap="3xs" flexDirection="column">
+      <Box mx="xl" display="flex" gap="3xs" flexDirection="column">
         <Box>
           <TextField
             fontSize="medium"
-            placeholder="Sui"
-            label="Search token"
             {...register('search')}
+            placeholder="Search token"
             nPlaceholder={{ opacity: 0.7 }}
             fieldProps={{ height: '3.5rem', mb: 'm', borderRadius: 'xs' }}
             Prefix={<SearchSVG maxWidth="1rem" maxHeight="1rem" width="100%" />}
           />
         </Box>
-        {!simple && <SelectTokenFilter control={control} setValue={setValue} />}
+        {!simple && (
+          <>
+            <FavoriteTokens onSelectToken={handleSelectToken} />
+            <SelectTokenFilter control={control} setValue={setValue} />
+          </>
+        )}
       </Box>
       <Box
         flex="1"
