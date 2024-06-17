@@ -9,7 +9,7 @@ import { METADATA } from '@/constants/metadata';
 import { useCoins } from '@/hooks/use-coins';
 import { useNetwork } from '@/hooks/use-network';
 import { CoinMetadataWithType } from '@/interface';
-import { isSui, makeSWRKey, ZERO_BIG_NUMBER } from '@/utils';
+import { fetchCoinMetadata, isSui, makeSWRKey, ZERO_BIG_NUMBER } from '@/utils';
 
 import { CoinsMap, TGetAllCoins } from './web3-manager.types';
 
@@ -55,28 +55,20 @@ const CoinsManager: FC = () => {
         ];
 
         const dbCoinsMetadata: Record<string, CoinMetadataWithType> =
-          await fetch(
-            encodeURI(
-              `/api/auth/v1/coin-metadata?network=${network}&type_list=${coinsType.join(
-                ','
-              )}`
-            )
-          )
-            .then((res) => res.json())
-            .then((data: ReadonlyArray<CoinMetadataWithType>) =>
-              data.reduce((acc, item) => {
-                const override =
-                  METADATA[network as Network][normalizeStructTag(item.type)] ||
-                  item;
-                return {
-                  ...acc,
-                  [normalizeStructTag(override.type)]: {
-                    ...override,
-                    type: normalizeStructTag(override.type),
-                  },
-                };
-              }, {})
-            );
+          await fetchCoinMetadata({ network, types: coinsType }).then((data) =>
+            data.reduce((acc, item) => {
+              const override =
+                METADATA[network as Network][normalizeStructTag(item.type)] ||
+                item;
+              return {
+                ...acc,
+                [normalizeStructTag(override.type)]: {
+                  ...override,
+                  type: normalizeStructTag(override.type),
+                },
+              };
+            }, {})
+          );
 
         const filteredCoinsRaw = coinsRaw.filter(
           ({ coinType }) => dbCoinsMetadata[normalizeStructTag(coinType)]

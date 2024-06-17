@@ -3,6 +3,7 @@ export * from './array';
 export * from './big-number';
 export * from './clipboard';
 export * from './coin';
+export * from './coin-metadata';
 export * from './fn';
 export * from './parse';
 export * from './pool';

@@ -20,10 +20,7 @@ const IncineratorRefresh: FC = () => {
   return (
     <Button
       isIcon
-      mx="s"
-      variant="text"
-      width="1.5rem"
-      height="1.5rem"
+      variant="outline"
       bg="transparent"
       color="onSurface"
       border="1px solid"
@@ -35,7 +32,7 @@ const IncineratorRefresh: FC = () => {
       nHover={{ bg: 'lowContainer' }}
       nActive={{ bg: 'transparent', color: 'onSurface' }}
     >
-      <RefreshSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+      <RefreshSVG maxWidth="1.2rem" maxHeight="1.2rem" width="100%" />
     </Button>
   );
 };
