@@ -95,7 +95,11 @@ const IncineratorManager: FC = () => {
 
   useEffect(() => {
     if (!reset && !error && !loading) updateAssets();
-  }, [tab, currentAccount, search]);
+  }, [tab, search]);
+
+  useEffect(() => {
+    mutate();
+  }, [currentAccount?.address]);
 
   useEffect(() => {
     mutate();
