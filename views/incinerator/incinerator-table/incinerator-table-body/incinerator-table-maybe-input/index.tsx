@@ -3,6 +3,7 @@ import { FC, MouseEventHandler } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { PencilSVG } from '@/svg';
+import { formatMoney } from '@/utils';
 
 import {
   IncineratorForm,
@@ -44,7 +45,7 @@ const IncineratorTableMaybeInput: FC<IncineratorTableRowProps> = ({
         variant="body"
         borderRadius="full"
       >
-        {isCoin ? value : 1}
+        {isCoin ? formatMoney(Number(value)) : 1}
       </Typography>
       {editable && (
         <Box

@@ -38,17 +38,11 @@ const CoinsManager: FC = () => {
       try {
         updateError(false);
         updateLoading(true);
-        if (!currentAccount?.address) {
-          updateCoins({} as CoinsMap);
-          return;
-        }
+        if (!currentAccount?.address) return updateCoins({} as CoinsMap);
 
         const coinsRaw = await getAllCoins(suiClient, currentAccount.address);
 
-        if (!coinsRaw.length) {
-          updateCoins({} as CoinsMap);
-          return;
-        }
+        if (!coinsRaw.length) return updateCoins({} as CoinsMap);
 
         const coinsType = [
           ...new Set(coinsRaw.map(({ coinType }) => coinType)),
@@ -74,10 +68,7 @@ const CoinsManager: FC = () => {
           ({ coinType }) => dbCoinsMetadata[normalizeStructTag(coinType)]
         );
 
-        if (!filteredCoinsRaw.length) {
-          updateCoins({} as CoinsMap);
-          return;
-        }
+        if (!filteredCoinsRaw.length) return updateCoins({} as CoinsMap);
 
         const coins = filteredCoinsRaw.reduce(
           (acc, { coinType, ...coinRaw }) => {
