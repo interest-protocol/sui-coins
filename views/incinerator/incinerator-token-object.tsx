@@ -47,15 +47,15 @@ const IncineratorTokenObject: FC<IncineratorTokenObjectProps> = ({
           tooltipContent={type}
           tooltipPosition="top"
         >
-          <Box display="flex" gap="xs">
-            <Typography size="medium" variant="body" whiteSpace="nowrap">
-              {type === displayName ? formatAddress(type) : displayName}
-            </Typography>
+          <Box display="flex" gap="2xs">
             {data?.includes(kind === 'Coin' ? display!.type : type) && (
-              <Box color="error">
+              <Box color="error" width="1rem">
                 <BurnSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
               </Box>
             )}
+            <Typography size="medium" variant="body" whiteSpace="nowrap">
+              {type === displayName ? formatAddress(type) : displayName}
+            </Typography>
           </Box>
         </TooltipWrapper>
         <Typography
