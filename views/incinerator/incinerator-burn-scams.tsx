@@ -54,7 +54,7 @@ const IncineratorBurnScams: FC = () => {
       onClick={onSelectScams}
       color="onErrorContainer"
       borderColor="outlineVariant"
-      nHover={{ bg: 'error', color: 'surface' }}
+      nHover={disabled ? '' : { bg: 'error', color: 'surface' }}
       nActive={{ bg: 'error', color: 'surface' }}
     >
       <BurnSVG maxWidth="1.2rem" maxHeight="1.2rem" width="100%" />
