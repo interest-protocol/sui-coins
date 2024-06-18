@@ -2,7 +2,7 @@
 import { Network } from '@/constants';
 import { CoinMetadataWithType } from '@/interface';
 import { CoinMetadataModel } from '@/server/model/coin-metadata';
-import { getBasicCoinMetadata } from '@/utils';
+import { getBasicCoinMetadata, getSymbolByType } from '@/utils';
 import { chunk } from '@/utils';
 
 import { COIN_METADATA_MODEL_MAP, SUI_CLIENT_PROVIDER_MAP } from '../utils';
@@ -54,7 +54,12 @@ const getCoinMetadataList = async (
         suiClient
           .getCoinMetadata({ coinType })
           .then((metadata) => ({
-            ...(metadata ?? getBasicCoinMetadata(coinType)),
+            ...(metadata
+              ? {
+                  ...metadata,
+                  symbol: metadata.symbol || getSymbolByType(coinType),
+                }
+              : getBasicCoinMetadata(coinType)),
             hasMetadata: !!metadata,
             type: coinType,
           }))

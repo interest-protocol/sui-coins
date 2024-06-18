@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Model, Schema } from 'mongoose';
 
 import { NFTCollectionMetadata } from '@/interface';
 
@@ -31,7 +31,9 @@ export const NFTCollectionMetadataSchema =
     },
   });
 
-export default mongoose.models[modelName] ||
+export default (mongoose.models[
+  modelName
+] as Model<NFTCollectionMetadataModel>) ||
   mongoose.model<NFTCollectionMetadataModel>(
     modelName,
     NFTCollectionMetadataSchema
