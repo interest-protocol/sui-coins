@@ -55,7 +55,10 @@ const getCoinMetadataList = async (
           .getCoinMetadata({ coinType })
           .then((metadata) => ({
             ...(metadata
-              ? { ...metadata, symbol: getSymbolByType(coinType) }
+              ? {
+                  ...metadata,
+                  symbol: metadata.symbol || getSymbolByType(coinType),
+                }
               : getBasicCoinMetadata(coinType)),
             hasMetadata: !!metadata,
             type: coinType,
