@@ -6,13 +6,14 @@ import TokenIcon from '@/components/token-icon';
 import { useNetwork } from '@/context/network';
 import { useModal } from '@/hooks/use-modal';
 import { CoinData } from '@/interface';
-import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
+import { ChevronRightSVG } from '@/svg';
+import { isSui } from '@/utils';
 import SelectTokenModal from '@/views/components/select-token-modal';
 
 import { CreatePoolForm } from '../../pool-create.types';
 import { InputProps } from './input.types';
 
-const SelectToken: FC<InputProps> = ({ index }) => {
+const SelectToken: FC<InputProps> = ({ index, isMobile }) => {
   const network = useNetwork();
   const { setModal, handleClose } = useModal();
 
@@ -33,7 +34,18 @@ const SelectToken: FC<InputProps> = ({ index }) => {
       symbol,
       decimals,
       value: '',
+      usdPrice: currentToken?.usdPrice,
     });
+
+    fetch(`/api/auth/v1/coin-price?symbol=${isSui(type) ? 'SUI' : symbol}`)
+      .then((response) => response.json())
+      .then((data) =>
+        setValue(
+          `tokens.${index}.usdPrice`,
+          data[isSui(type) ? 'SUI' : symbol][0].quote.USD.price
+        )
+      )
+      .catch(() => null);
   };
 
   const openModal = () =>
@@ -64,9 +76,9 @@ const SelectToken: FC<InputProps> = ({ index }) => {
         fontSize="s"
         width="100%"
         variant="tonal"
+        bg={currentSymbol ? 'transparent' : 'highestContainer'}
         color="onSurface"
         borderRadius="xs"
-        bg="highestContainer"
         onClick={openModal}
         {...(currentSymbol && {
           PrefixIcon: (
@@ -79,12 +91,16 @@ const SelectToken: FC<InputProps> = ({ index }) => {
           ),
         })}
       >
-        <Typography size="large" variant="label" p="xs" whiteSpace="nowrap">
-          {currentSymbol || 'Select Token'}
+        <Typography
+          p="xs"
+          variant="label"
+          whiteSpace="nowrap"
+          width="100%"
+          size={isMobile ? 'large' : 'small'}
+        >
+          {currentSymbol || 'Select token'}
         </Typography>
-        {currentSymbol ? (
-          <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-        ) : (
+        {!currentSymbol && (
           <ChevronRightSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
         )}
       </Button>

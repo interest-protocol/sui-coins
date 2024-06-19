@@ -60,8 +60,8 @@ const PoolNextButton: FC = () => {
     null,
     () =>
       setValue('tokens', [
-        { type: '', symbol: '', decimals: 0, value: '' },
-        { type: '', symbol: '', decimals: 0, value: '' },
+        { type: '', symbol: '', decimals: 0, value: '', usdPrice: null },
+        { type: '', symbol: '', decimals: 0, value: '', usdPrice: null },
       ]),
     // () => setValue('dex', ''),
   ];
