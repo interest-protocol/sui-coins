@@ -1,4 +1,4 @@
-import type { Trade } from '@hop.ag/sdk/dist/sdk/util';
+import type { Trade } from '@hop.ag/sdk';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 
 import type { JSONQuoteResponse } from '@/server/lib/hop/hop.utils';

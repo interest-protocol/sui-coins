@@ -1,5 +1,5 @@
-import { bcs } from '@mysten/sui.js/bcs';
-import { fromHEX, normalizeSuiAddress, toHEX } from '@mysten/sui.js/utils';
+import { bcs } from '@mysten/sui/bcs';
+import { fromHEX, normalizeSuiAddress, toHEX } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
 
 import { ICreateTokenForm } from '@/views/create-token/create-token.types';

@@ -1,14 +1,14 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import {
   useCurrentAccount,
-  useSignTransactionBlock,
+  useSignTransaction,
   useSuiClient,
   useSuiClientContext,
 } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
-import { TransactionObjectArgument } from '@mysten/sui.js/transactions';
-import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { formatAddress } from '@mysten/sui.js/utils';
+import { SuiTransactionBlockResponse } from '@mysten/sui/client';
+import { Transaction } from '@mysten/sui/transactions';
+import { TransactionObjectArgument } from '@mysten/sui/transactions';
 import BigNumber from 'bignumber.js';
 import { useFormContext } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -36,7 +36,7 @@ import IncineratorTokenObject from './incinerator-token-object';
 const useBurn = () => {
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
-  const signTransactionBlock = useSignTransactionBlock();
+  const signTransaction = useSignTransaction();
 
   return async (
     objects: ReadonlyArray<ObjectField>,
@@ -45,7 +45,7 @@ const useBurn = () => {
     if (!suiClient) throw new Error('Provider not found');
     if (!currentAccount) throw new Error('There is not an account');
 
-    const txb = new TransactionBlock();
+    const tx = new Transaction();
 
     const objectsToTransfer = objects.map((object) => {
       if (!isCoinObject(object as ObjectData)) return object.objectId;
@@ -53,9 +53,9 @@ const useBurn = () => {
       const objectBalance = BigNumber(object.display?.balance || '0');
 
       if (objectBalance.isZero()) {
-        txb.moveCall({
+        tx.moveCall({
           target: '0x2::coin::destroy_zero',
-          arguments: [txb.object(object.objectId)],
+          arguments: [tx.object(object.objectId)],
           typeArguments: [object.display?.type || ''],
         });
         return null;
@@ -71,18 +71,18 @@ const useBurn = () => {
       const [firstCoin, ...otherCoins] = (object as CoinObjectData).display
         .objects;
 
-      const firstCoinObject = txb.object(firstCoin.coinObjectId);
+      const firstCoinObject = tx.object(firstCoin.coinObjectId);
 
       if (otherCoins.length)
-        txb.mergeCoins(
+        tx.mergeCoins(
           firstCoinObject,
           otherCoins.map((coin) => coin.coinObjectId)
         );
 
       if (amount.gte(object.display!.balance)) return firstCoinObject;
 
-      const [splittedCoin] = txb.splitCoins(firstCoinObject, [
-        txb.pure(amount.decimalPlaces(0).toString()),
+      const [splittedCoin] = tx.splitCoins(firstCoinObject, [
+        tx.pure.u64(amount.decimalPlaces(0).toString()),
       ]);
 
       return splittedCoin;
@@ -93,18 +93,24 @@ const useBurn = () => {
       | string[];
 
     if (toTransfer.length)
-      txb.transferObjects(toTransfer, txb.pure.address('0x0'));
+      tx.transferObjects(toTransfer, tx.pure.address('0x0'));
 
-    const tx = await signAndExecute({
-      txb,
+    const tx2 = await signAndExecute({
+      tx,
       suiClient,
       currentAccount,
-      signTransactionBlock,
+      signTransaction,
     });
 
-    throwTXIfNotSuccessful(tx);
+    throwTXIfNotSuccessful(tx2);
 
-    onSuccess(tx);
+    await suiClient.waitForTransaction({
+      digest: tx2.digest,
+      timeout: 10000,
+      pollInterval: 500,
+    });
+
+    onSuccess(tx2);
   };
 };
 
@@ -129,6 +135,7 @@ export const useOnBurn = () => {
 
   const onSuccess = (tx: SuiTransactionBlockResponse) => {
     showTXSuccessToast(tx, network as Network);
+    mutate();
   };
 
   const handleBurn = async ({ objects }: Pick<IncineratorForm, 'objects'>) => {

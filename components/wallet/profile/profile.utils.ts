@@ -1,4 +1,4 @@
-import { formatAddress } from '@mysten/sui.js/utils';
+import { formatAddress } from '@mysten/sui/utils';
 
 export const getName = (
   account: string,

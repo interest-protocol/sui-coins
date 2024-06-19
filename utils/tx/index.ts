@@ -1,8 +1,4 @@
-import {
-  DevInspectResults,
-  SuiTransactionBlockResponse,
-} from '@mysten/sui.js/client';
-import { head, propOr } from 'ramda';
+import { SuiTransactionBlockResponse } from '@mysten/sui/client';
 
 import { SignAndExecuteArgs } from './tx.types';
 
@@ -16,37 +12,20 @@ export const throwTXIfNotSuccessful = (
   }
 };
 
-export const getReturnValuesFromInspectResults = (
-  x: DevInspectResults
-): Array<[number[], string]> | null => {
-  const results = propOr([], 'results', x) as DevInspectResults['results'];
-
-  if (!results?.length) return null;
-
-  const firstElem = head(results);
-
-  if (!firstElem) return null;
-
-  const returnValues = firstElem?.returnValues;
-
-  return returnValues ? returnValues : null;
-};
-
 export const signAndExecute = async ({
   suiClient,
   currentAccount,
-  txb,
-  signTransactionBlock,
+  tx,
+  signTransaction,
   options,
 }: SignAndExecuteArgs) => {
-  const { signature, transactionBlockBytes } =
-    await signTransactionBlock.mutateAsync({
-      transactionBlock: txb,
-      account: currentAccount,
-    });
+  const { signature, bytes } = await signTransaction.mutateAsync({
+    transaction: tx,
+    account: currentAccount,
+  });
 
   return suiClient.executeTransactionBlock({
-    transactionBlock: transactionBlockBytes,
+    transactionBlock: bytes,
     signature,
     options: {
       showEffects: true,

@@ -1,10 +1,16 @@
+import { bcs } from '@mysten/bcs';
 import {
   SuiObjectChangeCreated,
   SuiObjectRef,
   SuiObjectResponse,
   SuiTransactionBlockResponse,
-} from '@mysten/sui.js/client';
-import { normalizeSuiAddress, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+} from '@mysten/sui/client';
+import {
+  fromHEX,
+  normalizeSuiAddress,
+  SUI_TYPE_ARG,
+  toHEX,
+} from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
 import { pathOr, prop } from 'ramda';
 
@@ -30,31 +36,47 @@ export const findNextVersionAndDigest = (
 
 export const sendAirdrop = async ({
   suiClient,
-  txb,
+  tx,
   contractPackageId,
   tokenType,
   coinToSend,
   batch,
   currentAccount,
-  signTransactionBlock,
+  signTransaction,
 }: SendAirdropArgs) => {
-  txb.moveCall({
+  tx.moveCall({
     target: `${contractPackageId}::airdrop::send`,
     typeArguments: [tokenType],
     arguments: [
       coinToSend,
-      txb.pure(batch.map((x) => normalizeSuiAddress(x.address))),
-      txb.pure(
-        batch.map((x) => BigNumber(x.amount).decimalPlaces(0).toString())
+      tx.pure(
+        bcs
+          .vector(
+            bcs.bytes(32).transform({
+              // To change the input type, you need to provide a type definition for the input
+              input: (val: string) => fromHEX(val),
+              output: (val) => toHEX(val),
+            })
+          )
+          .serialize(batch.map((x) => normalizeSuiAddress(x.address)))
+          .toBytes()
+      ),
+      tx.pure(
+        bcs
+          .vector(bcs.u64())
+          .serialize(
+            batch.map((x) => BigNumber(x.amount).decimalPlaces(0).toString())
+          )
+          .toBytes()
       ),
     ],
   });
 
   return signAndExecute({
     suiClient,
-    txb,
+    tx,
     currentAccount,
-    signTransactionBlock,
+    signTransaction,
     options: {
       showObjectChanges: true,
     },

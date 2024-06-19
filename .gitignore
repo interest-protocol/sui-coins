@@ -115,3 +115,7 @@ types
 
 # Husky
 .husky/_
+
+# IDE
+.idea
+.vscode

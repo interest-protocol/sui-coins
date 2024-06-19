@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@0no-co/graphql.web@^1.0.4", "@0no-co/graphql.web@^1.0.5":
+"@0no-co/graphql.web@^1.0.5":
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/@0no-co/graphql.web/-/graphql.web-1.0.7.tgz#c7a762c887b3482a79ffa68f63de5e96059a62e4"
   integrity sha512-E3Qku4mTzdrlwVWGPxklDnME5ANrEGetvYw4i2GCRlppWXXE4QD66j7pwb8HelZwS6LnqEChhrSOGCXpbiu6MQ==
@@ -814,14 +814,6 @@
   dependencies:
     "@gitmoji/gitmoji-regex" "1.0.0"
 
-"@gql.tada/cli-utils@0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@gql.tada/cli-utils/-/cli-utils-0.3.1.tgz#5d86c409c371506a96e59ead710020d76d760207"
-  integrity sha512-Eq7lV0059AqqdM8TL53k3gtxKWQ+aPAG3Nn8ZyTZUM5DNniwqH3CHnHg+pTR67Q51rX8CXRpyAXEHlJvS8GvqQ==
-  dependencies:
-    "@gql.tada/internal" "0.1.1"
-    graphql "^16.8.1"
-
 "@gql.tada/cli-utils@1.3.4":
   version "1.3.4"
   resolved "https://registry.yarnpkg.com/@gql.tada/cli-utils/-/cli-utils-1.3.4.tgz#aa58b72fd4dcd15ae4ad345af2cf5fc17e6e5d5b"
@@ -833,13 +825,6 @@
     "@vue/language-core" "^2.0.0"
     graphql "^15.5.0 || ^16.0.0 || ^17.0.0"
     svelte2tsx "^0.7.6"
-
-"@gql.tada/internal@0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@gql.tada/internal/-/internal-0.1.1.tgz#e1b08db928c1591dd97e3ade222215c5d26980c6"
-  integrity sha512-2TrWcoluLySDBKKoGAGWQzXhiF2Vaz9xyfqsAP25Uz/xKmuFm+Nxpma6oLlwRec7lArNiRu9u7Vi1GjLik1UfA==
-  dependencies:
-    graphql "^16.8.1"
 
 "@gql.tada/internal@0.4.0":
   version "0.4.0"
@@ -865,13 +850,15 @@
   resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-3.3.4.tgz#de9b668c2835eb06892290192de6e2a5c906229b"
   integrity sha512-o5cgpGOuJYrd+iMKvkttOclgwRW86EsWJZZRC23prf0uU2i48Htq4PuT73AVb9ionFyZrwYEITuOFGF+BydEtQ==
 
-"@hop.ag/sdk@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@hop.ag/sdk/-/sdk-1.0.3.tgz#40f410f7352f07fc04ffb2a3fa043ccb08c111cf"
-  integrity sha512-sAjXzjNd1BWOJzs6JEP9XlZ86iXR7sNX0ArMTQGSH8HL2/0GEtEjqdE81FdIev5zSJyQa2HZttXhCsd5ZWqh8A==
+"@hop.ag/sdk@^3.0.6":
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/@hop.ag/sdk/-/sdk-3.0.6.tgz#09480201dd8e9870c46781c2bc6e036367b003cf"
+  integrity sha512-l7OnPX0u+E4Q8jwfAuIp6AbwTqPUx9HY4Y9v55B033SVmyiw2dP5FQ+NcoeXP+6NNRFwHnSqRVL7ndnGpNDzSg==
   dependencies:
-    "@mysten/sui.js" "^0.52.0"
-    axios "^1.6.8"
+    "@mysten/sui" "^1.1.2"
+    cross-fetch "^4.0.0"
+    tslib "^2.6.2"
+    zod "^3.23.8"
 
 "@humanwhocodes/config-array@^0.11.14":
   version "0.11.14"
@@ -1232,14 +1219,21 @@
   dependencies:
     bs58 "^5.0.0"
 
-"@mysten/dapp-kit@^0.13.2":
-  version "0.13.2"
-  resolved "https://registry.yarnpkg.com/@mysten/dapp-kit/-/dapp-kit-0.13.2.tgz#6093af2650399a442bca649720a9c094b6ef3ae1"
-  integrity sha512-YO4DTKwF0CiUjiB4As3tnHHbD30/9ZNIe1nXScXCl8KJEe0A0uuoLlTP9y6xVn84VftJGek7WmsIeuEq6wFZ0w==
+"@mysten/bcs@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@mysten/bcs/-/bcs-1.0.2.tgz#d24b051f1a0652d44f61d0a6d8b94f7351fdae1e"
+  integrity sha512-haHT0km/9yIIe8lwo8gDFxGLnoxfRF4WmEVCz4lDXbEVQRsZkF0zB97kukiwMjDuFBaGVUhrOMCLz6td8tSMaQ==
   dependencies:
-    "@mysten/sui.js" "0.54.1"
-    "@mysten/wallet-standard" "0.11.6"
-    "@mysten/zksend" "0.8.2"
+    bs58 "^5.0.0"
+
+"@mysten/dapp-kit@^0.14.9":
+  version "0.14.9"
+  resolved "https://registry.yarnpkg.com/@mysten/dapp-kit/-/dapp-kit-0.14.9.tgz#3caaf96a8561771f5315986928f0e0375ec233ca"
+  integrity sha512-QatDVBkstuYpKw7mXgeyzXfTzHUAqE9KLhHrD/hcX/zkJ7e2x7XFZbbFQzr7PU6IYuuswAE+aemQEiQoRDiwww==
+  dependencies:
+    "@mysten/sui" "1.1.2"
+    "@mysten/wallet-standard" "0.12.9"
+    "@mysten/zksend" "0.9.9"
     "@radix-ui/react-dialog" "^1.0.4"
     "@radix-ui/react-dropdown-menu" "^2.0.5"
     "@radix-ui/react-slot" "^1.0.2"
@@ -1248,24 +1242,6 @@
     "@vanilla-extract/recipes" "^0.5.0"
     clsx "^2.0.0"
     zustand "^4.4.1"
-
-"@mysten/sui.js@0.54.1", "@mysten/sui.js@^0.54.1":
-  version "0.54.1"
-  resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.54.1.tgz#27b6724dd30e0e81d50b47437cb206d0cec25f8b"
-  integrity sha512-TSmGIX7U9O/uS9EKIQdv7/S69KTbBhMJVelXCafJE6IJw8iB9cN9uLu0+uklkBSDrbRmLSEY70jMr3uRFjReIg==
-  dependencies:
-    "@graphql-typed-document-node/core" "^3.2.0"
-    "@mysten/bcs" "0.11.1"
-    "@noble/curves" "^1.1.0"
-    "@noble/hashes" "^1.3.1"
-    "@scure/bip32" "^1.3.1"
-    "@scure/bip39" "^1.2.1"
-    "@suchipi/femver" "^1.0.0"
-    bech32 "^2.0.0"
-    gql.tada "^1.7.0"
-    graphql "^16.8.1"
-    superstruct "^1.0.3"
-    tweetnacl "^1.0.3"
 
 "@mysten/sui.js@^0.37.1":
   version "0.37.1"
@@ -1299,10 +1275,10 @@
     superstruct "^1.0.3"
     tweetnacl "^1.0.3"
 
-"@mysten/sui.js@^0.52.0":
-  version "0.52.0"
-  resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.52.0.tgz#2916f79fc5d7832fa538d358b15fe44ade330039"
-  integrity sha512-oqfA0O/STWDJgnxvu07HsDRybG8yD3pfqAhADFawZTthbPdl6U01qJQVCzW7yf2OqG9AkYWHT+392rVcVjbcnw==
+"@mysten/sui.js@^0.54.1":
+  version "0.54.1"
+  resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.54.1.tgz#27b6724dd30e0e81d50b47437cb206d0cec25f8b"
+  integrity sha512-TSmGIX7U9O/uS9EKIQdv7/S69KTbBhMJVelXCafJE6IJw8iB9cN9uLu0+uklkBSDrbRmLSEY70jMr3uRFjReIg==
   dependencies:
     "@graphql-typed-document-node/core" "^3.2.0"
     "@mysten/bcs" "0.11.1"
@@ -1312,44 +1288,51 @@
     "@scure/bip39" "^1.2.1"
     "@suchipi/femver" "^1.0.0"
     bech32 "^2.0.0"
-    gql.tada "^1.4.1"
+    gql.tada "^1.7.0"
     graphql "^16.8.1"
     superstruct "^1.0.3"
     tweetnacl "^1.0.3"
 
-"@mysten/suins-toolkit@^0.4.10":
-  version "0.4.10"
-  resolved "https://registry.yarnpkg.com/@mysten/suins-toolkit/-/suins-toolkit-0.4.10.tgz#0a38e7a926291987bff9de9b3aa1626ff5b78c7e"
-  integrity sha512-aLMiQiKBFNuGy5QA+FBdIvJpM5Z6VewgsJOXjsUuqc0KYrsGcZVA9aeeO+i9bhmxeAidmiG0X03UuXewI1PT6w==
+"@mysten/sui@1.1.2", "@mysten/sui@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@mysten/sui/-/sui-1.1.2.tgz#6c84d5c74b491e23f560a9d72ded020efa5e1dcd"
+  integrity sha512-S1MfGvbkUxKGd39bfA6G21UVwJSSgJW8uKHinSByjt86+YKvSZxlF5zr6RVKcP4Rn8gl5ytMbZQfCPn+0nuGTg==
   dependencies:
-    "@mysten/sui.js" "0.54.1"
-
-"@mysten/wallet-standard@0.11.6":
-  version "0.11.6"
-  resolved "https://registry.yarnpkg.com/@mysten/wallet-standard/-/wallet-standard-0.11.6.tgz#3634a686fe806c9d35f9ce4f711423fc3e144617"
-  integrity sha512-iG/O+Al2oxYb+Cf1si8BzfvEGZoupHWjCxxeJHuk3BQhmaffkDe3JXy6AgCW2u+ZJm/sfO7Uva0Q4FAVt0WMZQ==
-  dependencies:
-    "@mysten/sui.js" "0.54.1"
-    "@wallet-standard/core" "1.0.3"
-
-"@mysten/zksend@0.8.2":
-  version "0.8.2"
-  resolved "https://registry.yarnpkg.com/@mysten/zksend/-/zksend-0.8.2.tgz#0ac3fcea8c15abb671dbfc28d38f2ddada7a74c2"
-  integrity sha512-XsQsxJm3QHjq4CcsR2vwYvmWhWw20AwFfJuDe6wbDGhpMUN91R8A055IVCr4OBmM1+48u0IgTsVyUrYJ4wAa+Q==
-  dependencies:
-    "@mysten/sui.js" "0.54.1"
-    "@mysten/wallet-standard" "0.11.6"
-    mitt "^3.0.1"
-    nanostores "^0.9.3"
+    "@graphql-typed-document-node/core" "^3.2.0"
+    "@mysten/bcs" "1.0.2"
+    "@noble/curves" "^1.1.0"
+    "@noble/hashes" "^1.3.1"
+    "@scure/bip32" "^1.3.1"
+    "@scure/bip39" "^1.2.1"
+    "@suchipi/femver" "^1.0.0"
+    bech32 "^2.0.0"
+    gql.tada "^1.7.0"
+    graphql "^16.8.1"
+    tweetnacl "^1.0.3"
     valibot "^0.25.0"
 
-"@mysten/zksend@^0.8.0":
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/@mysten/zksend/-/zksend-0.8.0.tgz#5f44ecd3b835a6156f44a7d21bdb1a23546b83c4"
-  integrity sha512-SB8OZadpx1LJtg8TNEkFWPL1/NODYr/pm3P2nIPj0pdiDWUR5mEx+EsJnhwNdLo405ZPV1z7jm7NA3rB+4IS/g==
+"@mysten/suins-toolkit@^0.5.8":
+  version "0.5.8"
+  resolved "https://registry.yarnpkg.com/@mysten/suins-toolkit/-/suins-toolkit-0.5.8.tgz#8cbe9256c91b2ff23f267515f7535963b0d01ecf"
+  integrity sha512-WFqfD1/NM1+mcr63zMNC8ycyOJXvb4RiEEJBi1vmCwRIywUFBKgnw+T6RPWulz5b5Wu+8XrzXPBDHaBQlJYeew==
   dependencies:
-    "@mysten/sui.js" "0.54.1"
-    "@mysten/wallet-standard" "0.11.6"
+    "@mysten/sui" "1.1.2"
+
+"@mysten/wallet-standard@0.12.9", "@mysten/wallet-standard@^0.12.9":
+  version "0.12.9"
+  resolved "https://registry.yarnpkg.com/@mysten/wallet-standard/-/wallet-standard-0.12.9.tgz#3155980587a28fbaaff9cfe6bfaadab3735db2b3"
+  integrity sha512-7UDiu11VkA8phWf/EVjZMSQqqQ6KzaZGr5OiqG1RsbrnVmAz3DApNLxHbBiH3rOJZL8CG0c+V6mHlenCVLrSDg==
+  dependencies:
+    "@mysten/sui" "1.1.2"
+    "@wallet-standard/core" "1.0.3"
+
+"@mysten/zksend@0.9.9", "@mysten/zksend@^0.9.9":
+  version "0.9.9"
+  resolved "https://registry.yarnpkg.com/@mysten/zksend/-/zksend-0.9.9.tgz#1657afdc93ae65833398e10fa7222f17c7f6cadb"
+  integrity sha512-8xUz4Alz4s8c0p36AlHiGzJkiedYK1CjZG5FojEoZY7v3Vu+0nvOIjS9fixCTGlUGHvBKpQuIKuuX3bEl6XESA==
+  dependencies:
+    "@mysten/sui" "1.1.2"
+    "@mysten/wallet-standard" "0.12.9"
     mitt "^3.0.1"
     nanostores "^0.9.3"
     valibot "^0.25.0"
@@ -2007,10 +1990,10 @@
     "@noble/hashes" "~1.4.0"
     "@scure/base" "~1.1.6"
 
-"@shinami/clients@^0.7.3":
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/@shinami/clients/-/clients-0.7.3.tgz#ce34192c40e40ad1b90223036e542511926f284f"
-  integrity sha512-YLWrqE+s70v00kyJ+Py+burb7UQcY1gXpsk6SVxenMa+cPPrc24L9Ao1obAlJiVqxbAuLQT29DzD0o6eAI7BKg==
+"@shinami/clients@^0.8.1":
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/@shinami/clients/-/clients-0.8.1.tgz#9869221c62b85f00b9d5a7d394bdb2994229b317"
+  integrity sha512-jjngbb+hzOifkZyFYlu4dVgp9n9eHUoozkud38kiuPjLiuZ/WULr/fg/puDBqVQWfFiMCvL5OFucYsbuV7QmAQ==
   dependencies:
     "@open-rpc/client-js" "^1.8.1"
     superstruct "^1.0.3"
@@ -2103,22 +2086,22 @@
   dependencies:
     tslib "^2.4.0"
 
-"@tanstack/query-core@5.36.0":
-  version "5.36.0"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.36.0.tgz#905bd05b6a73e58d70d95912d84e979ed865ab6a"
-  integrity sha512-B5BD3pg/mztDR36i77hGcyySKKeYrbM5mnogOROTBi1SUml5ByRK7PGUUl16vvubvQC+mSnqziFG/VIy/DE3FQ==
+"@tanstack/query-core@5.45.0":
+  version "5.45.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.45.0.tgz#47a662d311c2588867341238960ec21dc7f0714e"
+  integrity sha512-RVfIZQmFUTdjhSAAblvueimfngYyfN6HlwaJUPK71PKd7yi43Vs1S/rdimmZedPWX/WGppcq/U1HOj7O7FwYxw==
 
 "@tanstack/query-core@^5.28.0":
   version "5.36.1"
   resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.36.1.tgz#ae46f935c4752812a56c6815305061a3da82e7b8"
   integrity sha512-BteWYEPUcucEu3NBcDAgKuI4U25R9aPrHSP6YSf2NvaD2pSlIQTdqOfLRsxH9WdRYg7k0Uom35Uacb6nvbIMJg==
 
-"@tanstack/react-query@^5.7.2":
-  version "5.36.0"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.36.0.tgz#680cb1490d8b823ec7185e1a97065241cda2ea67"
-  integrity sha512-BATvtM0rohwg7pRHUnxgeDiwLWRGZ8OM/4y8LImHVpecQWoH6Uhytu3Z8YV6V7hQ1sMQBFcUrGE1/e4MxR6YiA==
+"@tanstack/react-query@^5.45.1":
+  version "5.45.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.45.1.tgz#a0ac6bb89b4a2c2b0251f6647a0a370d86f05347"
+  integrity sha512-mYYfJujKg2kxmkRRjA6nn4YKG3ITsKuH22f1kteJ5IuVQqgKUgbaSQfYwVP0gBS05mhwxO03HVpD0t7BMN7WOA==
   dependencies:
-    "@tanstack/query-core" "5.36.0"
+    "@tanstack/query-core" "5.45.0"
 
 "@testing-library/dom@^9.0.0":
   version "9.3.4"
@@ -2579,10 +2562,10 @@
   resolved "https://registry.yarnpkg.com/@vanilla-extract/recipes/-/recipes-0.5.2.tgz#fccd09af9ce1ab3abd17fcf20cd649df0e7f30d3"
   integrity sha512-IcDw3tFOcSJ+DUxL8MIGbg03eyccYb6NBO/rcgp439PDuHxo5GIQefVeGc1L5mIr/lUVPwDc1N5OXTHiGpiz1A==
 
-"@vercel/analytics@^1.1.1":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@vercel/analytics/-/analytics-1.2.2.tgz#715d8f203a170c06ba36b363e03b048c03060d5d"
-  integrity sha512-X0rctVWkQV1e5Y300ehVNqpOfSOufo7ieA5PIdna8yX/U7Vjz0GFsGf4qvAhxV02uQ2CVt7GYcrFfddXXK2Y4A==
+"@vercel/analytics@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@vercel/analytics/-/analytics-1.3.1.tgz#e2b1deac1b5d14fa2e4fe36186ac5054c6385ae4"
+  integrity sha512-xhSlYgAuJ6Q4WQGkzYTLmXwhYl39sWjoMA3nHxfkvG+WdBT25c563a7QhwwKivEOZtPJXifYHR1m2ihoisbWyA==
   dependencies:
     server-only "^0.0.1"
 
@@ -2879,10 +2862,10 @@ acorn@^8.4.1, acorn@^8.6.0, acorn@^8.9.0:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.11.3.tgz#71e0b14e13a4ec160724b38fb7b0f233b1b81d7a"
   integrity sha512-Y9rRfJG5jcKOE0CLisYbojUjIrIEE7AGMzA/Sm4BslANhbS+cDMpgBdcPT91oJ7OuJ9hYJBx59RjbhxVnrF8Xg==
 
-aftermath-ts-sdk@^1.1.61:
-  version "1.1.61"
-  resolved "https://registry.yarnpkg.com/aftermath-ts-sdk/-/aftermath-ts-sdk-1.1.61.tgz#c40b5624e7b4aa11e2694e023ffdc58ba11c7018"
-  integrity sha512-Bhr0XsdYzYftmZFL5Ob084zOclIsmPfvenMUUJOIe9tVj0/qLWcGI5hRI6Awjxe9bQD2AXZ/QJuIR6O9P615VA==
+aftermath-ts-sdk@^1.1.67:
+  version "1.1.67"
+  resolved "https://registry.yarnpkg.com/aftermath-ts-sdk/-/aftermath-ts-sdk-1.1.67.tgz#7fcedfdc6484782a809de0e184d309f517cb4fe5"
+  integrity sha512-54zvr8BHHb4ttxDkeDhh1si/lbD8hPYHqEyZVfbdCwb1oLnlbkb7jQrgYhbgLY1h0bIcn/US8EC4FO6J4R9pBg==
   dependencies:
     "@pythnetwork/pyth-sui-js" "^1.2.3"
     "@scallop-io/sui-scallop-sdk" "^0.44.10"
@@ -3248,7 +3231,7 @@ axios-retry@^3.8.0:
     "@babel/runtime" "^7.15.4"
     is-retry-allowed "^2.2.0"
 
-axios@^1.5.1, axios@^1.6.0, axios@^1.6.8:
+axios@^1.5.1, axios@^1.6.0:
   version "1.6.8"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.8.tgz#66d294951f5d988a00e87a0ffb955316a619ea66"
   integrity sha512-v/ZHtJDU39mDpyBoFVkETcd/uNdxrWRrg3bKpOKzXFA6Bvqopts6ALSMU3y6ijYxbw2B+wPrIv46egTzJXCLGQ==
@@ -3924,6 +3907,13 @@ create-require@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/create-require/-/create-require-1.1.1.tgz#c1d7e8f1e5f6cfc9ff65f9cd352d37348756c333"
   integrity sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==
+
+cross-fetch@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-4.0.0.tgz#f037aef1580bb3a1a35164ea2a848ba81b445983"
+  integrity sha512-e4a5N8lVvuLgAWgnCrLr2PP0YyDOTHa9H/Rj54dirp61qXnNq46m82bRhNqIA5VccJtWBvPTFRV3TtvHUKPB1g==
+  dependencies:
+    node-fetch "^2.6.12"
 
 cross-spawn@^7.0.0, cross-spawn@^7.0.2, cross-spawn@^7.0.3:
   version "7.0.3"
@@ -5444,15 +5434,6 @@ gopd@^1.0.1:
   integrity sha512-d65bNlIadxvpb/A2abVdlqKqV563juRnZ1Wtk6s1sIR8uNsXR70xqIzVqxVf1eTqDunwT2MkczEeaezCKTZhwA==
   dependencies:
     get-intrinsic "^1.1.3"
-
-gql.tada@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/gql.tada/-/gql.tada-1.4.1.tgz#d25f6d4941c146651b85191b4d54bad183183fac"
-  integrity sha512-AnDA26jbbyc4COiNzovgEwI1XKmRz4F5XoFFSI8Gh6TQqqzulOVNafv/1l8/C5S/iIqV9uwQmy33AJ89peCLBg==
-  dependencies:
-    "@0no-co/graphql.web" "^1.0.4"
-    "@gql.tada/cli-utils" "0.3.1"
-    "@gql.tada/internal" "0.1.1"
 
 gql.tada@^1.7.0:
   version "1.7.0"
@@ -7419,7 +7400,7 @@ node-fetch@2.6.9:
   dependencies:
     whatwg-url "^5.0.0"
 
-node-fetch@^2.0.0, node-fetch@^2.6.1, node-fetch@^2.6.7:
+node-fetch@^2.0.0, node-fetch@^2.6.1, node-fetch@^2.6.12, node-fetch@^2.6.7:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.7.0.tgz#d0f0fa6e3e2dc1d27efcd8ad99d550bda94d187d"
   integrity sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==
@@ -10027,6 +10008,11 @@ yup@*, yup@^1.3.2:
     tiny-case "^1.0.3"
     toposort "^2.0.2"
     type-fest "^2.19.0"
+
+zod@^3.23.8:
+  version "3.23.8"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.23.8.tgz#e37b957b5d52079769fb8097099b592f0ef4067d"
+  integrity sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==
 
 zustand@^4.4.1, zustand@^4.5.2:
   version "4.5.2"

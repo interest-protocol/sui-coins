@@ -2,12 +2,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Form, Typography } from '@interest-protocol/ui-kit';
 import {
   useCurrentAccount,
-  useSignTransactionBlock,
+  useSignTransaction,
   useSuiClient,
   useSuiClientContext,
 } from '@mysten/dapp-kit';
-import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { normalizeSuiAddress, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import { Transaction } from '@mysten/sui/transactions';
+import { normalizeSuiAddress, SUI_TYPE_ARG } from '@mysten/sui/utils';
 import { ChangeEvent, FC } from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -48,8 +48,8 @@ const CreateTokenForm: FC = () => {
   const suiClient = useSuiClient();
   const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
-  const signTransactionBlock = useSignTransactionBlock();
-  const { coinsMap } = useWeb3();
+  const signTransaction = useSignTransaction();
+  const { coinsMap, mutate } = useWeb3();
 
   const createToken = async () => {
     try {
@@ -68,9 +68,9 @@ const CreateTokenForm: FC = () => {
 
       await initMoveByteCodeTemplate('/move_bytecode_template_bg.wasm');
 
-      const txb = new TransactionBlock();
+      const tx = new Transaction();
 
-      txb.setGasPayment(
+      tx.setGasPayment(
         coinsMap[SUI_TYPE_ARG].objects.map(
           ({ coinObjectId, digest, version }) => ({
             objectId: coinObjectId,
@@ -80,7 +80,7 @@ const CreateTokenForm: FC = () => {
         )
       );
 
-      const [upgradeCap] = txb.publish({
+      const [upgradeCap] = tx.publish({
         modules: [
           [
             ...getBytecode({
@@ -92,23 +92,30 @@ const CreateTokenForm: FC = () => {
         dependencies: [normalizeSuiAddress('0x1'), normalizeSuiAddress('0x2')],
       });
 
-      txb.transferObjects([upgradeCap], txb.pure(currentAccount.address));
+      tx.transferObjects([upgradeCap], tx.pure.address(currentAccount.address));
 
-      const { signature, transactionBlockBytes } =
-        await signTransactionBlock.mutateAsync({
-          transactionBlock: txb,
-          account: currentAccount,
-        });
+      const { signature, bytes } = await signTransaction.mutateAsync({
+        transaction: tx,
+        account: currentAccount,
+      });
 
-      const tx = await suiClient.executeTransactionBlock({
+      const tx2 = await suiClient.executeTransactionBlock({
         signature,
-        transactionBlock: transactionBlockBytes,
+        transactionBlock: bytes,
         requestType: 'WaitForEffectsCert',
       });
 
-      throwTXIfNotSuccessful(tx);
+      throwTXIfNotSuccessful(tx2);
 
-      showTXSuccessToast(tx, network as Network);
+      showTXSuccessToast(tx2, network as Network);
+
+      await suiClient.waitForTransaction({
+        digest: tx2.digest,
+        timeout: 10000,
+        pollInterval: 500,
+      });
+
+      await mutate();
     } finally {
       setLoading(false);
     }

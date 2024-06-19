@@ -3,7 +3,7 @@ import {
   OwnedObjectRef,
   SuiClient,
   SuiTransactionBlockResponse,
-} from '@mysten/sui.js/client';
+} from '@mysten/sui/client';
 import { pathOr } from 'ramda';
 
 import { ExtractedCoinData } from './pool-create.types';

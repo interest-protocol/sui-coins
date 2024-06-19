@@ -1,8 +1,9 @@
+import { TransactionResult } from '@mysten/sui/transactions';
 import {
+  Transaction,
   TransactionArgument,
-  TransactionBlock,
   TransactionObjectArgument,
-} from '@mysten/sui.js/transactions';
+} from '@mysten/sui/transactions';
 
 import { Network } from '@/constants';
 import { ZK_BAG_CONTRACT_IDS } from '@/constants/zksend';
@@ -20,7 +21,7 @@ export class ZkBag<IDs> {
   }
 
   new(
-    txb: TransactionBlock,
+    txb: Transaction,
     {
       arguments: [store, receiver],
     }: {
@@ -40,7 +41,7 @@ export class ZkBag<IDs> {
   }
 
   add(
-    txb: TransactionBlock,
+    txb: Transaction,
     {
       arguments: [store, receiver, item],
       typeArguments,
@@ -52,7 +53,7 @@ export class ZkBag<IDs> {
       ];
       typeArguments: [string];
     }
-  ): Extract<TransactionArgument, { kind: 'Result' }> {
+  ): TransactionResult {
     return txb.moveCall({
       target: `${this.#package}::${this.#module}::add`,
       arguments: [
@@ -65,7 +66,7 @@ export class ZkBag<IDs> {
   }
 
   init_claim(
-    txb: TransactionBlock,
+    txb: Transaction,
     {
       arguments: [store],
     }: {
@@ -81,7 +82,7 @@ export class ZkBag<IDs> {
   }
 
   reclaim(
-    txb: TransactionBlock,
+    txb: Transaction,
     {
       arguments: [store, receiver],
     }: {
@@ -103,19 +104,22 @@ export class ZkBag<IDs> {
   }
 
   claim(
-    txb: TransactionBlock,
+    txb: Transaction,
     {
       arguments: [bag, claim, id],
       typeArguments,
     }: {
       arguments: [
         bag: TransactionObjectArgument | string,
-        claim: Extract<TransactionArgument, { kind: 'NestedResult' }>,
+        claim: {
+          $kind: 'NestedResult';
+          NestedResult: [number, number];
+        },
         id: TransactionObjectArgument | string,
       ];
       typeArguments: [string];
     }
-  ): Extract<TransactionArgument, { kind: 'Result' }> {
+  ): TransactionResult {
     return txb.moveCall({
       target: `${this.#package}::${this.#module}::claim`,
       arguments: [
@@ -128,13 +132,16 @@ export class ZkBag<IDs> {
   }
 
   finalize(
-    txb: TransactionBlock,
+    txb: Transaction,
     {
       arguments: [bag, claim],
     }: {
       arguments: [
         bag: TransactionObjectArgument | string,
-        claim: Extract<TransactionArgument, { kind: 'NestedResult' }>,
+        claim: {
+          $kind: 'NestedResult';
+          NestedResult: [number, number];
+        },
       ];
     }
   ) {
@@ -145,7 +152,7 @@ export class ZkBag<IDs> {
   }
 
   update_receiver(
-    txb: TransactionBlock,
+    txb: Transaction,
     {
       arguments: [bag, from, to],
     }: {
@@ -174,7 +181,7 @@ export const createClaimTransaction = ({
   reclaimAddress,
   contracts = ZK_BAG_CONTRACT_IDS[Network.MAINNET],
 }: CreateClaimTransactionArgs) => {
-  const txb = new TransactionBlock();
+  const txb = new Transaction();
 
   const contract = new ZkBag(contracts.packageId, contracts);
 

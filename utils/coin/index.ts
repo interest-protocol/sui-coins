@@ -1,7 +1,7 @@
 import { Token } from '@interest-protocol/sui-tokens';
-import { CoinStruct } from '@mysten/sui.js/client';
-import { TransactionResult } from '@mysten/sui.js/transactions';
-import { formatAddress, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import { CoinStruct } from '@mysten/sui/client';
+import { TransactionResult } from '@mysten/sui/transactions';
+import { formatAddress, SUI_TYPE_ARG } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
 
 import { Network } from '@/constants';
@@ -145,7 +145,7 @@ export async function getCoinOfValue({
   let coinOfValue: TransactionResult;
   coinType = removeLeadingZeros(coinType);
   if (coinType === '0x2::sui::SUI') {
-    coinOfValue = txb.splitCoins(txb.gas, [txb.pure(coinValue)]);
+    coinOfValue = txb.splitCoins(txb.gas, [txb.pure.u64(coinValue)]);
   } else {
     const paginatedCoins = await getCoins({
       suiClient,
@@ -163,7 +163,7 @@ export async function getCoinOfValue({
         otherCoins.map((coin) => coin.coinObjectId)
       );
     }
-    coinOfValue = txb.splitCoins(firstCoinInput, [txb.pure(coinValue)]);
+    coinOfValue = txb.splitCoins(firstCoinInput, [txb.pure.u64(coinValue)]);
   }
   return coinOfValue;
 }

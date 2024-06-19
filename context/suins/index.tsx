@@ -1,5 +1,5 @@
 import { useAccounts, useSuiClientContext } from '@mysten/dapp-kit';
-import { getFullnodeUrl, SuiClient } from '@mysten/sui.js/client';
+import { getFullnodeUrl, SuiClient } from '@mysten/sui/client';
 import { SuinsClient } from '@mysten/suins-toolkit';
 import { fromPairs, pathOr, prop } from 'ramda';
 import {
@@ -28,23 +28,14 @@ export const suiClientRecord = {
   [Network.TESTNET]: testnetClient,
 } as Record<Network, SuiClient>;
 
-const testnetSuiNs = new SuinsClient(testnetClient as any, {
+const testnetSuiNs = new SuinsClient(testnetClient, {
   networkType: 'testnet',
-  contractObjects: {
-    packageId:
-      '0xfdba31b34a43e058f17c5cf4b12d9b9e0a08c0623d8569092c022e0c77df46d3',
-    registry:
-      '0xac06695279c2a92436068cebe5ea778135ac503337642e27493431603ae6a71d',
-    reverseRegistry:
-      '0x34a36dd204f8351a157d19b87bada9d448ec40229d56f22bff04fa23713a5c31',
-    suins: '0x4acaf19db12fafce1943bbd44c7f794e1d81d00aeb63617096e5caa39499ba88',
-  },
 });
 
-export const suiNSMainNetProvider = new SuinsClient(mainnetClient as any, {
+export const suiNSMainNetProvider = new SuinsClient(mainnetClient, {
   contractObjects: {
     packageId:
-      '0xd22b24490e0bae52676651b4f56660a5ff8022a2576e0089f79b3c88d44e08f0',
+      '0x00c2f85e07181b90c140b15c5ce27d863f93c4d9159d2a4e7bdaeb40e286d6f5',
     suins: '0x6e0ddefc0ad98889c04bab9639e512c21766c5e6366f89e696956d9be6952871',
     registry:
       '0xe64cd9db9f829c6cc405d9790bd71567ae07259855f4fba6f02c84f52298c106',

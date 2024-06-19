@@ -1,5 +1,5 @@
 import { createNetworkConfig, SuiClientProvider } from '@mysten/dapp-kit';
-import { getFullnodeUrl } from '@mysten/sui.js/client';
+import { getFullnodeUrl } from '@mysten/sui/client';
 import { FC, PropsWithChildren, useMemo, useState } from 'react';
 
 import { Network } from '@/constants';

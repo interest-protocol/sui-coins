@@ -1,5 +1,5 @@
 import { CLAMM as CLAMM_ } from '@interest-protocol/clamm-sdk';
-import { getFullnodeUrl, SuiClient } from '@mysten/sui.js/client';
+import { getFullnodeUrl, SuiClient } from '@mysten/sui/client';
 
 import { Network } from '@/constants';
 
