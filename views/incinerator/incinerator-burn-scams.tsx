@@ -17,7 +17,10 @@ const IncineratorBurnScams: FC = () => {
   const objects = useWatch({ control, name: 'objects' });
 
   const disabled =
-    isLoading || !!error || !objects.some(({ type }) => data?.includes(type));
+    isLoading ||
+    !!error ||
+    !objects.length ||
+    !objects.some(({ type }) => data?.includes(type));
 
   const onSelectScams = () => {
     if (disabled) return;
@@ -54,8 +57,8 @@ const IncineratorBurnScams: FC = () => {
       onClick={onSelectScams}
       color="onErrorContainer"
       borderColor="outlineVariant"
-      nHover={disabled ? undefined : { bg: 'error', color: 'surface' }}
-      nActive={disabled ? undefined : { bg: 'error', color: 'surface' }}
+      nHover={!disabled && { bg: 'error', color: 'surface' }}
+      nActive={!disabled && { bg: 'error', color: 'surface' }}
     >
       <BurnSVG maxWidth="1.2rem" maxHeight="1.2rem" width="100%" />
       Burn scams
