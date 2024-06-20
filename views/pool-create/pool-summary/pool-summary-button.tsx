@@ -18,6 +18,7 @@ import {
   showTXSuccessToast,
   signAndExecute,
   throwTXIfNotSuccessful,
+  waitForTx,
 } from '@/utils';
 
 import {
@@ -80,11 +81,7 @@ const PoolSummaryButton: FC = () => {
 
     showTXSuccessToast(tx2, network as Network);
 
-    await client.waitForTransaction({
-      digest: tx2.digest,
-      timeout: 10000,
-      pollInterval: 500,
-    });
+    await waitForTx({ suiClient: client, digest: tx2.digest });
 
     mutate();
 

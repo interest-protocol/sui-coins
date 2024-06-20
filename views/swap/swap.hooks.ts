@@ -1,6 +1,6 @@
 import { useCurrentAccount } from '@mysten/dapp-kit';
-import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { normalizeStructTag } from '@mysten/sui.js/utils';
+import { Transaction } from '@mysten/sui/transactions';
+import { normalizeStructTag } from '@mysten/sui/utils';
 import { Aftermath } from 'aftermath-ts-sdk';
 import invariant from 'tiny-invariant';
 
@@ -29,50 +29,50 @@ export const useSwap = () => {
   const network = useNetwork();
   const pkgs = CLAMM_PACKAGE_ADDRESSES[network];
 
-  return async (values: SwapForm): Promise<TransactionBlock> => {
+  return async (values: SwapForm): Promise<Transaction> => {
     invariant(values.route && currentAccount, 'Something went wrong');
 
     if (!isNativeRoute(values.route)) {
       if (isAftermathRoute(values.route))
-        return (await afRouter.getTransactionForCompleteTradeRoute({
+        return afRouter.getTransactionForCompleteTradeRoute({
           walletAddress: currentAccount.address,
           completeRoute: values.route,
           slippage: Number(values.settings.slippage),
-        })) as unknown as TransactionBlock;
+        });
 
       const trade = values.route.trade;
 
-      return await hopSdk.swap(
+      return hopSdk.swap(
         trade,
         currentAccount.address,
         +values.settings.slippage * 100
-      );
+      ) as unknown as Transaction;
     }
 
     // Native Swap - Interest
 
     const route = values.route.routes[0];
 
-    const auxTxb = new TransactionBlock();
+    const auxTx = new Transaction();
 
     const [coinIn] = [values.from].map(({ type, value }) => {
       if (isSui(type))
-        return auxTxb.splitCoins(auxTxb.gas, [
-          auxTxb.pure(value.decimalPlaces(0).toFixed(0)),
+        return auxTx.splitCoins(auxTx.gas, [
+          auxTx.pure.u64(value.decimalPlaces(0).toFixed(0)),
         ])[0];
 
       const [firstCoin, ...otherCoins] = coinsMap[type].objects;
 
-      const firstCoinObject = auxTxb.object(firstCoin.coinObjectId);
+      const firstCoinObject = auxTx.object(firstCoin.coinObjectId);
 
       if (otherCoins.length)
-        auxTxb.mergeCoins(
+        auxTx.mergeCoins(
           firstCoinObject,
           otherCoins.map((coin) => coin.coinObjectId)
         );
 
-      const [splittedCoin] = auxTxb.splitCoins(firstCoinObject, [
-        auxTxb.pure(value.decimalPlaces(0).toFixed(0)),
+      const [splittedCoin] = auxTx.splitCoins(firstCoinObject, [
+        auxTx.pure.u64(value.decimalPlaces(0).toFixed(0)),
       ]);
 
       const wrappedCoin = COIN_TO_WRAPPED[network][normalizeStructTag(type)];
@@ -80,10 +80,10 @@ export const useSwap = () => {
       if (wrappedCoin) {
         const cap = SCALLOP_WRAPPED_COINS_TREASURY_CAPS[network][wrappedCoin];
 
-        const coinOut = auxTxb.moveCall({
+        const coinOut = auxTx.moveCall({
           target: `${pkgs.SCALLOP_COINS_WRAPPER}::wrapped_scoin::mint`,
           typeArguments: [type, wrappedCoin],
-          arguments: [auxTxb.object(cap), splittedCoin],
+          arguments: [auxTx.object(cap), splittedCoin],
         });
 
         return coinOut;
@@ -92,9 +92,9 @@ export const useSwap = () => {
       return splittedCoin;
     });
 
-    const { coinOut, txb } = clamm.swapRoute({
+    const { coinOut, tx } = clamm.swapRoute({
       coinIn,
-      txb: auxTxb as any,
+      tx: auxTx,
       route: [route[0], route[1]],
       poolsMap: values.route.poolsMap,
       slippage: Number((+values.settings.slippage * 100).toFixed(0)),
@@ -109,17 +109,17 @@ export const useSwap = () => {
           normalizeStructTag(wrappedCoin)
         ];
 
-      const coinY = auxTxb.moveCall({
+      const coinY = tx.moveCall({
         target: `${pkgs.SCALLOP_COINS_WRAPPER}::wrapped_scoin::burn`,
         typeArguments: [normalizeStructTag(values.to.type), wrappedCoin],
-        arguments: [auxTxb.object(cap), coinOut],
+        arguments: [tx.object(cap), coinOut],
       });
 
-      txb.transferObjects([coinY], txb.pure(currentAccount.address));
+      tx.transferObjects([coinY], tx.pure.address(currentAccount.address));
     } else {
-      txb.transferObjects([coinOut], txb.pure(currentAccount.address));
+      tx.transferObjects([coinOut], tx.pure.address(currentAccount.address));
     }
 
-    return txb as unknown as TransactionBlock;
+    return tx;
   };
 };

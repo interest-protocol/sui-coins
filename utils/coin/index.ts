@@ -139,13 +139,13 @@ export async function getCoinOfValue({
   suiClient,
   coinValue,
   coinType,
-  txb,
+  tx,
   account,
 }: GetCoinOfValueArgs): Promise<TransactionResult> {
   let coinOfValue: TransactionResult;
   coinType = removeLeadingZeros(coinType);
   if (coinType === '0x2::sui::SUI') {
-    coinOfValue = txb.splitCoins(txb.gas, [txb.pure.u64(coinValue)]);
+    coinOfValue = tx.splitCoins(tx.gas, [tx.pure.u64(coinValue)]);
   } else {
     const paginatedCoins = await getCoins({
       suiClient,
@@ -156,14 +156,14 @@ export async function getCoinOfValue({
 
     // Merge all coins into one
     const [firstCoin, ...otherCoins] = paginatedCoins;
-    const firstCoinInput = txb.object(firstCoin.coinObjectId);
+    const firstCoinInput = tx.object(firstCoin.coinObjectId);
     if (otherCoins.length > 0) {
-      txb.mergeCoins(
+      tx.mergeCoins(
         firstCoinInput,
         otherCoins.map((coin) => coin.coinObjectId)
       );
     }
-    coinOfValue = txb.splitCoins(firstCoinInput, [txb.pure.u64(coinValue)]);
+    coinOfValue = tx.splitCoins(firstCoinInput, [tx.pure.u64(coinValue)]);
   }
   return coinOfValue;
 }

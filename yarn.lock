@@ -879,15 +879,22 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-2.0.3.tgz#4a2868d75d6d6963e423bcf90b7fd1be343409d3"
   integrity sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==
 
-"@interest-protocol/clamm-sdk@8.4.0-alpha":
-  version "8.4.0-alpha"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/clamm-sdk/-/clamm-sdk-8.4.0-alpha.tgz#32fc5b6f4050f3c6884be024dcd60d6be10c05e9"
-  integrity sha512-YuRD81hf3HX2rQIvKFAFkMsAwuFX3ISErCju6o50qURsUNeciJTYpPJdWQJn93MkE1YNtW03x4WCOTXBdVKT2w==
+"@interest-protocol/clamm-sdk@^9.0.0-alpha":
+  version "9.0.0-alpha"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/clamm-sdk/-/clamm-sdk-9.0.0-alpha.tgz#d5f9fff01001e11a7ca7e3e0730f6548a0992154"
+  integrity sha512-aZDPjeSb6FJF3JIe45Hw6zv+Ax8tQUrHM6yUONeaSpjakkti958bR2p/Wk1apUGWYOjrIRKh7BUFAk3mYRQ1tQ==
   dependencies:
-    "@mysten/sui.js" "^0.54.1"
+    "@interest-protocol/move-bytecode-template" "0.0.4-alpha"
+    "@mysten/sui" "^1.1.2"
+    "@polymedia/suitcase-core" "^0.0.7"
     just-camel-case "^6.2.0"
     ramda "^0.29.1"
     tiny-invariant "^1.3.3"
+
+"@interest-protocol/move-bytecode-template@0.0.4-alpha":
+  version "0.0.4-alpha"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/move-bytecode-template/-/move-bytecode-template-0.0.4-alpha.tgz#5b0175067646850512531f3de085d37e4428e4ca"
+  integrity sha512-BHbIpCKTQZVsrHqVr62X0k8w36ML7Wvjpq3+Q6evfbUtDO9jqohFA5dQ96xixR3sxXfgz4m2mv476+vhJNmVvg==
 
 "@interest-protocol/sui-tokens@^1.7.0":
   version "1.7.0"
@@ -1198,13 +1205,6 @@
   dependencies:
     sparse-bitfield "^3.0.3"
 
-"@mysten/bcs@0.11.1":
-  version "0.11.1"
-  resolved "https://registry.yarnpkg.com/@mysten/bcs/-/bcs-0.11.1.tgz#0cc0b0f5960f60cfe5cf6a8c229affa59cd09b1b"
-  integrity sha512-xP85isNSYUCHd3O/g+TmZYmg4wK6cU8q/n/MebkIGP4CYVJZz2wU/G24xIZ3wI+0iTop4dfgA5kYrg/DQKCUzA==
-  dependencies:
-    bs58 "^5.0.0"
-
 "@mysten/bcs@0.7.3":
   version "0.7.3"
   resolved "https://registry.yarnpkg.com/@mysten/bcs/-/bcs-0.7.3.tgz#b2e4558a8feb9fd3a0dc2ff4e94c37e1f8a7c7e5"
@@ -1272,24 +1272,6 @@
     "@scure/bip39" "^1.2.1"
     "@suchipi/femver" "^1.0.0"
     events "^3.3.0"
-    superstruct "^1.0.3"
-    tweetnacl "^1.0.3"
-
-"@mysten/sui.js@^0.54.1":
-  version "0.54.1"
-  resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.54.1.tgz#27b6724dd30e0e81d50b47437cb206d0cec25f8b"
-  integrity sha512-TSmGIX7U9O/uS9EKIQdv7/S69KTbBhMJVelXCafJE6IJw8iB9cN9uLu0+uklkBSDrbRmLSEY70jMr3uRFjReIg==
-  dependencies:
-    "@graphql-typed-document-node/core" "^3.2.0"
-    "@mysten/bcs" "0.11.1"
-    "@noble/curves" "^1.1.0"
-    "@noble/hashes" "^1.3.1"
-    "@scure/bip32" "^1.3.1"
-    "@scure/bip39" "^1.2.1"
-    "@suchipi/femver" "^1.0.0"
-    bech32 "^2.0.0"
-    gql.tada "^1.7.0"
-    graphql "^16.8.1"
     superstruct "^1.0.3"
     tweetnacl "^1.0.3"
 
@@ -1617,6 +1599,11 @@
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.1.1.tgz#1ec17e2edbec25c8306d424ecfbf13c7de1aaa31"
   integrity sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==
+
+"@polymedia/suitcase-core@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@polymedia/suitcase-core/-/suitcase-core-0.0.7.tgz#09fd6e996802fb041eb7854072bc8d7d7914d07d"
+  integrity sha512-qE48yaNgUmPqX23K+qIBn8TW35tR12JMOwVtQ6Mro/FF81Wq80aeIDLZV6VJK9eJyI2sqTbCFAhipAEqxzitog==
 
 "@pythnetwork/price-service-client@*", "@pythnetwork/price-service-client@^1.8.2":
   version "1.9.0"

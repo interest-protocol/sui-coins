@@ -91,16 +91,19 @@ export const useCreateStablePool = () => {
 
     const typeArguments = [...tokens.map((token) => token.type), coinType];
 
-    const { pool, poolAdmin, lpCoin, txb } = await clamm.newStable({
+    const { pool, poolAdmin, lpCoin, tx } = await clamm.newStable({
       coins,
       tx: auxTx,
       lpCoinTreasuryCap: treasuryCap,
       typeArguments: typeArguments,
     });
 
-    txb.transferObjects([poolAdmin, lpCoin], txb.pure(currentAccount.address));
+    tx.transferObjects(
+      [poolAdmin, lpCoin],
+      tx.pure.address(currentAccount.address)
+    );
 
-    return clamm.shareStablePool({ txb, pool }) as unknown as Transaction;
+    return clamm.shareStablePool({ tx, pool });
   };
 };
 
@@ -161,18 +164,21 @@ export const useCreateVolatilePool = () => {
         .toFixed(0)
     );
 
-    const { pool, poolAdmin, lpCoin, txb } = await clamm.newVolatile({
+    const { pool, poolAdmin, lpCoin, tx } = await clamm.newVolatile({
       coins,
-      txb: auxTx,
+      tx: auxTx,
       lpCoinTreasuryCap: treasuryCap,
       typeArguments: typeArguments,
       prices: [price],
     });
 
-    txb.transferObjects([poolAdmin, lpCoin], txb.pure(currentAccount.address));
+    tx.transferObjects(
+      [poolAdmin, lpCoin],
+      tx.pure.address(currentAccount.address)
+    );
 
     return clamm.shareVolatilePool({
-      txb,
+      tx,
       pool,
     }) as unknown as Transaction;
   };

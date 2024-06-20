@@ -5,10 +5,10 @@ import {
   useSuiClient,
   useSuiClientContext,
 } from '@mysten/dapp-kit';
-import { formatAddress } from '@mysten/sui.js/utils';
 import { SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { Transaction } from '@mysten/sui/transactions';
 import { TransactionObjectArgument } from '@mysten/sui/transactions';
+import { formatAddress } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
 import { useFormContext } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -27,6 +27,7 @@ import {
   showTXSuccessToast,
   signAndExecute,
   throwTXIfNotSuccessful,
+  waitForTx,
 } from '@/utils';
 import { isCoinObject } from '@/views/components/select-object-modal/select-object-modal.utils';
 
@@ -104,11 +105,7 @@ const useBurn = () => {
 
     throwTXIfNotSuccessful(tx2);
 
-    await suiClient.waitForTransaction({
-      digest: tx2.digest,
-      timeout: 10000,
-      pollInterval: 500,
-    });
+    await waitForTx({ suiClient, digest: tx2.digest });
 
     onSuccess(tx2);
   };

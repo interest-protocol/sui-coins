@@ -1,5 +1,5 @@
 import type { Trade } from '@hop.ag/sdk';
-import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { Transaction } from '@mysten/sui/transactions';
 
 import type { JSONQuoteResponse } from '@/server/lib/hop/hop.utils';
 
@@ -16,6 +16,6 @@ export const useHopSdk = () => ({
     })
       .then((response) => response.json?.())
       .then(({ txb }: { txb: string }) =>
-        TransactionBlock.fromKind(txb)
-      ) as Promise<TransactionBlock>,
+        Transaction.fromKind(txb)
+      ) as Promise<Transaction>,
 });

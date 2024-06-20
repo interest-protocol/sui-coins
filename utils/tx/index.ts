@@ -1,6 +1,6 @@
 import { SuiTransactionBlockResponse } from '@mysten/sui/client';
 
-import { SignAndExecuteArgs } from './tx.types';
+import { SignAndExecuteArgs, WaitForTxArgs } from './tx.types';
 
 export const throwTXIfNotSuccessful = (
   tx: SuiTransactionBlockResponse,
@@ -34,3 +34,15 @@ export const signAndExecute = async ({
     requestType: 'WaitForLocalExecution',
   });
 };
+
+export const waitForTx = async ({
+  suiClient,
+  digest,
+  timeout = 10000,
+  pollInterval = 500,
+}: WaitForTxArgs) =>
+  suiClient.waitForTransaction({
+    digest,
+    timeout,
+    pollInterval,
+  });

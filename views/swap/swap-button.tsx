@@ -1,11 +1,10 @@
 import { Button, Typography } from '@interest-protocol/ui-kit';
 import {
   useCurrentAccount,
-  useSignTransactionBlock,
+  useSignTransaction,
   useSuiClient,
   useSuiClientContext,
 } from '@mysten/dapp-kit';
-import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import invariant from 'tiny-invariant';
@@ -15,6 +14,7 @@ import { useDialog } from '@/hooks/use-dialog';
 import {
   signAndExecute,
   throwTXIfNotSuccessful,
+  waitForTx,
   ZERO_BIG_NUMBER,
 } from '@/utils';
 import { SwapForm } from '@/views/swap/swap.types';
@@ -30,7 +30,7 @@ const SwapButton: FC = () => {
   const formSwap = useFormContext<SwapForm>();
   const { dialog, handleClose } = useDialog();
 
-  const signTransactionBlock = useSignTransactionBlock();
+  const signTransaction = useSignTransaction();
 
   const resetInput = () => {
     formSwap.setValue('to.display', '0');
@@ -64,20 +64,22 @@ const SwapButton: FC = () => {
 
       formSwap.setValue('swapping', true);
 
-      const txb = (await swap(formSwap.getValues())) as TransactionBlock;
+      const tx = await swap(formSwap.getValues());
 
-      const tx = await signAndExecute({
-        txb,
+      const tx2 = await signAndExecute({
+        tx,
         suiClient,
         currentAccount,
-        signTransactionBlock,
+        signTransaction,
       });
 
-      throwTXIfNotSuccessful(tx);
+      throwTXIfNotSuccessful(tx2);
+
+      await waitForTx({ suiClient, digest: tx2.digest });
 
       formSwap.setValue(
         'explorerLink',
-        `${EXPLORER_URL[network as Network]}/tx/${tx.digest}`
+        `${EXPLORER_URL[network as Network]}/tx/${tx2.digest}`
       );
     } finally {
       resetInput();

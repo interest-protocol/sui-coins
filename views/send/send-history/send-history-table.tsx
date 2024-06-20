@@ -11,8 +11,8 @@ import { useCurrentAccount, useSuiClientContext } from '@mysten/dapp-kit';
 import type {
   SuiObjectRef,
   SuiTransactionBlockResponse,
-} from '@mysten/sui.js/client';
-import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+} from '@mysten/sui/client';
+import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 import type { ZkSendLink } from '@mysten/zksend';
 import type { LinkAssets } from '@mysten/zksend/dist/cjs/links/utils';
 import { useRouter } from 'next/router';

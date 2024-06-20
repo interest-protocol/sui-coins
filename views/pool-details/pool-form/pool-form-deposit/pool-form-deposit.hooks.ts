@@ -1,5 +1,5 @@
 import { useCurrentAccount } from '@mysten/dapp-kit';
-import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { Transaction } from '@mysten/sui/transactions';
 import invariant from 'tiny-invariant';
 
 import {
@@ -10,14 +10,7 @@ import {
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
-import { FixedPointMath } from '@/lib';
-import {
-  getAmountMinusSlippage,
-  getSafeValue,
-  isScallopPool,
-  isSui,
-  parseBigNumberish,
-} from '@/utils';
+import { getSafeValue, isScallopPool, isSui } from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
 
 export const useDeposit = () => {
@@ -27,13 +20,13 @@ export const useDeposit = () => {
   const network = useNetwork();
   const pkgs = CLAMM_PACKAGE_ADDRESSES[network];
 
-  return async (values: PoolForm): Promise<TransactionBlock> => {
+  return async (values: PoolForm): Promise<Transaction> => {
     const { tokenList, pool, settings } = values;
 
     invariant(currentAccount, 'Must to connect your wallet');
     invariant(tokenList.length, 'No tokens ');
 
-    const initTxb = new TransactionBlock();
+    const initTx = new Transaction();
 
     const isScallop = isScallopPool({
       poolObjectId: pool.poolObjectId,
@@ -47,7 +40,7 @@ export const useDeposit = () => {
             ? WRAPPED_CONVERSION_MAP[network][type]
             : type;
 
-        const coinZero = initTxb.moveCall({
+        const coinZero = initTx.moveCall({
           target: `0x2::coin::zero`,
           typeArguments: [rightType],
         });
@@ -63,8 +56,8 @@ export const useDeposit = () => {
       });
 
       if (isSui(type)) {
-        const [splittedCoin] = initTxb.splitCoins(initTxb.gas, [
-          initTxb.pure.u64(safeValue.toString()),
+        const [splittedCoin] = initTx.splitCoins(initTx.gas, [
+          initTx.pure.u64(safeValue.toString()),
         ]);
 
         return splittedCoin;
@@ -72,16 +65,16 @@ export const useDeposit = () => {
 
       const [firstCoin, ...otherCoins] = coinsMap[type].objects;
 
-      const firstCoinObject = initTxb.object(firstCoin.coinObjectId);
+      const firstCoinObject = initTx.object(firstCoin.coinObjectId);
 
       if (otherCoins.length)
-        initTxb.mergeCoins(
+        initTx.mergeCoins(
           firstCoinObject,
           otherCoins.map((coin) => coin.coinObjectId)
         );
 
-      const [splittedCoin] = initTxb.splitCoins(firstCoinObject, [
-        initTxb.pure.u64(safeValue.toString()),
+      const [splittedCoin] = initTx.splitCoins(firstCoinObject, [
+        initTx.pure.u64(safeValue.toString()),
       ]);
 
       if (isScallop && !!WRAPPED_CONVERSION_MAP[network][type]) {
@@ -90,10 +83,10 @@ export const useDeposit = () => {
 
         if (!cap) return splittedCoin;
 
-        const wrappedCoin = initTxb.moveCall({
+        const wrappedCoin = initTx.moveCall({
           target: `${pkgs.SCALLOP_COINS_WRAPPER}::wrapped_scoin::mint`,
           typeArguments: [type, wrappedType],
-          arguments: [initTxb.object(cap), splittedCoin],
+          arguments: [initTx.object(cap), splittedCoin],
         });
 
         return wrappedCoin;
@@ -102,15 +95,15 @@ export const useDeposit = () => {
       return splittedCoin;
     });
 
-    const { lpCoin, txb } = await clamm.addLiquidity({
+    const { lpCoin, tx } = await clamm.addLiquidity({
       coinsIn: coins,
-      txb: initTxb as any,
+      tx: initTx,
       pool: pool.poolObjectId,
       slippage: +settings.slippage,
     });
 
-    txb.transferObjects([lpCoin], txb.pure.address(currentAccount.address));
+    tx.transferObjects([lpCoin], tx.pure.address(currentAccount.address));
 
-    return txb as unknown as TransactionBlock;
+    return tx;
   };
 };

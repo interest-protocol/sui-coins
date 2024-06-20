@@ -18,7 +18,11 @@ import { Network } from '@/constants';
 import { useWeb3 } from '@/hooks/use-web3';
 import { getBytecode } from '@/lib/move-template/coin';
 import initMoveByteCodeTemplate from '@/lib/move-template/move-bytecode-template';
-import { parseInputEventToNumberString, showTXSuccessToast } from '@/utils';
+import {
+  parseInputEventToNumberString,
+  showTXSuccessToast,
+  waitForTx,
+} from '@/utils';
 import { throwTXIfNotSuccessful } from '@/utils';
 
 import { ICreateTokenForm } from '../create-token.types';
@@ -109,11 +113,7 @@ const CreateTokenForm: FC = () => {
 
       showTXSuccessToast(tx2, network as Network);
 
-      await suiClient.waitForTransaction({
-        digest: tx2.digest,
-        timeout: 10000,
-        pollInterval: 500,
-      });
+      await waitForTx({ suiClient, digest: tx2.digest });
 
       await mutate();
     } finally {

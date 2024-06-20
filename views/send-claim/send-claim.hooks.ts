@@ -4,13 +4,13 @@ import {
   useSuiClient,
   useSuiClientContext,
 } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
-import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { SuiTransactionBlockResponse } from '@mysten/sui/client';
+import { Transaction } from '@mysten/sui/transactions';
 import { ZkSendLink } from '@mysten/zksend';
 
 import { Network } from '@/constants';
 import { ZK_BAG_CONTRACT_IDS } from '@/constants/zksend';
-import { throwTXIfNotSuccessful } from '@/utils';
+import { throwTXIfNotSuccessful, waitForTx } from '@/utils';
 import { createClaimTransaction } from '@/utils/zk-send';
 
 export const useClaim = () => {
@@ -50,10 +50,9 @@ export const useClaim = () => {
       }),
     }).then((response) => response.json?.());
 
-    const { signature: senderSignature } =
-      await link.keypair.signTransactionBlock(
-        await TransactionBlock.from(sponsoredResponse.txBytes).build()
-      );
+    const { signature: senderSignature } = await link.keypair.signTransaction(
+      await Transaction.from(sponsoredResponse.txBytes).build()
+    );
 
     const tx = await suiClient.executeTransactionBlock({
       signature: [sponsoredResponse.signature, senderSignature],
@@ -65,6 +64,8 @@ export const useClaim = () => {
     });
 
     throwTXIfNotSuccessful(tx);
+
+    await waitForTx({ suiClient, digest: tx.digest });
 
     onSuccess(tx);
   };

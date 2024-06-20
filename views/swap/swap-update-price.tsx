@@ -1,10 +1,10 @@
 import { QuoteSwapReturn } from '@interest-protocol/clamm-sdk';
-import {
+import type {
   CoinPath,
   PoolObjectIdPath,
 } from '@interest-protocol/clamm-sdk/dist/clamm/router/router.types';
 import { Box, Button, ProgressIndicator } from '@interest-protocol/ui-kit';
-import { normalizeStructTag } from '@mysten/sui.js/utils';
+import { normalizeStructTag } from '@mysten/sui/utils';
 import { RouterCompleteTradeRoute } from 'aftermath-ts-sdk';
 import BigNumber from 'bignumber.js';
 import { FC, useEffect } from 'react';

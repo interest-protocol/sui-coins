@@ -1,7 +1,7 @@
 import type { Trade } from '@hop.ag/sdk';
 import { GetQuoteResponse, HopApi } from '@hop.ag/sdk';
-import { getFullnodeUrl } from '@mysten/sui.js/client';
-import { normalizeStructTag, toB64 } from '@mysten/sui.js/utils';
+import { getFullnodeUrl } from '@mysten/sui/client';
+import { normalizeStructTag, toB64 } from '@mysten/sui/utils';
 
 import { TREASURY } from '@/constants';
 import { EXCHANGE_FEE } from '@/constants/clamm';

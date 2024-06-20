@@ -11,7 +11,7 @@ export interface GetCoinsArgs {
 
 export interface GetCoinOfValueArgs {
   suiClient: SuiClient;
-  txb: Transaction;
+  tx: Transaction;
   account: string;
   coinType: string;
   coinValue: number | bigint | string;
