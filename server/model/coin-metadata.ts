@@ -1,4 +1,6 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Model, Schema } from 'mongoose';
+
+const modelName = 'MovementCoinMetadataDevnet';
 
 export interface CoinMetadataModel extends Document {
   type: string;
@@ -10,17 +12,15 @@ export interface CoinMetadataModel extends Document {
   iconUrl?: string | null;
 }
 
-const modelName = 'MovementCoinMetadataDevnet';
-
 export const CoinMetadataSchema = new Schema({
   type: {
+    index: true,
+    unique: true,
     type: String,
     required: true,
-    index: true,
   },
   name: {
     type: String,
-    required: true,
   },
   symbol: {
     type: String,
@@ -42,5 +42,5 @@ export const CoinMetadataSchema = new Schema({
   },
 });
 
-export default mongoose.models[modelName] ||
+export default (mongoose.models[modelName] as Model<CoinMetadataModel>) ||
   mongoose.model<CoinMetadataModel>(modelName, CoinMetadataSchema);

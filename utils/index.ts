@@ -4,6 +4,7 @@ export * from './big-number';
 export * from './client';
 export * from './clipboard';
 export * from './coin';
+export * from './coin-metadata';
 export * from './events';
 export * from './fn';
 export * from './parse';

@@ -14,6 +14,7 @@ import { CoinMetadataWithType } from '@/interface';
 import { FixedPointMath } from '@/lib';
 
 import { isSameStructTag } from '../address';
+import { fetchCoinMetadata } from '../coin-metadata';
 import { getBasicCoinMetadata } from '../fn';
 import {
   CreateVectorParameterArgs,
@@ -159,8 +160,7 @@ export const getCoin = async (
   new Promise((resolve) => {
     if (coinsMap[type]) return resolve(coinObjectToToken(coinsMap[type]));
 
-    fetch(`/api/auth/v1/coin-metadata?network=${network}&type=${type}`)
-      .then((res) => res.json())
+    fetchCoinMetadata({ network, type })
       .then((metadata: CoinMetadataWithType) =>
         resolve(coinMetadataToToken(metadata))
       )

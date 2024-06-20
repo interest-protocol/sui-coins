@@ -2,7 +2,7 @@
 import { Network } from '@/constants';
 import { CoinMetadataWithType } from '@/interface';
 import { CoinMetadataModel } from '@/server/model/coin-metadata';
-import { getBasicCoinMetadata } from '@/utils';
+import { getBasicCoinMetadata, getSymbolByType } from '@/utils';
 import { chunk } from '@/utils';
 
 import { COIN_METADATA_MODEL_MAP, MOVE_CLIENT_PROVIDER_MAP } from '../utils';
@@ -12,38 +12,54 @@ const getCoinMetadataList = async (
   network: Network
 ) => {
   const Model = COIN_METADATA_MODEL_MAP[network];
-  const movClient = MOVE_CLIENT_PROVIDER_MAP[network];
+  const suiClient = MOVE_CLIENT_PROVIDER_MAP[network];
 
-  const metadataBatches = chunk<string>(typeList, 50);
+  const uniqueTypeList = [...new Set(typeList)];
 
-  const docs: Array<CoinMetadataModel> = [];
+  const batches = chunk(uniqueTypeList, 50);
 
-  for (const list of metadataBatches) {
-    docs.push(...(await Model.find({ type: typeList }).limit(50)));
+  const promises = [];
+
+  for (const elem of batches) {
+    promises.push(
+      Model.find({
+        type: elem,
+      })
+    );
   }
 
-  const docsMap = docs.reduce(
+  const docs: Array<Array<CoinMetadataModel>> = await Promise.all(promises);
+  const flattenedDocs = docs.flatMap((x) => x);
+
+  const docsMap = flattenedDocs.reduce(
     (acc, curr) => ({ ...acc, [curr.type]: curr }),
     {} as Record<string, CoinMetadataModel>
   );
 
-  const missingCoinsType = Array.from(
-    new Set(typeList.filter((type) => !docsMap[type]))
-  );
+  const missingCoinsType = [
+    ...new Set(uniqueTypeList.filter((type) => !docsMap[type])),
+  ];
 
-  const missingCoinsTypeBatches = chunk<string>(missingCoinsType, 7);
+  if (!missingCoinsType.length) return flattenedDocs;
+
+  const missingCoinsTypeBatches = chunk<string>(missingCoinsType, 10);
 
   const missingCoinsMetadata: Array<
     CoinMetadataWithType & { hasMetadata: boolean }
   > = [];
 
-  for await (const batch of missingCoinsTypeBatches) {
+  for (const batch of missingCoinsTypeBatches) {
     const data = await Promise.all(
       batch.map((coinType) =>
-        movClient
+        suiClient
           .getCoinMetadata({ coinType })
           .then((metadata) => ({
-            ...(metadata ?? getBasicCoinMetadata(coinType)),
+            ...(metadata
+              ? {
+                  ...metadata,
+                  symbol: metadata.symbol || getSymbolByType(coinType),
+                }
+              : getBasicCoinMetadata(coinType)),
             hasMetadata: !!metadata,
             type: coinType,
           }))
@@ -73,7 +89,7 @@ const getCoinMetadataList = async (
   }
 
   return [
-    ...docs,
+    ...flattenedDocs,
     ...missingCoinsMetadata.map(({ hasMetadata, ...metadata }) => metadata),
   ];
 };
