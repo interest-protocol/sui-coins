@@ -1,7 +1,7 @@
 import { Token } from '@interest-protocol/sui-tokens';
-import { CoinStruct } from '@mysten/sui.js/client';
-import { TransactionResult } from '@mysten/sui.js/transactions';
-import { formatAddress, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import { CoinStruct } from '@mysten/sui/client';
+import { TransactionResult } from '@mysten/sui/transactions';
+import { formatAddress, SUI_TYPE_ARG } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
 
 import { Network } from '@/constants';
@@ -139,13 +139,13 @@ export async function getCoinOfValue({
   suiClient,
   coinValue,
   coinType,
-  txb,
+  tx,
   account,
 }: GetCoinOfValueArgs): Promise<TransactionResult> {
   let coinOfValue: TransactionResult;
   coinType = removeLeadingZeros(coinType);
   if (coinType === '0x2::sui::SUI') {
-    coinOfValue = txb.splitCoins(txb.gas, [txb.pure(coinValue)]);
+    coinOfValue = tx.splitCoins(tx.gas, [tx.pure.u64(coinValue)]);
   } else {
     const paginatedCoins = await getCoins({
       suiClient,
@@ -156,14 +156,14 @@ export async function getCoinOfValue({
 
     // Merge all coins into one
     const [firstCoin, ...otherCoins] = paginatedCoins;
-    const firstCoinInput = txb.object(firstCoin.coinObjectId);
+    const firstCoinInput = tx.object(firstCoin.coinObjectId);
     if (otherCoins.length > 0) {
-      txb.mergeCoins(
+      tx.mergeCoins(
         firstCoinInput,
         otherCoins.map((coin) => coin.coinObjectId)
       );
     }
-    coinOfValue = txb.splitCoins(firstCoinInput, [txb.pure(coinValue)]);
+    coinOfValue = tx.splitCoins(firstCoinInput, [tx.pure.u64(coinValue)]);
   }
   return coinOfValue;
 }

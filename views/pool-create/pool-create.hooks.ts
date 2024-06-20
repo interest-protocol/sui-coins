@@ -1,6 +1,6 @@
 import { useCurrentAccount } from '@mysten/dapp-kit';
-import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { normalizeSuiAddress } from '@mysten/sui.js/utils';
+import { Transaction } from '@mysten/sui/transactions';
+import { normalizeSuiAddress } from '@mysten/sui/utils';
 
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { useWeb3 } from '@/hooks/use-web3';
@@ -38,16 +38,16 @@ export const useCreateLpCoin = () => {
 
     await initMoveByteCodeTemplate('/move_bytecode_template_bg.wasm');
 
-    const txb = new TransactionBlock();
+    const tx = new Transaction();
 
-    const [upgradeCap] = txb.publish({
+    const [upgradeCap] = tx.publish({
       modules: [[...getLpCoinBytecode(info)]],
       dependencies: [normalizeSuiAddress('0x1'), normalizeSuiAddress('0x2')],
     });
 
-    txb.transferObjects([upgradeCap], txb.pure.address(currentAccount.address));
+    tx.transferObjects([upgradeCap], tx.pure.address(currentAccount.address));
 
-    return txb;
+    return tx;
   };
 };
 
@@ -60,26 +60,26 @@ export const useCreateStablePool = () => {
     tokens: ReadonlyArray<Token>,
     treasuryCap: string | null | undefined,
     coinType: string
-  ): Promise<TransactionBlock> => {
+  ): Promise<Transaction> => {
     if (!currentAccount) throw new Error('No account');
 
     if (!treasuryCap) throw new Error('No authorization to use this LP coin');
 
-    const auxTxb = new TransactionBlock();
+    const auxTx = new Transaction();
 
     const coins = tokens.map(({ type, value }) => {
       const [firstCoin, ...otherCoins] = coinsMap[type].objects;
 
-      const firstCoinObject = auxTxb.object(firstCoin.coinObjectId);
+      const firstCoinObject = auxTx.object(firstCoin.coinObjectId);
 
       if (otherCoins.length)
-        auxTxb.mergeCoins(
+        auxTx.mergeCoins(
           firstCoinObject,
           otherCoins.map((coin) => coin.coinObjectId)
         );
 
-      const [splittedCoin] = auxTxb.splitCoins(firstCoinObject, [
-        auxTxb.pure(
+      const [splittedCoin] = auxTx.splitCoins(firstCoinObject, [
+        auxTx.pure.u64(
           FixedPointMath.toBigNumber(value, coinsMap[type].decimals)
             .decimalPlaces(0)
             .toString()
@@ -91,16 +91,19 @@ export const useCreateStablePool = () => {
 
     const typeArguments = [...tokens.map((token) => token.type), coinType];
 
-    const { pool, poolAdmin, lpCoin, txb } = await clamm.newStable({
+    const { pool, poolAdmin, lpCoin, tx } = await clamm.newStable({
       coins,
-      txb: auxTxb as any,
+      tx: auxTx,
       lpCoinTreasuryCap: treasuryCap,
       typeArguments: typeArguments,
     });
 
-    txb.transferObjects([poolAdmin, lpCoin], txb.pure(currentAccount.address));
+    tx.transferObjects(
+      [poolAdmin, lpCoin],
+      tx.pure.address(currentAccount.address)
+    );
 
-    return clamm.shareStablePool({ txb, pool }) as unknown as TransactionBlock;
+    return clamm.shareStablePool({ tx, pool });
   };
 };
 
@@ -113,17 +116,17 @@ export const useCreateVolatilePool = () => {
     tokens: ReadonlyArray<Token>,
     treasuryCap: string | null | undefined,
     lpCoinType: string
-  ): Promise<TransactionBlock> => {
+  ): Promise<Transaction> => {
     if (!currentAccount) throw new Error('No account');
 
     if (!treasuryCap) throw new Error('No authorization to use this LP coin');
 
-    const auxTxb = new TransactionBlock();
+    const auxTx = new Transaction();
 
     const coins = tokens.map(({ type, value }) => {
       if (isSui(type))
-        return auxTxb.splitCoins(auxTxb.gas, [
-          auxTxb.pure(
+        return auxTx.splitCoins(auxTx.gas, [
+          auxTx.pure.u64(
             FixedPointMath.toBigNumber(value, coinsMap[type].decimals)
               .decimalPlaces(0)
               .toString()
@@ -132,16 +135,16 @@ export const useCreateVolatilePool = () => {
 
       const [firstCoin, ...otherCoins] = coinsMap[type].objects;
 
-      const firstCoinObject = auxTxb.object(firstCoin.coinObjectId);
+      const firstCoinObject = auxTx.object(firstCoin.coinObjectId);
 
       if (otherCoins.length)
-        auxTxb.mergeCoins(
+        auxTx.mergeCoins(
           firstCoinObject,
           otherCoins.map((coin) => coin.coinObjectId)
         );
 
-      const [splittedCoin] = auxTxb.splitCoins(firstCoinObject, [
-        auxTxb.pure(
+      const [splittedCoin] = auxTx.splitCoins(firstCoinObject, [
+        auxTx.pure.u64(
           FixedPointMath.toBigNumber(value, coinsMap[type].decimals)
             .decimalPlaces(0)
             .toString()
@@ -161,19 +164,22 @@ export const useCreateVolatilePool = () => {
         .toFixed(0)
     );
 
-    const { pool, poolAdmin, lpCoin, txb } = await clamm.newVolatile({
+    const { pool, poolAdmin, lpCoin, tx } = await clamm.newVolatile({
       coins,
-      txb: auxTxb as any,
+      tx: auxTx,
       lpCoinTreasuryCap: treasuryCap,
       typeArguments: typeArguments,
       prices: [price],
     });
 
-    txb.transferObjects([poolAdmin, lpCoin], txb.pure(currentAccount.address));
+    tx.transferObjects(
+      [poolAdmin, lpCoin],
+      tx.pure.address(currentAccount.address)
+    );
 
     return clamm.shareVolatilePool({
-      txb,
+      tx,
       pool,
-    }) as unknown as TransactionBlock;
+    }) as unknown as Transaction;
   };
 };

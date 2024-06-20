@@ -1,4 +1,4 @@
-import { formatAddress } from '@mysten/sui.js/utils';
+import { formatAddress } from '@mysten/sui/utils';
 
 import { Network } from '@/constants';
 

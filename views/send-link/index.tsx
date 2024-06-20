@@ -5,8 +5,8 @@ import {
   Typography,
 } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
-import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import { SuiTransactionBlockResponse } from '@mysten/sui/client';
+import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
 

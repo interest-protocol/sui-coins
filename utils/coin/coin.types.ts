@@ -1,5 +1,5 @@
-import { SuiClient } from '@mysten/sui.js/client';
-import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { SuiClient } from '@mysten/sui/client';
+import { Transaction } from '@mysten/sui/transactions';
 import BigNumber from 'bignumber.js';
 
 export interface GetCoinsArgs {
@@ -11,7 +11,7 @@ export interface GetCoinsArgs {
 
 export interface GetCoinOfValueArgs {
   suiClient: SuiClient;
-  txb: TransactionBlock;
+  tx: Transaction;
   account: string;
   coinType: string;
   coinValue: number | bigint | string;

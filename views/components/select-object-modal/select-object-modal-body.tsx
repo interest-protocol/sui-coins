@@ -1,11 +1,12 @@
 import { useSuiClientContext } from '@mysten/dapp-kit';
-import { isValidSuiAddress } from '@mysten/sui.js/utils';
+import { isValidSuiAddress } from '@mysten/sui/utils';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
 
 import { LOCAL_STORAGE_VERSION } from '@/constants';
 import { useWeb3 } from '@/hooks/use-web3';
+import { isSameStructTag } from '@/utils';
 
 import ModalObjectBody from './modal-object-body';
 import NotFound from './not-found';
@@ -34,7 +35,7 @@ const SelectObjectModalBody: FC<SelectObjectModalBodyProps> = ({
     (!isSearchAddress && filterSelected === ObjectOrigin.Coins) ||
     (filterSelected === ObjectOrigin.Coins &&
       isSearchAddress &&
-      coinsObjects.some(({ type }) => type === search))
+      coinsObjects.some(({ type }) => isSameStructTag(type, search)))
   )
     return (
       <ModalObjectBody

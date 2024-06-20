@@ -1,5 +1,5 @@
 import { Chain, STRICT_LIST, Token } from '@interest-protocol/sui-tokens';
-import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 import { FC } from 'react';
 
 import { SVGProps } from '@/components/svg/svg.types';
@@ -27,14 +27,6 @@ import { Network } from '.';
 
 export const SUI_TYPE_ARG_LONG =
   '0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI';
-
-export const COIN_METADATA = {
-  [SUI_TYPE_ARG]: {
-    name: 'Sui',
-    decimals: 9,
-    symbol: TOKEN_SYMBOL.SUI,
-  },
-};
 
 export const TESTNET_BASE_COINS: Record<string, `0x${string}`> = {
   SUI: SUI_TYPE_ARG,
@@ -395,59 +387,6 @@ export const COINS: Record<Network, Record<string, Token>> = {
       symbol: TOKEN_SYMBOL.ETH_CELER_USDT,
       type: COIN_TYPE[Network.MAINNET].ETH_CELER_USDT,
     },
-  },
-};
-
-export const COIN_TYPE_TO_COIN = {
-  [Network.TESTNET]: {
-    [COIN_TYPE[Network.TESTNET].ETH]: COINS[Network.TESTNET].ETH,
-    [COIN_TYPE[Network.TESTNET].BTC]: COINS[Network.TESTNET].BTC,
-    [COIN_TYPE[Network.TESTNET].BNB]: COINS[Network.TESTNET].BNB,
-    [COIN_TYPE[Network.TESTNET].SUI]: COINS[Network.TESTNET].SUI,
-    [COIN_TYPE[Network.TESTNET].USDC]: COINS[Network.TESTNET].USDC,
-    [COIN_TYPE[Network.TESTNET].USDT]: COINS[Network.TESTNET].USDT,
-    [COIN_TYPE[Network.TESTNET].SUID]: COINS[Network.TESTNET].SUID,
-  },
-  [Network.MAINNET]: {
-    [COIN_TYPE[Network.MAINNET].SUI]: COINS[Network.MAINNET].SUI,
-    [COIN_TYPE[Network.MAINNET].NATIVE_WORMHOLE_ETH]:
-      COINS[Network.MAINNET].NATIVE_WORMHOLE_ETH,
-    [COIN_TYPE[Network.MAINNET].ETH_WORMHOLE_USDC]:
-      COINS[Network.MAINNET].ETH_WORMHOLE_USDC,
-    [COIN_TYPE[Network.MAINNET].ETH_WORMHOLE_USDT]:
-      COINS[Network.MAINNET].ETH_WORMHOLE_USDT,
-    [COIN_TYPE[Network.MAINNET].NATIVE_WORMHOLE_SOL]:
-      COINS[Network.MAINNET].NATIVE_WORMHOLE_SOL,
-    [COIN_TYPE[Network.MAINNET].NATIVE_WORMHOLE_WBNB]:
-      COINS[Network.MAINNET].NATIVE_WORMHOLE_WBNB,
-    [COIN_TYPE[Network.MAINNET].NATIVE_WORMHOLE_WAVAX]:
-      COINS[Network.MAINNET].NATIVE_WORMHOLE_WAVAX,
-    [COIN_TYPE[Network.MAINNET].NATIVE_WORMHOLE_WFTM]:
-      COINS[Network.MAINNET].NATIVE_WORMHOLE_WFTM,
-    [COIN_TYPE[Network.MAINNET].NATIVE_WORMHOLE_CELO]:
-      COINS[Network.MAINNET].NATIVE_WORMHOLE_CELO,
-    [COIN_TYPE[Network.MAINNET].NATIVE_WORMHOLE_WMATIC]:
-      COINS[Network.MAINNET].NATIVE_WORMHOLE_WMATIC,
-    [COIN_TYPE[Network.MAINNET].BSC_WORMHOLE_ADA]:
-      COINS[Network.MAINNET].BSC_WORMHOLE_ADA,
-    [COIN_TYPE[Network.MAINNET].BSC_WORMHOLE_BTCB]:
-      COINS[Network.MAINNET].BSC_WORMHOLE_BTCB,
-    [COIN_TYPE[Network.MAINNET].BSC_WORMHOLE_USDC]:
-      COINS[Network.MAINNET].BSC_WORMHOLE_USDC,
-    [COIN_TYPE[Network.MAINNET].BSC_WORMHOLE_USDT]:
-      COINS[Network.MAINNET].BSC_WORMHOLE_USDT,
-    [COIN_TYPE[Network.MAINNET].BSC_WORMHOLE_ETH]:
-      COINS[Network.MAINNET].BSC_WORMHOLE_ETH,
-    [COIN_TYPE[Network.MAINNET].BSC_WORMHOLE_FLOKI]:
-      COINS[Network.MAINNET].BSC_WORMHOLE_FLOKI,
-    [COIN_TYPE[Network.MAINNET].BSC_WORMHOLE_DOGE]:
-      COINS[Network.MAINNET].BSC_WORMHOLE_DOGE,
-    [COIN_TYPE[Network.MAINNET].ETH_CELER_WETH]:
-      COINS[Network.MAINNET].ETH_CELER_WETH,
-    [COIN_TYPE[Network.MAINNET].ETH_CELER_WBTC]:
-      COINS[Network.MAINNET].ETH_CELER_WBTC,
-    [COIN_TYPE[Network.MAINNET].ETH_CELER_USDC]:
-      COINS[Network.MAINNET].ETH_CELER_USDC,
   },
 };
 
