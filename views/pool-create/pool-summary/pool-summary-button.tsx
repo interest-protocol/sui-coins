@@ -1,7 +1,7 @@
 import { Button } from '@interest-protocol/ui-kit';
 import {
   useCurrentAccount,
-  useSignTransactionBlock,
+  useSignTransaction,
   useSuiClient,
   useSuiClientContext,
 } from '@mysten/dapp-kit';
@@ -13,10 +13,12 @@ import invariant from 'tiny-invariant';
 import { Network, Routes, RoutesEnum } from '@/constants';
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { useDialog } from '@/hooks/use-dialog';
+import { useWeb3 } from '@/hooks/use-web3';
 import {
   showTXSuccessToast,
   signAndExecute,
   throwTXIfNotSuccessful,
+  waitForTx,
 } from '@/utils';
 
 import {
@@ -33,12 +35,13 @@ const PoolSummaryButton: FC = () => {
   const clamm = useClammSdk();
   const { network } = useSuiClientContext();
   const createLpCoin = useCreateLpCoin();
-  const signTxb = useSignTransactionBlock();
+  const signTxb = useSignTransaction();
   const currentAccount = useCurrentAccount();
   const { dialog, handleClose } = useDialog();
   const createStablePool = useCreateStablePool();
   const createVolatilePool = useCreateVolatilePool();
   const { control } = useFormContext<CreatePoolForm>();
+  const { mutate } = useWeb3();
 
   const form = useWatch({ control });
 
@@ -46,37 +49,41 @@ const PoolSummaryButton: FC = () => {
     invariant(form && form.tokens?.length, 'No data');
     invariant(currentAccount, 'No wallet');
 
-    const lpCoinTxb = await createLpCoin(form.tokens as ReadonlyArray<Token>);
+    const lpCoinTx = await createLpCoin(form.tokens as ReadonlyArray<Token>);
 
-    const lpCoinTx = await signAndExecute({
-      txb: lpCoinTxb,
+    const lpCoinTx2 = await signAndExecute({
+      tx: lpCoinTx,
       currentAccount,
       suiClient: client,
-      signTransactionBlock: signTxb,
+      signTransaction: signTxb,
     });
 
-    const { treasuryCap, coinType } = await extractCoinData(lpCoinTx, client);
+    const { treasuryCap, coinType } = await extractCoinData(lpCoinTx2, client);
 
-    const txb = await (form.isStable ? createStablePool : createVolatilePool)(
+    const tx = await (form.isStable ? createStablePool : createVolatilePool)(
       form.tokens as ReadonlyArray<Token>,
       treasuryCap,
       coinType
     );
 
-    const tx = await signAndExecute({
-      txb,
+    const tx2 = await signAndExecute({
+      tx,
       currentAccount,
       suiClient: client,
-      signTransactionBlock: signTxb,
+      signTransaction: signTxb,
     });
 
-    throwTXIfNotSuccessful(tx);
+    throwTXIfNotSuccessful(tx2);
 
-    const poolId = await extractPoolDataFromTx(tx, client);
+    const poolId = await extractPoolDataFromTx(tx2, client);
 
     await clamm.savePool(poolId);
 
-    showTXSuccessToast(tx, network as Network);
+    showTXSuccessToast(tx2, network as Network);
+
+    await waitForTx({ suiClient: client, digest: tx2.digest });
+
+    mutate();
 
     push(`${Routes[RoutesEnum.PoolDetails]}?objectId=${poolId}`);
   };

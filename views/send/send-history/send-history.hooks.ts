@@ -1,10 +1,10 @@
 import {
   useCurrentAccount,
-  useSignTransactionBlock,
+  useSignTransaction,
   useSuiClient,
   useSuiClientContext,
 } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
+import { SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { listCreatedLinks, ZkSendLink } from '@mysten/zksend';
 import useSWR from 'swr';
 
@@ -40,7 +40,7 @@ export const useLinkList = (currentCursor: string | null) => {
 export const useRegenerateLink = () => {
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
-  const signTransactionBlock = useSignTransactionBlock();
+  const signTransaction = useSignTransaction();
 
   return async (
     link: ZkSendLink,
@@ -48,15 +48,16 @@ export const useRegenerateLink = () => {
   ) => {
     if (!currentAccount) return;
 
-    const { url, transactionBlock } = await link.createRegenerateTransaction(
+    const { url, transaction } = await link.createRegenerateTransaction(
       currentAccount.address
     );
 
-    const { transactionBlockBytes, signature } =
-      await signTransactionBlock.mutateAsync({ transactionBlock });
+    const { bytes, signature } = await signTransaction.mutateAsync({
+      transaction,
+    });
 
     const tx = await suiClient.executeTransactionBlock({
-      transactionBlock: transactionBlockBytes,
+      transactionBlock: bytes,
       signature,
       requestType: 'WaitForLocalExecution',
       options: {

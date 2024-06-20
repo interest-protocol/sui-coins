@@ -1,4 +1,4 @@
-import type { LinkAssets } from '@mysten/zksend/dist/cjs/links/utils';
+import { LinkAssets } from '@mysten/zksend/dist/cjs/links/utils';
 
 import type { Network } from '@/constants';
 

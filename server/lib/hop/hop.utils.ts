@@ -1,5 +1,4 @@
-import type { GetQuoteResponse } from '@hop.ag/sdk/dist/sdk/routes/quote';
-import type { Trade } from '@hop.ag/sdk/dist/sdk/util';
+import type { GetQuoteResponse, Trade } from '@hop.ag/sdk';
 
 export interface JSONQuoteResponse {
   trade: Trade;

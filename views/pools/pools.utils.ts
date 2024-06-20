@@ -1,5 +1,5 @@
 import { PoolMetadata } from '@interest-protocol/clamm-sdk';
-import { normalizeStructTag, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import { normalizeStructTag, SUI_TYPE_ARG } from '@mysten/sui/utils';
 
 import { Network } from '@/constants';
 import { COIN_TYPE_TO_SYMBOL } from '@/constants/coins';

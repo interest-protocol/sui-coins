@@ -1,8 +1,7 @@
-import { HopSdk } from '@hop.ag/sdk';
-import { GetQuoteResponse } from '@hop.ag/sdk/dist/sdk/routes/quote';
-import type { Trade } from '@hop.ag/sdk/dist/sdk/util';
-import { getFullnodeUrl } from '@mysten/sui.js/client';
-import { normalizeStructTag, toB64 } from '@mysten/sui.js/utils';
+import type { Trade } from '@hop.ag/sdk';
+import { GetQuoteResponse, HopApi } from '@hop.ag/sdk';
+import { getFullnodeUrl } from '@mysten/sui/client';
+import { normalizeStructTag, toB64 } from '@mysten/sui/utils';
 
 import { TREASURY } from '@/constants';
 import { EXCHANGE_FEE } from '@/constants/clamm';
@@ -23,7 +22,7 @@ const hop_api_options = {
   fee_wallet: TREASURY,
 };
 
-const sdk = new HopSdk.HopApi(rpc, hop_api_options);
+const sdk = new HopApi(rpc, hop_api_options);
 
 export const quote = async (
   token_in: string,

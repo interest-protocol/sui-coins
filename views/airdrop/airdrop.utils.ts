@@ -1,4 +1,4 @@
-import { isValidSuiAddress, normalizeSuiAddress } from '@mysten/sui.js/utils';
+import { isValidSuiAddress, normalizeSuiAddress } from '@mysten/sui/utils';
 import { propOr } from 'ramda';
 
 import { MAINNET_COINS_INFO } from '@/constants/coins';

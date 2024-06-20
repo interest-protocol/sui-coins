@@ -1,4 +1,4 @@
-import { normalizeStructTag } from '@mysten/sui.js/utils';
+import { normalizeStructTag } from '@mysten/sui/utils';
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextCors from 'nextjs-cors';
 import { pathOr } from 'ramda';

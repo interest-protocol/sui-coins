@@ -1,19 +1,16 @@
 import {
   useCurrentAccount,
-  useSignTransactionBlock,
+  useSignTransaction,
   useSuiClient,
   useSuiClientContext,
 } from '@mysten/dapp-kit';
-import {
-  SuiObjectRef,
-  SuiTransactionBlockResponse,
-} from '@mysten/sui.js/client';
+import { SuiObjectRef, SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { ZkSendLink } from '@mysten/zksend';
 import useSWR from 'swr';
 
 import { Network } from '@/constants';
 import { ZK_BAG_CONTRACT_IDS, ZK_SEND_GAS_BUDGET } from '@/constants/zksend';
-import { throwTXIfNotSuccessful } from '@/utils';
+import { throwTXIfNotSuccessful, waitForTx } from '@/utils';
 import { createClaimTransaction } from '@/utils/zk-send';
 
 export const useLink = () => {
@@ -35,7 +32,7 @@ export const useReclaimLink = () => {
   const { network } = useSuiClientContext();
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
-  const signTransactionBlock = useSignTransactionBlock();
+  const signTransaction = useSignTransaction();
 
   return async (
     link: ZkSendLink,
@@ -44,7 +41,7 @@ export const useReclaimLink = () => {
   ) => {
     if (!currentAccount) throw new Error('Error on current account');
 
-    const transactionBlock = createClaimTransaction({
+    const transaction = createClaimTransaction({
       assets: link.assets,
       reclaimAddress: link.address,
       sender: currentAccount.address,
@@ -54,16 +51,15 @@ export const useReclaimLink = () => {
       }),
     });
 
-    transactionBlock.setGasPayment(gasObjects);
-    transactionBlock.setGasBudget(BigInt(ZK_SEND_GAS_BUDGET));
+    transaction.setGasPayment(gasObjects);
+    transaction.setGasBudget(BigInt(ZK_SEND_GAS_BUDGET));
 
-    const { transactionBlockBytes, signature } =
-      await signTransactionBlock.mutateAsync({
-        transactionBlock,
-      });
+    const { bytes, signature } = await signTransaction.mutateAsync({
+      transaction,
+    });
 
     const tx = await suiClient.executeTransactionBlock({
-      transactionBlock: transactionBlockBytes,
+      transactionBlock: bytes,
       signature,
       requestType: 'WaitForLocalExecution',
       options: {
@@ -73,6 +69,8 @@ export const useReclaimLink = () => {
     });
 
     throwTXIfNotSuccessful(tx);
+
+    await waitForTx({ suiClient, digest: tx.digest });
 
     onSuccess(tx);
   };

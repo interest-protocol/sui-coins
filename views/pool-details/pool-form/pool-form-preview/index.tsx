@@ -30,10 +30,10 @@ const PoolPreview: FC<PoolPreviewProps> = ({
     async () => {
       if (!currentAccount) return;
 
-      const txb = await action(getValues());
+      const tx = await action(getValues());
 
       const inspect = await client.devInspectTransactionBlock({
-        transactionBlock: txb,
+        transactionBlock: tx,
         sender: currentAccount.address,
       });
 

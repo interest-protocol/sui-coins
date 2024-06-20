@@ -3,7 +3,7 @@ import {
   StablePool,
   VolatilePool,
 } from '@interest-protocol/clamm-sdk';
-import { normalizeStructTag } from '@mysten/sui.js/utils';
+import { normalizeStructTag } from '@mysten/sui/utils';
 import { BigNumber } from 'bignumber.js';
 import { isEmpty } from 'ramda';
 

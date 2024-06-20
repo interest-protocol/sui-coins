@@ -1,5 +1,5 @@
-import { bcs } from '@mysten/sui.js/bcs';
-import { fromHEX } from '@mysten/sui.js/utils';
+import { bcs } from '@mysten/sui/bcs';
+import { fromHEX } from '@mysten/sui/utils';
 
 import { GetByteCodeArgs } from '@/views/pool-create/pool-create.types';
 

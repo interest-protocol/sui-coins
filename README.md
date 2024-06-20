@@ -52,7 +52,7 @@ You must install it in your Editor text
 - [Jest](https://jestjs.io)
 - [Redux](https://redux.js.org/)
 - [Ramda](https://ramdajs.com/)
-- [@mysten/sui.js](https://www.npmjs.com/package/@mysten/sui.js)
+- [@mysten/sui](https://www.npmjs.com/package/@mysten/sui)
 - [@mysten/dapp-kit](https://www.npmjs.com/package/@mysten/dapp-kit)
 
 ## Live

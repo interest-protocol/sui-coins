@@ -1,5 +1,5 @@
 import { Box } from '@interest-protocol/ui-kit';
-import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
 import dynamic from 'next/dynamic';
 import { FC } from 'react';

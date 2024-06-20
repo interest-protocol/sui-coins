@@ -1,5 +1,5 @@
 import { Box, Button } from '@interest-protocol/ui-kit';
-import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 import { FC, useEffect } from 'react';
 import { FormProvider, useFormContext, useWatch } from 'react-hook-form';
 
