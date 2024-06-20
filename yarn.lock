@@ -879,10 +879,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-2.0.3.tgz#4a2868d75d6d6963e423bcf90b7fd1be343409d3"
   integrity sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==
 
-"@interest-protocol/clamm-sdk@^9.0.0-alpha":
-  version "9.0.0-alpha"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/clamm-sdk/-/clamm-sdk-9.0.0-alpha.tgz#d5f9fff01001e11a7ca7e3e0730f6548a0992154"
-  integrity sha512-aZDPjeSb6FJF3JIe45Hw6zv+Ax8tQUrHM6yUONeaSpjakkti958bR2p/Wk1apUGWYOjrIRKh7BUFAk3mYRQ1tQ==
+"@interest-protocol/clamm-sdk@9.0.1-alpha":
+  version "9.0.1-alpha"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/clamm-sdk/-/clamm-sdk-9.0.1-alpha.tgz#51452f143c95fc6922227aa52e2d5a748bbb7f58"
+  integrity sha512-Kw4XueHsARh9NxLGWBstxOCisnzrF/Y46uYYz/QLPG6Eyjaff2CfstAahoUGvVqGFYvwDZ7ux7KhI16enBHjfA==
   dependencies:
     "@interest-protocol/move-bytecode-template" "0.0.4-alpha"
     "@mysten/sui" "^1.1.2"
@@ -1275,7 +1275,7 @@
     superstruct "^1.0.3"
     tweetnacl "^1.0.3"
 
-"@mysten/sui@1.1.2", "@mysten/sui@^1.1.2":
+"@mysten/sui@1.1.2", "@mysten/sui@^1.0.5", "@mysten/sui@^1.1.2":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@mysten/sui/-/sui-1.1.2.tgz#6c84d5c74b491e23f560a9d72ded020efa5e1dcd"
   integrity sha512-S1MfGvbkUxKGd39bfA6G21UVwJSSgJW8uKHinSByjt86+YKvSZxlF5zr6RVKcP4Rn8gl5ytMbZQfCPn+0nuGTg==
@@ -1293,12 +1293,12 @@
     tweetnacl "^1.0.3"
     valibot "^0.25.0"
 
-"@mysten/suins-toolkit@^0.5.8":
-  version "0.5.8"
-  resolved "https://registry.yarnpkg.com/@mysten/suins-toolkit/-/suins-toolkit-0.5.8.tgz#8cbe9256c91b2ff23f267515f7535963b0d01ecf"
-  integrity sha512-WFqfD1/NM1+mcr63zMNC8ycyOJXvb4RiEEJBi1vmCwRIywUFBKgnw+T6RPWulz5b5Wu+8XrzXPBDHaBQlJYeew==
+"@mysten/suins@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@mysten/suins/-/suins-0.1.0.tgz#3c159273a0b81d0e92c9257c5242471a377a5b93"
+  integrity sha512-LggTIFdIOqxXca5NJofoq5PPofmyWL8mRMeraQK8Gdba3teW/BH/O0ocaarFkiG7Tc//k4rqF51uIKVJNbd50w==
   dependencies:
-    "@mysten/sui" "1.1.2"
+    "@mysten/sui" "^1.0.5"
 
 "@mysten/wallet-standard@0.12.9", "@mysten/wallet-standard@^0.12.9":
   version "0.12.9"

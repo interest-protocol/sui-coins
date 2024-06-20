@@ -1,6 +1,6 @@
-import { useAccounts, useSuiClientContext } from '@mysten/dapp-kit';
+import { useAccounts, useSuiClient } from '@mysten/dapp-kit';
 import { getFullnodeUrl, SuiClient } from '@mysten/sui/client';
-import { SuinsClient } from '@mysten/suins-toolkit';
+import { SuinsClient } from '@mysten/suins';
 import { fromPairs, pathOr, prop } from 'ramda';
 import {
   createContext,
@@ -12,6 +12,7 @@ import {
 } from 'react';
 
 import { Network } from '@/constants';
+import { useNetwork } from '@/hooks/use-network';
 import { noop } from '@/utils';
 
 import { ISuiNsContext } from './suins.types';
@@ -28,20 +29,14 @@ export const suiClientRecord = {
   [Network.TESTNET]: testnetClient,
 } as Record<Network, SuiClient>;
 
-const testnetSuiNs = new SuinsClient(testnetClient, {
-  networkType: 'testnet',
+const testnetSuiNs = new SuinsClient({
+  client: testnetClient,
+  network: 'testnet',
 });
 
-export const suiNSMainNetProvider = new SuinsClient(mainnetClient, {
-  contractObjects: {
-    packageId:
-      '0x00c2f85e07181b90c140b15c5ce27d863f93c4d9159d2a4e7bdaeb40e286d6f5',
-    suins: '0x6e0ddefc0ad98889c04bab9639e512c21766c5e6366f89e696956d9be6952871',
-    registry:
-      '0xe64cd9db9f829c6cc405d9790bd71567ae07259855f4fba6f02c84f52298c106',
-    reverseRegistry:
-      '0x2fd099e17a292d2bc541df474f9fafa595653848cbabb2d7a4656ec786a1969f',
-  },
+export const suiNSMainNetProvider = new SuinsClient({
+  client: mainnetClient,
+  network: 'mainnet',
 });
 
 const suiNsClientRecord = {
@@ -54,48 +49,53 @@ const suiNsContext = createContext<ISuiNsContext>({} as ISuiNsContext);
 export const SuiNsProvider: FC<PropsWithChildren> = ({ children }) => {
   const accounts = useAccounts();
   const { Provider } = suiNsContext;
-  const { network } = useSuiClientContext();
+  const network = useNetwork();
+  const suiClient = useSuiClient();
   const [loading, setLoading] = useState<boolean>(false);
-  const [names, setNames] = useState<Record<string, string>>({});
+  const [names, setNames] = useState<Record<string, string[]>>({});
   const [nsImages, setNsImages] = useState<Record<string, string>>({});
 
-  const provider = suiNsClientRecord[network as Network];
+  const suiNSProvider = suiNsClientRecord[network];
 
   useEffect(() => {
     if (accounts.length) {
       setLoading(true);
 
-      const promises = accounts.map((account) =>
-        provider.getName(account.address).catch(() => null)
+      const promises = Promise.all(
+        accounts.map((acc) =>
+          suiClient.resolveNameServiceNames({
+            address: acc.address,
+          })
+        )
       );
 
-      Promise.all(promises)
-        .then(async (namesServer) => {
-          const filteredNS = namesServer?.filter((nameServer) => !!nameServer);
-
-          if (!filteredNS || !filteredNS.length) return {};
-
+      promises
+        .then(async (names) => {
           setNames(
-            filteredNS.reduce(
-              (acc, name, index) =>
-                name ? { ...acc, [accounts[index].address]: name } : acc,
-              {} as Record<string, string>
+            names.reduce(
+              (acc, elem, index) => {
+                const account = accounts[index];
+
+                return {
+                  ...acc,
+                  [account.address]: elem.data,
+                };
+              },
+              {} as Record<string, string[]>
             )
           );
 
           const images: ReadonlyArray<[string | null, string | null]> =
             await Promise.all(
-              filteredNS.map(async (nameServer) => {
-                if (!nameServer) return [null, null];
+              names.map(async (name) => {
+                if (!name || !name.data.length) return [null, null];
 
-                return provider
-                  .getNameObject(nameServer, {
-                    showAvatar: true,
-                  })
+                return suiNSProvider
+                  .getNameRecord(name.data[0])
                   .then(async (object) => {
                     const nftId = prop('nftId', object as any);
 
-                    if (!nftId) return [nameServer, null];
+                    if (!nftId) return [name.data[0], null];
 
                     const nft = await suiClientRecord[
                       network as Network
@@ -110,7 +110,7 @@ export const SuiNsProvider: FC<PropsWithChildren> = ({ children }) => {
                       nft
                     ) as string | null;
 
-                    return [nameServer, imageUrl];
+                    return [name.data[0], imageUrl];
                   });
               })
             );
@@ -131,7 +131,7 @@ export const SuiNsProvider: FC<PropsWithChildren> = ({ children }) => {
   const value = {
     names,
     loading,
-    provider,
+    provider: suiNSProvider,
     images: nsImages,
   };
 
