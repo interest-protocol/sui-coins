@@ -1,7 +1,6 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import { useCurrentAccount } from '@mysten/dapp-kit';
 import { formatAddress } from '@mysten/sui/utils';
-import {} from '@mysten/suins';
 import { FC, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
