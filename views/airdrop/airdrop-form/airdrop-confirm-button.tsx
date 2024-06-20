@@ -178,6 +178,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         signTransaction,
         options: { showObjectChanges: true },
       });
+
       const initMergeAndSplitTxMS = Date.now();
 
       throwTXIfNotSuccessful(tx2, () => setValue('error', true));
@@ -215,6 +216,8 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           version: nextVersion,
         };
 
+        console.log({ gas });
+
         tx.setGasPayment([gas]);
 
         const tx2 = await sendAirdrop({
@@ -227,6 +230,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           tokenType: token.type,
           coinToSend: tx.objectRef(coin),
         });
+
         const initAirdropTxMS = Date.now();
 
         [nextDigest, nextVersion] = findNextVersionAndDigest(
@@ -250,6 +254,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         await pauseUtilNextTx(initAirdropTxMS);
       }
     } catch (e: any) {
+      console.log({ e });
       toast.error((e?.message as string) ?? e ?? 'Something went wrong!');
       if (((e?.message as string) ?? e) === 'Rejected from user') {
         setValue('error', true);

@@ -8,7 +8,8 @@ const LOCAL_NETWORK_KEY = 'suicoins:network';
 
 const { networkConfig } = createNetworkConfig({
   [Network.TESTNET]: {
-    url: getFullnodeUrl('testnet'),
+    url:
+      process.env.NEXT_PUBLIC_SUI_TESTNET_RPC_URL || getFullnodeUrl('testnet'),
   },
   [Network.MAINNET]: {
     url:

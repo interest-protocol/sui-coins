@@ -1,8 +1,7 @@
-import { bcs } from '@mysten/bcs';
+import { bcs } from '@mysten/sui/bcs';
 import {
   SuiObjectChangeCreated,
   SuiObjectRef,
-  SuiObjectResponse,
   SuiTransactionBlockResponse,
 } from '@mysten/sui/client';
 import {
@@ -34,6 +33,12 @@ export const findNextVersionAndDigest = (
   return [nextDigest, nextVersion];
 };
 
+const Address = bcs.bytes(32).transform({
+  // To change the input type, you need to provide a type definition for the input
+  input: (val: string) => fromHEX(val),
+  output: (val) => toHEX(val),
+});
+
 export const sendAirdrop = async ({
   suiClient,
   tx,
@@ -51,15 +56,8 @@ export const sendAirdrop = async ({
       coinToSend,
       tx.pure(
         bcs
-          .vector(
-            bcs.bytes(32).transform({
-              // To change the input type, you need to provide a type definition for the input
-              input: (val: string) => fromHEX(val),
-              output: (val) => toHEX(val),
-            })
-          )
+          .vector(Address)
           .serialize(batch.map((x) => normalizeSuiAddress(x.address)))
-          .toBytes()
       ),
       tx.pure(
         bcs
@@ -67,7 +65,6 @@ export const sendAirdrop = async ({
           .serialize(
             batch.map((x) => BigNumber(x.amount).decimalPlaces(0).toString())
           )
-          .toBytes()
       ),
     ],
   });
@@ -103,11 +100,3 @@ export const suiObjectReducer =
       },
     ];
   };
-
-export const getCreatedCoinInfo = (
-  object: SuiObjectResponse
-): SuiObjectRef => ({
-  objectId: pathOr('', ['data', 'objectId'], object),
-  version: pathOr('', ['data', 'version'], object),
-  digest: pathOr('', ['data', 'digest'], object),
-});
