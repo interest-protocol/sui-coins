@@ -1,17 +1,14 @@
-import {
-  useCurrentAccount,
-  useSuiClient,
-  useSuiClientContext,
-} from '@mysten/dapp-kit';
+import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import { normalizeStructTag } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import useSWR from 'swr';
 
+import { useNetwork } from '@/context/network';
 import { useCoins } from '@/hooks/use-coins';
 import { CoinMetadataWithType } from '@/interface';
-import { isSui, makeSWRKey, ZERO_BIG_NUMBER } from '@/utils';
+import { fetchCoinMetadata, isSui, makeSWRKey, ZERO_BIG_NUMBER } from '@/utils';
 
 import { CoinsMap, TGetAllCoins } from './coins-manager.types';
 
@@ -29,8 +26,8 @@ const getAllCoins: TGetAllCoins = async (provider, account, cursor = null) => {
 };
 
 const CoinsManager: FC = () => {
+  const network = useNetwork();
   const suiClient = useSuiClient();
-  const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
   const { id, delay, updateCoins, updateLoading, updateError } = useCoins();
 
@@ -57,15 +54,8 @@ const CoinsManager: FC = () => {
         ];
 
         const dbCoinsMetadata: Record<string, CoinMetadataWithType> =
-          await fetch(
-            encodeURI(
-              `/api/auth/v1/coin-metadata?network=${network}&type_list=${coinsType.join(
-                ','
-              )}`
-            )
-          )
-            .then((res) => res.json())
-            .then((data: ReadonlyArray<CoinMetadataWithType>) =>
+          await fetchCoinMetadata({ types: coinsType, network }).then(
+            (data: ReadonlyArray<CoinMetadataWithType>) =>
               data.reduce(
                 (acc, item) => ({
                   ...acc,
@@ -76,7 +66,7 @@ const CoinsManager: FC = () => {
                 }),
                 {}
               )
-            );
+          );
 
         const filteredCoinsRaw = coinsRaw.filter(
           ({ coinType }) => dbCoinsMetadata[normalizeStructTag(coinType)]

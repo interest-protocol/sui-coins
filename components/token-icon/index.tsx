@@ -3,6 +3,7 @@ import { FC, useState } from 'react';
 import useSWR from 'swr';
 
 import { DefaultTokenSVG } from '@/svg';
+import { fetchCoinMetadata } from '@/utils';
 
 import { TOKEN_ICONS } from './token-icon.data';
 import { TokenIconProps, TypeBasedIcon } from './token-icon.types';
@@ -40,9 +41,7 @@ const TokenIcon: FC<TokenIconProps> = (props) => {
     async () => {
       if (TokenIcon || !isTypeBased(props)) return null;
 
-      const data = await fetch(
-        `/api/auth/v1/coin-metadata?network=${network}&type=${type}`
-      ).then((res) => res.json());
+      const data = await fetchCoinMetadata({ type, network });
 
       return data.iconUrl;
     }
