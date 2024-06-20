@@ -25,8 +25,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     return res.status(200).send('Data deleted successfully');
   } catch (e) {
-    console.log(e);
-
     res.status(500).send('Something went wrong!');
   }
 };

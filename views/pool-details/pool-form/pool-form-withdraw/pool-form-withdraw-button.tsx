@@ -1,7 +1,7 @@
 import { Button, Motion } from '@interest-protocol/ui-kit';
 import {
   useCurrentAccount,
-  useSignTransactionBlock,
+  useSignTransaction,
   useSuiClient,
   useSuiClientContext,
 } from '@mysten/dapp-kit';
@@ -29,7 +29,7 @@ const PoolFormWithdrawButton: FC = () => {
   const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
   const { dialog, handleClose } = useDialog();
-  const signTransactionBlock = useSignTransactionBlock();
+  const signTransaction = useSignTransaction();
   const { setModal, handleClose: closeModal } = useModal();
   const { getValues, control, setValue } = useFormContext<PoolForm>();
 
@@ -39,22 +39,22 @@ const PoolFormWithdrawButton: FC = () => {
     try {
       if (!currentAccount) return;
 
-      const txb = await withdraw(getValues());
+      const tx = await withdraw(getValues());
 
-      const tx = await signAndExecute({
-        txb,
+      const tx2 = await signAndExecute({
+        tx,
         suiClient,
         currentAccount,
-        signTransactionBlock,
+        signTransaction,
       });
 
-      throwTXIfNotSuccessful(tx);
+      throwTXIfNotSuccessful(tx2);
 
-      showTXSuccessToast(tx, network as Network);
+      showTXSuccessToast(tx2, network as Network);
 
       setValue(
         'explorerLink',
-        `${EXPLORER_URL[network as Network]}/tx/${tx.digest}`
+        `${EXPLORER_URL[network as Network]}/tx/${tx2.digest}`
       );
     } finally {
       mutate();

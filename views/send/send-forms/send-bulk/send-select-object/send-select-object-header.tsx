@@ -1,5 +1,5 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
-import { formatAddress } from '@mysten/sui.js/utils';
+import { formatAddress } from '@mysten/sui/utils';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 

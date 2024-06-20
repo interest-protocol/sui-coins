@@ -1,12 +1,13 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import { useCurrentAccount } from '@mysten/dapp-kit';
+import { formatAddress } from '@mysten/sui/utils';
 import { FC, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
 import { useSuiNs } from '@/context/suins';
 import { UserSVG } from '@/svg';
+import { formatSuiNS } from '@/utils';
 
-import { getName } from '../wallet/profile/profile.utils';
 import { AvatarProps } from './account-info.types';
 
 const Avatar: FC<AvatarProps> = ({ isLarge, account, withNameOrAddress }) => {
@@ -15,7 +16,9 @@ const Avatar: FC<AvatarProps> = ({ isLarge, account, withNameOrAddress }) => {
   const SIZE = isLarge ? '2.2rem' : '1.5rem';
   const [imgLoading, setImgLoading] = useState(true);
 
-  const src = images[names[account ?? currentAccount!.address!]] ?? '';
+  const suiNsNames = names[account ?? currentAccount!.address!];
+
+  const src = suiNsNames?.length ? images[suiNsNames[0]] : '';
 
   return (
     <>
@@ -58,8 +61,12 @@ const Avatar: FC<AvatarProps> = ({ isLarge, account, withNameOrAddress }) => {
         >
           {loading ? (
             <Skeleton width="100%" />
+          ) : src && !!suiNsNames.length ? (
+            formatSuiNS(suiNsNames[0])
+          ) : currentAccount?.address ? (
+            formatAddress(currentAccount.address)
           ) : (
-            getName(account ?? currentAccount?.address ?? '', names)
+            ''
           )}
         </Typography>
       )}

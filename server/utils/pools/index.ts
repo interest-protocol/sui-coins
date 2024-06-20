@@ -1,4 +1,4 @@
-import { isValidSuiObjectId } from '@mysten/sui.js/utils';
+import { isValidSuiObjectId } from '@mysten/sui/utils';
 import invariant from 'tiny-invariant';
 
 import { Network, PAGE_SIZE } from '@/constants';

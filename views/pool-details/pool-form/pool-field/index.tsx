@@ -5,7 +5,7 @@ import {
   Typography,
 } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
-import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 import { ChangeEvent, FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 

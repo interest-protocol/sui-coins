@@ -1,5 +1,5 @@
 import { createNetworkConfig, SuiClientProvider } from '@mysten/dapp-kit';
-import { getFullnodeUrl } from '@mysten/sui.js/client';
+import { getFullnodeUrl } from '@mysten/sui/client';
 import { FC, PropsWithChildren, useMemo, useState } from 'react';
 
 import { Network } from '@/constants';
@@ -8,7 +8,8 @@ const LOCAL_NETWORK_KEY = 'suicoins:network';
 
 const { networkConfig } = createNetworkConfig({
   [Network.TESTNET]: {
-    url: getFullnodeUrl('testnet'),
+    url:
+      process.env.NEXT_PUBLIC_SUI_TESTNET_RPC_URL || getFullnodeUrl('testnet'),
   },
   [Network.MAINNET]: {
     url:

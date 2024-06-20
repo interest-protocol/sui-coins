@@ -1,6 +1,6 @@
 import { Box, Button, Dialog } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
+import { SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';

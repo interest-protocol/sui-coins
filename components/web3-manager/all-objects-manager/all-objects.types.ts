@@ -1,4 +1,4 @@
-import { SuiClient, SuiObjectResponse } from '@mysten/sui.js/client';
+import { SuiClient, SuiObjectResponse } from '@mysten/sui/client';
 
 import { CoinObject } from '../coins-manager/web3-manager.types';
 

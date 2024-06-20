@@ -1,5 +1,5 @@
 import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
-import { normalizeStructTag, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import { normalizeStructTag, SUI_TYPE_ARG } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import useSWR from 'swr';

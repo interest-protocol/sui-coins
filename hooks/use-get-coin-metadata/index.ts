@@ -1,4 +1,4 @@
-import { normalizeStructTag } from '@mysten/sui.js/utils';
+import { normalizeStructTag } from '@mysten/sui/utils';
 import useSWR from 'swr';
 
 import { METADATA } from '@/constants/metadata';

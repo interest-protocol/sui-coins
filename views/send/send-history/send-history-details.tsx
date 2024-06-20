@@ -1,7 +1,7 @@
 import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
-import { formatAddress } from '@mysten/sui.js/utils';
-import { LinkAssets } from '@mysten/zksend/dist/cjs/links/utils';
+import { formatAddress } from '@mysten/sui/utils';
+import type { LinkAssets } from '@mysten/zksend/dist/cjs/links/utils';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 

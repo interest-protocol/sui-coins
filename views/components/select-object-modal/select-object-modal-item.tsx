@@ -6,7 +6,7 @@ import {
   useTheme,
 } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
-import { formatAddress } from '@mysten/sui.js/utils';
+import { formatAddress } from '@mysten/sui/utils';
 import { FC, MouseEventHandler, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { useLocalStorage } from 'usehooks-ts';

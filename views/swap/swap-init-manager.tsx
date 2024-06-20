@@ -1,5 +1,5 @@
 import { useSuiClientContext } from '@mysten/dapp-kit';
-import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 import { useRouter } from 'next/router';
 import { FC, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -50,7 +50,7 @@ const SwapInitManager: FC = () => {
       const type = SUI_TYPE_ARG;
 
       return {
-        type,
+        type: type as `0x${string}`,
         symbol,
         decimals,
         display: '',

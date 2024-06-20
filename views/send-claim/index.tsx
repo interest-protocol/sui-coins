@@ -6,8 +6,8 @@ import {
   Typography,
 } from '@interest-protocol/ui-kit';
 import { useCurrentAccount, useSuiClientContext } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
-import { isValidSuiAddress } from '@mysten/sui.js/utils';
+import { SuiTransactionBlockResponse } from '@mysten/sui/client';
+import { isValidSuiAddress } from '@mysten/sui/utils';
 import { FC, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';

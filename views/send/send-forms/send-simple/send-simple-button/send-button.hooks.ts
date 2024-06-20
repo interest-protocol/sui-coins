@@ -1,17 +1,17 @@
 import {
   useCurrentAccount,
-  useSignTransactionBlock,
+  useSignTransaction,
   useSuiClient,
   useSuiClientContext,
 } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
+import { SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { ZkSendLinkBuilder } from '@mysten/zksend';
 
 import { ObjectData } from '@/components/web3-manager/all-objects-manager/all-objects.types';
 import { Network, SPONSOR_WALLET } from '@/constants';
 import { ZK_BAG_CONTRACT_IDS, ZK_SEND_GAS_BUDGET } from '@/constants/zksend';
 import { FixedPointMath } from '@/lib';
-import { isSui, throwTXIfNotSuccessful } from '@/utils';
+import { isSui, throwTXIfNotSuccessful, waitForTx } from '@/utils';
 import { isCoinObject } from '@/views/components/select-object-modal/select-object-modal.utils';
 
 import { ObjectField } from '../send-simple.types';
@@ -20,7 +20,7 @@ const useCreateLink = () => {
   const suiClient = useSuiClient();
   const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
-  const signTransactionBlock = useSignTransactionBlock();
+  const signTransaction = useSignTransaction();
 
   return async (
     objects: ReadonlyArray<ObjectField>,
@@ -56,24 +56,23 @@ const useCreateLink = () => {
       link.addClaimableBalance(object.display!.type, amount);
     });
 
-    const txb = await link.createSendTransaction();
+    const tx = await link.createSendTransaction();
 
-    const [gasBudget] = txb.splitCoins(txb.gas, [
-      txb.pure(String(ZK_SEND_GAS_BUDGET)),
+    const [gasBudget] = tx.splitCoins(tx.gas, [
+      tx.pure.u64(String(ZK_SEND_GAS_BUDGET)),
     ]);
 
-    txb.transferObjects(
+    tx.transferObjects(
       [gasBudget],
-      txb.pure.address(SPONSOR_WALLET[network as Network])
+      tx.pure.address(SPONSOR_WALLET[network as Network])
     );
 
-    const { transactionBlockBytes, signature } =
-      await signTransactionBlock.mutateAsync({
-        transactionBlock: txb,
-      });
+    const { bytes, signature } = await signTransaction.mutateAsync({
+      transaction: tx,
+    });
 
-    const tx = await suiClient.executeTransactionBlock({
-      transactionBlock: transactionBlockBytes,
+    const tx2 = await suiClient.executeTransactionBlock({
+      transactionBlock: bytes,
       signature,
       requestType: 'WaitForLocalExecution',
       options: {
@@ -81,9 +80,11 @@ const useCreateLink = () => {
       },
     });
 
-    throwTXIfNotSuccessful(tx);
+    await waitForTx({ suiClient, digest: tx2.digest });
 
-    onSuccess(tx, link.getLink());
+    throwTXIfNotSuccessful(tx2);
+
+    onSuccess(tx2, link.getLink());
   };
 };
 

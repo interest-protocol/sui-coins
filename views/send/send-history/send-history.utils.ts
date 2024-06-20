@@ -2,8 +2,8 @@ import {
   SuiObjectChange,
   SuiObjectRef,
   SuiTransactionBlockResponse,
-} from '@mysten/sui.js/client';
-import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+} from '@mysten/sui/client';
+import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 
 export const findNextGasCoin = (
   tx: SuiTransactionBlockResponse,
