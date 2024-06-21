@@ -49,8 +49,7 @@ const SwapUpdatePrice: FC = () => {
   const hopSdk = useHopSdk();
   const network = useNetwork();
   const aftermathRouter = useAftermathRouter();
-  const { control, setValue, getValues, resetField } =
-    useFormContext<SwapForm>();
+  const { control, setValue, getValues } = useFormContext<SwapForm>();
 
   const native = getValues('settings.aggregator') === Aggregator.Interest;
 
@@ -73,11 +72,6 @@ const SwapUpdatePrice: FC = () => {
   const coinOutType = useWatch({
     control,
     name: 'to.type',
-  });
-
-  const coinOutDisplay = useWatch({
-    control,
-    name: 'to.display',
   });
 
   const swapping = useWatch({
@@ -217,8 +211,6 @@ const SwapUpdatePrice: FC = () => {
 
       return getRouterValue(route!, aggregator!);
     } catch (e) {
-      console.log({ e });
-
       resetFields();
       setValue('error', 'There is no market for these coins.');
 
@@ -234,10 +226,14 @@ const SwapUpdatePrice: FC = () => {
     async () => {
       if (disabled) {
         resetFields();
+        if (bestPrice) setValue('settings.aggregator', null);
         return;
       }
 
-      if (swapping) return;
+      if (swapping) {
+        if (bestPrice) setValue('settings.aggregator', null);
+        return;
+      }
 
       setValue('fetchingPrices', true);
 

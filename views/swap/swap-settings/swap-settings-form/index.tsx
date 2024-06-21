@@ -13,7 +13,10 @@ import { ManageSlippageProps } from './swap-settings-form.types';
 
 const SLIPPAGE_BUTTONS = ['0.1', '0.5', '1'];
 
-const SwapSettingsForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
+const SwapSettingsForm: FC<ManageSlippageProps> = ({
+  handleManageView,
+  noAgg,
+}) => {
   const { getValues, setValue } = useFormContext<SwapForm>();
 
   const formTmpSettings = useForm<ISwapSettings>({
@@ -127,10 +130,12 @@ const SwapSettingsForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
           />
         </Box>
       </Box>
-      <SwapAggregatorManager
-        setValue={formTmpSettings.setValue}
-        control={formTmpSettings.control}
-      />
+      {!noAgg && (
+        <SwapAggregatorManager
+          setValue={formTmpSettings.setValue}
+          control={formTmpSettings.control}
+        />
+      )}
       <Box display="flex" gap="0.5rem" justifyContent="flex-end">
         <Button
           px="l"

@@ -7,11 +7,7 @@ import { useModal } from '@/hooks/use-modal';
 import { CheckSVG, TimesSVG } from '@/svg';
 
 import { AGGREGATORS_LIST } from './swap.data';
-import {
-  Aggregator,
-  AggregatorProps,
-  SwapSelectAggregatorModalProps,
-} from './swap.types';
+import { AggregatorProps, SwapSelectAggregatorModalProps } from './swap.types';
 
 const SwapSelectAggregatorModal: FC<SwapSelectAggregatorModalProps> = ({
   onSelect,
@@ -61,15 +57,7 @@ const SwapSelectAggregatorModal: FC<SwapSelectAggregatorModalProps> = ({
           nHover={!data.disabled && { bg: '#0053DB14' }}
           cursor={data.disabled ? 'not-allowed' : 'pointer'}
           bg={aggregatorSelected.name == data.name ? '#0053DB14' : 'unset'}
-          onClick={() =>
-            !data.disabled &&
-            onSelect(
-              data.shortName as
-                | `${Aggregator.Hop}`
-                | `${Aggregator.Aftermath}`
-                | 'interest'
-            )
-          }
+          onClick={() => !data.disabled && onSelect(data.key)}
         >
           <Box display="flex" alignItems="center" gap="m">
             <Box width="2.5rem" height="2.5rem">

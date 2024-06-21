@@ -5,7 +5,7 @@ import { FC, useState } from 'react';
 import SlippageInfo from './slippage';
 import SwapSettingsForm from './swap-settings-form';
 
-const SwapSettings: FC = () => {
+const SwapSettings: FC<{ noAgg?: boolean }> = ({ noAgg }) => {
   const [openManage, setOpenManage] = useState(false);
 
   const handleManageView = () => setOpenManage(not);
@@ -13,7 +13,9 @@ const SwapSettings: FC = () => {
   return (
     <Box display="flex" flexDirection="column">
       <SlippageInfo isOpen={openManage} handleManageView={handleManageView} />
-      {openManage && <SwapSettingsForm handleManageView={handleManageView} />}
+      {openManage && (
+        <SwapSettingsForm noAgg={noAgg} handleManageView={handleManageView} />
+      )}
     </Box>
   );
 };

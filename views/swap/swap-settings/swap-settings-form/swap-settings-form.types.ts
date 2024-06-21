@@ -1,4 +1,5 @@
 export interface ManageSlippageProps {
+  noAgg?: boolean;
   handleManageView: () => void;
 }
 

@@ -2,7 +2,7 @@ import { normalizeStructTag } from '@mysten/sui/utils';
 
 import { Network } from './dapp';
 
-export const EXCHANGE_FEE = 0.002;
+export const EXCHANGE_FEE = 0.015;
 
 export const CLAMM_PACKAGE_ADDRESSES = {
   [Network.MAINNET]: {
