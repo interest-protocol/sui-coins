@@ -8,11 +8,12 @@ import { ClockSVG, PercentageSVG } from '@/svg';
 import { parseInputEventToNumberString } from '@/utils';
 
 import { ISwapSettings, SwapForm } from '../../swap.types';
-import { ManageSlippageProps } from './manage-slippage-form.types';
+import SwapAggregatorManager from './swap-aggregator-manager';
+import { ManageSlippageProps } from './swap-settings-form.types';
 
 const SLIPPAGE_BUTTONS = ['0.1', '0.5', '1'];
 
-const ManageSlippageForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
+const SwapSettingsForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
   const { getValues, setValue } = useFormContext<SwapForm>();
 
   const formTmpSettings = useForm<ISwapSettings>({
@@ -23,18 +24,13 @@ const ManageSlippageForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
     formTmpSettings.setValue('slippage', value);
 
   const onConfirm = () => {
-    const { slippage, interval, aggregator } = formTmpSettings.getValues();
+    const settings = formTmpSettings.getValues();
 
-    setValue('settings.slippage', slippage);
-    setValue('settings.interval', interval);
+    setValue('settings', settings);
 
     localStorage.setItem(
       `${LOCAL_STORAGE_VERSION}-sui-coins-settings`,
-      JSON.stringify({
-        slippage,
-        interval,
-        aggregator,
-      })
+      JSON.stringify(settings)
     );
 
     handleManageView();
@@ -131,6 +127,10 @@ const ManageSlippageForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
           />
         </Box>
       </Box>
+      <SwapAggregatorManager
+        setValue={formTmpSettings.setValue}
+        control={formTmpSettings.control}
+      />
       <Box display="flex" gap="0.5rem" justifyContent="flex-end">
         <Button
           px="l"
@@ -142,7 +142,14 @@ const ManageSlippageForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
         >
           Cancel
         </Button>
-        <Button variant="filled" borderRadius="xs" onClick={onConfirm}>
+        <Button
+          width="100%"
+          variant="filled"
+          borderRadius="xs"
+          textAlign="center"
+          onClick={onConfirm}
+          justifyContent="center"
+        >
           <Typography variant="label" size="large" width="100%">
             Confirm
           </Typography>
@@ -152,4 +159,4 @@ const ManageSlippageForm: FC<ManageSlippageProps> = ({ handleManageView }) => {
   );
 };
 
-export default ManageSlippageForm;
+export default SwapSettingsForm;

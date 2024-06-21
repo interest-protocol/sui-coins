@@ -8,7 +8,8 @@ import type { JSONQuoteResponse } from '@/server/lib/hop/hop.utils';
 export interface ISwapSettings {
   slippage: string;
   interval: string;
-  aggregator: Aggregator;
+  bestPrice: boolean;
+  aggregator: Aggregator | null;
 }
 
 export interface SwapToken extends Token {
@@ -45,20 +46,16 @@ export interface SwapPreviewModalProps {
   onClose: () => void;
 }
 
-export type AggregatorType =
-  | `${Aggregator.Hop}`
-  | `${Aggregator.Aftermath}`
-  | 'interest';
-
 export interface AggregatorProps {
   url: string;
   logo: string;
   name: string;
+  info?: string;
+  key: Aggregator;
   disabled?: boolean;
-  shortName: AggregatorType;
 }
 
 export interface SwapSelectAggregatorModalProps {
   aggregatorSelected: AggregatorProps;
-  onSelect: (aggregator: AggregatorType) => void;
+  onSelect: (aggregator: Aggregator) => void;
 }

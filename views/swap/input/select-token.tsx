@@ -1,5 +1,5 @@
 import { Token } from '@interest-protocol/sui-tokens';
-import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
+import { Button, Motion, Typography } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
@@ -8,7 +8,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import TokenIcon from '@/components/token-icon';
 import { Network } from '@/constants';
 import { useModal } from '@/hooks/use-modal';
-import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
+import { ChevronDownSVG } from '@/svg';
 import { updateURL } from '@/utils';
 import SelectTokenModal from '@/views/components/select-token-modal';
 
@@ -108,54 +108,45 @@ const SelectToken: FC<InputProps> = ({ label }) => {
     );
 
   return (
-    <Box
-      position="relative"
-      minWidth={['4rem', '8rem', '8rem', '8rem', '6.25rem']}
+    <Button
+      py="2xs"
+      pr="s"
+      bg="#F8F9FD"
+      fontSize="s"
+      variant="tonal"
+      border="1px solid"
+      borderRadius="full"
+      disabled={swapping}
+      onClick={openModal}
+      opacity={swapping ? 0.7 : 1}
+      pl={currentType ? '2xs' : 'm'}
+      borderColor="#C6C6CA !important"
+      {...(currentType && {
+        PrefixIcon: (
+          <TokenIcon
+            withBg
+            rounded
+            size="1.1rem"
+            type={currentType}
+            symbol={currentSymbol}
+            network={network as Network}
+          />
+        ),
+      })}
     >
-      <Button
-        p="xs"
-        pl={currentType ? 'xs' : '1rem !important'}
-        fontSize="s"
-        height="2.5rem"
-        width="100%"
-        variant="tonal"
-        borderRadius="full"
-        border="1px solid"
-        borderColor="#C6C6CA !important"
-        disabled={swapping}
-        onClick={openModal}
-        bg="#F8F9FD"
-        opacity={swapping ? 0.7 : 1}
-        {...(currentType && {
-          PrefixIcon: (
-            <TokenIcon
-              withBg
-              rounded
-              type={currentType}
-              symbol={currentSymbol}
-              network={network as Network}
-            />
-          ),
-        })}
+      <Typography
+        size="large"
+        variant="label"
+        overflow="hidden"
+        whiteSpace="nowrap"
+        fontFamily="Satoshi"
+        width={['0px', 'auto']}
+        display={[currentType ? 'none' : 'block', 'block']}
       >
-        <Typography
-          size="large"
-          variant="label"
-          overflow="hidden"
-          whiteSpace="nowrap"
-          fontFamily="Satoshi"
-          width={['0px', 'auto']}
-          display={[currentType ? 'none' : 'block', 'block']}
-        >
-          {currentSymbol ?? 'Select Token'}
-        </Typography>
-        {currentSymbol ? (
-          <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-        ) : (
-          <ChevronRightSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-        )}
-      </Button>
-    </Box>
+        {currentSymbol ?? 'Select Token'}
+      </Typography>
+      <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+    </Button>
   );
 };
 

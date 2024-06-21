@@ -13,7 +13,7 @@ const HeaderInfo: FC<InputProps> = ({ label }) => {
   return (
     <Box display="flex" justifyContent="space-between">
       <Typography variant="label" size="medium" fontSize="s">
-        You {label == 'from' ? 'pay' : 'receive'}
+        {label == 'from' ? 'Sell' : 'BUY'}
         <Typography
           as="span"
           size="small"

@@ -4,7 +4,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 import { MinusSVG, PlusSVG } from '@/svg';
 
-import { SlippageInfoProps } from './manage-slippage-form/manage-slippage-form.types';
+import { SlippageInfoProps } from './swap-settings-form/swap-settings-form.types';
 
 const SlippageInfo: FC<SlippageInfoProps> = ({ isOpen, handleManageView }) => {
   const { control } = useFormContext();

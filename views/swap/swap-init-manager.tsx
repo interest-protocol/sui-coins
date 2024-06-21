@@ -23,7 +23,7 @@ const SwapInitManager: FC = () => {
 
   const settings = useReadLocalStorage<ISwapSettings>(
     `${LOCAL_STORAGE_VERSION}-sui-coins-settings`
-  ) ?? { interval: '10', slippage: '0.1', aggregator: Aggregator.Hop };
+  ) ?? { interval: '10', slippage: '0.1', aggregator: null, bestPrice: true };
 
   useEffect(() => {
     form.reset();
