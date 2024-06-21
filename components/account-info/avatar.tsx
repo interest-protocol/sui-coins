@@ -16,8 +16,9 @@ const Avatar: FC<AvatarProps> = ({ isLarge, account, withNameOrAddress }) => {
   const SIZE = isLarge ? '2.2rem' : '1.5rem';
   const [imgLoading, setImgLoading] = useState(true);
 
-  const suiNsNames = names[account ?? currentAccount!.address!];
+  const localAccount = account ?? currentAccount!.address!;
 
+  const suiNsNames = names[localAccount];
   const src = suiNsNames?.length ? images[suiNsNames[0]] : '';
 
   return (
@@ -63,8 +64,8 @@ const Avatar: FC<AvatarProps> = ({ isLarge, account, withNameOrAddress }) => {
             <Skeleton width="100%" />
           ) : src && !!suiNsNames.length ? (
             formatSuiNS(suiNsNames[0])
-          ) : currentAccount?.address ? (
-            formatAddress(currentAccount.address)
+          ) : localAccount ? (
+            formatAddress(localAccount)
           ) : (
             ''
           )}
