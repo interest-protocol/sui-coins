@@ -6,7 +6,7 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import useSWR from 'swr';
 
-import { EXCHANGE_FEE } from '@/constants/clamm';
+import { EXCHANGE_FEE_PERCENTAGE } from '@/constants/fees';
 import { FixedPointMath } from '@/lib';
 import { DotErrorSVG } from '@/svg';
 import { ZERO_BIG_NUMBER } from '@/utils';
@@ -115,7 +115,7 @@ const SwapPreviewModalSummary: FC = () => {
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center">
             <Typography mr="s" variant="body" size="medium" color="onSurface">
-              {EXCHANGE_FEE * 100}%
+              {EXCHANGE_FEE_PERCENTAGE}%
             </Typography>
           </Box>
         </Box>

@@ -2,8 +2,6 @@ import { normalizeStructTag } from '@mysten/sui/utils';
 
 import { Network } from './dapp';
 
-export const EXCHANGE_FEE = 0.015;
-
 export const CLAMM_PACKAGE_ADDRESSES = {
   [Network.MAINNET]: {
     CLAMM: '0x429dbf2fc849c0b4146db09af38c104ae7a3ed746baf835fa57fee27fa5ff382',
