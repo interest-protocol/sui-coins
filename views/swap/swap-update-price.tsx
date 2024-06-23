@@ -14,7 +14,8 @@ import useSWR from 'swr';
 import { useDebounce } from 'use-debounce';
 
 import { TREASURY } from '@/constants';
-import { COIN_TO_WRAPPED, EXCHANGE_FEE } from '@/constants/clamm';
+import { COIN_TO_WRAPPED } from '@/constants/clamm';
+import { EXCHANGE_FEE } from '@/constants/fees';
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { useHopSdk } from '@/hooks/use-hop-sdk';
 import { useNetwork } from '@/hooks/use-network';
