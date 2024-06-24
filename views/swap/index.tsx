@@ -1,4 +1,4 @@
-import { Box } from '@interest-protocol/ui-kit';
+import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
@@ -6,12 +6,11 @@ import Layout from '@/components/layout';
 
 import Input from './input';
 import Slider from './input/slider';
-import ManageSlippage from './manage-slippage';
 import PreviewSwapButton from './preview-swap-button';
 import SwapFlipToken from './swap-flip-token';
-import SwapHeader from './swap-header';
 import SwapPath from './swap-path';
 import SwapPoweredBy from './swap-powered-by';
+import SwapSettings from './swap-settings';
 import SwapUpdatePrice from './swap-update-price';
 
 const Swap: FC = () => (
@@ -26,7 +25,15 @@ const Swap: FC = () => (
       width={['100%', '100%', '100%', '39.75rem']}
     >
       <Box bg="lowestContainer" borderRadius="s" p="xl">
-        <SwapHeader />
+        <Typography
+          size="large"
+          fontWeight="700"
+          variant="headline"
+          textAlign="center"
+          fontFamily="Satoshi"
+        >
+          Swap
+        </Typography>
         <Box display="flex" flexDirection="column" gap="5xl">
           <Input
             label="from"
@@ -72,7 +79,7 @@ const Swap: FC = () => (
             )}
           </Box>
         </Box>
-        <Box py="xl" borderRadius="xs" bg="lowestContainer" my="m">
+        <Box pt="xl" borderRadius="xs" bg="lowestContainer" mt="m">
           <Input label="to" />
         </Box>
         <PreviewSwapButton />
@@ -80,7 +87,7 @@ const Swap: FC = () => (
       </Box>
       <SwapPath />
       <Box my="xs" bg="lowestContainer" borderRadius="xs">
-        <ManageSlippage />
+        <SwapSettings />
       </Box>
     </Box>
   </Layout>

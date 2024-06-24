@@ -12,19 +12,13 @@ import { isSui } from '@/utils';
 
 import { SwapPathLineProps } from './swap-path.types';
 
-const SwapPathLine: FC<SwapPathLineProps> = ({ percentage, paths }) => {
+const SwapPathLine: FC<SwapPathLineProps> = ({ position, paths }) => {
   const { network } = useSuiClientContext();
 
   return (
-    <Box
-      gap="m"
-      key={v4()}
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-    >
+    <Box gap="m" key={v4()} display="flex" alignItems="center">
       <Typography variant="label" size="small">
-        {(+percentage.toFixed(1)).toPrecision()}%
+        {position}
       </Typography>
       {paths?.map(([coinInType, coinOutType, protocolName], index) => [
         !index ? (

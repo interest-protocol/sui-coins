@@ -1,7 +1,7 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import ManageSlippage from '@/views/swap/manage-slippage';
+import ManageSlippage from '@/views/swap/swap-settings';
 
 import PoolField from '../pool-field';
 import { PoolFormProps } from '../pool-field/pool-field.types';
@@ -22,8 +22,8 @@ const PoolFormWithdraw: FC<PoolFormProps> = ({ poolOptionView }) => (
       <Typography variant="body" size="large" mb="m">
         Manage your slippage
       </Typography>
-      <Box bg="container" borderRadius="xs">
-        <ManageSlippage />
+      <Box borderRadius="xs">
+        <ManageSlippage noAgg />
       </Box>
     </Box>
     <WithdrawManager />

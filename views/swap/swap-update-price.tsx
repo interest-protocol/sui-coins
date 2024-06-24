@@ -61,6 +61,11 @@ const SwapUpdatePrice: FC = () => {
 
   const aggregator = useWatch({ control, name: 'settings.aggregator' });
 
+  const toDisplay = useWatch({
+    control,
+    name: 'to.display',
+  });
+
   const [coinInValue] = useDebounce(
     useWatch({
       control,
@@ -104,49 +109,94 @@ const SwapUpdatePrice: FC = () => {
 
   const disabled = !coinInValue || coinInValue.isZero() || !coinOutType;
 
-  const getRoutes = async () => {
+  const getRouterValue = (route: SwapForm['route'], aggregator: Aggregator) => {
+    if (isNativeRoute(route))
+      return String(
+        FixedPointMath.toNumber(
+          parseBigNumberish(route.routes[0][2].amount),
+          getValues('to.decimals')
+        )
+      );
+
+    if (aggregator === Aggregator.Aftermath)
+      return (
+        (FixedPointMath.toNumber(coinInValue, getValues('from.decimals')) *
+          10 ** (getValues('from.decimals') - getValues('to.decimals'))) /
+        (route as RouterCompleteTradeRoute).spotPrice
+      ).toPrecision(6);
+
+    if (aggregator === Aggregator.Hop)
+      return FixedPointMath.toNumber(
+        BigNumber((route as JSONQuoteResponse).amount_out_with_fee),
+        getValues('to.decimals')
+      ).toPrecision(6);
+
+    return '0';
+  };
+
+  const getRouteValue = async () => {
     try {
-      if (!native) {
-        return await (aggregator === Aggregator.Aftermath
-          ? aftermathRouter.getCompleteTradeRouteGivenAmountIn({
+      if (native) {
+        const route = await clamm
+          .getRoutesQuotes({
+            coinIn:
+              COIN_TO_WRAPPED[network][normalizeStructTag(coinInType)] ||
               coinInType,
+            coinOut:
+              COIN_TO_WRAPPED[network][normalizeStructTag(coinOutType)] ||
               coinOutType,
-              referrer: TREASURY,
-              coinInAmount: BigInt(coinInValue.toFixed(0)),
-              externalFee: { recipient: TREASURY, feePercentage: EXCHANGE_FEE },
-            })
-          : hopSdk.quote(coinInType, coinOutType, coinInValue.toFixed(0)));
+            amount: BigInt(
+              coinInValue.decimalPlaces(0, BigNumber.ROUND_DOWN).toString()
+            ),
+          })
+          .then((value) => ({
+            ...value,
+            routes: value.routes.reduce(
+              ([acc], route) => [
+                acc && acc[2].amount >= route[2].amount ? acc : route,
+              ],
+              [] as [CoinPath, PoolObjectIdPath, QuoteSwapReturn][]
+            ),
+          }));
+
+        setValue('route', route);
+
+        return getRouterValue(route, Aggregator.Interest);
       }
 
-      return await clamm
-        .getRoutesQuotes({
-          coinIn:
-            COIN_TO_WRAPPED[network][normalizeStructTag(coinInType)] ||
+      const getAggregatorRouter = (argument: Aggregator) => {
+        if (argument === Aggregator.Aftermath)
+          return aftermathRouter.getCompleteTradeRouteGivenAmountIn({
             coinInType,
-          coinOut:
-            COIN_TO_WRAPPED[network][normalizeStructTag(coinOutType)] ||
             coinOutType,
-          amount: BigInt(
-            coinInValue.decimalPlaces(0, BigNumber.ROUND_DOWN).toString()
-          ),
-        })
-        .then((value) => ({
-          ...value,
-          routes: value.routes.reduce(
-            ([acc], route) => [
-              acc && acc[2].amount >= route[2].amount ? acc : route,
-            ],
-            [] as [CoinPath, PoolObjectIdPath, QuoteSwapReturn][]
-          ),
-        }));
+            referrer: TREASURY,
+            coinInAmount: BigInt(coinInValue.toFixed(0)),
+            externalFee: { recipient: TREASURY, feePercentage: EXCHANGE_FEE },
+          });
+        if (argument === Aggregator.Hop)
+          return hopSdk.quote(coinInType, coinOutType, coinInValue.toFixed(0));
+
+        return;
+      };
+
+      const route = await getAggregatorRouter(aggregator!);
+
+      setValue('route', route!);
+
+      return getRouterValue(route!, aggregator!);
     } catch (e) {
       resetFields();
       setValue('error', 'There is no market for these coins.');
+
       throw e;
     } finally {
       setValue('fetchingPrices', false);
     }
   };
+
+  useEffect(() => {
+    if (!coinInValue || coinInValue.isZero()) setValue('to.display', '0');
+  }, [coinInValue, toDisplay]);
 
   const { mutate, error } = useSWR(
     `${coinInType}-${coinOutType}-${coinInValue?.toString()}-${network}-${aggregator}`,
@@ -160,37 +210,12 @@ const SwapUpdatePrice: FC = () => {
 
       setValue('fetchingPrices', true);
 
-      const data = await getRoutes();
-
-      setValue('route', data);
-
-      const value = isNativeRoute(data)
-        ? String(
-            FixedPointMath.toNumber(
-              parseBigNumberish(data.routes[0][2].amount),
-              getValues('to.decimals')
-            )
-          )
-        : Number(
-            (aggregator === Aggregator.Aftermath
-              ? (FixedPointMath.toNumber(
-                  coinInValue,
-                  getValues('from.decimals')
-                ) *
-                  10 **
-                    (getValues('from.decimals') - getValues('to.decimals'))) /
-                (data as RouterCompleteTradeRoute).spotPrice
-              : FixedPointMath.toNumber(
-                  BigNumber((data as JSONQuoteResponse).amount_out_with_fee),
-                  getValues('to.decimals')
-                )
-            ).toFixed(6)
-          ).toPrecision();
+      const value = await getRouteValue();
 
       setValue('to.display', value);
-
       setValue('lastFetchDate', Date.now());
-      setValue('error', null);
+
+      return;
     },
     { refreshInterval: Number(interval) * 1000, refreshWhenOffline: false }
   );
@@ -198,6 +223,7 @@ const SwapUpdatePrice: FC = () => {
   useEffect(() => {
     if (error) {
       resetFields();
+      setValue('route', null);
       setValue('error', SwapMessagesEnum.noMarket);
     }
   }, [error]);

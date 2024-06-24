@@ -24,6 +24,7 @@ const SwapMessages: FC = () => {
     <Box
       p="s"
       mx="xl"
+      my="4xl"
       gap="s"
       display="flex"
       borderRadius="xs"
