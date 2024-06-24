@@ -1,17 +1,12 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
 
-import { MinusSVG, PlusSVG } from '@/svg';
+import { CogsSVG, MinusSVG } from '@/svg';
 
-import { SlippageInfoProps } from './swap-settings-form/swap-settings-form.types';
+import { HeaderProps } from './swap-settings-form/swap-settings-form.types';
 
-const SlippageInfo: FC<SlippageInfoProps> = ({ isOpen, handleManageView }) => {
-  const { control } = useFormContext();
-
-  const settings = useWatch({ control, name: 'settings' });
-
-  const ManageIcon = isOpen ? MinusSVG : PlusSVG;
+const Header: FC<HeaderProps> = ({ isOpen, handleManageView }) => {
+  const ManageIcon = isOpen ? MinusSVG : CogsSVG;
 
   return (
     <Box
@@ -24,16 +19,7 @@ const SlippageInfo: FC<SlippageInfoProps> = ({ isOpen, handleManageView }) => {
       justifyContent="space-between"
     >
       <Typography variant="label" size="large" fontSize="0.875rem">
-        Slippage:
-        <Typography
-          ml="xs"
-          as="span"
-          size="large"
-          color="primary"
-          variant="label"
-        >
-          {settings.slippage}%
-        </Typography>
+        Settings
       </Typography>
       <Button isIcon variant="text" onClick={handleManageView}>
         <ManageIcon maxWidth="1.25rem" maxHeight="1.25rem" width="100%" />
@@ -42,4 +28,4 @@ const SlippageInfo: FC<SlippageInfoProps> = ({ isOpen, handleManageView }) => {
   );
 };
 
-export default SlippageInfo;
+export default Header;

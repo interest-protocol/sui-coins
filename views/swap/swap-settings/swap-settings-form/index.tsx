@@ -9,13 +9,13 @@ import { parseInputEventToNumberString } from '@/utils';
 
 import { ISwapSettings, SwapForm } from '../../swap.types';
 import SwapAggregatorManager from './swap-aggregator-manager';
-import { ManageSlippageProps } from './swap-settings-form.types';
+import { SwapSettingsFromProps } from './swap-settings-form.types';
 
 const SLIPPAGE_BUTTONS = ['0.1', '0.5', '1'];
 
-const SwapSettingsForm: FC<ManageSlippageProps> = ({
-  handleManageView,
+const SwapSettingsForm: FC<SwapSettingsFromProps> = ({
   noAgg,
+  handleManageView,
 }) => {
   const { getValues, setValue } = useFormContext<SwapForm>();
 

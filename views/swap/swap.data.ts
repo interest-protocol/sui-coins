@@ -1,24 +1,26 @@
+import { AftermathSVG, HopSVG, InterestSVG } from '@/svg';
+
 import { Aggregator, AggregatorProps } from './swap.types';
 
 export const AGGREGATORS_LIST: Record<Aggregator, AggregatorProps> = {
   [Aggregator.Hop]: {
+    Icon: HopSVG,
     key: Aggregator.Hop,
     url: 'https://hop.ag/',
     name: 'Hop Aggregator',
-    logo: '/images/aggregators/hop.webp',
   },
   [Aggregator.Aftermath]: {
     name: 'Aftermath',
+    Icon: AftermathSVG,
     key: Aggregator.Aftermath,
     url: 'https://aftermath.finance/',
-    logo: '/images/aggregators/aftermath.webp',
   },
   [Aggregator.Interest]: {
     url: '',
     disabled: true,
     name: 'Interest',
+    Icon: InterestSVG,
     key: Aggregator.Interest,
-    logo: 'https://interestprotocol.com/logo.png',
   },
 };
 

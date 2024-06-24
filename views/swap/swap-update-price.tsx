@@ -61,6 +61,11 @@ const SwapUpdatePrice: FC = () => {
 
   const aggregator = useWatch({ control, name: 'settings.aggregator' });
 
+  const toDisplay = useWatch({
+    control,
+    name: 'to.display',
+  });
+
   const [coinInValue] = useDebounce(
     useWatch({
       control,
@@ -189,6 +194,10 @@ const SwapUpdatePrice: FC = () => {
     }
   };
 
+  useEffect(() => {
+    if (!coinInValue || coinInValue.isZero()) setValue('to.display', '0');
+  }, [coinInValue, toDisplay]);
+
   const { mutate, error } = useSWR(
     `${coinInType}-${coinOutType}-${coinInValue?.toString()}-${network}-${aggregator}`,
     async () => {
@@ -205,7 +214,7 @@ const SwapUpdatePrice: FC = () => {
 
       setValue('to.display', value);
       setValue('lastFetchDate', Date.now());
-      setValue('error', null);
+
       return;
     },
     { refreshInterval: Number(interval) * 1000, refreshWhenOffline: false }
@@ -214,6 +223,7 @@ const SwapUpdatePrice: FC = () => {
   useEffect(() => {
     if (error) {
       resetFields();
+      setValue('route', null);
       setValue('error', SwapMessagesEnum.noMarket);
     }
   }, [error]);

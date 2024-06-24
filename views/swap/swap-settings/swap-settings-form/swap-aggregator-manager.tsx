@@ -7,7 +7,7 @@ import { v4 } from 'uuid';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { AGGREGATORS_LIST } from '../../swap.data';
-import { Aggregator, AggregatorProps, SwapForm } from '../../swap.types';
+import { Aggregator, SwapForm } from '../../swap.types';
 import { SwapAggregatorManagerProps } from './swap-settings-form.types';
 
 const SwapAggregatorManager: FC<SwapAggregatorManagerProps> = ({
@@ -30,34 +30,25 @@ const SwapAggregatorManager: FC<SwapAggregatorManagerProps> = ({
 
   return (
     <Box display="flex" flexWrap="wrap" gap="s">
-      {values(AGGREGATORS_LIST).map((data: AggregatorProps) => (
+      {values(AGGREGATORS_LIST).map(({ disabled, name, key, Icon }) => (
         <Button
           py="xs"
           pl="xs"
           pr="m"
           key={v4()}
           cursor="pointer"
-          disabled={data.disabled}
+          disabled={disabled}
           borderColor="outlineVariant"
           PrefixIcon={
-            <Box width="2.8rem" height="2.8rem">
-              <img
-                width="100%"
-                height="100%"
-                src={data.logo}
-                alt={data.name}
-                style={{ borderRadius: '0.5rem' }}
-              />
-            </Box>
+            <Icon maxHeight="2.8rem" maxWidth="2.8rem" width="100%" />
           }
-          variant={data.key === aggregator ? 'tonal' : 'outline'}
+          variant={key === aggregator ? 'tonal' : 'outline'}
           onClick={() =>
-            !(data.disabled || data.key === aggregator) &&
-            onSelectAggregator(data.key)
+            !(disabled || key === aggregator) && onSelectAggregator(key)
           }
         >
           <Typography size="large" variant="body" textTransform="capitalize">
-            {data.name}
+            {name}
           </Typography>
         </Button>
       ))}

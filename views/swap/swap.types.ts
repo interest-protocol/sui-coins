@@ -2,7 +2,9 @@ import type { GetRouteQuotesReturn } from '@interest-protocol/clamm-sdk';
 import type { Token } from '@interest-protocol/sui-tokens';
 import type { RouterCompleteTradeRoute } from 'aftermath-ts-sdk';
 import type BigNumber from 'bignumber.js';
+import { FC } from 'react';
 
+import { SVGProps } from '@/components/svg/svg.types';
 import type { JSONQuoteResponse } from '@/server/lib/hop/hop.utils';
 
 export interface ISwapSettings {
@@ -47,9 +49,9 @@ export interface SwapPreviewModalProps {
 
 export interface AggregatorProps {
   url: string;
-  logo: string;
   name: string;
   key: Aggregator;
+  Icon: FC<SVGProps>;
   disabled?: boolean;
 }
 

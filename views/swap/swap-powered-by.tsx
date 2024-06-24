@@ -9,7 +9,9 @@ const SwapPoweredBy: FC = () => {
   const { control } = useFormContext<SwapForm>();
   const aggregator = useWatch({ control, name: 'settings.aggregator' });
 
-  if (aggregator === Aggregator.Interest) return null;
+  if (!aggregator || aggregator === Aggregator.Interest) return null;
+
+  const { url, name, Icon } = AGGREGATORS_LIST[aggregator];
 
   return (
     <Box
@@ -19,11 +21,7 @@ const SwapPoweredBy: FC = () => {
       alignItems="center"
       flexDirection="column"
     >
-      <a
-        target="_blank"
-        rel="noopener, noreferrer"
-        href={AGGREGATORS_LIST[aggregator].url}
-      >
+      <a target="_blank" rel="noopener, noreferrer" href={url}>
         <Box
           gap="s"
           display="flex"
@@ -36,15 +34,7 @@ const SwapPoweredBy: FC = () => {
             Powered By:
           </Typography>
           <Box display="flex" alignItems="center" gap="xs">
-            <Box width="1.5rem" height="1.5rem">
-              <img
-                width="100%"
-                height="100%"
-                style={{ borderRadius: '9999rem' }}
-                src={AGGREGATORS_LIST[aggregator].logo}
-                alt={AGGREGATORS_LIST[aggregator].name}
-              />
-            </Box>
+            <Icon maxWidth="1.5rem" maxHeight="1.5rem" width="100%"></Icon>
             <Typography
               fontSize="s"
               size="medium"
@@ -52,7 +42,7 @@ const SwapPoweredBy: FC = () => {
               fontWeight="500"
               textTransform="capitalize"
             >
-              {AGGREGATORS_LIST[aggregator].name}
+              {name}
             </Typography>
           </Box>
         </Box>
