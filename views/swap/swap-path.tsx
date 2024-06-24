@@ -67,16 +67,18 @@ const SwapPath: FC = () => {
           justifyContent="space-between"
         >
           <Typography variant="body" size="medium">
-            {toDisplay &&
+            {!!(
+              toDisplay &&
               Number(toDisplay) &&
               fromDisplay &&
-              Number(fromDisplay) && (
-                <>
-                  {' '}
-                  1 {fromSymbol} = {(+toDisplay / +fromDisplay).toPrecision(6)}{' '}
-                  {toSymbol}
-                </>
-              )}
+              Number(fromDisplay)
+            ) && (
+              <>
+                {' '}
+                1 {fromSymbol} = {(+toDisplay / +fromDisplay).toPrecision(6)}{' '}
+                {toSymbol}
+              </>
+            )}
           </Typography>
           <Box rotate="90deg">
             <SwapSVG maxWidth="1rem" maxHeight="1rem" width="100%" />

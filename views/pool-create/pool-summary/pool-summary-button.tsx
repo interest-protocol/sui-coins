@@ -46,54 +46,46 @@ const PoolSummaryButton: FC = () => {
   const form = useWatch({ control });
 
   const onCreatePool = async () => {
-    try {
-      invariant(form && form.tokens?.length, 'No data');
-      invariant(currentAccount, 'No wallet');
+    invariant(form && form.tokens?.length, 'No data');
+    invariant(currentAccount, 'No wallet');
 
-      const lpCoinTx = await createLpCoin(form.tokens as ReadonlyArray<Token>);
+    const lpCoinTx = await createLpCoin(form.tokens as ReadonlyArray<Token>);
 
-      const lpCoinTx2 = await signAndExecute({
-        tx: lpCoinTx,
-        currentAccount,
-        suiClient: client,
-        signTransaction: signTxb,
-      });
+    const lpCoinTx2 = await signAndExecute({
+      tx: lpCoinTx,
+      currentAccount,
+      suiClient: client,
+      signTransaction: signTxb,
+    });
 
-      const { treasuryCap, coinType } = await extractCoinData(
-        lpCoinTx2,
-        client
-      );
+    const { treasuryCap, coinType } = await extractCoinData(lpCoinTx2, client);
 
-      const tx = await (form.isStable ? createStablePool : createVolatilePool)(
-        form.tokens as ReadonlyArray<Token>,
-        treasuryCap,
-        coinType
-      );
+    const tx = await (form.isStable ? createStablePool : createVolatilePool)(
+      form.tokens as ReadonlyArray<Token>,
+      treasuryCap,
+      coinType
+    );
 
-      const tx2 = await signAndExecute({
-        tx,
-        currentAccount,
-        suiClient: client,
-        signTransaction: signTxb,
-      });
+    const tx2 = await signAndExecute({
+      tx,
+      currentAccount,
+      suiClient: client,
+      signTransaction: signTxb,
+    });
 
-      throwTXIfNotSuccessful(tx2);
+    throwTXIfNotSuccessful(tx2);
 
-      const poolId = await extractPoolDataFromTx(tx2, client);
+    const poolId = await extractPoolDataFromTx(tx2, client);
 
-      await clamm.savePool(poolId);
+    await clamm.savePool(poolId);
 
-      showTXSuccessToast(tx2, network as Network);
+    showTXSuccessToast(tx2, network as Network);
 
-      await waitForTx({ suiClient: client, digest: tx2.digest });
+    await waitForTx({ suiClient: client, digest: tx2.digest });
 
-      mutate();
+    mutate();
 
-      push(`${Routes[RoutesEnum.PoolDetails]}?objectId=${poolId}`);
-    } catch (e) {
-      console.log({ e });
-      throw e;
-    }
+    push(`${Routes[RoutesEnum.PoolDetails]}?objectId=${poolId}`);
   };
 
   const createPool = () =>
