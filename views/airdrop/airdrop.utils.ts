@@ -9,6 +9,7 @@ import { AirdropData } from './airdrop.types';
 
 export const csvToAirdrop = (
   csv: string,
+  decimals: number,
   onError: (message: string) => void
 ): AirdropData[] => {
   try {
@@ -29,7 +30,7 @@ export const csvToAirdrop = (
     addresses.forEach((address, i) => {
       data.push({
         address,
-        amount: amounts[i],
+        amount: String(Number(amounts[i]) * 10 ** decimals),
       });
     });
 
