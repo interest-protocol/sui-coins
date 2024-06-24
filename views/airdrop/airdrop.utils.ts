@@ -3,37 +3,35 @@ import { propOr } from 'ramda';
 
 import { MAINNET_COINS_INFO } from '@/constants/coins';
 import { FixedPointMath } from '@/lib';
-import { isBigNumberish } from '@/utils';
 
 import { AirdropData } from './airdrop.types';
 
 export const csvToAirdrop = (
   csv: string,
+  decimals: number,
   onError: (message: string) => void
-): AirdropData[] => {
+): ReadonlyArray<AirdropData> => {
   try {
-    const lines = csv.split(',').map((x) => x.replace('\n', ''));
+    const lines = csv.split('\n').map((x) => x.split(','));
 
-    const addresses = lines.filter(
-      (x) => x.startsWith('0x') && isValidSuiAddress(normalizeSuiAddress(x))
-    );
-    const amounts = lines.filter(
-      (x) => !x.startsWith('0x') && isBigNumberish(x)
-    );
+    return lines.reduce((acc, [address, value]) => {
+      if (
+        address.startsWith('0x') &&
+        isValidSuiAddress(normalizeSuiAddress(address)) &&
+        value &&
+        Number(value) &&
+        !isNaN(Number(value))
+      )
+        return [
+          ...acc,
+          {
+            address,
+            amount: String(Math.round(Number(value) * 10 ** decimals)),
+          },
+        ];
 
-    if (addresses.length !== amounts.length)
-      throw new Error('Numbers of addresses and numbers do not match');
-
-    const data = [] as AirdropData[];
-
-    addresses.forEach((address, i) => {
-      data.push({
-        address,
-        amount: amounts[i],
-      });
-    });
-
-    return data;
+      return acc;
+    }, [] as ReadonlyArray<AirdropData>);
   } catch (error) {
     onError(propOr('Something went wrong', 'message', error));
     return [];
