@@ -7,24 +7,7 @@ import { Aggregator, SwapForm } from './swap.types';
 
 const SwapPoweredBy: FC = () => {
   const { control } = useFormContext<SwapForm>();
-
-  const bestPrice = useWatch({ control, name: 'settings.bestPrice' });
   const aggregator = useWatch({ control, name: 'settings.aggregator' });
-
-  if (!aggregator && bestPrice)
-    return (
-      <Typography
-        size="small"
-        variant="body"
-        color="outline"
-        textAlign="center"
-      >
-        The aggregator was automatically selected to provide the best possible
-        deal for your needs. You can change the aggregator/DEX in the next step.
-      </Typography>
-    );
-
-  if (!aggregator) return null;
 
   if (aggregator === Aggregator.Interest) return null;
 
@@ -74,18 +57,6 @@ const SwapPoweredBy: FC = () => {
           </Box>
         </Box>
       </a>
-      {bestPrice && (
-        <Typography
-          size="small"
-          variant="body"
-          color="outline"
-          textAlign="center"
-        >
-          The aggregator was automatically selected to provide the best possible
-          deal for your needs. You can change the aggregator/DEX in the next
-          step.
-        </Typography>
-      )}
     </Box>
   );
 };

@@ -58,7 +58,6 @@ const SwapUpdatePrice: FC = () => {
     name: 'from.type',
   });
 
-  const bestPrice = useWatch({ control, name: 'settings.bestPrice' });
   const aggregator = useWatch({ control, name: 'settings.aggregator' });
 
   const [coinInValue] = useDebounce(
@@ -174,37 +173,6 @@ const SwapUpdatePrice: FC = () => {
         return;
       };
 
-      if (bestPrice) {
-        const routers = await Promise.all([
-          getAggregatorRouter(Aggregator.Aftermath),
-          getAggregatorRouter(Aggregator.Hop),
-        ]);
-
-        const [value, routeIndex] = routers.reduce(
-          ([value, routeIndex], router, index) => {
-            const routerValue = getRouterValue(
-              router!,
-              index ? Aggregator.Hop : Aggregator.Aftermath
-            );
-
-            if (Number(routerValue) > Number(value))
-              return [routerValue, index];
-
-            return [value, routeIndex];
-          },
-          ['0', -1]
-        );
-
-        setValue(
-          'settings.aggregator',
-          routeIndex ? Aggregator.Hop : Aggregator.Aftermath
-        );
-
-        setValue('route', routers[routeIndex]!);
-
-        return value;
-      }
-
       const route = await getAggregatorRouter(aggregator!);
 
       setValue('route', route!);
@@ -214,7 +182,6 @@ const SwapUpdatePrice: FC = () => {
       resetFields();
       setValue('error', 'There is no market for these coins.');
 
-      if (bestPrice) setValue('settings.aggregator', null);
       throw e;
     } finally {
       setValue('fetchingPrices', false);
@@ -222,18 +189,14 @@ const SwapUpdatePrice: FC = () => {
   };
 
   const { mutate, error } = useSWR(
-    `${coinInType}-${coinOutType}-${coinInValue?.toString()}-${network}-${aggregator}-${bestPrice}`,
+    `${coinInType}-${coinOutType}-${coinInValue?.toString()}-${network}-${aggregator}`,
     async () => {
       if (disabled) {
         resetFields();
-        if (bestPrice) setValue('settings.aggregator', null);
         return;
       }
 
-      if (swapping) {
-        if (bestPrice) setValue('settings.aggregator', null);
-        return;
-      }
+      if (swapping) return;
 
       setValue('fetchingPrices', true);
 

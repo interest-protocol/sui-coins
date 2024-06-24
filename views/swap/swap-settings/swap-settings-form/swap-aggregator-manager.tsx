@@ -1,30 +1,21 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { values } from 'ramda';
 import { FC } from 'react';
-import {
-  Control,
-  useFormContext,
-  UseFormSetValue,
-  useWatch,
-} from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { AGGREGATORS_LIST } from '../../swap.data';
-import {
-  Aggregator,
-  AggregatorProps,
-  ISwapSettings,
-  SwapForm,
-} from '../../swap.types';
+import { Aggregator, AggregatorProps, SwapForm } from '../../swap.types';
+import { SwapAggregatorManagerProps } from './swap-settings-form.types';
 
-const SwapAggregatorManager: FC<{
-  control: Control<ISwapSettings>;
-  setValue: UseFormSetValue<ISwapSettings>;
-}> = ({ control, setValue }) => {
+const SwapAggregatorManager: FC<SwapAggregatorManagerProps> = ({
+  control,
+  setValue,
+}) => {
   const swapForm = useFormContext<SwapForm>();
-  const { aggregator, bestPrice } = useWatch({ control });
+  const aggregator = useWatch({ control, name: 'aggregator' });
 
   const resetFields = () => {
     swapForm.setValue('to.display', '0');
@@ -32,40 +23,13 @@ const SwapAggregatorManager: FC<{
     swapForm.setValue('from.value', ZERO_BIG_NUMBER);
   };
 
-  const onSelectBestPrice = () => {
-    setValue('bestPrice', true);
-    setValue('aggregator', null);
-    resetFields();
-  };
-
   const onSelectAggregator = (aggregator: Aggregator) => {
     setValue('aggregator', aggregator);
-    setValue('bestPrice', false);
     resetFields();
   };
 
   return (
     <Box display="flex" flexWrap="wrap" gap="s">
-      <Button
-        cursor="pointer"
-        borderColor="outlineVariant"
-        variant={bestPrice ? 'tonal' : 'outline'}
-        onClick={() => !bestPrice && onSelectBestPrice()}
-      >
-        <Box>
-          <Typography size="large" variant="body" textTransform="capitalize">
-            Best Price
-          </Typography>
-          <Typography
-            size="small"
-            variant="body"
-            color="outline"
-            textTransform="capitalize"
-          >
-            Recommended
-          </Typography>
-        </Box>
-      </Button>
       {values(AGGREGATORS_LIST).map((data: AggregatorProps) => (
         <Button
           py="xs"
@@ -86,27 +50,15 @@ const SwapAggregatorManager: FC<{
               />
             </Box>
           }
-          variant={!bestPrice && data.key === aggregator ? 'tonal' : 'outline'}
+          variant={data.key === aggregator ? 'tonal' : 'outline'}
           onClick={() =>
-            !(data.disabled || (!bestPrice && data.key === aggregator)) &&
+            !(data.disabled || data.key === aggregator) &&
             onSelectAggregator(data.key)
           }
         >
-          <Box>
-            <Typography size="large" variant="body" textTransform="capitalize">
-              {data.name}
-            </Typography>
-            {data.info && (
-              <Typography
-                size="small"
-                variant="body"
-                color="outline"
-                textTransform="capitalize"
-              >
-                {data.info}
-              </Typography>
-            )}
-          </Box>
+          <Typography size="large" variant="body" textTransform="capitalize">
+            {data.name}
+          </Typography>
         </Button>
       ))}
     </Box>

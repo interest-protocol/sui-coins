@@ -2,7 +2,6 @@ import { Aggregator, AggregatorProps } from './swap.types';
 
 export const AGGREGATORS_LIST: Record<Aggregator, AggregatorProps> = {
   [Aggregator.Hop]: {
-    info: 'Faster',
     key: Aggregator.Hop,
     url: 'https://hop.ag/',
     name: 'Hop Aggregator',
