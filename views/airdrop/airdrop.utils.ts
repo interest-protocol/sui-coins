@@ -24,7 +24,10 @@ export const csvToAirdrop = (
       )
         return [
           ...acc,
-          { address, amount: String(Number(value) * 10 ** decimals) },
+          {
+            address,
+            amount: String(Math.round(Number(value) * 10 ** decimals)),
+          },
         ];
 
       return acc;
