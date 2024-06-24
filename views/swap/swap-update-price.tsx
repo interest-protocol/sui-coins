@@ -213,7 +213,6 @@ const SwapUpdatePrice: FC = () => {
       const value = await getRouteValue();
 
       setValue('to.display', FixedPointMath.toBigNumber(value, 0).toString());
-      // setValue('to.display', value);
       setValue('lastFetchDate', Date.now());
 
       return;
