@@ -47,7 +47,6 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     networks: [Network.MAINNET, Network.TESTNET],
   },
   {
-    beta: true,
     Icon: FireSVG,
     disabled: false,
     name: 'incinerator',

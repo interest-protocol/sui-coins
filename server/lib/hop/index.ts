@@ -4,7 +4,7 @@ import { getFullnodeUrl } from '@mysten/sui/client';
 import { normalizeStructTag, toB64 } from '@mysten/sui/utils';
 
 import { TREASURY } from '@/constants';
-import { EXCHANGE_FEE } from '@/constants/clamm';
+import { EXCHANGE_FEE_BPS } from '@/constants/fees';
 import { mainnetClient } from '@/server/clients';
 
 export interface SwapArg {
@@ -18,7 +18,7 @@ const rpc =
 
 const hop_api_options = {
   api_key: process.env.HOP_API_KEY || '',
-  fee_bps: EXCHANGE_FEE,
+  fee_bps: EXCHANGE_FEE_BPS,
   fee_wallet: TREASURY,
 };
 
