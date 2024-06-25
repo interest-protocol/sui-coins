@@ -25,14 +25,14 @@ const PriceImpact: FC = () => {
 
   return (
     <Typography
-      bg={STATUS}
-      size="small"
-      variant="label"
-      fontSize="s"
-      color="lowestContainer"
       px="xs"
       py="2xs"
+      bg={STATUS}
+      fontSize="s"
+      size="small"
+      variant="label"
       borderRadius="full"
+      color="lowestContainer"
     >
       {priceImpact
         ? `${priceImpact > 0.1 ? priceImpact.toFixed(2) : '< 0.1'}%`

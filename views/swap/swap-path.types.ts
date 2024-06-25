@@ -1,4 +1,4 @@
 export interface SwapPathLineProps {
-  percentage: number;
+  position: number;
   paths: ReadonlyArray<[string, string, string]>;
 }

@@ -14,7 +14,7 @@ const ToInput: FC = () => {
   const value = useWatch({ control, name: 'to.display' });
 
   return (
-    <Box py="5xl">
+    <Box pt="5xl">
       <HeaderInfo label="to" />
       <Box
         py="l"
@@ -23,34 +23,31 @@ const ToInput: FC = () => {
         flexDirection="column"
         justifyContent="space-between"
       >
-        <Box display="flex" justifyContent="space-between">
-          <SelectToken label="to" />
-          <Box display="flex" alignItems="center" justifyContent="flex-end">
+        <Box display="flex" justifyContent="space-between" gap="xs">
+          <Box
+            flex="1"
+            display="flex"
+            alignItems="center"
+            justifyContent="flex-end"
+          >
             <TextField
               disabled
               value={value}
               lineHeight="l"
               placeholder="0"
               color="onSurface"
-              textAlign="right"
               fontFamily="Satoshi"
-              fontSize={['3xl', '5xl']}
               fieldProps={{
                 width: '100%',
-                borderRadius: 'xs',
-                borderColor: 'transparent',
-                border: 'none !important',
-                mr: '-1rem',
-                nHover: { border: 'none !important' },
-                nFocus: { border: 'none !important' },
-                nActive: { border: 'none !important' },
+                borderRadius: 'full',
               }}
             />
           </Box>
+          <SelectToken label="to" />
         </Box>
         <Box display="flex" justifyContent="space-between">
-          <Balance label="to" />
           <AmountInDollar label="to" />
+          <Balance label="to" />
         </Box>
       </Box>
     </Box>
