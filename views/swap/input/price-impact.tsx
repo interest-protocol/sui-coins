@@ -2,6 +2,8 @@ import { Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { EXCHANGE_FEE_PERCENTAGE } from '@/constants/fees';
+
 import { SwapForm } from '../swap.types';
 
 const PriceImpact: FC = () => {
@@ -16,7 +18,9 @@ const PriceImpact: FC = () => {
   const fromUSD = fromUSDPrice ? +fromValue * fromUSDPrice : null;
   const differenceBetween = fromUSD && toUSD ? fromUSD - toUSD : null;
   const priceImpact =
-    differenceBetween && fromUSD ? (differenceBetween * 100) / fromUSD : null;
+    differenceBetween && fromUSD
+      ? (differenceBetween * 100) / fromUSD - EXCHANGE_FEE_PERCENTAGE
+      : null;
 
   if (!priceImpact) return null;
 
