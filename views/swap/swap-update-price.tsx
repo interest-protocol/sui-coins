@@ -120,9 +120,10 @@ const SwapUpdatePrice: FC = () => {
 
     if (aggregator === Aggregator.Aftermath)
       return (
-        (FixedPointMath.toNumber(coinInValue, getValues('from.decimals')) *
+        ((FixedPointMath.toNumber(coinInValue, getValues('from.decimals')) *
           10 ** (getValues('from.decimals') - getValues('to.decimals'))) /
-        (route as RouterCompleteTradeRoute).spotPrice
+          (route as RouterCompleteTradeRoute).spotPrice) *
+        (1 - EXCHANGE_FEE)
       ).toPrecision(6);
 
     if (aggregator === Aggregator.Hop)

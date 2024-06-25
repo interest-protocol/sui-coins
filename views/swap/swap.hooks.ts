@@ -37,7 +37,7 @@ export const useSwap = () => {
         return afRouter.getTransactionForCompleteTradeRoute({
           walletAddress: currentAccount.address,
           completeRoute: values.route,
-          slippage: Number(values.settings.slippage),
+          slippage: Number(values.settings.slippage) / 100,
         });
 
       const trade = values.route.trade;
