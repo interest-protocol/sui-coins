@@ -12,7 +12,13 @@ const SelectTokenFilter: FC<SelectTokenFilterProps> = ({
   const filterSelected = useWatch({ control, name: 'filter' });
 
   return (
-    <Box gap="s" display="grid" flexWrap="wrap" gridTemplateColumns="1fr 1fr">
+    <Box
+      mt="s"
+      gap="s"
+      display="grid"
+      flexWrap="wrap"
+      gridTemplateColumns="1fr 1fr"
+    >
       {['Strict', 'Wallet'].map((item, index) => (
         <Box
           key={v4()}

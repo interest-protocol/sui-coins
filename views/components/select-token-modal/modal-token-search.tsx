@@ -2,6 +2,7 @@ import { FC, useId } from 'react';
 import useSWR from 'swr';
 import { v4 } from 'uuid';
 
+import { CoinObject } from '@/components/web3-manager/coins-manager/coins-manager.types';
 import { useNetwork } from '@/context/network';
 import { fetchCoinMetadata } from '@/utils';
 
@@ -26,7 +27,7 @@ const ModalTokenSearch: FC<ModalTokenSearchProps> = ({
 
   if (isLoading) return <FetchingToken />;
 
-  if (!tokenMetadata || error) return <NotFound />;
+  if (error) return <NotFound />;
 
   return (
     <TokenModalItem
@@ -34,7 +35,7 @@ const ModalTokenSearch: FC<ModalTokenSearchProps> = ({
       selected={false}
       type={search as `0x${string}`}
       symbol={tokenMetadata!.symbol}
-      onClick={() => handleSelectToken(tokenMetadata)}
+      onClick={() => handleSelectToken(tokenMetadata as unknown as CoinObject)}
     />
   );
 };

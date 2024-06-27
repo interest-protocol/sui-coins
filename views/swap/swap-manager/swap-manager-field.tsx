@@ -15,29 +15,30 @@ import { findAmount } from './swap-manager.utils';
 
 const SwapManagerField: FC<SwapManagerProps> = ({
   type,
-  poolsMap,
   name,
+  routes,
   control,
   account,
-  setError,
   setValue,
-  routes,
+  setError,
+  poolsMap,
   hasNoMarket,
+  setValueName,
   setIsZeroSwapAmount,
   isFetchingSwapAmount,
   setIsFetchingSwapAmount,
-  setValueName,
 }) => {
   const network = useNetwork();
   const client = useSuiClient();
   const [from] = useDebounce(useWatch({ control, name }), 900);
 
   const lock = useWatch({ control, name: 'lock' });
+  const toType = useWatch({ control, name: 'to.type' });
   const decimals = useWatch({ control, name: `${setValueName}.decimals` });
 
   const { error } = useSWR(
     makeSWRKey(
-      [account, type, prop('value', from), prop('type', from)],
+      [account, type, prop('value', from), prop('type', from), toType],
       SwapManagerField.name
     ),
     async () => {
@@ -116,7 +117,15 @@ const SwapManagerField: FC<SwapManagerProps> = ({
         from?.type === type ||
         hasNoMarket
     );
-  }, [error, from, hasNoMarket, from?.type, type, isFetchingSwapAmount]);
+  }, [
+    error,
+    from,
+    toType,
+    hasNoMarket,
+    from?.type,
+    type,
+    isFetchingSwapAmount,
+  ]);
 
   return null;
 };

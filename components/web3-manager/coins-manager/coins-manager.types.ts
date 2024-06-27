@@ -1,9 +1,7 @@
-import { Chain } from '@interest-protocol/sui-tokens';
 import { CoinMetadata, CoinStruct, SuiClient } from '@mysten/sui.js/client';
 import BigNumber from 'bignumber.js';
 
 export interface CoinObject extends Pick<CoinMetadata, 'symbol' | 'decimals'> {
-  chain?: Chain;
   digest?: string;
   version?: string;
   balance: BigNumber;

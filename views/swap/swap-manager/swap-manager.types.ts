@@ -18,10 +18,8 @@ export interface SwapMessagesProps {
   error: boolean;
   hasNoMarket: boolean;
   control: Control<SwapForm>;
-  isZeroSwapAmountIn: boolean;
-  isZeroSwapAmountOut: boolean;
-  isFetchingSwapAmountIn: boolean;
-  isFetchingSwapAmountOut: boolean;
+  isZeroSwapAmount: boolean;
+  isFetchingSwapAmount: boolean;
 }
 
 export interface SwapManagerProps {

@@ -6,12 +6,12 @@ import Layout from '@/components/layout';
 
 import Input from './input';
 import SwapFormFieldSlider from './input/swap-manager-slider';
-import ManageSlippage from './manage-slippage';
 import SwapFlipToken from './swap-flip-token';
 import SwapHeader from './swap-header';
 import SwapManager from './swap-manager';
 import SwapPath from './swap-manager/swap-path';
 import SwapPreviewButton from './swap-preview-button';
+import SwapSettings from './swap-settings';
 
 const Swap: FC = () => (
   <Layout>
@@ -78,7 +78,7 @@ const Swap: FC = () => (
       </Box>
       <SwapPath />
       <Box my="xs" bg="container" borderRadius="s">
-        <ManageSlippage />
+        <SwapSettings />
       </Box>
     </Box>
     <SwapManager />

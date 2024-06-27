@@ -1,7 +1,11 @@
 import type { Token } from '@interest-protocol/sui-tokens';
 import { CoinStruct } from '@mysten/sui.js/dist/cjs/client';
-import { normalizeStructTag } from '@mysten/sui.js/utils';
-import { normalizeSuiObjectId, SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import {
+  formatAddress,
+  normalizeStructTag,
+  normalizeSuiObjectId,
+  SUI_TYPE_ARG,
+} from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
 import { propOr } from 'ramda';
 
@@ -10,10 +14,11 @@ import {
   CoinsMap,
 } from '@/components/web3-manager/coins-manager/coins-manager.types';
 import { MOVE_TYPE_ARG, Network } from '@/constants';
-import { CoinMetadataWithType } from '@/interface';
+import { CoinData, CoinMetadataWithType } from '@/interface';
 import { FixedPointMath } from '@/lib';
 
 import { isSameStructTag } from '../address';
+import { ZERO_BIG_NUMBER } from '../big-number';
 import { fetchCoinMetadata } from '../coin-metadata';
 import { getBasicCoinMetadata } from '../fn';
 import {
@@ -216,3 +221,11 @@ export const getSafeValue = ({
 
   return safeAmount;
 };
+
+export const coinDataToCoinObject = (coinData: CoinData): CoinObject => ({
+  ...coinData,
+  balance: ZERO_BIG_NUMBER,
+  coinObjectId: '',
+  metadata: { name: formatAddress(coinData.type), description: '' },
+  objects: [],
+});

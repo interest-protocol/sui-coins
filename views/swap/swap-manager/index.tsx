@@ -15,25 +15,15 @@ const SwapManager: FC = () => {
   const formSwap = useFormContext<SwapForm>();
 
   const [error, setError] = useState(false);
-  const [isZeroSwapAmountIn, setIsZeroSwapAmountIn] = useState(false);
-  const [isZeroSwapAmountOut, setIsZeroSwapAmountOut] = useState(false);
+  const [isZeroSwapAmount, setIsZeroSwapAmount] = useState(false);
 
-  const isFetchingSwapAmountIn = useWatch({
-    control: formSwap.control,
-    name: 'from.isFetchingSwap',
-  });
-
-  const isFetchingSwapAmountOut = useWatch({
+  const isFetchingSwapAmount = useWatch({
     control: formSwap.control,
     name: 'to.isFetchingSwap',
   });
 
-  const setIsFetchingSwapAmountOut = (value: boolean) => {
+  const setIsFetchingSwapAmount = (value: boolean) => {
     formSwap.setValue('to.isFetchingSwap', value);
-  };
-
-  const setIsFetchingSwapAmountIn = (value: boolean) => {
-    formSwap.setValue('from.isFetchingSwap', value);
   };
 
   const coinInType = useWatch({
@@ -77,36 +67,19 @@ const SwapManager: FC = () => {
         setError={setError}
         poolsMap={data.poolsMap}
         hasNoMarket={hasNoMarket}
-        account={account?.address || DEAD_ADDRESS}
         control={formSwap.control}
         setValue={formSwap.setValue}
-        setIsZeroSwapAmount={setIsZeroSwapAmountOut}
-        isFetchingSwapAmount={!!isFetchingSwapAmountOut}
-        setIsFetchingSwapAmount={setIsFetchingSwapAmountOut}
-      />
-      <SwapManagerField
-        name="to"
-        routes={routes}
-        type={coinInType}
-        setValueName="from"
-        setError={setError}
-        poolsMap={data.poolsMap}
-        hasNoMarket={hasNoMarket}
-        control={formSwap.control}
+        setIsZeroSwapAmount={setIsZeroSwapAmount}
         account={account?.address || DEAD_ADDRESS}
-        setValue={formSwap.setValue}
-        setIsZeroSwapAmount={setIsZeroSwapAmountIn}
-        isFetchingSwapAmount={!!isFetchingSwapAmountIn}
-        setIsFetchingSwapAmount={setIsFetchingSwapAmountIn}
+        isFetchingSwapAmount={!!isFetchingSwapAmount}
+        setIsFetchingSwapAmount={setIsFetchingSwapAmount}
       />
       <SwapMessages
         error={error}
         hasNoMarket={hasNoMarket}
         control={formSwap.control}
-        isZeroSwapAmountIn={isZeroSwapAmountIn}
-        isZeroSwapAmountOut={isZeroSwapAmountOut}
-        isFetchingSwapAmountIn={!!isFetchingSwapAmountIn}
-        isFetchingSwapAmountOut={!!isFetchingSwapAmountOut}
+        isZeroSwapAmount={isZeroSwapAmount}
+        isFetchingSwapAmount={!!isFetchingSwapAmount}
       />
     </>
   );

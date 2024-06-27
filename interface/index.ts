@@ -4,12 +4,10 @@ import BigNumber from 'bignumber.js';
 export type BigNumberish = BigNumber | bigint | string | number;
 
 export interface CoinData {
-  type: string;
+  type: `0x${string}`;
   decimals: number;
   symbol: string;
 }
-
-export type LocalTokenMetadataRecord = Record<string, CoinData>;
 
 export enum PoolTypeEnum {
   CLAMM = 'CLAMM',
