@@ -1,6 +1,6 @@
 import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 
-import { LocalCoinMetadata } from '@/interface';
+import { CoinData } from '@/interface';
 
 export const MOVE_TYPE_ARG = '0x2::move::MOVE';
 
@@ -36,7 +36,7 @@ export const FAUCET_AMOUNT = {
   [USDT_TYPE]: '7000000000000',
 } as Record<string, string>;
 
-export const FAUCET_COINS = [
+export const FAUCET_COINS: ReadonlyArray<CoinData> = [
   {
     decimals: 9,
     symbol: 'MOVE',
@@ -64,7 +64,7 @@ export const FAUCET_COINS = [
   },
 ];
 
-export const COINS = [
+export const COINS: ReadonlyArray<CoinData> = [
   ...FAUCET_COINS,
   {
     decimals: 9,
@@ -73,7 +73,7 @@ export const COINS = [
   },
 ];
 
-export const COINS_MAP = {
+export const COINS_MAP: Record<string, CoinData> = {
   [SUI_TYPE_ARG]: {
     decimals: 9,
     symbol: 'MOVE',
@@ -104,6 +104,6 @@ export const COINS_MAP = {
     symbol: 'RUCO',
     type: RUCO_TYPE,
   },
-} as Record<string, LocalCoinMetadata>;
+};
 
 export const PRICE_BLACKLIST = ['RUCO'];

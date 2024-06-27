@@ -1,5 +1,6 @@
 import { Control, UseFormSetValue } from 'react-hook-form';
 
+import { CoinObject } from '@/components/web3-manager/coins-manager/coins-manager.types';
 import { CoinData } from '@/interface';
 
 export interface TokenModalItemProps
@@ -33,15 +34,15 @@ export interface SearchTokenForm {
 export interface SelectTokenModalBodyProps
   extends Pick<SelectTokenModalProps, 'faucet'> {
   control: Control<SearchTokenForm>;
-  handleSelectToken: (coin: CoinData) => void;
+  handleSelectToken: (type: CoinObject) => void;
 }
 
 export interface ModalTokenBodyProps {
   tokens: ReadonlyArray<CoinData>;
-  handleSelectToken: (coin: CoinData) => void;
+  handleSelectToken: (type: string) => void;
 }
 
 export interface ModalTokenSearchProps {
   search: string;
-  handleSelectToken: (coin: CoinData) => void;
+  handleSelectToken: (coin: CoinObject) => void;
 }

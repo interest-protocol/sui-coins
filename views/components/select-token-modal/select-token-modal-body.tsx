@@ -24,7 +24,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   handleSelectToken: onSelectToken,
 }) => {
   const network = useNetwork();
-  const { coins, loading } = useWeb3();
+  const { coins, loading, coinsMap } = useWeb3();
   const favoriteTokenTypes = useReadLocalStorage<ReadonlyArray<string>>(
     `${LOCAL_STORAGE_VERSION}-movement-${network}-favorite-tokens`
   );
@@ -35,16 +35,28 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   const isSearchAddress =
     isValidSuiAddress(search.split('::')[0]) && search.split('::').length > 2;
 
+  const handleSelectToken = (type: string) => onSelectToken(coinsMap[type]);
+
   if (!isSearchAddress && filterSelected === TokenOrigin.Strict && COINS)
     return (
       <ModalTokenBody
-        handleSelectToken={onSelectToken}
-        tokens={(faucet ? FAUCET_COINS : COINS)
-          ?.sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
-          .filter(
+        handleSelectToken={handleSelectToken}
+        tokens={[
+          ...(faucet ? FAUCET_COINS : COINS).filter(
             ({ symbol, type }) =>
-              type.includes(search) || symbol.toLowerCase().includes(search)
-          )}
+              (!search ||
+                symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+                type.includes(search)) &&
+              favoriteTokenTypes?.includes(type)
+          ),
+          ...(faucet ? FAUCET_COINS : COINS).filter(
+            ({ symbol, type }) =>
+              (!search ||
+                symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+                type.includes(search)) &&
+              !favoriteTokenTypes?.includes(type)
+          ),
+        ]}
       />
     );
 
@@ -61,7 +73,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   )
     return (
       <ModalTokenBody
-        handleSelectToken={onSelectToken}
+        handleSelectToken={handleSelectToken}
         tokens={(coins as Array<CoinObject>)
           ?.sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
           .filter(

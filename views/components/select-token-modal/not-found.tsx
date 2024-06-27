@@ -13,7 +13,7 @@ const NotFound: FC = () => (
     overflowY="auto"
     alignItems="center"
     flexDirection="column"
-    bg="lowContainer"
+    bg="surface.containerLow"
   >
     <NoSearchSVG maxHeight="4rem" maxWidth="4rem" width="100%" />
     <Typography variant="body" size="medium" textTransform="capitalize">

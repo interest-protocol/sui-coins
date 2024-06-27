@@ -42,13 +42,9 @@ const SwapManagerField: FC<SwapManagerProps> = ({
       SwapManagerField.name
     ),
     async () => {
-      console.log('here');
-
       const amount = FixedPointMath.toBigNumber(from.value, from.decimals);
 
       const safeAmount = amount.decimalPlaces(0, BigNumber.ROUND_DOWN);
-
-      console.log({ from, value: +from.value, lock, hasNoMarket });
 
       if (!from || !+from.value || lock || hasNoMarket) return;
 

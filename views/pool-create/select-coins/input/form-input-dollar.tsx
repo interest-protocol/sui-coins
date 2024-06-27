@@ -9,7 +9,6 @@ import { CreatePoolForm } from '../../pool-create.types';
 import { InputProps } from './input.types';
 
 const FormInputDollar: FC<InputProps> = ({ index }) => {
-  console.log(index);
   const { control } = useFormContext<CreatePoolForm>();
 
   const value = useWatch({ control, name: `tokens.${index}.value` });
