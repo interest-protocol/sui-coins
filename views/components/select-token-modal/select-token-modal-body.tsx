@@ -61,7 +61,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
       />
     );
 
-  if (loading) return <FetchingToken />;
+  if (!coins && loading) return <FetchingToken />;
 
   const noWalletToShow = filterSelected == TokenOrigin.Wallet && !coins?.length;
 
