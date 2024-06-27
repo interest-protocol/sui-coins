@@ -5,7 +5,7 @@ import { useReadLocalStorage } from 'usehooks-ts';
 
 import { CoinObject } from '@/components/web3-manager/coins-manager/coins-manager.types';
 import { LOCAL_STORAGE_VERSION } from '@/constants';
-import { COINS, FAUCET_COINS } from '@/constants/coins';
+import { COINS, COINS_MAP, FAUCET_COINS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks/use-web3';
 
@@ -24,7 +24,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   handleSelectToken: onSelectToken,
 }) => {
   const network = useNetwork();
-  const { coins, loading } = useWeb3();
+  const { coins, loading, coinsMap } = useWeb3();
   const favoriteTokenTypes = useReadLocalStorage<ReadonlyArray<string>>(
     `${LOCAL_STORAGE_VERSION}-movement-${network}-favorite-tokens`
   );
@@ -35,20 +35,56 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   const isSearchAddress =
     isValidSuiAddress(search.split('::')[0]) && search.split('::').length > 2;
 
-  if (!isSearchAddress && filterSelected === TokenOrigin.Strict && COINS)
+  const handleSelectToken = (type: string) =>
+    onSelectToken(coinsMap[type] ?? COINS_MAP[type]);
+
+  if (faucet)
     return (
       <ModalTokenBody
-        handleSelectToken={onSelectToken}
-        tokens={(faucet ? FAUCET_COINS : COINS)
-          ?.sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
-          .filter(
+        handleSelectToken={handleSelectToken}
+        tokens={[
+          ...FAUCET_COINS.filter(
             ({ symbol, type }) =>
-              type.includes(search) || symbol.toLowerCase().includes(search)
-          )}
+              (!search ||
+                symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+                type.includes(search)) &&
+              favoriteTokenTypes?.includes(type)
+          ),
+          ...FAUCET_COINS.filter(
+            ({ symbol, type }) =>
+              (!search ||
+                symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+                type.includes(search)) &&
+              !favoriteTokenTypes?.includes(type)
+          ),
+        ]}
       />
     );
 
-  if (loading) return <FetchingToken />;
+  if (!isSearchAddress && filterSelected === TokenOrigin.Strict)
+    return (
+      <ModalTokenBody
+        handleSelectToken={handleSelectToken}
+        tokens={[
+          ...COINS.filter(
+            ({ symbol, type }) =>
+              (!search ||
+                symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+                type.includes(search)) &&
+              favoriteTokenTypes?.includes(type)
+          ),
+          ...COINS.filter(
+            ({ symbol, type }) =>
+              (!search ||
+                symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+                type.includes(search)) &&
+              !favoriteTokenTypes?.includes(type)
+          ),
+        ]}
+      />
+    );
+
+  if (!coins && loading) return <FetchingToken />;
 
   const noWalletToShow = filterSelected == TokenOrigin.Wallet && !coins?.length;
 
@@ -61,7 +97,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   )
     return (
       <ModalTokenBody
-        handleSelectToken={onSelectToken}
+        handleSelectToken={handleSelectToken}
         tokens={(coins as Array<CoinObject>)
           ?.sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
           .filter(

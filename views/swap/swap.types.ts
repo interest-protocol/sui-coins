@@ -1,6 +1,8 @@
 import { WalletAccount } from '@wallet-standard/base';
+import { FC } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
+import { SVGProps } from '@/components/svg/svg.types';
 import { CoinsMap } from '@/components/web3-manager/coins-manager/coins-manager.types';
 import { Network } from '@/constants';
 import { CoinData } from '@/interface';
@@ -11,7 +13,6 @@ import {
 
 export interface ISwapSettings {
   slippage: string;
-  aggregator: Aggregator;
 }
 
 export interface SwapToken extends CoinData {
@@ -27,7 +28,7 @@ interface SwapTypeArgs {
 }
 
 export enum Aggregator {
-  Interest = 'Interest',
+  Interest = 'interest',
 }
 
 export type SwapPath = ReadonlyArray<SwapTypeArgs>;
@@ -38,6 +39,7 @@ export interface SwapForm {
   settings: ISwapSettings;
   lock: boolean;
   error?: string | null;
+  explorerLink: string;
   loading: boolean;
   maxValue: boolean;
   disabled: boolean;
@@ -50,9 +52,9 @@ export interface SwapForm {
 
 export interface AggregatorProps {
   url: string;
-  logo: string;
   name: string;
-  shortName: 'Interest';
+  key: Aggregator;
+  Icon: FC<SVGProps>;
 }
 
 export interface SwapPreviewModalProps {

@@ -5,12 +5,10 @@ import {
   useSuiClient,
 } from '@mysten/dapp-kit';
 import { useState } from 'react';
-import { useFormContext, UseFormReturn } from 'react-hook-form';
-import toast from 'react-hot-toast';
+import { useFormContext } from 'react-hook-form';
 
 import { useNetwork } from '@/context/network';
-import { useWeb3 } from '@/hooks';
-import { useModal } from '@/hooks/use-modal';
+import { useDialog, useWeb3 } from '@/hooks';
 import { showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
 import { SwapForm } from '@/views/swap/swap.types';
 
@@ -21,20 +19,28 @@ const SwapButton = () => {
   const network = useNetwork();
   const { mutate } = useWeb3();
   const client = useSuiClient();
-  const { handleClose } = useModal();
   const currentAccount = useCurrentAccount();
+  const formSwap = useFormContext<SwapForm>();
+  const { dialog, handleClose } = useDialog();
   const [loading, setLoading] = useState(false);
   const signTransactionBlock = useSignTransactionBlock();
-  const formSwap: UseFormReturn<SwapForm> = useFormContext();
 
   const resetInput = () => {
-    formSwap.setValue('from.value', '0');
     formSwap.setValue('to.value', '0');
+    formSwap.setValue('from.value', '0');
+  };
+
+  const gotoExplorer = () => {
+    window.open(
+      formSwap.getValues('explorerLink'),
+      '_blank',
+      'noopener,noreferrer'
+    );
+
+    formSwap.setValue('explorerLink', '');
   };
 
   const handleSwap = async () => {
-    const loadingToastId = toast.loading('Swapping...');
-
     try {
       setLoading(true);
 
@@ -56,20 +62,52 @@ const SwapButton = () => {
       throwTXIfNotSuccessful(tx);
 
       await showTXSuccessToast(tx, network);
-      toast.success('Swapped successfully');
     } catch (e) {
-      toast.error((e as Error).message ?? 'Failed to swap');
+      console.log({ e });
+      throw e;
     } finally {
-      toast.dismiss(loadingToastId);
       resetInput();
       setLoading(false);
       handleClose();
-      await mutate();
+      mutate();
     }
   };
 
+  const onSwap = () =>
+    dialog.promise(handleSwap(), {
+      loading: {
+        title: 'Swapping...',
+        message: 'We are swapping, and you will let you know when it is done',
+      },
+      error: {
+        title: 'Swap Failure',
+        message:
+          'Your swap failed, please try to increment your slippage and try again or contact the support team',
+        primaryButton: { label: 'Try again', onClick: handleClose },
+      },
+      success: {
+        title: 'Swap Successfully',
+        message:
+          'Your swap was successfully, and you can check it on the Explorer',
+        primaryButton: {
+          label: 'See on Explorer',
+          onClick: gotoExplorer,
+        },
+        secondaryButton: (
+          <Button
+            mr="s"
+            color="onSurface"
+            variant="outline"
+            onClick={handleClose}
+          >
+            got it
+          </Button>
+        ),
+      },
+    });
+
   return (
-    <Button variant="filled" onClick={handleSwap} justifyContent="center">
+    <Button variant="filled" onClick={onSwap} justifyContent="center">
       <Typography variant="label" size="large">
         {loading ? 'Swapping...' : 'Confirm Swap'}
       </Typography>

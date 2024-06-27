@@ -11,9 +11,9 @@ const NotFound: FC = () => (
     color="text"
     display="flex"
     overflowY="auto"
+    gridColumn="1/-1"
     alignItems="center"
     flexDirection="column"
-    bg="lowContainer"
   >
     <NoSearchSVG maxHeight="4rem" maxWidth="4rem" width="100%" />
     <Typography variant="body" size="medium" textTransform="capitalize">
