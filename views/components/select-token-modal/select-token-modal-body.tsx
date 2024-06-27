@@ -5,7 +5,7 @@ import { useReadLocalStorage } from 'usehooks-ts';
 
 import { CoinObject } from '@/components/web3-manager/coins-manager/coins-manager.types';
 import { LOCAL_STORAGE_VERSION } from '@/constants';
-import { COINS, FAUCET_COINS } from '@/constants/coins';
+import { COINS, COINS_MAP, FAUCET_COINS } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks/use-web3';
 
@@ -35,7 +35,8 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   const isSearchAddress =
     isValidSuiAddress(search.split('::')[0]) && search.split('::').length > 2;
 
-  const handleSelectToken = (type: string) => onSelectToken(coinsMap[type]);
+  const handleSelectToken = (type: string) =>
+    onSelectToken(coinsMap[type] ?? COINS_MAP[type]);
 
   if (!isSearchAddress && filterSelected === TokenOrigin.Strict && COINS)
     return (

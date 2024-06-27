@@ -88,10 +88,10 @@ const CoinsManager: FC = () => {
                 [SUI_TYPE_ARG as `0x${string}`]: {
                   ...acc[SUI_TYPE_ARG as `0x${string}`],
                   ...coinRaw,
-                  type: SUI_TYPE_ARG as `0x${string}`,
-                  symbol,
                   decimals,
                   metadata,
+                  symbol: 'MOVE',
+                  type: SUI_TYPE_ARG as `0x${string}`,
                   balance: BigNumber(coinRaw.balance).plus(
                     acc[SUI_TYPE_ARG as `0x${string}`]?.balance ??
                       ZERO_BIG_NUMBER
