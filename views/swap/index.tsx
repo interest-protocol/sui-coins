@@ -10,7 +10,6 @@ import SwapFlipToken from './swap-flip-token';
 import SwapHeader from './swap-header';
 import SwapManager from './swap-manager';
 import SwapPath from './swap-manager/swap-path';
-import SwapPoweredBy from './swap-powered-by';
 import SwapPreviewButton from './swap-preview-button';
 import SwapSettings from './swap-settings';
 
@@ -76,7 +75,6 @@ const Swap: FC = () => (
           <Input label="to" />
         </Box>
         <SwapPreviewButton />
-        <SwapPoweredBy />
       </Box>
       <SwapPath />
       <Box my="xs" bg="container" borderRadius="s">

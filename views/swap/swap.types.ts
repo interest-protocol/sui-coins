@@ -13,7 +13,6 @@ import {
 
 export interface ISwapSettings {
   slippage: string;
-  aggregator: Aggregator;
 }
 
 export interface SwapToken extends CoinData {

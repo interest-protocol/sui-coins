@@ -24,12 +24,12 @@ const SwapPath: FC = () => {
     name: 'routeWithAmount',
   });
 
+  if (!readyToSwap || !swapPath || !swapPath.length) return null;
+
   const {
     to: { symbol: toSymbol, value: toDisplay },
     from: { symbol: fromSymbol, value: fromDisplay },
   } = formSwap.getValues();
-
-  if (!readyToSwap || !swapPath || !swapPath.length) return null;
 
   const [coinsPath, ,] = swapPath;
 
