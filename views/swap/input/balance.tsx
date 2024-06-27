@@ -2,9 +2,9 @@ import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { useWeb3 } from '@/hooks';
+import SubtractBox from '@/components/svg/subtract-box';
+import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
-import { SubtractBoxSVG } from '@/svg';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { SwapForm } from '../swap.types';
@@ -26,14 +26,14 @@ const Balance: FC<InputProps> = ({ label }) => {
   return (
     <Box display="flex" color="outline" gap="0.5rem" alignItems="center">
       <Box width="1rem" height="1rem">
-        <SubtractBoxSVG
+        <SubtractBox
           maxHeight="100%"
           maxWidth="100%"
           width="100%"
           height="100%"
         />
       </Box>
-      <Typography size="medium" variant="body" fontSize="s">
+      <Typography size="small" variant="body" fontSize="s">
         {symbol ? `${balance} ${symbol}` : '0'}
       </Typography>
     </Box>

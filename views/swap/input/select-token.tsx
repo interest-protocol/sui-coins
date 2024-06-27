@@ -1,23 +1,23 @@
-import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
+import { Button, Motion, Typography } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import TokenIcon from '@/components/token-icon';
-import { MOVE_TYPE_ARG, PRICE_BLACKLIST } from '@/constants';
-import { useNetwork } from '@/context/network';
+import { Network } from '@/constants';
 import { useModal } from '@/hooks/use-modal';
 import { CoinData } from '@/interface';
-import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
-import { isSui, updateURL } from '@/utils';
+import { ChevronDownSVG } from '@/svg';
+import { updateURL } from '@/utils';
 import SelectTokenModal from '@/views/components/select-token-modal';
 
 import { SwapForm } from '../swap.types';
 import { InputProps } from './input.types';
 
 const SelectToken: FC<InputProps> = ({ label }) => {
-  const network = useNetwork();
   const { pathname } = useRouter();
+  const { network } = useSuiClientContext();
   const { setModal, handleClose } = useModal();
 
   const { setValue, control } = useFormContext<SwapForm>();
@@ -27,16 +27,28 @@ const SelectToken: FC<InputProps> = ({ label }) => {
     name: label,
   });
 
+  const swapping = useWatch({
+    control,
+    name: 'swapping',
+  });
+
   const { symbol: currentSymbol, type: currentType } = currentToken ?? {
     symbol: undefined,
     type: undefined,
   };
 
-  const changeURL = (type: string) => {
+  const changeURL = (type: string, oppositeType?: string) => {
     const searchParams = new URLSearchParams(location.search);
-    searchParams.set(label, isSui(type) ? MOVE_TYPE_ARG : type);
+    searchParams.set(label, type);
 
-    updateURL(`${pathname}?${searchParams.toString()}`);
+    if (oppositeType)
+      searchParams.set(label === 'to' ? 'from' : 'to', oppositeType);
+
+    updateURL(
+      `${pathname}?from=${searchParams.get('from')}&to=${searchParams.get(
+        'to'
+      )}`
+    );
   };
 
   const oppositeType = useWatch({
@@ -45,34 +57,38 @@ const SelectToken: FC<InputProps> = ({ label }) => {
   });
 
   const onSelect = async ({ type, decimals, symbol }: CoinData) => {
-    if (type === oppositeType)
-      setValue(label === 'to' ? 'from' : 'to', currentToken);
+    if (type === oppositeType) {
+      setValue(label === 'to' ? 'from' : 'to', {
+        type: currentToken.type,
+        symbol: currentToken.symbol,
+        decimals: currentToken.decimals,
+        usdPrice: currentToken.usdPrice,
+        value: '',
+      });
+    }
 
     setValue(label, {
       type,
       symbol,
       decimals,
       value: '',
-      usdPrice: currentToken?.usdPrice,
+      usdPrice: null,
     });
 
-    if (!PRICE_BLACKLIST.includes(symbol))
-      fetch(`/api/auth/v1/coin-price?symbol=${isSui(type) ? 'SUI' : symbol}`)
-        .then((response) => response.json())
-        .then((data) =>
-          setValue(
-            `${label}.usdPrice`,
-            data[isSui(type) ? 'MOVE' : symbol][0].quote.USD.price
-          )
-        )
-        .catch(() => null);
+    fetch(`/api/auth/v1/coin-price?symbol=${symbol}`)
+      .then((response) => response.json())
+      .then((data) =>
+        setValue(`${label}.usdPrice`, data[symbol][0].quote.USD.price)
+      )
+      .catch(() => null);
 
-    setValue(`${label === 'from' ? 'to' : 'from'}.value`, '');
+    if (label === 'from') setValue('to.value', '');
 
-    changeURL(type);
+    changeURL(type, type === oppositeType ? currentToken.type : undefined);
   };
 
   const openModal = () =>
+    !swapping &&
     setModal(
       <Motion
         animate={{ scale: 1 }}
@@ -90,60 +106,46 @@ const SelectToken: FC<InputProps> = ({ label }) => {
     );
 
   return (
-    <Box
-      position="relative"
-      minWidth={['4rem', '8rem', '8rem', '8rem', '6.25rem']}
+    <Button
+      py="2xs"
+      pr="s"
+      fontSize="s"
+      variant="tonal"
+      color="onSurface"
+      border="1px solid"
+      borderRadius="full"
+      disabled={swapping}
+      onClick={openModal}
+      bg="highestContainer"
+      opacity={swapping ? 0.7 : 1}
+      pl={currentType ? '2xs' : 'm'}
+      borderColor="#C6C6CA !important"
+      {...(currentType && {
+        PrefixIcon: (
+          <TokenIcon
+            withBg
+            rounded
+            size="1.1rem"
+            type={currentType}
+            symbol={currentSymbol}
+            network={network as Network}
+          />
+        ),
+      })}
     >
-      <Button
-        p="xs"
-        pl={currentType ? 'xs' : '1rem !important'}
-        width="100%"
-        fontSize="xs"
-        variant="tonal"
-        height="2.5rem"
-        borderRadius="full"
-        color="onSurface"
-        border="1px solid"
-        borderColor="outline"
-        bg="highestContainer"
-        onClick={openModal}
-        {...(currentSymbol && {
-          PrefixIcon: (
-            <TokenIcon
-              withBg
-              rounded
-              network={network}
-              symbol={currentSymbol}
-              type={currentToken.type}
-            />
-          ),
-        })}
+      <Typography
+        size="large"
+        variant="label"
+        overflow="hidden"
+        whiteSpace="nowrap"
+        fontFamily="Satoshi"
+        width={['0px', 'auto']}
+        display={[currentType ? 'none' : 'block', 'block']}
       >
-        <Box
-          width="100%"
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-        >
-          <Typography
-            size="large"
-            variant="label"
-            overflow="hidden"
-            whiteSpace="nowrap"
-            fontFamily="Satoshi"
-            width={['0px', 'auto']}
-            display={[currentType ? 'none' : 'block', 'block']}
-          >
-            {currentSymbol ?? 'Select Token'}
-          </Typography>
-          {currentSymbol ? (
-            <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-          ) : (
-            <ChevronRightSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-          )}
-        </Box>
-      </Button>
-    </Box>
+        {currentSymbol ?? 'Select Token'}
+      </Typography>
+      <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+    </Button>
   );
 };
 

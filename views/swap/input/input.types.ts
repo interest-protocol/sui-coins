@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
 export interface InputProps {
-  label: 'to' | 'from';
+  label: 'from' | 'to';
 }
 
 export interface InputFieldProps extends InputProps {

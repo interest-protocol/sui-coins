@@ -22,10 +22,13 @@ const AmountInDollar: FC<InputProps> = ({ label }) => {
     name: `${label}.usdPrice`,
   });
 
+  if (!(usdPrice && value)) return '--';
+
   return (
     <Box display="flex" gap="s" alignItems="center">
       <Typography
-        size="medium"
+        size="small"
+        fontSize="s"
         variant="body"
         color={value ? 'outline' : 'onSurface'}
       >

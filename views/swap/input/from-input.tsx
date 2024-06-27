@@ -14,6 +14,7 @@ const FromInput: FC = () => {
   const { register, setValue, control } = useFormContext<SwapForm>();
 
   useWatch({ control, name: 'focus' });
+  const swapping = useWatch({ control, name: 'swapping' });
 
   return (
     <>
@@ -25,25 +26,23 @@ const FromInput: FC = () => {
         flexDirection="column"
         justifyContent="space-between"
       >
-        <Box display="flex" justifyContent="space-between">
-          <SelectToken label="from" />
-          <Box display="flex" alignItems="center" justifyContent="flex-end">
+        <Box display="flex" justifyContent="space-between" gap="xs">
+          <Box
+            flex="1"
+            display="flex"
+            alignItems="center"
+            justifyContent="flex-end"
+          >
             <TextField
+              width="100%"
               lineHeight="l"
               placeholder="0"
               color="onSurface"
-              textAlign="right"
+              disabled={swapping}
               fontFamily="Satoshi"
-              fontSize={['3xl', '5xl']}
               fieldProps={{
                 width: '100%',
-                borderRadius: 'xs',
-                borderColor: 'transparent',
-                border: 'none !important',
-                mr: '-1rem',
-                nHover: { border: 'none !important' },
-                nFocus: { border: 'none !important' },
-                nActive: { border: 'none !important' },
+                borderRadius: 'full',
               }}
               {...register(`from.value`, {
                 onChange: (v: ChangeEvent<HTMLInputElement>) => {
@@ -53,10 +52,11 @@ const FromInput: FC = () => {
               })}
             />
           </Box>
+          <SelectToken label="from" />
         </Box>
-        <Box display="flex" justifyContent="space-between">
-          <Balance label="from" />
+        <Box display="flex" justifyContent="space-between" color="outline">
           <AmountInDollar label="from" />
+          <Balance label="from" />
         </Box>
       </Box>
     </>
