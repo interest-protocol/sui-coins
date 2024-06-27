@@ -31,7 +31,7 @@ const SwapPath: FC = () => {
     from: { symbol: fromSymbol, value: fromDisplay },
   } = formSwap.getValues();
 
-  const [coinsPath, ,] = swapPath;
+  const [coinsPath] = swapPath;
 
   const coinIn = coinsPath[0];
   const baseTokens = coinsPath.slice(1, -1);

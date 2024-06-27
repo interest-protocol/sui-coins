@@ -13,10 +13,8 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
   error,
   control,
   hasNoMarket,
-  isZeroSwapAmountIn,
-  isZeroSwapAmountOut,
-  isFetchingSwapAmountIn,
-  isFetchingSwapAmountOut,
+  isZeroSwapAmount,
+  isFetchingSwapAmount,
 }) => {
   const { setValue } = useFormContext();
   const { coinsMap } = useWeb3();
@@ -32,33 +30,19 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
       'readyToSwap',
       !(error && fromValue > 0) &&
         !(error && toValue > 0) &&
-        !isFetchingSwapAmountOut &&
-        !(isZeroSwapAmountOut && !!fromValue && !isFetchingSwapAmountOut) &&
-        !isFetchingSwapAmountIn &&
-        !(isZeroSwapAmountIn && !!toValue && !isFetchingSwapAmountIn) &&
+        !isFetchingSwapAmount &&
+        !(isZeroSwapAmount && !!fromValue && !isFetchingSwapAmount) &&
         !(propOr('', 'type', from) === propOr('', 'type', to)) &&
         !hasNoMarket
     );
-  }, [
-    error,
-    fromValue,
-    toValue,
-    isFetchingSwapAmountOut,
-    isFetchingSwapAmountIn,
-    isZeroSwapAmountIn,
-    from,
-    to,
-    hasNoMarket,
-  ]);
+  }, [error, fromValue, toValue, isFetchingSwapAmount, from, to, hasNoMarket]);
 
   const amountNotEnough =
-    (isZeroSwapAmountIn && !!fromValue && !isFetchingSwapAmountIn) ||
-    (isZeroSwapAmountOut && !!toValue && !isFetchingSwapAmountOut);
+    isZeroSwapAmount && !!fromValue && !isFetchingSwapAmount;
 
   useEffect(() => {
-    if ((isFetchingSwapAmountIn || isFetchingSwapAmountOut) && !toastState)
-      setToastState(true);
-  }, [isFetchingSwapAmountIn, isFetchingSwapAmountOut]);
+    if (isFetchingSwapAmount && !toastState) setToastState(true);
+  }, [isFetchingSwapAmount]);
 
   useEffect(() => {
     if (toastState) {
@@ -68,12 +52,12 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
   }, [toastState]);
 
   useEffect(() => {
-    if (!(isFetchingSwapAmountIn || isFetchingSwapAmountOut) && toastState) {
+    if (!isFetchingSwapAmount && toastState) {
       setValue('swapping', false);
       setToastState(false);
       toast.dismiss();
     }
-  }, [isFetchingSwapAmountIn, isFetchingSwapAmountOut]);
+  }, [isFetchingSwapAmount]);
 
   // Set Error
   useEffect(() => {

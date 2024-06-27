@@ -85,6 +85,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
     if (label === 'from') setValue('to.value', '');
 
     changeURL(type, type === oppositeType ? currentToken.type : undefined);
+    setValue('lock', false);
   };
 
   const openModal = () =>
