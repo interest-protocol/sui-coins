@@ -38,19 +38,42 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   const handleSelectToken = (type: string) =>
     onSelectToken(coinsMap[type] ?? COINS_MAP[type]);
 
-  if (!isSearchAddress && filterSelected === TokenOrigin.Strict && COINS)
+  if (faucet)
     return (
       <ModalTokenBody
         handleSelectToken={handleSelectToken}
         tokens={[
-          ...(faucet ? FAUCET_COINS : COINS).filter(
+          ...FAUCET_COINS.filter(
             ({ symbol, type }) =>
               (!search ||
                 symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
                 type.includes(search)) &&
               favoriteTokenTypes?.includes(type)
           ),
-          ...(faucet ? FAUCET_COINS : COINS).filter(
+          ...FAUCET_COINS.filter(
+            ({ symbol, type }) =>
+              (!search ||
+                symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+                type.includes(search)) &&
+              !favoriteTokenTypes?.includes(type)
+          ),
+        ]}
+      />
+    );
+
+  if (!isSearchAddress && filterSelected === TokenOrigin.Strict)
+    return (
+      <ModalTokenBody
+        handleSelectToken={handleSelectToken}
+        tokens={[
+          ...COINS.filter(
+            ({ symbol, type }) =>
+              (!search ||
+                symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+                type.includes(search)) &&
+              favoriteTokenTypes?.includes(type)
+          ),
+          ...COINS.filter(
             ({ symbol, type }) =>
               (!search ||
                 symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||

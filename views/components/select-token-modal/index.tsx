@@ -21,6 +21,7 @@ import SelectTokenModalBody from './select-token-modal-body';
 import SelectTokenFilter from './select-token-modal-filter';
 
 const SelectTokenModal: FC<SelectTokenModalProps> = ({
+  faucet,
   simple,
   onSelect,
   closeModal,
@@ -93,6 +94,7 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
         flexDirection="column"
       >
         <SelectTokenModalBody
+          faucet={faucet}
           control={control}
           handleSelectToken={handleSelectToken}
         />
