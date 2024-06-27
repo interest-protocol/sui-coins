@@ -28,7 +28,7 @@ const SwapSettingsForm: FC<SwapSettingsFromProps> = ({ handleManageView }) => {
     setValue('settings', settings);
 
     localStorage.setItem(
-      `${LOCAL_STORAGE_VERSION}-sui-coins-settings`,
+      `${LOCAL_STORAGE_VERSION}-movement-settings`,
       JSON.stringify(settings)
     );
 
