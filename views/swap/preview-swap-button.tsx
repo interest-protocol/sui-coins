@@ -2,11 +2,10 @@ import { Box, Button } from '@interest-protocol/ui-kit';
 import { FC, useEffect } from 'react';
 import { FormProvider, useFormContext, useWatch } from 'react-hook-form';
 
-import { Network } from '@/constants';
 import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
-import { fetchCoinMetadata, isSui, ZERO_BIG_NUMBER } from '@/utils';
+import { isSui, ZERO_BIG_NUMBER } from '@/utils';
 
 import { SwapMessagesEnum } from './swap.data';
 import { SwapForm } from './swap.types';
@@ -14,11 +13,6 @@ import SwapMessages from './swap-messages';
 import SwapPreviewModal from './swap-preview-modal';
 
 const PreviewSwapButton: FC = () => {
-  fetchCoinMetadata({
-    network: Network.MAINNET,
-    type: '0x9eed28fc98688a799fe51aa6ed39b851bd09d950fc785b2d7c9f543796254631::drip::DRIP',
-  }).then(console.log);
-
   const { coinsMap } = useWeb3();
   const form = useFormContext<SwapForm>();
   const { setModal, handleClose } = useModal();
