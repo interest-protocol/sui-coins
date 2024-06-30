@@ -11,6 +11,7 @@ export interface MenuItemCollapsibleProps {
 export interface MenuItemTitleContentProps extends MenuItemCollapsibleProps {
   name: string;
   path?: string;
+  isOpen?: boolean;
   disabled: boolean;
   Icon: FC<SVGProps>;
   isCollapsed: boolean;
@@ -46,6 +47,7 @@ export interface AccordionItemProps {
 
 export interface MenuListProps
   extends Pick<MenuItemProps, 'setIsCollapsed' | 'setTemporarilyOpen'> {
+  isOpen: boolean;
   isCollapsed: boolean;
 }
 
