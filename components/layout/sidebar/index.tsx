@@ -45,6 +45,7 @@ const Sidebar: FC = () => {
       <Box>
         <SidebarHeader isCollapsed={!isOpen && isCollapsed} />
         <SidebarMenuList
+          isOpen={isOpen}
           setIsCollapsed={setIsCollapsed}
           isCollapsed={!isOpen && isCollapsed}
           setTemporarilyOpen={setTemporarilyOpen}

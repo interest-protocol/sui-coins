@@ -12,6 +12,7 @@ import { SIDEBAR_ITEMS } from './sidebar.data';
 import { MenuListProps } from './sidebar.types';
 
 const SidebarMenuList: FC<MenuListProps> = ({
+  isOpen,
   isCollapsed,
   setIsCollapsed,
   setTemporarilyOpen,
@@ -27,6 +28,7 @@ const SidebarMenuList: FC<MenuListProps> = ({
           <SideBarMenuItem
             {...item}
             key={v4()}
+            isOpen={isOpen}
             isCollapsed={isCollapsed}
             setIsCollapsed={setIsCollapsed}
             setTemporarilyOpen={setTemporarilyOpen}
