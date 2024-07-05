@@ -1,19 +1,20 @@
 import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
-import { formatAddress } from '@mysten/sui.js/utils';
+import { useSuiClientContext } from '@mysten/dapp-kit';
+import { formatAddress } from '@mysten/sui/utils';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import TokenIcon from '@/components/token-icon';
-import { useNetwork } from '@/context/network';
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { Network } from '@/constants';
 import { useModal } from '@/hooks/use-modal';
 import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
 import SelectTokenModal from '@/views/components/select-token-modal';
 
+import { CoinObject } from '../../../../../components/web3-manager/coins-manager/web3-manager.types';
 import { ISendBulkForm } from '../send-bulk.types';
 
 const SelectObject: FC = () => {
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
 
   const { setValue, control } = useFormContext<ISendBulkForm>();
 
@@ -79,7 +80,7 @@ const SelectObject: FC = () => {
               size="1rem"
               type={coinType}
               symbol={symbol}
-              network={network}
+              network={network as Network}
             />
           ),
         })}

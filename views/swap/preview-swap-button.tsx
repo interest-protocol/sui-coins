@@ -1,13 +1,13 @@
 import { Box, Button } from '@interest-protocol/ui-kit';
-import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import { FC, useEffect } from 'react';
 import { FormProvider, useFormContext, useWatch } from 'react-hook-form';
 
 import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
-import { ZERO_BIG_NUMBER } from '@/utils';
+import { isSui, ZERO_BIG_NUMBER } from '@/utils';
 
+import { SwapMessagesEnum } from './swap.data';
 import { SwapForm } from './swap.types';
 import SwapMessages from './swap-messages';
 import SwapPreviewModal from './swap-preview-modal';
@@ -45,9 +45,7 @@ const PreviewSwapButton: FC = () => {
     !from.value?.isZero() &&
     Number(to.display) &&
     coinsMap[from.type] &&
-    (from.type === SUI_TYPE_ARG
-      ? !isGreaterThanAllowedWhenSui
-      : !isGreaterThanBalance);
+    (isSui(from.type) ? !isGreaterThanAllowedWhenSui : !isGreaterThanBalance);
 
   useEffect(() => {
     if (
@@ -57,19 +55,20 @@ const PreviewSwapButton: FC = () => {
       String(from.decimals) &&
       coinsMap[from.type]
     ) {
-      if (from.type === SUI_TYPE_ARG)
+      if (isSui(from.type))
         if (isGreaterThanAllowedWhenSui) {
-          setValue('error', 'You must have at least 1 SUI on your wallet');
+          setValue('error', SwapMessagesEnum.leastOneSui);
           return;
         }
 
       if (isGreaterThanBalance) {
-        setValue('error', 'You do not have enough tokens.');
+        setValue('error', SwapMessagesEnum.notEnoughToken);
         return;
       }
     }
+
     setValue('error', null);
-  }, [from]);
+  }, [from, to]);
 
   const handlePreview = () => {
     setValue('readyToSwap', false);

@@ -1,12 +1,9 @@
 import { ZkSendLink } from '@mysten/zksend';
+import { KeyedMutator } from 'swr';
 
 export interface SendLinkProps {
-  id: string;
+  error: any;
+  data?: ZkSendLink;
+  isLoading: boolean;
+  mutate: KeyedMutator<ZkSendLink>;
 }
-
-export type ZkSendLinkWithUrl =
-  | {
-      url: string;
-      link: ZkSendLink;
-    }
-  | { url: undefined; link: null };

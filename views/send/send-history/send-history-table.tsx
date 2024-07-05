@@ -7,18 +7,25 @@ import {
   TooltipWrapper,
   Typography,
 } from '@interest-protocol/ui-kit';
-import type { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
+import { useCurrentAccount, useSuiClientContext } from '@mysten/dapp-kit';
+import type {
+  SuiObjectRef,
+  SuiTransactionBlockResponse,
+} from '@mysten/sui/client';
+import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 import type { ZkSendLink } from '@mysten/zksend';
 import type { LinkAssets } from '@mysten/zksend/dist/cjs/links/utils';
 import { useRouter } from 'next/router';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { v4 } from 'uuid';
 
-import { EXPLORER_URL, Routes, RoutesEnum } from '@/constants';
-import { useNetwork } from '@/context/network';
+import { EXPLORER_URL, Network, Routes, RoutesEnum } from '@/constants';
 import { useModal } from '@/hooks/use-modal';
+import { useWeb3 } from '@/hooks/use-web3';
 import {
+  ChevronLeftSVG,
+  ChevronRightSVG,
   DefaultAssetSVG,
   DownloadSVG,
   EmptyBoxSVG,
@@ -28,52 +35,69 @@ import {
 } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 import PoweredByZkSend from '@/views/components/powered-by-zksend';
+import { useReclaimLink } from '@/views/send-link/send-link.hooks';
 
-import {
-  useLinkList,
-  useReclaimByLink,
-  useRegenerateLink,
-} from './send-history.hooks';
-import { ZkSendLinkItem } from './send-history.types';
+import { useLinkList, useRegenerateLink } from './send-history.hooks';
+import { findNextGasCoin } from './send-history.utils';
 import SendHistoryDetailsModal from './send-history-details';
 
 const SendHistoryTable: FC = () => {
   const { push } = useRouter();
-  const network = useNetwork();
-  const reclaimLink = useReclaimByLink();
+  const { coinsMap } = useWeb3();
+  const reclaimLink = useReclaimLink();
+  const { network } = useSuiClientContext();
   const regenerateLink = useRegenerateLink();
   const { setModal, handleClose } = useModal();
-  const [currentCursor, setCursor] = useState<string>('');
-  const [linkList, setLinkList] = useState<ReadonlyArray<ZkSendLinkItem>>([]);
+  const [currentCursor, setCursor] = useState<string | null>(null);
+  const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [gasObjects, setGasObjects] = useState<Array<SuiObjectRef>>([]);
+  const [previousCursors, setPreviousCursors] = useState<
+    ReadonlyArray<string | null>
+  >([]);
+  const currentAccount = useCurrentAccount();
 
-  const updateLinkInfo = (
-    links: ReadonlyArray<ZkSendLinkItem>,
-    hasNextPage: boolean,
-    cursor: string | null
-  ) => {
-    if (hasNextPage) setCursor(cursor ?? '');
+  const { data, isLoading, mutate } = useLinkList(currentCursor);
 
-    setLinkList([
-      ...linkList,
-      ...links.filter((item) =>
-        linkList.every(({ digest }) => digest !== item.digest)
-      ),
-    ]);
+  useEffect(() => {
+    if (data && data.cursor && data.cursor !== nextCursor) {
+      setNextCursor(data.cursor);
+    }
+  }, [data]);
+
+  const next = () => {
+    if (data && data.hasNextPage && currentCursor !== nextCursor) {
+      setPreviousCursors([currentCursor, ...(previousCursors ?? [])]);
+      setCursor(nextCursor);
+    }
   };
 
-  const { data, mutate, isLoading } = useLinkList(
-    currentCursor,
-    updateLinkInfo
-  );
+  const previous = () => {
+    if (
+      data &&
+      previousCursors.length &&
+      previousCursors[0] !== currentCursor
+    ) {
+      setCursor(previousCursors[0]);
+      setPreviousCursors(([, ...tail]) => tail);
+    }
+  };
 
   const onSuccessReclaim = (tx: SuiTransactionBlockResponse) => {
-    showTXSuccessToast(tx, network);
+    if (!currentAccount) return;
+    showTXSuccessToast(tx, network as Network);
+
+    setGasObjects(findNextGasCoin(tx, currentAccount.address));
+
+    mutate();
   };
 
-  const onSuccessRegenerate = (tx: SuiTransactionBlockResponse, id: string) => {
-    showTXSuccessToast(tx, network);
+  const onSuccessRegenerate = (
+    tx: SuiTransactionBlockResponse,
+    url: string
+  ) => {
+    showTXSuccessToast(tx, network as Network);
 
-    push(`${Routes[RoutesEnum.SendLink]}/${id}`);
+    push(`${Routes[RoutesEnum.SendLink]}#${url.split('#')[1]}`);
   };
 
   const openDetails = (assets: LinkAssets) =>
@@ -82,12 +106,22 @@ const SendHistoryTable: FC = () => {
     );
 
   const gotoExplorer = (digest: string) =>
-    window.open(`${EXPLORER_URL[network]}/tx/${digest}`);
+    window.open(`${EXPLORER_URL[network as Network]}/tx/${digest}`);
 
   const handleReclaimLink = async (link: ZkSendLink) => {
+    const gasCoins = gasObjects.length
+      ? gasObjects
+      : coinsMap[SUI_TYPE_ARG].objects.map(
+          ({ coinObjectId, digest, version }) => ({
+            objectId: coinObjectId,
+            digest,
+            version,
+          })
+        );
+
     const toastId = toast.loading('Reclaiming...');
     try {
-      await reclaimLink(link, onSuccessReclaim);
+      await reclaimLink(link, gasCoins, onSuccessReclaim);
       toast.success('Link reclaimed successfully!');
     } catch (e) {
       toast.error((e as any).message ?? 'Link reclaiming failed!');
@@ -96,10 +130,10 @@ const SendHistoryTable: FC = () => {
     }
   };
 
-  const handleRegenerateLink = async (link: ZkSendLink, digest: string) => {
+  const handleRegenerateLink = async (link: ZkSendLink) => {
     const toastId = toast.loading('Regenerating...');
     try {
-      await regenerateLink(link, digest!, onSuccessRegenerate);
+      await regenerateLink(link, onSuccessRegenerate);
       toast.success('Link regenerated successfully!');
     } catch (e) {
       toast.error((e as any).message ?? 'Link regenerating failed!');
@@ -108,11 +142,7 @@ const SendHistoryTable: FC = () => {
     }
   };
 
-  const onRegenerateLink = (
-    claimed: boolean,
-    link: ZkSendLink,
-    digest: string
-  ) => {
+  const onRegenerateLink = (claimed: boolean, link: ZkSendLink) => {
     if (claimed) return;
 
     setModal(
@@ -124,7 +154,7 @@ const SendHistoryTable: FC = () => {
           label: 'Continue anyway',
           onClick: () => {
             handleClose();
-            handleRegenerateLink(link, digest);
+            handleRegenerateLink(link);
           },
         }}
         secondaryButton={{
@@ -138,7 +168,7 @@ const SendHistoryTable: FC = () => {
   return (
     <Box mb="l" display="grid" gap="l">
       <Box overflowX="auto">
-        {!!linkList.length && (
+        {!!data?.links.length && (
           <Motion as="table" rowGap="l" width="100%" mt="l">
             <Box as="thead">
               <Box as="tr">
@@ -159,7 +189,7 @@ const SendHistoryTable: FC = () => {
               </Box>
             </Box>
             <Motion as="tbody">
-              {linkList.map(
+              {data?.links.map(
                 ({ link, assets, createdAt, claimed, digest }, index) => (
                   <>
                     <Box as="tr" key={v4()}>
@@ -196,7 +226,7 @@ const SendHistoryTable: FC = () => {
                             variant="body"
                             whiteSpace="nowrap"
                           >
-                            ID {index + 1}
+                            ID {index + 1 + 10 * previousCursors.length}
                           </Typography>
                           <Typography
                             as="span"
@@ -232,12 +262,26 @@ const SendHistoryTable: FC = () => {
                           size="medium"
                           variant="label"
                           borderRadius="full"
-                          bg={`${claimed ? 'primary' : 'success'}Container`}
+                          bg={`${
+                            !(assets.nfts.length + assets.balances.length)
+                              ? 'warning'
+                              : claimed
+                                ? 'primary'
+                                : 'success'
+                          }Container`}
                           color={`on${
-                            claimed ? 'Primary' : 'Success'
+                            !(assets.nfts.length + assets.balances.length)
+                              ? 'Warning'
+                              : claimed
+                                ? 'Primary'
+                                : 'Success'
                           }Container`}
                         >
-                          {claimed ? 'Claimed' : 'Unclaimed'}
+                          {!(assets.nfts.length + assets.balances.length)
+                            ? 'Reclaimed'
+                            : claimed
+                              ? 'Claimed'
+                              : 'Unclaimed'}
                         </Typography>
                       </Typography>
                       <Typography
@@ -268,9 +312,7 @@ const SendHistoryTable: FC = () => {
                             variant="tonal"
                             disabled={claimed}
                             borderRadius="full"
-                            onClick={() =>
-                              onRegenerateLink(claimed, link, digest!)
-                            }
+                            onClick={() => onRegenerateLink(claimed, link)}
                           >
                             <ReloadSVG
                               maxHeight="1rem"
@@ -376,7 +418,7 @@ const SendHistoryTable: FC = () => {
           >
             <ProgressIndicator size={40} variant="loading" />
           </Box>
-        ) : linkList.length ? null : (
+        ) : data?.links.length ? null : (
           <Box
             py="xl"
             mx="auto"
@@ -392,16 +434,39 @@ const SendHistoryTable: FC = () => {
           </Box>
         )}
       </Box>
-      {data && (
-        <Button
-          mx="auto"
-          disabled={!data}
-          variant="outline"
-          onClick={() => mutate()}
-        >
-          View More
-        </Button>
-      )}
+      <Box
+        px="l"
+        gap="s"
+        display="grid"
+        alignItems="center"
+        gridTemplateColumns="1fr 1fr 1fr"
+      >
+        <Box>
+          {!!previousCursors.length && (
+            <Button mr="auto" variant="outline" onClick={previous}>
+              <ChevronLeftSVG
+                width="100%"
+                maxWidth="0.8rem"
+                maxHeight="0.8rem"
+              />
+              Previous
+            </Button>
+          )}
+        </Box>
+        {isLoading || !data?.links.length ? null : (
+          <Typography variant="body" size="medium" mx="auto">
+            Page: {previousCursors.length + 1}
+          </Typography>
+        )}
+        <Box>
+          {data?.hasNextPage && (
+            <Button ml="auto" onClick={next} disabled={!data} variant="outline">
+              Next
+              <ChevronRightSVG width="100%" maxWidth="1rem" maxHeight="1rem" />
+            </Button>
+          )}
+        </Box>
+      </Box>
       <PoweredByZkSend />
     </Box>
   );

@@ -1,4 +1,4 @@
-import { CoinMetadata } from '@mysten/sui.js/client';
+import { CoinMetadata } from '@mysten/sui/client';
 import BigNumber from 'bignumber.js';
 
 import { TOKEN_SYMBOL } from '@/lib';
@@ -9,21 +9,6 @@ export interface CoinData {
   decimals: number;
   type: `0x${string}`;
   symbol: TOKEN_SYMBOL | string;
-}
-
-export type LocalTokenMetadataRecord = Record<string, CoinData>;
-
-export type DexMarket = Record<string, Record<string, string>>;
-
-export interface FormattedNumber {
-  unit: string;
-  value: number;
-  toString: (unitSeparator?: string) => string;
-}
-
-export interface RegistryPool {
-  poolId: string;
-  lpCoinType: string;
 }
 
 export interface CoinMetadataWithType extends CoinMetadata {
@@ -44,8 +29,11 @@ export interface NFTCollectionMetadata {
   updatedAt?: number;
 }
 
-export interface ZkSendLinkData {
-  id: string;
-  digest: string;
-  links: ReadonlyArray<string>;
+export interface PoolPageProps {
+  objectId: string;
+  stateId: string;
+}
+
+export interface CoinMetadataWithType extends CoinMetadata {
+  type: `0x${string}`;
 }

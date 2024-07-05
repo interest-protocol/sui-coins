@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Model, Schema } from 'mongoose';
 
 export interface NFTCollectionModel extends Document {
   collectionId: string;
@@ -25,5 +25,5 @@ export const NFTCollectionSchema = new Schema({
   },
 });
 
-export default mongoose.models[modelName] ||
+export default (mongoose.models[modelName] as Model<NFTCollectionModel>) ||
   mongoose.model<NFTCollectionModel>(modelName, NFTCollectionSchema);

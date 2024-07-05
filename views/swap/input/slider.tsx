@@ -1,5 +1,5 @@
 import { Box } from '@interest-protocol/ui-kit';
-import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
+import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
 import dynamic from 'next/dynamic';
 import { FC } from 'react';
@@ -34,22 +34,23 @@ const SwapFormFieldSlider: FC = () => {
 
   const fromValue = type ? getValues('from.value') : ZERO_BIG_NUMBER;
 
+  const initial =
+    fromValue && balance && !fromValue.isZero?.() && !balance.isZero?.()
+      ? balance.gt(fromValue)
+        ? +FixedPointMath.toNumber(
+            fromValue.times(100).div(balance),
+            0
+          ).toFixed(0)
+        : 100
+      : 0;
+
   return (
     <Box mx="s">
       <Slider
         min={0}
         max={100}
+        initial={initial}
         disabled={!balance || balance.isZero?.() || swapping}
-        initial={Math.floor(
-          fromValue && balance && !fromValue.isZero?.() && !balance.isZero?.()
-            ? balance.gt(fromValue)
-              ? FixedPointMath.toNumber(
-                  fromValue.times(100).div(balance),
-                  getValues('from.decimals')
-                )
-              : 100
-            : 0
-        )}
         onChange={(value: number) => {
           setValue(
             'from.display',
@@ -64,6 +65,7 @@ const SwapFormFieldSlider: FC = () => {
             'from.value',
             balance.times(BigNumber(value)).div(BigNumber(100))
           );
+          if (getValues('focus')) setValue('focus', false);
         }}
       />
     </Box>

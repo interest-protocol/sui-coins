@@ -2,7 +2,8 @@ import { FC, useId } from 'react';
 import useSWR from 'swr';
 import { v4 } from 'uuid';
 
-import { useNetwork } from '@/context/network';
+import { useNetwork } from '@/hooks/use-network';
+import { fetchCoinMetadata } from '@/utils';
 
 import FetchingToken from './fetching-token';
 import NotFound from './not-found';
@@ -20,9 +21,7 @@ const ModalTokenSearch: FC<ModalTokenSearchProps> = ({
     isLoading,
     data: tokenMetadata,
   } = useSWR(`get-token-metadata-${network}-${search}-${id}`, () =>
-    fetch(`/api/v1/coin-metadata?type=${search}&network=${network}`).then(
-      (res) => res.json()
-    )
+    fetchCoinMetadata({ type: search, network })
   );
 
   if (isLoading) return <FetchingToken />;

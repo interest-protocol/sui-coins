@@ -2,27 +2,33 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Form, Typography } from '@interest-protocol/ui-kit';
 import {
   useCurrentAccount,
-  useSignTransactionBlock,
+  useSignTransaction,
   useSuiClient,
+  useSuiClientContext,
 } from '@mysten/dapp-kit';
-import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { normalizeSuiAddress } from '@mysten/sui.js/utils';
+import { Transaction } from '@mysten/sui/transactions';
+import { normalizeSuiAddress, SUI_TYPE_ARG } from '@mysten/sui/utils';
 import { ChangeEvent, FC } from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { TextField } from '@/components';
-import { useNetwork } from '@/context/network';
-import { parseInputEventToNumberString, showTXSuccessToast } from '@/utils';
+import { Network } from '@/constants';
+import { useWeb3 } from '@/hooks/use-web3';
+import { getBytecode } from '@/lib/move-template/coin';
+import initMoveByteCodeTemplate from '@/lib/move-template/move-bytecode-template';
+import {
+  parseInputEventToNumberString,
+  showTXSuccessToast,
+  waitForTx,
+} from '@/utils';
 import { throwTXIfNotSuccessful } from '@/utils';
 
 import { ICreateTokenForm } from '../create-token.types';
 import { Blacklist } from './blacklist';
 import { validationSchema } from './create-token-form.validation';
 import FixedSupplyToggle from './fixed-supply-toggle';
-import initMoveByteCodeTemplate from './move-bytecode-template';
-import { getBytecode } from './template';
 import UploadImage from './upload-image';
 
 const CreateTokenForm: FC = () => {
@@ -44,9 +50,10 @@ const CreateTokenForm: FC = () => {
   });
 
   const suiClient = useSuiClient();
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
-  const signTransactionBlock = useSignTransactionBlock();
+  const signTransaction = useSignTransaction();
+  const { coinsMap, mutate } = useWeb3();
 
   const createToken = async () => {
     try {
@@ -65,9 +72,19 @@ const CreateTokenForm: FC = () => {
 
       await initMoveByteCodeTemplate('/move_bytecode_template_bg.wasm');
 
-      const txb = new TransactionBlock();
+      const tx = new Transaction();
 
-      const [upgradeCap] = txb.publish({
+      tx.setGasPayment(
+        coinsMap[SUI_TYPE_ARG].objects.map(
+          ({ coinObjectId, digest, version }) => ({
+            objectId: coinObjectId,
+            digest: digest!,
+            version: version!,
+          })
+        )
+      );
+
+      const [upgradeCap] = tx.publish({
         modules: [
           [
             ...getBytecode({
@@ -79,23 +96,26 @@ const CreateTokenForm: FC = () => {
         dependencies: [normalizeSuiAddress('0x1'), normalizeSuiAddress('0x2')],
       });
 
-      txb.transferObjects([upgradeCap], txb.pure(currentAccount.address));
+      tx.transferObjects([upgradeCap], tx.pure.address(currentAccount.address));
 
-      const { signature, transactionBlockBytes } =
-        await signTransactionBlock.mutateAsync({
-          transactionBlock: txb,
-          account: currentAccount,
-        });
+      const { signature, bytes } = await signTransaction.mutateAsync({
+        transaction: tx,
+        account: currentAccount,
+      });
 
-      const tx = await suiClient.executeTransactionBlock({
+      const tx2 = await suiClient.executeTransactionBlock({
         signature,
-        transactionBlock: transactionBlockBytes,
+        transactionBlock: bytes,
         requestType: 'WaitForEffectsCert',
       });
 
-      throwTXIfNotSuccessful(tx);
+      throwTXIfNotSuccessful(tx2);
 
-      showTXSuccessToast(tx, network);
+      showTXSuccessToast(tx2, network as Network);
+
+      await waitForTx({ suiClient, digest: tx2.digest });
+
+      await mutate();
     } finally {
       setLoading(false);
     }
@@ -116,12 +136,12 @@ const CreateTokenForm: FC = () => {
   return (
     <Form
       as="form"
+      mx="auto"
       width="100%"
       maxWidth="37rem"
-      borderRadius="xs"
       overflow="hidden"
+      borderRadius="xs"
       bg="lowestContainer"
-      mx="auto"
       onSubmit={handleSubmit(onSubmit)}
     >
       <Typography variant="title" size="large" p="xl">
@@ -158,8 +178,11 @@ const CreateTokenForm: FC = () => {
           label="Coin Image URL"
           {...register('imageUrl')}
           status={errors.imageUrl && 'error'}
-          supportingText={errors.imageUrl?.message}
           placeholder="Eg. https://sui.com/images/logo.png"
+          supportingText={
+            errors.imageUrl?.message ??
+            'We recommend to upload an image with 250x250 pixels.'
+          }
         />
         <Typography
           size="large"

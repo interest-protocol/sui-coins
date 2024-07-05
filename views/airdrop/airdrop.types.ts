@@ -1,12 +1,15 @@
-import { useSignTransactionBlock } from '@mysten/dapp-kit';
-import { SuiClient } from '@mysten/sui.js/client';
-import { TransactionObjectArgument } from '@mysten/sui.js/transactions';
-import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { useSignTransaction } from '@mysten/dapp-kit';
+import { SuiClient } from '@mysten/sui/client';
+import {
+  Transaction,
+  TransactionObjectArgument,
+} from '@mysten/sui/transactions';
 import { WalletAccount } from '@wallet-standard/base';
 import { Dispatch, SetStateAction } from 'react';
 
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
 import { NFTCollectionMetadata } from '@/interface';
+
+import { CoinObject } from '../../components/web3-manager/coins-manager/web3-manager.types';
 
 export interface AirdropData {
   address: string;
@@ -64,26 +67,14 @@ export interface AirdropSummaryProps {
 
 export interface SendAirdropArgs {
   suiClient: SuiClient;
-  txb: TransactionBlock;
+  tx: Transaction;
   contractPackageId: string;
   tokenType: string;
-  coinToSend:
-    | {
-        kind: 'NestedResult';
-        index: number;
-        resultIndex: number;
-      }
-    | TransactionObjectArgument;
+  coinToSend: TransactionObjectArgument;
   batch: readonly AirdropData[];
   currentAccount: WalletAccount;
-  signTransactionBlock: ReturnType<typeof useSignTransactionBlock>;
+  signTransaction: ReturnType<typeof useSignTransaction>;
 }
 export interface AirdropPreviewButtonProps {
   handleOpenSummaryModal: () => void;
-}
-
-export interface CreatedCoinInfo {
-  digest: string;
-  version: string;
-  objectId: string;
 }

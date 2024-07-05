@@ -1,4 +1,4 @@
-import { ObjectData } from '@/context/all-objects/all-objects.types';
+import { ObjectData } from '@/components/web3-manager/all-objects-manager/all-objects.types';
 
 export type ObjectField = ObjectData & {
   value: string;

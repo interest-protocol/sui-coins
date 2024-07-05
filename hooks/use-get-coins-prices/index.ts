@@ -1,9 +1,10 @@
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { pathOr } from 'ramda';
 import useSWR, { SWRConfiguration } from 'swr';
 
+import { Network } from '@/constants';
 import { COIN_MARKET_CAP_ID_RECORD } from '@/constants/coin-market-cap';
 import { COIN_TYPE } from '@/constants/coins';
-import { useNetwork } from '@/context/network';
 
 interface CoinPricesRecordData {
   type: string;
@@ -21,14 +22,16 @@ export const useGetCoinsPrices = (
   coinTypes: ReadonlyArray<string>,
   config: SWRConfiguration = {}
 ) => {
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
   const {
     data: rawData,
     error,
     isLoading,
   } = useSWR(
-    `/api/v1/quote?id=${coinTypes
-      .map((coinType) => COIN_MARKET_CAP_ID_RECORD[network][coinType])
+    `/api/auth/v1/quote?id=${coinTypes
+      .map(
+        (coinType) => COIN_MARKET_CAP_ID_RECORD[network as Network][coinType]
+      )
       .filter((x) => x !== -1 && !!x)}`,
     fetcher,
     {
@@ -50,7 +53,7 @@ export const useGetCoinsPrices = (
           0,
           [
             'data',
-            COIN_MARKET_CAP_ID_RECORD[network][coinType],
+            COIN_MARKET_CAP_ID_RECORD[network as Network][coinType],
             'quote',
             'USD',
             'price',

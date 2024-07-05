@@ -1,4 +1,4 @@
-import { SuiClient } from '@mysten/sui.js/client';
+import { SuiClient } from '@mysten/sui/client';
 
 export type TGetOwned = (
   provider: SuiClient,

@@ -1,10 +1,9 @@
 import { Typography } from '@interest-protocol/ui-kit';
-import { formatAddress } from '@mysten/sui.js/utils';
+import { formatAddress } from '@mysten/sui/utils';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
-
+import { CoinObject } from '../../../../../components/web3-manager/coins-manager/web3-manager.types';
 import { ISendSimpleForm } from '../send-simple.types';
 import { SendFormSelectObjectProps } from './send-select-object.types';
 
@@ -39,10 +38,9 @@ const SendSelectObjectHeader: FC<SendFormSelectObjectProps> = ({ index }) => {
       width={['auto', '0px']}
       display={['block', 'none']}
     >
-      Sending:{' '}
       {symbol ||
         (type && type === displayName ? formatAddress(type) : displayName) ||
-        'Select Token'}
+        'Select Object'}
     </Typography>
   );
 };

@@ -1,5 +1,5 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
-import { formatAddress } from '@mysten/sui.js/utils';
+import { formatAddress } from '@mysten/sui/utils';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
@@ -59,15 +59,21 @@ const SendAssetDetails: FC<SendAssetDetailsProps> = ({ assets, network }) => {
         const url = display?.image_url || '';
 
         return (
-          <Box key={v4()} display="flex" alignItems="center">
+          <Box
+            key={v4()}
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+          >
             <Box gap="s" display="flex" alignItems="center">
               <TokenIcon
                 withBg
+                url={url}
                 size="1rem"
+                type={type}
                 loaderSize={12}
                 symbol={symbol}
                 network={network}
-                {...(url ? { url } : { network, type })}
               />
               <Typography variant="label" size="large">
                 {displayName || symbol || formatAddress(type)}

@@ -2,7 +2,7 @@
 import { Network } from '@/constants';
 import { CoinMetadataWithType } from '@/interface';
 import { CoinMetadataModel } from '@/server/model/coin-metadata';
-import { getBasicCoinMetadata } from '@/utils';
+import { getBasicCoinMetadata, getSymbolByType } from '@/utils';
 import { chunk } from '@/utils';
 
 import { COIN_METADATA_MODEL_MAP, SUI_CLIENT_PROVIDER_MAP } from '../utils';
@@ -14,30 +14,52 @@ const getCoinMetadataList = async (
   const Model = COIN_METADATA_MODEL_MAP[network];
   const suiClient = SUI_CLIENT_PROVIDER_MAP[network];
 
-  const docs: Array<CoinMetadataModel> = await Model.find({ type: typeList });
+  const uniqueTypeList = [...new Set(typeList)];
 
-  const docsMap = docs.reduce(
+  const batches = chunk(uniqueTypeList, 50);
+
+  const promises = [];
+
+  for (const elem of batches) {
+    promises.push(
+      Model.find({
+        type: elem,
+      })
+    );
+  }
+
+  const docs: Array<Array<CoinMetadataModel>> = await Promise.all(promises);
+  const flattenedDocs = docs.flatMap((x) => x);
+
+  const docsMap = flattenedDocs.reduce(
     (acc, curr) => ({ ...acc, [curr.type]: curr }),
     {} as Record<string, CoinMetadataModel>
   );
 
-  const missingCoinsType = Array.from(
-    new Set(typeList.filter((type) => !docsMap[type]))
-  );
+  const missingCoinsType = [
+    ...new Set(uniqueTypeList.filter((type) => !docsMap[type])),
+  ];
 
-  const missingCoinsTypeBatches = chunk<string>(missingCoinsType, 7);
+  if (!missingCoinsType.length) return flattenedDocs;
+
+  const missingCoinsTypeBatches = chunk<string>(missingCoinsType, 10);
 
   const missingCoinsMetadata: Array<
     CoinMetadataWithType & { hasMetadata: boolean }
   > = [];
 
-  for await (const batch of missingCoinsTypeBatches) {
+  for (const batch of missingCoinsTypeBatches) {
     const data = await Promise.all(
       batch.map((coinType) =>
         suiClient
           .getCoinMetadata({ coinType })
           .then((metadata) => ({
-            ...(metadata ?? getBasicCoinMetadata(coinType)),
+            ...(metadata
+              ? {
+                  ...metadata,
+                  symbol: metadata.symbol || getSymbolByType(coinType),
+                }
+              : getBasicCoinMetadata(coinType)),
             hasMetadata: !!metadata,
             type: coinType,
           }))
@@ -67,7 +89,7 @@ const getCoinMetadataList = async (
   }
 
   return [
-    ...docs,
+    ...flattenedDocs,
     ...missingCoinsMetadata.map(({ hasMetadata, ...metadata }) => metadata),
   ];
 };

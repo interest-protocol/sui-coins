@@ -1,7 +1,9 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
+import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { ZK_SEND_GAS_BUDGET } from '@/constants/zksend';
 import { FixedPointMath } from '@/lib';
 
 import { ISendBulkForm } from './send-bulk.types';
@@ -21,7 +23,10 @@ const SendBulkSummary: FC = () => {
 
   const displayAmountToSend =
     Number(value) && Number(quantity)
-      ? `${FixedPointMath.toNumber(FixedPointMath.toBigNumber(value, decimals).times(Number(quantity)), decimals)} ${symbol}`
+      ? `${FixedPointMath.toNumber(
+          FixedPointMath.toBigNumber(value, decimals).times(Number(quantity)),
+          decimals
+        )} ${symbol}`
       : '--';
 
   return (
@@ -54,7 +59,13 @@ const SendBulkSummary: FC = () => {
           {displayAmountToSend}
         </Typography>
       </Box>
-      <Box display="flex" justifyContent="space-between" py="m">
+      <Box
+        py="m"
+        display="flex"
+        borderBottom="1px solid"
+        borderColor="outlineVariant"
+        justifyContent="space-between"
+      >
         <Typography variant="body" size="medium" color="outline">
           Summary
         </Typography>
@@ -80,6 +91,28 @@ const SendBulkSummary: FC = () => {
               </Typography>{' '}
               each
             </>
+          ) : (
+            '--'
+          )}
+        </Typography>
+      </Box>
+      <Box display="flex" justifyContent="space-between" py="m">
+        <Typography variant="body" size="medium" color="outline">
+          Costs
+        </Typography>
+        <Typography variant="body" size="medium">
+          {Number(quantity) ? (
+            <Typography
+              as="strong"
+              size="medium"
+              variant="body"
+              fontWeight="bold"
+            >
+              {FixedPointMath.toNumber(
+                BigNumber(Number(quantity) * ZK_SEND_GAS_BUDGET)
+              )}{' '}
+              Sui
+            </Typography>
           ) : (
             '--'
           )}

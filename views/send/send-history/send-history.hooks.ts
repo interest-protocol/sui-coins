@@ -1,118 +1,73 @@
 import {
   useCurrentAccount,
-  useSignTransactionBlock,
+  useSignTransaction,
   useSuiClient,
+  useSuiClientContext,
 } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui.js/dist/cjs/client';
+import { SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { listCreatedLinks, ZkSendLink } from '@mysten/zksend';
 import useSWR from 'swr';
-import { v4 } from 'uuid';
 
 import { Network } from '@/constants';
-import { useNetwork } from '@/context/network';
+import { ZK_BAG_CONTRACT_IDS } from '@/constants/zksend';
 import { throwTXIfNotSuccessful } from '@/utils';
 
-import { ZkSendLinkItem } from './send-history.types';
-
-export const useLinkList = (
-  currentCursor: string,
-  updateList: (
-    links: ReadonlyArray<ZkSendLinkItem>,
-    hasNextPage: boolean,
-    cursor: string | null
-  ) => void
-) => {
-  const network = useNetwork();
+export const useLinkList = (currentCursor: string | null) => {
   const suiClient = useSuiClient();
+  const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
 
   return useSWR(
-    `${network}-${currentAccount?.address}-${suiClient}`,
+    `${network}-${currentAccount?.address}-${suiClient}-${currentCursor}`,
     async () => {
       if (!currentAccount || !suiClient) return;
 
       const { links, hasNextPage, cursor } = await listCreatedLinks({
         client: suiClient,
+        host: '/send/link',
+        path: location.origin,
         address: currentAccount.address,
+        contract: ZK_BAG_CONTRACT_IDS[network as Network],
         network: network === Network.MAINNET ? 'mainnet' : 'testnet',
         ...(currentCursor && { cursor: currentCursor }),
       });
 
-      updateList(links, hasNextPage, cursor);
-
-      return hasNextPage;
+      return { links, hasNextPage, cursor };
     }
   );
 };
 
 export const useRegenerateLink = () => {
-  const network = useNetwork();
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
-  const signTransactionBlock = useSignTransactionBlock();
+  const signTransaction = useSignTransaction();
 
   return async (
     link: ZkSendLink,
-    digest: string,
-    onSuccess: (tx: SuiTransactionBlockResponse, id: string) => void
+    onSuccess: (tx: SuiTransactionBlockResponse, url: string) => void
   ) => {
     if (!currentAccount) return;
 
-    const { url, transactionBlock } = await link.createRegenerateTransaction(
+    const { url, transaction } = await link.createRegenerateTransaction(
       currentAccount.address
     );
 
-    const { transactionBlockBytes, signature } =
-      await signTransactionBlock.mutateAsync({ transactionBlock });
+    const { bytes, signature } = await signTransaction.mutateAsync({
+      transaction,
+    });
 
     const tx = await suiClient.executeTransactionBlock({
-      transactionBlock: transactionBlockBytes,
+      transactionBlock: bytes,
       signature,
+      requestType: 'WaitForLocalExecution',
+      options: {
+        showEffects: true,
+        showBalanceChanges: true,
+      },
     });
 
     throwTXIfNotSuccessful(tx);
 
-    const id = v4();
-
-    await fetch(`/api/v1/zksend?network=${network}&digest=${digest}`, {
-      method: 'PUT',
-      body: JSON.stringify({
-        id,
-        links: [url],
-        digest: tx.digest,
-      }),
-    });
-
-    onSuccess(tx, id);
-  };
-};
-
-export const useReclaimByLink = () => {
-  const suiClient = useSuiClient();
-  const currentAccount = useCurrentAccount();
-  const signTransactionBlock = useSignTransactionBlock();
-
-  return async (
-    link: ZkSendLink,
-    onSuccess: (tx: SuiTransactionBlockResponse) => void
-  ) => {
-    if (!currentAccount) return;
-
-    const transactionBlock = link.createClaimTransaction(
-      currentAccount.address,
-      { reclaim: true }
-    );
-
-    const { transactionBlockBytes, signature } =
-      await signTransactionBlock.mutateAsync({ transactionBlock });
-
-    const tx = await suiClient.executeTransactionBlock({
-      transactionBlock: transactionBlockBytes,
-      signature,
-    });
-
-    throwTXIfNotSuccessful(tx);
-
-    onSuccess(tx);
+    onSuccess(tx, url);
   };
 };

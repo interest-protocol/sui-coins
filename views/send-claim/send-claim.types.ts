@@ -1,11 +1,13 @@
-import { Dispatch, SetStateAction } from 'react';
-
-import { ZkSendLinkWithUrl } from '../send-link/send-link.types';
+import { ZkSendLink } from '@mysten/zksend';
+import { KeyedMutator } from 'swr';
 
 export interface SendClaimProps {
-  id: string;
   error: any;
+  data?: ZkSendLink;
   isLoading: boolean;
-  data: ZkSendLinkWithUrl | undefined;
-  claimingState: [boolean, Dispatch<SetStateAction<boolean>>];
+  mutate: KeyedMutator<ZkSendLink>;
+}
+
+export interface IClaimForm {
+  address: string;
 }

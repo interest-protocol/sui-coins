@@ -1,29 +1,32 @@
 import {
   useCurrentAccount,
-  useSignTransactionBlock,
+  useSignTransaction,
   useSuiClient,
+  useSuiClientContext,
 } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
+import { SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { ZkSendLinkBuilder } from '@mysten/zksend';
-import { v4 } from 'uuid';
 
-import { Network } from '@/constants';
-import { useNetwork } from '@/context/network';
+import { Network, SPONSOR_WALLET } from '@/constants';
+import { ZK_BAG_CONTRACT_IDS, ZK_SEND_GAS_BUDGET } from '@/constants/zksend';
 import { FixedPointMath } from '@/lib';
-import { isSui, throwTXIfNotSuccessful } from '@/utils';
+import { isSui, throwTXIfNotSuccessful, waitForTx } from '@/utils';
 
 import { ObjectField } from '../send-bulk.types';
 
 const useCreateLink = () => {
-  const network = useNetwork();
   const suiClient = useSuiClient();
+  const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
-  const signTransactionBlock = useSignTransactionBlock();
+  const signTransaction = useSignTransaction();
 
   return async (
     object: ObjectField,
     quantity: number,
-    onSuccess: (tx: SuiTransactionBlockResponse, id: string) => void
+    onSuccess: (
+      tx: SuiTransactionBlockResponse,
+      links: ReadonlyArray<string>
+    ) => void
   ) => {
     if (!suiClient) throw new Error('Provider not found');
     if (!currentAccount) throw new Error('There is not an account');
@@ -37,9 +40,10 @@ const useCreateLink = () => {
     const links = Array.from({ length: quantity }, () => {
       const link = new ZkSendLinkBuilder({
         client: suiClient,
-        sender: currentAccount.address,
         path: '/send/link',
         host: location.origin,
+        sender: currentAccount.address,
+        contract: ZK_BAG_CONTRACT_IDS[network as Network],
         network: network === Network.MAINNET ? 'mainnet' : 'testnet',
       });
 
@@ -49,35 +53,43 @@ const useCreateLink = () => {
       return link;
     });
 
-    const txb = await ZkSendLinkBuilder.createLinks({
+    const tx = await ZkSendLinkBuilder.createLinks({
       links,
+      client: suiClient,
+      contract: ZK_BAG_CONTRACT_IDS[network as Network],
       network: network === Network.MAINNET ? 'mainnet' : 'testnet',
     });
 
-    const { transactionBlockBytes, signature } =
-      await signTransactionBlock.mutateAsync({
-        transactionBlock: txb,
-      });
+    const [gasBudget] = tx.splitCoins(tx.gas, [
+      tx.pure.u64(String(ZK_SEND_GAS_BUDGET * quantity)),
+    ]);
 
-    const tx = await suiClient.executeTransactionBlock({
-      transactionBlock: transactionBlockBytes,
+    tx.transferObjects(
+      [gasBudget],
+      tx.pure.address(SPONSOR_WALLET[network as Network])
+    );
+
+    const { bytes, signature } = await signTransaction.mutateAsync({
+      transaction: tx,
+    });
+
+    const tx2 = await suiClient.executeTransactionBlock({
+      transactionBlock: bytes,
       signature,
+      requestType: 'WaitForLocalExecution',
+      options: {
+        showEffects: true,
+      },
     });
 
-    throwTXIfNotSuccessful(tx);
+    throwTXIfNotSuccessful(tx2);
 
-    const id = v4();
+    await waitForTx({ suiClient, digest: tx2.digest });
 
-    await fetch(`/api/v1/zksend?network=${network}`, {
-      method: 'POST',
-      body: JSON.stringify({
-        id,
-        digest: tx.digest,
-        links: links.map((link) => link.getLink()),
-      }),
-    });
-
-    onSuccess(tx, id);
+    onSuccess(
+      tx2,
+      links.map((link) => link.getLink())
+    );
   };
 };
 

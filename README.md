@@ -52,7 +52,7 @@ You must install it in your Editor text
 - [Jest](https://jestjs.io)
 - [Redux](https://redux.js.org/)
 - [Ramda](https://ramdajs.com/)
-- [@mysten/sui.js](https://www.npmjs.com/package/@mysten/sui.js)
+- [@mysten/sui](https://www.npmjs.com/package/@mysten/sui)
 - [@mysten/dapp-kit](https://www.npmjs.com/package/@mysten/dapp-kit)
 
 ## Live
@@ -65,8 +65,8 @@ Access [DApp](https://sui.interestprotocol.com/dapp/dex) and enjoy what has been
 
 ## Contact Us
 
-- X: [@interest_dinero](https://x.com/interest_dinero)
-- Discord: https://discord.gg/interest
+- X: [@IPXSui](https://x.com/IPXSui)
+- Discord: https://discord.com/invite/interestprotocol
 - Telegram: https://t.me/interestprotocol
 - Email: [contact@interestprotocol.com](mailto:contact@interestprotocol.com)
 - Medium: [@interestprotocol](https://medium.com/@interestprotocol)

@@ -1,14 +1,6 @@
-import { SuiClient } from '@mysten/sui.js/client';
-import { TransactionBlock } from '@mysten/sui.js/transactions';
-
-import { CoinsMap } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
-
-export interface CreateVectorParameterArgs {
-  txb: TransactionBlock;
-  coinsMap: CoinsMap;
-  type: string;
-  amount: string;
-}
+import { SuiClient } from '@mysten/sui/client';
+import { Transaction } from '@mysten/sui/transactions';
+import BigNumber from 'bignumber.js';
 
 export interface GetCoinsArgs {
   suiClient: SuiClient;
@@ -19,8 +11,15 @@ export interface GetCoinsArgs {
 
 export interface GetCoinOfValueArgs {
   suiClient: SuiClient;
-  txb: TransactionBlock;
+  tx: Transaction;
   account: string;
   coinType: string;
   coinValue: number | bigint | string;
+}
+
+export interface GetSafeValueArgs {
+  coinValue: string;
+  coinType: string;
+  balance: BigNumber;
+  decimals: number;
 }

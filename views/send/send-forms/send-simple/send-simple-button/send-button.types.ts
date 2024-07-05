@@ -1,11 +1,8 @@
-export interface SendCoin {
-  type: string;
-  amount: bigint;
-  quantity: number | null;
+export interface FormSendButtonProps {
+  openModal: () => void;
 }
 
-export interface SendObject {
-  id: string;
+export interface AmountListProps {
+  symbol: string;
+  isGreater: boolean;
 }
-
-export type SendArguments = SendCoin | SendObject;

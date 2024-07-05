@@ -1,15 +1,15 @@
 import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
-import { ObjectData } from '@/context/all-objects/all-objects.types';
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { ObjectData } from '@/components/web3-manager/all-objects-manager/all-objects.types';
 import { useModal } from '@/hooks/use-modal';
 import { MinusSVG, PlusSVG } from '@/svg';
 import SelectObjectModal from '@/views/components/select-object-modal';
 
+import { CoinObject } from '../../../../components/web3-manager/coins-manager/web3-manager.types';
 import SendFormSelectObject from './send-select-object';
 import { ISendSimpleForm } from './send-simple.types';
-import SendButton from './send-simple-button';
+import FormSendButton from './send-simple-button';
 
 const SendSimpleFormFields = () => {
   const { setModal, handleClose } = useModal();
@@ -68,19 +68,7 @@ const SendSimpleFormFields = () => {
         ))}
       </Box>
       {fields.length ? (
-        <Box display="flex" justifyContent="center" gap="xs">
-          <Button
-            variant="outline"
-            onClick={openModal}
-            borderColor="outlineVariant"
-            SuffixIcon={
-              <PlusSVG maxWidth="1.2rem" maxHeight="1.2rem" width="100%" />
-            }
-          >
-            Add more
-          </Button>
-          <SendButton />
-        </Box>
+        <FormSendButton openModal={openModal} />
       ) : (
         <Box
           p="xl"

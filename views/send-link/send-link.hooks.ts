@@ -1,71 +1,76 @@
 import {
   useCurrentAccount,
-  useSignTransactionBlock,
+  useSignTransaction,
   useSuiClient,
+  useSuiClientContext,
 } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
+import { SuiObjectRef, SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { ZkSendLink } from '@mysten/zksend';
 import useSWR from 'swr';
 
-import { useNetwork } from '@/context/network';
-import { ZkSendLinkData } from '@/interface';
-import { throwTXIfNotSuccessful } from '@/utils';
+import { Network } from '@/constants';
+import { ZK_BAG_CONTRACT_IDS, ZK_SEND_GAS_BUDGET } from '@/constants/zksend';
+import { throwTXIfNotSuccessful, waitForTx } from '@/utils';
+import { createClaimTransaction } from '@/utils/zk-send';
 
-import { ZkSendLinkWithUrl } from './send-link.types';
+export const useLink = () => {
+  const suiClient = useSuiClient();
+  const { network } = useSuiClientContext();
 
-export const useLinkWithUrl = (id: string, isClaiming: boolean) => {
-  const network = useNetwork();
-
-  return useSWR<ZkSendLinkWithUrl>(`${id}-${network}-${isClaiming}`, () =>
-    fetch(`/api/v1/zksend?network=${network}&id=${id}`)
-      .then((response) => response.json?.())
-      .then(async (data: ZkSendLinkData) =>
-        data.links[0]
-          ? {
-              url: data.links[0],
-              link: await ZkSendLink.fromUrl(data.links[0]),
-            }
-          : { url: undefined, link: null }
-      )
+  return useSWR<ZkSendLink>(`${location}-${network}`, () =>
+    ZkSendLink.fromUrl(location.href, {
+      client: suiClient,
+      host: '/send/link',
+      path: location.origin,
+      contract: ZK_BAG_CONTRACT_IDS[network as Network],
+      network: network === Network.MAINNET ? 'mainnet' : 'testnet',
+    })
   );
 };
 
 export const useReclaimLink = () => {
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
-  const signTransactionBlock = useSignTransactionBlock();
+  const signTransaction = useSignTransaction();
 
   return async (
-    url: string,
-    id: string,
+    link: ZkSendLink,
+    gasObjects: Array<SuiObjectRef>,
     onSuccess: (tx: SuiTransactionBlockResponse) => void
   ) => {
-    if (!currentAccount) return;
+    if (!currentAccount) throw new Error('Error on current account');
 
-    const link = await ZkSendLink.fromUrl(url);
+    const transaction = createClaimTransaction({
+      assets: link.assets,
+      reclaimAddress: link.address,
+      sender: currentAccount.address,
+      address: currentAccount.address,
+      ...(network === Network.TESTNET && {
+        contracts: ZK_BAG_CONTRACT_IDS[network],
+      }),
+    });
 
-    const transactionBlock = link.createClaimTransaction(
-      currentAccount.address,
-      { reclaim: true }
-    );
+    transaction.setGasPayment(gasObjects);
+    transaction.setGasBudget(BigInt(ZK_SEND_GAS_BUDGET));
 
-    const { transactionBlockBytes, signature } =
-      await signTransactionBlock.mutateAsync({ transactionBlock });
+    const { bytes, signature } = await signTransaction.mutateAsync({
+      transaction,
+    });
 
     const tx = await suiClient.executeTransactionBlock({
-      transactionBlock: transactionBlockBytes,
+      transactionBlock: bytes,
       signature,
+      requestType: 'WaitForLocalExecution',
+      options: {
+        showEffects: true,
+        showObjectChanges: true,
+      },
     });
 
     throwTXIfNotSuccessful(tx);
 
-    await fetch(`/api/v1/zksend?network=${network}&id=${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify({
-        link: encodeURI(url),
-      }),
-    });
+    await waitForTx({ suiClient, digest: tx.digest });
 
     onSuccess(tx);
   };

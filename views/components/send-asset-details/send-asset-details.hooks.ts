@@ -1,19 +1,20 @@
 import { useSuiClient } from '@mysten/dapp-kit';
-import { SuiObjectResponse } from '@mysten/sui.js/dist/cjs/client';
+import { SuiObjectResponse } from '@mysten/sui/client';
 import type { LinkAssets } from '@mysten/zksend/dist/cjs/links/utils';
-import { useId } from 'react';
 import useSWR from 'swr';
 
-import { useNetwork } from '@/context/network';
+import { useNetwork } from '@/hooks/use-network';
 import { CoinMetadataWithType } from '@/interface';
+import { fetchCoinMetadata } from '@/utils';
 
 export const useAssetsNFTs = (nfts: LinkAssets['nfts']) => {
-  const id = useId();
   const network = useNetwork();
   const suiClient = useSuiClient();
 
+  const idList = nfts.map(({ objectId }) => objectId).join();
+
   return useSWR<ReadonlyArray<SuiObjectResponse['data']>>(
-    `nfts-${network}-${id}`,
+    `nfts-${network}-${idList}`,
     () => {
       if (!nfts) return [];
 
@@ -32,22 +33,17 @@ export const useAssetsNFTs = (nfts: LinkAssets['nfts']) => {
 };
 
 export const useAssetsBalances = (balances: LinkAssets['balances']) => {
-  const id = useId();
   const network = useNetwork();
+  const typeList = balances.map(({ coinType }) => coinType);
 
   return useSWR<ReadonlyArray<CoinMetadataWithType>>(
-    `coins-${network}-${id}`,
+    `coins-${network}-${typeList}`,
     () => {
-      if (!balances) return [];
+      if (!balances.length) return [];
 
-      return fetch(
-        encodeURI(
-          `/api/v1/coin-metadata?network=${network}&type_list=${balances.reduce(
-            (acc, { coinType }) => `${acc},${coinType}`,
-            ''
-          )}`
-        )
-      ).then((response) => response.json?.());
+      return fetchCoinMetadata({ network, types: typeList }) as Promise<
+        ReadonlyArray<CoinMetadataWithType>
+      >;
     }
   );
 };

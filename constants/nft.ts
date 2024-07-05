@@ -6,4 +6,8 @@ export const NFT: ReadonlyArray<string> = [
   'd5ea5c61-5a91-40f2-9837-a1912a2083a1', // Tails By Typus
   '09d26434-4449-45eb-b848-89c30bec2e12', // Unchained Esports
   'e5385a7a-075e-4382-96dd-1caaf960bd13', // Enforcer Machin
+  'fbb4e6bc-7c71-42a6-80c2-196f876198e0', // Gommies
+  '07231735-96de-4710-8e11-52c61a482578', // Prime Machin
+  '200220c4-d7fa-41e8-a8be-63d208556336', // Unbound
+  'ae2db678-d698-4a0b-a224-00c66fa9813a', // OnlySPAM
 ];

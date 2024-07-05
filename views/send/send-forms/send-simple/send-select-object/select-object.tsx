@@ -1,21 +1,22 @@
 import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
-import { formatAddress } from '@mysten/sui.js/utils';
+import { useSuiClientContext } from '@mysten/dapp-kit';
+import { formatAddress } from '@mysten/sui/utils';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import TokenIcon from '@/components/token-icon';
-import { ObjectData } from '@/context/all-objects/all-objects.types';
-import { useNetwork } from '@/context/network';
-import { CoinObject } from '@/hooks/use-get-all-coins/use-get-all-coins.types';
+import { ObjectData } from '@/components/web3-manager/all-objects-manager/all-objects.types';
+import { Network } from '@/constants';
 import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
 import SelectObjectModal from '@/views/components/select-object-modal';
 
+import { CoinObject } from '../../../../../components/web3-manager/coins-manager/web3-manager.types';
 import { ISendSimpleForm } from '../send-simple.types';
 import { SendFormSelectObjectProps } from './send-select-object.types';
 
 const SelectObject: FC<SendFormSelectObjectProps> = ({ index }) => {
-  const network = useNetwork();
+  const { network } = useSuiClientContext();
   const { coinsMap } = useWeb3();
 
   const { setValue, control } = useFormContext<ISendSimpleForm>();
@@ -32,7 +33,7 @@ const SelectObject: FC<SendFormSelectObjectProps> = ({ index }) => {
   const { setModal, handleClose } = useModal();
 
   const onSelect = async (object: ObjectData) => {
-    const balance = coinsMap[(object.display as CoinObject)?.type].balance;
+    const balance = coinsMap[(object.display as CoinObject)?.type]?.balance;
     const editable = balance && !balance.isZero();
 
     setValue(`objects.${index}`, {
@@ -91,7 +92,9 @@ const SelectObject: FC<SendFormSelectObjectProps> = ({ index }) => {
               withBg
               size="1rem"
               symbol={symbol}
-              {...(url ? { url } : { network, type: coinType })}
+              url={url}
+              network={network as Network}
+              type={coinType}
             />
           ),
         })}

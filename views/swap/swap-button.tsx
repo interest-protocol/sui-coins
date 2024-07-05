@@ -1,40 +1,42 @@
 import { Button, Typography } from '@interest-protocol/ui-kit';
 import {
   useCurrentAccount,
-  useSignTransactionBlock,
+  useSignTransaction,
   useSuiClient,
+  useSuiClientContext,
 } from '@mysten/dapp-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+import invariant from 'tiny-invariant';
 
-import { EXPLORER_URL } from '@/constants';
-import { useNetwork } from '@/context/network';
+import { EXPLORER_URL, Network } from '@/constants';
 import { useDialog } from '@/hooks/use-dialog';
-import { useWeb3 } from '@/hooks/use-web3';
-import { throwTXIfNotSuccessful, ZERO_BIG_NUMBER } from '@/utils';
+import {
+  signAndExecute,
+  throwTXIfNotSuccessful,
+  waitForTx,
+  ZERO_BIG_NUMBER,
+} from '@/utils';
 import { SwapForm } from '@/views/swap/swap.types';
 
-import { useAftermathRouter } from './swap.hooks';
+import { SwapMessagesEnum } from './swap.data';
+import { useSwap } from './swap.hooks';
 
 const SwapButton: FC = () => {
-  const network = useNetwork();
-  const client = useSuiClient();
-  const router = useAftermathRouter();
+  const swap = useSwap();
+  const suiClient = useSuiClient();
+  const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
   const formSwap = useFormContext<SwapForm>();
   const { dialog, handleClose } = useDialog();
 
-  const { mutate } = useWeb3();
-
-  const signTransactionBlock = useSignTransactionBlock();
+  const signTransaction = useSignTransaction();
 
   const resetInput = () => {
     formSwap.setValue('to.display', '0');
     formSwap.setValue('from.display', '0');
     formSwap.setValue('from.value', ZERO_BIG_NUMBER);
   };
-
-  const route = useWatch({ control: formSwap.control, name: 'route' });
 
   const swapping = useWatch({
     control: formSwap.control,
@@ -44,11 +46,6 @@ const SwapButton: FC = () => {
   const readyToSwap = useWatch({
     control: formSwap.control,
     name: 'readyToSwap',
-  });
-
-  const slippage = useWatch({
-    control: formSwap.control,
-    name: 'settings.slippage',
   });
 
   const gotoExplorer = () => {
@@ -63,59 +60,48 @@ const SwapButton: FC = () => {
 
   const handleSwap = async () => {
     try {
-      if (!route || !currentAccount) throw new Error('Something went wrong');
+      invariant(currentAccount, 'Need to connect wallet');
 
       formSwap.setValue('swapping', true);
 
-      const txb = await router.getTransactionForCompleteTradeRoute({
-        walletAddress: currentAccount.address,
-        completeRoute: route,
-        slippage: Number(slippage),
+      const tx = await swap(formSwap.getValues());
+
+      const tx2 = await signAndExecute({
+        tx,
+        suiClient,
+        currentAccount,
+        signTransaction,
       });
 
-      const { signature, transactionBlockBytes } =
-        await signTransactionBlock.mutateAsync({
-          transactionBlock: txb,
-          account: currentAccount,
-        });
+      throwTXIfNotSuccessful(tx2);
 
-      const tx = await client.executeTransactionBlock({
-        transactionBlock: transactionBlockBytes,
-        signature,
-        options: { showEffects: true },
-        requestType: 'WaitForEffectsCert',
-      });
-
-      throwTXIfNotSuccessful(tx);
+      await waitForTx({ suiClient, digest: tx2.digest });
 
       formSwap.setValue(
         'explorerLink',
-        `${EXPLORER_URL[network]}/tx/${tx.digest}`
+        `${EXPLORER_URL[network as Network]}/tx/${tx2.digest}`
       );
     } finally {
       resetInput();
       formSwap.setValue('swapping', false);
-      mutate();
     }
   };
 
-  const swap = () =>
+  const onSwap = () =>
     readyToSwap &&
     dialog.promise(handleSwap(), {
       loading: {
         title: 'Swapping...',
-        message: 'We are swapping, and you will let you know when it is done',
+        message: SwapMessagesEnum.swapping,
       },
       error: {
         title: 'Swap Failure',
-        message:
-          'Your swap failed, please try to increment your slippage and try again or contact the support team',
+        message: SwapMessagesEnum.swapFailure,
         primaryButton: { label: 'Try again', onClick: handleClose },
       },
       success: {
         title: 'Swap Successfully',
-        message:
-          'Your swap was successfully, and you can check it on the Explorer',
+        message: SwapMessagesEnum.swapSuccess,
         primaryButton: {
           label: 'See on Explorer',
           onClick: gotoExplorer,
@@ -130,10 +116,10 @@ const SwapButton: FC = () => {
 
   return (
     <Button
-      onClick={swap}
+      onClick={onSwap}
       variant="filled"
-      justifyContent="center"
       disabled={!readyToSwap}
+      justifyContent="center"
     >
       <Typography variant="label" size="large">
         {swapping ? 'Swapping...' : 'Swap'}

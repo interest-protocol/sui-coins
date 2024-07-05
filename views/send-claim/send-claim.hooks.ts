@@ -1,54 +1,72 @@
-import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui.js/client';
+import { toB64 } from '@mysten/bcs';
+import {
+  useCurrentAccount,
+  useSuiClient,
+  useSuiClientContext,
+} from '@mysten/dapp-kit';
+import { SuiTransactionBlockResponse } from '@mysten/sui/client';
+import { Transaction } from '@mysten/sui/transactions';
+import { ZkSendLink } from '@mysten/zksend';
 
 import { Network } from '@/constants';
-import { useNetwork } from '@/context/network';
-
-import { ZkSendLinkWithUrl } from '../send-link/send-link.types';
+import { ZK_BAG_CONTRACT_IDS } from '@/constants/zksend';
+import { throwTXIfNotSuccessful, waitForTx } from '@/utils';
+import { createClaimTransaction } from '@/utils/zk-send';
 
 export const useClaim = () => {
-  const network = useNetwork();
   const suiClient = useSuiClient();
+  const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
 
   return async (
-    { url, link }: ZkSendLinkWithUrl,
-    id: string,
+    link: ZkSendLink,
     address: string,
     onSuccess: (tx: SuiTransactionBlockResponse) => void
   ) => {
-    if ((!currentAccount && !address) || !link) return;
+    if ((!currentAccount && !address) || !link || !link.keypair)
+      throw new Error('Checking params');
 
-    const transactionBlock = link.createClaimTransaction(
-      currentAccount?.address ?? address
-    );
-
-    const built = await transactionBlock.build({
-      client: suiClient,
-      onlyTransactionKind: true,
+    const transactionBlock = createClaimTransaction({
+      address: currentAccount?.address || address,
+      sender: link.keypair!.toSuiAddress(),
+      assets: link.assets,
+      ...(network === Network.TESTNET && {
+        contracts: ZK_BAG_CONTRACT_IDS[network as Network],
+      }),
     });
 
-    const transactionBlockKindBytes = btoa(
-      built.reduce((data, byte) => data + String.fromCharCode(byte), '')
-    );
+    const txbBytes = await transactionBlock.build({
+      onlyTransactionKind: true,
+      client: suiClient,
+    });
 
-    const { data } = await fetch('/api/v1/sponsor', {
+    const sponsoredResponse = await fetch('/api/auth/v1/sponsor/shinami', {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        sender: link.address,
-        transactionBlockKindBytes,
-        claimer: currentAccount?.address ?? address,
-        network: network === Network.MAINNET ? 'mainnet' : 'testnet',
+        sender: link.keypair.toSuiAddress(),
+        txbBytes: toB64(txbBytes),
+        isMainnet: network === Network.MAINNET,
       }),
     }).then((response) => response.json?.());
 
-    await fetch(`/api/v1/zksend?network=${network}&id=${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify({
-        link: encodeURI(url),
-      }),
+    const { signature: senderSignature } = await link.keypair.signTransaction(
+      await Transaction.from(sponsoredResponse.txBytes).build()
+    );
+
+    const tx = await suiClient.executeTransactionBlock({
+      signature: [sponsoredResponse.signature, senderSignature],
+      transactionBlock: sponsoredResponse.txBytes,
+      requestType: 'WaitForLocalExecution',
+      options: {
+        showEffects: true,
+      },
     });
 
-    onSuccess(data);
+    throwTXIfNotSuccessful(tx);
+
+    await waitForTx({ suiClient, digest: tx.digest });
+
+    onSuccess(tx);
   };
 };
