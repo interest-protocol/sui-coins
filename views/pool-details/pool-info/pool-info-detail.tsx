@@ -95,26 +95,28 @@ const PoolDetail = () => {
                     : coinXMetadata?.symbol,
                 balance: pool.balanceX,
                 decimals: pool.decimalsX,
-                price:
-                  prices[
-                    (coinXMetadata?.symbol === 'MOVE'
-                      ? 'MOVE'
-                      : coinXMetadata.symbol
-                    )?.toLowerCase()
-                  ] ?? 0,
+                price: propOr(
+                  0,
+                  (coinXMetadata?.symbol === 'MOVE'
+                    ? 'MOVE'
+                    : coinXMetadata.symbol
+                  )?.toLowerCase(),
+                  prices
+                ) as number,
               },
               {
                 type: coinYMetadata?.type,
                 symbol: coinYMetadata?.symbol,
                 balance: pool.balanceY,
                 decimals: pool.decimalsY,
-                price:
-                  prices[
-                    (coinYMetadata?.symbol === 'MOVE'
-                      ? 'MOVE'
-                      : coinYMetadata.symbol
-                    )?.toLowerCase()
-                  ] ?? 0,
+                price: propOr(
+                  0,
+                  (coinYMetadata?.symbol === 'MOVE'
+                    ? 'MOVE'
+                    : coinYMetadata.symbol
+                  )?.toLowerCase(),
+                  prices
+                ) as number,
               },
             ].map(({ type, symbol, balance, decimals, price }) => (
               <ItemToken
