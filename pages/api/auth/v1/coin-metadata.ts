@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { pathOr } from 'ramda';
 
 import { Network } from '@/constants';
 import dbConnect from '@/server';
@@ -11,7 +12,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     await dbConnect();
 
     const type = req.body.type as string;
-    const network = req.body.network as Network;
+    const network = pathOr(Network.DEVNET, ['body', 'network'], req) as Network;
     const typeList = req.body.coinsType;
 
     if (isInvalidNetwork(network))
