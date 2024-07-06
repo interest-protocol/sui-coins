@@ -100,7 +100,7 @@ const PoolDetail = () => {
                     (coinXMetadata?.symbol === 'MOVE'
                       ? 'MOVE'
                       : coinXMetadata.symbol
-                    ).toLowerCase()
+                    )?.toLowerCase()
                   ] ?? 0,
               },
               {
@@ -113,7 +113,7 @@ const PoolDetail = () => {
                     (coinYMetadata?.symbol === 'MOVE'
                       ? 'MOVE'
                       : coinYMetadata.symbol
-                    ).toLowerCase()
+                    )?.toLowerCase()
                   ] ?? 0,
               },
             ].map(({ type, symbol, balance, decimals, price }) => (
