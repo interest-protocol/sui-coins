@@ -1,7 +1,10 @@
 import { isValidSuiAddress, normalizeSuiAddress } from '@mysten/sui.js/utils';
+import BigNumber from 'bignumber.js';
 import { propOr } from 'ramda';
 
+import { CoinObject } from '@/components/web3-manager/coins-manager/coins-manager.types';
 import { FixedPointMath } from '@/lib';
+import { Quest } from '@/server/model/quest';
 import { isBigNumberish } from '@/utils';
 
 import { AirdropData } from './airdrop.types';
@@ -71,4 +74,32 @@ export const convertTypeToShortPackedId = (type: string): string => {
   if (packageId.length < 10) return packageId;
 
   return `${packageId.slice(0, 6)}...${packageId.slice(-4)}`;
+};
+
+export const logAirdrop = (
+  address: string,
+  token: CoinObject,
+  amount: BigNumber,
+  addressesCount: number
+) => {
+  fetch('/api/v1/quest/airdrop', {
+    method: 'POST',
+    headers: {
+      Origin: 'https://dashboard.galxe.com',
+      'Access-Control-Request-Headers': 'Content-Type',
+      'Access-Control-Request-Method': 'POST',
+    },
+    body: JSON.stringify({
+      address,
+      kind: 'airdrop',
+      data: {
+        coin: {
+          type: token.type,
+          symbol: token.symbol,
+          amount: String(FixedPointMath.toNumber(amount, token.decimals)),
+        },
+        addressesCount,
+      },
+    } as Omit<Quest, 'timestamp'>),
+  });
 };
