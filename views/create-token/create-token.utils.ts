@@ -30,7 +30,6 @@ export const logCreateToken = (
   fetch('/api/auth/v1/log-quest', {
     method: 'POST',
     headers: {
-      Origin: 'https://dashboard.galxe.com',
       'Content-Type': 'application/json',
       'Access-Control-Request-Headers': 'Content-Type',
       'Access-Control-Request-Method': 'POST',
