@@ -1,5 +1,8 @@
 import BigNumber from 'bignumber.js';
 
+import { Quest } from '@/server/model/quest';
+import { PoolToken } from '@/views/pools/pools.types';
+
 export const getAmmOptimalCoin0Value = (
   coinYAmount: BigNumber,
   coinXReserves: BigNumber,
@@ -75,4 +78,37 @@ export const getAmmXYAmount = (
   const optimalAmountY = lpAmount.multipliedBy(coinYReserves).dividedBy(supply);
 
   return [optimalAmountX, optimalAmountY];
+};
+
+export const logDepositPool = (
+  address: string,
+  tokenA: PoolToken,
+  tokenB: PoolToken,
+  txDigest: string
+) => {
+  fetch('/api/auth/v1/log-quest', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Request-Headers': 'Content-Type',
+      'Access-Control-Request-Method': 'POST',
+    },
+    body: JSON.stringify({
+      address,
+      txDigest,
+      kind: 'addLiquidity',
+      data: {
+        coinA: {
+          type: tokenA.type,
+          amount: tokenA.value,
+          symbol: tokenA.symbol,
+        },
+        coinB: {
+          type: tokenB.type,
+          amount: tokenB.value,
+          symbol: tokenB.symbol,
+        },
+      },
+    } as Omit<Quest, 'timestamp'>),
+  });
 };
