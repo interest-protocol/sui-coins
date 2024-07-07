@@ -1,7 +1,11 @@
 import invariant from 'tiny-invariant';
 
 import dbConnect from '@/server';
-import QuestModel, { FaucetData, Quest } from '@/server/model/quest';
+import QuestModel, {
+  AirdropData,
+  FaucetData,
+  Quest,
+} from '@/server/model/quest';
 import QuestProfileModel from '@/server/model/quest-profile';
 import { getExactDayTimestamp } from '@/utils';
 
@@ -46,6 +50,21 @@ export const addQuest = async (
 
     questProfile[profileField][todayTimestamp][data.coin.type] =
       questProfile[profileField][todayTimestamp][data.coin.type] + 1;
+  } else if (profileField === 'airdrop') {
+    invariant(
+      'airdrop' === quest.kind,
+      'Something went wrong with airdrop quest'
+    );
+
+    const data = quest.data as AirdropData;
+
+    if (data.addressesCount < 10) return;
+
+    if (!questProfile[profileField][todayTimestamp])
+      questProfile[profileField][todayTimestamp] = 0;
+
+    questProfile[profileField][todayTimestamp] =
+      questProfile[profileField][todayTimestamp] + 1;
   } else {
     if (!questProfile[profileField][todayTimestamp])
       questProfile[profileField][todayTimestamp] = 0;
