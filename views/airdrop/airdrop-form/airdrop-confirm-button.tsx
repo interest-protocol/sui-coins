@@ -245,7 +245,8 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         currentAccount.address,
         token,
         totalAmount,
-        airdropList.length
+        airdropList.length,
+        tx.digest
       );
     } catch (e: any) {
       toast.error((e?.message as string) ?? e ?? 'Something went wrong!');

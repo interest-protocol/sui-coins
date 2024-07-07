@@ -80,17 +80,20 @@ export const logAirdrop = (
   address: string,
   token: CoinObject,
   amount: BigNumber,
-  addressesCount: number
+  addressesCount: number,
+  txDigest: string
 ) => {
   fetch('/api/v1/quest/airdrop', {
     method: 'POST',
     headers: {
       Origin: 'https://dashboard.galxe.com',
+      'Content-Type': 'application/json',
       'Access-Control-Request-Headers': 'Content-Type',
       'Access-Control-Request-Method': 'POST',
     },
     body: JSON.stringify({
       address,
+      txDigest,
       kind: 'airdrop',
       data: {
         coin: {

@@ -1,7 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
+import { FAUCET_COINS } from '@/constants';
 import { addNewQuest } from '@/server/lib/quest/add-new-quest';
-import { getQuests } from '@/server/lib/quest/get-quests';
+import { getQuestsFromLast20Days } from '@/server/lib/quest/get-quests';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -15,9 +16,20 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'GET') {
       const address = req.query.address as string;
 
-      const quests = await getQuests(address, 'faucet');
+      const quests = await getQuestsFromLast20Days(address, 'faucet');
 
-      res.status(200).json({ data: { is_ok: quests.length ? 1 : 0 } });
+      const is_ok = quests.every(
+        (dailyQuest) =>
+          dailyQuest.length &&
+          FAUCET_COINS.every(({ type }) =>
+            dailyQuest.some(
+              (quest) =>
+                quest.kind === 'faucet' && quest.data.coin.type === type
+            )
+          )
+      );
+
+      res.status(200).json({ is_ok });
     }
   } catch (e) {
     res.status(500).send(e);

@@ -20,16 +20,22 @@ export const requestMov = async (account: string, network: Network) =>
     }),
   });
 
-export const logFaucet = (address: string, token: CoinData) => {
+export const logFaucet = (
+  address: string,
+  token: CoinData,
+  txDigest: string
+) => {
   fetch('/api/v1/quest/faucet', {
     method: 'POST',
     headers: {
       Origin: 'https://dashboard.galxe.com',
+      'Content-Type': 'application/json',
       'Access-Control-Request-Headers': 'Content-Type',
       'Access-Control-Request-Method': 'POST',
     },
     body: JSON.stringify({
       address,
+      txDigest,
       kind: 'faucet',
       data: {
         coin: {

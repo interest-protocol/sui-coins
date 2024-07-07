@@ -72,9 +72,9 @@ const MintForm: FC = () => {
       throwTXIfNotSuccessful(tx);
       await showTXSuccessToast(tx, network);
 
-      logFaucet(currentAccount!.address, selected);
+      logFaucet(currentAccount!.address, selected, tx.digest);
     } finally {
-      await mutate();
+      mutate();
     }
   };
 

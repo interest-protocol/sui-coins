@@ -64,9 +64,12 @@ const SwapButton = () => {
 
       await showTXSuccessToast(tx, network);
 
-      const { from, to } = formSwap.getValues();
-
-      logSwap(currentAccount!.address, from, to);
+      logSwap(
+        currentAccount!.address,
+        formSwap.getValues('from'),
+        formSwap.getValues('to'),
+        tx.digest
+      );
     } catch (e) {
       console.log({ e });
       throw e;

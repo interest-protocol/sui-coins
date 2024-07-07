@@ -35,16 +35,23 @@ export const calculatePriceImpact = (
   );
 };
 
-export const logSwap = (address: string, from: SwapToken, to: SwapToken) => {
+export const logSwap = (
+  address: string,
+  from: SwapToken,
+  to: SwapToken,
+  txDigest: string
+) => {
   fetch('/api/v1/quest/swap', {
     method: 'POST',
     headers: {
+      'Content-Type': 'application/json',
       Origin: 'https://dashboard.galxe.com',
       'Access-Control-Request-Headers': 'Content-Type',
       'Access-Control-Request-Method': 'POST',
     },
     body: JSON.stringify({
       address,
+      txDigest,
       kind: 'swap',
       data: {
         coinIn: {

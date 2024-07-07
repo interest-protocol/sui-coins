@@ -77,7 +77,8 @@ const CreateTokenForm: FC = () => {
       logCreateToken(
         currentAccount.address,
         getValues('symbol'),
-        getValues('totalSupply')
+        getValues('totalSupply'),
+        tx.digest
       );
     } finally {
       setLoading(false);

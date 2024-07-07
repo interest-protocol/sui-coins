@@ -13,6 +13,11 @@ export interface SwapData {
   coinOut: Coin;
 }
 
+export interface PoolData {
+  coinA: Coin;
+  coinB: Coin;
+}
+
 export interface FaucetData {
   coin: Coin;
 }
@@ -28,6 +33,7 @@ export interface CreateTokenData {
 
 export type Quest = {
   address: string;
+  txDigest: string;
   timestamp: number;
 } & (
   | {
@@ -46,7 +52,16 @@ export type Quest = {
       kind: 'createToken';
       data: CreateTokenData;
     }
+  | {
+      kind: 'createPool';
+      data: PoolData;
+    }
+  | {
+      kind: 'depositPool';
+      data: PoolData;
+    }
 );
+
 export type QuestDocument = Document & Quest;
 
 export const QuestSchema = new Schema({
@@ -57,6 +72,10 @@ export const QuestSchema = new Schema({
   },
   timestamp: {
     type: Number,
+    required: true,
+  },
+  txDigest: {
+    type: String,
     required: true,
   },
   kind: {

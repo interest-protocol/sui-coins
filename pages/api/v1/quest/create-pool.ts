@@ -15,11 +15,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'GET') {
       const address = req.query.address as string;
 
-      const quests = await getQuestsFromLast20Days(address, 'swap');
+      const quests = await getQuestsFromLast20Days(address, 'createPool');
 
-      console.log(quests);
-
-      const is_ok = quests.every((dailyQuest) => dailyQuest.length > 5);
+      const is_ok = quests.every((dailyQuest) => dailyQuest.length);
 
       res.status(200).json({ is_ok });
     }

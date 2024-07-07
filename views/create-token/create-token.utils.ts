@@ -24,17 +24,20 @@ export const getBase64 = async (file: File) => {
 export const logCreateToken = (
   address: string,
   symbol: string,
-  amount: string
+  amount: string,
+  txDigest: string
 ) => {
   fetch('/api/v1/quest/create-token', {
     method: 'POST',
     headers: {
       Origin: 'https://dashboard.galxe.com',
+      'Content-Type': 'application/json',
       'Access-Control-Request-Headers': 'Content-Type',
       'Access-Control-Request-Method': 'POST',
     },
     body: JSON.stringify({
       address,
+      txDigest,
       kind: 'createToken',
       data: {
         coin: {
