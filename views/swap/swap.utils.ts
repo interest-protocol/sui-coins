@@ -45,7 +45,6 @@ export const logSwap = (
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Origin: 'https://dashboard.galxe.com',
       'Access-Control-Request-Headers': 'Content-Type',
       'Access-Control-Request-Method': 'POST',
     },
