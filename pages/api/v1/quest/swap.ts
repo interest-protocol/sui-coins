@@ -9,8 +9,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       const profile = await findQuestProfile(address);
 
-      console.log({ profile });
-
       const is_ok =
         Object.values(profile.swap).filter((times) => times >= 5).length === 20;
 
