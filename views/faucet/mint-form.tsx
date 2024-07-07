@@ -17,7 +17,7 @@ import { useModal } from '@/hooks/use-modal';
 import { CoinData } from '@/interface';
 import { ChevronDownSVG } from '@/svg';
 import { showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
-import { requestMov } from '@/views/faucet/faucet.utils';
+import { logFaucet, requestMov } from '@/views/faucet/faucet.utils';
 
 import SelectTokenModal from '../components/select-token-modal';
 
@@ -71,8 +71,10 @@ const MintForm: FC = () => {
 
       throwTXIfNotSuccessful(tx);
       await showTXSuccessToast(tx, network);
+
+      logFaucet(currentAccount!.address, selected, tx.digest);
     } finally {
-      await mutate();
+      mutate();
     }
   };
 
