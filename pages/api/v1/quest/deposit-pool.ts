@@ -1,23 +1,22 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { addNewQuest } from '@/server/lib/quest/add-new-quest';
-import { getQuestsFromLast20Days } from '@/server/lib/quest/get-quests';
+import { addQuest, findQuestProfile } from '@/server/lib/quest/add-new-quest';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     if (req.method === 'POST') {
       const body = req.body;
 
-      const data = await addNewQuest(body);
+      const data = await addQuest(body, 'addLiquidity');
 
       res.status(200).json(data);
     }
     if (req.method === 'GET') {
       const address = req.query.address as string;
 
-      const quests = await getQuestsFromLast20Days(address, 'depositPool');
+      const profile = await findQuestProfile(address);
 
-      const is_ok = quests.every((dailyQuest) => dailyQuest.length);
+      const is_ok = Object.values(profile.addLiquidity).length === 20;
 
       res.status(200).json({ is_ok });
     }

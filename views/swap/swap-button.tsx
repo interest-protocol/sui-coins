@@ -70,9 +70,6 @@ const SwapButton = () => {
         formSwap.getValues('to'),
         tx.digest
       );
-    } catch (e) {
-      console.log({ e });
-      throw e;
     } finally {
       resetInput();
       setLoading(false);

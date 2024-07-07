@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { addNewQuest } from '@/server/lib/quest/add-new-quest';
-import { getQuestsFromLast20Days } from '@/server/lib/quest/get-quests';
+import { addQuest, findQuestProfile } from '@/server/lib/quest/add-new-quest';
 import { Quest } from '@/server/model/quest';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -9,23 +8,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
       const body = req.body as Quest;
 
-      const data = await addNewQuest(body);
+      const data = await addQuest(body, 'airdrop');
 
       res.status(200).json(data);
     }
     if (req.method === 'GET') {
       const address = req.query.address as string;
 
-      const quests = await getQuestsFromLast20Days(address, 'airdrop');
+      const profile = await findQuestProfile(address);
 
-      const is_ok = quests.every(
-        (dailyQuest) =>
-          dailyQuest.length &&
-          dailyQuest.some(
-            (quest) =>
-              quest.kind === 'airdrop' && quest.data.addressesCount >= 10
-          )
-      );
+      const is_ok = Object.values(profile.airdrop).length === 20;
 
       res.status(200).json({ is_ok });
     }
