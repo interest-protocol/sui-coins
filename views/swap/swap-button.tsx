@@ -13,6 +13,7 @@ import { showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
 import { SwapForm } from '@/views/swap/swap.types';
 
 import { useSwap } from './swap.hooks';
+import { logSwap } from './swap.utils';
 
 const SwapButton = () => {
   const swap = useSwap();
@@ -62,6 +63,13 @@ const SwapButton = () => {
       throwTXIfNotSuccessful(tx);
 
       await showTXSuccessToast(tx, network);
+
+      logSwap(
+        currentAccount!.address,
+        formSwap.getValues('from'),
+        formSwap.getValues('to'),
+        tx.digest
+      );
     } catch (e) {
       console.log({ e });
       throw e;

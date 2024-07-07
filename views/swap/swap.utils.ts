@@ -2,6 +2,9 @@ import { DevInspectResults } from '@mysten/sui.js/client';
 import BigNumber from 'bignumber.js';
 
 import { FixedPointMath } from '@/lib';
+import { Quest } from '@/server/model/quest';
+
+import { SwapToken } from './swap.types';
 
 export const getAmountMinusSlippage = (
   value: BigNumber,
@@ -30,4 +33,38 @@ export const calculatePriceImpact = (
   return (
     (Math.abs(zeroExchangeRate - realExchangeRate) / zeroExchangeRate) * 100
   );
+};
+
+export const logSwap = (
+  address: string,
+  from: SwapToken,
+  to: SwapToken,
+  txDigest: string
+) => {
+  fetch('/api/v1/quest/swap', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Origin: 'https://dashboard.galxe.com',
+      'Access-Control-Request-Headers': 'Content-Type',
+      'Access-Control-Request-Method': 'POST',
+    },
+    body: JSON.stringify({
+      address,
+      txDigest,
+      kind: 'swap',
+      data: {
+        coinIn: {
+          type: from.type,
+          amount: from.value,
+          symbol: from.symbol,
+        },
+        coinOut: {
+          type: to.type,
+          amount: to.value,
+          symbol: to.symbol,
+        },
+      },
+    } as Omit<Quest, 'timestamp'>),
+  });
 };

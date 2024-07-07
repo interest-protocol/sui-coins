@@ -26,6 +26,7 @@ import { throwTXIfNotSuccessful } from '@/utils';
 
 import { useCreateToken } from '../create-token.hooks';
 import { ICreateTokenForm } from '../create-token.types';
+import { logCreateToken } from '../create-token.utils';
 import { validationSchema } from './create-token-form.validation';
 import CreateTokenFormImage from './create-token-form-image';
 import CreateTokenFormToggle from './create-token-form-toggle';
@@ -72,6 +73,13 @@ const CreateTokenForm: FC = () => {
       throwTXIfNotSuccessful(tx);
 
       showTXSuccessToast(tx, network);
+
+      logCreateToken(
+        currentAccount.address,
+        getValues('symbol'),
+        getValues('totalSupply'),
+        tx.digest
+      );
     } finally {
       setLoading(false);
     }

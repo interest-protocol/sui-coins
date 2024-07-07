@@ -36,6 +36,7 @@ import {
 
 import { BATCH_SIZE } from '../airdrop.constants';
 import { AirdropConfirmButtonProps, IAirdropForm } from '../airdrop.types';
+import { logAirdrop } from '../airdrop.utils';
 
 const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
   setIsProgressView,
@@ -239,6 +240,14 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
         await pauseUtilNextTx(initAirdropTxMS);
       }
+
+      logAirdrop(
+        currentAccount.address,
+        token,
+        totalAmount,
+        airdropList.length,
+        tx.digest
+      );
     } catch (e: any) {
       toast.error((e?.message as string) ?? e ?? 'Something went wrong!');
       if (((e?.message as string) ?? e) === 'Rejected from user') {
