@@ -27,7 +27,7 @@ export const logCreateToken = (
   amount: string,
   txDigest: string
 ) => {
-  fetch('/api/v1/quest/create-token', {
+  fetch('/api/auth/v1/log-quest', {
     method: 'POST',
     headers: {
       Origin: 'https://dashboard.galxe.com',

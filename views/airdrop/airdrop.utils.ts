@@ -83,7 +83,7 @@ export const logAirdrop = (
   addressesCount: number,
   txDigest: string
 ) => {
-  fetch('/api/v1/quest/airdrop', {
+  fetch('/api/auth/v1/log-quest', {
     method: 'POST',
     headers: {
       Origin: 'https://dashboard.galxe.com',

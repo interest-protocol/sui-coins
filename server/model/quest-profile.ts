@@ -7,11 +7,11 @@ type QuestData = Record<number, number>;
 export interface QuestProfile {
   address: string;
   swap: QuestData;
-  faucet: Record<number, Record<string, number>>;
-  createPool: QuestData;
-  addLiquidity: QuestData;
   airdrop: QuestData;
+  createPool: QuestData;
   createToken: QuestData;
+  addLiquidity: QuestData;
+  faucet: Record<number, Record<string, number>>;
 }
 
 export type QuestProfileDocument = Document & QuestProfile;

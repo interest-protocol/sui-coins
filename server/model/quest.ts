@@ -57,7 +57,7 @@ export type Quest = {
       data: PoolData;
     }
   | {
-      kind: 'depositPool';
+      kind: 'addLiquidity';
       data: PoolData;
     }
 );

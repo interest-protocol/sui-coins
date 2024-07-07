@@ -60,6 +60,8 @@ export const addQuest = async (
 };
 
 export const findQuestProfile = async (address: string) => {
+  await dbConnect();
+
   const questProfile = await QuestProfileModel.findOne({ address });
 
   if (!questProfile)
@@ -67,10 +69,10 @@ export const findQuestProfile = async (address: string) => {
       address,
       swap: {},
       faucet: {},
-      createPool: {},
-      addLiquidity: {},
       airdrop: {},
+      createPool: {},
       createToken: {},
+      addLiquidity: {},
     });
 
   return questProfile;

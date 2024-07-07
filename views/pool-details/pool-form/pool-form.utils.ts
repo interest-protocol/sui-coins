@@ -86,7 +86,7 @@ export const logDepositPool = (
   tokenB: PoolToken,
   txDigest: string
 ) => {
-  fetch('/api/v1/quest/deposit-pool', {
+  fetch('/api/auth/v1/log-quest', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -97,7 +97,7 @@ export const logDepositPool = (
     body: JSON.stringify({
       address,
       txDigest,
-      kind: 'depositPool',
+      kind: 'addLiquidity',
       data: {
         coinA: {
           type: tokenA.type,

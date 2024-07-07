@@ -177,7 +177,7 @@ export const logCreatePool = (
   tokenB: Token,
   txDigest: string
 ) => {
-  fetch('/api/v1/quest/create-pool', {
+  fetch('/api/auth/v1/log-quest', {
     method: 'POST',
     headers: {
       Origin: 'https://dashboard.galxe.com',
