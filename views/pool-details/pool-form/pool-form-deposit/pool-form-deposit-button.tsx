@@ -16,6 +16,7 @@ import { isSui, showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
 
 import { usePoolDetails } from '../../pool-details.context';
+import { logDepositPool } from '../pool-form.utils';
 import PoolPreview from '../pool-form-preview';
 import { useDeposit } from './pool-form-deposit.hooks';
 
@@ -59,8 +60,15 @@ const PoolFormDepositButton: FC = () => {
       await showTXSuccessToast(tx, network);
 
       setValue('explorerLink', EXPLORER_URL[network](`/txblock/${tx.digest}`));
+
+      logDepositPool(
+        account.address,
+        getValues('tokenList.0'),
+        getValues('tokenList.1'),
+        tx.digest
+      );
     } finally {
-      await mutate();
+      mutate();
     }
   };
 

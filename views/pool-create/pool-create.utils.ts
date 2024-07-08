@@ -10,6 +10,7 @@ import { pathOr } from 'ramda';
 import invariant from 'tiny-invariant';
 
 import { AMM_CURVES, Network, OBJECTS, PACKAGES } from '@/constants';
+import { Quest } from '@/server/model/quest';
 
 import { ExtractedCoinData, Token } from './pool-create.types';
 
@@ -168,4 +169,37 @@ export const extractPoolDataFromTx = async (
   );
 
   return poolData?.data?.objectId ?? '';
+};
+
+export const logCreatePool = (
+  address: string,
+  tokenA: Token,
+  tokenB: Token,
+  txDigest: string
+) => {
+  fetch('/api/auth/v1/log-quest', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Request-Headers': 'Content-Type',
+      'Access-Control-Request-Method': 'POST',
+    },
+    body: JSON.stringify({
+      address,
+      txDigest,
+      kind: 'createPool',
+      data: {
+        coinA: {
+          type: tokenA.type,
+          amount: tokenA.value,
+          symbol: tokenA.symbol,
+        },
+        coinB: {
+          type: tokenB.type,
+          amount: tokenB.value,
+          symbol: tokenB.symbol,
+        },
+      },
+    } as Omit<Quest, 'timestamp'>),
+  });
 };
