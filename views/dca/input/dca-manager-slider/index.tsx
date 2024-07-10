@@ -8,14 +8,14 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 
-import { DCAForm } from '../dca.types';
+import { DCAForm } from '../../dca.types';
 
 const Slider = dynamic(
   import('@interest-protocol/ui-kit').then(({ Slider }) => Slider),
   { ssr: false }
 );
 
-const DCASlider: FC = () => {
+const DCAFormFieldSlider: FC = () => {
   const { coinsMap } = useWeb3();
   const { control, setValue, getValues } = useFormContext<DCAForm>();
 
@@ -44,7 +44,7 @@ const DCASlider: FC = () => {
         )}
         onChange={(value: number) => {
           setValue(
-            'from.value',
+            'from.display',
             `${Number(((value / 100) * balance).toFixed(6)).toPrecision()}`
           );
         }}
@@ -53,4 +53,4 @@ const DCASlider: FC = () => {
   );
 };
 
-export default DCASlider;
+export default DCAFormFieldSlider;

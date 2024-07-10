@@ -1,132 +1,81 @@
-import { Box, Button, TextField } from '@interest-protocol/ui-kit';
-import { useRouter } from 'next/router';
+import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
-import { useFormContext } from 'react-hook-form';
 
 import Layout from '@/components/layout';
-import { SwapSVG } from '@/svg';
-import { updateURL } from '@/utils';
 
-import { DCAForm } from './dca.types';
-import Input from './dca-input';
-import DCAManager from './dca-manager';
-import DCAPeriodicityDropdown from './dca-periodicity-dropdown';
-import DCAPreviewButton from './dca-preview-button';
-import DCAPriceStrategy from './dca-price-strategy';
-import DCASelectToken from './dca-select-token';
+import DCAFlipToken from './dca-flip-token';
+import Input from './input';
+import Slider from './input/slider';
+import PreviewDCAButton from './preview-dca-button';
 
-const DCA: FC = () => {
-  const { pathname } = useRouter();
-  const form = useFormContext<DCAForm>();
-
-  const { getValues, setValue } = form;
-
-  const flipToken = () => {
-    const tmpTo = getValues('to');
-    const tmpFrom = getValues('from');
-    setValue('to', { ...tmpFrom, value: '' });
-    setValue('from', { ...tmpTo, value: '' });
-
-    updateURL(`${pathname}?from=${tmpTo.type}&to=${tmpFrom.type}`);
-  };
-
-  return (
-    <Layout title="DCA">
-      <Box
-        mx="auto"
-        display="flex"
-        borderRadius="2xl"
-        flexDirection="column"
-        px={['2xs', 'xl', 'xl', '7xl']}
-        width={['100%', '100%', '100%', '39.75rem']}
-      >
-        <Box
-          py="xl"
-          my="xs"
-          px={['2xs', 'm']}
-          borderRadius="xs"
-          bg="lowestContainer"
+const DCA: FC = () => (
+  <Layout>
+    <Box
+      mx="auto"
+      mt="3.5rem"
+      display="flex"
+      borderRadius="l"
+      flexDirection="column"
+      px={['2xs', 'xl', 'xl', '7xl']}
+      width={['100%', '100%', '100%', '39.75rem']}
+    >
+      <Box bg="lowestContainer" borderRadius="s" p="xl">
+        <Typography
+          size="large"
+          fontWeight="700"
+          variant="headline"
+          fontFamily="Satoshi"
         >
-          <Input />
-          <Box my="0.25rem" position="relative">
-            <Box
-              left="45%"
-              borderRadius="s"
-              border="7px solid"
-              position="absolute"
-              borderColor="surface"
-            >
-              <Button
-                isIcon
-                bg="onPrimary"
-                color="primary"
-                variant="tonal"
-                onClick={flipToken}
-              >
-                <SwapSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
-              </Button>
-            </Box>
-          </Box>
+          Trade DCA
+        </Typography>
+        <Box display="flex" flexDirection="column" gap="5xl">
+          <Input
+            label="from"
+            slider={
+              <Box px="s">
+                <Slider />
+              </Box>
+            }
+          />
         </Box>
         <Box
-          px="m"
-          py="xl"
-          gap="m"
           display="flex"
-          borderRadius="xs"
-          bg="lowestContainer"
-          flexDirection="column"
+          position="relative"
+          alignContent="center"
+          justifyContent="center"
         >
-          <DCASelectToken />
-          <Box px="l" display="flex" gap="l" alignItems="flex-end">
-            <Box flex="1">
-              <TextField
-                label="Every"
-                {...form.register('settings.intervals')}
-                fieldProps={{
-                  py: 'xl',
-                  borderRadius: 'xs',
-                  borderWidth: '1px',
-                  nHover: {
-                    borderWidth: '1px',
-                  },
-                  nFocus: {
-                    borderWidth: '1px',
-                  },
-                }}
-              />
-            </Box>
-            <DCAPeriodicityDropdown />
-          </Box>
-          <Box px="l">
-            <Box>
-              <TextField
-                label="Over"
-                Suffix="orders"
-                color="onSurface"
-                {...form.register('settings.iterations')}
-                fieldProps={{
-                  py: 'xl',
-                  color: 'outline',
-                  borderRadius: 'xs',
-                  borderWidth: '1px',
-                  nHover: {
-                    borderWidth: '1px',
-                  },
-                  nFocus: {
-                    borderWidth: '1px',
-                  },
-                }}
-              />
+          <Box width="100%" height="0.313rem" bg="lowContainer" />
+          <Box
+            gap="s"
+            my="-1.5rem"
+            width="100%"
+            display="flex"
+            position="absolute"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Box
+              display="flex"
+              width="3.25rem"
+              height="3.25rem"
+              borderRadius="full"
+              border="5px solid"
+              alignItems="center"
+              borderColor="lowContainer"
+              justifyContent="center"
+            >
+              <DCAFlipToken />
             </Box>
           </Box>
-          <DCAPriceStrategy />
-          <DCAPreviewButton />
         </Box>
-        <DCAManager />
+        <Box pt="xl" borderRadius="xs" bg="lowestContainer" mt="m">
+          <Input label="to" />
+        </Box>
+        <PreviewDCAButton />
       </Box>
-    </Layout>
-  );
-};
+      <Box my="xs" bg="lowestContainer" borderRadius="xs"></Box>
+    </Box>
+  </Layout>
+);
 
 export default DCA;

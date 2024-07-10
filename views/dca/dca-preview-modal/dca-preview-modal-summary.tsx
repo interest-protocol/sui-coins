@@ -1,55 +1,42 @@
 import { Box, ProgressIndicator, Typography } from '@interest-protocol/ui-kit';
 import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
+import { Transaction } from '@mysten/sui/transactions';
 import BigNumber from 'bignumber.js';
 import { values } from 'ramda';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import useSWR from 'swr';
-import { useReadLocalStorage } from 'usehooks-ts';
 
-import { LOCAL_STORAGE_VERSION } from '@/constants';
-import { EXCHANGE_FEE } from '@/constants/dex';
+import { EXCHANGE_FEE_PERCENTAGE } from '@/constants/fees';
 import { FixedPointMath } from '@/lib';
+import { DotErrorSVG } from '@/svg';
 import { ZERO_BIG_NUMBER } from '@/utils';
-import { ISwapSettings } from '@/views/swap/swap.types';
 
 import { DCAForm } from '../dca.types';
-import { useAftermathRouter } from '../dca-manager/dca-manager.hooks';
 
 const DCAPreviewModalSummary: FC = () => {
   const suiClient = useSuiClient();
-  const router = useAftermathRouter();
   const currentAccount = useCurrentAccount();
-  const { control } = useFormContext<DCAForm>();
-
-  const toValue = useWatch({ control, name: 'to.value' });
-  const fromValue = useWatch({ control, name: 'from.value' });
-  const toUSDPrice = useWatch({ control, name: 'to.usdPrice' });
-  const fromUSDPrice = useWatch({ control, name: 'from.usdPrice' });
+  const { control, setValue } = useFormContext<DCAForm>();
 
   const route = useWatch({ control, name: 'route' });
-
-  const settings = useReadLocalStorage<ISwapSettings>(
-    `${LOCAL_STORAGE_VERSION}-sui-coins-settings`
-  );
+  const slippage = useWatch({ control, name: 'settings.slippage' });
 
   const { data: fees, isLoading } = useSWR(
-    `network-fee-${route?.spotPrice}-${currentAccount?.address}-${settings?.slippage}`,
+    `network-fee-${currentAccount?.address}-${slippage}`,
     async () => {
-      if (!route || !currentAccount || !settings) return;
+      if (!route || !currentAccount) return;
 
-      const txb = await router.getTransactionForCompleteTradeRoute({
-        completeRoute: route,
-        slippage: Number(settings.slippage),
-        walletAddress: currentAccount.address,
-      });
+      const txb = new Transaction();
 
       const inspect = await suiClient.devInspectTransactionBlock({
-        transactionBlock: txb,
+        transactionBlock: txb as any,
         sender: currentAccount.address,
       });
 
       const { storageRebate, ...gasStructure } = inspect.effects.gasUsed;
+
+      setValue('readyToStartDCA', true);
 
       return [
         FixedPointMath.toNumber(
@@ -63,43 +50,16 @@ const DCAPreviewModalSummary: FC = () => {
     }
   );
 
-  const priceImpact =
-    fromUSDPrice && toUSDPrice
-      ? ((+fromValue * fromUSDPrice) / +toValue) * toUSDPrice
-      : null;
-
   return (
-    <Box display="flex" flexDirection="column" mb="m">
+    <Box display="flex" flexDirection="column" mb="m" gap="l">
       <Box bg="surface" px="m" py="2xs" borderRadius="xs">
         <Box
           py="m"
           display="flex"
-          borderBottom="1px solid"
+          borderTop="1px solid"
           borderColor="outlineVariant"
           justifyContent="space-between"
         >
-          <Typography
-            size="medium"
-            variant="body"
-            opacity="0.80"
-            color="#000000A3"
-          >
-            Price impact
-          </Typography>
-          <Box display="flex" justifyContent="center" alignItems="center">
-            <Typography
-              variant="body"
-              size="medium"
-              color="onSurface"
-              mr="0.5rem"
-            >
-              {priceImpact
-                ? `${priceImpact > 0.1 ? priceImpact.toFixed(2) : '< 0.1'}%`
-                : '--'}
-            </Typography>
-          </Box>
-        </Box>
-        <Box py="m" display="flex" justifyContent="space-between">
           <Typography
             variant="body"
             size="medium"
@@ -110,10 +70,11 @@ const DCAPreviewModalSummary: FC = () => {
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center">
             <Typography mr="s" variant="body" size="medium" color="onSurface">
-              {EXCHANGE_FEE * 1000}%
+              {EXCHANGE_FEE_PERCENTAGE}%
             </Typography>
           </Box>
         </Box>
+
         <Box
           py="m"
           display="flex"
@@ -154,7 +115,7 @@ const DCAPreviewModalSummary: FC = () => {
             opacity="0.80"
             color="#000000A3"
           >
-            Rebated fee
+            Storage rebate
           </Typography>
           <Box textAlign="right">
             {isLoading ? (
@@ -169,6 +130,23 @@ const DCAPreviewModalSummary: FC = () => {
           </Box>
         </Box>
       </Box>
+      {!isLoading && !fees && (
+        <Box
+          p="s"
+          gap="s"
+          display="flex"
+          borderRadius="xs"
+          border="1px solid"
+          bg="errorContainer"
+          color="onErrorContainer"
+          borderColor="onErrorContainer"
+        >
+          <DotErrorSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+          <Typography variant="label" size="medium">
+            ERROR: Try to increase the Slippage
+          </Typography>
+        </Box>
+      )}
     </Box>
   );
 };

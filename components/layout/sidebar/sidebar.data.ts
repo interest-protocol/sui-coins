@@ -11,28 +11,23 @@ import {
   UploadSVG,
 } from '@/svg';
 
-import { MenuItemProps } from './sidebar.types';
+import { IMenuItem } from './sidebar.types';
 
-export const SIDEBAR_ITEMS: ReadonlyArray<
-  Omit<
-    MenuItemProps,
-    'setIsCollapsed' | 'isCollapsed' | 'setTemporarilyOpen' | 'temporarilyOpen'
-  >
-> = [
+export const SIDEBAR_ITEMS: ReadonlyArray<IMenuItem> = [
   {
-    name: 'Trade',
+    name: 'trade',
     disabled: false,
     Icon: DoubleChevronSVG,
     accordionList: [
       {
-        name: 'Swap',
+        name: 'swap',
         disabled: false,
         Icon: DoubleChevronSVG,
         path: Routes[RoutesEnum.Swap],
         networks: [Network.MAINNET],
       },
       {
-        name: 'DCA',
+        name: 'dca',
         disabled: false,
         Icon: HourglassSVG,
         path: Routes[RoutesEnum.DCA],
@@ -77,7 +72,7 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     accordionList: [
       {
         beta: true,
-        name: 'zkSend',
+        name: 'zksend',
         disabled: false,
         Icon: UploadSVG,
         path: Routes[RoutesEnum.Send],

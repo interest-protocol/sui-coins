@@ -1,116 +1,102 @@
 import { Button, Typography } from '@interest-protocol/ui-kit';
-import {
-  useCurrentAccount,
-  useSignTransactionBlock,
-  useSuiClient,
-} from '@mysten/dapp-kit';
-import { useState } from 'react';
+import { useCurrentAccount, useSuiClientContext } from '@mysten/dapp-kit';
+import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+import invariant from 'tiny-invariant';
 
-import { EXPLORER_URL } from '@/constants';
-import { useNetwork } from '@/context/network';
+import { EXPLORER_URL, Network } from '@/constants';
 import { useDialog } from '@/hooks/use-dialog';
-import { useWeb3 } from '@/hooks/use-web3';
-import { throwTXIfNotSuccessful } from '@/utils';
-import { SwapForm } from '@/views/swap/swap.types';
+import { ZERO_BIG_NUMBER } from '@/utils';
+import { DCAForm } from '@/views/dca/dca.types';
 
-import { useAftermathRouter } from './dca-manager/dca-manager.hooks';
+import { DCAMessagesEnum } from './dca.data';
 
-const SwapButton = () => {
-  const client = useSuiClient();
-  const network = useNetwork();
-  const router = useAftermathRouter();
+const SwapButton: FC = () => {
+  const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
+  const formDCA = useFormContext<DCAForm>();
   const { dialog, handleClose } = useDialog();
-  const formSwap = useFormContext<SwapForm>();
-  const [loading, setLoading] = useState(false);
-  const { mutate } = useWeb3();
-
-  const signTransactionBlock = useSignTransactionBlock();
 
   const resetInput = () => {
-    formSwap.setValue('from.display', '0');
-    formSwap.setValue('to.display', '0');
+    formDCA.setValue('to.display', '0');
+    formDCA.setValue('from.display', '0');
+    formDCA.setValue('from.value', ZERO_BIG_NUMBER);
   };
 
-  const [explorerLink, setExplorerLink] = useState('');
-
-  const gotoExplorer = () =>
-    window.open(explorerLink, '_blank', 'noopener,noreferrer');
-
-  const route = useWatch({ control: formSwap.control, name: 'route' });
-  const slippage = useWatch({
-    control: formSwap.control,
-    name: 'settings.slippage',
+  const swapping = useWatch({
+    control: formDCA.control,
+    name: 'swapping',
   });
+
+  const readyToStartDCA = useWatch({
+    control: formDCA.control,
+    name: 'readyToStartDCA',
+  });
+
+  const gotoExplorer = () => {
+    window.open(
+      formDCA.getValues('explorerLink'),
+      '_blank',
+      'noopener,noreferrer'
+    );
+
+    formDCA.setValue('explorerLink', '');
+  };
 
   const handleSwap = async () => {
     try {
-      if (!route || !currentAccount) return;
+      invariant(currentAccount, 'Need to connect wallet');
 
-      setLoading(true);
+      formDCA.setValue('swapping', true);
 
-      const txb = await router.getTransactionForCompleteTradeRoute({
-        walletAddress: currentAccount.address,
-        completeRoute: route,
-        slippage: Number(slippage),
-      });
+      const digest = '';
 
-      const { signature, transactionBlockBytes } =
-        await signTransactionBlock.mutateAsync({
-          transactionBlock: txb,
-        });
-
-      const tx = await client.executeTransactionBlock({
-        transactionBlock: transactionBlockBytes,
-        signature,
-        options: { showEffects: true },
-        requestType: 'WaitForEffectsCert',
-      });
-
-      throwTXIfNotSuccessful(tx);
-
-      setExplorerLink(`${EXPLORER_URL[network]}/txblock/${tx.digest}`);
+      formDCA.setValue(
+        'explorerLink',
+        `${EXPLORER_URL[network as Network]}/tx/${digest}`
+      );
     } finally {
       resetInput();
-      setLoading(false);
-      await mutate();
+      formDCA.setValue('swapping', false);
     }
   };
 
-  const swap = () => {
+  const onSwap = () =>
+    readyToStartDCA &&
     dialog.promise(handleSwap(), {
       loading: {
-        title: 'Confirming DCA...',
-        message:
-          'We are confirming the DCA, and you will let you know when it is done',
+        title: 'Swapping...',
+        message: DCAMessagesEnum.swapping,
+      },
+      error: {
+        title: 'DCA Failure',
+        message: DCAMessagesEnum.swapFailure,
+        primaryButton: { label: 'Try again', onClick: handleClose },
       },
       success: {
-        title: 'DCA confirmed successfully',
-        message:
-          'Your DCA setup was successfully, and you can check it on the Explorer',
+        title: 'DCA Successfully',
+        message: DCAMessagesEnum.swapSuccess,
         primaryButton: {
           label: 'See on Explorer',
           onClick: gotoExplorer,
         },
-        secondaryButton: {
-          label: 'got it',
-          onClick: handleClose,
-        },
-      },
-      error: {
-        title: 'DCA Failed',
-        message:
-          'Your DCA failed, please try again or contact the support team',
-        primaryButton: { label: 'Try again', onClick: handleClose },
+        secondaryButton: (
+          <Button variant="outline" mr="s" onClick={handleClose}>
+            got it
+          </Button>
+        ),
       },
     });
-  };
 
   return (
-    <Button onClick={swap} variant="filled" justifyContent="center">
+    <Button
+      onClick={onSwap}
+      variant="filled"
+      disabled={!readyToStartDCA}
+      justifyContent="center"
+    >
       <Typography variant="label" size="large">
-        {loading ? 'Confirming...' : 'Confirma DCA'}
+        {swapping ? 'Swapping...' : 'DCA'}
       </Typography>
     </Button>
   );
