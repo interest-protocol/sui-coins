@@ -218,11 +218,13 @@ export const useOnBurn = () => {
                       nHover={{ color: 'outlineVariant' }}
                     >
                       {formatAddress(objectType)}{' '}
-                      <CopySVG
-                        width="100%"
-                        maxWidth="0.75rem"
-                        maxHeight="0.75rem"
-                      />
+                      {objectType && (
+                        <CopySVG
+                          width="100%"
+                          maxWidth="0.75rem"
+                          maxHeight="0.75rem"
+                        />
+                      )}
                     </Typography>
                   </Box>
                 </Box>
