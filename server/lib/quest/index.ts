@@ -73,6 +73,17 @@ export const addQuest = async (
       return finalQuest;
 
     questProfile.lastFaucetAt[data.coin.type] = todayTimestamp;
+  } else if (profileField === 'swap') {
+    invariant('swap' === quest.kind, 'Something went wrong with swap quest');
+
+    const swapCount = await QuestModel.countDocuments({
+      address: quest.address,
+      timestamp: todayTimestamp,
+    });
+
+    if (swapCount >= 5) return finalQuest;
+
+    questProfile.lastSwapAt = todayTimestamp;
   } else {
     if (questProfile[lastFieldMap[profileField]] === todayTimestamp)
       return finalQuest;
