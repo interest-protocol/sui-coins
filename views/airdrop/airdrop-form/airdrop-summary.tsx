@@ -125,7 +125,9 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
               size="medium"
               variant="body"
               color={
-                airdropFee.gt(coinsMap[SUI_TYPE_ARG]?.balance)
+                airdropFee.gt(
+                  coinsMap[SUI_TYPE_ARG]?.balance || ZERO_BIG_NUMBER
+                )
                   ? 'error'
                   : 'unset'
               }
