@@ -1,42 +1,36 @@
 import { Network } from '@/constants/network';
 
-export const AMM_CURVES = {
-  [Network.DEVNET]: {
-    STABLE:
-      '0x096e99cfb6d4443ea673745081d268a00e982652e4b8d836218e4452fd0bdc3d::curves::Stable',
-    VOLATILE:
-      '0x096e99cfb6d4443ea673745081d268a00e982652e4b8d836218e4452fd0bdc3d::curves::Volatile',
-  },
-  [Network.TESTNET]: {
-    STABLE:
-      '0xf7a29e0a883d131f73307e1b730f016c20ca6310baae013c75fa889673d10055::curves::Stable',
-    VOLATILE:
-      '0xf7a29e0a883d131f73307e1b730f016c20ca6310baae013c75fa889673d10055::curves::Volatile',
-  },
-};
-
 export const OBJECTS = {
   [Network.DEVNET]: {
     REGISTRY:
-      '0x93b0561167d574e5b0d38cc68f11fa392413571563fc572960b3cfc1e5ff5c99',
+      '0xa82dfa032afd911aa4a7953d5ecbf6a33f8e2d1b8f0f379667b141933e5c7582',
   },
   [Network.TESTNET]: {
-    REGISTRY:
-      '0x93b0561167d574e5b0d38cc68f11fa392413571563fc572960b3cfc1e5ff5c99',
+    REGISTRY: '',
   },
 };
 
 export const PACKAGES = {
   [Network.DEVNET]: {
-    DEX: '0x096e99cfb6d4443ea673745081d268a00e982652e4b8d836218e4452fd0bdc3d',
-    UTILS: '0xddc7d7d9f7f46edcfde063ac363deeb2d181ac9219222e5079cfb579b26b12a6',
+    DEX: '0x6cd108f303c318cdef1bbbf309e23f97ef9648fdc0e2e6a9d2ef2db014f9504c',
+    UTILS: '0x46d23d852e4ead896cf91d8d0ef47c147d80355517edd2ef81dac19b7c3248ae',
     AIRDROP:
-      '0x835a7b92f4efee71b5546e42d6983dfc81a1b06ab18e1517d604e0467884f354',
+      '0x35770416e5918031841afa8e9ad2076f2f9e0dd45fa4fc9effd1fdabf4db654b',
   },
   [Network.TESTNET]: {
-    DEX: '0x096e99cfb6d4443ea673745081d268a00e982652e4b8d836218e4452fd0bdc3d',
-    UTILS: '0xddc7d7d9f7f46edcfde063ac363deeb2d181ac9219222e5079cfb579b26b12a6',
-    AIRDROP:
-      '0x835a7b92f4efee71b5546e42d6983dfc81a1b06ab18e1517d604e0467884f354',
+    DEX: '',
+    UTILS: '',
+    AIRDROP: '',
+  },
+};
+
+export const AMM_CURVES = {
+  [Network.DEVNET]: {
+    STABLE: `${PACKAGES[Network.DEVNET].DEX}::curves::Stable`,
+    VOLATILE: `${PACKAGES[Network.DEVNET].DEX}::curves::Volatile`,
+  },
+  [Network.TESTNET]: {
+    STABLE: `${PACKAGES[Network.TESTNET].DEX}::curves::Stable`,
+    VOLATILE: `${PACKAGES[Network.TESTNET].DEX}::curves::Volatile`,
   },
 };
