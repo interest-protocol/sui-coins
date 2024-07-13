@@ -75,7 +75,7 @@ const CreateTokenForm: FC = () => {
       const tx = new Transaction();
 
       tx.setGasPayment(
-        coinsMap[SUI_TYPE_ARG].objects.map(
+        coinsMap[SUI_TYPE_ARG]?.objects.map(
           ({ coinObjectId, digest, version }) => ({
             objectId: coinObjectId,
             digest: digest!,

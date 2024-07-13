@@ -111,7 +111,7 @@ const SendHistoryTable: FC = () => {
   const handleReclaimLink = async (link: ZkSendLink) => {
     const gasCoins = gasObjects.length
       ? gasObjects
-      : coinsMap[SUI_TYPE_ARG].objects.map(
+      : coinsMap[SUI_TYPE_ARG]?.objects.map(
           ({ coinObjectId, digest, version }) => ({
             objectId: coinObjectId,
             digest,
