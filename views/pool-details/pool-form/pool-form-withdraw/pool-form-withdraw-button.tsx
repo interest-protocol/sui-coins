@@ -31,7 +31,7 @@ const PoolFormWithdrawButton: FC = () => {
   const error = useWatch({ control, name: 'error' });
   const lpCoin = useWatch({ control, name: 'lpCoin' });
 
-  const ableToClick = Boolean(BigInt(lpCoin.value));
+  const ableToClick = Boolean(Number(lpCoin.value));
 
   const handleWithdraw = async () => {
     try {
