@@ -9,6 +9,7 @@ import { CreatePoolForm } from '../pool-create.types';
 import PoolCreateButton from '../pool-next-button';
 import Input from './input';
 import SelectCoinsError from './select-coins-error';
+import SelectCoinsErrorManager from './select-coins-error-manager';
 
 const SelectCoins: FC = () => {
   const { control } = useFormContext<CreatePoolForm>();
@@ -85,6 +86,7 @@ const SelectCoins: FC = () => {
                 Add Coin
               </Button>
             )}
+          <SelectCoinsErrorManager />
           <SelectCoinsError />
         </Box>
       </Box>
