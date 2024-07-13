@@ -1,5 +1,4 @@
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { SUI_CLOCK_OBJECT_ID } from '@mysten/sui.js/utils';
 import { WalletAccount } from '@wallet-standard/base';
 
 import { PACKAGES } from '@/constants';
@@ -75,7 +74,6 @@ export const useWithdraw = () => {
       typeArguments: [coin0.type, coin1.type, lpCoin.type],
       arguments: [
         txb.object(pool.poolId),
-        txb.object(SUI_CLOCK_OBJECT_ID),
         lpCoinIn,
         txb.pure(minimumXAmount),
         txb.pure(minimumYAmount),

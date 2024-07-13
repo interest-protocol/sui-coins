@@ -16,7 +16,7 @@ export const USDC_TYPE = `${MOVEMENT_MOCK_COINS_PACKAGE}::usdc::USDC`;
 export const USDT_TYPE = `${MOVEMENT_MOCK_COINS_PACKAGE}::usdt::USDT`;
 
 export const RUCO_TYPE =
-  '0x66e2b5b7888b2b04c94ef12f8a035d144c2397bfa022a3ea6cae696d9d833957::ruco::RUCO';
+  '0x935aae204191927c7f1586a11c011da5fafb57fa51bd1df60484954c18862891::ruco::RUCO';
 
 export const TREASURY_CAP_MAP = {
   [USDC_TYPE]:

@@ -1,6 +1,5 @@
 import { useCurrentAccount } from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { SUI_CLOCK_OBJECT_ID } from '@mysten/sui.js/utils';
 import BigNumber from 'bignumber.js';
 import { useFormContext } from 'react-hook-form';
 
@@ -132,7 +131,6 @@ const swap = async ({
         ],
         arguments: [
           txb.object(id),
-          txb.object(SUI_CLOCK_OBJECT_ID),
           assetIn,
           txb.pure.u64(minAmountOut.toString()),
         ],
@@ -148,12 +146,7 @@ const swap = async ({
         coinsPath[index + 1],
         poolMetadata.coinTypes.lpCoin,
       ],
-      arguments: [
-        txb.object(id),
-        txb.object(SUI_CLOCK_OBJECT_ID),
-        assetIn,
-        txb.pure.u64('0'),
-      ],
+      arguments: [txb.object(id), assetIn, txb.pure.u64('0')],
     });
   });
 

@@ -1,5 +1,4 @@
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { SUI_CLOCK_OBJECT_ID } from '@mysten/sui.js/utils';
 import { devInspectAndGetReturnValues } from '@polymedia/suits';
 import BigNumber from 'bignumber.js';
 import invariant from 'tiny-invariant';
@@ -51,11 +50,7 @@ export const findAmount = async ({
             coinsPath[index + 1],
             poolMetadata.coinTypes.lpCoin,
           ],
-          arguments: [
-            txb.object(id),
-            txb.object(SUI_CLOCK_OBJECT_ID),
-            amountIn,
-          ],
+          arguments: [txb.object(id), amountIn],
         });
 
         return;
@@ -68,7 +63,7 @@ export const findAmount = async ({
           coinsPath[index + 1],
           poolMetadata.coinTypes.lpCoin,
         ],
-        arguments: [txb.object(id), txb.object(SUI_CLOCK_OBJECT_ID), amountIn],
+        arguments: [txb.object(id), amountIn],
       });
     });
   });
