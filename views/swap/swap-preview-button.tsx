@@ -47,8 +47,8 @@ const SwapPreviewButton: FC = () => {
     coinsExist &&
     !loading &&
     !notEnoughBalance &&
-    Number(from.value) &&
-    Number(to.value);
+    !!Number(from.value) &&
+    !!Number(to.value);
 
   const handlePreview = () => {
     setValue('readyToSwap', false);

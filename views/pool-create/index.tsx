@@ -19,11 +19,12 @@ const PoolCreate = () => {
   return (
     <Layout>
       <CreatePoolHeader
-        onBack={() =>
+        onBack={() => {
           currentStep
             ? setValue('step', currentStep - 1)
-            : push(Routes[RoutesEnum.Pools])
-        }
+            : push(Routes[RoutesEnum.Pools]);
+          setValue('error', '');
+        }}
         name={stepTitle[currentStep]}
       />
       <Box
