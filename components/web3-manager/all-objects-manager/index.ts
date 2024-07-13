@@ -33,10 +33,7 @@ const getAllObjects: TGetAllObjects = async (
 const AllObjectsManager: FC<{ withBlocked?: boolean }> = ({ withBlocked }) => {
   const suiClient = useSuiClient();
   const { network } = useSuiClientContext();
-  const currentAccount = {
-    address:
-      '0x10eefc7a3070baa5d72f602a0c89d7b1cb2fcc0b101cf55e6a70e3edb6229f8b',
-  };
+  const currentAccount = useCurrentAccount();
   const { id, delay, updateAllObjects, updateError, updateLoading } =
     useObjects();
 
