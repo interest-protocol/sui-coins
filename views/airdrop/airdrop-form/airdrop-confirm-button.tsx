@@ -264,7 +264,9 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
     ? BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS).times(airdropList.length)
     : ZERO_BIG_NUMBER;
 
-  const disabled = airdropFee.gt(coinsMap[SUI_TYPE_ARG].balance);
+  const disabled = airdropFee.gt(
+    coinsMap[SUI_TYPE_ARG]?.balance ?? ZERO_BIG_NUMBER
+  );
 
   return (
     <Box display="flex" justifyContent="center">
