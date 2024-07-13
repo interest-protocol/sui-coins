@@ -1,7 +1,12 @@
 import invariant from 'tiny-invariant';
 
+import { FAUCET_COINS } from '@/constants';
 import dbConnect from '@/server';
-import QuestModel, { FaucetData, Quest } from '@/server/model/quest';
+import QuestModel, {
+  AirdropData,
+  FaucetData,
+  Quest,
+} from '@/server/model/quest';
 import QuestProfileModel from '@/server/model/quest-profile';
 import { getExactDayTimestamp } from '@/utils';
 
@@ -12,6 +17,23 @@ type ProfileField =
   | 'addLiquidity'
   | 'airdrop'
   | 'createToken';
+
+type LastField =
+  | 'lastSwapAt'
+  | 'lastFaucetAt'
+  | 'lastCreatePoolAt'
+  | 'lastAddLiquidityAt'
+  | 'lastAirdropAt'
+  | 'lastCreateTokenAt';
+
+const lastFieldMap: Record<ProfileField, LastField> = {
+  swap: 'lastSwapAt',
+  faucet: 'lastFaucetAt',
+  airdrop: 'lastAirdropAt',
+  createPool: 'lastCreatePoolAt',
+  createToken: 'lastCreateTokenAt',
+  addLiquidity: 'lastAddLiquidityAt',
+};
 
 export const addQuest = async (
   quest: Omit<Quest, 'timestamp'>,
@@ -28,7 +50,16 @@ export const addQuest = async (
   const doc = await QuestModel.create(finalQuest);
   await doc.save();
 
-  if (!questProfile[profileField]) questProfile[profileField] = {};
+  if (profileField === 'airdrop') {
+    invariant(
+      'airdrop' === quest.kind,
+      'Something went wrong with airdrop quest'
+    );
+
+    const data = quest.data as AirdropData;
+
+    if (data.addressesCount < 10) return finalQuest;
+  }
 
   if (profileField === 'faucet') {
     invariant(
@@ -38,20 +69,26 @@ export const addQuest = async (
 
     const data = quest.data as FaucetData;
 
-    if (!questProfile[profileField][todayTimestamp])
-      questProfile[profileField][todayTimestamp] = {};
+    if (questProfile.lastFaucetAt[data.coin.type] === todayTimestamp)
+      return finalQuest;
 
-    if (!questProfile[profileField][todayTimestamp][data.coin.type])
-      questProfile[profileField][todayTimestamp][data.coin.type] = 0;
+    questProfile.lastFaucetAt[data.coin.type] = todayTimestamp;
+  } else if (profileField === 'swap') {
+    invariant('swap' === quest.kind, 'Something went wrong with swap quest');
 
-    questProfile[profileField][todayTimestamp][data.coin.type] =
-      questProfile[profileField][todayTimestamp][data.coin.type] + 1;
+    const swapCount = await QuestModel.countDocuments({
+      address: quest.address,
+      timestamp: todayTimestamp,
+    });
+
+    if (swapCount >= 5) return finalQuest;
+
+    questProfile.lastSwapAt = todayTimestamp;
   } else {
-    if (!questProfile[profileField][todayTimestamp])
-      questProfile[profileField][todayTimestamp] = 0;
+    if (questProfile[lastFieldMap[profileField]] === todayTimestamp)
+      return finalQuest;
 
-    questProfile[profileField][todayTimestamp] =
-      questProfile[profileField][todayTimestamp] + 1;
+    (questProfile[lastFieldMap[profileField]] as number) = todayTimestamp;
   }
 
   await questProfile.save();
@@ -67,12 +104,15 @@ export const findQuestProfile = async (address: string) => {
   if (!questProfile)
     return QuestProfileModel.create({
       address,
-      swap: {},
-      faucet: {},
-      airdrop: {},
-      createPool: {},
-      createToken: {},
-      addLiquidity: {},
+      lastSwapAt: 0,
+      lastAirdropAt: 0,
+      lastCreatePoolAt: 0,
+      lastCreateTokenAt: 0,
+      lastAddLiquidityAt: 0,
+      lastFaucetAt: FAUCET_COINS.reduce(
+        (acc, { type }) => ({ ...acc, [type]: 0 }),
+        {}
+      ),
     });
 
   return questProfile;

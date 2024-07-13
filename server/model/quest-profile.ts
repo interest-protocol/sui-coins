@@ -2,16 +2,14 @@ import mongoose, { Document, Model, Schema } from 'mongoose';
 
 const modelName = 'MovementQuestProfileDevnet';
 
-type QuestData = Record<number, number>;
-
 export interface QuestProfile {
   address: string;
-  swap: QuestData;
-  airdrop: QuestData;
-  createPool: QuestData;
-  createToken: QuestData;
-  addLiquidity: QuestData;
-  faucet: Record<number, Record<string, number>>;
+  lastSwapAt: number;
+  lastAirdropAt: number;
+  lastCreatePoolAt: number;
+  lastCreateTokenAt: number;
+  lastAddLiquidityAt: number;
+  lastFaucetAt: Record<string, number>;
 }
 
 export type QuestProfileDocument = Document & QuestProfile;
@@ -23,12 +21,12 @@ export const QuestProfileSchema = new Schema({
     required: true,
     unique: true,
   },
-  swap: Object,
-  faucet: Object,
-  createPool: Object,
-  addLiquidity: Object,
-  airdrop: Object,
-  createToken: Object,
+  lastFaucetAt: Object,
+  lastSwapAt: { type: Number },
+  lastAirdropAt: { type: Number },
+  lastCreatePoolAt: { type: Number },
+  lastCreateTokenAt: { type: Number },
+  lastAddLiquidityAt: { type: Number },
 });
 
 export default (mongoose.models[modelName] as Model<QuestProfileDocument>) ||
