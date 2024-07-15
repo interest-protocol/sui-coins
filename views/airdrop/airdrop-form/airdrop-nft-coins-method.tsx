@@ -10,7 +10,7 @@ import { ChevronRightSVG } from '@/svg';
 import SelectNFTModal from '@/views/components/select-nft-modal';
 import SelectTokenModal from '@/views/components/select-token-modal';
 
-import { CoinObject } from '../../../components/web3-manager/coins-manager/web3-manager.types';
+import { CoinObject } from '../../../components/web3-manager/coins-manager/coins-manager.types';
 import { IAirdropForm } from '../airdrop.types';
 import { getSymbol } from '../airdrop.utils';
 import AirdropCommonAmountTextField from './airdrop-common-amount-text-field';

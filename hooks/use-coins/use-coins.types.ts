@@ -1,7 +1,7 @@
 import {
   CoinObject,
   CoinsMap,
-} from '../../components/web3-manager/coins-manager/web3-manager.types';
+} from '../../components/web3-manager/coins-manager/coins-manager.types';
 
 export interface UseCoinsResponse {
   id: string;
