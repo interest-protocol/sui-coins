@@ -6,6 +6,7 @@ import {
   FireSVG,
   MemechanSVG,
   MenuSVG,
+  MergeSVG,
   PoolSVG,
   UploadSVG,
 } from '@/svg';
@@ -65,6 +66,14 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
         disabled: false,
         Icon: UploadSVG,
         path: Routes[RoutesEnum.Send],
+        networks: [Network.MAINNET, Network.TESTNET],
+      },
+      {
+        beta: false,
+        name: 'merge',
+        disabled: false,
+        Icon: MergeSVG,
+        path: Routes[RoutesEnum.Merge],
         networks: [Network.MAINNET, Network.TESTNET],
       },
       {

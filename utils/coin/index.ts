@@ -143,7 +143,7 @@ export async function getCoinOfValue({
 }: GetCoinOfValueArgs): Promise<TransactionResult> {
   let coinOfValue: TransactionResult;
   coinType = removeLeadingZeros(coinType);
-  if (coinType === '0x2::sui::SUI') {
+  if (isSui(coinType)) {
     coinOfValue = tx.splitCoins(tx.gas, [tx.pure.u64(coinValue)]);
   } else {
     const paginatedCoins = await getCoins({
