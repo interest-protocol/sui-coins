@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { ObjectData } from '@/components/web3-manager/all-objects-manager/all-objects.types';
-import { CoinObject } from '@/components/web3-manager/coins-manager/web3-manager.types';
+import { CoinObject } from '@/components/web3-manager/coins-manager/coins-manager.types';
 
 import { useCoins } from '../use-coins';
 import { useNFTMetadata } from '../use-nft-metadata';
