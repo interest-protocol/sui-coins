@@ -1,4 +1,5 @@
 import { useCurrentAccount } from '@mysten/dapp-kit';
+import { CoinStruct } from '@mysten/sui/dist/cjs/client';
 import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
@@ -58,7 +59,11 @@ const IncineratorManager: FC = () => {
             object.display?.symbol
               ?.toLowerCase()
               .includes(search.toLowerCase()) ||
-            object.display?.objects[0].objectId
+            (
+              object.display?.objects[0] as Omit<CoinStruct, 'coinType'> & {
+                type: string;
+              }
+            ).coinObjectId
               ?.toLowerCase()
               .includes(search.toLowerCase())
           )
