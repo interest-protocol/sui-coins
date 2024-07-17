@@ -11,7 +11,9 @@ export const TOKEN_ICONS: Record<
 > = {
   [Network.TESTNET]: {
     ETH: ETHSVG,
+    WETH: ETHSVG,
     BTC: BTCSVG,
+    WBTC: BTCSVG,
     USDC: USDCSVG,
     MOVE: MOVESVG,
     USDT: USDTSVG,
@@ -19,7 +21,9 @@ export const TOKEN_ICONS: Record<
   },
   [Network.DEVNET]: {
     ETH: ETHSVG,
+    WETH: ETHSVG,
     BTC: BTCSVG,
+    WBTC: BTCSVG,
     USDC: USDCSVG,
     MOVE: MOVESVG,
     USDT: USDTSVG,
