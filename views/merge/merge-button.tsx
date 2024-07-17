@@ -85,7 +85,7 @@ const MergeButton: FC = () => {
         variant="tonal"
         justifyContent="center"
         onClick={handleMergeCoins}
-        disabled={!(coinsToMerge.length > 1)}
+        disabled={!coinsToMerge.length}
       >
         clear
       </Button>
@@ -95,7 +95,7 @@ const MergeButton: FC = () => {
         variant="filled"
         justifyContent="center"
         onClick={handleMergeCoins}
-        disabled={!(coinsToMerge.length > 1)}
+        disabled={!coinsToMerge.length}
         PrefixIcon={
           <MergeSVG maxWidth="1.2rem" maxHeight="1.2rem" width="100%" />
         }

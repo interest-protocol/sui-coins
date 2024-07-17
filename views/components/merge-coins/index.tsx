@@ -18,7 +18,7 @@ import { useModal } from '@/hooks/use-modal';
 import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
 import { MergeSVG } from '@/svg';
-import { showTXSuccessToast, signAndExecute } from '@/utils';
+import { isSui, showTXSuccessToast, signAndExecute } from '@/utils';
 
 const MergeCoins: FC = () => {
   const { coins } = useWeb3();
@@ -37,14 +37,16 @@ const MergeCoins: FC = () => {
 
       const tx = new Transaction();
 
-      coinsToMerge.map(({ objects: [target, ...others] }) => {
-        const targetCoinObject = tx.object(target.coinObjectId);
+      coinsToMerge
+        .filter(({ type }) => !isSui(type))
+        .map(({ objects: [target, ...others] }) => {
+          const targetCoinObject = tx.object(target.coinObjectId);
 
-        tx.mergeCoins(
-          targetCoinObject,
-          others.map(({ coinObjectId }) => coinObjectId)
-        );
-      });
+          tx.mergeCoins(
+            targetCoinObject,
+            others.map(({ coinObjectId }) => coinObjectId)
+          );
+        });
 
       const txResult = await signAndExecute({
         tx,
