@@ -22,7 +22,8 @@ const SwapFormFieldSlider: FC = () => {
   const type = useWatch({ control, name: 'from.type' });
   const swapping = useWatch({ control, name: 'swapping' });
 
-  const safeRemoval = isSui(type) ? BigNumber(100000000) : ZERO_BIG_NUMBER;
+  const safeRemoval =
+    type && isSui(type) ? BigNumber(100000000) : ZERO_BIG_NUMBER;
 
   const balance = coinsMap[type]
     ? coinsMap[type].balance.minus(safeRemoval)
