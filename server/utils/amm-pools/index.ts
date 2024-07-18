@@ -4,11 +4,11 @@ import { toString } from 'ramda';
 import invariant from 'tiny-invariant';
 
 import {
-  BTC_TYPE,
-  ETH_TYPE,
   PAGE_SIZE,
   USDC_TYPE,
   USDT_TYPE,
+  WBTC_TYPE,
+  WETH_TYPE,
 } from '@/constants';
 import { AmmPool } from '@/interface';
 import { AMMPoolModel, getAmmPoolModel } from '@/server/model/amm-pool';
@@ -65,7 +65,7 @@ export const getAllPools = async ({
   return [pools, totalPages];
 };
 
-const baseCoins = [USDT_TYPE, USDC_TYPE, BTC_TYPE, ETH_TYPE, SUI_TYPE_ARG];
+const baseCoins = [USDT_TYPE, USDC_TYPE, WBTC_TYPE, WETH_TYPE, SUI_TYPE_ARG];
 
 export const getPoolsByCoinTypes = async ({
   client,

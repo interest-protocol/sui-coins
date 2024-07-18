@@ -5,11 +5,11 @@ import { CoinData } from '@/interface';
 export const MOVE_TYPE_ARG = '0x2::move::MOVE';
 
 const MOVEMENT_MOCK_COINS_PACKAGE =
-  '0x2e92e323161b7128012270910d55ba19033e193fc7a7af37810e280853d3926e';
+  '0x457abead7283c8af79b0902e71decf173f88624fe8dd2e76be97b6132c39e9c9';
 
-export const BTC_TYPE = `${MOVEMENT_MOCK_COINS_PACKAGE}::btc::BTC`;
+export const WBTC_TYPE = `${MOVEMENT_MOCK_COINS_PACKAGE}::wbtc::WBTC`;
 
-export const ETH_TYPE = `${MOVEMENT_MOCK_COINS_PACKAGE}::eth::ETH`;
+export const WETH_TYPE = `${MOVEMENT_MOCK_COINS_PACKAGE}::weth::WETH`;
 
 export const USDC_TYPE = `${MOVEMENT_MOCK_COINS_PACKAGE}::usdc::USDC`;
 
@@ -20,19 +20,19 @@ export const RUCO_TYPE =
 
 export const TREASURY_CAP_MAP = {
   [USDC_TYPE]:
-    '0xaea0c4e0b0940fe832b3369e5cfdca218a7c067f5fe5b8514bf9f7c6f7437f40',
-  [ETH_TYPE]:
-    '0x8ed18d4f15991b3d36e60e7b7ca088e6ff2b08797f308045cdef665f67bc91e6',
-  [BTC_TYPE]:
-    '0x6cdbf86e99ee99d373d1d5d70189e505a9a21b77cc103f82daf77c0e0266e7a9',
+    '0x1292ab377437c97bc6dfead6b502c0a40c1cdd84d3b5c7c98ad6a303bec52897',
+  [WETH_TYPE]:
+    '0x2edacfae4858522ae6cff36d8acc05a255b9b4403bd7e56d9b0ca6664edc25be',
+  [WBTC_TYPE]:
+    '0x0401a6b9b03b694d16fe9806389625beb6d801f64a188d39aecfc090c5dce2fd',
   [USDT_TYPE]:
-    '0x6cd5b46b192da614e77191f6de15b91d56a7b40b6638b054be12501c76ca6b2c',
+    '0x54e04baa0fa5bf840efb48e44afb1c388690e8d52cf874a012edaa5fa487ab27',
 } as Record<string, string>;
 
 export const FAUCET_AMOUNT = {
   [USDC_TYPE]: '5000000000',
-  [ETH_TYPE]: '5000000000',
-  [BTC_TYPE]: '100000000',
+  [WETH_TYPE]: '5000000000',
+  [WBTC_TYPE]: '100000000',
   [USDT_TYPE]: '7000000000000',
 } as Record<string, string>;
 
@@ -44,13 +44,13 @@ export const FAUCET_COINS: ReadonlyArray<CoinData> = [
   },
   {
     decimals: 9,
-    symbol: 'BTC',
-    type: BTC_TYPE,
+    symbol: 'WBTC',
+    type: WBTC_TYPE,
   },
   {
     decimals: 9,
-    symbol: 'ETH',
-    type: ETH_TYPE,
+    symbol: 'WETH',
+    type: WETH_TYPE,
   },
   {
     decimals: 6,
@@ -79,15 +79,15 @@ export const COINS_MAP: Record<string, CoinData> = {
     symbol: 'MOVE',
     type: SUI_TYPE_ARG,
   },
-  [BTC_TYPE]: {
+  [WBTC_TYPE]: {
     decimals: 9,
-    symbol: 'BTC',
-    type: BTC_TYPE,
+    symbol: 'WBTC',
+    type: WBTC_TYPE,
   },
-  [ETH_TYPE]: {
+  [WETH_TYPE]: {
     decimals: 9,
     symbol: 'ETH',
-    type: ETH_TYPE,
+    type: WETH_TYPE,
   },
   [USDC_TYPE]: {
     decimals: 6,
