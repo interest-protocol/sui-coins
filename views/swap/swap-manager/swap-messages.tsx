@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import { propOr } from 'ramda';
 import { FC, useState } from 'react';
 import { useEffect } from 'react';
@@ -6,6 +7,7 @@ import toast from 'react-hot-toast';
 
 import { useWeb3 } from '@/hooks';
 import { FixedPointMath } from '@/lib';
+import { isSui, ZERO_BIG_NUMBER } from '@/utils';
 
 import { SwapMessagesProps } from './swap-manager.types';
 
@@ -80,11 +82,24 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
     }
 
     if (
-      coinsMap[from.type]?.balance.lt(
-        FixedPointMath.toBigNumber(fromValue, from.decimals)
-      )
+      FixedPointMath.toNumber(
+        coinsMap[from.type]?.balance ?? ZERO_BIG_NUMBER,
+        from.decimals
+      ) < Number(fromValue)
     ) {
-      setValue('error', "Price value can't be greater than balance");
+      setValue('error', "Sell value can't be greater than balance");
+      return;
+    }
+
+    if (
+      isSui(from.type) &&
+      FixedPointMath.toNumber(
+        coinsMap[from.type]?.balance.minus(BigNumber(100000000)) ??
+          ZERO_BIG_NUMBER,
+        from.decimals
+      ) < Number(fromValue)
+    ) {
+      setValue('error', 'You should leave at least 0.1 MOVE for gas');
       return;
     }
 
