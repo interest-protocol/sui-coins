@@ -11,7 +11,7 @@ import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
 import SelectObjectModal from '@/views/components/select-object-modal';
 
-import { CoinObject } from '../../../../../components/web3-manager/coins-manager/web3-manager.types';
+import { CoinObject } from '../../../../../components/web3-manager/coins-manager/coins-manager.types';
 import { ISendSimpleForm } from '../send-simple.types';
 import { SendFormSelectObjectProps } from './send-select-object.types';
 

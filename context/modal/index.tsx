@@ -21,8 +21,8 @@ export const ModalProvider: FC<PropsWithChildren> = ({ children }) => {
   const [modalProps, setModalProps] = useState<Omit<ModalProps, 'isOpen'>>({});
 
   const handleClose = () => {
-    setComponent(null);
     modalProps?.onClose?.();
+    setComponent(null);
   };
 
   const setModal = (node: ReactNode, props = {} as Partial<ModalProps>) => {

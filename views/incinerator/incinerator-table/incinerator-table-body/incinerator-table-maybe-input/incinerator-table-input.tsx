@@ -8,7 +8,7 @@ import {
 } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { CoinObject } from '@/components/web3-manager/coins-manager/web3-manager.types';
+import { CoinObject } from '@/components/web3-manager/coins-manager/coins-manager.types';
 import { Keys } from '@/constants';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';

@@ -6,7 +6,7 @@ import { useModal } from '@/hooks/use-modal';
 import { MinusSVG, PlusSVG } from '@/svg';
 import SelectObjectModal from '@/views/components/select-object-modal';
 
-import { CoinObject } from '../../../../components/web3-manager/coins-manager/web3-manager.types';
+import { CoinObject } from '../../../../components/web3-manager/coins-manager/coins-manager.types';
 import SendFormSelectObject from './send-select-object';
 import { ISendSimpleForm } from './send-simple.types';
 import FormSendButton from './send-simple-button';
