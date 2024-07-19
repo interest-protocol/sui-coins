@@ -20,38 +20,44 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
   <ModalProvider>
     <Box display="flex" height="100vh" overflow="hidden" bg="surface">
       {!noSidebar && <Sidebar />}
-      <Box as="aside" position="relative" flex="1">
+      <Box
+        as="aside"
+        position="relative"
+        flex="1"
+        display="flex"
+        flexDirection="column"
+      >
         <Header withLogo={noSidebar} />
         <Web3Manager features={features} withBlocked={withBlocked} />
-        <Box width="100%" overflowY="auto">
-          <Box
-            m="0"
-            width="100%"
-            display="flex"
-            maxHeight="100vh"
-            variant="container"
-            flexDirection="column"
-            px={['m', 'l', 'l', 'xl']}
-            mt="unset"
-          >
-            <Box as="main" flex="1" mb="10xl">
-              <Box>
-                {title && (
-                  <Typography
-                    textAlign="center"
-                    variant="display"
-                    size="medium"
-                    my="3rem"
-                  >
-                    {title}
-                  </Typography>
-                )}
-                {children}
-              </Box>
+        <Box
+          m="0"
+          mt="unset"
+          width="100%"
+          height="100%"
+          display="flex"
+          overflowY="auto"
+          variant="container"
+          flexDirection="column"
+          px={['m', 'l', 'l', 'xl']}
+          justifyContent="space-between"
+        >
+          <Box as="main" flex="1" mb="10xl">
+            <Box>
+              {title && (
+                <Typography
+                  textAlign="center"
+                  variant="display"
+                  size="medium"
+                  my="3rem"
+                >
+                  {title}
+                </Typography>
+              )}
+              {children}
             </Box>
-            <MergeCoins />
-            <Footer />
           </Box>
+          <MergeCoins />
+          <Footer />
         </Box>
       </Box>
     </Box>
