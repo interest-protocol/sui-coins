@@ -1,4 +1,4 @@
-import { Box, Typography } from '@interest-protocol/ui-kit';
+import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -42,22 +42,20 @@ const SwapPreviewModal: FC<SwapPreviewModalProps> = ({ onClose }) => {
           alignItems="center"
           justifyContent="space-between"
         >
-          <ArrowLeftSVG
-            width="100%"
-            onClick={onClose}
-            maxWidth="1.5rem"
-            maxHeight="1.5rem"
-          />
+          <Button isIcon variant="text" onClick={onClose}>
+            <ArrowLeftSVG width="100%" maxWidth="1.5rem" maxHeight="1.5rem" />
+          </Button>
           <Typography size="large" variant="title">
             Swap
           </Typography>
-          <TimesSVG
-            onClick={onClose}
-            width="100%"
-            maxWidth="1rem"
-            cursor="pointer"
-            maxHeight="1rem"
-          />
+          <Button isIcon variant="text" onClick={onClose}>
+            <TimesSVG
+              width="100%"
+              maxWidth="1rem"
+              cursor="pointer"
+              maxHeight="1rem"
+            />
+          </Button>
         </Box>
         <Box display="flex" flexDirection="column" gap="m">
           <Box
