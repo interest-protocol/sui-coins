@@ -42,9 +42,9 @@ const MergeButton: FC = () => {
       p="l"
       gap="xs"
       mx="auto"
-      width="25rem"
       bg="onPrimary"
       display="grid"
+      maxWidth="25rem"
       borderRadius="xs"
       gridTemplateColumns="1fr 3fr"
     >
