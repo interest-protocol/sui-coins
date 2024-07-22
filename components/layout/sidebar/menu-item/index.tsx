@@ -6,7 +6,7 @@ import MenuItemCollapsible from './menu-item-collapsible';
 import MenuItemTitle from './menu-item-title';
 
 const SidebarMenuItem: FC<MenuItemProps> = ({
-  isOpen,
+  open,
   isCollapsed,
   accordionList,
   setTemporarilyOpen,
@@ -16,14 +16,14 @@ const SidebarMenuItem: FC<MenuItemProps> = ({
     if (!accordionList) return;
 
     setTemporarilyOpen((temporarilyOpen) =>
-      isCollapsed ? true : temporarilyOpen
+      isCollapsed ? props.name : temporarilyOpen
     );
   };
 
   const onMouseLeave = () => {
     if (!accordionList) return;
 
-    setTemporarilyOpen(false);
+    setTemporarilyOpen(null);
   };
 
   return (
@@ -31,7 +31,7 @@ const SidebarMenuItem: FC<MenuItemProps> = ({
       <Motion
         initial="rest"
         whileHover="hover"
-        animate={isOpen && accordionList ? 'hover' : 'rest'}
+        animate={props.name === open && accordionList ? 'hover' : 'rest'}
       >
         <MenuItemTitle
           {...props}

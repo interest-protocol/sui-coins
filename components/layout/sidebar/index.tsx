@@ -23,7 +23,7 @@ const Sidebar: FC = () => {
     `${LOCAL_STORAGE_VERSION}-sui-coins-menu-collapse`
   );
 
-  const [isOpen, setTemporarilyOpen] = useState(false);
+  const [open, setTemporarilyOpen] = useState<string | null>(null);
   const [isCollapsed, setIsCollapsed] = useState(isLocalCollapsed ?? false);
 
   return (
@@ -39,20 +39,20 @@ const Sidebar: FC = () => {
       justifyContent="space-between"
       transition={{ duration: 0.5 }}
       display={['none', 'none', 'none', 'flex']}
-      animate={isOpen || !isCollapsed ? 'open' : 'closed'}
-      initial={(isOpen || !isCollapsed) === isMounted() ? 'closed' : 'open'}
+      animate={open || !isCollapsed ? 'open' : 'closed'}
+      initial={(open || !isCollapsed) === isMounted() ? 'closed' : 'open'}
     >
       <Box>
-        <SidebarHeader isCollapsed={!isOpen && isCollapsed} />
+        <SidebarHeader isCollapsed={!open && isCollapsed} />
         <SidebarMenuList
-          isOpen={isOpen}
+          open={open}
           setIsCollapsed={setIsCollapsed}
-          isCollapsed={!isOpen && isCollapsed}
+          isCollapsed={!open && isCollapsed}
           setTemporarilyOpen={setTemporarilyOpen}
         />
       </Box>
       <SidebarCollapseButton
-        isOpen={isOpen}
+        isOpen={!!open}
         isCollapsed={isCollapsed}
         setIsCollapsed={setIsCollapsed}
       />

@@ -4,6 +4,7 @@ import {
   CirclePlusSVG,
   DoubleChevronSVG,
   FireSVG,
+  HourglassSVG,
   MemechanSVG,
   MenuSVG,
   MergeSVG,
@@ -11,26 +12,36 @@ import {
   UploadSVG,
 } from '@/svg';
 
-import { MenuItemProps } from './sidebar.types';
+import { IMenuItem } from './sidebar.types';
 
-export const SIDEBAR_ITEMS: ReadonlyArray<
-  Omit<
-    MenuItemProps,
-    'setIsCollapsed' | 'isCollapsed' | 'setTemporarilyOpen' | 'temporarilyOpen'
-  >
-> = [
+export const SIDEBAR_ITEMS: ReadonlyArray<IMenuItem> = [
   {
-    name: 'swap',
+    name: 'trade',
     disabled: false,
     Icon: DoubleChevronSVG,
-    path: Routes[RoutesEnum.Swap],
-    networks: [Network.MAINNET, Network.TESTNET],
+    accordionList: [
+      {
+        name: 'swap',
+        disabled: false,
+        Icon: DoubleChevronSVG,
+        path: Routes[RoutesEnum.Swap],
+        networks: [Network.MAINNET],
+      },
+      {
+        name: 'dca',
+        disabled: false,
+        Icon: HourglassSVG,
+        path: Routes[RoutesEnum.DCA],
+        networks: [Network.MAINNET],
+      },
+    ],
+    networks: [Network.MAINNET],
   },
   {
     name: 'pool',
     Icon: PoolSVG,
     path: Routes[RoutesEnum.Pools],
-    networks: [Network.MAINNET, Network.TESTNET],
+    networks: [Network.MAINNET],
     disabled: true,
   },
   {
@@ -62,7 +73,7 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     accordionList: [
       {
         beta: true,
-        name: 'zkSend',
+        name: 'zksend',
         disabled: false,
         Icon: UploadSVG,
         path: Routes[RoutesEnum.Send],

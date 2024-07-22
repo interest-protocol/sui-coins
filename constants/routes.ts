@@ -3,6 +3,7 @@
  * @description this data type will help us to uniformize our route names
  */
 export enum RoutesEnum {
+  DCA = 'dca',
   Swap = 'swap',
   Send = 'send',
   Pools = 'pools',
@@ -26,6 +27,7 @@ export enum RoutesEnum {
  */
 export const Routes: Record<RoutesEnum, string> = {
   [RoutesEnum.Swap]: '/',
+  [RoutesEnum.DCA]: '/dca',
   [RoutesEnum.Send]: '/send',
   [RoutesEnum.Pools]: '/pools',
   [RoutesEnum.Merge]: '/merge',
