@@ -21,10 +21,11 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
     <Box display="flex" height="100vh" overflow="hidden" bg="surface">
       {!noSidebar && <Sidebar />}
       <Box
-        as="aside"
-        position="relative"
         flex="1"
+        as="aside"
         display="flex"
+        overflowY="auto"
+        position="relative"
         flexDirection="column"
       >
         <Header withLogo={noSidebar} />
@@ -35,7 +36,6 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
           width="100%"
           height="100%"
           display="flex"
-          overflowY="auto"
           variant="container"
           flexDirection="column"
           px={['m', 'l', 'l', 'xl']}
