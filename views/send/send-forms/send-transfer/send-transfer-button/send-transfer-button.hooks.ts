@@ -6,16 +6,7 @@ import {
 import { SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { Transaction } from '@mysten/sui/transactions';
 
-import { ObjectData } from '@/components/web3-manager/all-objects-manager/all-objects.types';
-import { CoinObject } from '@/components/web3-manager/coins-manager/coins-manager.types';
-import { FixedPointMath } from '@/lib';
-import {
-  isSui,
-  signAndExecute,
-  throwTXIfNotSuccessful,
-  waitForTx,
-} from '@/utils';
-import { isCoinObject } from '@/views/components/select-object-modal/select-object-modal.utils';
+import { signAndExecute, throwTXIfNotSuccessful, waitForTx } from '@/utils';
 
 import { ObjectField } from '../send-transfer.types';
 
