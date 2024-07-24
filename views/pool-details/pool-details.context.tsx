@@ -1,14 +1,12 @@
 import { InterestPool } from '@interest-protocol/clamm-sdk';
-import { useSuiClientContext } from '@mysten/dapp-kit';
 import { createContext, FC, PropsWithChildren, useContext } from 'react';
 
-import { Network } from '@/constants';
+import { COIN_TO_WRAPPED } from '@/constants/clamm';
 import { useGetCoinMetadata } from '@/hooks/use-get-coin-metadata';
-import useGetMultipleTokenPriceBySymbol from '@/hooks/use-get-multiple-token-price-by-symbol';
+import useGetMultipleTokenPriceByType from '@/hooks/use-get-multiple-token-price-by-type';
+import { useNetwork } from '@/hooks/use-network';
 import { usePool } from '@/hooks/use-pools';
 import { CoinMetadataWithType } from '@/interface';
-
-import { getAllSymbols } from '../pools/pools.utils';
 
 interface PoolDetailsProviderProps {
   objectId: string;
@@ -34,8 +32,7 @@ export const PoolDetailsProvider: FC<
   PropsWithChildren<PoolDetailsProviderProps>
 > = ({ objectId, children }) => {
   const { Provider } = poolDetailsContext;
-  const { network } = useSuiClientContext();
-
+  const network = useNetwork();
   const {
     data: pool,
     error: poolError,
@@ -52,8 +49,8 @@ export const PoolDetailsProvider: FC<
     data: prices,
     isLoading: isPricesLoading,
     error: pricesError,
-  } = useGetMultipleTokenPriceBySymbol(
-    getAllSymbols(pool ? [pool] : [], network as Network)
+  } = useGetMultipleTokenPriceByType(
+    pool?.coinTypes.map((type) => COIN_TO_WRAPPED[network][type] ?? type) ?? []
   );
 
   const loading =

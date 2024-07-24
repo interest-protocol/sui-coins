@@ -3,7 +3,6 @@ import {
   StablePool,
   VolatilePool,
 } from '@interest-protocol/clamm-sdk';
-import { normalizeStructTag } from '@mysten/sui/utils';
 import { BigNumber } from 'bignumber.js';
 import { isEmpty } from 'ramda';
 
@@ -22,21 +21,9 @@ export const getStableLiquidity = (
 ): number => {
   if (isEmpty(prices)) return 0;
 
-  const priceX = metadata[pool.coinTypes[0]]
-    ? prices[
-        metadata[pool.coinTypes[0]]?.symbol.toLowerCase() === 'sui'
-          ? 'mov'
-          : metadata[pool.coinTypes[0]]?.symbol.toLowerCase()
-      ]
-    : null;
+  const priceX = prices[pool.coinTypes[0]];
 
-  const priceY = metadata[pool.coinTypes[1]]
-    ? prices[
-        metadata[pool.coinTypes[1]]?.symbol.toLowerCase() === ' sui'
-          ? 'move'
-          : metadata[pool.coinTypes[1]]?.symbol.toLowerCase()
-      ]
-    : null;
+  const priceY = prices[pool.coinTypes[1]];
 
   if (!priceX && !!priceY)
     return (
@@ -86,17 +73,9 @@ export const getVolatileLiquidity = (
 ): number => {
   if (isEmpty(prices)) return 0;
 
-  const priceX = metadata[pool.coinTypes[0]]
-    ? prices[
-        metadata[normalizeStructTag(pool.coinTypes[0])]?.symbol.toLowerCase()
-      ]
-    : null;
+  const priceX = prices[pool.coinTypes[0]];
 
-  const priceY = metadata[pool.coinTypes[1]]
-    ? prices[
-        metadata[normalizeStructTag(pool.coinTypes[1])]?.symbol.toLowerCase()
-      ]
-    : null;
+  const priceY = prices[pool.coinTypes[1]];
 
   if (!priceX && !!priceY)
     return (

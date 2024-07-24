@@ -1,13 +1,14 @@
 import { Token } from '@interest-protocol/sui-tokens';
 import { Button, Motion, Typography } from '@interest-protocol/ui-kit';
-import { useSuiClientContext } from '@mysten/dapp-kit';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import TokenIcon from '@/components/token-icon';
 import { Network } from '@/constants';
+import { getAllCoinsPrice } from '@/hooks/use-get-multiple-token-price-by-type/use-get-multiple-token-price-by-type.utils';
 import { useModal } from '@/hooks/use-modal';
+import { useNetwork } from '@/hooks/use-network';
 import { ChevronDownSVG } from '@/svg';
 import { updateURL } from '@/utils';
 import SelectTokenModal from '@/views/components/select-token-modal';
@@ -17,7 +18,7 @@ import { InputProps } from './input.types';
 
 const SelectToken: FC<InputProps> = ({ label }) => {
   const { pathname } = useRouter();
-  const { network } = useSuiClientContext();
+  const network = useNetwork();
   const { setModal, handleClose } = useModal();
 
   const { setValue, control } = useFormContext<SwapForm>();
@@ -77,11 +78,8 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       usdPrice: null,
     });
 
-    fetch(`/api/auth/v1/coin-price?symbol=${symbol}`)
-      .then((response) => response.json())
-      .then((data) =>
-        setValue(`${label}.usdPrice`, data[symbol][0].quote.USD.price)
-      )
+    getAllCoinsPrice([type], network)
+      .then((data) => setValue(`${label}.usdPrice`, data[type]))
       .catch(() => null);
 
     if (label === 'from') setValue('to.display', '');
