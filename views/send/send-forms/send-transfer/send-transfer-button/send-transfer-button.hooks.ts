@@ -35,31 +35,7 @@ const useSendAssets = () => {
 
     const tx = new Transaction();
 
-    const itemsToSend = objects.map((object) => {
-      if (!isCoinObject(object as ObjectData)) return object.objectId;
-
-      const amount = BigInt(
-        FixedPointMath.toBigNumber(
-          object.value!,
-          Number(object.display!.decimals!)
-        )
-          .decimalPlaces(0)
-          .toString()
-      );
-
-      if (isSui(object.display!.type)) return tx.splitCoins(tx.gas, [amount]);
-
-      const objectWithEnoughBalance = (
-        object.display! as CoinObject
-      ).objects.find(({ balance }) => BigInt(balance) <= amount);
-
-      if (!objectWithEnoughBalance)
-        throw new Error('You must merge your coins');
-
-      return tx.splitCoins(tx.object(objectWithEnoughBalance.coinObjectId), [
-        amount,
-      ]);
-    });
+    const itemsToSend = objects.map((object) => object.objectId);
 
     tx.transferObjects(itemsToSend, tx.pure.address(recipient));
 
