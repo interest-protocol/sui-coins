@@ -22,6 +22,7 @@ import SelectObjectModalBody from './select-object-modal-body';
 import SelectObjectFilter from './select-object-modal-filter';
 
 const SelectObjectModal: FC<SelectObjectModalProps> = ({
+  noCoins,
   onSelect,
   closeModal,
 }) => {
@@ -29,7 +30,7 @@ const SelectObjectModal: FC<SelectObjectModalProps> = ({
   const { control, register, setValue } = useForm<SearchObjectForm>({
     defaultValues: {
       search: '',
-      filter: ObjectOrigin.Coins,
+      filter: noCoins ? ObjectOrigin.NFT : ObjectOrigin.Coins,
     },
   });
 
@@ -81,7 +82,11 @@ const SelectObjectModal: FC<SelectObjectModalProps> = ({
             Prefix={<SearchSVG maxWidth="1rem" maxHeight="1rem" width="100%" />}
           />
         </Box>
-        <SelectObjectFilter control={control} setValue={setValue} />
+        <SelectObjectFilter
+          control={control}
+          noCoins={noCoins}
+          setValue={setValue}
+        />
       </Box>
       <Box
         flex="1"
@@ -95,7 +100,6 @@ const SelectObjectModal: FC<SelectObjectModalProps> = ({
           handleSelectObject={handleSelectObject}
         />
       </Box>
-
       <Box p="s">
         <Typography variant="body" size="small" textAlign="center">
           Cannot see your wallet objects? Make sure it is transferable

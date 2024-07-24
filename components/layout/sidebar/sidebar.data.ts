@@ -4,7 +4,6 @@ import {
   CirclePlusSVG,
   DoubleChevronSVG,
   FireSVG,
-  MemechanSVG,
   MenuSVG,
   MergeSVG,
   PoolSVG,
@@ -61,8 +60,8 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
     networks: [Network.MAINNET, Network.TESTNET],
     accordionList: [
       {
-        beta: true,
-        name: 'zkSend',
+        beta: false,
+        name: 'send',
         disabled: false,
         Icon: UploadSVG,
         path: Routes[RoutesEnum.Send],
@@ -75,13 +74,6 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
         Icon: MergeSVG,
         path: Routes[RoutesEnum.Merge],
         networks: [Network.MAINNET, Network.TESTNET],
-      },
-      {
-        disabled: false,
-        name: 'memechan',
-        Icon: MemechanSVG,
-        networks: [Network.MAINNET],
-        path: 'https://sui.memechan.gg',
       },
     ],
   },
