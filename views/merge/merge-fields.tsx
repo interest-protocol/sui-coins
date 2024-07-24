@@ -66,7 +66,6 @@ const MergeCoinsForm: FC = () => {
           onClick={openModal}
           justifyContent="center"
           borderColor="outlineVariant"
-          disabled={!(coinsToMerge.length > 1)}
           PrefixIcon={
             <PlusSVG maxWidth="1.2rem" maxHeight="1.2rem" width="100%" />
           }
