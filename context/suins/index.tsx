@@ -131,7 +131,7 @@ export const SuiNsProvider: FC<PropsWithChildren> = ({ children }) => {
   const value = {
     names,
     loading,
-    provider: suiNSProvider,
+    suinsClient: suiNSProvider,
     images: nsImages,
   };
 

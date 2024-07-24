@@ -9,19 +9,21 @@ export type ObjectModalItemProps = ObjectData & {
 };
 
 export interface SelectObjectModalProps {
+  noCoins?: boolean;
   closeModal: () => void;
   onSelect: (object: ObjectData) => void;
 }
 
-export interface SelectObjectFilterProps {
+export interface SelectObjectFilterProps
+  extends Pick<SelectObjectModalProps, 'noCoins'> {
   control: Control<SearchObjectForm>;
   setValue: UseFormSetValue<SearchObjectForm>;
 }
 
 export enum ObjectOrigin {
-  Coins,
-  NFT,
-  Objects,
+  Coins = 'coins',
+  NFT = 'nft',
+  Objects = 'others',
 }
 
 export interface SearchObjectForm {
