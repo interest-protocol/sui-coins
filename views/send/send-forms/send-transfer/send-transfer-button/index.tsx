@@ -27,16 +27,11 @@ const SendTransferButton: FC<FormSendButtonProps> = ({ openModal }) => {
   const { suinsClient } = useSuiNs();
   const sendAssets = useSendAssets();
   const { network } = useSuiClientContext();
-  const { control, setError, clearErrors } =
-    useFormContext<ISendTransferForm>();
+  const { control, setError } = useFormContext<ISendTransferForm>();
   const [amountList, setAmountList] = useState<AmountListProps[] | null>();
 
   const objects = useWatch({ control, name: 'objects' });
   const [address] = useDebounce(useWatch({ control, name: 'address' }), 800);
-
-  useEffect(() => {
-    clearErrors('address');
-  }, [address]);
 
   const onSuccess = (tx: SuiTransactionBlockResponse) =>
     showTXSuccessToast(tx, network as Network);

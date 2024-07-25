@@ -22,7 +22,7 @@ const SendTransferFormFields = () => {
   const {
     control,
     register,
-
+    clearErrors,
     formState: { errors },
   } = useFormContext<ISendTransferForm>();
 
@@ -68,13 +68,12 @@ const SendTransferFormFields = () => {
       <Box display="flex" flexDirection="column" gap="xs">
         <Box>1. Wallet Address</Box>
         <TextField
-          label="Name"
-          {...register('address')}
           nPlaceholder={{ opacity: 0.7 }}
           status={errors.address && 'error'}
           fieldProps={{ borderRadius: 'xs' }}
           supportingText={errors.address?.message}
           placeholder="@suicoins or 0x0123456789abcdef..."
+          {...register('address', { onBlur: () => clearErrors('address') })}
         />
         <Box mt="l">2. Assets</Box>
         {fields.map(({ id }, index) => (
