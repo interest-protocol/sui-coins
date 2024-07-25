@@ -18,17 +18,16 @@ export const COIN_TYPES = {
     WETH: `${MOVEMENT_MOCK_COINS_PACKAGE}::weth::WETH`,
     USDC: `${MOVEMENT_MOCK_COINS_PACKAGE}::usdc::USDC`,
     USDT: `${MOVEMENT_MOCK_COINS_PACKAGE}::usdt::USDT`,
+    RUCO: '0x935aae204191927c7f1586a11c011da5fafb57fa51bd1df60484954c18862891::ruco::RUCO',
   },
   [Network.TESTNET]: {
     WBTC: `${MOVEMENT_MOCK_IMOLA_PACKAGE}::wbtc::WBTC`,
     WETH: `${MOVEMENT_MOCK_IMOLA_PACKAGE}::weth::WETH`,
     USDC: `${MOVEMENT_MOCK_IMOLA_PACKAGE}::usdc::USDC`,
     USDT: `${MOVEMENT_MOCK_IMOLA_PACKAGE}::usdt::USDT`,
+    RUCO: '0xbcf97579863d0d299c00f718132fd85e138badedbe597201287ec6e2d7eb739f::ruco::RUCO',
   },
 };
-
-export const RUCO_TYPE =
-  '0x935aae204191927c7f1586a11c011da5fafb57fa51bd1df60484954c18862891::ruco::RUCO';
 
 export const TREASURY_CAP_MAP: Record<Network, Record<string, string>> = {
   [Network.DEVNET]: {
@@ -126,7 +125,7 @@ export const COINS: Record<Network, ReadonlyArray<CoinData>> = {
     {
       decimals: 9,
       symbol: 'RUCO',
-      type: RUCO_TYPE,
+      type: COIN_TYPES[Network.DEVNET].RUCO as `0x${string}`,
     },
   ],
   [Network.TESTNET]: [
@@ -136,6 +135,11 @@ export const COINS: Record<Network, ReadonlyArray<CoinData>> = {
       type: SUI_TYPE_ARG,
     },
     ...FAUCET_COINS[Network.TESTNET],
+    {
+      decimals: 9,
+      symbol: 'RUCO',
+      type: COIN_TYPES[Network.TESTNET].RUCO as `0x${string}`,
+    },
   ],
 };
 
@@ -166,10 +170,10 @@ export const COINS_MAP: Record<Network, Record<string, CoinData>> = {
       symbol: 'USDT',
       type: COIN_TYPES[Network.DEVNET].USDT as `0x${string}`,
     },
-    [RUCO_TYPE]: {
+    [COIN_TYPES[Network.DEVNET].RUCO]: {
       decimals: 9,
       symbol: 'RUCO',
-      type: RUCO_TYPE,
+      type: COIN_TYPES[Network.DEVNET].RUCO as `0x${string}`,
     },
   },
   [Network.TESTNET]: {
@@ -197,6 +201,11 @@ export const COINS_MAP: Record<Network, Record<string, CoinData>> = {
       decimals: 9,
       symbol: 'USDT',
       type: COIN_TYPES[Network.TESTNET].USDT as `0x${string}`,
+    },
+    [COIN_TYPES[Network.TESTNET].RUCO]: {
+      decimals: 9,
+      symbol: 'RUCO',
+      type: COIN_TYPES[Network.TESTNET].RUCO as `0x${string}`,
     },
   },
 };
