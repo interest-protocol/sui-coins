@@ -19,7 +19,8 @@ export const RPC_URL = {
 
 export const FAUCET_URL = {
   [Network.DEVNET]: 'https://sui.devnet.m2.movementlabs.xyz/faucet',
-  [Network.TESTNET]: 'https://faucet.sui.imola.testnet.movementlabs.xyz',
+  [Network.TESTNET]:
+    'https://faucet.sui.imola.testnet.movementlabs.xyz/faucet/web',
 };
 
 export const EXPLORER_URL = {
