@@ -1,5 +1,6 @@
 import { createContext, FC, PropsWithChildren, useContext } from 'react';
 
+import { useNetwork } from '@/context/network';
 import { useGetCoinMetadata } from '@/hooks/use-get-coin-metadata';
 import useGetMultipleTokenPriceBySymbol from '@/hooks/use-get-multiple-token-price-by-symbol';
 import { usePool } from '@/hooks/use-pools';
@@ -30,6 +31,7 @@ const poolDetailsContext = createContext<PoolDetailsContext>(INITIAL);
 export const PoolDetailsProvider: FC<
   PropsWithChildren<PoolDetailsProviderProps>
 > = ({ objectId, children }) => {
+  const network = useNetwork();
   const { Provider } = poolDetailsContext;
 
   const {
@@ -50,7 +52,7 @@ export const PoolDetailsProvider: FC<
     data: prices,
     isLoading: isPricesLoading,
     error: pricesError,
-  } = useGetMultipleTokenPriceBySymbol(getAllSymbols(types));
+  } = useGetMultipleTokenPriceBySymbol(getAllSymbols(types, network));
 
   const loading =
     isPoolLoading ||

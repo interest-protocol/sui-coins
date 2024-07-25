@@ -12,7 +12,7 @@ const MOVEMENT_MOCK_COINS_PACKAGE =
 const MOVEMENT_MOCK_IMOLA_PACKAGE =
   '0x8ac626e474c33520a815175649fefcbb272678c8c37a7b024e7171fa45d47711';
 
-const COIN_TYPES = {
+export const COIN_TYPES = {
   [Network.DEVNET]: {
     WBTC: `${MOVEMENT_MOCK_COINS_PACKAGE}::wbtc::WBTC`,
     WETH: `${MOVEMENT_MOCK_COINS_PACKAGE}::weth::WETH`,
@@ -129,7 +129,14 @@ export const COINS: Record<Network, ReadonlyArray<CoinData>> = {
       type: RUCO_TYPE,
     },
   ],
-  [Network.TESTNET]: [...FAUCET_COINS[Network.TESTNET]],
+  [Network.TESTNET]: [
+    {
+      decimals: 9,
+      symbol: 'MOVE',
+      type: SUI_TYPE_ARG,
+    },
+    ...FAUCET_COINS[Network.TESTNET],
+  ],
 };
 
 export const COINS_MAP: Record<Network, Record<string, CoinData>> = {
