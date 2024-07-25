@@ -19,10 +19,11 @@ import { EXCHANGE_FEE } from '@/constants/fees';
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { useHopSdk } from '@/hooks/use-hop-sdk';
 import { useNetwork } from '@/hooks/use-network';
+import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import { JSONQuoteResponse } from '@/server/lib/hop/hop.utils';
 import { RefreshSVG } from '@/svg';
-import { parseBigNumberish } from '@/utils';
+import { isSui, parseBigNumberish, ZERO_BIG_NUMBER } from '@/utils';
 
 import { SwapMessagesEnum } from './swap.data';
 import { useAftermathRouter } from './swap.hooks';
@@ -48,6 +49,7 @@ const countdownRenderer =
 const SwapUpdatePrice: FC = () => {
   const clamm = useClammSdk();
   const hopSdk = useHopSdk();
+  const { coinsMap } = useWeb3();
   const network = useNetwork();
   const aftermathRouter = useAftermathRouter();
   const { control, setValue, getValues } = useFormContext<SwapForm>();
@@ -58,6 +60,21 @@ const SwapUpdatePrice: FC = () => {
     control,
     name: 'from.type',
   });
+
+  const from = useWatch({ control, name: 'from' });
+
+  const fromValue = from?.value ?? ZERO_BIG_NUMBER;
+
+  const fromBalance =
+    from && coinsMap[from.type] ? coinsMap[from.type].balance : ZERO_BIG_NUMBER;
+
+  const oneCoin = from
+    ? FixedPointMath.toBigNumber(1, from.decimals)
+    : ZERO_BIG_NUMBER;
+
+  const isGreaterThanBalance = fromBalance.lt(fromValue);
+
+  const isGreaterThanAllowedWhenSui = fromBalance.minus(oneCoin).lt(fromValue);
 
   const aggregator = useWatch({ control, name: 'settings.aggregator' });
 
@@ -208,6 +225,25 @@ const SwapUpdatePrice: FC = () => {
       }
 
       if (swapping) return;
+
+      setValue('error', null);
+
+      if (
+        from &&
+        Number(from.value) &&
+        from.type &&
+        String(from.decimals) &&
+        coinsMap[from.type]
+      ) {
+        if (isGreaterThanBalance) {
+          setValue('error', SwapMessagesEnum.notEnoughToken);
+          return;
+        }
+        if (isSui(from.type) && isGreaterThanAllowedWhenSui) {
+          setValue('error', SwapMessagesEnum.leastOneSui);
+          return;
+        }
+      }
 
       setValue('fetchingPrices', true);
 
