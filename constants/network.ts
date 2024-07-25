@@ -5,5 +5,5 @@ export enum Network {
 
 export const DISPLAY_NETWORK = {
   [Network.DEVNET]: 'Devnet',
-  [Network.TESTNET]: 'Testnet',
+  [Network.TESTNET]: 'Testnet Imola',
 };

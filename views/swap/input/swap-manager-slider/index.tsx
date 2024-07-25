@@ -6,6 +6,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
+import { isSui, ZERO_BIG_NUMBER } from '@/utils';
 
 import { SwapForm } from '../../swap.types';
 
@@ -19,33 +20,46 @@ const SwapFormFieldSlider: FC = () => {
   const { control, setValue, getValues } = useFormContext<SwapForm>();
 
   const type = useWatch({ control, name: 'from.type' });
+  const swapping = useWatch({ control, name: 'swapping' });
 
-  const balance = FixedPointMath.toNumber(
-    BigNumber(coinsMap[type]?.balance.toString() || 0),
-    coinsMap[type]?.decimals ?? (getValues('from.decimals') || 0)
-  );
+  const safeRemoval =
+    type && isSui(type) ? BigNumber(100000000) : ZERO_BIG_NUMBER;
+
+  const balance = coinsMap[type]
+    ? coinsMap[type].balance.minus(safeRemoval)
+    : ZERO_BIG_NUMBER;
+
+  const fromValue = type ? getValues('from.value') : '0';
+
+  const initial =
+    fromValue && balance && Number(fromValue) && !balance.isZero?.()
+      ? balance.gt(
+          FixedPointMath.toBigNumber(fromValue, coinsMap[type].decimals)
+        )
+        ? +FixedPointMath.toBigNumber(
+            Number(fromValue) * 100,
+            coinsMap[type].decimals
+          )
+            .div(balance)
+            .toFixed(0)
+        : 100
+      : 0;
 
   return (
-    <Box mx="s" color="onSurface">
+    <Box mx="s">
       <Slider
         min={0}
         max={100}
-        disabled={!balance}
-        initial={Math.floor(
-          Number(getValues('from.value')) && balance
-            ? balance >= Number(getValues('from.value'))
-              ? (Number(getValues('from.value')) * 100) / balance
-              : 100
-            : 0
-        )}
+        initial={initial}
+        disabled={!balance || balance.isZero?.() || swapping}
         onChange={(value: number) => {
-          setValue('lock', false);
-          setValue('maxValue', value === 100);
           setValue(
             'from.value',
-            `${Number((Number(value / 100) * balance).toFixed(6)).toPrecision()}`
+            String(
+              FixedPointMath.toNumber(balance, coinsMap[type].decimals) *
+                (value / 100)
+            )
           );
-
           if (getValues('focus')) setValue('focus', false);
         }}
       />

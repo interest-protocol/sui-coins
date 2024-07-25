@@ -118,7 +118,6 @@ const MovementNetwork: FC = () => {
                 key={v4()}
                 index={index}
                 selected={networkKey === network}
-                disabled={networkKey === Network.TESTNET}
                 totalItems={toPairs(DISPLAY_NETWORK).length}
                 onClick={() => selectNetwork(networkKey as Network)}
               >
