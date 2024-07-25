@@ -6,7 +6,8 @@ export const OBJECTS = {
       '0xa82dfa032afd911aa4a7953d5ecbf6a33f8e2d1b8f0f379667b141933e5c7582',
   },
   [Network.TESTNET]: {
-    REGISTRY: '',
+    REGISTRY:
+      '0xaa3be47d3edde41e3bf4ad6ddb0ab438cdfb988dd29d7aa878c787d0a3f1190a',
   },
 };
 
@@ -18,9 +19,10 @@ export const PACKAGES = {
       '0x35770416e5918031841afa8e9ad2076f2f9e0dd45fa4fc9effd1fdabf4db654b',
   },
   [Network.TESTNET]: {
-    DEX: '',
-    UTILS: '',
-    AIRDROP: '',
+    DEX: '0xd12f7350af6737c0e5436cbb19651ab41dca662e264c255d11ba88d8ec6140a8',
+    UTILS: '0xcc26884afc8d168fddde2f69f022cd8f2a118e4a94a2d5a7d60b0dd108a3bf31',
+    AIRDROP:
+      '0xe84e654a5ad196f1d3507174d413467fa635bb1d70ceb218c1c28f7c102dfd41',
   },
 };
 

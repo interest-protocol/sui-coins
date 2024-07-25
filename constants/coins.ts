@@ -7,6 +7,9 @@ export const MOVE_TYPE_ARG = '0x2::move::MOVE';
 const MOVEMENT_MOCK_COINS_PACKAGE =
   '0x457abead7283c8af79b0902e71decf173f88624fe8dd2e76be97b6132c39e9c9';
 
+const MOVEMENT_MOCK_IMOLA_PACKAGE =
+  '0x8ac626e474c33520a815175649fefcbb272678c8c37a7b024e7171fa45d47711';
+
 export const WBTC_TYPE = `${MOVEMENT_MOCK_COINS_PACKAGE}::wbtc::WBTC`;
 
 export const WETH_TYPE = `${MOVEMENT_MOCK_COINS_PACKAGE}::weth::WETH`;
@@ -27,6 +30,17 @@ export const TREASURY_CAP_MAP = {
     '0x0401a6b9b03b694d16fe9806389625beb6d801f64a188d39aecfc090c5dce2fd',
   [USDT_TYPE]:
     '0x54e04baa0fa5bf840efb48e44afb1c388690e8d52cf874a012edaa5fa487ab27',
+} as Record<string, string>;
+
+export const IMOLA_TREASURY_CAP_MAP = {
+  [USDC_TYPE]:
+    '0x6bad1a88caef6f9ea56680cd31315b2cfeb6018b105471320407559042e6d067',
+  [WETH_TYPE]:
+    '0xe02ba3510a9240ba970aed72e0c6188989c3e6d6bd316edfa12bd04da8ebf675',
+  [WBTC_TYPE]:
+    '0xd2c1127a16494f9df5b6f973baebd78e093d66b3c06463c4e930c8545a9b6df2',
+  [USDT_TYPE]:
+    '0x8cacf2fd727720db5fc11006786fbcf69408decda4611921da791cc8ed844878',
 } as Record<string, string>;
 
 export const FAUCET_AMOUNT = {
