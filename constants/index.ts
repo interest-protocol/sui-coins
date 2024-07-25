@@ -14,19 +14,19 @@ export const DEAD_ADDRESS = normalizeSuiAddress('0x0');
 
 export const RPC_URL = {
   [Network.DEVNET]: 'https://sui.devnet.m2.movementlabs.xyz:443',
-  [Network.TESTNET]: 'https://sui.imola.testnet.movementlabs.xyz',
+  [Network.IMOLA_TESTNET]: 'https://sui.imola.testnet.movementlabs.xyz',
 };
 
 export const FAUCET_URL = {
   [Network.DEVNET]: 'https://sui.devnet.m2.movementlabs.xyz/faucet',
-  [Network.TESTNET]:
+  [Network.IMOLA_TESTNET]:
     'https://faucet.sui.imola.testnet.movementlabs.xyz/faucet/web',
 };
 
 export const EXPLORER_URL = {
   [Network.DEVNET]: (path: string) =>
     `https://explorer.devnet.m2.movementlabs.xyz/${path}?network=devnet`,
-  [Network.TESTNET]: (path: string) =>
+  [Network.IMOLA_TESTNET]: (path: string) =>
     `https://explore.sui.imola.testnet.movementlabs.xyz/${path}?network=testnet`,
 } as Record<Network, (path: string) => string>;
 

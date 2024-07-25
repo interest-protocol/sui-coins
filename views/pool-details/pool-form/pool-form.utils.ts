@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
 
+import { Network } from '@/constants';
 import { Quest } from '@/server/model/quest';
 import { PoolToken } from '@/views/pools/pools.types';
 
@@ -84,9 +85,10 @@ export const logDepositPool = (
   address: string,
   tokenA: PoolToken,
   tokenB: PoolToken,
+  network: Network,
   txDigest: string
 ) => {
-  fetch('/api/auth/v1/log-quest', {
+  fetch(`/api/auth/v1/log-quest?network=${network}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

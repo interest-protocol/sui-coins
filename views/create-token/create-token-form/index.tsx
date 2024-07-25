@@ -78,6 +78,7 @@ const CreateTokenForm: FC = () => {
         currentAccount.address,
         getValues('symbol'),
         getValues('totalSupply'),
+        network,
         tx.digest
       );
     } finally {

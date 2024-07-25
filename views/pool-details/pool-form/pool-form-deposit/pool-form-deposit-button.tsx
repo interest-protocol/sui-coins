@@ -65,6 +65,7 @@ const PoolFormDepositButton: FC = () => {
         account.address,
         getValues('tokenList.0'),
         getValues('tokenList.1'),
+        network,
         tx.digest
       );
     } finally {

@@ -246,6 +246,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         token,
         totalAmount,
         airdropList.length,
+        network,
         tx.digest
       );
     } catch (e: any) {
