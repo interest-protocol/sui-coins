@@ -15,18 +15,16 @@ export const getCMCPrices = (types: ReadonlyArray<string>, network: Network) =>
     }
   )
     .then((res) => res.json?.())
-    .then((data) => {
-      console.log({ data });
-
-      return types.reduce(
+    .then((data) =>
+      types.reduce(
         (acc, type) => ({
           ...acc,
           [WRAPPED_TO_COIN[network][type] ?? type]:
             data[CMC_COIN_ID[network][type]].quote.USD.price,
         }),
         {} as Record<string, number>
-      );
-    })
+      )
+    )
     .catch(() => ({}) as Record<string, number>);
 
 export const getAFPrices = (types: ReadonlyArray<string>, network: Network) =>
