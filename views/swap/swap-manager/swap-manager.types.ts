@@ -24,18 +24,18 @@ export interface SwapMessagesProps {
 
 export interface SwapManagerProps {
   type: string;
+  routes: Routes;
+  poolsMap: PoolsMap;
   name: 'from' | 'to';
-  setValueName: 'from' | 'to';
   hasNoMarket: boolean;
   account: string | null;
   control: Control<SwapForm>;
+  setValueName: 'from' | 'to';
   isFetchingSwapAmount: boolean;
-  routes: Routes;
   setValue: UseFormSetValue<SwapForm>;
   setError: Dispatch<SetStateAction<boolean>>;
   setIsFetchingSwapAmount: (value: boolean) => void;
   setIsZeroSwapAmount: Dispatch<SetStateAction<boolean>>;
-  poolsMap: PoolsMap;
 }
 
 export interface UseGetDexArgs {
