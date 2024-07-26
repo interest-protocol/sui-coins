@@ -21,7 +21,7 @@ export const useGetCoinMetadata = (coinsType: ReadonlyArray<string>) => {
         (data: ReadonlyArray<CoinMetadataWithType>) =>
           setMetadata((oldData) => ({
             ...oldData,
-            ...data.reduce(
+            ...data?.reduce(
               (acc, { symbol, ...item }) => ({
                 ...acc,
                 [item.type]: {
