@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import NextCors from 'nextjs-cors';
 
 import { fetchNftMetadata } from '@/api/indexer';
 import dbConnect from '@/server';
@@ -7,6 +8,12 @@ import NFTCollectionMetadata from '@/server/model/nft-collection-metadata';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    await NextCors(req, res, {
+      methods: ['GET', 'POST'],
+      optionsSuccessStatus: 200,
+      origin: process.env.ORIGIN ?? '*',
+    });
+
     await dbConnect();
 
     if (req.method === 'GET') {
