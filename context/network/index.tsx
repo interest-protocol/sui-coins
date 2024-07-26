@@ -39,7 +39,7 @@ export const NetworkProvider: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <SuiClientProvider
-      network={network}
+      network={network as Network.IMOLA_TESTNET}
       networks={networkConfig}
       onNetworkChange={(network) => {
         changeNetwork(network);
