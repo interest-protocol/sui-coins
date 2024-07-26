@@ -20,6 +20,8 @@ const isSingleType = (
 ): args is FetchCoinMetadataSingleTypeArg =>
   !!(args as FetchCoinMetadataSingleTypeArg).type;
 
+const metadatas: Record<string, CoinMetadataWithType> = {};
+
 export const fetchCoinMetadata: FetchCoinMetadata = async (args) => {
   if (isSingleType(args)) {
     const localMetadata =
@@ -27,19 +29,28 @@ export const fetchCoinMetadata: FetchCoinMetadata = async (args) => {
 
     if (localMetadata) return localMetadata;
 
+    if (metadatas[args.type]) return metadatas[args.type];
+
     return await fetch('/api/auth/v1/coin-metadata', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(args),
-    }).then((res) => res.json());
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        metadatas[args.type] = data;
+        return data;
+      });
   }
 
   const uniqueTypes = Array.from(new Set(args.types));
 
-  const localMetadatas = uniqueTypes.reduce((acc, type) => {
-    const metadata = coinMetadataMap[args.network][normalizeStructTag(type)];
+  const cachedMetadatas = uniqueTypes.reduce((acc, type) => {
+    const metadata =
+      coinMetadataMap[args.network][normalizeStructTag(type)] ??
+      metadatas[type];
     if (!metadata) return acc;
     return [...acc, metadata];
   }, [] as ReadonlyArray<CoinMetadataWithType>);
@@ -48,7 +59,7 @@ export const fetchCoinMetadata: FetchCoinMetadata = async (args) => {
     (type) => !coinMetadataMap[args.network][normalizeStructTag(type)]
   );
 
-  if (!missingTypes.length) return localMetadatas;
+  if (!missingTypes.length) return cachedMetadatas;
 
   const missingMetadatas = await fetch('/api/auth/v1/coin-metadata', {
     method: 'POST',
@@ -56,7 +67,16 @@ export const fetchCoinMetadata: FetchCoinMetadata = async (args) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ coinsType: missingTypes, network: args.network }),
-  }).then((res) => res.json());
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      data.forEach(
+        (metadata: CoinMetadataWithType) =>
+          (metadatas[metadata.type] = metadata)
+      );
 
-  return [...missingMetadatas, ...localMetadatas];
+      return data;
+    });
+
+  return [...missingMetadatas, ...cachedMetadatas];
 };
