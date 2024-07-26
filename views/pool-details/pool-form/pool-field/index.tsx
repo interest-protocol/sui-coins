@@ -55,12 +55,14 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
 
         setValue(
           `${fieldName}.value`,
-          (+(coinsMap[token.type]
-            ? FixedPointMath.toNumber(
-                coinsMap[token.type].balance,
-                token.decimals
-              )
-            : 0)).toPrecision()
+          String(
+            coinsMap[token.type]
+              ? +FixedPointMath.toNumber(
+                  coinsMap[token.type].balance,
+                  token.decimals
+                ).toFixed(6)
+              : 0
+          )
         );
       }}
       {...register(`${fieldName}.value`, {
@@ -97,10 +99,10 @@ const PoolField: FC<PoolFieldsProps> = ({ index, poolOptionView }) => {
                 <ProgressIndicator variant="loading" size={16} />
               </Box>
             ) : token && coinsMap[token.type] ? (
-              FixedPointMath.toNumber(
+              +FixedPointMath.toNumber(
                 coinsMap[token.type].balance,
                 token.decimals
-              )
+              ).toFixed(6)
             ) : (
               0
             )}
