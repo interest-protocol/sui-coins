@@ -176,7 +176,7 @@ export const logCreatePool = (
   tokenA: Token,
   tokenB: Token,
   txDigest: string
-) => {
+) =>
   fetch('/api/auth/v1/log-quest', {
     method: 'POST',
     headers: {
@@ -202,4 +202,3 @@ export const logCreatePool = (
       },
     } as Omit<Quest, 'timestamp'>),
   });
-};
