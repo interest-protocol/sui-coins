@@ -31,10 +31,10 @@ export const usePool = (parentId: string) => {
 
 export const usePools = (page: number = 1, findQuery = {}) =>
   useSWR<UsePoolsReturn>(
-    `/api/auth/v1/get-pools?page=${page}&find=${JSON.stringify(findQuery)}`,
+    `/api/v1/get-pools?page=${page}&find=${JSON.stringify(findQuery)}`,
     async () => {
       const res = await fetch(
-        `/api/auth/v1/get-pools?page=${page}&find=${JSON.stringify(findQuery)}`
+        `/api/v1/get-pools?page=${page}&find=${JSON.stringify(findQuery)}`
       );
       const { pools, totalPages } = (await res.json?.()) as UsePoolsFetchReturn;
 

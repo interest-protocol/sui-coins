@@ -100,7 +100,7 @@ const PoolSummaryButton: FC = () => {
     await sleep(500);
 
     push(`${Routes[RoutesEnum.PoolDetails]}?objectId=${poolId}`).then(() =>
-      fetch('/api/auth/v1/save-pool', {
+      fetch('/api/v1/save-pool', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

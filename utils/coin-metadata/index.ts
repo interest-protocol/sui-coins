@@ -17,7 +17,7 @@ export const fetchCoinMetadata: FetchCoinMetadata = async (args) => {
   if (isSingleType(args)) {
     if (metadatas[args.type]) return metadatas[args.type];
 
-    return await fetch('/api/auth/v1/coin-metadata', {
+    return await fetch('/api/v1/coin-metadata', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ export const fetchCoinMetadata: FetchCoinMetadata = async (args) => {
 
   const coinsToFetch = uniqueTypes.filter((type) => !metadatas[type]);
 
-  return await fetch('/api/auth/v1/coin-metadata', {
+  return await fetch('/api/v1/coin-metadata', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
