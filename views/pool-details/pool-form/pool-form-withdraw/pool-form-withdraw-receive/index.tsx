@@ -39,7 +39,9 @@ const PoolFormWithdrawReceive: FC = () => {
       amounts.map((amount, index) => ({
         ...tokenList[index],
         valueBN: amount,
-        value: String(FixedPointMath.toNumber(amount)),
+        value: String(
+          FixedPointMath.toNumber(amount, tokenList[index].decimals)
+        ),
       }))
     );
   }, [lpCoin.value]);
