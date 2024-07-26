@@ -25,6 +25,7 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
         as="aside"
         display="flex"
         overflowY="auto"
+        overflowX="hidden"
         position="relative"
         flexDirection="column"
       >
