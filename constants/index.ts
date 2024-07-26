@@ -6,7 +6,7 @@ export const DAY_IN_MS = 1000 * 60 * 60 * 24;
 
 export const MAX_NUMBER_INPUT_VALUE = 9000000000000000;
 
-export const LOCAL_STORAGE_VERSION = 'v4';
+export const LOCAL_STORAGE_VERSION = 'v5';
 
 export const PAGE_SIZE = 50;
 

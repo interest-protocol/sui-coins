@@ -78,10 +78,12 @@ const SwapManagerField: FC<SwapManagerProps> = ({
         setValue('routeWithAmount', []);
       },
       onSuccess: (response) => {
+        setError(false);
+        setIsFetchingSwapAmount(false);
+        setValue('lock', true);
+
         if (!response) {
-          setError(false);
-          setIsFetchingSwapAmount(false);
-          setValue('lock', true);
+          if (Number(from.value)) return setError(true);
           return;
         }
 
@@ -98,10 +100,6 @@ const SwapManagerField: FC<SwapManagerProps> = ({
         );
         setValue('poolsMap', poolsMap);
         setValue('routeWithAmount', [coinsPath, poolIds, amountObj]);
-
-        setError(false);
-        setIsFetchingSwapAmount(false);
-        setValue('lock', true);
       },
       revalidateOnFocus: true,
       revalidateOnMount: true,
