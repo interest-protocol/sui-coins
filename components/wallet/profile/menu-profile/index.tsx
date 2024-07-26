@@ -36,7 +36,7 @@ const MenuProfile: FC<MenuProfileProps> = ({
     },
     switchAccounts: handleOpenSwitch,
     viewInExplorer: () => {
-      window.open(`${EXPLORER_URL[network](`account/${account}`)}`, '_blank');
+      window.open(`${EXPLORER_URL[network](`address/${account}`)}`, '_blank');
     },
   };
 
