@@ -98,15 +98,15 @@ const PoolSummaryButton: FC = () => {
       }),
     });
 
-    push(`${Routes[RoutesEnum.PoolDetails]}?objectId=${poolId}`);
-
-    logCreatePool(
+    await logCreatePool(
       currentAccount.address,
       tokens[0],
       tokens[1],
       network,
       tx.digest
     );
+
+    push(`${Routes[RoutesEnum.PoolDetails]}?objectId=${poolId}`);
   };
 
   const createPool = () =>
