@@ -13,7 +13,7 @@ import invariant from 'tiny-invariant';
 import { EXPLORER_URL, Routes, RoutesEnum } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useDialog } from '@/hooks';
-import { signAndExecute, sleep, throwTXIfNotSuccessful } from '@/utils';
+import { signAndExecute, throwTXIfNotSuccessful } from '@/utils';
 
 import { useCreateAmmPool, useCreateLpCoin } from '../pool-create.hooks';
 import { CreatePoolForm } from '../pool-create.types';
@@ -98,16 +98,7 @@ const PoolSummaryButton: FC = () => {
       }),
     });
 
-    await sleep(250);
-
-    await logCreatePool(
-      currentAccount.address,
-      tokens[0],
-      tokens[1],
-      tx.digest
-    ).catch(() =>
-      logCreatePool(currentAccount.address, tokens[0], tokens[1], tx.digest)
-    );
+    logCreatePool(currentAccount.address, tokens[0], tokens[1], tx.digest);
 
     push(`${Routes[RoutesEnum.PoolDetails]}?objectId=${poolId}`);
   };
