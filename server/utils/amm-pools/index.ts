@@ -3,13 +3,7 @@ import { isValidSuiObjectId } from '@mysten/sui.js/utils';
 import { toString } from 'ramda';
 import invariant from 'tiny-invariant';
 
-import {
-  PAGE_SIZE,
-  USDC_TYPE,
-  USDT_TYPE,
-  WBTC_TYPE,
-  WETH_TYPE,
-} from '@/constants';
+import { COIN_TYPES, Network, PAGE_SIZE } from '@/constants';
 import { AmmPool } from '@/interface';
 import { AMMPoolModel, getAmmPoolModel } from '@/server/model/amm-pool';
 import { fetchPool, fetchPools } from '@/utils';
@@ -65,7 +59,22 @@ export const getAllPools = async ({
   return [pools, totalPages];
 };
 
-const baseCoins = [USDT_TYPE, USDC_TYPE, WBTC_TYPE, WETH_TYPE, SUI_TYPE_ARG];
+const baseCoins = {
+  [Network.DEVNET]: [
+    COIN_TYPES[Network.DEVNET].USDT,
+    COIN_TYPES[Network.DEVNET].WBTC,
+    COIN_TYPES[Network.DEVNET].WETH,
+    COIN_TYPES[Network.DEVNET].USDC,
+    SUI_TYPE_ARG,
+  ],
+  [Network.IMOLA_TESTNET]: [
+    COIN_TYPES[Network.IMOLA_TESTNET].USDT,
+    COIN_TYPES[Network.IMOLA_TESTNET].WBTC,
+    COIN_TYPES[Network.IMOLA_TESTNET].WETH,
+    COIN_TYPES[Network.IMOLA_TESTNET].USDC,
+    SUI_TYPE_ARG,
+  ],
+};
 
 export const getPoolsByCoinTypes = async ({
   client,
@@ -73,7 +82,7 @@ export const getPoolsByCoinTypes = async ({
   coinInType,
   coinOutType,
 }: GetPoolsByCoinTypes): Promise<readonly AmmPool[]> => {
-  const basePools = baseCoins.flatMap((baseType) => [
+  const basePools = baseCoins[network].flatMap((baseType) => [
     {
       coinX: baseType,
       coinY: coinOutType,

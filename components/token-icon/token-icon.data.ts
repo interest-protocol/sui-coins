@@ -9,7 +9,7 @@ export const TOKEN_ICONS: Record<
   Network,
   Record<string, string | FC<SVGProps>>
 > = {
-  [Network.TESTNET]: {
+  [Network.IMOLA_TESTNET]: {
     ETH: ETHSVG,
     WETH: ETHSVG,
     BTC: BTCSVG,

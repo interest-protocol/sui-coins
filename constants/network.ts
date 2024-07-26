@@ -1,9 +1,9 @@
 export enum Network {
   DEVNET = 'm2:devnet',
-  TESTNET = 'm2:testnet',
+  IMOLA_TESTNET = 'imola:testnet',
 }
 
 export const DISPLAY_NETWORK = {
-  [Network.DEVNET]: 'Devnet',
-  [Network.TESTNET]: 'Testnet',
+  [Network.IMOLA_TESTNET]: 'Imola Testnet',
+  [Network.DEVNET]: 'M2 Devnet',
 };

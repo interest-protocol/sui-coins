@@ -1,4 +1,4 @@
-import { FAUCET_COINS } from '@/constants';
+import { FAUCET_COINS, Network } from '@/constants';
 import dbConnect from '@/server';
 import { getExactDayTimestamp } from '@/utils';
 
@@ -15,7 +15,7 @@ export const fillQuestProfile = async (address: string) => {
   questProfile.lastCreatePoolAt = todayTimestamp;
   questProfile.lastCreateTokenAt = todayTimestamp;
   questProfile.lastAddLiquidityAt = todayTimestamp;
-  questProfile.lastFaucetAt = FAUCET_COINS.reduce(
+  questProfile.lastFaucetAt = FAUCET_COINS[Network.DEVNET].reduce(
     (acc, { type }) => ({
       ...acc,
       [type]: todayTimestamp,

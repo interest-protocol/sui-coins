@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js';
 import { propOr } from 'ramda';
 
 import { CoinObject } from '@/components/web3-manager/coins-manager/coins-manager.types';
+import { Network } from '@/constants';
 import { FixedPointMath } from '@/lib';
 import { Quest } from '@/server/model/quest';
 import { isBigNumberish } from '@/utils';
@@ -81,9 +82,10 @@ export const logAirdrop = (
   token: CoinObject,
   amount: BigNumber,
   addressesCount: number,
+  network: Network,
   txDigest: string
 ) => {
-  fetch('/api/auth/v1/log-quest', {
+  fetch(`/api/auth/v1/log-quest?network=${network}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -9,6 +9,7 @@ import { v4 } from 'uuid';
 
 import { Network, PAGE_SIZE } from '@/constants';
 import { CATEGORY_POOLS } from '@/constants/pools';
+import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks';
 import { useGetCoinMetadata } from '@/hooks/use-get-coin-metadata';
 import useGetMultipleTokenPriceBySymbol from '@/hooks/use-get-multiple-token-price-by-symbol';
@@ -252,6 +253,7 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
   totalItems,
   arePoolsLoading,
 }) => {
+  const network = useNetwork();
   const hasPoolsList = !!(pools && pools.length);
 
   const hasMore = !!(
@@ -264,7 +266,7 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
     ...new Set(pools?.flatMap((pool) => [pool.coinX, pool.coinY])),
   ];
 
-  const symbols = getAllSymbols(types);
+  const symbols = getAllSymbols(types, network);
 
   const { data: pricesRecord, isLoading: arePricesLoading } =
     useGetMultipleTokenPriceBySymbol(symbols);

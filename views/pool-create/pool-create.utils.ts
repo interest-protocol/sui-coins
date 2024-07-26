@@ -175,9 +175,10 @@ export const logCreatePool = (
   address: string,
   tokenA: Token,
   tokenB: Token,
+  network: Network,
   txDigest: string
 ) => {
-  fetch('/api/auth/v1/log-quest', {
+  fetch(`/api/auth/v1/log-quest?network=${network}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

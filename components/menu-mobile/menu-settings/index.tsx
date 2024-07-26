@@ -1,8 +1,10 @@
-import { Box, Motion, Tabs } from '@interest-protocol/ui-kit';
-import { not } from 'ramda';
+import { Box, Motion, Tabs, Typography } from '@interest-protocol/ui-kit';
+import { useSuiClientContext } from '@mysten/dapp-kit';
+import { not, toPairs } from 'ramda';
 import { FC, useState } from 'react';
+import { v4 } from 'uuid';
 
-import { noop } from '@/utils';
+import { DISPLAY_NETWORK, Network } from '@/constants';
 
 import MenuSettingsListHeaderMobile from './header';
 import ItemWrapper from './item-wrapper';
@@ -10,9 +12,8 @@ import ItemWrapper from './item-wrapper';
 const MenuSettingsList: FC = () => {
   const [toggle, setToggle] = useState(false);
 
-  const closeDropdownSettingsMenu = () => {
-    setToggle(not);
-  };
+  const { selectNetwork } = useSuiClientContext();
+  const closeDropdownSettingsMenu = () => setToggle(not);
 
   return (
     <>
@@ -29,9 +30,21 @@ const MenuSettingsList: FC = () => {
           <Box mx="auto">
             <Tabs
               type="circle"
-              items={['Mainnet', 'Testnet']}
+              onChangeTab={(index) =>
+                selectNetwork(
+                  toPairs(DISPLAY_NETWORK).filter(
+                    ([network]) => network !== Network.DEVNET
+                  )[index][0]
+                )
+              }
               defaultTabIndex={0}
-              onChangeTab={noop}
+              items={toPairs(DISPLAY_NETWORK)
+                .filter(([network]) => network !== Network.DEVNET)
+                .map(([, name]) => (
+                  <Typography variant="label" size="large" key={v4()}>
+                    {name}
+                  </Typography>
+                ))}
             />
           </Box>
         </ItemWrapper>

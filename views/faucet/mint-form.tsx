@@ -10,7 +10,7 @@ import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { TokenIcon } from '@/components';
-import { COINS, FAUCET_AMOUNT, TREASURY_CAP_MAP } from '@/constants';
+import { FAUCET_AMOUNT, FAUCET_COINS, TREASURY_CAP_MAP } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks';
 import { useModal } from '@/hooks/use-modal';
@@ -22,14 +22,14 @@ import { logFaucet, requestMov } from '@/views/faucet/faucet.utils';
 import SelectTokenModal from '../components/select-token-modal';
 
 const MintForm: FC = () => {
-  const [selected, setSelected] = useState(COINS[0]);
   const network = useNetwork();
   const { mutate } = useWeb3();
-  const account = useCurrentAccount();
-  const { setModal, handleClose } = useModal();
   const client = useSuiClient();
-  const signTransactionBlock = useSignTransactionBlock();
+  const account = useCurrentAccount();
   const currentAccount = useCurrentAccount();
+  const { setModal, handleClose } = useModal();
+  const signTransactionBlock = useSignTransactionBlock();
+  const [selected, setSelected] = useState(FAUCET_COINS[network][0]);
 
   const handleMint = async () => {
     try {
@@ -45,8 +45,8 @@ const MintForm: FC = () => {
         target: `0x2::coin::mint_and_transfer`,
         typeArguments: [selected.type],
         arguments: [
-          transactionBlock.object(TREASURY_CAP_MAP[selected.type]),
-          transactionBlock.pure.u64(FAUCET_AMOUNT[selected.type]),
+          transactionBlock.object(TREASURY_CAP_MAP[network][selected.type]),
+          transactionBlock.pure.u64(FAUCET_AMOUNT[network][selected.type]),
           transactionBlock.pure.address(account.address),
         ],
       });
@@ -72,7 +72,7 @@ const MintForm: FC = () => {
       throwTXIfNotSuccessful(tx);
       await showTXSuccessToast(tx, network);
 
-      logFaucet(currentAccount!.address, selected, tx.digest);
+      logFaucet(currentAccount!.address, selected, network, tx.digest);
     } finally {
       mutate();
     }

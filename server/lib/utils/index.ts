@@ -5,7 +5,7 @@ import CoinMetadata from '@/server/model/coin-metadata';
 import CoinMetadataTestnet from '@/server/model/coin-metadata-testnet';
 
 const testnetClient = new SuiClient({
-  url: RPC_URL[Network.TESTNET],
+  url: RPC_URL[Network.IMOLA_TESTNET],
 });
 
 const devnetClient = new SuiClient({
@@ -14,10 +14,10 @@ const devnetClient = new SuiClient({
 
 export const MOVE_CLIENT_PROVIDER_MAP = {
   [Network.DEVNET]: devnetClient,
-  [Network.TESTNET]: testnetClient,
+  [Network.IMOLA_TESTNET]: testnetClient,
 } as Record<Network, SuiClient>;
 
 export const COIN_METADATA_MODEL_MAP = {
   [Network.DEVNET]: CoinMetadata,
-  [Network.TESTNET]: CoinMetadataTestnet,
+  [Network.IMOLA_TESTNET]: CoinMetadataTestnet,
 } as Record<Network, ReturnType<typeof mongoose.model>>;

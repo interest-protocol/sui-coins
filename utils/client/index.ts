@@ -6,7 +6,7 @@ export const movementClient = {
   [Network.DEVNET]: new SuiClient({
     url: RPC_URL[Network.DEVNET],
   }),
-  [Network.TESTNET]: new SuiClient({
-    url: RPC_URL[Network.TESTNET],
+  [Network.IMOLA_TESTNET]: new SuiClient({
+    url: RPC_URL[Network.IMOLA_TESTNET],
   }),
 };

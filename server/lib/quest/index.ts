@@ -1,6 +1,6 @@
 import invariant from 'tiny-invariant';
 
-import { FAUCET_COINS } from '@/constants';
+import { FAUCET_COINS, Network } from '@/constants';
 import dbConnect from '@/server';
 import QuestModel, {
   AirdropData,
@@ -109,7 +109,7 @@ export const findQuestProfile = async (address: string) => {
       lastCreatePoolAt: 0,
       lastCreateTokenAt: 0,
       lastAddLiquidityAt: 0,
-      lastFaucetAt: FAUCET_COINS.reduce(
+      lastFaucetAt: FAUCET_COINS[Network.DEVNET].reduce(
         (acc, { type }) => ({ ...acc, [type]: 0 }),
         {}
       ),

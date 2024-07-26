@@ -36,7 +36,7 @@ const MintBalances: FC = () => {
         borderRadius="s"
         flexDirection="column"
       >
-        {FAUCET_COINS.map(({ symbol, type }) => (
+        {FAUCET_COINS[network].map(({ symbol, type }) => (
           <Box key={v4()} display="flex" justifyContent="space-between">
             <Box display="flex" alignItems="center" gap="l">
               <Box

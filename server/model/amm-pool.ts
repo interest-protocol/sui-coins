@@ -59,4 +59,4 @@ const testnetModel =
   mongoose.model<AMMPoolModel>(testnet, AmmPoolSchema);
 
 export const getAmmPoolModel = (x: Network) =>
-  x === Network.TESTNET ? testnetModel : devnetModel;
+  x === Network.IMOLA_TESTNET ? testnetModel : devnetModel;
