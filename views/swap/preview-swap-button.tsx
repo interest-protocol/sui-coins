@@ -1,5 +1,5 @@
 import { Box, Button } from '@interest-protocol/ui-kit';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { FormProvider, useFormContext, useWatch } from 'react-hook-form';
 
 import { useModal } from '@/hooks/use-modal';
@@ -7,7 +7,6 @@ import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import { isSui, ZERO_BIG_NUMBER } from '@/utils';
 
-import { SwapMessagesEnum } from './swap.data';
 import { SwapForm } from './swap.types';
 import SwapMessages from './swap-messages';
 import SwapPreviewModal from './swap-preview-modal';
@@ -46,29 +45,6 @@ const PreviewSwapButton: FC = () => {
     Number(to.display) &&
     coinsMap[from.type] &&
     (isSui(from.type) ? !isGreaterThanAllowedWhenSui : !isGreaterThanBalance);
-
-  useEffect(() => {
-    if (
-      from &&
-      Number(from.value) &&
-      from.type &&
-      String(from.decimals) &&
-      coinsMap[from.type]
-    ) {
-      if (isSui(from.type))
-        if (isGreaterThanAllowedWhenSui) {
-          setValue('error', SwapMessagesEnum.leastOneSui);
-          return;
-        }
-
-      if (isGreaterThanBalance) {
-        setValue('error', SwapMessagesEnum.notEnoughToken);
-        return;
-      }
-    }
-
-    setValue('error', null);
-  }, [from, to]);
 
   const handlePreview = () => {
     setValue('readyToSwap', false);
