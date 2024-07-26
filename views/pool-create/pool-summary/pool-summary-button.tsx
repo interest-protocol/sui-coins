@@ -4,6 +4,7 @@ import {
   useSignTransactionBlock,
   useSuiClient,
 } from '@mysten/dapp-kit';
+import { sleep } from '@polymedia/suits';
 import { useRouter } from 'next/router';
 import { reverse } from 'ramda';
 import { FC } from 'react';
@@ -97,6 +98,8 @@ const PoolSummaryButton: FC = () => {
         network,
       }),
     });
+
+    await sleep(500);
 
     logCreatePool(currentAccount.address, tokens[0], tokens[1], tx.digest);
 
