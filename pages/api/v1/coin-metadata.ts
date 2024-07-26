@@ -13,7 +13,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     await NextCors(req, res, {
       methods: ['POST'],
       optionsSuccessStatus: 200,
-      origin: 'https://movement.interestprotocol.com/',
+      origin: process.env.ORIGIN ?? '*',
     });
 
     await dbConnect();
