@@ -85,7 +85,7 @@ const PoolSummaryButton: FC = () => {
 
     throwTXIfNotSuccessful(tx);
 
-    setValue('explorerLink', EXPLORER_URL[network](`/txblock/${tx.digest}`));
+    setValue('explorerLink', EXPLORER_URL[network](`txblock/${tx.digest}`));
 
     const poolId = await extractPoolDataFromTx(tx, suiClient, network);
 
