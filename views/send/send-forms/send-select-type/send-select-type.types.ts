@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
 
+import { SendType } from '../../send.data';
+
 export interface SendSelectTypeCardProps {
   title: string;
   description: string;
@@ -8,5 +10,5 @@ export interface SendSelectTypeCardProps {
 }
 
 export interface SendSelectTypeProps {
-  onSelectType: (index: number) => void;
+  onSelectType: (key: SendType) => void;
 }

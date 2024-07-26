@@ -2,6 +2,7 @@ import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC, PropsWithChildren } from 'react';
 
 import { ModalProvider } from '@/context/modal';
+import MergeCoins from '@/views/components/merge-coins';
 
 import Web3Manager from '../web3-manager';
 import Footer from './footer';
@@ -16,44 +17,52 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
   noSidebar,
   withBlocked,
 }) => (
-  <Box display="flex" height="100vh" overflow="hidden" bg="surface">
-    {!noSidebar && <Sidebar />}
-    <Box as="aside" position="relative" flex="1">
-      <Header withLogo={noSidebar} />
-      <Web3Manager features={features} withBlocked={withBlocked} />
-      <ModalProvider>
-        <Box width="100%" overflowY="auto">
-          <Box
-            m="0"
-            width="100%"
-            display="flex"
-            maxHeight="100vh"
-            variant="container"
-            flexDirection="column"
-            px={['m', 'l', 'l', 'xl']}
-            mt="unset"
-          >
-            <Box as="main" flex="1" mb="10xl">
-              <Box>
-                {title && (
-                  <Typography
-                    textAlign="center"
-                    variant="display"
-                    size="medium"
-                    my="3rem"
-                  >
-                    {title}
-                  </Typography>
-                )}
-                {children}
-              </Box>
+  <ModalProvider>
+    <Box display="flex" height="100vh" overflow="hidden" bg="surface">
+      {!noSidebar && <Sidebar />}
+      <Box
+        flex="1"
+        as="aside"
+        display="flex"
+        overflowY="auto"
+        overflowX="hidden"
+        position="relative"
+        flexDirection="column"
+      >
+        <Header withLogo={noSidebar} />
+        <Web3Manager features={features} withBlocked={withBlocked} />
+        <Box
+          m="0"
+          mt="unset"
+          width="100%"
+          height="100%"
+          display="flex"
+          variant="container"
+          flexDirection="column"
+          px={['m', 'l', 'l', 'xl']}
+          justifyContent="space-between"
+        >
+          <Box as="main" flex="1" mb="10xl">
+            <Box>
+              {title && (
+                <Typography
+                  textAlign="center"
+                  variant="display"
+                  size="medium"
+                  my="3rem"
+                >
+                  {title}
+                </Typography>
+              )}
+              {children}
             </Box>
-            <Footer />
           </Box>
+          <MergeCoins />
+          <Footer />
         </Box>
-      </ModalProvider>
+      </Box>
     </Box>
-  </Box>
+  </ModalProvider>
 );
 
 export default Layout;

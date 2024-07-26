@@ -43,7 +43,6 @@ const TextField: FC<PropsWithRef<TextFieldProps>> = forwardRef(
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
       changeValue(e.target.value);
-
     return (
       <Box>
         {label && (
@@ -63,9 +62,9 @@ const TextField: FC<PropsWithRef<TextFieldProps>> = forwardRef(
           display="flex"
           borderRadius="xs"
           alignItems="center"
-          borderStyle="solid"
           borderWidth="1px"
-          borderColor="#76767A"
+          borderStyle="solid"
+          borderColor={focus ? 'primary' : 'outline'}
           {...fieldProps}
         >
           <Box

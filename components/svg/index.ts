@@ -80,6 +80,7 @@ export { default as MATICSVG } from './matic';
 export { default as MATICChainSVG } from './matic-chain';
 export { default as MemechanSVG } from './memechan';
 export { default as MenuSVG } from './menu';
+export { default as MergeSVG } from './merge';
 export { default as MinusSVG } from './minus';
 export { default as NftSVG } from './nft';
 export { default as NoSearchSVG } from './no-search';

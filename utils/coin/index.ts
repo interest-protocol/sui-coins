@@ -19,7 +19,7 @@ import { FixedPointMath } from '@/lib';
 import {
   CoinObject,
   CoinsMap,
-} from '../../components/web3-manager/coins-manager/web3-manager.types';
+} from '../../components/web3-manager/coins-manager/coins-manager.types';
 import { isSameStructTag } from '../address';
 import { ZERO_BIG_NUMBER } from '../big-number';
 import { fetchCoinMetadata } from '../coin-metadata';
@@ -56,7 +56,6 @@ export const safePoolSymbolFromType = (type: string): string =>
 export const coinDataToCoinObject = (coinData: CoinData): CoinObject => ({
   ...coinData,
   balance: ZERO_BIG_NUMBER,
-  coinObjectId: '',
   metadata: { name: formatAddress(coinData.type), description: '' },
   objects: [],
 });
@@ -144,7 +143,7 @@ export async function getCoinOfValue({
 }: GetCoinOfValueArgs): Promise<TransactionResult> {
   let coinOfValue: TransactionResult;
   coinType = removeLeadingZeros(coinType);
-  if (coinType === '0x2::sui::SUI') {
+  if (isSui(coinType)) {
     coinOfValue = tx.splitCoins(tx.gas, [tx.pure.u64(coinValue)]);
   } else {
     const paginatedCoins = await getCoins({

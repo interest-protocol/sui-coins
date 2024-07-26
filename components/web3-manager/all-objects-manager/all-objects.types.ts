@@ -1,6 +1,6 @@
 import { SuiClient, SuiObjectResponse } from '@mysten/sui/client';
 
-import { CoinObject } from '../coins-manager/web3-manager.types';
+import { CoinObject } from '../coins-manager/coins-manager.types';
 
 export type TGetAllObjects = (
   provider: SuiClient,

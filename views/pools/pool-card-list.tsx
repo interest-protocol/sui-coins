@@ -9,11 +9,10 @@ import { v4 } from 'uuid';
 import { Network, PAGE_SIZE } from '@/constants';
 import { CATEGORY_POOLS } from '@/constants/clamm';
 import { useGetCoinMetadata } from '@/hooks/use-get-coin-metadata';
-import useGetMultipleTokenPriceBySymbol from '@/hooks/use-get-multiple-token-price-by-symbol';
+import useGetMultipleTokenPriceByType from '@/hooks/use-get-multiple-token-price-by-type';
 import { usePools } from '@/hooks/use-pools';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FormFilterValue } from '@/views/pools/pool-card/pool-card.types';
-import { getAllSymbols } from '@/views/pools/pools.utils';
 
 import PoolCard from './pool-card';
 import PoolCardSkeleton from './pool-card/pool-card-skeleton';
@@ -206,7 +205,6 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
   arePoolsLoading,
   done,
 }) => {
-  const { network } = useSuiClientContext();
   const hasPoolsList = !!(pools && pools.length);
 
   const hasMore = !!(
@@ -215,10 +213,12 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
     totalItems > Math.ceil(pools.length / PAGE_SIZE)
   );
 
-  const symbols = getAllSymbols(pools || [], network as Network);
-
   const { data: pricesRecord, isLoading: arePricesLoading } =
-    useGetMultipleTokenPriceBySymbol(symbols);
+    useGetMultipleTokenPriceByType([
+      ...new Set(pools?.flatMap((pool) => pool.coinTypes) ?? []),
+    ]);
+
+  console.log({ pricesRecord });
 
   const { data: coinMetadataMap, isLoading: isCoinMetadataLoading } =
     useGetCoinMetadata([...new Set(pools?.flatMap((pool) => pool.coinTypes))]);

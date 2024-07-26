@@ -11,7 +11,7 @@ import { useNetwork } from '@/hooks/use-network';
 import { CoinMetadataWithType } from '@/interface';
 import { fetchCoinMetadata, isSui, makeSWRKey, ZERO_BIG_NUMBER } from '@/utils';
 
-import { CoinsMap, TGetAllCoins } from './web3-manager.types';
+import { CoinsMap, TGetAllCoins } from './coins-manager.types';
 
 const getAllCoins: TGetAllCoins = async (provider, account, cursor = null) => {
   const { data, nextCursor, hasNextPage } = await provider.getAllCoins({
