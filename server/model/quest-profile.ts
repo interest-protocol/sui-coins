@@ -5,11 +5,11 @@ const modelName = 'MovementQuestProfileImolaTestnet';
 export interface QuestProfile {
   address: string;
   lastSwapAt: number;
+  lastFaucetAt: number;
   lastAirdropAt: number;
   lastCreatePoolAt: number;
   lastCreateTokenAt: number;
   lastAddLiquidityAt: number;
-  lastFaucetAt: Record<string, number>;
 }
 
 export type QuestProfileDocument = Document & QuestProfile;
@@ -21,8 +21,8 @@ export const QuestProfileSchema = new Schema({
     required: true,
     unique: true,
   },
-  lastFaucetAt: Object,
   lastSwapAt: { type: Number },
+  lastFaucetAt: { type: Number },
   lastAirdropAt: { type: Number },
   lastCreatePoolAt: { type: Number },
   lastCreateTokenAt: { type: Number },
