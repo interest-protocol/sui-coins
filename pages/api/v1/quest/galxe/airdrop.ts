@@ -14,7 +14,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       const profile = await findQuestProfile(address);
 
-      const is_ok = profile.lastAirdropAt === getExactDayTimestamp();
+      const is_ok = profile.lastAirdropAt === getExactDayTimestamp() ? 1 : 0;
 
       res.status(200).json({ is_ok });
       return;
