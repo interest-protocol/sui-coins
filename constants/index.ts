@@ -27,7 +27,7 @@ export const EXPLORER_URL = {
   [Network.DEVNET]: (path: string) =>
     `https://explorer.devnet.m2.movementlabs.xyz/${path}?network=devnet`,
   [Network.IMOLA_TESTNET]: (path: string) =>
-    `https://explore.sui.imola.testnet.movementlabs.xyz/${path}?network=testnet`,
+    `https://explorer.sui.imola.testnet.movementlabs.xyz/${path}?network=testnet`,
 } as Record<Network, (path: string) => string>;
 
 export const TOAST_DURATION = 10000;
