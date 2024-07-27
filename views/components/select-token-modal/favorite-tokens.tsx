@@ -9,7 +9,7 @@ import { LOCAL_STORAGE_VERSION } from '@/constants';
 import { COINS, COINS_MAP } from '@/constants/coins';
 import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks/use-web3';
-import { coinDataToCoinObject } from '@/utils';
+import { coinDataToCoinObject, fetchCoinMetadata } from '@/utils';
 
 import { metadataToCoin } from './select-token-modal.utils';
 
@@ -48,11 +48,7 @@ const FavoriteTokens: FC<{ onSelectToken: (coin: CoinObject) => void }> = ({
 
     if (token) return onSelectToken(coinDataToCoinObject(token));
 
-    const metadata = await fetch(
-      `/api/auth/v1/coin-metadata?type=${type}&network=${network}`
-    ).then((response) =>
-      response.status === 200 ? response.json() : response
-    );
+    const metadata = await fetchCoinMetadata({ type, network });
 
     return onSelectToken({ ...metadataToCoin(metadata) });
   };

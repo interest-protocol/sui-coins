@@ -24,7 +24,7 @@ export const logFaucet = (
   token: CoinData,
   network: Network,
   txDigest: string
-) => {
+) =>
   fetch(`/api/auth/v1/log-quest?network=${network}`, {
     method: 'POST',
     headers: {
@@ -50,4 +50,3 @@ export const logFaucet = (
       },
     } as Omit<Quest, 'timestamp'>),
   });
-};

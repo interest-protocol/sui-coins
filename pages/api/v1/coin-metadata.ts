@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import NextCors from 'nextjs-cors';
 import { pathOr } from 'ramda';
 
 import { Network } from '@/constants';
@@ -9,6 +10,12 @@ import { isInvalidNetwork } from '@/utils';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    await NextCors(req, res, {
+      methods: ['POST'],
+      optionsSuccessStatus: 200,
+      origin: process.env.ORIGIN ?? '*',
+    });
+
     await dbConnect();
 
     const type = req.body.type as string;
@@ -21,16 +28,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (type) {
       const doc = await getCoinMetadata(type, network);
 
-      return res.status(200).json(doc);
+      return res.json(doc);
     }
 
     if (!!typeList && Array.isArray(typeList) && !!typeList.length) {
       const data = await getCoinMetadataList(typeList, network);
 
-      return res.status(200).json(data);
+      return res.json(data);
     }
-
-    return res.status(404).json({ message: 'No coin type requested' });
   } catch (e) {
     res.status(500).send(e);
   }

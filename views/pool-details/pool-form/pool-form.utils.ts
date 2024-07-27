@@ -87,7 +87,7 @@ export const logDepositPool = (
   tokenB: PoolToken,
   network: Network,
   txDigest: string
-) => {
+) =>
   fetch(`/api/auth/v1/log-quest?network=${network}`, {
     method: 'POST',
     headers: {
@@ -113,4 +113,3 @@ export const logDepositPool = (
       },
     } as Omit<Quest, 'timestamp'>),
   });
-};

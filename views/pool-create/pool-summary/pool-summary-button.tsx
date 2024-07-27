@@ -89,15 +89,6 @@ const PoolSummaryButton: FC = () => {
 
     const poolId = await extractPoolDataFromTx(tx, suiClient, network);
 
-    await fetch('/api/auth/v1/save-pool', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        poolId,
-        network,
-      }),
-    });
-
     await logCreatePool(
       currentAccount.address,
       tokens[0],
@@ -106,7 +97,16 @@ const PoolSummaryButton: FC = () => {
       tx.digest
     );
 
-    push(`${Routes[RoutesEnum.PoolDetails]}?objectId=${poolId}`);
+    push(`${Routes[RoutesEnum.PoolDetails]}?objectId=${poolId}`).then(() =>
+      fetch('/api/v1/save-pool', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          poolId,
+          network,
+        }),
+      })
+    );
   };
 
   const createPool = () =>

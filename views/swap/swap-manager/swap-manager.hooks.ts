@@ -18,7 +18,7 @@ export const useGetDex = ({ coinInType, coinOutType }: UseGetDexArgs) => {
   const key = md5([coinInType, coinOutType].sort().toString());
 
   return useSWR<UseGetDexReturn>(
-    makeSWRKey([network, key], `/api/auth/v1/get-pools-by-cointypes`),
+    makeSWRKey([network, key], `/api/v1/get-pools-by-cointypes`),
     async () => {
       if (!coinInType || !coinOutType)
         return {
@@ -29,7 +29,7 @@ export const useGetDex = ({ coinInType, coinOutType }: UseGetDexArgs) => {
       if (cache.has(key)) return cache.get(key)!;
 
       const fetchRes = await fetch(
-        `/api/auth/v1/get-pools-by-cointypes?coinInType=${coinInType}&coinOutType=${coinOutType}&network=${network}`
+        `/api/v1/get-pools-by-cointypes?coinInType=${coinInType}&coinOutType=${coinOutType}&network=${network}`
       );
 
       const serverPools = (await fetchRes.json()) as AmmServerPool[];

@@ -16,7 +16,7 @@ const useGetMultipleTokenPriceBySymbol = (
         (symbol) => !PRICE_BLACKLIST.includes(symbol)
       );
 
-      const res = await fetch(`/api/auth/v1/coin-price?symbol=${validSymbols}`);
+      const res = await fetch(`/api/v1/coin-price?symbol=${validSymbols}`);
 
       const data = await res.json();
 

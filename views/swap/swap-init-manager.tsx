@@ -79,7 +79,7 @@ const SwapInitManager: FC = () => {
     form.setValue(field, token);
 
     if (!PRICE_BLACKLIST.includes(token.symbol))
-      fetch(`/api/auth/v1/coin-price?symbol=${token.symbol}`)
+      fetch(`/api/v1/coin-price?symbol=${token.symbol}`)
         .then((response) => response.json?.())
         .then((data) =>
           form.setValue(

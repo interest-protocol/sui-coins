@@ -54,6 +54,7 @@ export const usePools = (page: number = 1, findQuery = {}) => {
     }
   );
 };
+
 export const usePoolsMetadata = (poolStateIds: Record<string, string>) => {
   const suiClient = useSuiClient();
 
