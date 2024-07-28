@@ -5,7 +5,7 @@ import { Network } from '@/constants';
 import { getSymbolByType } from '../coin';
 
 export const isInvalidNetwork = (network: Network) =>
-  !network || (network !== Network.DEVNET && network !== Network.IMOLA_TESTNET);
+  !network || (network !== Network.DEVNET && network !== Network.TESTNET);
 
 export const getBasicCoinMetadata = (type: string) => ({
   decimals: 0,
