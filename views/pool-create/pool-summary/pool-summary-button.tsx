@@ -89,23 +89,23 @@ const PoolSummaryButton: FC = () => {
 
     const poolId = await extractPoolDataFromTx(tx, suiClient, network);
 
-    await fetch('/api/auth/v1/save-pool', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        poolId,
-        network,
-      }),
-    });
-
-    push(`${Routes[RoutesEnum.PoolDetails]}?objectId=${poolId}`);
-
-    logCreatePool(
+    await logCreatePool(
       currentAccount.address,
       tokens[0],
       tokens[1],
       network,
       tx.digest
+    );
+
+    push(`${Routes[RoutesEnum.PoolDetails]}?objectId=${poolId}`).then(() =>
+      fetch('/api/v1/save-pool', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          poolId,
+          network,
+        }),
+      })
     );
   };
 

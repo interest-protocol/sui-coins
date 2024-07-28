@@ -1,4 +1,3 @@
-import { isValidSuiAddress } from '@mysten/sui.js/utils';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import { findQuestProfile } from '@/server/lib/quest';
@@ -9,14 +8,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'GET') {
       const address = req.query.address as string;
 
-      if (!isValidSuiAddress(address))
-        return res.status(400).send(new Error('Invalid address'));
+      const questProfile = await findQuestProfile(address);
 
-      const profile = await findQuestProfile(address);
+      res
+        .status(200)
+        .json({ timestamp: getExactDayTimestamp(), data: questProfile });
 
-      const is_ok = profile.lastFaucetAt === getExactDayTimestamp() ? 1 : 0;
-
-      res.status(200).json({ is_ok });
       return;
     }
 

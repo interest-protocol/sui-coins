@@ -42,8 +42,8 @@ export const logSwap = (
   to: SwapToken,
   network: Network,
   txDigest: string
-) => {
-  fetch(`/api/auth/v1/log-quest?network=${network}`, {
+) =>
+  fetch(`/api/v1/log-quest?network=${network}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -68,4 +68,3 @@ export const logSwap = (
       },
     } as Omit<Quest, 'timestamp'>),
   });
-};

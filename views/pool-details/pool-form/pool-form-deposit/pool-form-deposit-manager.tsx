@@ -47,7 +47,7 @@ const DepositManager: FC = () => {
     const roundedN =
       n.lt(new BigNumber(1)) && !coin1.decimals
         ? 0
-        : n.decimalPlaces(coin1.decimals, BigNumber.ROUND_UP).toNumber();
+        : n.decimalPlaces(0).toNumber();
 
     setValue('tokenList.1.value', roundedN.toString());
   }, [token0Amount, input1IsLocked]);
@@ -79,7 +79,7 @@ const DepositManager: FC = () => {
     const roundedN =
       n.lt(new BigNumber(1)) && !coin0.decimals
         ? 0
-        : n.decimalPlaces(coin0.decimals, BigNumber.ROUND_UP).toNumber();
+        : n.decimalPlaces(0).toNumber();
 
     setValue('tokenList.0.value', roundedN.toString());
   }, [token1Amount, input0IsLocked]);

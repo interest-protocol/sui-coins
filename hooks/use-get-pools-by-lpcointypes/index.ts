@@ -23,7 +23,7 @@ export const useGetPoolsByLpCoinTypes = () => {
       if (!account) return [];
 
       const res = await fetch(
-        `/api/auth/v1/get-pools-by-lpcoins?lpCoins=${lpCoins.toString()}&network=${network}`
+        `/api/v1/get-pools-by-lpcoins?lpCoins=${lpCoins.toString()}&network=${network}`
       );
 
       const pools = (await res.json()) as AmmServerPool[];

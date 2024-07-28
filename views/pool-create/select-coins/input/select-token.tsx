@@ -37,7 +37,7 @@ const SelectToken: FC<InputProps> = ({ index, isMobile }) => {
       usdPrice: currentToken?.usdPrice,
     });
 
-    fetch(`/api/auth/v1/coin-price?symbol=${isSui(type) ? 'SUI' : symbol}`)
+    fetch(`/api/v1/coin-price?symbol=${isSui(type) ? 'SUI' : symbol}`)
       .then((response) => response.json())
       .then((data) =>
         setValue(
