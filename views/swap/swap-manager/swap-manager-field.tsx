@@ -98,6 +98,8 @@ const SwapManagerField: FC<SwapManagerProps> = ({
         setValue('poolsMap', poolsMap);
         setValue('routeWithAmount', [coinsPath, poolIds, amountObj]);
       },
+      isPaused: () => !from || !+from?.value || lock || hasNoMarket,
+      isOnline: () => !from || !+from?.value || lock || hasNoMarket,
       revalidateOnFocus: true,
       revalidateOnMount: true,
       refreshWhenHidden: false,
