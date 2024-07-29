@@ -19,7 +19,7 @@ const handler: NextApiHandler = async (req, res) => {
 
     const page = +pathOr(1, ['query', 'page'], req);
     const findQuery = JSON.parse(pathOr('{}', ['query', 'find'], req));
-    const network = pathOr(Network.DEVNET, ['query', 'network'], req);
+    const network = pathOr(Network.TESTNET, ['query', 'network'], req);
 
     // Prevent ppl from passing malicious strings to DB queries
     invariant(!isNaN(page), 'Page must be a number');
