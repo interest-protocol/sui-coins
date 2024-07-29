@@ -16,8 +16,8 @@ const LOCAL_NETWORK_KEY = 'movement:network-v1';
 const networkContext = createContext<Network>('' as Network);
 
 const { networkConfig } = createNetworkConfig({
-  [Network.IMOLA_TESTNET]: {
-    url: RPC_URL[Network.IMOLA_TESTNET],
+  [Network.TESTNET]: {
+    url: RPC_URL[Network.TESTNET],
   },
   // [Network.DEVNET]: {
   //   url: RPC_URL[Network.DEVNET],
@@ -26,10 +26,10 @@ const { networkConfig } = createNetworkConfig({
 
 export const NetworkProvider: FC<PropsWithChildren> = ({ children }) => {
   const { Provider } = networkContext;
-  const [network, setNetwork] = useState<Network>(Network.IMOLA_TESTNET);
+  const [network, setNetwork] = useState<Network>(Network.TESTNET);
 
   useEffect(() => {
-    setNetwork(Network.IMOLA_TESTNET);
+    setNetwork(Network.TESTNET);
   }, []);
 
   const changeNetwork = (network: Network) => {
@@ -39,7 +39,7 @@ export const NetworkProvider: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <SuiClientProvider
-      network={network as Network.IMOLA_TESTNET}
+      network={network as Network.TESTNET}
       networks={networkConfig}
       onNetworkChange={(network) => {
         changeNetwork(network);

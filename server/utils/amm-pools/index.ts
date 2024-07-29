@@ -67,11 +67,11 @@ const baseCoins = {
     COIN_TYPES[Network.DEVNET].USDC,
     SUI_TYPE_ARG,
   ],
-  [Network.IMOLA_TESTNET]: [
-    COIN_TYPES[Network.IMOLA_TESTNET].USDT,
-    COIN_TYPES[Network.IMOLA_TESTNET].WBTC,
-    COIN_TYPES[Network.IMOLA_TESTNET].WETH,
-    COIN_TYPES[Network.IMOLA_TESTNET].USDC,
+  [Network.TESTNET]: [
+    COIN_TYPES[Network.TESTNET].USDT,
+    COIN_TYPES[Network.TESTNET].WBTC,
+    COIN_TYPES[Network.TESTNET].WETH,
+    COIN_TYPES[Network.TESTNET].USDC,
     SUI_TYPE_ARG,
   ],
 };

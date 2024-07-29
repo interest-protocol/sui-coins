@@ -5,7 +5,7 @@ export const OBJECTS = {
     REGISTRY:
       '0xa82dfa032afd911aa4a7953d5ecbf6a33f8e2d1b8f0f379667b141933e5c7582',
   },
-  [Network.IMOLA_TESTNET]: {
+  [Network.TESTNET]: {
     REGISTRY:
       '0xaa3be47d3edde41e3bf4ad6ddb0ab438cdfb988dd29d7aa878c787d0a3f1190a',
   },
@@ -18,7 +18,7 @@ export const PACKAGES = {
     AIRDROP:
       '0x35770416e5918031841afa8e9ad2076f2f9e0dd45fa4fc9effd1fdabf4db654b',
   },
-  [Network.IMOLA_TESTNET]: {
+  [Network.TESTNET]: {
     DEX: '0xcb6b81f09890a762a782171cc7c1a2f17a42fb662956d6aa5b7d11e05760797f',
     UTILS: '0xcc26884afc8d168fddde2f69f022cd8f2a118e4a94a2d5a7d60b0dd108a3bf31',
     AIRDROP:
@@ -31,8 +31,8 @@ export const AMM_CURVES = {
     STABLE: `${PACKAGES[Network.DEVNET].DEX}::curves::Stable`,
     VOLATILE: `${PACKAGES[Network.DEVNET].DEX}::curves::Volatile`,
   },
-  [Network.IMOLA_TESTNET]: {
-    STABLE: `${PACKAGES[Network.IMOLA_TESTNET].DEX}::curves::Stable`,
-    VOLATILE: `${PACKAGES[Network.IMOLA_TESTNET].DEX}::curves::Volatile`,
+  [Network.TESTNET]: {
+    STABLE: `${PACKAGES[Network.TESTNET].DEX}::curves::Stable`,
+    VOLATILE: `${PACKAGES[Network.TESTNET].DEX}::curves::Volatile`,
   },
 };

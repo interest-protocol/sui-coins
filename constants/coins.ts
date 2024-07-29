@@ -20,7 +20,7 @@ export const COIN_TYPES = {
     USDT: `${MOVEMENT_MOCK_COINS_PACKAGE}::usdt::USDT`,
     RUCO: '0x935aae204191927c7f1586a11c011da5fafb57fa51bd1df60484954c18862891::ruco::RUCO',
   },
-  [Network.IMOLA_TESTNET]: {
+  [Network.TESTNET]: {
     WBTC: `${MOVEMENT_MOCK_IMOLA_PACKAGE}::wbtc::WBTC`,
     WETH: `${MOVEMENT_MOCK_IMOLA_PACKAGE}::weth::WETH`,
     USDC: `${MOVEMENT_MOCK_IMOLA_PACKAGE}::usdc::USDC`,
@@ -40,14 +40,14 @@ export const TREASURY_CAP_MAP: Record<Network, Record<string, string>> = {
     [COIN_TYPES[Network.DEVNET].USDT]:
       '0x54e04baa0fa5bf840efb48e44afb1c388690e8d52cf874a012edaa5fa487ab27',
   },
-  [Network.IMOLA_TESTNET]: {
-    [COIN_TYPES[Network.IMOLA_TESTNET].USDC]:
+  [Network.TESTNET]: {
+    [COIN_TYPES[Network.TESTNET].USDC]:
       '0x6bad1a88caef6f9ea56680cd31315b2cfeb6018b105471320407559042e6d067',
-    [COIN_TYPES[Network.IMOLA_TESTNET].WETH]:
+    [COIN_TYPES[Network.TESTNET].WETH]:
       '0xe02ba3510a9240ba970aed72e0c6188989c3e6d6bd316edfa12bd04da8ebf675',
-    [COIN_TYPES[Network.IMOLA_TESTNET].WBTC]:
+    [COIN_TYPES[Network.TESTNET].WBTC]:
       '0xd2c1127a16494f9df5b6f973baebd78e093d66b3c06463c4e930c8545a9b6df2',
-    [COIN_TYPES[Network.IMOLA_TESTNET].USDT]:
+    [COIN_TYPES[Network.TESTNET].USDT]:
       '0x8cacf2fd727720db5fc11006786fbcf69408decda4611921da791cc8ed844878',
   },
 };
@@ -59,11 +59,11 @@ export const FAUCET_AMOUNT: Record<Network, Record<string, `${number}`>> = {
     [COIN_TYPES[Network.DEVNET].WBTC]: '100000000',
     [COIN_TYPES[Network.DEVNET].USDT]: '7000000000000',
   },
-  [Network.IMOLA_TESTNET]: {
-    [COIN_TYPES[Network.IMOLA_TESTNET].USDC]: '5000000000',
-    [COIN_TYPES[Network.IMOLA_TESTNET].WETH]: '5000000000',
-    [COIN_TYPES[Network.IMOLA_TESTNET].WBTC]: '100000000',
-    [COIN_TYPES[Network.IMOLA_TESTNET].USDT]: '7000000000000',
+  [Network.TESTNET]: {
+    [COIN_TYPES[Network.TESTNET].USDC]: '5000000000',
+    [COIN_TYPES[Network.TESTNET].WETH]: '5000000000',
+    [COIN_TYPES[Network.TESTNET].WBTC]: '100000000',
+    [COIN_TYPES[Network.TESTNET].USDT]: '7000000000000',
   },
 };
 
@@ -95,26 +95,26 @@ export const FAUCET_COINS: Record<Network, ReadonlyArray<CoinData>> = {
       type: COIN_TYPES[Network.DEVNET].USDT as `0x${string}`,
     },
   ],
-  [Network.IMOLA_TESTNET]: [
+  [Network.TESTNET]: [
     {
       decimals: 9,
       symbol: 'WBTC',
-      type: COIN_TYPES[Network.IMOLA_TESTNET].WBTC as `0x${string}`,
+      type: COIN_TYPES[Network.TESTNET].WBTC as `0x${string}`,
     },
     {
       decimals: 9,
       symbol: 'WETH',
-      type: COIN_TYPES[Network.IMOLA_TESTNET].WETH as `0x${string}`,
+      type: COIN_TYPES[Network.TESTNET].WETH as `0x${string}`,
     },
     {
       decimals: 6,
       symbol: 'USDC',
-      type: COIN_TYPES[Network.IMOLA_TESTNET].USDC as `0x${string}`,
+      type: COIN_TYPES[Network.TESTNET].USDC as `0x${string}`,
     },
     {
       decimals: 9,
       symbol: 'USDT',
-      type: COIN_TYPES[Network.IMOLA_TESTNET].USDT as `0x${string}`,
+      type: COIN_TYPES[Network.TESTNET].USDT as `0x${string}`,
     },
   ],
 };
@@ -128,17 +128,17 @@ export const COINS: Record<Network, ReadonlyArray<CoinData>> = {
       type: COIN_TYPES[Network.DEVNET].RUCO as `0x${string}`,
     },
   ],
-  [Network.IMOLA_TESTNET]: [
+  [Network.TESTNET]: [
     {
       decimals: 9,
       symbol: 'MOVE',
       type: SUI_TYPE_ARG,
     },
-    ...FAUCET_COINS[Network.IMOLA_TESTNET],
+    ...FAUCET_COINS[Network.TESTNET],
     {
       decimals: 9,
       symbol: 'RUCO',
-      type: COIN_TYPES[Network.IMOLA_TESTNET].RUCO as `0x${string}`,
+      type: COIN_TYPES[Network.TESTNET].RUCO as `0x${string}`,
     },
   ],
 };
@@ -176,36 +176,36 @@ export const COINS_MAP: Record<Network, Record<string, CoinData>> = {
       type: COIN_TYPES[Network.DEVNET].RUCO as `0x${string}`,
     },
   },
-  [Network.IMOLA_TESTNET]: {
+  [Network.TESTNET]: {
     [SUI_TYPE_ARG]: {
       decimals: 9,
       symbol: 'MOVE',
       type: SUI_TYPE_ARG,
     },
-    [COIN_TYPES[Network.IMOLA_TESTNET].WBTC]: {
+    [COIN_TYPES[Network.TESTNET].WBTC]: {
       decimals: 9,
       symbol: 'WBTC',
-      type: COIN_TYPES[Network.IMOLA_TESTNET].WBTC as `0x${string}`,
+      type: COIN_TYPES[Network.TESTNET].WBTC as `0x${string}`,
     },
-    [COIN_TYPES[Network.IMOLA_TESTNET].WETH]: {
+    [COIN_TYPES[Network.TESTNET].WETH]: {
       decimals: 9,
       symbol: 'WETH',
-      type: COIN_TYPES[Network.IMOLA_TESTNET].WETH as `0x${string}`,
+      type: COIN_TYPES[Network.TESTNET].WETH as `0x${string}`,
     },
-    [COIN_TYPES[Network.IMOLA_TESTNET].USDC]: {
+    [COIN_TYPES[Network.TESTNET].USDC]: {
       decimals: 6,
       symbol: 'USDC',
-      type: COIN_TYPES[Network.IMOLA_TESTNET].USDC as `0x${string}`,
+      type: COIN_TYPES[Network.TESTNET].USDC as `0x${string}`,
     },
-    [COIN_TYPES[Network.IMOLA_TESTNET].USDT]: {
+    [COIN_TYPES[Network.TESTNET].USDT]: {
       decimals: 9,
       symbol: 'USDT',
-      type: COIN_TYPES[Network.IMOLA_TESTNET].USDT as `0x${string}`,
+      type: COIN_TYPES[Network.TESTNET].USDT as `0x${string}`,
     },
-    [COIN_TYPES[Network.IMOLA_TESTNET].RUCO]: {
+    [COIN_TYPES[Network.TESTNET].RUCO]: {
       decimals: 9,
       symbol: 'RUCO',
-      type: COIN_TYPES[Network.IMOLA_TESTNET].RUCO as `0x${string}`,
+      type: COIN_TYPES[Network.TESTNET].RUCO as `0x${string}`,
     },
   },
 };
