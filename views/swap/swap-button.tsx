@@ -68,6 +68,7 @@ const SwapButton = () => {
         currentAccount!.address,
         formSwap.getValues('from'),
         formSwap.getValues('to'),
+        network,
         tx.digest
       );
     } finally {

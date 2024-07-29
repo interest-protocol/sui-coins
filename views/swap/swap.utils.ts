@@ -1,6 +1,7 @@
 import { DevInspectResults } from '@mysten/sui.js/client';
 import BigNumber from 'bignumber.js';
 
+import { Network } from '@/constants';
 import { FixedPointMath } from '@/lib';
 import { Quest } from '@/server/model/quest';
 
@@ -39,9 +40,10 @@ export const logSwap = (
   address: string,
   from: SwapToken,
   to: SwapToken,
+  network: Network,
   txDigest: string
-) => {
-  fetch('/api/v1/log-quest', {
+) =>
+  fetch(`/api/v1/log-quest?network=${network}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -66,4 +68,3 @@ export const logSwap = (
       },
     } as Omit<Quest, 'timestamp'>),
   });
-};

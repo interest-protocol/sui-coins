@@ -3,6 +3,7 @@ import { getSuiObjectResponseFields } from '@polymedia/suits';
 import { keys } from 'ramda';
 import useSWR from 'swr';
 
+import { useNetwork } from '@/context/network';
 import { AmmPool, AmmServerPool } from '@/interface';
 import { convertServerPoolToClientPool, fetchPool, makeSWRKey } from '@/utils';
 
@@ -29,12 +30,14 @@ export const usePool = (parentId: string) => {
   );
 };
 
-export const usePools = (page: number = 1, findQuery = {}) =>
-  useSWR<UsePoolsReturn>(
-    `/api/v1/get-pools?page=${page}&find=${JSON.stringify(findQuery)}`,
+export const usePools = (page: number = 1, findQuery = {}) => {
+  const network = useNetwork();
+
+  return useSWR<UsePoolsReturn>(
+    `/api/v1/get-pools?page=${page}&find=${JSON.stringify(findQuery)}&network=${network}`,
     async () => {
       const res = await fetch(
-        `/api/v1/get-pools?page=${page}&find=${JSON.stringify(findQuery)}`
+        `/api/v1/get-pools?page=${page}&find=${JSON.stringify(findQuery)}&network=${network}`
       );
       const { pools, totalPages } = (await res.json?.()) as UsePoolsFetchReturn;
 
@@ -50,6 +53,7 @@ export const usePools = (page: number = 1, findQuery = {}) =>
       refreshWhenHidden: false,
     }
   );
+};
 
 export const usePoolsMetadata = (poolStateIds: Record<string, string>) => {
   const suiClient = useSuiClient();

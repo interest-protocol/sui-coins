@@ -54,21 +54,19 @@ const Swap: FC = () => (
             alignItems="center"
             justifyContent="center"
           >
-            {[<SwapFlipToken key={v4()} />].map((button) => (
-              <Box
-                key={v4()}
-                display="flex"
-                width="3.25rem"
-                height="3.25rem"
-                border="5px solid"
-                alignItems="center"
-                borderRadius="full"
-                justifyContent="center"
-                borderColor="lowContainer"
-              >
-                {button}
-              </Box>
-            ))}
+            <Box
+              key={v4()}
+              display="flex"
+              width="3.25rem"
+              height="3.25rem"
+              border="5px solid"
+              alignItems="center"
+              borderRadius="full"
+              justifyContent="center"
+              borderColor="lowContainer"
+            >
+              <SwapFlipToken />
+            </Box>
           </Box>
         </Box>
         <Box py="xl" borderRadius="xs" bg="container" my="m">

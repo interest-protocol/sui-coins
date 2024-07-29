@@ -1,5 +1,6 @@
 import Resizer from 'react-image-file-resizer';
 
+import { Network } from '@/constants';
 import { Quest } from '@/server/model/quest';
 
 export const getBase64 = async (file: File) => {
@@ -25,9 +26,10 @@ export const logCreateToken = (
   address: string,
   symbol: string,
   amount: string,
+  network: Network,
   txDigest: string
-) => {
-  fetch('/api/v1/log-quest', {
+) =>
+  fetch(`/api/v1/log-quest?network=${network}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -47,4 +49,3 @@ export const logCreateToken = (
       },
     } as Omit<Quest, 'timestamp'>),
   });
-};

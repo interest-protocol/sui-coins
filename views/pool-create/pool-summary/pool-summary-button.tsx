@@ -4,7 +4,6 @@ import {
   useSignTransactionBlock,
   useSuiClient,
 } from '@mysten/dapp-kit';
-import { sleep } from '@polymedia/suits';
 import { useRouter } from 'next/router';
 import { reverse } from 'ramda';
 import { FC } from 'react';
@@ -86,7 +85,7 @@ const PoolSummaryButton: FC = () => {
 
     throwTXIfNotSuccessful(tx);
 
-    setValue('explorerLink', EXPLORER_URL[network](`/txblock/${tx.digest}`));
+    setValue('explorerLink', EXPLORER_URL[network](`txblock/${tx.digest}`));
 
     const poolId = await extractPoolDataFromTx(tx, suiClient, network);
 
@@ -94,10 +93,9 @@ const PoolSummaryButton: FC = () => {
       currentAccount.address,
       tokens[0],
       tokens[1],
+      network,
       tx.digest
     );
-
-    await sleep(500);
 
     push(`${Routes[RoutesEnum.PoolDetails]}?objectId=${poolId}`).then(() =>
       fetch('/api/v1/save-pool', {

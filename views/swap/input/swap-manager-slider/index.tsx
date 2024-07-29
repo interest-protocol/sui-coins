@@ -60,6 +60,7 @@ const SwapFormFieldSlider: FC = () => {
                 (value / 100)
             )
           );
+          if (getValues('lock')) setValue('lock', false);
           if (getValues('focus')) setValue('focus', false);
         }}
       />

@@ -36,21 +36,21 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
     isValidSuiAddress(search.split('::')[0]) && search.split('::').length > 2;
 
   const handleSelectToken = (type: string) =>
-    onSelectToken(coinsMap[type] ?? COINS_MAP[type]);
+    onSelectToken(coinsMap[type] ?? COINS_MAP[network][type]);
 
   if (faucet)
     return (
       <ModalTokenBody
         handleSelectToken={handleSelectToken}
         tokens={[
-          ...FAUCET_COINS.filter(
+          ...FAUCET_COINS[network].filter(
             ({ symbol, type }) =>
               (!search ||
                 symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
                 type.includes(search)) &&
               favoriteTokenTypes?.includes(type)
           ),
-          ...FAUCET_COINS.filter(
+          ...FAUCET_COINS[network].filter(
             ({ symbol, type }) =>
               (!search ||
                 symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
@@ -66,14 +66,14 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
       <ModalTokenBody
         handleSelectToken={handleSelectToken}
         tokens={[
-          ...COINS.filter(
+          ...COINS[network].filter(
             ({ symbol, type }) =>
               (!search ||
                 symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
                 type.includes(search)) &&
               favoriteTokenTypes?.includes(type)
           ),
-          ...COINS.filter(
+          ...COINS[network].filter(
             ({ symbol, type }) =>
               (!search ||
                 symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||

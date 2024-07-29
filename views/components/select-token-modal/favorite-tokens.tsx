@@ -25,7 +25,7 @@ const FavoriteTokens: FC<{ onSelectToken: (coin: CoinObject) => void }> = ({
     `${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-tokens-meta`
   );
 
-  const defaultFavoriteTokens = COINS.slice(0, 2);
+  const defaultFavoriteTokens = COINS[network].slice(0, 2);
   const safeFavoriteTokens = favoriteTokenTypes?.filter(
     (type) => !defaultFavoriteTokens.some((token) => token.type === type)
   );
@@ -44,7 +44,7 @@ const FavoriteTokens: FC<{ onSelectToken: (coin: CoinObject) => void }> = ({
   const handleSelectToken = async (type: string) => {
     if (coinsMap[type]) return onSelectToken(coinsMap[type]);
 
-    const token = COINS_MAP[type];
+    const token = COINS_MAP[network][type];
 
     if (token) return onSelectToken(coinDataToCoinObject(token));
 

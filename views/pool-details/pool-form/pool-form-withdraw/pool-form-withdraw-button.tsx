@@ -56,7 +56,7 @@ const PoolFormWithdrawButton: FC = () => {
 
       await showTXSuccessToast(tx, network);
 
-      setValue('explorerLink', EXPLORER_URL[network](`/txblock/${tx.digest}`));
+      setValue('explorerLink', EXPLORER_URL[network](`txblock/${tx.digest}`));
     } finally {
       await mutate();
     }

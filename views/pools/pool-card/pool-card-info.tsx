@@ -44,7 +44,7 @@ const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({
                 ? 'MOVE'
                 : coinMetadata[type]?.symbol ?? getSymbolByType(type)
             }
-            {...(COINS.some((coin) => coin.type === type)
+            {...(COINS[network].some((coin) => coin.type === type)
               ? { type }
               : { url: coinMetadata[type]?.iconUrl ?? '' })}
           />

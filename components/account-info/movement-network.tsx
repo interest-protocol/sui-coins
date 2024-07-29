@@ -23,10 +23,10 @@ import OptionItem from './menu-options/option-item';
 const BOX_ID = 'network-box-id';
 
 const MovementNetwork: FC = () => {
+  const network = useNetwork();
   const { colors } = useTheme() as Theme;
   const isFirstRender = useIsFirstRender();
   const [isOpen, setIsOpen] = useState(false);
-  const network = useNetwork();
   const { selectNetwork } = useSuiClientContext();
 
   const closeNetworkDropdown = (event: any) => {
@@ -104,6 +104,7 @@ const MovementNetwork: FC = () => {
           bg="container"
           width="14.5rem"
           borderRadius="m"
+          overflow="hidden"
           position="absolute"
           variants={wrapperVariants}
           textTransform="capitalize"
@@ -112,21 +113,20 @@ const MovementNetwork: FC = () => {
           pointerEvents={isOpen ? 'auto' : 'none'}
           boxShadow="0px 2px 4px -2px rgba(13, 16, 23, 0.04), 0px 4px 8px -2px rgba(13, 16, 23, 0.12);"
         >
-          {toPairs(DISPLAY_NETWORK).map(
-            ([networkKey, displayNetwork], index) => (
+          {toPairs(DISPLAY_NETWORK)
+            .filter(([key]) => key !== Network.DEVNET)
+            .map(([networkKey, displayNetwork], index) => (
               <OptionItem
                 key={v4()}
                 index={index}
                 selected={networkKey === network}
-                disabled={networkKey === Network.TESTNET}
                 totalItems={toPairs(DISPLAY_NETWORK).length}
                 onClick={() => selectNetwork(networkKey as Network)}
               >
                 <MovementLogoSVG maxWidth="2rem" maxHeight="2rem" />
-                <Box>M2 {displayNetwork}</Box>
+                <Box>{displayNetwork}</Box>
               </OptionItem>
-            )
-          )}
+            ))}
         </Motion>
       )}
     </Box>

@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { FAUCET_AMOUNT, FAUCET_URL } from '@/constants';
-import { Network } from '@/constants/network';
+import { FAUCET_AMOUNT, FAUCET_URL, Network } from '@/constants';
 import { CoinData } from '@/interface';
 import { FixedPointMath } from '@/lib';
 import { Quest } from '@/server/model/quest';
@@ -23,9 +22,10 @@ export const requestMov = async (account: string, network: Network) =>
 export const logFaucet = (
   address: string,
   token: CoinData,
+  network: Network,
   txDigest: string
-) => {
-  fetch('/api/v1/log-quest', {
+) =>
+  fetch(`/api/v1/log-quest?network=${network}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ export const logFaucet = (
           symbol: token.symbol,
           amount: String(
             FixedPointMath.toNumber(
-              BigNumber(FAUCET_AMOUNT[token.type]),
+              BigNumber(FAUCET_AMOUNT[network][token.type]),
               token.decimals
             )
           ),
@@ -50,4 +50,3 @@ export const logFaucet = (
       },
     } as Omit<Quest, 'timestamp'>),
   });
-};
