@@ -14,19 +14,19 @@ export const DEAD_ADDRESS = normalizeSuiAddress('0x0');
 
 export const RPC_URL = {
   [Network.DEVNET]: 'https://sui.devnet.m2.movementlabs.xyz:443',
-  [Network.TESTNET]: 'https://testnet.baku.movementlabs.xyz',
+  [Network.TESTNET]: 'https://devnet.baku.movementlabs.xyz',
 };
 
 export const FAUCET_URL = {
   [Network.DEVNET]: 'https://sui.devnet.m2.movementlabs.xyz/faucet',
-  [Network.TESTNET]: 'https://faucet.testnet.baku.movementlabs.xyz/faucet/web',
+  [Network.TESTNET]: 'https://faucet.devnet.baku.movementlabs.xyz/faucet/web',
 };
 
 export const EXPLORER_URL = {
   [Network.DEVNET]: (path: string) =>
     `https://explorer.devnet.m2.movementlabs.xyz/${path}?network=devnet`,
   [Network.TESTNET]: (path: string) =>
-    `https://explorer.testnet.baku.movementlabs.xyz/${path}`,
+    `https://explorer.devnet.baku.movementlabs.xyz/${path}`,
 } as Record<Network, (path: string) => string>;
 
 export const TOAST_DURATION = 10000;
