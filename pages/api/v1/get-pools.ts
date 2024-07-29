@@ -19,14 +19,15 @@ const handler: NextApiHandler = async (req, res) => {
 
     const page = +pathOr(1, ['query', 'page'], req);
     const findQuery = JSON.parse(pathOr('{}', ['query', 'find'], req));
+    const network = pathOr(Network.DEVNET, ['query', 'network'], req);
 
     // Prevent ppl from passing malicious strings to DB queries
     invariant(!isNaN(page), 'Page must be a number');
 
     const [pools, totalPages] = await getAllPools({
       page,
+      network,
       findQuery,
-      network: Network.DEVNET,
     });
 
     res.json({
