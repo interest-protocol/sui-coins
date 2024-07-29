@@ -42,11 +42,11 @@ const SwapManagerField: FC<SwapManagerProps> = ({
       SwapManagerField.name
     ),
     async () => {
+      if (!from || !+from?.value || lock || hasNoMarket) return;
+
       const amount = FixedPointMath.toBigNumber(from.value, from.decimals);
 
       const safeAmount = amount.decimalPlaces(0, BigNumber.ROUND_DOWN);
-
-      if (!from || !+from.value || lock || hasNoMarket) return;
 
       setIsFetchingSwapAmount(true);
 
@@ -82,10 +82,7 @@ const SwapManagerField: FC<SwapManagerProps> = ({
         setIsFetchingSwapAmount(false);
         setValue('lock', true);
 
-        if (!response) {
-          if (Number(from.value)) return setError(true);
-          return;
-        }
+        if (!response) return;
 
         const [coinsPath, poolIds, amountObj] = response;
 

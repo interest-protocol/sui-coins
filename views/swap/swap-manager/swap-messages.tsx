@@ -20,9 +20,10 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
 }) => {
   const { setValue } = useFormContext();
   const { coinsMap } = useWeb3();
-  const from = useWatch({ control: control, name: 'from' });
   const to = useWatch({ control: control, name: 'to' });
+  const from = useWatch({ control: control, name: 'from' });
   const [toastState, setToastState] = useState<boolean>(false);
+  const swapping = useWatch({ control: control, name: 'swapping' });
 
   const fromValue = +(propOr('0', 'value', from) as string);
   const toValue = +(propOr('0', 'value', to) as string);
@@ -64,6 +65,8 @@ export const SwapMessages: FC<SwapMessagesProps> = ({
   // Set Error
   useEffect(() => {
     if (!from?.type || !to?.type) return;
+
+    if (swapping) return;
 
     // If there is already an error or both tokens are not selected -> do nothing
     if (error) {
