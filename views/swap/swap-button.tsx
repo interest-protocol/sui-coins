@@ -60,6 +60,8 @@ const SwapButton = () => {
         transactionBlock: transactionBlockBytes,
       });
 
+      console.log({ tx });
+
       throwTXIfNotSuccessful(tx);
 
       await showTXSuccessToast(tx, network);

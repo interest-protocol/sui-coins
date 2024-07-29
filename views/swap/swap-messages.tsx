@@ -9,6 +9,8 @@ const SwapMessages: FC = () => {
 
   const error = useWatch({ control, name: 'error' });
 
+  console.log({ error });
+
   if (!error) return null;
 
   return (
