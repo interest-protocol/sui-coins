@@ -7,6 +7,7 @@ import {
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
+import { EXPLORER_URL } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useDialog, useWeb3 } from '@/hooks';
 import { showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
@@ -70,6 +71,10 @@ const SwapButton = () => {
         formSwap.getValues('to'),
         network,
         tx.digest
+      );
+      formSwap.setValue(
+        'explorerLink',
+        EXPLORER_URL[network](`txblock/${tx.digest}`)
       );
     } finally {
       resetInput();
