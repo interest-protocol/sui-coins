@@ -20,7 +20,7 @@ const Wallet: FC = () => {
         {!!currentAccount && (
           <>
             <a
-              href="https://forms.gle/yj8UYiasf6ocNLDG6"
+              href="https://exultant-lycra-b2b.notion.site/Interest-Protocol-a3ed3682872f4b72ae881bf17b5d0be3"
               target="_blank"
               rel="noreferrer"
             >
@@ -31,7 +31,7 @@ const Wallet: FC = () => {
                 p={['xs', 'xs', 's']}
                 nHover={{ bg: 'warning' }}
               >
-                Feedback
+                Guide
               </Button>
             </a>
             <Box
