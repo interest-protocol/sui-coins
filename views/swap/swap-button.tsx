@@ -81,6 +81,8 @@ const SwapButton: FC = () => {
         'explorerLink',
         `${EXPLORER_URL[network as Network]}/tx/${tx2.digest}`
       );
+
+      formSwap.setValue('executionTime', tx2.time);
     } finally {
       resetInput();
       formSwap.setValue('swapping', false);
@@ -101,7 +103,9 @@ const SwapButton: FC = () => {
       },
       success: {
         title: 'Swap Successfully',
-        message: SwapMessagesEnum.swapSuccess,
+        message: `${
+          SwapMessagesEnum.swapSuccess
+        }. Operation successfully in ${formSwap.getValues('executionTime')}`,
         primaryButton: {
           label: 'See on Explorer',
           onClick: gotoExplorer,

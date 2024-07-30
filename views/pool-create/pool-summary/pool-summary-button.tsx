@@ -10,7 +10,7 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import invariant from 'tiny-invariant';
 
-import { Network, Routes, RoutesEnum } from '@/constants';
+import { EXPLORER_URL, Network, Routes, RoutesEnum } from '@/constants';
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { useDialog } from '@/hooks/use-dialog';
 import { useWeb3 } from '@/hooks/use-web3';
@@ -30,20 +30,26 @@ import { CreatePoolForm, Token } from '../pool-create.types';
 import { extractCoinData, extractPoolDataFromTx } from '../pool-create.utils';
 
 const PoolSummaryButton: FC = () => {
-  const { push } = useRouter();
-  const client = useSuiClient();
   const clamm = useClammSdk();
-  const { network } = useSuiClientContext();
-  const createLpCoin = useCreateLpCoin();
+  const { push } = useRouter();
+  const { mutate } = useWeb3();
+  const client = useSuiClient();
   const signTxb = useSignTransaction();
+  const createLpCoin = useCreateLpCoin();
+  const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
   const { dialog, handleClose } = useDialog();
   const createStablePool = useCreateStablePool();
   const createVolatilePool = useCreateVolatilePool();
-  const { control } = useFormContext<CreatePoolForm>();
-  const { mutate } = useWeb3();
+  const { control, getValues, setValue } = useFormContext<CreatePoolForm>();
 
   const form = useWatch({ control });
+
+  const gotoExplorer = () => {
+    window.open(getValues('explorerLink'), '_blank', 'noopener,noreferrer');
+
+    setValue('explorerLink', '');
+  };
 
   const onCreatePool = async () => {
     invariant(form && form.tokens?.length, 'No data');
@@ -83,8 +89,13 @@ const PoolSummaryButton: FC = () => {
 
     await waitForTx({ suiClient: client, digest: tx2.digest });
 
-    mutate();
+    setValue(
+      'explorerLink',
+      `${EXPLORER_URL[network as Network]}/tx/${tx2.digest}`
+    );
+    setValue('executionTime', tx2.time);
 
+    mutate();
     push(`${Routes[RoutesEnum.PoolDetails]}?objectId=${poolId}`);
   };
 
@@ -100,7 +111,7 @@ const PoolSummaryButton: FC = () => {
           'Your pool was create successfully, and you can check it on the Explorer',
         primaryButton: {
           label: 'See on Explorer',
-          onClick: handleClose,
+          onClick: gotoExplorer,
         },
       },
       error: {

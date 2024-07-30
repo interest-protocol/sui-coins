@@ -8,6 +8,8 @@ export interface CreatePoolForm {
   dex: string;
   step: number;
   isStable: boolean;
+  explorerLink: string;
+  executionTime: number;
   tokens: ReadonlyArray<Token>;
 }
 

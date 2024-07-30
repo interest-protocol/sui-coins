@@ -4,13 +4,14 @@ import {
   useSuiClient,
   useSuiClientContext,
 } from '@mysten/dapp-kit';
-import { SuiObjectRef, SuiTransactionBlockResponse } from '@mysten/sui/client';
+import { SuiObjectRef } from '@mysten/sui/client';
 import { ZkSendLink } from '@mysten/zksend';
 import useSWR from 'swr';
 
 import { Network } from '@/constants';
 import { ZK_BAG_CONTRACT_IDS, ZK_SEND_GAS_BUDGET } from '@/constants/zksend';
-import { throwTXIfNotSuccessful, waitForTx } from '@/utils';
+import { TimedSuiTransactionBlockResponse } from '@/interface';
+import { signAndExecute, throwTXIfNotSuccessful, waitForTx } from '@/utils';
 import { createClaimTransaction } from '@/utils/zk-send';
 
 export const useLink = () => {
@@ -37,7 +38,7 @@ export const useReclaimLink = () => {
   return async (
     link: ZkSendLink,
     gasObjects: Array<SuiObjectRef>,
-    onSuccess: (tx: SuiTransactionBlockResponse) => void
+    onSuccess: (tx: TimedSuiTransactionBlockResponse) => void
   ) => {
     if (!currentAccount) throw new Error('Error on current account');
 
@@ -54,14 +55,11 @@ export const useReclaimLink = () => {
     transaction.setGasPayment(gasObjects);
     transaction.setGasBudget(BigInt(ZK_SEND_GAS_BUDGET));
 
-    const { bytes, signature } = await signTransaction.mutateAsync({
-      transaction,
-    });
-
-    const tx = await suiClient.executeTransactionBlock({
-      transactionBlock: bytes,
-      signature,
-      requestType: 'WaitForLocalExecution',
+    const tx = await signAndExecute({
+      tx: transaction,
+      suiClient,
+      currentAccount,
+      signTransaction,
       options: {
         showEffects: true,
         showObjectChanges: true,

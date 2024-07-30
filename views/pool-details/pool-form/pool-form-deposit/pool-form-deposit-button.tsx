@@ -62,6 +62,7 @@ const PoolFormDepositButton: FC = () => {
         'explorerLink',
         `${EXPLORER_URL[network as Network]}/tx/${tx.digest}`
       );
+      setValue('executionTime', tx.time);
     } finally {
       mutate();
     }
@@ -82,8 +83,9 @@ const PoolFormDepositButton: FC = () => {
       },
       success: {
         title: 'Deposit Successfully',
-        message:
-          'Your deposit was successfully, and you can check it on the Explorer',
+        message: `Your deposit was successfully, and you can check it on the Explorer. Operation completed in ${
+          getValues('executionTime') / 1000
+        }s`,
         primaryButton: {
           label: 'See on Explorer',
           onClick: gotoExplorer,

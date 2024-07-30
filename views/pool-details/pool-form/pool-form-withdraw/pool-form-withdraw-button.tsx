@@ -56,6 +56,7 @@ const PoolFormWithdrawButton: FC = () => {
         'explorerLink',
         `${EXPLORER_URL[network as Network]}/tx/${tx2.digest}`
       );
+      setValue('executionTime', tx2.time);
     } finally {
       mutate();
     }
@@ -77,8 +78,9 @@ const PoolFormWithdrawButton: FC = () => {
       },
       success: {
         title: 'Withdraw Successfully',
-        message:
-          'Your withdraw was successfully, and you can check it on the Explorer',
+        message: `Your withdraw was successfully, and you can check it on the Explorer. Operation completed in ${
+          getValues('executionTime') / 1000
+        }s`,
         primaryButton: {
           label: 'See on Explorer',
           onClick: gotoExplorer,

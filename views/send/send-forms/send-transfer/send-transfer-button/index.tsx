@@ -1,6 +1,5 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { isValidSuiAddress } from '@mysten/sui/utils';
 import { toPairs } from 'ramda';
 import { FC, useEffect, useState } from 'react';
@@ -11,6 +10,7 @@ import { useDebounce } from 'use-debounce';
 import { Network } from '@/constants';
 import { useSuiNs } from '@/context/suins';
 import { useWeb3 } from '@/hooks/use-web3';
+import { TimedSuiTransactionBlockResponse } from '@/interface';
 import { DotErrorSVG, PlusSVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 import { getAmountsMapFromObjects } from '@/views/components/send-asset-details/send-asset-details.utils';
@@ -33,7 +33,7 @@ const SendTransferButton: FC<FormSendButtonProps> = ({ openModal }) => {
   const objects = useWatch({ control, name: 'objects' });
   const [address] = useDebounce(useWatch({ control, name: 'address' }), 800);
 
-  const onSuccess = (tx: SuiTransactionBlockResponse) =>
+  const onSuccess = (tx: TimedSuiTransactionBlockResponse) =>
     showTXSuccessToast(tx, network as Network);
 
   useEffect(() => {
