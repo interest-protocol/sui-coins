@@ -78,9 +78,9 @@ const PoolFormWithdrawButton: FC = () => {
       },
       success: {
         title: 'Withdraw Successfully',
-        message: `Your withdraw was successfully, and you can check it on the Explorer. Operation completed in ${
+        message: `Your withdraw was successfully, and you can check it on the Explorer. Operation completed in ${(
           getValues('executionTime') / 1000
-        }s`,
+        ).toPrecision(2)}s`,
         primaryButton: {
           label: 'See on Explorer',
           onClick: gotoExplorer,

@@ -86,6 +86,7 @@ const PoolSummaryButton: FC = () => {
     await clamm.savePool(poolId);
 
     showTXSuccessToast(tx2, network as Network);
+    setValue('executionTime', tx2.time);
 
     await waitForTx({ suiClient: client, digest: tx2.digest });
 
@@ -93,7 +94,6 @@ const PoolSummaryButton: FC = () => {
       'explorerLink',
       `${EXPLORER_URL[network as Network]}/tx/${tx2.digest}`
     );
-    setValue('executionTime', tx2.time);
 
     mutate();
     push(`${Routes[RoutesEnum.PoolDetails]}?objectId=${poolId}`);
@@ -107,9 +107,9 @@ const PoolSummaryButton: FC = () => {
       },
       success: {
         title: 'Pool created successfully',
-        message: `Your pool was create successfully, and you can check it on the Explorer. Operation successfully in ${
+        message: `Your pool was create successfully, and you can check it on the Explorer. Operation successfully in ${(
           getValues('executionTime') / 1000
-        }s`,
+        ).toPrecision(2)}s`,
         primaryButton: {
           label: 'See on Explorer',
           onClick: gotoExplorer,
