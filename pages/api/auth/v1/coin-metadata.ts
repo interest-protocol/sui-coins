@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import NextCors from 'nextjs-cors';
 
 import { Network } from '@/constants';
 import dbConnect from '@/server';
@@ -8,6 +9,12 @@ import { isInvalidNetwork } from '@/utils';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    await NextCors(req, res, {
+      methods: ['GET'],
+      optionsSuccessStatus: 200,
+      origin: process.env.ORIGIN ?? '*',
+    });
+
     await dbConnect();
 
     const type = req.body.type as string;
