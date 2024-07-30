@@ -1,6 +1,5 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { useRouter } from 'next/router';
 import { toPairs } from 'ramda';
 import { FC, useEffect, useState } from 'react';
@@ -9,6 +8,7 @@ import toast from 'react-hot-toast';
 
 import { Network, Routes, RoutesEnum } from '@/constants';
 import { useWeb3 } from '@/hooks/use-web3';
+import { TimedSuiTransactionBlockResponse } from '@/interface';
 import { DotErrorSVG, PlusSVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 import { getAmountsMapFromObjects } from '@/views/components/send-asset-details/send-asset-details.utils';
@@ -26,7 +26,7 @@ const FormSendButton: FC<FormSendButtonProps> = ({ openModal }) => {
   const objects = useWatch({ control, name: 'objects' });
   const [amountList, setAmountList] = useState<AmountListProps[] | null>();
 
-  const onSuccess = (tx: SuiTransactionBlockResponse, url: string) => {
+  const onSuccess = (tx: TimedSuiTransactionBlockResponse, url: string) => {
     showTXSuccessToast(tx, network as Network);
 
     push(`${Routes[RoutesEnum.SendLink]}#${url.split('#')[1]}`);

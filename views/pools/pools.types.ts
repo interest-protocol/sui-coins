@@ -41,6 +41,7 @@ export interface PoolForm {
   lpCoin: PoolToken;
   tokenSelected?: string;
   explorerLink: string;
+  executionTime: number;
   isFindingPool: boolean;
   settings: ISwapSettings;
   tokenList: ReadonlyArray<PoolToken>;

@@ -4,12 +4,12 @@ import {
   useSuiClient,
   useSuiClientContext,
 } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { Transaction } from '@mysten/sui/transactions';
 import { ZkSendLink } from '@mysten/zksend';
 
 import { Network } from '@/constants';
 import { ZK_BAG_CONTRACT_IDS } from '@/constants/zksend';
+import { TimedSuiTransactionBlockResponse } from '@/interface';
 import { throwTXIfNotSuccessful, waitForTx } from '@/utils';
 import { createClaimTransaction } from '@/utils/zk-send';
 
@@ -21,7 +21,7 @@ export const useClaim = () => {
   return async (
     link: ZkSendLink,
     address: string,
-    onSuccess: (tx: SuiTransactionBlockResponse) => void
+    onSuccess: (tx: TimedSuiTransactionBlockResponse) => void
   ) => {
     if ((!currentAccount && !address) || !link || !link.keypair)
       throw new Error('Checking params');
@@ -54,6 +54,8 @@ export const useClaim = () => {
       await Transaction.from(sponsoredResponse.txBytes).build()
     );
 
+    const startTime = Date.now();
+
     const tx = await suiClient.executeTransactionBlock({
       signature: [sponsoredResponse.signature, senderSignature],
       transactionBlock: sponsoredResponse.txBytes,
@@ -63,10 +65,12 @@ export const useClaim = () => {
       },
     });
 
+    const time = Date.now() - startTime;
+
     throwTXIfNotSuccessful(tx);
 
     await waitForTx({ suiClient, digest: tx.digest });
 
-    onSuccess(tx);
+    onSuccess({ ...tx, time });
   };
 };

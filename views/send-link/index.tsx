@@ -5,7 +5,6 @@ import {
   Typography,
 } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -13,6 +12,7 @@ import toast from 'react-hot-toast';
 import { Network } from '@/constants';
 import { SUI_TYPE_ARG_LONG } from '@/constants/coins';
 import { useWeb3 } from '@/hooks/use-web3';
+import { TimedSuiTransactionBlockResponse } from '@/interface';
 import { CheckmarkSVG, ErrorSVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 
@@ -34,7 +34,7 @@ const SendLink: FC<SendLinkProps> = ({ data, error, isLoading, mutate }) => {
     toast('Copied to clipboard');
   };
 
-  const onSuccess = (tx: SuiTransactionBlockResponse) => {
+  const onSuccess = (tx: TimedSuiTransactionBlockResponse) => {
     showTXSuccessToast(tx, network as Network);
     mutate();
   };

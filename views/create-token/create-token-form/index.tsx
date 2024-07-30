@@ -21,6 +21,7 @@ import initMoveByteCodeTemplate from '@/lib/move-template/move-bytecode-template
 import {
   parseInputEventToNumberString,
   showTXSuccessToast,
+  signAndExecute,
   waitForTx,
 } from '@/utils';
 import { throwTXIfNotSuccessful } from '@/utils';
@@ -98,15 +99,11 @@ const CreateTokenForm: FC = () => {
 
       tx.transferObjects([upgradeCap], tx.pure.address(currentAccount.address));
 
-      const { signature, bytes } = await signTransaction.mutateAsync({
-        transaction: tx,
-        account: currentAccount,
-      });
-
-      const tx2 = await suiClient.executeTransactionBlock({
-        signature,
-        transactionBlock: bytes,
-        requestType: 'WaitForEffectsCert',
+      const tx2 = await signAndExecute({
+        tx,
+        suiClient,
+        currentAccount,
+        signTransaction,
       });
 
       throwTXIfNotSuccessful(tx2);

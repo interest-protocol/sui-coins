@@ -32,6 +32,7 @@ export interface SwapForm {
   explorerLink: string;
   error: string | null;
   readyToSwap: boolean;
+  executionTime: number;
   fetchingPrices: boolean;
   settings: ISwapSettings;
   lastFetchDate: number | null;

@@ -4,14 +4,19 @@ import {
   useSuiClient,
   useSuiClientContext,
 } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { ZkSendLinkBuilder } from '@mysten/zksend';
 
 import { ObjectData } from '@/components/web3-manager/all-objects-manager/all-objects.types';
 import { Network, SPONSOR_WALLET } from '@/constants';
 import { ZK_BAG_CONTRACT_IDS, ZK_SEND_GAS_BUDGET } from '@/constants/zksend';
+import { TimedSuiTransactionBlockResponse } from '@/interface';
 import { FixedPointMath } from '@/lib';
-import { isSui, throwTXIfNotSuccessful, waitForTx } from '@/utils';
+import {
+  isSui,
+  signAndExecute,
+  throwTXIfNotSuccessful,
+  waitForTx,
+} from '@/utils';
 import { isCoinObject } from '@/views/components/select-object-modal/select-object-modal.utils';
 
 import { ObjectField } from '../send-simple.types';
@@ -24,7 +29,7 @@ const useCreateLink = () => {
 
   return async (
     objects: ReadonlyArray<ObjectField>,
-    onSuccess: (tx: SuiTransactionBlockResponse, id: string) => void
+    onSuccess: (tx: TimedSuiTransactionBlockResponse, id: string) => void
   ) => {
     if (!suiClient) throw new Error('Provider not found');
     if (!currentAccount) throw new Error('There is not an account');
@@ -67,14 +72,11 @@ const useCreateLink = () => {
       tx.pure.address(SPONSOR_WALLET[network as Network])
     );
 
-    const { bytes, signature } = await signTransaction.mutateAsync({
-      transaction: tx,
-    });
-
-    const tx2 = await suiClient.executeTransactionBlock({
-      transactionBlock: bytes,
-      signature,
-      requestType: 'WaitForLocalExecution',
+    const tx2 = await signAndExecute({
+      tx,
+      suiClient,
+      currentAccount,
+      signTransaction,
       options: {
         showEffects: true,
       },

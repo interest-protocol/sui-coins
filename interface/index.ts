@@ -1,4 +1,4 @@
-import { CoinMetadata } from '@mysten/sui/client';
+import { CoinMetadata, SuiTransactionBlockResponse } from '@mysten/sui/client';
 import BigNumber from 'bignumber.js';
 
 import { TOKEN_SYMBOL } from '@/lib';
@@ -36,4 +36,9 @@ export interface PoolPageProps {
 
 export interface CoinMetadataWithType extends CoinMetadata {
   type: `0x${string}`;
+}
+
+export interface TimedSuiTransactionBlockResponse
+  extends SuiTransactionBlockResponse {
+  time: number;
 }
