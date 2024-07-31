@@ -102,11 +102,9 @@ const SwapButton: FC = () => {
       },
       success: {
         title: 'Swap Successfully',
-        message: `${
-          SwapMessagesEnum.swapSuccess
-        }.\nOperation successfully in ${(
+        message: `${SwapMessagesEnum.swapSuccess}. Tx finalized in ${+(
           formSwap.getValues('executionTime') / 1000
-        ).toPrecision(2)}s`,
+        ).toFixed(2)} sec`,
         primaryButton: {
           label: 'See on Explorer',
           onClick: gotoExplorer,

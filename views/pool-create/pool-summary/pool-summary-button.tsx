@@ -107,9 +107,9 @@ const PoolSummaryButton: FC = () => {
       },
       success: {
         title: 'Pool created successfully',
-        message: `Your pool was create successfully, and you can check it on the Explorer. Operation successfully in ${(
+        message: `Your pool was create successfully, and you can check it on the Explorer. Tx finalized in ${+(
           getValues('executionTime') / 1000
-        ).toPrecision(2)}s`,
+        ).toFixed(2)} sec!`,
         primaryButton: {
           label: 'See on Explorer',
           onClick: gotoExplorer,

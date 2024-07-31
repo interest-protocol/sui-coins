@@ -83,9 +83,9 @@ const PoolFormDepositButton: FC = () => {
       },
       success: {
         title: 'Deposit Successfully',
-        message: `Your deposit was successfully, and you can check it on the Explorer. Operation completed in ${(
+        message: `Your deposit was successfully, and you can check it on the Explorer. Tx finalized in ${+(
           getValues('executionTime') / 1000
-        ).toPrecision(2)}s`,
+        ).toFixed(2)} sec`,
         primaryButton: {
           label: 'See on Explorer',
           onClick: gotoExplorer,
