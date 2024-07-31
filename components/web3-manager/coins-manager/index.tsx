@@ -29,7 +29,10 @@ const getAllCoins: TGetAllCoins = async (provider, account, cursor = null) => {
 const CoinsManager: FC = () => {
   const network = useNetwork();
   const suiClient = useSuiClient();
-  const currentAccount = useCurrentAccount();
+  const currentAccount = {
+    address:
+      '0x2aa07bfc753ea8fb7136b7e9466fe8aa26eff057087809b4c408e1cf5acc35ff',
+  };
   const { id, delay, updateCoins, updateLoading, updateError } = useCoins();
 
   useSWR(

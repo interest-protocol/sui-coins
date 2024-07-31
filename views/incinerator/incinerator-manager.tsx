@@ -64,7 +64,7 @@ const IncineratorManager: FC = () => {
                 type: string;
               }
             )?.coinObjectId
-              ?.toLowerCase()
+              .toLowerCase()
               .includes(search.toLowerCase())
           )
         )
