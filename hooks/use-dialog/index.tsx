@@ -16,22 +16,22 @@ export const useDialog = () => {
           loading,
           success,
           error,
-        }: Record<'error' | 'loading' | 'success', IDialogData>
+        }: Record<'error' | 'loading' | 'success', () => IDialogData>
       ): Promise<void> => {
         try {
-          setModal(<Dialog status="loading" {...loading} />, {
+          setModal(<Dialog status="loading" {...loading()} />, {
             isOpen: true,
             custom: true,
             onClose: handleClose,
           });
           await promise;
-          setModal(<Dialog status="success" {...success} />, {
+          setModal(<Dialog status="success" {...success()} />, {
             isOpen: true,
             custom: true,
             onClose: handleClose,
           });
         } catch {
-          setModal(<Dialog status="error" {...error} />, {
+          setModal(<Dialog status="error" {...error()} />, {
             isOpen: true,
             custom: true,
             onClose: handleClose,
