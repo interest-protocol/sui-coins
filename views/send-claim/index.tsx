@@ -6,7 +6,6 @@ import {
   Typography,
 } from '@interest-protocol/ui-kit';
 import { useCurrentAccount, useSuiClientContext } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { isValidSuiAddress } from '@mysten/sui/utils';
 import { FC, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -15,6 +14,7 @@ import { useDebounce } from 'use-debounce';
 
 import Layout from '@/components/layout';
 import { Network } from '@/constants';
+import { TimedSuiTransactionBlockResponse } from '@/interface';
 import { CheckmarkSVG } from '@/svg';
 import { showTXSuccessToast } from '@/utils';
 
@@ -30,7 +30,7 @@ const SendClaim: FC<SendClaimProps> = ({ data, error, mutate, isLoading }) => {
   const { control, register } = useFormContext<IClaimForm>();
   const [address] = useDebounce(useWatch({ control, name: 'address' }), 800);
 
-  const onSuccess = (tx: SuiTransactionBlockResponse) => {
+  const onSuccess = (tx: TimedSuiTransactionBlockResponse) => {
     showTXSuccessToast(tx, network as Network);
   };
 

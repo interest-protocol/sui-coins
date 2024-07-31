@@ -3,9 +3,9 @@ import {
   useSignTransaction,
   useSuiClient,
 } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { Transaction } from '@mysten/sui/transactions';
 
+import { TimedSuiTransactionBlockResponse } from '@/interface';
 import { signAndExecute, throwTXIfNotSuccessful, waitForTx } from '@/utils';
 
 import { ObjectField } from '../send-transfer.types';
@@ -18,7 +18,7 @@ const useSendAssets = () => {
   return async (
     objects: ReadonlyArray<ObjectField>,
     recipient: string,
-    onSuccess: (tx: SuiTransactionBlockResponse) => void
+    onSuccess: (tx: TimedSuiTransactionBlockResponse) => void
   ) => {
     if (!suiClient) throw new Error('Provider not found');
     if (!currentAccount) throw new Error('There is not an account');

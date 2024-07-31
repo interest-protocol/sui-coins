@@ -8,10 +8,7 @@ import {
   Typography,
 } from '@interest-protocol/ui-kit';
 import { useCurrentAccount, useSuiClientContext } from '@mysten/dapp-kit';
-import type {
-  SuiObjectRef,
-  SuiTransactionBlockResponse,
-} from '@mysten/sui/client';
+import type { SuiObjectRef } from '@mysten/sui/client';
 import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 import type { ZkSendLink } from '@mysten/zksend';
 import type { LinkAssets } from '@mysten/zksend/dist/cjs/links/utils';
@@ -23,6 +20,7 @@ import { v4 } from 'uuid';
 import { EXPLORER_URL, Network, Routes, RoutesEnum } from '@/constants';
 import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
+import { TimedSuiTransactionBlockResponse } from '@/interface';
 import {
   ChevronLeftSVG,
   ChevronRightSVG,
@@ -82,7 +80,7 @@ const SendHistoryTable: FC = () => {
     }
   };
 
-  const onSuccessReclaim = (tx: SuiTransactionBlockResponse) => {
+  const onSuccessReclaim = (tx: TimedSuiTransactionBlockResponse) => {
     if (!currentAccount) return;
     showTXSuccessToast(tx, network as Network);
 
@@ -92,7 +90,7 @@ const SendHistoryTable: FC = () => {
   };
 
   const onSuccessRegenerate = (
-    tx: SuiTransactionBlockResponse,
+    tx: TimedSuiTransactionBlockResponse,
     url: string
   ) => {
     showTXSuccessToast(tx, network as Network);

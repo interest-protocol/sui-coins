@@ -11,10 +11,9 @@ export default async function handler(
 ) {
   try {
     await NextCors(req, res, {
-      // Options
       methods: ['POST'],
-      origin: '*',
-      optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+      optionsSuccessStatus: 200,
+      origin: process.env.ORIGIN ?? '*',
     });
 
     const data = req.body as SwapArg;

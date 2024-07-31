@@ -3,7 +3,7 @@ import {
   useSignTransaction,
   useSuiClient,
 } from '@mysten/dapp-kit';
-import { CoinStruct, SuiTransactionBlockResponse } from '@mysten/sui/client';
+import { CoinStruct } from '@mysten/sui/client';
 import { Transaction } from '@mysten/sui/transactions';
 import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 import toast from 'react-hot-toast';
@@ -12,6 +12,7 @@ import invariant from 'tiny-invariant';
 import { CoinObject } from '@/components/web3-manager/coins-manager/coins-manager.types';
 import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
+import { TimedSuiTransactionBlockResponse } from '@/interface';
 import { FixedPointMath } from '@/lib';
 import {
   isSui,
@@ -36,7 +37,7 @@ export const useMergeCoins = () => {
     let i = 0;
     let digest: string;
     let version: string;
-    let txResult: SuiTransactionBlockResponse | undefined = undefined;
+    let txResult: TimedSuiTransactionBlockResponse | undefined = undefined;
     const gasObjectId = coinsMap[SUI_TYPE_ARG]?.objects[0].coinObjectId;
 
     do {

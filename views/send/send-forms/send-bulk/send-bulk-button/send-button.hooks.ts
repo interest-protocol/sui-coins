@@ -4,13 +4,18 @@ import {
   useSuiClient,
   useSuiClientContext,
 } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { ZkSendLinkBuilder } from '@mysten/zksend';
 
 import { Network, SPONSOR_WALLET } from '@/constants';
 import { ZK_BAG_CONTRACT_IDS, ZK_SEND_GAS_BUDGET } from '@/constants/zksend';
+import { TimedSuiTransactionBlockResponse } from '@/interface';
 import { FixedPointMath } from '@/lib';
-import { isSui, throwTXIfNotSuccessful, waitForTx } from '@/utils';
+import {
+  isSui,
+  signAndExecute,
+  throwTXIfNotSuccessful,
+  waitForTx,
+} from '@/utils';
 
 import { ObjectField } from '../send-bulk.types';
 
@@ -24,7 +29,7 @@ const useCreateLink = () => {
     object: ObjectField,
     quantity: number,
     onSuccess: (
-      tx: SuiTransactionBlockResponse,
+      tx: TimedSuiTransactionBlockResponse,
       links: ReadonlyArray<string>
     ) => void
   ) => {
@@ -69,14 +74,11 @@ const useCreateLink = () => {
       tx.pure.address(SPONSOR_WALLET[network as Network])
     );
 
-    const { bytes, signature } = await signTransaction.mutateAsync({
-      transaction: tx,
-    });
-
-    const tx2 = await suiClient.executeTransactionBlock({
-      transactionBlock: bytes,
-      signature,
-      requestType: 'WaitForLocalExecution',
+    const tx2 = await signAndExecute({
+      tx,
+      suiClient,
+      currentAccount,
+      signTransaction,
       options: {
         showEffects: true,
       },

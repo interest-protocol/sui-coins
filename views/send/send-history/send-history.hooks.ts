@@ -4,13 +4,13 @@ import {
   useSuiClient,
   useSuiClientContext,
 } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { listCreatedLinks, ZkSendLink } from '@mysten/zksend';
 import useSWR from 'swr';
 
 import { Network } from '@/constants';
 import { ZK_BAG_CONTRACT_IDS } from '@/constants/zksend';
-import { throwTXIfNotSuccessful } from '@/utils';
+import { TimedSuiTransactionBlockResponse } from '@/interface';
+import { signAndExecute, throwTXIfNotSuccessful } from '@/utils';
 
 export const useLinkList = (currentCursor: string | null) => {
   const suiClient = useSuiClient();
@@ -44,7 +44,7 @@ export const useRegenerateLink = () => {
 
   return async (
     link: ZkSendLink,
-    onSuccess: (tx: SuiTransactionBlockResponse, url: string) => void
+    onSuccess: (tx: TimedSuiTransactionBlockResponse, url: string) => void
   ) => {
     if (!currentAccount) return;
 
@@ -52,18 +52,11 @@ export const useRegenerateLink = () => {
       currentAccount.address
     );
 
-    const { bytes, signature } = await signTransaction.mutateAsync({
-      transaction,
-    });
-
-    const tx = await suiClient.executeTransactionBlock({
-      transactionBlock: bytes,
-      signature,
-      requestType: 'WaitForLocalExecution',
-      options: {
-        showEffects: true,
-        showBalanceChanges: true,
-      },
+    const tx = await signAndExecute({
+      tx: transaction,
+      signTransaction,
+      suiClient,
+      currentAccount,
     });
 
     throwTXIfNotSuccessful(tx);
