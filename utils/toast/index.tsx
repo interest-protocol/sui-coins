@@ -21,7 +21,7 @@ export const showTXSuccessToast = (
         Sui Explorer
       </Typography>
       <Typography size="small" variant="body" cursor="pointer">
-        Executed in {tx.time / 1000}s
+        Tx finalized in {+(tx.time / 1000).toFixed(2)} sec!
       </Typography>
     </a>
   );

@@ -71,27 +71,27 @@ const PoolFormWithdrawButton: FC = () => {
   const onWithdraw = () => {
     closeModal();
     dialog.promise(handleWithdraw(), {
-      loading: {
+      loading: () => ({
         title: 'Withdrawing...',
         message:
           'We are Withdrawing, and you will let you know when it is done',
-      },
-      success: {
+      }),
+      success: () => ({
         title: 'Withdraw Successfully',
-        message: `Your withdraw was successfully, and you can check it on the Explorer. Operation completed in ${
+        message: `Your withdraw was successfully, and you can check it on the Explorer. Tx finalized in ${+(
           getValues('executionTime') / 1000
-        }s`,
+        ).toFixed(2)} sec!`,
         primaryButton: {
           label: 'See on Explorer',
           onClick: gotoExplorer,
         },
-      },
-      error: {
+      }),
+      error: () => ({
         title: 'Withdraw Failure',
         message:
           'Your withdrawing failed, please try again or contact the support team',
         primaryButton: { label: 'Try again', onClick: handleClose },
-      },
+      }),
     });
   };
 

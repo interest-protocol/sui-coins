@@ -74,6 +74,7 @@ const SwapButton: FC = () => {
       });
 
       throwTXIfNotSuccessful(tx2);
+      formSwap.setValue('executionTime', tx2.time);
 
       await waitForTx({ suiClient, digest: tx2.digest });
 
@@ -81,8 +82,6 @@ const SwapButton: FC = () => {
         'explorerLink',
         `${EXPLORER_URL[network as Network]}/tx/${tx2.digest}`
       );
-
-      formSwap.setValue('executionTime', tx2.time);
     } finally {
       resetInput();
       formSwap.setValue('swapping', false);
@@ -92,20 +91,20 @@ const SwapButton: FC = () => {
   const onSwap = () =>
     readyToSwap &&
     dialog.promise(handleSwap(), {
-      loading: {
+      loading: () => ({
         title: 'Swapping...',
         message: SwapMessagesEnum.swapping,
-      },
-      error: {
+      }),
+      error: () => ({
         title: 'Swap Failure',
         message: SwapMessagesEnum.swapFailure,
         primaryButton: { label: 'Try again', onClick: handleClose },
-      },
-      success: {
+      }),
+      success: () => ({
         title: 'Swap Successfully',
-        message: `${
-          SwapMessagesEnum.swapSuccess
-        }. Operation successfully in ${formSwap.getValues('executionTime')}`,
+        message: `${SwapMessagesEnum.swapSuccess}. Tx finalized in ${+(
+          formSwap.getValues('executionTime') / 1000
+        ).toFixed(2)} sec`,
         primaryButton: {
           label: 'See on Explorer',
           onClick: gotoExplorer,
@@ -115,7 +114,7 @@ const SwapButton: FC = () => {
             got it
           </Button>
         ),
-      },
+      }),
     });
 
   return (

@@ -77,26 +77,26 @@ const PoolFormDepositButton: FC = () => {
   const onDeposit = () => {
     closeModal();
     dialog.promise(handleDeposit(), {
-      loading: {
+      loading: () => ({
         title: 'Depositing...',
         message: 'We are Depositing, and you will let you know when it is done',
-      },
-      success: {
+      }),
+      success: () => ({
         title: 'Deposit Successfully',
-        message: `Your deposit was successfully, and you can check it on the Explorer. Operation completed in ${
+        message: `Your deposit was successfully, and you can check it on the Explorer. Tx finalized in ${+(
           getValues('executionTime') / 1000
-        }s`,
+        ).toFixed(2)} sec`,
         primaryButton: {
           label: 'See on Explorer',
           onClick: gotoExplorer,
         },
-      },
-      error: {
+      }),
+      error: () => ({
         title: 'Deposit Failure',
         message:
           'Your deposit failed, please try again or contact the support team',
         primaryButton: { label: 'Try again', onClick: handleClose },
-      },
+      }),
     });
   };
 

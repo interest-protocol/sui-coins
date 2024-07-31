@@ -86,6 +86,7 @@ const PoolSummaryButton: FC = () => {
     await clamm.savePool(poolId);
 
     showTXSuccessToast(tx2, network as Network);
+    setValue('executionTime', tx2.time);
 
     await waitForTx({ suiClient: client, digest: tx2.digest });
 
@@ -93,7 +94,6 @@ const PoolSummaryButton: FC = () => {
       'explorerLink',
       `${EXPLORER_URL[network as Network]}/tx/${tx2.digest}`
     );
-    setValue('executionTime', tx2.time);
 
     mutate();
     push(`${Routes[RoutesEnum.PoolDetails]}?objectId=${poolId}`);
@@ -101,25 +101,26 @@ const PoolSummaryButton: FC = () => {
 
   const createPool = () =>
     dialog.promise(onCreatePool(), {
-      loading: {
+      loading: () => ({
         title: 'Create the pool...',
         message: 'We are creating the pool, and you will know when it is done',
-      },
-      success: {
+      }),
+      success: () => ({
         title: 'Pool created successfully',
-        message:
-          'Your pool was create successfully, and you can check it on the Explorer',
+        message: `Your pool was create successfully, and you can check it on the Explorer. Tx finalized in ${+(
+          getValues('executionTime') / 1000
+        ).toFixed(2)} sec!`,
         primaryButton: {
           label: 'See on Explorer',
           onClick: gotoExplorer,
         },
-      },
-      error: {
+      }),
+      error: () => ({
         title: 'Pool creation failed',
         message:
           'Your pool was not created, please try again or contact the support team',
         primaryButton: { label: 'Try again', onClick: handleClose },
-      },
+      }),
     });
 
   return (
