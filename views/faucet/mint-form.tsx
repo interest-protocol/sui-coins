@@ -16,7 +16,11 @@ import { useWeb3 } from '@/hooks';
 import { useModal } from '@/hooks/use-modal';
 import { CoinData } from '@/interface';
 import { ChevronDownSVG } from '@/svg';
-import { showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
+import {
+  showTXSuccessToast,
+  signAndExecute,
+  throwTXIfNotSuccessful,
+} from '@/utils';
 import { logFaucet, requestMov } from '@/views/faucet/faucet.utils';
 
 import SelectTokenModal from '../components/select-token-modal';
@@ -36,37 +40,27 @@ const MintForm: FC = () => {
       if (!selected) throw new Error('Token not found');
       if (!account || !currentAccount) throw new Error('Not account found');
 
-      const transactionBlock = new TransactionBlock();
+      const txb = new TransactionBlock();
 
       if (selected.type === SUI_TYPE_ARG)
         return requestMov(account.address, network);
 
-      transactionBlock.moveCall({
+      txb.moveCall({
         target: `0x2::coin::mint_and_transfer`,
         typeArguments: [selected.type],
         arguments: [
-          transactionBlock.object(TREASURY_CAP_MAP[network][selected.type]),
-          transactionBlock.pure.u64(FAUCET_AMOUNT[network][selected.type]),
-          transactionBlock.pure.address(account.address),
+          txb.object(TREASURY_CAP_MAP[network][selected.type]),
+          txb.pure.u64(FAUCET_AMOUNT[network][selected.type]),
+          txb.pure.address(account.address),
         ],
       });
 
-      const { transactionBlockBytes, signature } =
-        await signTransactionBlock.mutateAsync({
-          transactionBlock,
-          account: currentAccount,
-        });
-
-      const tx = await client.executeTransactionBlock({
-        transactionBlock: transactionBlockBytes,
-        signature,
-        options: {
-          showEffects: true,
-          showEvents: false,
-          showInput: false,
-          showBalanceChanges: false,
-          showObjectChanges: false,
-        },
+      const tx = await signAndExecute({
+        txb,
+        currentAccount,
+        suiClient: client,
+        signTransactionBlock,
+        options: { showEffects: true },
       });
 
       throwTXIfNotSuccessful(tx);
