@@ -10,33 +10,38 @@ import {
   PlusSVG,
   PoolSVG,
   TotalSVG,
+  UserSVG,
 } from '@/svg';
 
-import { useMetrics } from './analytics.hooks';
+import {
+  usePoolsMetrics,
+  useQuestMetrics,
+  useQuestProfiles,
+} from './analytics.hooks';
 import AnalyticsCard from './analytics-card';
 
 const Analytics: FC = () => {
-  const { data: totalCount, isLoading: totalLoading } = useMetrics({});
-  const { data: swapCount, isLoading: swapLoading } = useMetrics({
+  const { data: totalCount, isLoading: totalLoading } = useQuestMetrics({});
+  const { data: usersCount, isLoading: usersLoading } = useQuestProfiles();
+  const { data: swapCount, isLoading: swapLoading } = useQuestMetrics({
     kind: 'swap',
   });
-  const { data: faucetCount, isLoading: faucetLoading } = useMetrics({
+  const { data: faucetCount, isLoading: faucetLoading } = useQuestMetrics({
     kind: 'faucet',
   });
-  const { data: airdropCount, isLoading: airdropLoading } = useMetrics({
+  const { data: airdropCount, isLoading: airdropLoading } = useQuestMetrics({
     kind: 'airdrop',
   });
-  const { data: createPoolCount, isLoading: createPoolLoading } = useMetrics({
-    kind: 'createPool',
-  });
-  const { data: createTokenCount, isLoading: createTokenLoading } = useMetrics({
-    kind: 'createToken',
-  });
+  const { data: poolsCount, isLoading: poolsLoading } = usePoolsMetrics();
+  const { data: createTokenCount, isLoading: createTokenLoading } =
+    useQuestMetrics({
+      kind: 'createToken',
+    });
   const { data: addLiquidityCount, isLoading: addLiquidityLoading } =
-    useMetrics({ kind: 'addLiquidity' });
+    useQuestMetrics({ kind: 'addLiquidity' });
 
   return (
-    <Layout title="Analytics">
+    <Layout title="TX Analytics">
       <Box
         gap="m"
         display="grid"
@@ -44,9 +49,15 @@ const Analytics: FC = () => {
       >
         <AnalyticsCard
           Icon={TotalSVG}
-          title="Total TX"
+          title="Total TXs"
           quantity={totalCount}
           loading={totalLoading}
+        />
+        <AnalyticsCard
+          title="Unique Users"
+          Icon={UserSVG}
+          quantity={usersCount}
+          loading={usersLoading}
         />
         <AnalyticsCard
           title="Airdrop"
@@ -61,7 +72,7 @@ const Analytics: FC = () => {
           loading={faucetLoading}
         />
         <AnalyticsCard
-          title="Swap"
+          title="Swaps"
           quantity={swapCount}
           loading={swapLoading}
           Icon={DoubleChevronSVG}
@@ -75,12 +86,12 @@ const Analytics: FC = () => {
         <AnalyticsCard
           Icon={PoolSVG}
           title="Pools created"
-          quantity={createPoolCount}
-          loading={createPoolLoading}
+          quantity={+poolsCount}
+          loading={poolsLoading}
         />
         <AnalyticsCard
           Icon={PlusSVG}
-          title="Liquidity Deposited"
+          title="Liquidity Management"
           quantity={addLiquidityCount}
           loading={addLiquidityLoading}
         />

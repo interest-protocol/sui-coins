@@ -1,7 +1,8 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
-import { formatNumber } from '@polymedia/suits';
 import { FC } from 'react';
 import Skeleton from 'react-loading-skeleton';
+
+import { formatMoney } from '@/utils';
 
 import type { AnalyticsCardProps } from './analytics.types';
 
@@ -27,7 +28,7 @@ const AnalyticsCard: FC<AnalyticsCardProps> = ({
       <Icon maxHeight="2rem" maxWidth="2rem" width="100%" />
     </Box>
     <Typography variant="headline" size="large">
-      {loading ? <Skeleton width="10rem" /> : formatNumber(quantity)}
+      {loading ? <Skeleton width="10rem" /> : formatMoney(quantity, 0)}
     </Typography>
   </Box>
 );

@@ -1,9 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextCors from 'nextjs-cors';
-import { pathOr } from 'ramda';
 
 import dbConnect from '@/server';
-import quest from '@/server/model/quest';
+import questProfile from '@/server/model/quest-profile';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -15,12 +14,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     await dbConnect();
 
-    const findQuery = JSON.parse(pathOr('{}', ['query', 'find'], req));
-
-    const data = await quest.countDocuments({
-      timestamp: { $gte: 1722207600000 }, // get data from 29-07-2024
-      ...findQuery,
-    });
+    const data = await questProfile.countDocuments();
 
     res.json(data);
   } catch (e) {
