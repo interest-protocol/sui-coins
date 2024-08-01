@@ -6,10 +6,10 @@ import Skeleton from 'react-loading-skeleton';
 import type { AnalyticsCardProps } from './analytics.types';
 
 const AnalyticsCard: FC<AnalyticsCardProps> = ({
-  title,
-  quantity,
   Icon,
+  title,
   loading,
+  quantity,
 }) => (
   <Box
     p="xl"

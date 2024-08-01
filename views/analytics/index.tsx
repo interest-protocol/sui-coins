@@ -37,10 +37,14 @@ const Analytics: FC = () => {
 
   return (
     <Layout title="Analytics">
-      <Box display="grid" gap="m" gridTemplateColumns="1fr 1fr 1fr">
+      <Box
+        gap="m"
+        display="grid"
+        gridTemplateColumns={['1fr', '1fr 1fr', '1fr 1fr', '1fr 1fr 1fr']}
+      >
         <AnalyticsCard
-          title="Total"
           Icon={TotalSVG}
+          title="Total TX"
           quantity={totalCount}
           loading={totalLoading}
         />
