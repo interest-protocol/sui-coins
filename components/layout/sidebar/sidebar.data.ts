@@ -49,7 +49,7 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
   {
     Icon: ChartSVG,
     disabled: false,
-    name: 'Analytics',
+    name: 'TX Analytics',
     path: Routes[RoutesEnum.Analytics],
   },
 ];
