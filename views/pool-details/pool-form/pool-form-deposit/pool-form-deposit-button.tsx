@@ -12,7 +12,12 @@ import { useNetwork } from '@/context/network';
 import { useDialog, useWeb3 } from '@/hooks';
 import { useModal } from '@/hooks/use-modal';
 import { FixedPointMath } from '@/lib';
-import { isSui, showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
+import {
+  isSui,
+  showTXSuccessToast,
+  signAndExecute,
+  throwTXIfNotSuccessful,
+} from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
 
 import { usePoolDetails } from '../../pool-details.context';
@@ -42,19 +47,13 @@ const PoolFormDepositButton: FC = () => {
 
       const txb = await deposit(getValues(), account);
 
-      const { signature, transactionBlockBytes } =
-        await signTransactionBlock.mutateAsync({
-          transactionBlock: txb,
-          account: account,
-        });
-
-      const tx = await client.executeTransactionBlock({
-        signature,
+      const tx = await signAndExecute({
+        txb,
+        suiClient: client,
+        signTransactionBlock,
+        currentAccount: account,
         options: { showEffects: true },
-        requestType: 'WaitForEffectsCert',
-        transactionBlock: transactionBlockBytes,
       });
-
       throwTXIfNotSuccessful(tx);
 
       await showTXSuccessToast(tx, network);

@@ -11,9 +11,11 @@ const ConnectWalletButton: FC = () => {
 
   return (
     <ConnectModal
+      open={open}
+      onOpenChange={(isOpen) => setOpen(isOpen)}
       trigger={
         <Button
-          py="s"
+          px={['s', 'l']}
           variant="filled"
           borderRadius="xs"
           disabled={!!currentAccount}
@@ -22,8 +24,8 @@ const ConnectWalletButton: FC = () => {
           Connect
           <Typography
             as="span"
-            variant="label"
             size="large"
+            variant="label"
             display={['none', 'none', 'inline']}
           >
             {' '}
@@ -31,8 +33,6 @@ const ConnectWalletButton: FC = () => {
           </Typography>
         </Button>
       }
-      open={open}
-      onOpenChange={(isOpen) => setOpen(isOpen)}
     />
   );
 };

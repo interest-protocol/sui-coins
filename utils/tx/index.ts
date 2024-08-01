@@ -39,6 +39,8 @@ export const signAndExecute = async ({
   currentAccount,
   signTransactionBlock,
 }: SignAndExecuteArgs) => {
+  txb.setSender(currentAccount.address);
+
   const { signature, transactionBlockBytes } =
     await signTransactionBlock.mutateAsync({
       transactionBlock: txb,
