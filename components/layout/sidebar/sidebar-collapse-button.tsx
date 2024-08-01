@@ -1,16 +1,27 @@
-import { Box, Motion, Theme, useTheme } from '@interest-protocol/ui-kit';
+import {
+  Box,
+  Motion,
+  Theme,
+  TooltipWrapper,
+  Typography,
+  useTheme,
+} from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
 import { LOCAL_STORAGE_VERSION } from '@/constants';
 import { ChevronLeftSVG } from '@/svg';
 
+import Checkpoint from '../checkpoint';
+import useCheckpoint from '../checkpoint/checkpoint.hook';
 import { SidebarCollapseButtonProps } from './sidebar.types';
 
 const SidebarCollapseButton: FC<SidebarCollapseButtonProps> = ({
+  isOpen,
   isCollapsed,
   setIsCollapsed,
 }) => {
   const { colors } = useTheme() as Theme;
+  const { content: checkpoint } = useCheckpoint();
 
   const handleCollapse = () => {
     setIsCollapsed(!isCollapsed);
@@ -23,25 +34,21 @@ const SidebarCollapseButton: FC<SidebarCollapseButtonProps> = ({
 
   return (
     <Motion
-      my="m"
-      display="flex"
-      overflow="hidden"
-      animation={isCollapsed ? '2.5rem' : 'auto'}
-      transition={{
-        duration: 0.5,
-      }}
-      variants={{
-        collapsed: { width: '2.5rem ' },
-        unCollapsed: { width: 'auto' },
-      }}
+      my="s"
       gap="m"
-      pb="s"
-      pt="m"
+      mx="2xs"
+      display="flex"
+      transition={{ duration: 0.5 }}
+      animation={isCollapsed ? 'collapsed' : 'unCollapsed'}
+      variants={{
+        collapsed: { width: '2.5rem' },
+        unCollapsed: { width: '100%' },
+      }}
     >
       <Box
         display="flex"
-        width="2.5rem"
-        height="2.5rem"
+        minWidth="2.5rem"
+        minHeight="2.5rem"
         cursor="pointer"
         borderRadius="xs"
         color="onSurface"
@@ -68,7 +75,40 @@ const SidebarCollapseButton: FC<SidebarCollapseButtonProps> = ({
             maxHeight="0.625rem"
           />
         </Motion>
+        {isCollapsed && !isOpen && (
+          <Box
+            mt="-0.5rem"
+            right="-0.3rem"
+            bottom="-0.3rem"
+            position="absolute"
+          >
+            <TooltipWrapper
+              bg="surface"
+              border="1px solid"
+              width="max-content"
+              tooltipPosition="right"
+              borderColor="outlineVariant"
+              tooltipContent={
+                <Typography
+                  size="medium"
+                  variant="label"
+                  color="onSurface"
+                  textTransform="capitalize"
+                >
+                  {checkpoint}
+                </Typography>
+              }
+            >
+              <Checkpoint withoutInfo />
+            </TooltipWrapper>
+          </Box>
+        )}
       </Box>
+      {(!isCollapsed || isOpen) && (
+        <Box mx="auto">
+          <Checkpoint />
+        </Box>
+      )}
     </Motion>
   );
 };
