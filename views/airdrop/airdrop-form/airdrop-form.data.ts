@@ -23,7 +23,7 @@ export const METHODS_ICONS: Record<
 
 export const AIRDROP_ERRORS = {
   notValidList: 'The airdropping amounts are not valid',
-  noCoin: 'You does not have this coin on your wallet',
-  noBalance: 'The coin select does not have any amount',
+  noCoin: 'You do not have this coin in your wallet',
+  noBalance: 'The coin selected does not have any amount',
   balanceNotEnough: 'Not enough balance',
 };
