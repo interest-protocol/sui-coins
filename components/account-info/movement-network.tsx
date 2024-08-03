@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Motion,
   Theme,
   Typography,
@@ -48,59 +49,54 @@ const MovementNetwork: FC = () => {
 
   return (
     <Box
-      display="flex"
-      flexDirection="column"
-      position="relative"
       id={BOX_ID}
+      display="flex"
+      position="relative"
+      flexDirection="column"
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       ref={networkBoxRef}
     >
-      <Box
-        p="xs"
+      <Button
         gap="xs"
         display="flex"
         cursor="pointer"
-        onClick={handleOpenMenu}
+        variant="tonal"
         borderRadius="xs"
+        color="onSurface"
         alignItems="center"
+        nHover={{ color: 'onSurface' }}
+        onClick={handleOpenMenu}
         bg={isOpen ? `${colors.primary}14` : 'container'}
-      >
-        <Box
-          color="onSurface"
-          display="flex"
-          width="1.5rem"
-          height="1.5rem"
-          cursor="pointer"
-          alignItems="center"
-          borderRadius="full"
-          justifyContent="center"
-        >
+        PrefixIcon={
           <MovementLogoSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
-        </Box>
+        }
+        SuffixIcon={
+          <Motion
+            display="flex"
+            color="onSurface"
+            alignItems="center"
+            animate={{ rotate: isOpen ? '180deg' : '0deg' }}
+          >
+            <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+          </Motion>
+        }
+      >
         <Typography
-          variant="label"
-          size="large"
           mr="0.5rem"
-          width="max-content"
+          size="large"
+          variant="label"
           color="onSurface"
+          width="max-content"
         >
           {`${DISPLAY_NETWORK[network]}`}
         </Typography>
-        <Box
-          display="flex"
-          transform={`rotate(${isOpen ? '180deg' : '0deg'})`}
-          alignItems="center"
-          color="onSurface"
-        >
-          <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-        </Box>
-      </Box>
+      </Button>
       {!isFirstRender && (
         <Motion
           right="0"
-          top="3rem"
           zIndex={4}
+          top="3.4rem"
           bg="container"
           width="14.5rem"
           borderRadius="m"

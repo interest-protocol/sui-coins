@@ -71,6 +71,7 @@ export const QuestSchema = new Schema({
     required: true,
   },
   timestamp: {
+    index: true,
     type: Number,
     required: true,
   },

@@ -10,7 +10,11 @@ import { useFormContext } from 'react-hook-form';
 import { EXPLORER_URL } from '@/constants';
 import { useNetwork } from '@/context/network';
 import { useDialog, useWeb3 } from '@/hooks';
-import { showTXSuccessToast, throwTXIfNotSuccessful } from '@/utils';
+import {
+  showTXSuccessToast,
+  signAndExecute,
+  throwTXIfNotSuccessful,
+} from '@/utils';
 import { SwapForm } from '@/views/swap/swap.types';
 
 import { useSwap } from './swap.hooks';
@@ -44,21 +48,18 @@ const SwapButton = () => {
 
   const handleSwap = async () => {
     try {
+      if (!currentAccount) return;
+
       setLoading(true);
 
       const txb = await swap();
 
-      const { signature, transactionBlockBytes } =
-        await signTransactionBlock.mutateAsync({
-          transactionBlock: txb,
-          account: currentAccount!,
-        });
-
-      const tx = await client.executeTransactionBlock({
-        signature,
+      const tx = await signAndExecute({
+        txb,
+        currentAccount,
+        suiClient: client,
+        signTransactionBlock,
         options: { showEffects: true },
-        requestType: 'WaitForEffectsCert',
-        transactionBlock: transactionBlockBytes,
       });
 
       throwTXIfNotSuccessful(tx);

@@ -8,7 +8,7 @@ import { LogoSVG } from '@/svg';
 import { SidebarLogoProps } from './sidebar.types';
 
 const SidebarLogo: FC<SidebarLogoProps> = ({ isCollapsed }) => (
-  <Link href={Routes[RoutesEnum.CreateToken]}>
+  <Link href={Routes[RoutesEnum.Swap]}>
     <Motion
       mb="3.75rem"
       display="flex"
@@ -25,11 +25,11 @@ const SidebarLogo: FC<SidebarLogoProps> = ({ isCollapsed }) => (
     >
       <Box
         display="flex"
+        color="onSurface"
         minWidth="12.5rem"
         minHeight="2.5rem"
         alignItems="center"
         justifyContent="center"
-        color="onSurface"
       >
         <LogoSVG width="100%" maxWidth="12.5rem" maxHeight="2.5rem" />
       </Box>
