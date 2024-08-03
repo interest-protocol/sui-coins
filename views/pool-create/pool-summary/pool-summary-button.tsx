@@ -5,7 +5,6 @@ import {
   useSuiClient,
 } from '@mysten/dapp-kit';
 import { useRouter } from 'next/router';
-import { reverse } from 'ramda';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import invariant from 'tiny-invariant';
@@ -49,7 +48,7 @@ const PoolSummaryButton: FC = () => {
 
     const isOrdered = await isPoolsCoinsOrdered(tokens, suiClient, network);
 
-    const orderedTokens = isOrdered ? tokens : reverse(tokens);
+    const orderedTokens = isOrdered ? tokens : tokens.slice().reverse();
 
     const txbLpCoin = await createLpCoin(orderedTokens, isStable);
 
