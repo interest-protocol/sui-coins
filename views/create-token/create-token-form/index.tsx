@@ -1,11 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  Box,
-  Button,
-  Form,
-  TextField,
-  Typography,
-} from '@interest-protocol/ui-kit';
+import { Box, Button, Form, Typography } from '@interest-protocol/ui-kit';
 import {
   useCurrentAccount,
   useSignTransactionBlock,
@@ -16,6 +10,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
+import { TextField } from '@/components';
 import { useNetwork } from '@/context/network';
 import {
   parseInputEventToNumberString,
@@ -42,12 +37,10 @@ const CreateTokenForm: FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<ICreateTokenForm>({
-    defaultValues: {
-      fixedSupply: true,
-    },
-    resolver: yupResolver(validationSchema),
     mode: 'onBlur',
     reValidateMode: 'onBlur',
+    defaultValues: { fixedSupply: true },
+    resolver: yupResolver(validationSchema),
   });
 
   const network = useNetwork();
@@ -99,163 +92,128 @@ const CreateTokenForm: FC = () => {
   };
 
   return (
-    <Box
+    <Form
+      as="form"
       mx="auto"
+      width="100%"
       bg="container"
+      maxWidth="37rem"
       overflow="hidden"
-      color="onSurface"
       borderRadius="xs"
-      width={['100%', '100%', '100%', '37rem']}
-      boxShadow="0px 24px 46px -10px rgba(13, 16, 23, 0.16)"
+      color="onSurface"
+      onSubmit={handleSubmit(onSubmit)}
     >
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <Box p="xl" fontSize="l">
-          Coin Generator
+      <Typography variant="title" size="large" p="xl">
+        Coin Generator
+      </Typography>
+      <Box p="xl" display="flex" flexDirection="column" gap="m">
+        <Box>1. Coin Details</Box>
+        <TextField
+          label="Name"
+          {...register('name')}
+          placeholder="Eg. Sui"
+          status={errors.name && 'error'}
+          supportingText={errors.name?.message}
+        />
+        <TextField
+          label="Coin Symbol"
+          placeholder="Eg. SUI"
+          {...register('symbol')}
+          status={errors.symbol && 'error'}
+          supportingText={errors.symbol?.message}
+        />
+        <TextField
+          label="Description"
+          {...register('description')}
+          status={errors.description && 'error'}
+          placeholder="Eg. Some description about the coin"
+          supportingText={errors.description?.message}
+        />
+      </Box>
+      <Box p="xl" display="flex" flexDirection="column" gap="m">
+        <Box>2. Add Coin Image</Box>
+        <TextField
+          type="link"
+          label="Coin Image URL"
+          {...register('imageUrl')}
+          status={errors.imageUrl && 'error'}
+          placeholder="Eg. https://sui.com/images/logo.png"
+          supportingText={
+            errors.imageUrl?.message ??
+            'We recommend to upload an image with 250x250 pixels.'
+          }
+        />
+        <Typography
+          size="large"
+          variant="body"
+          opacity="0.64"
+          textAlign="center"
+        >
+          or
+        </Typography>
+        <Box display="flex" flexDirection="column" gap="xs">
+          <Typography as="label" size="small" variant="body">
+            Upload image
+          </Typography>
+          <CreateTokenFormImage setValue={setValue} />
         </Box>
-        <Box p="xl" display="flex" flexDirection="column" gap="m">
-          <Box display="flex" flexDirection="column" gap="m">
-            <Box>1. Coin Details</Box>
-            <TextField
-              label="Name"
-              {...register('name')}
-              placeholder="Eg. Move"
-              status={errors.name && 'error'}
-              supportingText={errors.name?.message}
-              fieldProps={{
-                borderRadius: 'xs',
-                py: 'xl',
-              }}
-              nPlaceholder={{
-                color: 'onSurface',
-                opacity: 0.5,
-              }}
-            />
-            <TextField
-              label="Coin Symbol"
-              placeholder="Eg. MOVE"
-              {...register('symbol')}
-              status={errors.symbol && 'error'}
-              supportingText={errors.symbol?.message}
-              fieldProps={{
-                borderRadius: 'xs',
-                py: 'xl',
-              }}
-              nPlaceholder={{
-                color: 'onSurface',
-                opacity: 0.5,
-              }}
-            />
-            <TextField
-              label="Description"
-              {...register('description')}
-              status={errors.description && 'error'}
-              placeholder="Eg. Some description about the coin"
-              supportingText={errors.description?.message}
-              fieldProps={{
-                borderRadius: 'xs',
-                py: 'xl',
-              }}
-              nPlaceholder={{
-                color: 'onSurface',
-                opacity: 0.5,
-              }}
-            />
-            <TextField
-              type="link"
-              label="Coin Image URL"
-              {...register('imageUrl')}
-              status={errors.imageUrl && 'error'}
-              supportingText={errors.imageUrl?.message}
-              placeholder="Eg. https://www.interestprotocol.com/logo.png"
-              fieldProps={{
-                borderRadius: 'xs',
-                py: 'xl',
-              }}
-              nPlaceholder={{
-                color: 'onSurface',
-                opacity: 0.5,
-              }}
-            />
-            <Typography size="large" variant="body" textAlign="center">
-              or
-            </Typography>
-            <CreateTokenFormImage setValue={setValue} />
-          </Box>
-          <Box display="flex" flexDirection="column" gap="m">
-            <Box>2. Coin Features</Box>
-            <TextField
-              type="number"
-              defaultValue="9"
-              label="Coin Decimals"
-              {...register('decimals')}
-              status={errors.decimals?.message ? 'error' : 'success'}
-              supportingText={
-                errors.decimals?.message ||
-                "Insert the decimal precision of your token. If you don't know what to insert, use 9"
-              }
-              fieldProps={{
-                borderRadius: 'xs',
-                py: 'xl',
-              }}
-              nPlaceholder={{
-                color: 'onSurface',
-                opacity: 0.5,
-              }}
-            />
-            <TextField
-              label="Total Supply"
-              placeholder="Your total coin supply"
-              status={errors.totalSupply && 'error'}
-              supportingText={
-                errors.totalSupply?.message ||
-                'Insert the initial token supply to mint'
-              }
-              {...register('totalSupply', {
-                onChange: (v: ChangeEvent<HTMLInputElement>) => {
-                  setValue('totalSupply', parseInputEventToNumberString(v));
-                },
-              })}
-              fieldProps={{
-                borderRadius: 'xs',
-                py: 'xl',
-              }}
-              nPlaceholder={{
-                color: 'onSurface',
-                opacity: 0.5,
-              }}
-            />
-            <Box
-              p="m"
-              my="xl"
-              gap="m"
-              bg="surface"
-              display="flex"
-              borderRadius="xs"
-              flexDirection="column"
-            >
-              <CreateTokenFormToggle control={control} setValue={setValue} />
-            </Box>
-            <Box display="flex" justifyContent="center">
-              <Button
-                py="s"
-                px="xl"
-                fontSize="s"
-                bg="primary"
-                type="submit"
-                variant="filled"
-                color="onPrimary"
-                fontFamily="Proto"
-                borderRadius="xs"
-                onClick={onSubmit}
-                disabled={!currentAccount || loading}
-              >
-                Create coin
-              </Button>
-            </Box>
-          </Box>
+      </Box>
+      <Box p="xl" display="flex" flexDirection="column" gap="m">
+        <Box>3. Coin Features</Box>
+        <TextField
+          type="number"
+          defaultValue="9"
+          label="Coin Decimals"
+          {...register('decimals')}
+          status={errors.decimals?.message ? 'error' : 'success'}
+          supportingText={
+            errors.decimals?.message ||
+            "Insert the decimal precision of your token. If you don't know what to insert, use 9"
+          }
+        />
+        <TextField
+          label="Total Supply"
+          placeholder="Your total coin supply"
+          status={errors.totalSupply && 'error'}
+          supportingText={
+            errors.totalSupply?.message ||
+            'Insert the initial token supply to mint'
+          }
+          {...register('totalSupply', {
+            onChange: (v: ChangeEvent<HTMLInputElement>) => {
+              setValue('totalSupply', parseInputEventToNumberString(v));
+            },
+          })}
+        />
+        <Box
+          p="m"
+          my="xl"
+          gap="m"
+          bg="surface"
+          display="flex"
+          borderRadius="xs"
+          flexDirection="column"
+        >
+          <CreateTokenFormToggle control={control} setValue={setValue} />
         </Box>
-      </Form>
-    </Box>
+        <Box display="flex" justifyContent="center">
+          <Button
+            py="s"
+            px="xl"
+            fontSize="s"
+            bg="primary"
+            type="submit"
+            variant="filled"
+            color="onPrimary"
+            borderRadius="xs"
+            fontFamily="Proto"
+            disabled={!currentAccount || loading}
+          >
+            Create coin
+          </Button>
+        </Box>
+      </Box>
+    </Form>
   );
 };
 
