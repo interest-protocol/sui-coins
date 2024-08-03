@@ -20,3 +20,10 @@ export const METHODS_ICONS: Record<
     description: 'Same airdrop value, different addresses.',
   },
 };
+
+export const AIRDROP_ERRORS = {
+  notValidList: 'The airdropping amounts are not valid',
+  noCoin: 'You does not have this coin on your wallet',
+  noBalance: 'The coin select does not have any amount',
+  balanceNotEnough: 'Not enough balance',
+};
