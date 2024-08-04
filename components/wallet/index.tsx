@@ -33,7 +33,22 @@ const Wallet: FC = () => {
       >
         <MovementNetwork />
       </Box>
-      {currentAccount ? <Profile /> : <ConnectWalletButton />}
+      {currentAccount ? (
+        <>
+          <a
+            href="https://faucet.devnet.imola.movementlabs.xyz"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Button variant="filled" px={['xs', 'xs', 's']}>
+              Mint MOVE
+            </Button>
+          </a>
+          <Profile />
+        </>
+      ) : (
+        <ConnectWalletButton />
+      )}
     </Box>
   );
 };

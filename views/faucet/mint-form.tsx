@@ -15,7 +15,7 @@ import { useNetwork } from '@/context/network';
 import { useWeb3 } from '@/hooks';
 import { useModal } from '@/hooks/use-modal';
 import { CoinData } from '@/interface';
-import { ArrowObliqueSVG, ChevronDownSVG } from '@/svg';
+import { ChevronDownSVG } from '@/svg';
 import {
   showTXSuccessToast,
   signAndExecute,
@@ -110,103 +110,75 @@ const MintForm: FC = () => {
   };
 
   return (
-    <Box mx="auto" width={['100%', '100%', '100%', '39.75rem']}>
-      <Box
-        p="xl"
-        mb="s"
-        bg="container"
-        display="flex"
+    <Box
+      mx="auto"
+      width={['100%', '100%', '100%', '39.75rem']}
+      p="xl"
+      mb="s"
+      display="flex"
+      bg="container"
+      borderRadius="xs"
+      flexDirection="column"
+    >
+      <Typography
+        size="large"
+        fontSize="5xl"
+        variant="title"
+        fontWeight="500"
         color="onSurface"
-        borderRadius="xs"
-        alignItems="center"
-        justifyContent="space-between"
       >
-        <Typography size="large" variant="title">
-          Get MOVE
+        I would like to mint...
+      </Typography>
+      <Box my="6xl" display="flex" gap="s" flexDirection="column">
+        <Typography variant="body" size="large" color="onSurface">
+          Choose coin to mint
         </Typography>
-        <a
-          href="https://faucet.devnet.imola.movementlabs.xyz"
-          target="_blank"
-          rel="noreferrer"
-        >
+        <Box position="relative" display="flex" flexDirection="column">
           <Button
-            variant="filled"
+            p="xs"
+            variant="outline"
+            borderRadius="xs"
+            onClick={openModal}
+            borderColor="outlineVariant"
+            nHover={{ color: 'unset' }}
+            PrefixIcon={
+              <TokenIcon
+                withBg
+                network={network}
+                type={selected.type}
+                symbol={selected.symbol}
+              />
+            }
             SuffixIcon={
-              <ArrowObliqueSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+              <Box
+                display="flex"
+                color="onSurface"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <ChevronDownSVG
+                  width="100%"
+                  maxWidth="1.5rem"
+                  maxHeight="1.5rem"
+                />
+              </Box>
             }
           >
-            Mint MOVE
-          </Button>
-        </a>
-      </Box>
-      <Box
-        p="xl"
-        mb="s"
-        display="flex"
-        bg="container"
-        borderRadius="xs"
-        flexDirection="column"
-      >
-        <Typography
-          size="large"
-          fontSize="5xl"
-          variant="title"
-          fontWeight="500"
-          color="onSurface"
-        >
-          I would like to mint...
-        </Typography>
-        <Box my="6xl" display="flex" gap="s" flexDirection="column">
-          <Typography variant="body" size="large" color="onSurface">
-            Choose coin to mint
-          </Typography>
-          <Box position="relative" display="flex" flexDirection="column">
-            <Button
-              p="xs"
-              variant="outline"
-              borderRadius="xs"
-              onClick={openModal}
-              borderColor="outlineVariant"
-              nHover={{ color: 'unset' }}
-              PrefixIcon={
-                <TokenIcon
-                  withBg
-                  network={network}
-                  type={selected.type}
-                  symbol={selected.symbol}
-                />
-              }
-              SuffixIcon={
-                <Box
-                  display="flex"
-                  color="onSurface"
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  <ChevronDownSVG
-                    width="100%"
-                    maxWidth="1.5rem"
-                    maxHeight="1.5rem"
-                  />
-                </Box>
-              }
+            <Typography
+              size="large"
+              width="100%"
+              variant="body"
+              color="onSurface"
             >
-              <Typography
-                size="large"
-                width="100%"
-                variant="body"
-                color="onSurface"
-              >
-                {selected.symbol}
-              </Typography>
-            </Button>
-          </Box>
-        </Box>
-        <Box display="flex" justifyContent="center">
-          <Button color="surface" variant="filled" onClick={onMint}>
-            Mint
+              {selected.symbol}
+            </Typography>
           </Button>
         </Box>
+      </Box>
+      <Box display="flex" justifyContent="center">
+        <Button color="surface" variant="filled" onClick={onMint}>
+          Mint
+        </Button>
       </Box>
     </Box>
   );
