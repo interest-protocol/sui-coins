@@ -67,7 +67,7 @@ const PoolCardInfo: FC<PoolCardTokenInfoProps> = ({
             pathOr('', [type, 'symbol'], coinMetadata).replace(
               'SUI',
               'MOVE'
-            ) || <Skeleton width="4rem" />,
+            ) || <Skeleton key={v4()} width="4rem" />,
           ])}
         </Typography>
       </Box>

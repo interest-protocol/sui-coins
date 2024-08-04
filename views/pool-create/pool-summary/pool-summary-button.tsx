@@ -90,8 +90,8 @@ const PoolSummaryButton: FC = () => {
 
     await logCreatePool(
       currentAccount.address,
-      tokens[0],
-      tokens[1],
+      orderedTokens[0],
+      orderedTokens[1],
       network,
       tx.digest
     );

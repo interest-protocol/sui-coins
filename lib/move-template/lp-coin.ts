@@ -54,10 +54,11 @@ export const getLpCoinBytecode = (info: GetByteCodeArgs) => {
 
   const initialModuleName = info.isStable ? 'ipx_s_' : 'ipx_v_';
   const otwArray = info.coinTypes.map((x) => x.split('::')[2]).join('_');
+  const moduleArray = info.coinTypes.map((x) => x.split('::')[1]).join('_');
 
   const modifiedByteCode = template.update_identifiers(templateByteCode, {
     LP_COIN: initialModuleName.toUpperCase() + otwArray.toUpperCase(),
-    lp_coin: initialModuleName.toLowerCase() + otwArray.toLowerCase(),
+    lp_coin: initialModuleName.toLowerCase() + moduleArray,
   });
 
   let updated = updateDecimals(modifiedByteCode, 9);
