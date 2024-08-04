@@ -111,14 +111,14 @@ const MintForm: FC = () => {
 
   return (
     <Box
-      mb="s"
-      p="xl"
       mx="auto"
-      display="flex"
-      borderRadius="xs"
-      bg="container"
-      flexDirection="column"
       width={['100%', '100%', '100%', '39.75rem']}
+      p="xl"
+      mb="s"
+      display="flex"
+      bg="container"
+      borderRadius="xs"
+      flexDirection="column"
     >
       <Typography
         size="large"
