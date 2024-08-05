@@ -2,7 +2,6 @@ import { isValidSuiAddress } from '@mysten/sui.js/utils';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import { findQuestProfile } from '@/server/lib/quest';
-import { getExactDayTimestamp } from '@/utils';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -14,7 +13,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       const profile = await findQuestProfile(address);
 
-      const is_ok = profile.lastFaucetAt === getExactDayTimestamp() ? 1 : 0;
+      const is_ok = profile.lastFaucetAt ? 1 : 0;
 
       res.status(200).json({ is_ok });
       return;
