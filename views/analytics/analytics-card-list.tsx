@@ -14,7 +14,7 @@ import {
 import { useMetrics } from './analytics.hooks';
 import AnalyticsCard from './analytics-card';
 
-const AnalyticsCards: FC = () => {
+const AnalyticsCardList: FC = () => {
   const {
     totalCount,
     totalLoading,
@@ -87,4 +87,4 @@ const AnalyticsCards: FC = () => {
   );
 };
 
-export default AnalyticsCards;
+export default AnalyticsCardList;
