@@ -20,7 +20,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const data = await metrics.findOne({ network });
 
-    res.json(data?.weekly);
+    res.json({ weeklyTXs: data?.weeklyTXs, weeklyUsers: data?.weeklyUsers });
   } catch (e) {
     res.status(500).send(e);
   }

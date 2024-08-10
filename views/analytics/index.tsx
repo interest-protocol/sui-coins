@@ -1,16 +1,19 @@
-import { Box } from '@interest-protocol/ui-kit';
+import { Box, Typography } from '@interest-protocol/ui-kit';
 import { toPairs, values } from 'ramda';
 import { FC } from 'react';
 
+import BarChartComponent from '@/components/bar-chart';
 import Layout from '@/components/layout';
 import {
   AirdropSVG,
   CirclePlusSVG,
   DoubleChevronSVG,
   FaucetSVG,
+  GroupSVG,
   PlusSVG,
   PoolSVG,
   TotalSVG,
+  TransactionSVG,
   UserSVG,
 } from '@/svg';
 
@@ -21,7 +24,6 @@ import {
   useWeeklyMetrics,
 } from './analytics.hooks';
 import AnalyticsCard from './analytics-card';
-import AnalyticsCardChart from './analytics-card-chart';
 
 const Analytics: FC = () => {
   const { data: totalCount, isLoading: totalLoading } = useQuestMetrics({});
@@ -42,7 +44,8 @@ const Analytics: FC = () => {
     });
   const { data: addLiquidityCount, isLoading: addLiquidityLoading } =
     useQuestMetrics({ kind: 'addLiquidity' });
-  const { data: weeklyTXs, isLoading: loadingWeeklyTXs } = useWeeklyMetrics();
+  const { data: weeklyMetrics, isLoading: loadingWeeklyTXs } =
+    useWeeklyMetrics();
 
   return (
     <Layout title="TX Analytics">
@@ -51,6 +54,62 @@ const Analytics: FC = () => {
         display="grid"
         gridTemplateColumns={['1fr', '1fr 1fr', '1fr 1fr', '1fr 1fr 1fr']}
       >
+        <Box
+          p="2xl"
+          gap="m"
+          display="flex"
+          gridRow="span 2"
+          borderRadius="s"
+          bg="highContainer"
+          flexDirection="column"
+        >
+          <Typography variant="title" size="large" color="onSurface">
+            Weekly Transactions
+          </Typography>
+          <BarChartComponent
+            data={toPairs(weeklyMetrics?.weeklyTXs).map(
+              ([timestamp, value], index) => ({
+                amount: value,
+                x: `Week ${index + 1}`,
+                description: `Week from ${new Date(Number(timestamp)).toLocaleDateString()}`,
+              })
+            )}
+          />
+        </Box>
+        <Box
+          p="2xl"
+          gap="m"
+          display="flex"
+          gridRow="span 2"
+          borderRadius="s"
+          bg="highContainer"
+          flexDirection="column"
+        >
+          <Typography variant="title" size="large" color="onSurface">
+            Weekly Users
+          </Typography>
+          <BarChartComponent
+            data={toPairs(weeklyMetrics?.weeklyUsers).map(
+              ([timestamp, wallets], index) => ({
+                amount: wallets.length,
+                x: `Week ${index + 1}`,
+                description: `Week from ${new Date(Number(timestamp)).toLocaleDateString()}`,
+              })
+            )}
+          />
+        </Box>
+        <AnalyticsCard
+          title="Last Week TXs"
+          Icon={TransactionSVG}
+          loading={loadingWeeklyTXs}
+          quantity={values(weeklyMetrics?.weeklyTXs).reverse()[0]}
+        />
+        <AnalyticsCard
+          Icon={GroupSVG}
+          title="Last Week Users"
+          loading={loadingWeeklyTXs}
+          quantity={values(weeklyMetrics?.weeklyUsers).reverse()[0]?.length}
+        />
         <AnalyticsCard
           Icon={TotalSVG}
           title="Total TXs"
@@ -98,18 +157,6 @@ const Analytics: FC = () => {
           title="Liquidity Management"
           quantity={addLiquidityCount}
           loading={addLiquidityLoading}
-        />
-        <AnalyticsCardChart
-          Icon={PlusSVG}
-          title="Last Week TXs"
-          loading={loadingWeeklyTXs}
-          label="Weekly Transactions"
-          quantity={values(weeklyTXs).reverse()[0]}
-          data={toPairs(weeklyTXs).map(([timestamp, value], index) => ({
-            amount: value,
-            day: `Week ${index + 1}`,
-            description: `Week from ${new Date(Number(timestamp)).toLocaleDateString()}`,
-          }))}
         />
       </Box>
     </Layout>

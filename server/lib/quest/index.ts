@@ -39,13 +39,7 @@ export const addQuest = async (
 ) => {
   await dbConnect();
 
-  const firstWeekDay = getFirstWeekDayTimestamp();
-
-  const metric = await findMetrics(network);
-
-  metric.weekly[firstWeekDay] = (metric.weekly[firstWeekDay] ?? 0) + 1;
-
-  await metric.save();
+  await updateMetrics(network, quest.address);
 
   const questProfile = await findQuestProfile(quest.address);
 
@@ -105,7 +99,25 @@ export const findMetrics = async (network: Network) => {
     metric ??
     metrics.create({
       network,
-      weekly: {},
+      weeklyTXs: {},
+      weeklyUsers: {},
     })
   );
+};
+
+export const updateMetrics = async (network: Network, address: string) => {
+  await dbConnect();
+  const firstWeekDay = getFirstWeekDayTimestamp();
+
+  const metric = await findMetrics(network);
+
+  metric.weeklyTXs[firstWeekDay] = (metric.weeklyTXs[firstWeekDay] ?? 0) + 1;
+
+  if (!metric.weeklyUsers[firstWeekDay].includes(address))
+    metric.weeklyUsers[firstWeekDay] = [
+      ...metric.weeklyUsers[firstWeekDay],
+      address,
+    ];
+
+  await metric.save();
 };

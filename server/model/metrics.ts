@@ -6,7 +6,8 @@ const modelName = 'MovementMetrics';
 
 export interface Metrics {
   network: Network;
-  weekly: Record<number, number>;
+  weeklyTXs: Record<number, number>;
+  weeklyUsers: Record<number, ReadonlyArray<string>>;
 }
 
 export type MetricsDocument = Document & Metrics;
@@ -17,7 +18,10 @@ export const MetricsSchema = new Schema({
     type: String,
     required: true,
   },
-  weekly: {
+  weeklyTXs: {
+    type: Schema.Types.Mixed,
+  },
+  weeklyUsers: {
     type: Schema.Types.Mixed,
   },
 });
