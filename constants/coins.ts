@@ -61,9 +61,9 @@ export const FAUCET_AMOUNT: Record<Network, Record<string, `${number}`>> = {
   },
   [Network.TESTNET]: {
     [COIN_TYPES[Network.TESTNET].USDC]: '5000000000',
-    [COIN_TYPES[Network.TESTNET].WETH]: '5000000000',
-    [COIN_TYPES[Network.TESTNET].WBTC]: '100000000',
-    [COIN_TYPES[Network.TESTNET].USDT]: '7000000000000',
+    [COIN_TYPES[Network.TESTNET].WETH]: '500000000',
+    [COIN_TYPES[Network.TESTNET].WBTC]: '10000000',
+    [COIN_TYPES[Network.TESTNET].USDT]: '7000000000',
   },
 };
 
@@ -97,12 +97,12 @@ export const FAUCET_COINS: Record<Network, ReadonlyArray<CoinData>> = {
   ],
   [Network.TESTNET]: [
     {
-      decimals: 9,
+      decimals: 8,
       symbol: 'WBTC',
       type: COIN_TYPES[Network.TESTNET].WBTC as `0x${string}`,
     },
     {
-      decimals: 9,
+      decimals: 8,
       symbol: 'WETH',
       type: COIN_TYPES[Network.TESTNET].WETH as `0x${string}`,
     },
@@ -112,7 +112,7 @@ export const FAUCET_COINS: Record<Network, ReadonlyArray<CoinData>> = {
       type: COIN_TYPES[Network.TESTNET].USDC as `0x${string}`,
     },
     {
-      decimals: 9,
+      decimals: 6,
       symbol: 'USDT',
       type: COIN_TYPES[Network.TESTNET].USDT as `0x${string}`,
     },
