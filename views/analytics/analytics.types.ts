@@ -8,3 +8,14 @@ export interface AnalyticsCardProps {
   loading: boolean;
   Icon: FC<SVGProps>;
 }
+
+interface ChartItem {
+  x: string;
+  amount: number;
+  description: string;
+}
+export interface AnalyticsChartProps {
+  title: string;
+  loading: boolean;
+  data: ReadonlyArray<ChartItem>;
+}
