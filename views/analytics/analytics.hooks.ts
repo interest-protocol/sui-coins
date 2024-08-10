@@ -1,19 +1,19 @@
 import { useSuiClient } from '@mysten/dapp-kit';
 import useSWR from 'swr';
 
-export const useQuestMetrics = (query: any) =>
+const useQuestMetrics = (query: any) =>
   useSWR(`/api/v1/metrics?find=${JSON.stringify(query)}`, () =>
     fetch(`/api/v1/metrics?find=${JSON.stringify(query)}`).then((response) =>
       response?.json()
     )
   );
 
-export const useQuestProfiles = () =>
+const useQuestProfiles = () =>
   useSWR(`/api/v1/profiles`, () =>
     fetch(`/api/v1/profiles`).then((response) => response?.json())
   );
 
-export const usePoolsMetrics = () => {
+const usePoolsMetrics = () => {
   const suiClient = useSuiClient();
 
   return useSWR('pools', () =>
@@ -34,3 +34,43 @@ export const useWeeklyMetrics = () =>
   useSWR(`/api/v1/metrics/weekly`, () =>
     fetch(`/api/v1/metrics/weekly`).then((response) => response?.json())
   );
+
+export const useMetrics = () => {
+  const { data: totalCount, isLoading: totalLoading } = useQuestMetrics({});
+  const { data: usersCount, isLoading: usersLoading } = useQuestProfiles();
+  const { data: swapCount, isLoading: swapLoading } = useQuestMetrics({
+    kind: 'swap',
+  });
+  const { data: faucetCount, isLoading: faucetLoading } = useQuestMetrics({
+    kind: 'faucet',
+  });
+  const { data: airdropCount, isLoading: airdropLoading } = useQuestMetrics({
+    kind: 'airdrop',
+  });
+  const { data: poolsCount, isLoading: poolsLoading } = usePoolsMetrics();
+  const { data: createTokenCount, isLoading: createTokenLoading } =
+    useQuestMetrics({
+      kind: 'createToken',
+    });
+  const { data: addLiquidityCount, isLoading: addLiquidityLoading } =
+    useQuestMetrics({ kind: 'addLiquidity' });
+
+  return {
+    swapCount,
+    swapLoading,
+    totalCount,
+    totalLoading,
+    usersLoading,
+    usersCount,
+    faucetCount,
+    faucetLoading,
+    airdropCount,
+    airdropLoading,
+    createTokenCount,
+    createTokenLoading,
+    poolsCount,
+    poolsLoading,
+    addLiquidityCount,
+    addLiquidityLoading,
+  };
+};
