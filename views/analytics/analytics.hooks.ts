@@ -29,3 +29,8 @@ export const usePoolsMetrics = () => {
       )
   );
 };
+
+export const useWeeklyMetrics = () =>
+  useSWR(`/api/v1/metrics/weekly`, () =>
+    fetch(`/api/v1/metrics/weekly`).then((response) => response?.json())
+  );

@@ -3,30 +3,24 @@ import NextCors from 'nextjs-cors';
 import { pathOr } from 'ramda';
 
 import { Network } from '@/constants';
-import { addQuest } from '@/server/lib/quest';
-import { Quest } from '@/server/model/quest';
+import dbConnect from '@/server';
+import metrics from '@/server/model/metrics';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     await NextCors(req, res, {
-      methods: ['POST'],
+      methods: ['GET'],
       optionsSuccessStatus: 200,
       origin: process.env.ORIGIN ?? '*',
     });
 
-    const network = pathOr(
-      Network.DEVNET,
-      ['query', 'network'],
-      req
-    ) as Network;
+    await dbConnect();
 
-    if (network === Network.DEVNET) return;
+    const network = pathOr(Network.TESTNET, ['query', 'network'], req);
 
-    const body = req.body as Quest;
+    const data = await metrics.findOne({ network });
 
-    const data = await addQuest(body, body.kind, network);
-
-    res.json(data);
+    res.json(data?.weekly);
   } catch (e) {
     res.status(500).send(e);
   }

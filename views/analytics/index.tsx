@@ -1,4 +1,5 @@
 import { Box } from '@interest-protocol/ui-kit';
+import { toPairs, values } from 'ramda';
 import { FC } from 'react';
 
 import Layout from '@/components/layout';
@@ -17,8 +18,10 @@ import {
   usePoolsMetrics,
   useQuestMetrics,
   useQuestProfiles,
+  useWeeklyMetrics,
 } from './analytics.hooks';
 import AnalyticsCard from './analytics-card';
+import AnalyticsCardChart from './analytics-card-chart';
 
 const Analytics: FC = () => {
   const { data: totalCount, isLoading: totalLoading } = useQuestMetrics({});
@@ -39,6 +42,7 @@ const Analytics: FC = () => {
     });
   const { data: addLiquidityCount, isLoading: addLiquidityLoading } =
     useQuestMetrics({ kind: 'addLiquidity' });
+  const { data: weeklyTXs, isLoading: loadingWeeklyTXs } = useWeeklyMetrics();
 
   return (
     <Layout title="TX Analytics">
@@ -94,6 +98,18 @@ const Analytics: FC = () => {
           title="Liquidity Management"
           quantity={addLiquidityCount}
           loading={addLiquidityLoading}
+        />
+        <AnalyticsCardChart
+          Icon={PlusSVG}
+          title="Last Week TXs"
+          loading={loadingWeeklyTXs}
+          label="Weekly Transactions"
+          quantity={values(weeklyTXs).reverse()[0]}
+          data={toPairs(weeklyTXs).map(([timestamp, value], index) => ({
+            amount: value,
+            day: `Week ${index + 1}`,
+            description: `Week from ${new Date(Number(timestamp)).toLocaleDateString()}`,
+          }))}
         />
       </Box>
     </Layout>
