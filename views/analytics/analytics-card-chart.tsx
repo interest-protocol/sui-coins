@@ -22,11 +22,11 @@ const AnalyticsCardChart: FC<AnalyticsCardChartProps> = ({
       <Box
         p="2xl"
         gap="m"
-        width="30rem"
         bg="container"
         display="flex"
         borderRadius="s"
         flexDirection="column"
+        width={['20rem', '30rem']}
       >
         <Typography variant="title" size="large" color="onSurface">
           {label}
