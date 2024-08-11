@@ -1,9 +1,7 @@
-import invariant from 'tiny-invariant';
-
 import { Network } from '@/constants';
 import dbConnect from '@/server';
 import metrics from '@/server/model/metrics';
-import QuestModel, { AirdropData, Quest } from '@/server/model/quest';
+import QuestModel, { Quest } from '@/server/model/quest';
 import QuestProfileModel from '@/server/model/quest-profile';
 import { getExactDayTimestamp, getFirstWeekDayTimestamp } from '@/utils';
 
@@ -49,17 +47,6 @@ export const addQuest = async (
 
   const doc = await QuestModel.create(finalQuest);
   await doc.save();
-
-  if (profileField === 'airdrop') {
-    invariant(
-      'airdrop' === quest.kind,
-      'Something went wrong with airdrop quest'
-    );
-
-    const data = quest.data as AirdropData;
-
-    if (data.addressesCount < 10) return finalQuest;
-  }
 
   if (questProfile[lastFieldMap[profileField]] === todayTimestamp)
     return finalQuest;
