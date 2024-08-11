@@ -17,6 +17,7 @@ const DCAPreviewModal: FC<DCAPreviewModalProps> = ({ onClose }) => {
   const { control } = useFormContext<DCAForm>();
 
   const tokenFrom = useWatch({ control, name: 'from' });
+  const tokenTo = useWatch({ control, name: 'to' });
 
   return (
     <Box
@@ -100,6 +101,36 @@ const DCAPreviewModal: FC<DCAPreviewModalProps> = ({ onClose }) => {
                       )
                     : '--'}{' '}
                   USD
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
+          <Box
+            px="xl"
+            display="flex"
+            flexDirection="column"
+            justifyContent="start"
+          >
+            <Typography size="medium" variant="label" mb="xs">
+              Receive
+            </Typography>
+            <Box
+              p="s"
+              bg="surface"
+              display="flex"
+              borderRadius="xs"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Box display="flex" alignItems="center" gap="m">
+                <TokenIcon
+                  withBg
+                  type={tokenTo.type}
+                  symbol={tokenTo.symbol}
+                  network={network as Network}
+                />
+                <Typography size="small" variant="title">
+                  {tokenTo.symbol}
                 </Typography>
               </Box>
             </Box>

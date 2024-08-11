@@ -142,30 +142,30 @@ export async function getCoinOfValue({
   tx,
   account,
 }: GetCoinOfValueArgs): Promise<TransactionResult> {
-  let coinOfValue: TransactionResult;
   coinType = removeLeadingZeros(coinType);
-  if (coinType === '0x2::sui::SUI') {
-    coinOfValue = tx.splitCoins(tx.gas, [tx.pure.u64(coinValue)]);
-  } else {
-    const paginatedCoins = await getCoins({
-      suiClient,
-      coinType,
-      cursor: null,
-      account,
-    });
 
-    // Merge all coins into one
-    const [firstCoin, ...otherCoins] = paginatedCoins;
-    const firstCoinInput = tx.object(firstCoin.coinObjectId);
-    if (otherCoins.length > 0) {
-      tx.mergeCoins(
-        firstCoinInput,
-        otherCoins.map((coin) => coin.coinObjectId)
-      );
-    }
-    coinOfValue = tx.splitCoins(firstCoinInput, [tx.pure.u64(coinValue)]);
+  if (isSui(coinType)) return tx.splitCoins(tx.gas, [tx.pure.u64(coinValue)]);
+
+  const paginatedCoins = await getCoins({
+    suiClient,
+    coinType,
+    cursor: null,
+    account,
+  });
+
+  // Merge all coins into one
+  const [firstCoin, ...otherCoins] = paginatedCoins;
+
+  const firstCoinInput = tx.object(firstCoin.coinObjectId);
+
+  if (otherCoins.length > 0) {
+    tx.mergeCoins(
+      firstCoinInput,
+      otherCoins.map((coin) => coin.coinObjectId)
+    );
   }
-  return coinOfValue;
+
+  return tx.splitCoins(firstCoinInput, [tx.pure.u64(coinValue)]);
 }
 
 export const isSui = (type: string) => isSameStructTag(type, SUI_TYPE_ARG);

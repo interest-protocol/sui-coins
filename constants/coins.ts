@@ -632,3 +632,47 @@ export const STRICT_TOKENS_MAP: Record<Network, Record<string, Token>> = {
     {}
   ),
 };
+
+const DCA_PACKAGE =
+  '0xcd79b4f3d61afacdd30632ccdfc05f923b9847d21ba19c7bae9c73e5d860f5b5';
+
+export const TREASURY_CAP_MAP: Record<string, string> = {
+  [`${DCA_PACKAGE}::usdc::USDC`]:
+    '0x59ba3c06c55a80e64551a0f9289d5fee9522778f4d81d5871d15f6d0a7686a87',
+  [`${DCA_PACKAGE}::eth::ETH`]:
+    '0xc3cea680608424c2d4f618577d2991c7a99bd29a98f58e0be75555858e9c54af',
+  [`${DCA_PACKAGE}::btc::BTC`]:
+    '0xea65017ca55ad4b46f51c2e0ce9df86a3bcccba33ccbfa51aade38c2c92fa963',
+  [`${DCA_PACKAGE}::usdt::USDT`]:
+    '0x99ee533652462c5f990c193bf502c16429af600d51b7bf774d1e3cf76623cab6',
+};
+
+export const FAUCET_AMOUNT: Record<string, string> = {
+  [`${DCA_PACKAGE}::usdc::USDC`]: '5000000000',
+  [`${DCA_PACKAGE}::eth::ETH`]: '5000000000',
+  [`${DCA_PACKAGE}::btc::BTC`]: '100000000',
+  [`${DCA_PACKAGE}::usdt::USDT`]: '7000000000000',
+};
+
+export const FAUCET_COINS: Array<Token> = [
+  {
+    decimals: 8,
+    symbol: 'WBTC',
+    type: `${DCA_PACKAGE}::btc::BTC`,
+  },
+  {
+    decimals: 8,
+    symbol: 'WETH',
+    type: `${DCA_PACKAGE}::eth::ETH`,
+  },
+  {
+    decimals: 6,
+    symbol: 'USDC',
+    type: `${DCA_PACKAGE}::usdc::USDC`,
+  },
+  {
+    decimals: 9,
+    symbol: 'USDT',
+    type: `${DCA_PACKAGE}::usdt::USDT`,
+  },
+];

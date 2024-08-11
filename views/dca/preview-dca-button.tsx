@@ -10,7 +10,7 @@ import { isSui, ZERO_BIG_NUMBER } from '@/utils';
 import { DCAMessagesEnum } from './dca.data';
 import { DCAForm } from './dca.types';
 import DCAMessages from './dca-messages';
-import SwapPreviewModal from './dca-preview-modal';
+import DCAPreviewModal from './dca-preview-modal';
 
 const PreviewSwapButton: FC = () => {
   const { coinsMap } = useWeb3();
@@ -21,7 +21,7 @@ const PreviewSwapButton: FC = () => {
 
   const from = useWatch({ control, name: 'from' });
   const to = useWatch({ control, name: 'to' });
-  const swapping = useWatch({ control, name: 'swapping' });
+  const starting = useWatch({ control, name: 'starting' });
 
   const fromValue = from?.value ?? ZERO_BIG_NUMBER;
 
@@ -41,9 +41,8 @@ const PreviewSwapButton: FC = () => {
     to &&
     from.type &&
     to.type &&
-    !swapping &&
+    !starting &&
     !from.value?.isZero() &&
-    Number(to.display) &&
     coinsMap[from.type] &&
     (isSui(from.type) ? !isGreaterThanAllowedWhenSui : !isGreaterThanBalance);
 
@@ -70,18 +69,15 @@ const PreviewSwapButton: FC = () => {
     setValue('error', null);
   }, [from, to]);
 
-  const handlePreview = () => {
-    setValue('readyToStartDCA', false);
-
+  const handlePreview = () =>
     setModal(
       <FormProvider {...form}>
-        <SwapPreviewModal onClose={handleClose} />
+        <DCAPreviewModal onClose={handleClose} />
       </FormProvider>,
       {
         custom: true,
       }
     );
-  };
 
   return (
     <>
@@ -97,7 +93,7 @@ const PreviewSwapButton: FC = () => {
           disabled={!ableToSwap}
           onClick={handlePreview}
         >
-          {swapping ? 'Starting DCA...' : 'Preview DCA'}
+          {starting ? 'Starting DCA...' : 'Preview DCA'}
         </Button>
       </Box>
     </>

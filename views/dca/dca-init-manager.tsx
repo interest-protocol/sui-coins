@@ -3,15 +3,14 @@ import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 import { useRouter } from 'next/router';
 import { FC, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { useReadLocalStorage } from 'usehooks-ts';
 
-import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
+import { Network } from '@/constants';
 import { useWeb3 } from '@/hooks/use-web3';
-import { getCoin, isSui, updateURL } from '@/utils';
+import { getCoin, isSui, updateURL, ZERO_BIG_NUMBER } from '@/utils';
 
-import { Aggregator, ISwapSettings, DCAForm, SwapToken } from './dca.types';
+import { DCAForm, DCAToken } from './dca.types';
 
-const SwapInitManager: FC = () => {
+const DCAInitManager: FC = () => {
   const { coinsMap } = useWeb3();
   const form = useFormContext<DCAForm>();
   const { network } = useSuiClientContext();
@@ -21,29 +20,9 @@ const SwapInitManager: FC = () => {
     asPath,
   } = useRouter();
 
-  const settings = useReadLocalStorage<ISwapSettings>(
-    `${LOCAL_STORAGE_VERSION}-sui-coins-settings`
-  ) ?? { interval: '10', slippage: '0.1', aggregator: Aggregator.Hop };
+  const getDCAToken = async (type: `0x${string}`): Promise<DCAToken | null> => {
+    if (!type || (type as string) === 'null') return null;
 
-  useEffect(() => {
-    form.reset();
-    const defaultSettings = form.getValues('settings');
-    form.setValue('settings', {
-      ...defaultSettings,
-      ...settings,
-      ...(process.env.VERCEL_ENV === 'production' &&
-      settings.aggregator === Aggregator.Interest
-        ? {
-            aggregator: Aggregator.Hop,
-          }
-        : {}),
-    });
-    updateURL(pathname);
-  }, [network]);
-
-  const getSwapToken = async (
-    type: `0x${string}`
-  ): Promise<SwapToken | null> => {
     if (isSui(type)) {
       const decimals = 9;
       const symbol = 'SUI';
@@ -54,6 +33,7 @@ const SwapInitManager: FC = () => {
         symbol,
         decimals,
         display: '',
+        value: ZERO_BIG_NUMBER,
         usdPrice: null,
       };
     }
@@ -64,6 +44,7 @@ const SwapInitManager: FC = () => {
         ...coin,
         display: '',
         usdPrice: null,
+        value: ZERO_BIG_NUMBER,
       };
     }
     return null;
@@ -75,7 +56,7 @@ const SwapInitManager: FC = () => {
   ) => {
     if (!value) return;
 
-    const token = await getSwapToken(value);
+    const token = await getDCAToken(value);
 
     if (!token) return;
 
@@ -93,14 +74,6 @@ const SwapInitManager: FC = () => {
 
     return token.type;
   };
-
-  useEffect(() => {
-    const defaultSettings = form.getValues('settings');
-    form.setValue('settings', {
-      ...defaultSettings,
-      ...settings,
-    });
-  }, [settings]);
 
   useEffect(() => {
     (async () => {
@@ -128,4 +101,4 @@ const SwapInitManager: FC = () => {
   return null;
 };
 
-export default SwapInitManager;
+export default DCAInitManager;

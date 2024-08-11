@@ -1,21 +1,34 @@
 import { Button, Typography } from '@interest-protocol/ui-kit';
-import { useCurrentAccount, useSuiClientContext } from '@mysten/dapp-kit';
+import {
+  useCurrentAccount,
+  useSignTransaction,
+  useSuiClient,
+  useSuiClientContext,
+} from '@mysten/dapp-kit';
+import { Transaction } from '@mysten/sui/transactions';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import invariant from 'tiny-invariant';
 
 import { EXPLORER_URL, Network } from '@/constants';
+import useDcaSdk from '@/hooks/use-dca-sdk';
 import { useDialog } from '@/hooks/use-dialog';
-import { ZERO_BIG_NUMBER } from '@/utils';
+import { getCoinOfValue, signAndExecute, ZERO_BIG_NUMBER } from '@/utils';
 import { DCAForm } from '@/views/dca/dca.types';
 
 import { DCAMessagesEnum } from './dca.data';
 
-const SwapButton: FC = () => {
+const WHITELIST_TESTNET_WITNESS =
+  '0x5fee448eda1dd26b9fe1c8d72ee5228631c4b337c995d1e62dc8e61ef4aa30b9::whitelist_adapter::Whitelist';
+
+const DCAButton: FC = () => {
+  const dcaSdk = useDcaSdk();
+  const suiClient = useSuiClient();
   const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
   const formDCA = useFormContext<DCAForm>();
   const { dialog, handleClose } = useDialog();
+  const signTransaction = useSignTransaction();
 
   const resetInput = () => {
     formDCA.setValue('to.display', '0');
@@ -23,14 +36,9 @@ const SwapButton: FC = () => {
     formDCA.setValue('from.value', ZERO_BIG_NUMBER);
   };
 
-  const swapping = useWatch({
+  const starting = useWatch({
     control: formDCA.control,
-    name: 'swapping',
-  });
-
-  const readyToStartDCA = useWatch({
-    control: formDCA.control,
-    name: 'readyToStartDCA',
+    name: 'starting',
   });
 
   const gotoExplorer = () => {
@@ -43,39 +51,70 @@ const SwapButton: FC = () => {
     formDCA.setValue('explorerLink', '');
   };
 
-  const handleSwap = async () => {
+  const handleStartDCA = async () => {
     try {
+      const values = formDCA.getValues();
+
       invariant(currentAccount, 'Need to connect wallet');
 
-      formDCA.setValue('swapping', true);
+      formDCA.setValue('starting', true);
 
-      const digest = '';
+      const initTx = new Transaction();
+
+      const coinIn = await getCoinOfValue({
+        suiClient,
+        tx: initTx,
+        account: currentAccount.address,
+        coinType: values.from.type,
+        coinValue: values.from.value.toString(),
+      });
+
+      const tx = dcaSdk.newAndShare({
+        coinIn,
+        tx: initTx as any,
+        coinOutType: values.to.type,
+        coinInType: values.from.type,
+        timeScale: values.periodicity,
+        every: Number(values.intervals),
+        delegatee: currentAccount.address,
+        numberOfOrders: Number(values.orders),
+        witnessType: WHITELIST_TESTNET_WITNESS,
+      }) as unknown as Transaction;
+
+      const txResult = await signAndExecute({
+        tx,
+        suiClient,
+        currentAccount,
+        signTransaction,
+      });
 
       formDCA.setValue(
         'explorerLink',
-        `${EXPLORER_URL[network as Network]}/tx/${digest}`
+        `${EXPLORER_URL[network as Network]}/tx/${txResult.digest}`
       );
+    } catch (e) {
+      console.log({ e });
+      throw e;
     } finally {
       resetInput();
-      formDCA.setValue('swapping', false);
+      formDCA.setValue('starting', false);
     }
   };
 
-  const onSwap = () =>
-    readyToStartDCA &&
-    dialog.promise(handleSwap(), {
+  const onStartDCA = () =>
+    dialog.promise(handleStartDCA(), {
       loading: {
-        title: 'Swapping...',
-        message: DCAMessagesEnum.swapping,
+        title: 'Starting DCA...',
+        message: DCAMessagesEnum.starting,
       },
       error: {
         title: 'DCA Failure',
-        message: DCAMessagesEnum.swapFailure,
+        message: DCAMessagesEnum.dcaFailure,
         primaryButton: { label: 'Try again', onClick: handleClose },
       },
       success: {
         title: 'DCA Successfully',
-        message: DCAMessagesEnum.swapSuccess,
+        message: DCAMessagesEnum.dcaSuccess,
         primaryButton: {
           label: 'See on Explorer',
           onClick: gotoExplorer,
@@ -89,17 +128,12 @@ const SwapButton: FC = () => {
     });
 
   return (
-    <Button
-      onClick={onSwap}
-      variant="filled"
-      disabled={!readyToStartDCA}
-      justifyContent="center"
-    >
+    <Button onClick={onStartDCA} variant="filled" justifyContent="center">
       <Typography variant="label" size="large">
-        {swapping ? 'Swapping...' : 'DCA'}
+        {starting ? 'Loading...' : 'Start DCA'}
       </Typography>
     </Button>
   );
 };
 
-export default SwapButton;
+export default DCAButton;

@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { DCAForm } from '../dca.types';
+import Balance from './balance';
 import { InputProps } from './input.types';
 
 const HeaderInfo: FC<InputProps> = ({ label }) => {
@@ -11,9 +12,9 @@ const HeaderInfo: FC<InputProps> = ({ label }) => {
   const symbol = useWatch({ control, name: `${label}.symbol` });
 
   return (
-    <Box display="flex" justifyContent="space-between">
+    <Box display="flex" justifyContent="space-between" alignItems="center">
       <Typography variant="label" size="medium" fontSize="s">
-        {label == 'from' ? 'Sell' : 'BUY'}
+        {label == 'from' ? 'I WANT TO ALLOCATE' : 'TO BUY'}
         <Typography
           as="span"
           size="small"
@@ -24,6 +25,9 @@ const HeaderInfo: FC<InputProps> = ({ label }) => {
           : {symbol}
         </Typography>
       </Typography>
+      <Box display="flex" gap="xs">
+        <Balance label={label} />
+      </Box>
     </Box>
   );
 };

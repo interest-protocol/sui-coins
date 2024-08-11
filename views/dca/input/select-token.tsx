@@ -1,5 +1,5 @@
 import { Token } from '@interest-protocol/sui-tokens';
-import { Button, Motion, Typography } from '@interest-protocol/ui-kit';
+import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
@@ -9,7 +9,7 @@ import TokenIcon from '@/components/token-icon';
 import { Network } from '@/constants';
 import { useModal } from '@/hooks/use-modal';
 import { ChevronDownSVG } from '@/svg';
-import { updateURL } from '@/utils';
+import { updateURL, ZERO_BIG_NUMBER } from '@/utils';
 import SelectTokenModal from '@/views/components/select-token-modal';
 
 import { DCAForm } from '../dca.types';
@@ -25,11 +25,6 @@ const SelectToken: FC<InputProps> = ({ label }) => {
   const currentToken = useWatch({
     control,
     name: label,
-  });
-
-  const swapping = useWatch({
-    control,
-    name: 'swapping',
   });
 
   const { symbol: currentSymbol, type: currentType } = currentToken ?? {
@@ -58,23 +53,26 @@ const SelectToken: FC<InputProps> = ({ label }) => {
 
   const onSelect = async ({ type, decimals, symbol, chain }: Token) => {
     if (type === oppositeType) {
-      setValue(label === 'to' ? 'from' : 'to', {
-        type: currentToken.type,
-        symbol: currentToken.symbol,
-        decimals: currentToken.decimals,
-        usdPrice: currentToken.usdPrice,
-        chain: currentToken.chain,
-        display: '',
-      });
+      if (label === 'to')
+        setValue(label === 'to' ? 'from' : 'to', {
+          display: '',
+          usdPrice: null,
+          value: ZERO_BIG_NUMBER,
+          type: currentToken.type,
+          chain: currentToken.chain,
+          symbol: currentToken.symbol,
+          decimals: currentToken.decimals,
+        });
     }
 
     setValue(label, {
-      type,
-      chain,
-      symbol,
-      decimals,
+      type: type,
       display: '',
+      chain: chain,
       usdPrice: null,
+      symbol: symbol,
+      decimals: decimals,
+      value: ZERO_BIG_NUMBER,
     });
 
     fetch(`/api/auth/v1/coin-price?symbol=${symbol}`)
@@ -84,20 +82,22 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       )
       .catch(() => null);
 
-    if (label === 'from') setValue('to.display', '');
-
     changeURL(type, type === oppositeType ? currentToken.type : undefined);
   };
 
   const openModal = () =>
-    !swapping &&
     setModal(
       <Motion
         animate={{ scale: 1 }}
         initial={{ scale: 0.85 }}
         transition={{ duration: 0.3 }}
       >
-        <SelectTokenModal closeModal={handleClose} onSelect={onSelect} />
+        <SelectTokenModal
+          faucet
+          simple
+          closeModal={handleClose}
+          onSelect={onSelect}
+        />
       </Motion>,
       {
         isOpen: true,
@@ -109,20 +109,37 @@ const SelectToken: FC<InputProps> = ({ label }) => {
 
   return (
     <Button
-      py="2xs"
-      pr="s"
-      bg="#F8F9FD"
+      px="s"
+      py="auto"
       fontSize="s"
       variant="tonal"
-      border="1px solid"
-      borderRadius="full"
-      disabled={swapping}
+      color="onSurface"
+      borderRadius="xs"
+      borderStyle="solid"
       onClick={openModal}
-      opacity={swapping ? 0.7 : 1}
-      pl={currentType ? '2xs' : 'm'}
-      borderColor="#C6C6CA !important"
-      {...(currentType && {
-        PrefixIcon: (
+      borderColor="outlineVariant"
+      height={label === 'to' ? '3.25rem' : '3rem'}
+      bg={label === 'to' ? 'none' : 'lowContainer'}
+      borderWidth={label === 'to' ? '1px' : '0px'}
+      SuffixIcon={
+        <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+      }
+      {...(currentType &&
+        label === 'from' && {
+          PrefixIcon: (
+            <TokenIcon
+              withBg
+              rounded
+              size="1.1rem"
+              type={currentType}
+              symbol={currentSymbol}
+              network={network as Network}
+            />
+          ),
+        })}
+    >
+      <Box as="span" display="flex" alignItems="center" gap="xs">
+        {currentType && label === 'to' && (
           <TokenIcon
             withBg
             rounded
@@ -131,21 +148,19 @@ const SelectToken: FC<InputProps> = ({ label }) => {
             symbol={currentSymbol}
             network={network as Network}
           />
-        ),
-      })}
-    >
-      <Typography
-        size="large"
-        variant="label"
-        overflow="hidden"
-        whiteSpace="nowrap"
-        fontFamily="Satoshi"
-        width={['0px', 'auto']}
-        display={[currentType ? 'none' : 'block', 'block']}
-      >
-        {currentSymbol ?? 'Select Token'}
-      </Typography>
-      <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+        )}
+        <Typography
+          size="large"
+          variant="label"
+          overflow="hidden"
+          whiteSpace="nowrap"
+          fontFamily="Satoshi"
+          width={['0px', 'auto']}
+          display={[currentType ? 'none' : 'block', 'block']}
+        >
+          {currentSymbol ?? 'Select Token'}
+        </Typography>
+      </Box>
     </Button>
   );
 };
