@@ -16,7 +16,7 @@ const SwapFlipToken: FC = () => {
 
   const to = useWatch({ control, name: 'to' });
   const from = useWatch({ control, name: 'from' });
-  const swapping = useWatch({ control, name: 'swapping' });
+  const swapping = useWatch({ control, name: 'starting' });
 
   const flipToken = () => {
     if (swapping) return;
