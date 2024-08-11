@@ -103,16 +103,16 @@ const DCAButton: FC = () => {
 
   const onStartDCA = () =>
     dialog.promise(handleStartDCA(), {
-      loading: {
+      loading: () => ({
         title: 'Starting DCA...',
         message: DCAMessagesEnum.starting,
-      },
-      error: {
+      }),
+      error: () => ({
         title: 'DCA Failure',
         message: DCAMessagesEnum.dcaFailure,
         primaryButton: { label: 'Try again', onClick: handleClose },
-      },
-      success: {
+      }),
+      success: () => ({
         title: 'DCA Successfully',
         message: DCAMessagesEnum.dcaSuccess,
         primaryButton: {
@@ -124,7 +124,7 @@ const DCAButton: FC = () => {
             got it
           </Button>
         ),
-      },
+      }),
     });
 
   return (
