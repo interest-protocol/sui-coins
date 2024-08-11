@@ -1,15 +1,19 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import NextCors from 'nextjs-cors';
 
 import { sponsorTx } from '@/utils/sponsored';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    if (req.method === 'POST') {
-      const response = await sponsorTx(req.body);
+    await NextCors(req, res, {
+      methods: ['POST'],
+      optionsSuccessStatus: 200,
+      origin: process.env.ORIGIN ?? '*',
+    });
 
-      return res.status(200).json(response);
-    }
-    return res.status(405).send('Method not allowed!');
+    const response = await sponsorTx(req.body);
+
+    return res.status(200).json(response);
   } catch (e) {
     res.status(500).send(e);
   }

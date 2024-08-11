@@ -27,10 +27,10 @@ const Avatar: FC<AvatarProps> = ({ isLarge, account, withNameOrAddress }) => {
         width={SIZE}
         height={SIZE}
         display="flex"
+        borderRadius="xs"
         overflow="hidden"
         position="relative"
         alignItems="center"
-        borderRadius="full"
         bg="primaryContainer"
         justifyContent="center"
         color="onPrimaryContainer"

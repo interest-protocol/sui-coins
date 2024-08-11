@@ -19,7 +19,7 @@ import { FixedPointMath } from '@/lib';
 import {
   CoinObject,
   CoinsMap,
-} from '../../components/web3-manager/coins-manager/web3-manager.types';
+} from '../../components/web3-manager/coins-manager/coins-manager.types';
 import { isSameStructTag } from '../address';
 import { ZERO_BIG_NUMBER } from '../big-number';
 import { fetchCoinMetadata } from '../coin-metadata';
@@ -56,7 +56,6 @@ export const safePoolSymbolFromType = (type: string): string =>
 export const coinDataToCoinObject = (coinData: CoinData): CoinObject => ({
   ...coinData,
   balance: ZERO_BIG_NUMBER,
-  coinObjectId: '',
   metadata: { name: formatAddress(coinData.type), description: '' },
   objects: [],
 });

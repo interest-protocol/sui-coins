@@ -8,7 +8,6 @@ export interface CoinObject extends Pick<CoinMetadata, 'symbol' | 'decimals'> {
   version?: string;
   balance: BigNumber;
   type: `0x${string}`;
-  coinObjectId: string;
   previousTransaction?: string;
   lockedUntilEpoch?: number | null | undefined;
   metadata: Omit<CoinMetadata, 'symbol' | 'decimals'>;

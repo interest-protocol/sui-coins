@@ -1,5 +1,7 @@
 import { SuiTransactionBlockResponse } from '@mysten/sui/client';
 
+import { TimedSuiTransactionBlockResponse } from '@/interface';
+
 import { SignAndExecuteArgs, WaitForTxArgs } from './tx.types';
 
 export const throwTXIfNotSuccessful = (
@@ -18,13 +20,15 @@ export const signAndExecute = async ({
   tx,
   signTransaction,
   options,
-}: SignAndExecuteArgs) => {
+}: SignAndExecuteArgs): Promise<TimedSuiTransactionBlockResponse> => {
   const { signature, bytes } = await signTransaction.mutateAsync({
     transaction: tx,
     account: currentAccount,
   });
 
-  return suiClient.executeTransactionBlock({
+  const startTime = Date.now();
+
+  const txResult = await suiClient.executeTransactionBlock({
     transactionBlock: bytes,
     signature,
     options: {
@@ -33,6 +37,11 @@ export const signAndExecute = async ({
     },
     requestType: 'WaitForLocalExecution',
   });
+
+  return {
+    ...txResult,
+    time: Date.now() - startTime,
+  };
 };
 
 export const waitForTx = async ({

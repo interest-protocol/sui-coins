@@ -5,7 +5,6 @@ import {
   useSuiClient,
   useSuiClientContext,
 } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { Transaction } from '@mysten/sui/transactions';
 import { TransactionObjectArgument } from '@mysten/sui/transactions';
 import { formatAddress } from '@mysten/sui/utils';
@@ -21,6 +20,7 @@ import {
 import { Network } from '@/constants';
 import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
+import { TimedSuiTransactionBlockResponse } from '@/interface';
 import { FixedPointMath } from '@/lib';
 import { CopySVG } from '@/svg';
 import {
@@ -41,7 +41,7 @@ const useBurn = () => {
 
   return async (
     objects: ReadonlyArray<ObjectField>,
-    onSuccess: (tx: SuiTransactionBlockResponse) => void
+    onSuccess: (tx: TimedSuiTransactionBlockResponse) => void
   ) => {
     if (!suiClient) throw new Error('Provider not found');
     if (!currentAccount) throw new Error('There is not an account');
@@ -130,7 +130,7 @@ export const useOnBurn = () => {
     toast('Link copied to clipboard');
   };
 
-  const onSuccess = (tx: SuiTransactionBlockResponse) => {
+  const onSuccess = (tx: TimedSuiTransactionBlockResponse) => {
     showTXSuccessToast(tx, network as Network);
     mutate();
   };
@@ -185,41 +185,51 @@ export const useOnBurn = () => {
             maxHeight="20rem"
             flexDirection="column"
           >
-            {objects.map((object) => (
-              <Box
-                p="xs"
-                pr="xl"
-                key={v4()}
-                display="flex"
-                bg="lowContainer"
-                borderRadius="xs"
-                alignItems="center"
-                nHover={{ bg: 'container' }}
-                justifyContent="space-between"
-              >
-                <IncineratorTokenObject object={object} />
-                <Box textAlign="right">
-                  <Typography size="medium" variant="body">
-                    {object.value}
-                  </Typography>
-                  <Typography
-                    size="small"
-                    variant="body"
-                    color="outline"
-                    cursor="pointer"
-                    onClick={() => copy(object.type)}
-                    nHover={{ color: 'outlineVariant' }}
-                  >
-                    {formatAddress(object.type)}{' '}
-                    <CopySVG
-                      width="100%"
-                      maxWidth="0.75rem"
-                      maxHeight="0.75rem"
-                    />
-                  </Typography>
+            {objects.map((object) => {
+              const objectType = object.type
+                ? object.type
+                : object.display
+                  ? object.display.type
+                  : '';
+
+              return (
+                <Box
+                  p="xs"
+                  pr="xl"
+                  key={v4()}
+                  display="flex"
+                  bg="lowContainer"
+                  borderRadius="xs"
+                  alignItems="center"
+                  nHover={{ bg: 'container' }}
+                  justifyContent="space-between"
+                >
+                  <IncineratorTokenObject object={object} />
+                  <Box textAlign="right">
+                    <Typography size="medium" variant="body">
+                      {object.value}
+                    </Typography>
+                    <Typography
+                      size="small"
+                      variant="body"
+                      color="outline"
+                      cursor="pointer"
+                      onClick={() => copy(objectType)}
+                      nHover={{ color: 'outlineVariant' }}
+                    >
+                      {formatAddress(objectType)}{' '}
+                      {objectType && (
+                        <CopySVG
+                          width="100%"
+                          maxWidth="0.75rem"
+                          maxHeight="0.75rem"
+                        />
+                      )}
+                    </Typography>
+                  </Box>
                 </Box>
-              </Box>
-            ))}
+              );
+            })}
           </Box>
         </Box>
         <Box display="flex" gap="s" justifyContent="center">

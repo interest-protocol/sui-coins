@@ -7,6 +7,7 @@ export enum RoutesEnum {
   Swap = 'swap',
   Send = 'send',
   Pools = 'pools',
+  Merge = 'merge',
   Faucet = 'faucet',
   Airdrop = 'airdrop',
   Metrics = 'metrics',
@@ -19,6 +20,7 @@ export enum RoutesEnum {
   CreatePool = 'create-pool',
   SendHistory = 'send-history',
   PoolDetails = 'pool-details',
+  SendTransfer = 'send-transfer',
 }
 
 /**
@@ -30,6 +32,7 @@ export const Routes: Record<RoutesEnum, string> = {
   [RoutesEnum.DCA]: '/dca',
   [RoutesEnum.Send]: '/send',
   [RoutesEnum.Pools]: '/pools',
+  [RoutesEnum.Merge]: '/merge',
   [RoutesEnum.Faucet]: '/faucet',
   [RoutesEnum.Metrics]: '/metrics',
   [RoutesEnum.Airdrop]: '/airdrop',
@@ -42,4 +45,5 @@ export const Routes: Record<RoutesEnum, string> = {
   [RoutesEnum.CreatePool]: '/pools/create',
   [RoutesEnum.SendHistory]: '/send/history',
   [RoutesEnum.PoolDetails]: '/pools/details',
+  [RoutesEnum.SendTransfer]: '/send/transfer',
 };

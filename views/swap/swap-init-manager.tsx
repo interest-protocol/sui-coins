@@ -1,4 +1,3 @@
-import { useSuiClientContext } from '@mysten/dapp-kit';
 import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 import { useRouter } from 'next/router';
 import { FC, useEffect } from 'react';
@@ -6,6 +5,8 @@ import { useFormContext } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
 
 import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
+import { getAllCoinsPrice } from '@/hooks/use-get-multiple-token-price-by-type/use-get-multiple-token-price-by-type.utils';
+import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
 import { getCoin, isSui, updateURL } from '@/utils';
 
@@ -14,7 +15,7 @@ import { Aggregator, ISwapSettings, SwapForm, SwapToken } from './swap.types';
 const SwapInitManager: FC = () => {
   const { coinsMap } = useWeb3();
   const form = useFormContext<SwapForm>();
-  const { network } = useSuiClientContext();
+  const network = useNetwork();
   const {
     query: { to, from },
     pathname,
@@ -81,14 +82,8 @@ const SwapInitManager: FC = () => {
 
     form.setValue(field, token);
 
-    fetch(`/api/auth/v1/coin-price?symbol=${token.symbol}`)
-      .then((response) => response.json?.())
-      .then((data) =>
-        form.setValue(
-          `${field}.usdPrice`,
-          data[token.symbol][0].quote.USD.price
-        )
-      )
+    getAllCoinsPrice([token.type], network)
+      .then((data) => form.setValue(`${field}.usdPrice`, data[token.type]))
       .catch(console.log);
 
     return token.type;

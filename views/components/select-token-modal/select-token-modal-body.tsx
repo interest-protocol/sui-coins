@@ -20,7 +20,7 @@ import { useWeb3 } from '@/hooks/use-web3';
 import { CoinMetadataWithType } from '@/interface';
 import { coinDataToCoinObject, fetchCoinMetadata } from '@/utils';
 
-import { CoinObject } from '../../../components/web3-manager/coins-manager/web3-manager.types';
+import { CoinObject } from '../../../components/web3-manager/coins-manager/coins-manager.types';
 import FetchingToken from './fetching-token';
 import ModalTokenBody from './modal-token-body';
 import ModalTokenSearch from './modal-token-search';

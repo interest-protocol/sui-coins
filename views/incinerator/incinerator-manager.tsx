@@ -1,8 +1,9 @@
 import { useCurrentAccount } from '@mysten/dapp-kit';
+import { CoinStruct } from '@mysten/sui/dist/cjs/client';
 import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { CoinObject } from '@/components/web3-manager/coins-manager/web3-manager.types';
+import { CoinObject } from '@/components/web3-manager/coins-manager/coins-manager.types';
 import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
@@ -58,8 +59,12 @@ const IncineratorManager: FC = () => {
             object.display?.symbol
               ?.toLowerCase()
               .includes(search.toLowerCase()) ||
-            object.display?.coinObjectId
-              ?.toLowerCase()
+            (
+              object.display?.objects[0] as Omit<CoinStruct, 'coinType'> & {
+                type: string;
+              }
+            )?.coinObjectId
+              .toLowerCase()
               .includes(search.toLowerCase())
           )
         )

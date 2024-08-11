@@ -6,8 +6,8 @@ import {
   FaucetSVG,
   FireSVG,
   HourglassSVG,
-  MemechanSVG,
   MenuSVG,
+  MergeSVG,
   PoolSVG,
   UploadSVG,
 } from '@/svg';
@@ -72,8 +72,8 @@ export const SIDEBAR_ITEMS: ReadonlyArray<IMenuItem> = [
     networks: [Network.MAINNET, Network.TESTNET],
     accordionList: [
       {
-        beta: true,
-        name: 'zksend',
+        beta: false,
+        name: 'send',
         disabled: false,
         Icon: UploadSVG,
         path: Routes[RoutesEnum.Send],
@@ -88,11 +88,11 @@ export const SIDEBAR_ITEMS: ReadonlyArray<IMenuItem> = [
         path: Routes[RoutesEnum.Faucet],
       },
       {
+        name: 'merge',
         disabled: false,
-        name: 'memechan',
-        Icon: MemechanSVG,
-        networks: [Network.MAINNET],
-        path: 'https://sui.memechan.gg',
+        Icon: MergeSVG,
+        path: Routes[RoutesEnum.Merge],
+        networks: [Network.MAINNET, Network.TESTNET],
       },
     ],
   },

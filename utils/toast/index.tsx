@@ -1,11 +1,11 @@
 import { Typography } from '@interest-protocol/ui-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui/client';
 import toast from 'react-hot-toast';
 
 import { EXPLORER_URL, Network } from '@/constants';
+import { TimedSuiTransactionBlockResponse } from '@/interface';
 
 export const showTXSuccessToast = (
-  tx: SuiTransactionBlockResponse,
+  tx: TimedSuiTransactionBlockResponse,
   network: Network
 ): void => {
   const explorerLink = `${EXPLORER_URL[network]}/tx/${tx.digest}`;
@@ -19,6 +19,9 @@ export const showTXSuccessToast = (
         textDecoration="underline"
       >
         Sui Explorer
+      </Typography>
+      <Typography size="small" variant="body" cursor="pointer">
+        Tx finalized in {+(tx.time / 1000).toFixed(2)} sec!
       </Typography>
     </a>
   );
