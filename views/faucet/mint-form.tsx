@@ -4,7 +4,6 @@ import {
   useSignTransaction,
   useSuiClient,
 } from '@mysten/dapp-kit';
-import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 import { Transaction } from '@mysten/sui/transactions';
 import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -25,7 +24,6 @@ import {
   signAndExecute,
   throwTXIfNotSuccessful,
 } from '@/utils';
-import { requestMov } from '@/views/faucet/faucet.utils';
 
 import SelectTokenModal from '../components/select-token-modal';
 
@@ -45,9 +43,6 @@ const MintForm: FC = () => {
       if (!account || !currentAccount) throw new Error('Not account found');
 
       const tx = new Transaction();
-
-      if (selected.type === SUI_TYPE_ARG)
-        return requestMov(account.address, network);
 
       tx.moveCall({
         target: `0x2::coin::mint_and_transfer`,
