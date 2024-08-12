@@ -6,8 +6,8 @@ const modelName = 'MovementMetricsV2';
 
 export interface Metrics {
   network: Network;
-  weeklyTXs: Record<number, number>;
-  weeklyUsers: Record<number, number>;
+  weeklyTXs: Map<string, number>;
+  weeklyUsers: Map<string, number>;
 }
 
 export type MetricsDocument = Document & Metrics;
