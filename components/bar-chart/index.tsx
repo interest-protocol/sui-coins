@@ -12,6 +12,8 @@ import {
 } from 'recharts';
 import { v4 } from 'uuid';
 
+import { formatMoney } from '@/utils';
+
 import CustomCursor from './custom-cursor';
 import CustomTooltip from './custom-tooltip';
 import CustomXAxisTick from './x-axis-tick';
@@ -51,9 +53,12 @@ const BarChartComponent: FC<BaseChartProps> = ({ data, height, width }) => {
         />
         <Bar key={v4()} dataKey="amount" fill={colors['primary']}>
           <LabelList
-            dataKey="amount"
             position="top"
+            dataKey="amount"
             color={colors['onSurface']}
+            formatter={(value: number) =>
+              isNaN(value) ? value : formatMoney(Number(value), 0, true)
+            }
           />
         </Bar>
       </BarChart>

@@ -15,7 +15,11 @@ const removeZero = (array: ReadonlyArray<string>): string => {
 export const removeUnnecessaryZeros = (string: string): string =>
   string.includes('.') ? removeZero(string.split('')) : string;
 
-const treatMoneyDecimals = (money: number, maxDecimals: number) => {
+const treatMoneyDecimals = (
+  money: number,
+  maxDecimals: number,
+  allowK: boolean
+) => {
   const [integralPart, decimalPart] = (
     isExponential(money)
       ? removeUnnecessaryZeros(money.toFixed(maxDecimals))
@@ -31,11 +35,19 @@ const treatMoneyDecimals = (money: number, maxDecimals: number) => {
         ? `${integralPart.slice(0, -9)}.${integralPart.slice(-9, -7)}`
         : integralDigits > 6
           ? `${integralPart.slice(0, -6)}.${integralPart.slice(-6, -4)}`
-          : `${integralPart}.${
-              +integralPart >= 10
-                ? decimalPart?.slice(0, 2) ?? 0
-                : decimalPart ?? 0
-            }`
+          : integralDigits > 3
+            ? allowK
+              ? `${integralPart.slice(0, -3)}.${integralPart.slice(-3, -1)}`
+              : `${integralPart}.${
+                  +integralPart >= 10
+                    ? decimalPart?.slice(0, 2) ?? 0
+                    : decimalPart ?? 0
+                }`
+            : `${integralPart}.${
+                +integralPart >= 10
+                  ? decimalPart?.slice(0, 2) ?? 0
+                  : decimalPart ?? 0
+              }`
   );
 
   const newMoneyString = isExponential(newMoney)
@@ -56,10 +68,15 @@ const treatMoneyDecimals = (money: number, maxDecimals: number) => {
   };
 };
 
-export const formatMoney = (money: number, maxFractionDigits = 20): string => {
+export const formatMoney = (
+  money: number,
+  maxFractionDigits = 20,
+  allowK: boolean = false
+): string => {
   const { integralDigits, newMoney, decimalDigits } = treatMoneyDecimals(
     money,
-    maxFractionDigits
+    maxFractionDigits,
+    allowK
   );
 
   const maximumFractionDigits =
@@ -82,7 +99,11 @@ export const formatMoney = (money: number, maxFractionDigits = 20): string => {
         ? 'B'
         : integralDigits > 6
           ? 'M'
-          : ''
+          : integralDigits > 3
+            ? allowK
+              ? 'K'
+              : ''
+            : ''
   }`.slice(1);
 };
 
