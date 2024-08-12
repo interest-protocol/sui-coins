@@ -37,11 +37,12 @@ export const addQuest = async (
 ) => {
   await dbConnect();
 
-  await updateMetrics(network, quest.address);
-
   const questProfile = await findQuestProfile(quest.address);
 
   const todayTimestamp = getExactDayTimestamp();
+  const weekTimestamp = getFirstWeekDayTimestamp();
+
+  await updateMetrics(network, !questProfile.weeks?.includes(weekTimestamp));
 
   const finalQuest = { ...quest, timestamp: todayTimestamp };
 
@@ -51,7 +52,8 @@ export const addQuest = async (
   if (questProfile[lastFieldMap[profileField]] === todayTimestamp)
     return finalQuest;
 
-  (questProfile[lastFieldMap[profileField]] as number) = todayTimestamp;
+  if (!questProfile.weeks?.includes(weekTimestamp))
+    questProfile.weeks = [...(questProfile.weeks ?? []), weekTimestamp];
 
   await questProfile.save();
 
@@ -63,8 +65,9 @@ export const findQuestProfile = async (address: string) => {
 
   const questProfile = await QuestProfileModel.findOne({ address });
 
-  if (!questProfile)
-    return QuestProfileModel.create({
+  return (
+    questProfile ??
+    QuestProfileModel.create({
       address,
       lastSwapAt: 0,
       lastFaucetAt: 0,
@@ -72,9 +75,8 @@ export const findQuestProfile = async (address: string) => {
       lastCreatePoolAt: 0,
       lastCreateTokenAt: 0,
       lastAddLiquidityAt: 0,
-    });
-
-  return questProfile;
+    })
+  );
 };
 
 export const findMetrics = async (network: Network) => {
@@ -92,7 +94,7 @@ export const findMetrics = async (network: Network) => {
   );
 };
 
-export const updateMetrics = async (network: Network, address: string) => {
+export const updateMetrics = async (network: Network, newUser: boolean) => {
   await dbConnect();
   const firstWeekDay = getFirstWeekDayTimestamp();
 
@@ -100,11 +102,9 @@ export const updateMetrics = async (network: Network, address: string) => {
 
   metric.weeklyTXs[firstWeekDay] = (metric.weeklyTXs[firstWeekDay] ?? 0) + 1;
 
-  if (!metric.weeklyUsers[firstWeekDay].includes(address))
-    metric.weeklyUsers[firstWeekDay] = [
-      ...metric.weeklyUsers[firstWeekDay],
-      address,
-    ];
+  if (newUser)
+    metric.weeklyUsers[firstWeekDay] =
+      (metric.weeklyUsers[firstWeekDay] ?? 0) + 1;
 
   await metric.save();
 };

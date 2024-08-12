@@ -10,6 +10,7 @@ export interface QuestProfile {
   lastCreatePoolAt: number;
   lastCreateTokenAt: number;
   lastAddLiquidityAt: number;
+  weeks: ReadonlyArray<number>;
 }
 
 export type QuestProfileDocument = Document & QuestProfile;
@@ -27,6 +28,7 @@ export const QuestProfileSchema = new Schema({
   lastCreatePoolAt: { type: Number },
   lastCreateTokenAt: { type: Number },
   lastAddLiquidityAt: { type: Number },
+  weeks: { type: Schema.Types.Array },
 });
 
 export default (mongoose.models[modelName] as Model<QuestProfileDocument>) ||
