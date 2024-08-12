@@ -1316,24 +1316,6 @@
     superstruct "^1.0.3"
     tweetnacl "^1.0.3"
 
-"@mysten/sui@1.1.2", "@mysten/sui@^1.1.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@mysten/sui/-/sui-1.1.2.tgz#6c84d5c74b491e23f560a9d72ded020efa5e1dcd"
-  integrity sha512-S1MfGvbkUxKGd39bfA6G21UVwJSSgJW8uKHinSByjt86+YKvSZxlF5zr6RVKcP4Rn8gl5ytMbZQfCPn+0nuGTg==
-  dependencies:
-    "@graphql-typed-document-node/core" "^3.2.0"
-    "@mysten/bcs" "1.0.2"
-    "@noble/curves" "^1.1.0"
-    "@noble/hashes" "^1.3.1"
-    "@scure/bip32" "^1.3.1"
-    "@scure/bip39" "^1.2.1"
-    "@suchipi/femver" "^1.0.0"
-    bech32 "^2.0.0"
-    gql.tada "^1.7.0"
-    graphql "^16.8.1"
-    tweetnacl "^1.0.3"
-    valibot "^0.25.0"
-
 "@mysten/sui@1.5.0", "@mysten/sui@^1.2.0", "@mysten/sui@^1.4.0", "@mysten/sui@^1.5.0":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@mysten/sui/-/sui-1.5.0.tgz#86568abe6f4df77f76d51637e83b225753244acd"
@@ -1352,20 +1334,30 @@
     tweetnacl "^1.0.3"
     valibot "^0.36.0"
 
+"@mysten/sui@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@mysten/sui/-/sui-1.1.2.tgz#6c84d5c74b491e23f560a9d72ded020efa5e1dcd"
+  integrity sha512-S1MfGvbkUxKGd39bfA6G21UVwJSSgJW8uKHinSByjt86+YKvSZxlF5zr6RVKcP4Rn8gl5ytMbZQfCPn+0nuGTg==
+  dependencies:
+    "@graphql-typed-document-node/core" "^3.2.0"
+    "@mysten/bcs" "1.0.2"
+    "@noble/curves" "^1.1.0"
+    "@noble/hashes" "^1.3.1"
+    "@scure/bip32" "^1.3.1"
+    "@scure/bip39" "^1.2.1"
+    "@suchipi/femver" "^1.0.0"
+    bech32 "^2.0.0"
+    gql.tada "^1.7.0"
+    graphql "^16.8.1"
+    tweetnacl "^1.0.3"
+    valibot "^0.25.0"
+
 "@mysten/suins@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@mysten/suins/-/suins-0.3.0.tgz#00b52131efcda82f02c472c0e661e6914c356953"
   integrity sha512-iqyQm1huVpSehI0wRv97O3x9LwZULY8/UghWJYJonYWVie8QMRw7UfaHJly1988+799u2xmMcNfD684qcUk8eQ==
   dependencies:
     "@mysten/sui" "^1.4.0"
-
-"@mysten/wallet-standard@0.12.9":
-  version "0.12.9"
-  resolved "https://registry.yarnpkg.com/@mysten/wallet-standard/-/wallet-standard-0.12.9.tgz#3155980587a28fbaaff9cfe6bfaadab3735db2b3"
-  integrity sha512-7UDiu11VkA8phWf/EVjZMSQqqQ6KzaZGr5OiqG1RsbrnVmAz3DApNLxHbBiH3rOJZL8CG0c+V6mHlenCVLrSDg==
-  dependencies:
-    "@mysten/sui" "1.1.2"
-    "@wallet-standard/core" "1.0.3"
 
 "@mysten/wallet-standard@0.13.0", "@mysten/wallet-standard@^0.13.0":
   version "0.13.0"
@@ -1375,7 +1367,7 @@
     "@mysten/sui" "1.5.0"
     "@wallet-standard/core" "1.0.3"
 
-"@mysten/zksend@0.10.4":
+"@mysten/zksend@0.10.4", "@mysten/zksend@^0.10.4":
   version "0.10.4"
   resolved "https://registry.yarnpkg.com/@mysten/zksend/-/zksend-0.10.4.tgz#deba2600a18d8143f6334c8bb24a13d6fcbc594d"
   integrity sha512-7lh8RZXa2dHbrg3jIW7s06pQAffO5PVXPacHKHh21VlcyfQZ7GjK9fMVGmrYGbRL7aCmPDomEbTG2etPR4wkMw==
@@ -1385,17 +1377,6 @@
     mitt "^3.0.1"
     nanostores "^0.10.3"
     valibot "^0.36.0"
-
-"@mysten/zksend@^0.9.9":
-  version "0.9.9"
-  resolved "https://registry.yarnpkg.com/@mysten/zksend/-/zksend-0.9.9.tgz#1657afdc93ae65833398e10fa7222f17c7f6cadb"
-  integrity sha512-8xUz4Alz4s8c0p36AlHiGzJkiedYK1CjZG5FojEoZY7v3Vu+0nvOIjS9fixCTGlUGHvBKpQuIKuuX3bEl6XESA==
-  dependencies:
-    "@mysten/sui" "1.1.2"
-    "@mysten/wallet-standard" "0.12.9"
-    mitt "^3.0.1"
-    nanostores "^0.9.3"
-    valibot "^0.25.0"
 
 "@next/env@14.0.1":
   version "14.0.1"
@@ -7361,11 +7342,6 @@ nanostores@^0.10.3:
   version "0.10.3"
   resolved "https://registry.yarnpkg.com/nanostores/-/nanostores-0.10.3.tgz#960b508dd465286a9bd8747ba0596fb679004c57"
   integrity sha512-Nii8O1XqmawqSCf9o2aWqVxhKRN01+iue9/VEd1TiJCr9VT5XxgPFbF1Edl1XN6pwJcZRsl8Ki+z01yb/T/C2g==
-
-nanostores@^0.9.3:
-  version "0.9.5"
-  resolved "https://registry.yarnpkg.com/nanostores/-/nanostores-0.9.5.tgz#4fcfce9786c4bf16e045a899cda2e46e90780a5b"
-  integrity sha512-Z+p+g8E7yzaWwOe5gEUB2Ox0rCEeXWYIZWmYvw/ajNYX8DlXdMvMDj8DWfM/subqPAcsf8l8Td4iAwO1DeIIRQ==
 
 natural-compare@^1.4.0:
   version "1.4.0"

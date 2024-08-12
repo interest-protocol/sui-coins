@@ -1,7 +1,7 @@
 import { Aftermath } from 'aftermath-ts-sdk';
 
 import { Network } from '@/constants';
-import { useNetwork } from '@/context/network';
+import { useNetwork } from '@/hooks/use-network';
 
 const INIT_ARG = {
   [Network.TESTNET]: 'TESTNET',
