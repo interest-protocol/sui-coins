@@ -52,6 +52,8 @@ export const addQuest = async (
   if (questProfile[lastFieldMap[profileField]] === todayTimestamp)
     return finalQuest;
 
+  questProfile[lastFieldMap[profileField]] = todayTimestamp;
+
   if (!questProfile.weeks?.includes(weekTimestamp))
     questProfile.weeks = [...(questProfile.weeks ?? []), weekTimestamp];
 
@@ -69,6 +71,7 @@ export const findQuestProfile = async (address: string) => {
     questProfile ??
     QuestProfileModel.create({
       address,
+      weeks: [],
       lastSwapAt: 0,
       lastFaucetAt: 0,
       lastAirdropAt: 0,
