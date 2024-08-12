@@ -103,11 +103,18 @@ export const updateMetrics = async (network: Network, newUser: boolean) => {
 
   const metric = await findMetrics(network);
 
-  metric.weeklyTXs[firstWeekDay] = (metric.weeklyTXs[firstWeekDay] ?? 0) + 1;
+  metric.weeklyTXs.set(
+    String(firstWeekDay),
+    (metric.weeklyTXs.get(String(firstWeekDay)) ?? 0) + 1
+  );
 
   if (newUser)
-    metric.weeklyUsers[firstWeekDay] =
-      (metric.weeklyUsers[firstWeekDay] ?? 0) + 1;
+    metric.weeklyUsers.set(
+      String(firstWeekDay),
+      (metric.weeklyUsers.get(String(firstWeekDay)) ?? 0) + 1
+    );
+
+  console.log({ firstWeekDay, metric });
 
   await metric.save();
 };
