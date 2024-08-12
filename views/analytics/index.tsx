@@ -14,8 +14,6 @@ const Analytics: FC = () => {
   const { data: weeklyMetrics, isLoading: loadingWeeklyMetrics } =
     useWeeklyMetrics();
 
-  console.log({ weeklyMetrics });
-
   return (
     <Layout title="TX Analytics">
       <Box
