@@ -15,7 +15,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
 
     const network = pathOr(
-      Network.DEVNET,
+      Network.TESTNET,
       ['query', 'network'],
       req
     ) as Network;
