@@ -11,7 +11,6 @@ import { ChevronDownSVG } from '@/svg';
 import { DCAForm } from '../dca.types';
 
 const PERIODICITY: Record<TimeScale, string> = {
-  [TimeScale.Seconds]: 'Seconds',
   [TimeScale.Minutes]: 'Minutes',
   [TimeScale.Hour]: 'Hour',
   [TimeScale.Day]: 'Day',
