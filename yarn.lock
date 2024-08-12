@@ -362,7 +362,7 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.24.0"
 
-"@babel/runtime@^7.12.5", "@babel/runtime@^7.15.4", "@babel/runtime@^7.18.3", "@babel/runtime@^7.20.13", "@babel/runtime@^7.23.2", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7", "@babel/runtime@^7.9.2":
+"@babel/runtime@^7.12.5", "@babel/runtime@^7.15.4", "@babel/runtime@^7.18.3", "@babel/runtime@^7.23.2", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7", "@babel/runtime@^7.9.2":
   version "7.24.5"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.24.5.tgz#230946857c053a36ccc66e1dd03b17dd0c4ed02c"
   integrity sha512-Nms86NXrsaeU9vbBJKni6gXiEXZ4CVpYVzEjDH9Sb8vmZ3UljyA1GSOJl/6LGPO8EHLuSF9H+IxNXHPX8QHJ4g==
@@ -915,12 +915,12 @@
     ramda "^0.29.1"
     tiny-invariant "^1.3.3"
 
-"@interest-protocol/dca-sdk@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/dca-sdk/-/dca-sdk-2.0.0.tgz#2a2b586d2d7d827cbf4735c332477119b7435671"
-  integrity sha512-hF4P+W2rfwv/MQf67wIZElRAEfVJ7emrqIkwUtU8oyf2Q8X1sM+4R3dag4N1aQwxuAf6MtwFwQIcVzXY+dHX1Q==
+"@interest-protocol/dca-sdk@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/dca-sdk/-/dca-sdk-2.1.1.tgz#06480682fb0ce8d744a4c4644ed872926066edd9"
+  integrity sha512-EISYYDY+svlD4JmTQxcWuhiRaf3uf0if7jsqLS7z/hZEwi47ZEGvdl7+EIxgFwI34vqDHxjjfunxbthJMgRVZw==
   dependencies:
-    "@mysten/sui" "^1.2.1"
+    "@mysten/sui" "^1.5.0"
     "@polymedia/suitcase-core" "^0.0.7"
     ramda "^0.30.1"
     tiny-invariant "^1.3.3"
@@ -1260,13 +1260,6 @@
   dependencies:
     bs58 "^5.0.0"
 
-"@mysten/bcs@1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@mysten/bcs/-/bcs-1.0.3.tgz#a8d1df65584d193834c9567194d7011eb1ccdcfe"
-  integrity sha512-fc2xDj8eteP18zCNr6WStlE0Hxi7kYeY9yAzAN8oyz5EYOLas0JwScR9pAd9VR61BfIThJ+5vxQ6K7Y22lHDVQ==
-  dependencies:
-    bs58 "^6.0.0"
-
 "@mysten/bcs@1.0.4":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@mysten/bcs/-/bcs-1.0.4.tgz#c8998ee7cb92d9e59e2fae735b69abe49d8037cb"
@@ -1341,31 +1334,13 @@
     tweetnacl "^1.0.3"
     valibot "^0.25.0"
 
-"@mysten/sui@1.5.0", "@mysten/sui@^1.4.0", "@mysten/sui@^1.5.0":
+"@mysten/sui@1.5.0", "@mysten/sui@^1.2.0", "@mysten/sui@^1.4.0", "@mysten/sui@^1.5.0":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@mysten/sui/-/sui-1.5.0.tgz#86568abe6f4df77f76d51637e83b225753244acd"
   integrity sha512-RRB3EPiEbtfhkTW+p1Hc9Hf8zM+hGrAhhjyzMqCWhjnWuF7yM+5PL3jLcTZaZe+jGjFP9lKGol/0uOWVtfGL5w==
   dependencies:
     "@graphql-typed-document-node/core" "^3.2.0"
     "@mysten/bcs" "1.0.4"
-    "@noble/curves" "^1.4.2"
-    "@noble/hashes" "^1.4.0"
-    "@scure/bip32" "^1.4.0"
-    "@scure/bip39" "^1.3.0"
-    "@suchipi/femver" "^1.0.0"
-    bech32 "^2.0.0"
-    gql.tada "^1.8.2"
-    graphql "^16.9.0"
-    tweetnacl "^1.0.3"
-    valibot "^0.36.0"
-
-"@mysten/sui@^1.2.1":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@mysten/sui/-/sui-1.4.0.tgz#f0c312041620f74e699b451805d4af0ddc8daa08"
-  integrity sha512-j1JVdmL4pAqMmPQXw/RPAVJP0jqCfj/GVH4Z4NBPfl6nwcbLOJdcBczRhyY8WB/87rTog1N0guxPylfvU76gqw==
-  dependencies:
-    "@graphql-typed-document-node/core" "^3.2.0"
-    "@mysten/bcs" "1.0.3"
     "@noble/curves" "^1.4.2"
     "@noble/hashes" "^1.4.0"
     "@scure/bip32" "^1.4.0"
@@ -2808,24 +2783,12 @@
   dependencies:
     "@volar/source-map" "2.2.2"
 
-"@volar/language-core@~2.4.0-alpha.15":
-  version "2.4.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/@volar/language-core/-/language-core-2.4.0-alpha.17.tgz#a87b9ec8bf0c7f1f19362514ffe589da60172a96"
-  integrity sha512-FF9g89QZUVJpgZvrNpA+v5Sgo7MdUjeA1celxCe4nFTpfp4P/FUdZ1lgeYy7ZS5r13oC4Ei6HqWpfLN7PFM60w==
-  dependencies:
-    "@volar/source-map" "2.4.0-alpha.17"
-
 "@volar/source-map@2.2.2":
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/@volar/source-map/-/source-map-2.2.2.tgz#ec25e8366297b1e9bbd3abcb1636330010d59d59"
   integrity sha512-vUwvZuSW6iN4JI9QRinh9EjFasx1TUtnaWMKwgWx08xz1PyYuNkLlWlrZXBZ5GGBhML0u230M/7X+AHY2h9yKg==
   dependencies:
     muggle-string "^0.4.0"
-
-"@volar/source-map@2.4.0-alpha.17":
-  version "2.4.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/@volar/source-map/-/source-map-2.4.0-alpha.17.tgz#633d7e87ba792a010ba8135f9537c5ecb90cd486"
-  integrity sha512-6LOuR2nIloQCSNMNcUPRPLjL5CInIE1pYZ8lifOCSxQRiz8GcWaOm34kAvdm7pzPQqMRHBBnV/Ihkdt/w7oWAQ==
 
 "@vue/compiler-core@3.4.27":
   version "3.4.27"
@@ -2856,20 +2819,6 @@
     "@vue/shared" "^3.4.0"
     computeds "^0.0.1"
     minimatch "^9.0.3"
-    path-browserify "^1.0.1"
-    vue-template-compiler "^2.7.14"
-
-"@vue/language-core@^2.0.17":
-  version "2.0.26"
-  resolved "https://registry.yarnpkg.com/@vue/language-core/-/language-core-2.0.26.tgz#233793b2e0a9f33db6f4bdac030d9c164b3efc0f"
-  integrity sha512-/lt6SfQ3O1yDAhPsnLv9iSUgXd1dMHqUm/t3RctfqjuwQf1LnftZ414X3UBn6aXT4MiwXWtbNJ4Z0NZWwDWgJQ==
-  dependencies:
-    "@volar/language-core" "~2.4.0-alpha.15"
-    "@vue/compiler-dom" "^3.4.0"
-    "@vue/shared" "^3.4.0"
-    computeds "^0.0.1"
-    minimatch "^9.0.3"
-    muggle-string "^0.4.1"
     path-browserify "^1.0.1"
     vue-template-compiler "^2.7.14"
 
@@ -7393,7 +7342,7 @@ ms@2.1.3, ms@^2.0.0, ms@^2.1.1, ms@^2.1.2:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.3.tgz#574c8138ce1d2b5861f0b44579dbadd60c6615b2"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
-muggle-string@^0.4.0, muggle-string@^0.4.1:
+muggle-string@^0.4.0:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/muggle-string/-/muggle-string-0.4.1.tgz#3b366bd43b32f809dc20659534dd30e7c8a0d328"
   integrity sha512-VNTrAak/KhO2i8dqqnqnAHOa3cYBwXEZe9h+D5h/1ZqFSTEFHdM65lR7RoIqq3tBBYavsOXV84NoHXZ0AkPyqQ==

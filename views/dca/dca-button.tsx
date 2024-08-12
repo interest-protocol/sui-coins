@@ -13,7 +13,8 @@ import invariant from 'tiny-invariant';
 import { EXPLORER_URL, Network } from '@/constants';
 import useDcaSdk from '@/hooks/use-dca-sdk';
 import { useDialog } from '@/hooks/use-dialog';
-import { getCoinOfValue, signAndExecute, ZERO_BIG_NUMBER } from '@/utils';
+import { useWeb3 } from '@/hooks/use-web3';
+import { coinOfValue, signAndExecute, ZERO_BIG_NUMBER } from '@/utils';
 import { DCAForm } from '@/views/dca/dca.types';
 
 import { DCAMessagesEnum } from './dca.data';
@@ -23,6 +24,7 @@ const WHITELIST_TESTNET_WITNESS =
 
 const DCAButton: FC = () => {
   const dcaSdk = useDcaSdk();
+  const { coinsMap } = useWeb3();
   const suiClient = useSuiClient();
   const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
@@ -53,7 +55,7 @@ const DCAButton: FC = () => {
 
   const handleStartDCA = async () => {
     try {
-      const values = formDCA.getValues();
+      const { to, from, intervals, orders, periodicity } = formDCA.getValues();
 
       invariant(currentAccount, 'Need to connect wallet');
 
@@ -61,25 +63,28 @@ const DCAButton: FC = () => {
 
       const initTx = new Transaction();
 
-      const coinIn = await getCoinOfValue({
-        suiClient,
+      const coinIn = coinOfValue({
+        coinsMap,
         tx: initTx,
-        account: currentAccount.address,
-        coinType: values.from.type,
-        coinValue: values.from.value.toString(),
+        coinType: from.type,
+        coinValue: from.value.toString(),
       });
 
-      const tx = dcaSdk.newAndShare({
+      const txArgs = {
+        tx: initTx,
+        coinOutType: to.type,
+        coinInType: from.type,
         coinIn,
-        tx: initTx as any,
-        coinOutType: values.to.type,
-        coinInType: values.from.type,
-        timeScale: values.periodicity,
-        every: Number(values.intervals),
+        timeScale: periodicity,
+        numberOfOrders: Number(orders),
+        every: Number(intervals),
         delegatee: currentAccount.address,
-        numberOfOrders: Number(values.orders),
         witnessType: WHITELIST_TESTNET_WITNESS,
-      }) as unknown as Transaction;
+      };
+
+      console.log({ txArgs });
+
+      const tx = dcaSdk.newAndShare(txArgs);
 
       const txResult = await signAndExecute({
         tx,
