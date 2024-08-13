@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import { findQuestProfile } from '@/server/lib/quest';
-import { getExactDayTimestamp } from '@/utils';
+import { getExactDayTimestamp, getFirstWeekDayTimestamp } from '@/utils';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -10,9 +10,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       const questProfile = await findQuestProfile(address);
 
-      res
-        .status(200)
-        .json({ timestamp: getExactDayTimestamp(), data: questProfile });
+      res.status(200).json({
+        timestamp: getExactDayTimestamp(),
+        currentWeek: getFirstWeekDayTimestamp(),
+        data: questProfile,
+      });
 
       return;
     }
