@@ -114,7 +114,5 @@ export const updateMetrics = async (network: Network, newUser: boolean) => {
       (metric.weeklyUsers.get(String(firstWeekDay)) ?? 0) + 1
     );
 
-  console.log({ firstWeekDay, metric });
-
   await metric.save();
 };
