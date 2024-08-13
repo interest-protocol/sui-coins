@@ -1,4 +1,3 @@
-import { TimeScale } from '@interest-protocol/dca-sdk';
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { toPairs } from 'ramda';
 import { FC } from 'react';
@@ -8,15 +7,8 @@ import { v4 } from 'uuid';
 import useToggleOutside from '@/hooks/use-toggle-outside';
 import { ChevronDownSVG } from '@/svg';
 
+import { PERIODICITY } from '../dca.data';
 import { DCAForm } from '../dca.types';
-
-const PERIODICITY: Record<TimeScale, string> = {
-  [TimeScale.Minutes]: 'Minutes',
-  [TimeScale.Hour]: 'Hour',
-  [TimeScale.Day]: 'Day',
-  [TimeScale.Week]: 'Week',
-  [TimeScale.Month]: 'Month',
-};
 
 const DCAPeriodicity: FC = () => {
   const { control, setValue } = useFormContext<DCAForm>();
@@ -82,6 +74,7 @@ const DCAPeriodicity: FC = () => {
               borderRadius="0"
               color="onSurface"
               bg="lowestContainer"
+              textTransform="capitalize"
               nHover={{ bg: 'container' }}
               onClick={() => {
                 setValue('periodicity', key);

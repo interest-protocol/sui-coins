@@ -5,27 +5,118 @@ import {
   ProgressIndicator,
   Typography,
 } from '@interest-protocol/ui-kit';
+import {
+  useCurrentAccount,
+  useSignTransaction,
+  useSuiClient,
+} from '@mysten/dapp-kit';
+import { normalizeStructTag } from '@mysten/sui/utils';
+import BigNumber from 'bignumber.js';
 import { not } from 'ramda';
-import { FC, useState } from 'react';
+import { FC, MouseEventHandler, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import invariant from 'tiny-invariant';
 import { v4 } from 'uuid';
 
-import { CaretRightSVG, ChevronDownSVG, SOLSVG, TrashSVG } from '@/svg';
+import { TokenIcon } from '@/components';
+import { useDcaOrders } from '@/hooks/use-dca';
+import useDcaSdk from '@/hooks/use-dca-sdk';
+import { useNetwork } from '@/hooks/use-network';
+import { CoinMetadataWithType } from '@/interface';
+import { FixedPointMath } from '@/lib';
+import { CaretRightSVG, ChevronDownSVG, TrashSVG } from '@/svg';
+import {
+  fetchCoinMetadata,
+  isSameStructTag,
+  showTXSuccessToast,
+  signAndExecute,
+  throwTXIfNotSuccessful,
+} from '@/utils';
 
 import DCAOrderDetails from './dca-order-details';
+import { DCAOrderListItemProps } from './dca-orders.types';
 
-const DCAOrderListItem: FC = () => {
+const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
+  id,
+  min,
+  max,
+  every,
+  input,
+  active,
+  output,
+  timeScale,
+  inputBalance,
+  remainingOrders,
+}) => {
+  const coinsType: [string, string] = [input.name, output.name];
+
+  const dcaSdk = useDcaSdk();
+  const network = useNetwork();
+  const suiClient = useSuiClient();
+  const currentAccount = useCurrentAccount();
+  const signTransaction = useSignTransaction();
+  const { data: dcaOrders } = useDcaOrders(id);
   const [isOpen, setIsOpen] = useState(false);
+  const [[tokenIn, tokenOut], setCoins] = useState<
+    [CoinMetadataWithType | null, CoinMetadataWithType | null]
+  >([null, null]);
+
+  const totalOrders = dcaOrders
+    ? remainingOrders + dcaOrders.length
+    : remainingOrders;
+
+  const statusPercentage = dcaOrders
+    ? (dcaOrders.length * 100) / totalOrders
+    : 0;
+
+  const handleDestroyDCA: MouseEventHandler<HTMLButtonElement> = async (e) => {
+    e.stopPropagation();
+    try {
+      invariant(currentAccount, 'You must be connected');
+
+      const tx = dcaSdk.stopAndDestroy({
+        dca: id,
+        coinInType: normalizeStructTag(input.name),
+        coinOutType: normalizeStructTag(output.name),
+      });
+
+      const txResult = await signAndExecute({
+        tx,
+        suiClient,
+        currentAccount,
+        signTransaction,
+      });
+
+      throwTXIfNotSuccessful(txResult);
+
+      showTXSuccessToast(txResult, network, 'DCA destroyed successfully');
+    } catch (e) {
+      toast.error((e as Error)?.message || 'Error on destroy DCA');
+    }
+  };
+
+  useEffect(() => {
+    fetchCoinMetadata({
+      network,
+      types: coinsType.map(normalizeStructTag),
+    }).then((data) =>
+      setCoins(
+        coinsType.map(
+          (type) => data.find((item) => isSameStructTag(item.type, type))!
+        ) as [CoinMetadataWithType, CoinMetadataWithType]
+      )
+    );
+  }, []);
 
   return (
     <>
       <Box
+        mt="-1rem"
         overflow="hidden"
         display={['none', 'none', 'none', 'block']}
-        mt="-1rem"
       >
         <Box
           p="m"
-          gap="2rem"
           zIndex="1"
           key={v4()}
           display="grid"
@@ -49,14 +140,21 @@ const DCAOrderListItem: FC = () => {
             />
           </Motion>
           <Box
+            gap="xs"
             display="flex"
             alignItems="center"
             flexDirection="column"
-            gap="xs"
           >
-            <SOLSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+            <TokenIcon
+              withBg
+              rounded
+              size="1.1rem"
+              network={network}
+              type={tokenIn?.type ?? ''}
+              symbol={tokenIn?.symbol ?? ''}
+            />
             <Typography variant="body" size="medium">
-              SOL
+              {tokenIn?.symbol ?? ''}
             </Typography>
           </Box>
           <Box
@@ -65,16 +163,27 @@ const DCAOrderListItem: FC = () => {
             flexDirection="column"
             gap="xs"
           >
-            <SOLSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+            <TokenIcon
+              withBg
+              rounded
+              size="1.1rem"
+              network={network}
+              type={tokenOut?.type ?? ''}
+              symbol={tokenOut?.symbol ?? ''}
+            />
             <Typography variant="body" size="medium">
-              SOL
+              {tokenOut?.symbol ?? ''}
             </Typography>
           </Box>
           <Typography variant="body" size="large">
-            3
+            {totalOrders}
           </Typography>
           <Typography variant="body" size="large">
-            500 SOL
+            {FixedPointMath.toNumber(
+              BigNumber(inputBalance),
+              tokenIn?.decimals ?? 0
+            )}{' '}
+            {tokenIn?.symbol ?? ''}
           </Typography>
           <Box
             px="l"
@@ -84,9 +193,9 @@ const DCAOrderListItem: FC = () => {
             alignItems="flex-start"
           >
             <Typography variant="body" size="medium">
-              65%
+              {(+statusPercentage.toFixed(2)).toPrecision()}%
             </Typography>
-            <ProgressIndicator variant="bar" value={65} />
+            <ProgressIndicator variant="bar" value={statusPercentage} />
             <Box
               mt="s"
               px="l"
@@ -95,14 +204,25 @@ const DCAOrderListItem: FC = () => {
               bg="primaryContainer"
               borderColor="primary"
             >
-              Active
+              {active ? 'Active' : remainingOrders ? 'Cancelled' : 'Done'}
             </Box>
           </Box>
           <Box>
-            <TrashSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+            <Button variant="text" isIcon onClick={handleDestroyDCA}>
+              <TrashSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+            </Button>
           </Box>
         </Box>
-        <DCAOrderDetails isOpen={isOpen} />
+        <DCAOrderDetails
+          min={min}
+          max={max}
+          every={every}
+          isOpen={isOpen}
+          timeScale={timeScale}
+          orders={dcaOrders ?? []}
+          totalOrders={totalOrders}
+          coins={[tokenIn, tokenOut]}
+        />
       </Box>
       <Box
         mt="-1rem"
@@ -148,9 +268,16 @@ const DCAOrderListItem: FC = () => {
                 flexDirection="column"
                 gap="xs"
               >
-                <SOLSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+                <TokenIcon
+                  withBg
+                  rounded
+                  size="1.1rem"
+                  network={network}
+                  type={tokenIn?.type ?? ''}
+                  symbol={tokenIn?.symbol ?? ''}
+                />
                 <Typography variant="body" size="medium">
-                  SOL
+                  {tokenIn?.symbol ?? ''}
                 </Typography>
               </Box>
             </Box>
@@ -169,9 +296,16 @@ const DCAOrderListItem: FC = () => {
                 flexDirection="column"
                 gap="xs"
               >
-                <SOLSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+                <TokenIcon
+                  withBg
+                  rounded
+                  size="1.1rem"
+                  network={network}
+                  type={tokenOut?.type ?? ''}
+                  symbol={tokenOut?.symbol ?? ''}
+                />
                 <Typography variant="body" size="medium">
-                  SOL
+                  {tokenOut?.symbol ?? ''}
                 </Typography>
               </Box>
             </Box>
@@ -191,7 +325,7 @@ const DCAOrderListItem: FC = () => {
                 gap="xs"
               >
                 <Typography variant="body" size="medium">
-                  3
+                  {totalOrders}
                 </Typography>
               </Box>
             </Box>
@@ -222,7 +356,11 @@ const DCAOrderListItem: FC = () => {
                 gap="xs"
               >
                 <Typography variant="body" size="medium">
-                  50 SOL
+                  {FixedPointMath.toNumber(
+                    BigNumber(inputBalance),
+                    tokenIn?.decimals ?? 0
+                  )}{' '}
+                  {tokenIn?.symbol ?? ''}
                 </Typography>
               </Box>
             </Box>
@@ -243,9 +381,9 @@ const DCAOrderListItem: FC = () => {
                 alignItems="flex-start"
               >
                 <Typography variant="body" size="medium">
-                  65%
+                  {(+statusPercentage.toFixed(2)).toPrecision()}%
                 </Typography>
-                <ProgressIndicator variant="bar" value={65} />
+                <ProgressIndicator variant="bar" value={statusPercentage} />
                 <Box
                   mt="s"
                   px="l"
@@ -254,7 +392,7 @@ const DCAOrderListItem: FC = () => {
                   bg="primaryContainer"
                   borderColor="primary"
                 >
-                  Active
+                  {active ? 'Active' : remainingOrders ? 'Cancelled' : 'Done'}
                 </Box>
               </Box>
             </Box>
@@ -295,7 +433,16 @@ const DCAOrderListItem: FC = () => {
             Expand
           </Button>
         </Box>
-        <DCAOrderDetails isOpen={isOpen} />
+        <DCAOrderDetails
+          min={min}
+          max={max}
+          every={every}
+          isOpen={isOpen}
+          timeScale={timeScale}
+          orders={dcaOrders ?? []}
+          totalOrders={totalOrders}
+          coins={[tokenIn, tokenOut]}
+        />
       </Box>
     </>
   );

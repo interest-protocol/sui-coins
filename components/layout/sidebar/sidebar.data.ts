@@ -8,7 +8,6 @@ import {
   HourglassSVG,
   MenuSVG,
   MergeSVG,
-  PoolSVG,
   UploadSVG,
 } from '@/svg';
 
@@ -16,33 +15,18 @@ import { IMenuItem } from './sidebar.types';
 
 export const SIDEBAR_ITEMS: ReadonlyArray<IMenuItem> = [
   {
-    name: 'trade',
+    name: 'swap',
     disabled: false,
     Icon: DoubleChevronSVG,
-    accordionList: [
-      {
-        name: 'swap',
-        disabled: false,
-        Icon: DoubleChevronSVG,
-        path: Routes[RoutesEnum.Swap],
-        networks: [Network.MAINNET],
-      },
-      {
-        name: 'dca',
-        disabled: false,
-        Icon: HourglassSVG,
-        path: Routes[RoutesEnum.DCA],
-        networks: [Network.TESTNET],
-      },
-    ],
-    networks: [Network.MAINNET, Network.TESTNET],
+    path: Routes[RoutesEnum.Swap],
+    networks: [Network.MAINNET],
   },
   {
-    name: 'pool',
-    Icon: PoolSVG,
-    path: Routes[RoutesEnum.Pools],
-    networks: [Network.MAINNET],
-    disabled: true,
+    name: 'dca',
+    disabled: false,
+    Icon: HourglassSVG,
+    path: Routes[RoutesEnum.DCA],
+    networks: [Network.TESTNET],
   },
   {
     disabled: false,

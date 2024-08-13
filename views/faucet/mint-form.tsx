@@ -38,6 +38,7 @@ const MintForm: FC = () => {
   const [selected, setSelected] = useState(FAUCET_COINS[0]);
 
   const handleMint = async () => {
+    const toastId = toast.loading('Loading');
     try {
       if (!selected) throw new Error('Token not found');
       if (!account || !currentAccount) throw new Error('Not account found');
@@ -63,8 +64,16 @@ const MintForm: FC = () => {
       });
 
       throwTXIfNotSuccessful(txResult);
-      showTXSuccessToast(txResult, network);
+
+      showTXSuccessToast(
+        txResult,
+        network,
+        `${selected.symbol} minted successfully`
+      );
+    } catch (e) {
+      toast.error((e as Error)?.message || 'Something went wrong');
     } finally {
+      toast.dismiss(toastId);
       mutate();
     }
   };
@@ -95,16 +104,6 @@ const MintForm: FC = () => {
         allowClose: true,
       }
     );
-
-  const onMint = () => {
-    toast
-      .promise(handleMint(), {
-        loading: 'Loading',
-        success: `${selected.symbol} minted successfully`,
-        error: 'Something went wrong',
-      })
-      .catch(console.log);
-  };
 
   return (
     <Box
@@ -173,7 +172,7 @@ const MintForm: FC = () => {
         </Box>
       </Box>
       <Box display="flex" justifyContent="center">
-        <Button color="surface" variant="filled" onClick={onMint}>
+        <Button color="surface" variant="filled" onClick={handleMint}>
           Mint
         </Button>
       </Box>

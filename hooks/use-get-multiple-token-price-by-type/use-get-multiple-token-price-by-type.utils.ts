@@ -63,6 +63,8 @@ export const getAllCoinsPrice = async (
 
   if (!convertedTypes.length) return {};
 
+  console.log({ network });
+
   if (!convertedTypes.filter((type) => CMC_COIN_ID[network][type]).length)
     return getAFPrices(
       convertedTypes.filter((type) => !CMC_COIN_ID[network][type]),

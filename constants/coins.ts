@@ -647,35 +647,43 @@ export const TREASURY_CAP_MAP: Record<string, string> = {
     '0x99ee533652462c5f990c193bf502c16429af600d51b7bf774d1e3cf76623cab6',
 };
 
+export const FAUCET_COIN_TYPES: Record<string, string> = {
+  USDC: `${DCA_PACKAGE}::usdc::USDC`,
+  ETH: `${DCA_PACKAGE}::eth::ETH`,
+  BTC: `${DCA_PACKAGE}::btc::BTC`,
+  USDT: `${DCA_PACKAGE}::usdt::USDT`,
+};
+
 export const FAUCET_AMOUNT: Record<string, string> = {
-  [`${DCA_PACKAGE}::usdc::USDC`]: '5000000000',
-  [`${DCA_PACKAGE}::eth::ETH`]: '5000000000',
-  [`${DCA_PACKAGE}::btc::BTC`]: '100000000',
-  [`${DCA_PACKAGE}::usdt::USDT`]: '7000000000000',
+  [FAUCET_COIN_TYPES.USDC]: '5000000000',
+  [FAUCET_COIN_TYPES.ETH]: '5000000000',
+  [FAUCET_COIN_TYPES.BTC]: '100000000',
+  [FAUCET_COIN_TYPES.USDT]: '7000000000000',
 };
 
 export const FAUCET_COINS: Array<Token> = [
   {
     decimals: 8,
-    symbol: 'WBTC',
-    type: `${DCA_PACKAGE}::btc::BTC`,
+    symbol: 'BTC',
+    type: FAUCET_COIN_TYPES.BTC as `0x${string}`,
   },
   {
     decimals: 8,
-    symbol: 'WETH',
-    type: `${DCA_PACKAGE}::eth::ETH`,
+    symbol: 'ETH',
+    type: FAUCET_COIN_TYPES.ETH as `0x${string}`,
   },
   {
     decimals: 6,
     symbol: 'USDC',
-    type: `${DCA_PACKAGE}::usdc::USDC`,
+    type: FAUCET_COIN_TYPES.USDC as `0x${string}`,
   },
   {
     decimals: 9,
     symbol: 'USDT',
-    type: `${DCA_PACKAGE}::usdt::USDT`,
+    type: FAUCET_COIN_TYPES.USDC as `0x${string}`,
   },
 ];
+
 export const CMC_COIN_ID = {
   [Network.TESTNET]: {
     [SUI_TYPE_ARG_LONG]: 20947,

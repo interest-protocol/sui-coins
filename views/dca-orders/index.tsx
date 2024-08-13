@@ -5,10 +5,13 @@ import { v4 } from 'uuid';
 
 import Layout from '@/components/layout';
 import { Routes, RoutesEnum } from '@/constants';
+import { useDcas } from '@/hooks/use-dca';
 
 import DCAOrderListItem from './dca-order-list-item';
+import { DCAOrderListItemProps } from './dca-orders.types';
 
 const DCAOrders: FC = () => {
+  const { data: dcas, isLoading } = useDcas();
   const { push, pathname } = useRouter();
 
   const onChangeTab = (index: number) => {
@@ -38,7 +41,7 @@ const DCAOrders: FC = () => {
       </Box>
       <Box>
         <Box
-          p="l"
+          p="m"
           pb="2xl"
           alignItems="center"
           justifyItems="center"
@@ -65,8 +68,12 @@ const DCAOrders: FC = () => {
             Actions
           </Typography>
         </Box>
-        <DCAOrderListItem />
-        <DCAOrderListItem />
+        <Box>
+          {!isLoading &&
+            dcas?.map((dca: DCAOrderListItemProps) => (
+              <DCAOrderListItem key={v4()} {...dca} />
+            ))}
+        </Box>
       </Box>
     </Layout>
   );

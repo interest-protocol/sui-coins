@@ -20,7 +20,10 @@ import { DCAForm } from '@/views/dca/dca.types';
 import { DCAMessagesEnum } from './dca.data';
 
 const WHITELIST_TESTNET_WITNESS =
-  '0x5fee448eda1dd26b9fe1c8d72ee5228631c4b337c995d1e62dc8e61ef4aa30b9::whitelist_adapter::Whitelist';
+  '0x5fee448eda1dd26b9fe1c8d72ee5228631c4b337c995d1e62dc8e61ef4aa30b9::whitelist_adapter::Witness';
+
+const DELEGATEE =
+  '0xae67a84ffd814ac5005e2de892be9acb2372712b7ec9605360620e964deb09a4';
 
 const DCAButton: FC = () => {
   const dcaSdk = useDcaSdk();
@@ -78,7 +81,7 @@ const DCAButton: FC = () => {
         timeScale: periodicity,
         numberOfOrders: Number(orders),
         every: Number(intervals),
-        delegatee: currentAccount.address,
+        delegatee: DELEGATEE,
         witnessType: WHITELIST_TESTNET_WITNESS,
       };
 
