@@ -70,7 +70,7 @@ const DCAOrders: FC = () => {
         </Box>
         <Box>
           {!isLoading &&
-            dcas?.map((dca: DCAOrderListItemProps) => (
+            dcas?.data.map((dca: DCAOrderListItemProps) => (
               <DCAOrderListItem key={v4()} {...dca} />
             ))}
         </Box>

@@ -16,10 +16,15 @@ export const useDcas = () => {
 };
 
 export const useDcaOrders = (id: string) =>
-  useSWR<ReadonlyArray<DCAOrder>>(`dca-orders-${id}`, () => {
-    if (!id) return [];
+  useSWR<{
+    page: number;
+    pageSize: number;
+    totalItems: number;
+    data: ReadonlyArray<DCAOrder>;
+  } | null>(`dca-orders-${id}`, () => {
+    if (!id) return null;
 
     return fetch(
-      `${process.env.NEXT_PUBLIC_SENTINEL_API_URL}dcas/${id}/orders`
+      `${process.env.NEXT_PUBLIC_SENTINEL_API_URL}dcas/${id}/orders?pageSize=100`
     ).then((response) => response.json?.());
   });

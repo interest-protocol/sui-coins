@@ -1,7 +1,9 @@
 import { Theme, useTheme } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-const CustomizedAxisTick: FC<any> = ({ x, y, payload, dy }) => {
+import { formatMoney } from '@/utils';
+
+const CustomizedAxisTick: FC<any> = ({ x, y, payload, dy, money }) => {
   const { dark } = useTheme() as Theme;
 
   return (
@@ -11,11 +13,11 @@ const CustomizedAxisTick: FC<any> = ({ x, y, payload, dy }) => {
         y={0}
         dy={dy}
         fontSize="0.75rem"
-        textAnchor="middle"
+        textAnchor={dy ? 'middle' : 'end'}
         style={{ fontFamily: 'Proto' }}
         fill={dark ? 'white' : 'black'}
       >
-        {payload.value}
+        {money ? formatMoney(payload.value) : payload.value}
       </text>
     </g>
   );

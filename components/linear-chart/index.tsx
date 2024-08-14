@@ -47,7 +47,7 @@ const LinearChart: FC<BaseChartProps> = ({ data, height, width }) => {
         <YAxis
           dataKey="amount"
           tickLine={false}
-          tick={<CustomizedAxisTick dy={0} />}
+          tick={<CustomizedAxisTick dy={0} money />}
         />
         <XAxis
           tickCount={6}
@@ -56,7 +56,6 @@ const LinearChart: FC<BaseChartProps> = ({ data, height, width }) => {
           tickLine={false}
           interval="preserveStartEnd"
           tick={<CustomizedAxisTick dy={10} />}
-          domain={['dataMin', 'dataMax']}
         />
         <Area
           type="linear"

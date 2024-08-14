@@ -62,11 +62,11 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
   >([null, null]);
 
   const totalOrders = dcaOrders
-    ? remainingOrders + dcaOrders.length
+    ? remainingOrders + dcaOrders.totalItems
     : remainingOrders;
 
   const statusPercentage = dcaOrders
-    ? (dcaOrders.length * 100) / totalOrders
+    ? (dcaOrders.data.length * 100) / totalOrders
     : 0;
 
   const handleDestroyDCA: MouseEventHandler<HTMLButtonElement> = async (e) => {
@@ -219,9 +219,9 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
           every={every}
           isOpen={isOpen}
           timeScale={timeScale}
-          orders={dcaOrders ?? []}
           totalOrders={totalOrders}
           coins={[tokenIn, tokenOut]}
+          orders={dcaOrders?.data ?? []}
         />
       </Box>
       <Box
@@ -439,9 +439,9 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
           every={every}
           isOpen={isOpen}
           timeScale={timeScale}
-          orders={dcaOrders ?? []}
           totalOrders={totalOrders}
           coins={[tokenIn, tokenOut]}
+          orders={dcaOrders?.data ?? []}
         />
       </Box>
     </>

@@ -53,6 +53,7 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
       bg="highContainer"
       overflowY="hidden"
       style={{ originY: 0 }}
+      transition={{ ease: 'easeIn' }}
       gridTemplateColumns={['1fr', '1fr', '1fr', '1fr 2fr 2fr']}
       initial={{
         scaleY: isOpen ? 0 : 1,
@@ -63,7 +64,6 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
         scaleY: isOpen ? 1 : 0,
         height: isOpen ? 'auto' : 0,
       }}
-      transition={{ ease: 'easeIn' }}
     >
       <Box
         p="l"
@@ -141,7 +141,19 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
           gridTemplateColumns="3fr 1fr 1fr"
         >
           {orders.flatMap(({ timestampMs, input_amount, output_amount }) =>
-            [timestampMs, input_amount, output_amount].map((value, index) => (
+            [
+              timestampMs,
+              FixedPointMath.toNumber(
+                BigNumber(input_amount),
+                tokenIn?.decimals
+              ),
+              Number(
+                FixedPointMath.toNumber(
+                  BigNumber(output_amount),
+                  tokenOut?.decimals
+                ).toFixed(tokenOut?.decimals)
+              ).toPrecision(),
+            ].map((value, index) => (
               <Typography key={v4()} variant="body" size="medium">
                 {index ? value : new Date(value).toLocaleString()}
               </Typography>

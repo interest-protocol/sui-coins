@@ -22,8 +22,8 @@ export const signAndExecute = async ({
   options,
 }: SignAndExecuteArgs): Promise<TimedSuiTransactionBlockResponse> => {
   const { signature, bytes } = await signTransaction.mutateAsync({
-    transaction: tx,
     account: currentAccount,
+    transaction: tx,
   });
 
   const startTime = Date.now();
