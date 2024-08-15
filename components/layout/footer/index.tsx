@@ -40,7 +40,7 @@ const Footer: FC = () => {
         </Box>
       </Link>
       <Box textAlign="center">
-        <Typography variant="label" size="medium">
+        <Typography variant="label" size="medium" textTransform="capitalize">
           &copy; Interest PROTOCOL UI {fullYear}
         </Typography>
       </Box>
