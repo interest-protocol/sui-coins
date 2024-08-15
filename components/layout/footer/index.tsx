@@ -9,6 +9,8 @@ import { SOCIAL_LINK } from './social-link.data';
 
 const Footer: FC = () => {
   const IPXLandingPage = 'https://www.interestprotocol.com/';
+  const date = new Date();
+  const fullYear = date.getFullYear();
   return (
     <Box
       py="xl"
@@ -39,7 +41,7 @@ const Footer: FC = () => {
       </Link>
       <Box textAlign="center">
         <Typography variant="label" size="medium">
-          &copy; Interest PROTOCOL UI 2024
+          &copy; Interest PROTOCOL UI {fullYear}
         </Typography>
       </Box>
       <Box
