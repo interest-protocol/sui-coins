@@ -9,9 +9,14 @@ export const useDcas = () => {
   return useSWR(`dcas-${currentAccount?.address}`, () => {
     if (!currentAccount) return;
 
-    return fetch(
-      `${process.env.NEXT_PUBLIC_SENTINEL_API_URL}dcas?owner=${currentAccount.address}`
-    ).then((response) => response.json?.());
+    return Promise.all([
+      fetch(
+        `${process.env.NEXT_PUBLIC_SENTINEL_API_URL}dcas?active=true&owner=${currentAccount.address}`
+      ).then((response) => response.json?.()),
+      fetch(
+        `${process.env.NEXT_PUBLIC_SENTINEL_API_URL}dcas?active=false&owner=${currentAccount.address}`
+      ).then((response) => response.json?.()),
+    ]);
   });
 };
 

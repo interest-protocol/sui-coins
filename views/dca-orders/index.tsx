@@ -70,11 +70,52 @@ const DCAOrders: FC = () => {
         </Box>
         <Box>
           {!isLoading &&
-            dcas?.data.map((dca: DCAOrderListItemProps) => (
+            dcas?.[0]?.data.map((dca: DCAOrderListItemProps) => (
               <DCAOrderListItem key={v4()} {...dca} />
             ))}
         </Box>
       </Box>
+      {!!dcas?.[1]?.data.length && (
+        <Box pt="2xl">
+          <Typography variant="headline" size="small" my="xl" fontSize="l">
+            Previous orders
+          </Typography>
+          <Box
+            p="m"
+            pb="2xl"
+            alignItems="center"
+            justifyItems="center"
+            display={['none', 'none', 'none', 'grid']}
+            gridTemplateColumns="1.25rem 1fr 1fr 1fr 1fr 1fr 1fr"
+          >
+            <Box as="span" />
+            <Typography variant="label" size="large">
+              Pay with
+            </Typography>
+            <Typography variant="label" size="large">
+              Get
+            </Typography>
+            <Typography variant="label" size="large">
+              Orders
+            </Typography>
+            <Typography variant="label" size="large">
+              Amount
+            </Typography>
+            <Typography variant="label" size="large">
+              Status
+            </Typography>
+            <Typography variant="label" size="large">
+              Actions
+            </Typography>
+          </Box>
+          <Box>
+            {!isLoading &&
+              dcas?.[1]?.data.map((dca: DCAOrderListItemProps) => (
+                <DCAOrderListItem key={v4()} {...dca} />
+              ))}
+          </Box>
+        </Box>
+      )}
     </Layout>
   );
 };

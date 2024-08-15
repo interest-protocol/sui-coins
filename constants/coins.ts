@@ -680,7 +680,7 @@ export const FAUCET_COINS: Array<Token> = [
   {
     decimals: 9,
     symbol: 'USDT',
-    type: FAUCET_COIN_TYPES.USDC as `0x${string}`,
+    type: FAUCET_COIN_TYPES.USDT as `0x${string}`,
   },
 ];
 
