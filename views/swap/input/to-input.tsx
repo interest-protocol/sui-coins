@@ -1,17 +1,20 @@
 import { Box, TextField } from '@interest-protocol/ui-kit';
-import { FC } from 'react';
+import { ChangeEvent, FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { SwapForm } from '../swap.types';
+import { FixedPointMath } from '@/lib';
+import { parseInputEventToNumberString } from '@/utils';
+
+import { Aggregator, SwapForm } from '../swap.types';
 import Balance from './balance';
 import AmountInDollar from './dollar-value';
 import HeaderInfo from './header-info';
 import SelectToken from './select-token';
 
 const ToInput: FC = () => {
-  const { control } = useFormContext<SwapForm>();
+  const { register, control, setValue, getValues } = useFormContext<SwapForm>();
 
-  const value = useWatch({ control, name: 'to.display' });
+  const aggregator = useWatch({ control, name: 'settings.aggregator' });
 
   return (
     <Box pt="5xl">
@@ -31,8 +34,17 @@ const ToInput: FC = () => {
             justifyContent="flex-end"
           >
             <TextField
-              disabled
-              value={value}
+              {...register('to.display', {
+                onChange: (v: ChangeEvent<HTMLInputElement>) => {
+                  const value = parseInputEventToNumberString(v);
+                  setValue('origin', 'to');
+                  setValue('to.display', value);
+                  setValue(
+                    'to.value',
+                    FixedPointMath.toBigNumber(value, getValues('to.decimals'))
+                  );
+                },
+              })}
               lineHeight="l"
               placeholder="0"
               color="onSurface"
@@ -41,6 +53,7 @@ const ToInput: FC = () => {
                 width: '100%',
                 borderRadius: 'full',
               }}
+              disabled={!(aggregator === Aggregator.Aftermath)}
             />
           </Box>
           <SelectToken label="to" />

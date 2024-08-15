@@ -48,6 +48,7 @@ const FromInput: FC = () => {
               {...register('from.display', {
                 onChange: (v: ChangeEvent<HTMLInputElement>) => {
                   const value = parseInputEventToNumberString(v);
+                  setValue('origin', 'from');
                   setValue('from.display', value);
                   setValue(
                     'from.value',
