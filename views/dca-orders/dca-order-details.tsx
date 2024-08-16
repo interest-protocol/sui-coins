@@ -1,3 +1,4 @@
+import { TimeScale } from '@interest-protocol/dca-sdk';
 import { Box, Motion, Typography } from '@interest-protocol/ui-kit';
 import BigNumber from 'bignumber.js';
 import { FC } from 'react';
@@ -15,17 +16,18 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
   min,
   max,
   every,
+  orders,
   isOpen,
   timeScale,
   totalOrders,
-  orders: intendedOrders,
+  amountPerTrade,
   coins: [tokenIn, tokenOut],
 }) => {
   const isFirstRender = useIsFirstRender();
 
-  const orders = intendedOrders.toReversed();
+  console.log({ amountPerTrade });
 
-  const orderPrices = intendedOrders.map(
+  const orderPrices = orders.map(
     ({ input_amount, output_amount, timestampMs }) => {
       if (!(tokenIn && tokenOut)) return { value: 0, time: 0 };
 
@@ -79,18 +81,37 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
         <Box display="flex" flexDirection="column" gap="s">
           <Typography variant="body" size="medium">
             <b>Min Price:</b>{' '}
-            {min ? `${formatMoney(min)} ${tokenOut?.symbol}` : 'N/A'}
+            {min
+              ? `${formatMoney(
+                  FixedPointMath.toNumber(
+                    BigNumber(min),
+                    tokenOut?.decimals ?? 0
+                  )
+                )} ${tokenOut?.symbol}`
+              : 'N/A'}
           </Typography>
           <Typography variant="body" size="medium">
             <b>Max Price:</b>{' '}
-            {max > 0 ? `${formatMoney(max)} ${tokenOut?.symbol}` : 'N/A'}
+            {max > 0
+              ? `${formatMoney(
+                  FixedPointMath.toNumber(
+                    BigNumber(max),
+                    tokenOut?.decimals ?? 0
+                  )
+                )} ${tokenOut?.symbol}`
+              : 'N/A'}
           </Typography>
           <Typography variant="body" size="medium">
             <b>Average Price:</b>{' '}
             {orderPrices.length
               ? `${formatMoney(
-                  orderPrices.reduce((acc, { value }) => value + acc, 0) /
-                    orderPrices.length
+                  FixedPointMath.toNumber(
+                    BigNumber(
+                      orderPrices.reduce((acc, { value }) => value + acc, 0) /
+                        orderPrices.length
+                    ),
+                    tokenOut?.decimals ?? 0
+                  )
                 )} ${tokenOut?.symbol}`
               : 'N/A'}
           </Typography>
@@ -99,7 +120,7 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
             {every !== 1 ? 's' : ''}
           </Typography>
           <Typography variant="body" size="medium">
-            <b>Number of orders:</b> {totalOrders}
+            <b>Number of orders:</b> {orders?.length ?? 0}/{totalOrders}
           </Typography>
         </Box>
       </Box>
@@ -155,7 +176,9 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
               ).toPrecision(),
             ].map((value, index) => (
               <Typography key={v4()} variant="body" size="medium">
-                {index ? value : new Date(value).toLocaleString()}
+                {index
+                  ? formatMoney(Number(value))
+                  : new Date(value).toLocaleString()}
               </Typography>
             ))
           )}
@@ -178,17 +201,20 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
             Over/Click on the graph to see orders details
           </Typography>
         </Box>
-        <Box ml="-1.5rem">
-          <LinearChart
-            data={orderPrices.map(({ time, value }) => ({
-              amount: value,
-              day: new Date(time)[
-                timeScale > 1 ? 'toLocaleDateString' : 'toLocaleTimeString'
-              ](),
-              description: new Date(time).toLocaleString(),
-            }))}
-          />
-        </Box>
+        <LinearChart
+          data={orderPrices.map(({ time, value }) => ({
+            amount: FixedPointMath.toNumber(
+              BigNumber(value),
+              tokenOut?.decimals ?? 0
+            ),
+            day: new Date(time)[
+              timeScale > TimeScale.Day
+                ? 'toLocaleDateString'
+                : 'toLocaleTimeString'
+            ](),
+            description: new Date(time).toLocaleString(),
+          }))}
+        />
         <Typography variant="body" size="small">
           Number of orders: {orders.length}
         </Typography>

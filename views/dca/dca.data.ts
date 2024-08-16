@@ -10,7 +10,7 @@ export enum DCAMessagesEnum {
 }
 
 export const PERIODICITY: Record<TimeScale, string> = {
-  [TimeScale.Seconds]: 'segundos',
+  [TimeScale.Seconds]: 'segundo',
   [TimeScale.Minutes]: 'minute',
   [TimeScale.Hour]: 'hour',
   [TimeScale.Day]: 'day',

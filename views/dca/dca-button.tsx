@@ -21,15 +21,15 @@ import { DCAForm } from '@/views/dca/dca.types';
 import { DCAMessagesEnum } from './dca.data';
 
 const DELEGATEE =
-  '0xae67a84ffd814ac5005e2de892be9acb2372712b7ec9605360620e964deb09a4';
+  '0xc23ea8e493616b1510d9405ce05593f8bd1fb30f44f92303ab2c54f6c8680ecb';
 
 const DCAButton: FC = () => {
   const dcaSdk = useDcaSdk();
   const { coinsMap } = useWeb3();
   const suiClient = useSuiClient();
+  const formDCA = useFormContext<DCAForm>();
   const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
-  const formDCA = useFormContext<DCAForm>();
   const { dialog, handleClose } = useDialog();
   const signTransaction = useSignTransaction();
 
@@ -56,7 +56,8 @@ const DCAButton: FC = () => {
 
   const handleStartDCA = async () => {
     try {
-      const { to, from, intervals, orders, periodicity } = formDCA.getValues();
+      const { to, from, intervals, orders, periodicity, min, max } =
+        formDCA.getValues();
 
       invariant(currentAccount, 'Need to connect wallet');
 
@@ -71,7 +72,7 @@ const DCAButton: FC = () => {
         coinValue: from.value.toString(),
       });
 
-      const txArgs = {
+      const tx = dcaSdk.newAndShare({
         tx: initTx,
         coinOutType: to.type,
         coinInType: from.type,
@@ -80,12 +81,10 @@ const DCAButton: FC = () => {
         numberOfOrders: Number(orders),
         every: Number(intervals),
         delegatee: DELEGATEE,
+        min: BigInt(min.value.toString()),
+        max: BigInt(max.value.toString()),
         witnessType: WITNESSES.testnet.WHITELIST_ADAPTER,
-      };
-
-      console.log({ txArgs });
-
-      const tx = dcaSdk.newAndShare(txArgs);
+      });
 
       const txResult = await signAndExecute({
         tx,

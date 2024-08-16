@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { v4 } from 'uuid';
 
 import { TokenIcon } from '@/components';
-import { FAUCET_COINS } from '@/constants/coins';
+import { FAUCET_COINS } from '@/constants/dca';
 import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
@@ -20,7 +20,7 @@ const MintBalances: FC = () => {
       mx="auto"
       display="flex"
       borderRadius="xs"
-      bg="container"
+      bg="lowestContainer"
       flexDirection="column"
       width={['100%', '100%', '100%', '39.75rem']}
     >

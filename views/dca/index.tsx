@@ -6,6 +6,7 @@ import { v4 } from 'uuid';
 import Layout from '@/components/layout';
 import { Routes, RoutesEnum } from '@/constants';
 
+import { useRealPrice } from './dca.hooks';
 import DCAFields from './dca-fields';
 import DCAFlipToken from './dca-flip-token';
 import Input from './input';
@@ -14,6 +15,7 @@ import SelectToken from './input/select-token';
 import PreviewDCAButton from './preview-dca-button';
 
 const DCA: FC = () => {
+  useRealPrice();
   const { push, pathname } = useRouter();
 
   const onChangeTab = (index: number) => {

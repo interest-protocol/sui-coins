@@ -9,17 +9,15 @@ import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { TokenIcon } from '@/components';
-import {
-  FAUCET_AMOUNT,
-  FAUCET_COINS,
-  TREASURY_CAP_MAP,
-} from '@/constants/coins';
+import { requestSui } from '@/components/mint/mint.utils';
+import { FAUCET_AMOUNT, FAUCET_COINS, TREASURY_CAP_MAP } from '@/constants/dca';
 import { useModal } from '@/hooks/use-modal';
 import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
 import { CoinData } from '@/interface';
 import { ChevronDownSVG } from '@/svg';
 import {
+  isSui,
   showTXSuccessToast,
   signAndExecute,
   throwTXIfNotSuccessful,
@@ -44,6 +42,12 @@ const MintForm: FC = () => {
       if (!account || !currentAccount) throw new Error('Not account found');
 
       const tx = new Transaction();
+
+      if (isSui(selected.type)) {
+        await requestSui(currentAccount);
+
+        return toast.success(`SUI minted successfully`);
+      }
 
       tx.moveCall({
         target: `0x2::coin::mint_and_transfer`,
@@ -112,8 +116,8 @@ const MintForm: FC = () => {
       p="xl"
       mb="s"
       display="flex"
-      bg="container"
       borderRadius="xs"
+      bg="lowestContainer"
       flexDirection="column"
     >
       <Typography

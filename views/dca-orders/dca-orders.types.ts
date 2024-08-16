@@ -4,30 +4,30 @@ import { DCAOrder } from '@/hooks/use-dca/use-dca.types';
 import { CoinMetadataWithType } from '@/interface';
 
 export interface DCAOrderListItemProps {
-  active: boolean;
-  amountPerTrade: number;
-  cooldown: number;
-  delegatee: string;
-  every: number;
-  feePercent: number;
   id: string;
-  input: {
-    name: string;
-  };
-  inputBalance: number;
-  lastTrade: number;
   max: number;
   min: number;
-  output: {
-    name: string;
-  };
   owner: string;
-  remainingOrders: number;
+  every: number;
+  start: number;
+  active: boolean;
+  cooldown: number;
+  delegatee: string;
+  lastTrade: number;
+  feePercent: number;
   timeScale: TimeScale;
+  inputBalance: number;
+  amountPerTrade: number;
+  input: { name: string };
+  remainingOrders: number;
+  output: { name: string };
 }
 
 export interface DCAOrderDetailedItemProps
-  extends Pick<DCAOrderListItemProps, 'min' | 'max' | 'every' | 'timeScale'> {
+  extends Pick<
+    DCAOrderListItemProps,
+    'min' | 'max' | 'every' | 'timeScale' | 'amountPerTrade'
+  > {
   isOpen: boolean;
   totalOrders: number;
   orders: ReadonlyArray<DCAOrder>;

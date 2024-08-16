@@ -8,13 +8,13 @@ import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
 import {
   CELER_TOKENS,
   CELER_TOKENS_TYPE,
-  FAUCET_COINS,
   STRICT_TOKENS,
   STRICT_TOKENS_MAP,
   STRICT_TOKENS_TYPE,
   WORMHOLE_TOKENS,
   WORMHOLE_TOKENS_TYPE,
 } from '@/constants/coins';
+import { FAUCET_COINS } from '@/constants/dca';
 import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
 import { CoinMetadataWithType } from '@/interface';

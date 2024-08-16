@@ -10,7 +10,6 @@ export interface IDCASettings {
 export interface DCAToken extends Token {
   display: string;
   value: BigNumber;
-  usdPrice: number | null;
 }
 
 export interface DCAForm {
@@ -21,6 +20,7 @@ export interface DCAForm {
   starting: boolean;
   intervals: number;
   iterations: number;
+  price: string | null;
   explorerLink: string;
   error: string | null;
   periodicity: TimeScale;

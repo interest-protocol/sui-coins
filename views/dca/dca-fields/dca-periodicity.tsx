@@ -47,6 +47,7 @@ const DCAPeriodicity: FC = () => {
           variant="body"
           overflow="hidden"
           whiteSpace="nowrap"
+          textTransform="capitalize"
         >
           {PERIODICITY[periodicity] ?? 'Select'}
         </Typography>

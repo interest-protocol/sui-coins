@@ -17,7 +17,7 @@ const CustomizedAxisTick: FC<any> = ({ x, y, payload, dy, money }) => {
         style={{ fontFamily: 'Proto' }}
         fill={dark ? 'white' : 'black'}
       >
-        {money ? formatMoney(payload.value) : payload.value}
+        {money ? formatMoney(payload.value, 2, true) : payload.value}
       </text>
     </g>
   );

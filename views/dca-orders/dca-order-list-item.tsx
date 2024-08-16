@@ -42,6 +42,7 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
   max,
   every,
   input,
+  start,
   active,
   output,
   timeScale,
@@ -192,17 +193,30 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
             flexDirection="column"
             alignItems="flex-start"
           >
-            <Typography variant="body" size="medium">
-              {(+statusPercentage.toFixed(2)).toPrecision()}%
-            </Typography>
-            <ProgressIndicator variant="bar" value={statusPercentage} />
+            {remainingOrders ? (
+              <>
+                <Typography variant="body" size="medium">
+                  {(+statusPercentage.toFixed(2)).toPrecision()}%
+                </Typography>
+                <ProgressIndicator variant="bar" value={statusPercentage} />{' '}
+              </>
+            ) : null}
             <Box
               mt="s"
               px="l"
               border="1px solid"
               borderRadius="full"
-              bg="primaryContainer"
-              borderColor="primary"
+              color={active ? 'primary' : remainingOrders ? 'error' : 'outline'}
+              borderColor={
+                active ? 'primary' : remainingOrders ? 'error' : 'outline'
+              }
+              bg={
+                active
+                  ? 'primaryContainer'
+                  : remainingOrders
+                    ? 'errorContainer'
+                    : 'container'
+              }
             >
               {active ? 'Active' : remainingOrders ? 'Cancelled' : 'Done'}
             </Box>
@@ -380,10 +394,14 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
                 flexDirection="column"
                 alignItems="flex-start"
               >
-                <Typography variant="body" size="medium">
-                  {(+statusPercentage.toFixed(2)).toPrecision()}%
-                </Typography>
-                <ProgressIndicator variant="bar" value={statusPercentage} />
+                {remainingOrders ? (
+                  <>
+                    <Typography variant="body" size="medium">
+                      {(+statusPercentage.toFixed(2)).toPrecision()}%
+                    </Typography>
+                    <ProgressIndicator variant="bar" value={statusPercentage} />{' '}
+                  </>
+                ) : null}
                 <Box
                   mt="s"
                   px="l"
@@ -405,9 +423,15 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
               <Typography variant="label" size="large">
                 Actions
               </Typography>
-              <Box>
-                <TrashSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
-              </Box>
+              {active ? (
+                <Button variant="text" isIcon onClick={handleDestroyDCA}>
+                  <TrashSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+                </Button>
+              ) : (
+                <Typography variant="body" size="small">
+                  {new Date(start).toLocaleDateString()}
+                </Typography>
+              )}
             </Box>
           </Box>
           <Button

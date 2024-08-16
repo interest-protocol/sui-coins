@@ -7,6 +7,7 @@ import {
 } from '@interest-protocol/ui-kit';
 import { ChangeEvent, FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+import { v4 } from 'uuid';
 
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
@@ -20,11 +21,10 @@ const DCAFields: FC = () => {
   const { coinsMap } = useWeb3();
   const { register, getValues, setValue, control } = useFormContext<DCAForm>();
 
+  const toSymbol = getValues('to.symbol');
+  const fromSymbol = getValues('from.symbol');
+  const price = useWatch({ control, name: 'price' });
   const fromType = useWatch({ control, name: 'from.type' });
-  const fromUsd = useWatch({ control, name: 'from.usdPrice' });
-  const toSymbol = useWatch({ control, name: 'to.symbol' });
-  const toUsd = useWatch({ control, name: 'to.usdPrice' });
-  const fromSymbol = useWatch({ control, name: 'from.symbol' });
 
   return (
     <Box gap="l" display="flex" flexDirection="column">
@@ -179,10 +179,8 @@ const DCAFields: FC = () => {
               textAlign="right"
             >
               Price
-              {fromUsd && toUsd
-                ? `: 1 ${fromSymbol} = ${+(fromUsd / toUsd).toFixed(
-                    4
-                  )} ${toSymbol}`
+              {price
+                ? `: 1 ${fromSymbol} = ${+(+price).toFixed(4)} ${toSymbol}`
                 : ''}
             </Typography>
             <TextField
@@ -216,56 +214,47 @@ const DCAFields: FC = () => {
           </Box>
         </Box>
         <Box display="flex" gap="m">
-          <Button
-            px="xs"
-            py="2xs"
-            variant="outline"
-            borderRadius="full"
-            fontFamily="Satoshi"
-            borderColor="outlineVariant"
-          >
-            10%
-          </Button>
-          <Button
-            px="xs"
-            py="2xs"
-            variant="outline"
-            borderRadius="full"
-            fontFamily="Satoshi"
-            borderColor="outlineVariant"
-          >
-            20%
-          </Button>
-          <Button
-            px="xs"
-            py="2xs"
-            variant="outline"
-            borderRadius="full"
-            fontFamily="Satoshi"
-            borderColor="outlineVariant"
-          >
-            30%
-          </Button>
-          <Button
-            px="xs"
-            py="2xs"
-            variant="outline"
-            borderRadius="full"
-            fontFamily="Satoshi"
-            borderColor="outlineVariant"
-          >
-            40%
-          </Button>
-          <Button
-            px="xs"
-            py="2xs"
-            variant="outline"
-            borderRadius="full"
-            fontFamily="Satoshi"
-            borderColor="outlineVariant"
-          >
-            50%
-          </Button>
+          {[0.1, 0.2, 0.3, 0.4, 0.5].map((value) => (
+            <Button
+              px="xs"
+              py="2xs"
+              key={v4()}
+              variant="outline"
+              borderRadius="full"
+              fontFamily="Satoshi"
+              borderColor="outlineVariant"
+              onClick={() => {
+                setValue(
+                  'max.display',
+                  Number(
+                    (Number(price) + Number(price) * value).toFixed(6)
+                  ).toPrecision()
+                );
+                setValue(
+                  'max.value',
+                  FixedPointMath.toBigNumber(
+                    String(Number(price) - Number(price) * value),
+                    getValues('from.decimals')
+                  ).decimalPlaces(0)
+                );
+                setValue(
+                  'min.display',
+                  Number(
+                    (Number(price) - Number(price) * value).toFixed(6)
+                  ).toPrecision()
+                );
+                setValue(
+                  'min.value',
+                  FixedPointMath.toBigNumber(
+                    String(Number(price) - Number(price) * value),
+                    getValues('from.decimals')
+                  ).decimalPlaces(0)
+                );
+              }}
+            >
+              {value * 100}%
+            </Button>
+          ))}
         </Box>
       </Box>
     </Box>
