@@ -17,6 +17,7 @@ const Footer: FC = () => {
       gap="s"
       px="2xl"
       zIndex={0}
+      as="footer"
       width="100%"
       display="flex"
       alignItems="center"
