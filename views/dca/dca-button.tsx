@@ -63,6 +63,8 @@ const DCAButton: FC = () => {
 
       formDCA.setValue('starting', true);
 
+      const amountPerTrade = from.value.div(orders);
+
       const initTx = new Transaction();
 
       const coinIn = coinOfValue({
@@ -73,17 +75,25 @@ const DCAButton: FC = () => {
       });
 
       const tx = dcaSdk.newAndShare({
+        coinIn,
         tx: initTx,
+        delegatee: DELEGATEE,
         coinOutType: to.type,
         coinInType: from.type,
-        coinIn,
         timeScale: periodicity,
-        numberOfOrders: Number(orders),
         every: Number(intervals),
-        delegatee: DELEGATEE,
-        min: BigInt(min.value.toString()),
-        max: BigInt(max.value.toString()),
+        numberOfOrders: Number(orders),
         witnessType: WITNESSES.testnet.WHITELIST_ADAPTER,
+        ...(Number(min.display) && {
+          min: BigInt(
+            min.value.times(amountPerTrade).decimalPlaces(0).toString()
+          ),
+        }),
+        ...(Number(max.display) && {
+          max: BigInt(
+            max.value.times(amountPerTrade).decimalPlaces(0).toString()
+          ),
+        }),
       });
 
       const txResult = await signAndExecute({

@@ -8,19 +8,21 @@ import { Routes, RoutesEnum } from '@/constants';
 import { useDcas } from '@/hooks/use-dca';
 
 import DCAOrderListItem from './dca-order-list-item';
+import DCAOrderListItemSkeleton from './dca-order-list-item-skeleton';
 import { DCAOrderListItemProps } from './dca-orders.types';
 
 const DCAOrders: FC = () => {
-  const { data: dcas, isLoading } = useDcas();
+  const { data: dcas, isLoading, mutate } = useDcas();
   const { push, pathname } = useRouter();
 
-  const onChangeTab = (index: number) => {
+  const onChangeTab = (index: number) =>
     push(
       index ? Routes[RoutesEnum.DCAOrders] : Routes[RoutesEnum.DCA],
       undefined,
       { shallow: true }
     );
-  };
+
+  console.log({ dcas });
 
   return (
     <Layout>
@@ -39,6 +41,41 @@ const DCAOrders: FC = () => {
           ]}
         />
       </Box>
+      {!dcas && isLoading && (
+        <Box>
+          <Box
+            p="m"
+            pb="2xl"
+            alignItems="center"
+            justifyItems="center"
+            display={['none', 'none', 'none', 'grid']}
+            gridTemplateColumns="1.25rem 1fr 1fr 1fr 1fr 1fr 1fr"
+          >
+            <Box as="span" />
+            <Typography variant="label" size="large">
+              Pay with
+            </Typography>
+            <Typography variant="label" size="large">
+              Get
+            </Typography>
+            <Typography variant="label" size="large">
+              Orders
+            </Typography>
+            <Typography variant="label" size="large">
+              Amount
+            </Typography>
+            <Typography variant="label" size="large">
+              Status
+            </Typography>
+            <Typography variant="label" size="large">
+              Actions
+            </Typography>
+          </Box>
+          <Box>
+            <DCAOrderListItemSkeleton />
+          </Box>
+        </Box>
+      )}
       {!!dcas?.[0]?.data.length && (
         <Box>
           <Box
@@ -72,7 +109,7 @@ const DCAOrders: FC = () => {
           <Box>
             {!isLoading &&
               dcas?.[0]?.data.map((dca: DCAOrderListItemProps) => (
-                <DCAOrderListItem key={v4()} {...dca} />
+                <DCAOrderListItem key={v4()} {...dca} mutate={mutate} />
               ))}
           </Box>
         </Box>
@@ -113,7 +150,7 @@ const DCAOrders: FC = () => {
           <Box>
             {!isLoading &&
               dcas?.[1]?.data.map((dca: DCAOrderListItemProps) => (
-                <DCAOrderListItem key={v4()} {...dca} />
+                <DCAOrderListItem key={v4()} {...dca} mutate={mutate} />
               ))}
           </Box>
         </Box>

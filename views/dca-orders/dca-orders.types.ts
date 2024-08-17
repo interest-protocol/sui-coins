@@ -1,12 +1,13 @@
-import { TimeScale } from '@interest-protocol/dca-sdk';
+import type { TimeScale } from '@interest-protocol/dca-sdk';
+import type { KeyedMutator } from 'swr';
 
-import { DCAOrder } from '@/hooks/use-dca/use-dca.types';
-import { CoinMetadataWithType } from '@/interface';
+import type { DCAOrder } from '@/hooks/use-dca/use-dca.types';
+import type { CoinMetadataWithType } from '@/interface';
 
 export interface DCAOrderListItemProps {
   id: string;
-  max: number;
-  min: number;
+  min: string;
+  max: string;
   owner: string;
   every: number;
   start: number;
@@ -21,12 +22,20 @@ export interface DCAOrderListItemProps {
   input: { name: string };
   remainingOrders: number;
   output: { name: string };
+  mutate: KeyedMutator<[any, any] | undefined>;
 }
 
 export interface DCAOrderDetailedItemProps
   extends Pick<
     DCAOrderListItemProps,
-    'min' | 'max' | 'every' | 'timeScale' | 'amountPerTrade'
+    | 'min'
+    | 'max'
+    | 'every'
+    | 'timeScale'
+    | 'amountPerTrade'
+    | 'cooldown'
+    | 'lastTrade'
+    | 'start'
   > {
   isOpen: boolean;
   totalOrders: number;

@@ -46,10 +46,10 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
             <Box>
               {title && (
                 <Typography
-                  textAlign="center"
-                  variant="display"
-                  size="medium"
                   my="3rem"
+                  size="medium"
+                  variant="display"
+                  textAlign="center"
                 >
                   {title}
                 </Typography>

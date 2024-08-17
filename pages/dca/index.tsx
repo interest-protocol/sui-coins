@@ -10,8 +10,8 @@ import DCAInitManager from '@/views/dca/dca-init-manager';
 const DCAPage: NextPage = () => {
   const form = useForm<DCAForm>({
     defaultValues: {
-      intervals: 1,
       orders: 2,
+      intervals: 1,
       periodicity: TimeScale.Minutes,
     },
   });

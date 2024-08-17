@@ -16,7 +16,7 @@ const CustomTooltip: FC<CustomTooltipProps> = ({ payload }) => {
       {payload.map(({ value, payload, dataKey }) => (
         <Box key={`tooltip-${dataKey}`}>
           <Typography variant="body" size="small" color="dark" mb="2xs">
-            $ {value}
+            {value}
           </Typography>
           <Typography variant="body" size="small" color="outlineVariant">
             {payload?.description}

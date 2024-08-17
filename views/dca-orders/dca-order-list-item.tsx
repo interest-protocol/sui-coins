@@ -44,9 +44,13 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
   input,
   start,
   active,
+  mutate,
   output,
+  cooldown,
   timeScale,
+  lastTrade,
   inputBalance,
+  amountPerTrade,
   remainingOrders,
 }) => {
   const coinsType: [string, string] = [input.name, output.name];
@@ -93,6 +97,10 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
       showTXSuccessToast(txResult, network, 'DCA destroyed successfully');
     } catch (e) {
       toast.error((e as Error)?.message || 'Error on destroy DCA');
+    } finally {
+      setTimeout(() => {
+        mutate();
+      }, 10000);
     }
   };
 
@@ -230,12 +238,16 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
         <DCAOrderDetails
           min={min}
           max={max}
+          start={start}
           every={every}
           isOpen={isOpen}
+          cooldown={cooldown}
+          lastTrade={lastTrade}
           timeScale={timeScale}
           totalOrders={totalOrders}
           coins={[tokenIn, tokenOut]}
           orders={dcaOrders?.data ?? []}
+          amountPerTrade={amountPerTrade}
         />
       </Box>
       <Box
@@ -461,11 +473,15 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
           min={min}
           max={max}
           every={every}
+          start={start}
           isOpen={isOpen}
+          cooldown={cooldown}
+          lastTrade={lastTrade}
           timeScale={timeScale}
           totalOrders={totalOrders}
           coins={[tokenIn, tokenOut]}
           orders={dcaOrders?.data ?? []}
+          amountPerTrade={amountPerTrade}
         />
       </Box>
     </>

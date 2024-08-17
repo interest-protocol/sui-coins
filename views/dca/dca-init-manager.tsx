@@ -34,7 +34,6 @@ const DCAInitManager: FC = () => {
         decimals,
         display: '',
         value: ZERO_BIG_NUMBER,
-        usdPrice: null,
       };
     }
     if (typeof type === 'string' && type.startsWith('0x')) {
@@ -43,7 +42,6 @@ const DCAInitManager: FC = () => {
       return {
         ...coin,
         display: '',
-        usdPrice: null,
         value: ZERO_BIG_NUMBER,
       };
     }
@@ -61,16 +59,6 @@ const DCAInitManager: FC = () => {
     if (!token) return;
 
     form.setValue(field, token);
-
-    fetch(`/api/auth/v1/coin-price?symbol=${token.symbol}`)
-      .then((response) => response.json?.())
-      .then((data) =>
-        form.setValue(
-          `${field}.usdPrice`,
-          data[token.symbol][0].quote.USD.price
-        )
-      )
-      .catch(console.log);
 
     return token.type;
   };

@@ -9,15 +9,18 @@ import { useIsFirstRender } from '@/hooks/use-is-first-render';
 import { FixedPointMath } from '@/lib';
 import { formatMoney } from '@/utils';
 
-import { PERIODICITY, TIME_SCALE_TO_MS } from '../dca/dca.data';
+import { PERIODICITY } from '../dca/dca.data';
 import { DCAOrderDetailedItemProps } from './dca-orders.types';
 
 const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
   min,
   max,
+  start,
   every,
   orders,
   isOpen,
+  cooldown,
+  lastTrade,
   timeScale,
   totalOrders,
   amountPerTrade,
@@ -25,11 +28,9 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
 }) => {
   const isFirstRender = useIsFirstRender();
 
-  console.log({ amountPerTrade });
-
   const orderPrices = orders.map(
     ({ input_amount, output_amount, timestampMs }) => {
-      if (!(tokenIn && tokenOut)) return { value: 0, time: 0 };
+      if (!(tokenIn && tokenOut)) return { valueIn: 0, price: 0, time: 0 };
 
       const valueIn = FixedPointMath.toNumber(
         BigNumber(input_amount),
@@ -41,9 +42,31 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
         tokenOut.decimals
       );
 
-      return { value: valueIn / valueOut, time: timestampMs };
+      return { valueIn, price: valueIn / valueOut, time: timestampMs };
     }
   );
+
+  const maxPrice =
+    tokenOut && tokenIn
+      ? FixedPointMath.toNumber(
+          FixedPointMath.toBigNumber(max, tokenOut.decimals).div(
+            FixedPointMath.toBigNumber(amountPerTrade, tokenIn.decimals)
+          ),
+          0
+        )
+      : null;
+
+  const minPrice =
+    tokenOut && tokenIn && Number(min)
+      ? FixedPointMath.toNumber(
+          FixedPointMath.toBigNumber(min, tokenOut.decimals).div(
+            FixedPointMath.toBigNumber(amountPerTrade, tokenIn.decimals)
+          ),
+          0
+        )
+      : null;
+
+  console.log({ maxPrice, minPrice });
 
   return (
     <Motion
@@ -81,37 +104,20 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
         <Box display="flex" flexDirection="column" gap="s">
           <Typography variant="body" size="medium">
             <b>Min Price:</b>{' '}
-            {min
-              ? `${formatMoney(
-                  FixedPointMath.toNumber(
-                    BigNumber(min),
-                    tokenOut?.decimals ?? 0
-                  )
-                )} ${tokenOut?.symbol}`
-              : 'N/A'}
+            {minPrice ? formatMoney(minPrice, 1, true) : 'N/A'}
           </Typography>
           <Typography variant="body" size="medium">
             <b>Max Price:</b>{' '}
-            {max > 0
-              ? `${formatMoney(
-                  FixedPointMath.toNumber(
-                    BigNumber(max),
-                    tokenOut?.decimals ?? 0
-                  )
-                )} ${tokenOut?.symbol}`
-              : 'N/A'}
+            {maxPrice ? formatMoney(maxPrice, 1, true) : 'N/A'}
           </Typography>
           <Typography variant="body" size="medium">
             <b>Average Price:</b>{' '}
             {orderPrices.length
               ? `${formatMoney(
-                  FixedPointMath.toNumber(
-                    BigNumber(
-                      orderPrices.reduce((acc, { value }) => value + acc, 0) /
-                        orderPrices.length
-                    ),
-                    tokenOut?.decimals ?? 0
-                  )
+                  orderPrices.reduce((acc, { price }) => price + acc, 0) /
+                    orderPrices.length,
+                  1,
+                  true
                 )} ${tokenOut?.symbol}`
               : 'N/A'}
           </Typography>
@@ -139,7 +145,7 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
           <Typography variant="body" size="small">
             Next:{' '}
             {new Date(
-              orders?.[0]?.timestampMs + every * TIME_SCALE_TO_MS[timeScale]
+              ((lastTrade || start) + cooldown) * 1000
             ).toLocaleString()}
           </Typography>
         </Box>
@@ -161,20 +167,8 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
           maxHeight="13rem"
           gridTemplateColumns="3fr 1fr 1fr"
         >
-          {orders.flatMap(({ timestampMs, input_amount, output_amount }) =>
-            [
-              timestampMs,
-              FixedPointMath.toNumber(
-                BigNumber(input_amount),
-                tokenIn?.decimals
-              ),
-              Number(
-                FixedPointMath.toNumber(
-                  BigNumber(output_amount),
-                  tokenOut?.decimals
-                ).toFixed(tokenOut?.decimals)
-              ).toPrecision(),
-            ].map((value, index) => (
+          {orderPrices.flatMap(({ time, valueIn, price }) =>
+            [time, valueIn, price].map((value, index) => (
               <Typography key={v4()} variant="body" size="medium">
                 {index
                   ? formatMoney(Number(value))
@@ -202,11 +196,8 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
           </Typography>
         </Box>
         <LinearChart
-          data={orderPrices.map(({ time, value }) => ({
-            amount: FixedPointMath.toNumber(
-              BigNumber(value),
-              tokenOut?.decimals ?? 0
-            ),
+          data={orderPrices.map(({ time, price }) => ({
+            amount: price,
             day: new Date(time)[
               timeScale > TimeScale.Day
                 ? 'toLocaleDateString'

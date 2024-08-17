@@ -35,7 +35,7 @@ const MergeCoins: FC = () => {
   };
 
   return (
-    <Box right="2rem" bottom="2rem" position="fixed">
+    <Box right="2rem" bottom="2rem" position="fixed" zIndex="2">
       <TooltipWrapper
         px="s"
         whiteSpace="nowrap"

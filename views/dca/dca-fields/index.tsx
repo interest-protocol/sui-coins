@@ -224,6 +224,7 @@ const DCAFields: FC = () => {
               fontFamily="Satoshi"
               borderColor="outlineVariant"
               onClick={() => {
+                // Set MAX fields
                 setValue(
                   'max.display',
                   Number(
@@ -233,10 +234,12 @@ const DCAFields: FC = () => {
                 setValue(
                   'max.value',
                   FixedPointMath.toBigNumber(
-                    String(Number(price) - Number(price) * value),
+                    Number(price) + Number(price) * value,
                     getValues('from.decimals')
                   ).decimalPlaces(0)
                 );
+
+                // Set MIN fields
                 setValue(
                   'min.display',
                   Number(
@@ -246,7 +249,7 @@ const DCAFields: FC = () => {
                 setValue(
                   'min.value',
                   FixedPointMath.toBigNumber(
-                    String(Number(price) - Number(price) * value),
+                    Number(price) - Number(price) * value,
                     getValues('from.decimals')
                   ).decimalPlaces(0)
                 );
