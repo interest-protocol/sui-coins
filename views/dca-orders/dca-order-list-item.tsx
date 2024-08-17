@@ -34,6 +34,7 @@ import {
 } from '@/utils';
 
 import DCAOrderDetails from './dca-order-details';
+import DCAOrderListItemSkeleton from './dca-order-list-item-skeleton';
 import { DCAOrderListItemProps } from './dca-orders.types';
 
 const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
@@ -60,8 +61,8 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
   const signTransaction = useSignTransaction();
-  const { data: dcaOrders } = useDcaOrders(id);
   const [isOpen, setIsOpen] = useState(false);
+  const { data: dcaOrders, isLoading } = useDcaOrders(id);
   const [[tokenIn, tokenOut], setCoins] = useState<
     [CoinMetadataWithType | null, CoinMetadataWithType | null]
   >([null, null]);
@@ -116,6 +117,8 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
       )
     );
   }, []);
+
+  if (isLoading || !tokenIn || !tokenOut) return <DCAOrderListItemSkeleton />;
 
   return (
     <>

@@ -66,8 +66,6 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
         )
       : null;
 
-  console.log({ maxPrice, minPrice });
-
   return (
     <Motion
       p="xl"
