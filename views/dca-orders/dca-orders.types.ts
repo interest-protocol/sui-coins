@@ -1,33 +1,15 @@
-import type { TimeScale } from '@interest-protocol/dca-sdk';
 import type { KeyedMutator } from 'swr';
 
-import type { DCAOrder } from '@/hooks/use-dca/use-dca.types';
+import type { DCA, DCAOrder, Paginated } from '@/hooks/use-dca/use-dca.types';
 import type { CoinMetadataWithType } from '@/interface';
 
-export interface DCAOrderListItemProps {
-  id: string;
-  min: string;
-  max: string;
-  owner: string;
-  every: number;
-  start: number;
-  active: boolean;
-  cooldown: number;
-  delegatee: string;
-  lastTrade: number;
-  feePercent: number;
-  timeScale: TimeScale;
-  inputBalance: number;
-  amountPerTrade: number;
-  input: { name: string };
-  remainingOrders: number;
-  output: { name: string };
-  mutate: KeyedMutator<[any, any] | undefined>;
+export interface DCAOrderListItemProps extends DCA {
+  mutate: KeyedMutator<[Paginated<DCA>, Paginated<DCA>] | null>;
 }
 
 export interface DCAOrderDetailedItemProps
   extends Pick<
-    DCAOrderListItemProps,
+    DCA,
     | 'min'
     | 'max'
     | 'every'

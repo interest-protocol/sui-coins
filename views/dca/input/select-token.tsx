@@ -56,7 +56,6 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       if (label === 'to')
         setValue(label === 'to' ? 'from' : 'to', {
           display: '',
-          usdPrice: null,
           value: ZERO_BIG_NUMBER,
           type: currentToken.type,
           chain: currentToken.chain,
@@ -69,18 +68,10 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       type: type,
       display: '',
       chain: chain,
-      usdPrice: null,
       symbol: symbol,
       decimals: decimals,
       value: ZERO_BIG_NUMBER,
     });
-
-    fetch(`/api/auth/v1/coin-price?symbol=${symbol}`)
-      .then((response) => response.json())
-      .then((data) =>
-        setValue(`${label}.usdPrice`, data[symbol][0].quote.USD.price)
-      )
-      .catch(() => null);
 
     changeURL(type, type === oppositeType ? currentToken.type : undefined);
   };
