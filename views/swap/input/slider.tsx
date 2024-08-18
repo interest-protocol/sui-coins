@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 import dynamic from 'next/dynamic';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+import { useDebounce } from 'use-debounce';
 
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
@@ -22,6 +23,7 @@ const SwapFormFieldSlider: FC = () => {
 
   const type = useWatch({ control, name: 'from.type' });
   const swapping = useWatch({ control, name: 'swapping' });
+  const [value] = useDebounce(useWatch({ control, name: 'from.value' }), 50);
 
   const safeRemoval =
     type === SUI_TYPE_ARG
@@ -32,7 +34,7 @@ const SwapFormFieldSlider: FC = () => {
     ? coinsMap[type].balance.minus(safeRemoval)
     : ZERO_BIG_NUMBER;
 
-  const fromValue = type ? getValues('from.value') : ZERO_BIG_NUMBER;
+  const fromValue = value ?? ZERO_BIG_NUMBER;
 
   const initial =
     fromValue && balance && !fromValue.isZero?.() && !balance.isZero?.()
