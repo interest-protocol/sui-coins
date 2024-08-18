@@ -1,23 +1,22 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
-import { useSuiClientContext } from '@mysten/dapp-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { TokenIcon } from '@/components';
-import { Network } from '@/constants';
+import { useNetwork } from '@/hooks/use-network';
 import { ArrowLeftSVG, TimesSVG } from '@/svg';
-import { formatDollars } from '@/utils';
 
 import { DCAForm, DCAPreviewModalProps } from '../dca.types';
 import DCAButton from '../dca-button';
 import DCAPreviewModalSummary from './dca-preview-modal-summary';
 
 const DCAPreviewModal: FC<DCAPreviewModalProps> = ({ onClose }) => {
-  const { network } = useSuiClientContext();
+  const network = useNetwork();
   const { control } = useFormContext<DCAForm>();
 
   const tokenFrom = useWatch({ control, name: 'from' });
   const tokenTo = useWatch({ control, name: 'to' });
+  const price = useWatch({ control, name: 'price' });
 
   return (
     <Box
@@ -80,9 +79,9 @@ const DCAPreviewModal: FC<DCAPreviewModalProps> = ({ onClose }) => {
               <Box display="flex" alignItems="center" gap="m">
                 <TokenIcon
                   withBg
+                  network={network}
                   type={tokenFrom.type}
                   symbol={tokenFrom.symbol}
-                  network={network as Network}
                 />
                 <Typography size="small" variant="title">
                   {tokenFrom.symbol}
@@ -91,16 +90,6 @@ const DCAPreviewModal: FC<DCAPreviewModalProps> = ({ onClose }) => {
               <Box textAlign="right">
                 <Typography variant="body" size="medium">
                   {tokenFrom.display || 0}
-                </Typography>
-                <Typography variant="body" size="small" color="#000000A3">
-                  {tokenFrom.usdPrice
-                    ? formatDollars(
-                        +(
-                          Number(tokenFrom.display || 0) * tokenFrom.usdPrice
-                        ).toFixed(3)
-                      )
-                    : '--'}{' '}
-                  USD
                 </Typography>
               </Box>
             </Box>
@@ -125,12 +114,17 @@ const DCAPreviewModal: FC<DCAPreviewModalProps> = ({ onClose }) => {
               <Box display="flex" alignItems="center" gap="m">
                 <TokenIcon
                   withBg
+                  network={network}
                   type={tokenTo.type}
                   symbol={tokenTo.symbol}
-                  network={network as Network}
                 />
                 <Typography size="small" variant="title">
                   {tokenTo.symbol}
+                </Typography>
+              </Box>
+              <Box textAlign="right">
+                <Typography variant="body" size="medium">
+                  ~{Number(tokenFrom.display) * Number(price) || 0}
                 </Typography>
               </Box>
             </Box>
