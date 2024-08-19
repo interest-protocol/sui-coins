@@ -55,6 +55,7 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
   remainingOrders,
 }) => {
   const coinsType: [string, string] = [input.name, output.name];
+  console.log({ start });
 
   const dcaSdk = useDcaSdk();
   const network = useNetwork();
@@ -239,7 +240,7 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
               </Button>
             ) : (
               <Typography variant="body" size="medium">
-                {new Date(start).toLocaleDateString()}
+                {new Date(start * 1000).toLocaleDateString()}
               </Typography>
             )}
           </Box>
@@ -451,7 +452,7 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
                 </Button>
               ) : (
                 <Typography variant="body" size="small">
-                  {new Date(start).toLocaleDateString()}
+                  {new Date(start * 1000).toLocaleDateString()}
                 </Typography>
               )}
             </Box>
