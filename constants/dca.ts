@@ -33,11 +33,6 @@ export const FAUCET_AMOUNT: Record<string, string> = {
 
 export const FAUCET_COINS: Array<Token> = [
   {
-    decimals: 9,
-    symbol: 'SUI',
-    type: FAUCET_COIN_TYPES.SUI as `0x${string}`,
-  },
-  {
     decimals: 8,
     symbol: 'BTC',
     type: FAUCET_COIN_TYPES.BTC as `0x${string}`,
