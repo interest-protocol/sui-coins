@@ -13,6 +13,8 @@ export interface DCAToken extends Token {
 }
 
 export interface DCAForm {
+  min: string;
+  max: string;
   to: DCAToken;
   from: DCAToken;
   orders: number;
@@ -25,14 +27,6 @@ export interface DCAForm {
   error: string | null;
   periodicity: TimeScale;
   fetchingPrices: boolean;
-  min: {
-    display: string;
-    value: BigNumber;
-  };
-  max: {
-    display: string;
-    value: BigNumber;
-  };
 }
 
 export interface DCAPreviewModalProps {

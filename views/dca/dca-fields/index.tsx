@@ -156,17 +156,10 @@ const DCAFields: FC = () => {
                 height: '3.5rem',
                 borderRadius: 'xs',
               }}
-              {...register('min.display', {
+              {...register('min', {
                 onChange: (v: ChangeEvent<HTMLInputElement>) => {
                   const value = parseInputEventToNumberString(v);
-                  setValue('min.display', value);
-                  setValue(
-                    'min.value',
-                    FixedPointMath.toBigNumber(
-                      value,
-                      getValues('from.decimals')
-                    )
-                  );
+                  setValue('min', value);
                 },
               })}
             />
@@ -197,17 +190,10 @@ const DCAFields: FC = () => {
                 height: '3.5rem',
                 borderRadius: 'xs',
               }}
-              {...register('max.display', {
+              {...register('max', {
                 onChange: (v: ChangeEvent<HTMLInputElement>) => {
                   const value = parseInputEventToNumberString(v);
-                  setValue('max.display', value);
-                  setValue(
-                    'max.value',
-                    FixedPointMath.toBigNumber(
-                      value,
-                      getValues('from.decimals')
-                    )
-                  );
+                  setValue('max', value);
                 },
               })}
             />
@@ -224,34 +210,22 @@ const DCAFields: FC = () => {
               fontFamily="Satoshi"
               borderColor="outlineVariant"
               onClick={() => {
-                // Set MAX fields
+                if (!price) return;
+
+                const decimals = getValues('to.decimals');
+
                 setValue(
-                  'max.display',
+                  'max',
                   Number(
-                    (Number(price) + Number(price) * value).toFixed(6)
+                    (Number(price) + Number(price) * value).toFixed(decimals)
                   ).toPrecision()
-                );
-                setValue(
-                  'max.value',
-                  FixedPointMath.toBigNumber(
-                    Number(price) + Number(price) * value,
-                    getValues('from.decimals')
-                  ).decimalPlaces(0)
                 );
 
-                // Set MIN fields
                 setValue(
-                  'min.display',
+                  'min',
                   Number(
-                    (Number(price) - Number(price) * value).toFixed(6)
+                    (Number(price) - Number(price) * value).toFixed(decimals)
                   ).toPrecision()
-                );
-                setValue(
-                  'min.value',
-                  FixedPointMath.toBigNumber(
-                    Number(price) - Number(price) * value,
-                    getValues('from.decimals')
-                  ).decimalPlaces(0)
                 );
               }}
             >

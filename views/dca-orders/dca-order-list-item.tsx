@@ -233,9 +233,15 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
             </Box>
           </Box>
           <Box>
-            <Button variant="text" isIcon onClick={handleDestroyDCA}>
-              <TrashSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
-            </Button>
+            {active ? (
+              <Button variant="text" isIcon onClick={handleDestroyDCA}>
+                <TrashSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+              </Button>
+            ) : (
+              <Typography variant="body" size="medium">
+                {new Date(start).toLocaleDateString()}
+              </Typography>
+            )}
           </Box>
         </Box>
         <DCAOrderDetails

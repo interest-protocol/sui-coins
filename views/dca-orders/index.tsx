@@ -97,7 +97,7 @@ const DCAOrders: FC = () => {
         </Box>
       ) : (
         <>
-          {dcas?.[0]?.data.length && (
+          {!!dcas?.[0]?.data.length && (
             <Box>
               <Box
                 p="m"

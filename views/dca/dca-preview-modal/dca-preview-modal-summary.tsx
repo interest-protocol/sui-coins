@@ -61,7 +61,7 @@ const DCAPreviewModalSummary: FC = () => {
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center">
             <Typography mr="s" variant="body" size="medium" color="onSurface">
-              {min ? formatMoney(+min.display) : 'N/A'}
+              {min ? formatMoney(+min) : 'N/A'}
             </Typography>
           </Box>
         </Box>
@@ -76,7 +76,7 @@ const DCAPreviewModalSummary: FC = () => {
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center">
             <Typography mr="s" variant="body" size="medium" color="onSurface">
-              {max ? formatMoney(+max.display) : 'N/A'}
+              {max ? formatMoney(+max) : 'N/A'}
             </Typography>
           </Box>
         </Box>

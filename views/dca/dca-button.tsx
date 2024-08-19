@@ -15,6 +15,7 @@ import { EXPLORER_URL, Network } from '@/constants';
 import useDcaSdk from '@/hooks/use-dca-sdk';
 import { useDialog } from '@/hooks/use-dialog';
 import { useWeb3 } from '@/hooks/use-web3';
+import { FixedPointMath } from '@/lib';
 import { coinOfValue, signAndExecute, ZERO_BIG_NUMBER } from '@/utils';
 import { DCAForm } from '@/views/dca/dca.types';
 
@@ -63,7 +64,10 @@ const DCAButton: FC = () => {
 
       formDCA.setValue('starting', true);
 
-      const amountPerTrade = from.value.div(orders);
+      const amountPerTrade = FixedPointMath.toNumber(
+        from.value.div(orders),
+        from.decimals
+      );
 
       const initTx = new Transaction();
 
@@ -74,7 +78,7 @@ const DCAButton: FC = () => {
         coinValue: from.value.toString(),
       });
 
-      const tx = dcaSdk.newAndShare({
+      const args = {
         coinIn,
         tx: initTx,
         delegatee: DELEGATEE,
@@ -84,17 +88,32 @@ const DCAButton: FC = () => {
         every: Number(intervals),
         numberOfOrders: Number(orders),
         witnessType: WITNESSES.testnet.WHITELIST_ADAPTER,
-        ...(Number(min.display) && {
+        ...(Number(min) && {
           min: BigInt(
-            min.value.times(amountPerTrade).decimalPlaces(0).toString()
+            FixedPointMath.toBigNumber(min, to.decimals)
+              .times(amountPerTrade)
+              .decimalPlaces(0)
+              .toString()
           ),
         }),
-        ...(Number(max.display) && {
+        ...(Number(max) && {
           max: BigInt(
-            max.value.times(amountPerTrade).decimalPlaces(0).toString()
+            FixedPointMath.toBigNumber(max, to.decimals)
+              .times(amountPerTrade)
+              .decimalPlaces(0)
+              .toString()
           ),
         }),
+      };
+
+      console.log({
+        args,
+        amountPerTrade,
+        minPrice: min,
+        maxPrice: max,
       });
+
+      const tx = dcaSdk.newAndShare(args);
 
       const txResult = await signAndExecute({
         tx,

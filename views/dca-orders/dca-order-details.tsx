@@ -12,6 +12,8 @@ import { formatMoney } from '@/utils';
 import { PERIODICITY } from '../dca/dca.data';
 import { DCAOrderDetailedItemProps } from './dca-orders.types';
 
+const MAX = '18446744073709551615';
+
 const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
   min,
   max,
@@ -42,29 +44,40 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
         tokenOut.decimals
       );
 
-      return { valueIn, price: valueIn / valueOut, time: timestampMs };
+      const price = valueIn / valueOut;
+
+      return {
+        valueIn,
+        price: Number(+(+price.toFixed(tokenOut.decimals)).toPrecision()),
+        time: timestampMs,
+      };
     }
   );
 
   const maxPrice =
-    tokenOut && tokenIn
+    tokenOut && tokenIn && max !== MAX
       ? FixedPointMath.toNumber(
-          FixedPointMath.toBigNumber(max, tokenOut.decimals).div(
-            FixedPointMath.toBigNumber(amountPerTrade, tokenIn.decimals)
+          BigNumber(max).div(
+            FixedPointMath.toNumber(BigNumber(amountPerTrade), tokenIn.decimals)
           ),
-          0
+          tokenOut.decimals
         )
       : null;
 
   const minPrice =
     tokenOut && tokenIn && Number(min)
       ? FixedPointMath.toNumber(
-          FixedPointMath.toBigNumber(min, tokenOut.decimals).div(
-            FixedPointMath.toBigNumber(amountPerTrade, tokenIn.decimals)
+          BigNumber(min).div(
+            FixedPointMath.toNumber(BigNumber(amountPerTrade), tokenIn.decimals)
           ),
-          0
+          tokenOut.decimals
         )
       : null;
+
+  console.log({
+    min,
+    max,
+  });
 
   return (
     <Motion
@@ -102,11 +115,11 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
         <Box display="flex" flexDirection="column" gap="s">
           <Typography variant="body" size="medium">
             <b>Min Price:</b>{' '}
-            {minPrice ? formatMoney(minPrice, 1, true) : 'N/A'}
+            {minPrice ? formatMoney(minPrice, undefined, true) : 'N/A'}
           </Typography>
           <Typography variant="body" size="medium">
             <b>Max Price:</b>{' '}
-            {maxPrice ? formatMoney(maxPrice, 1, true) : 'N/A'}
+            {maxPrice ? formatMoney(maxPrice, undefined, true) : 'N/A'}
           </Typography>
           <Typography variant="body" size="medium">
             <b>Average Price:</b>{' '}
@@ -165,8 +178,15 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
           maxHeight="13rem"
           gridTemplateColumns="3fr 1fr 1fr"
         >
-          {orderPrices.flatMap(({ time, valueIn, price }) =>
-            [time, valueIn, price].map((value, index) => (
+          {orderPrices.flatMap(({ time, price }) =>
+            [
+              time,
+              FixedPointMath.toNumber(
+                BigNumber(amountPerTrade),
+                tokenIn?.decimals
+              ),
+              price,
+            ].map((value, index) => (
               <Typography key={v4()} variant="body" size="medium">
                 {index
                   ? formatMoney(Number(value))
@@ -194,7 +214,7 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
           </Typography>
         </Box>
         <LinearChart
-          data={orderPrices.map(({ time, price }) => ({
+          data={orderPrices.toReversed().map(({ time, price }) => ({
             amount: price,
             day: new Date(time)[
               timeScale > TimeScale.Day
