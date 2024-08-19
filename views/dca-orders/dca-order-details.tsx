@@ -74,11 +74,6 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
         )
       : null;
 
-  console.log({
-    min,
-    max,
-  });
-
   return (
     <Motion
       p="xl"

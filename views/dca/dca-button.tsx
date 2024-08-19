@@ -106,13 +106,6 @@ const DCAButton: FC = () => {
         }),
       };
 
-      console.log({
-        args,
-        amountPerTrade,
-        minPrice: min,
-        maxPrice: max,
-      });
-
       const tx = dcaSdk.newAndShare(args);
 
       const txResult = await signAndExecute({
@@ -126,9 +119,6 @@ const DCAButton: FC = () => {
         'explorerLink',
         `${EXPLORER_URL[network as Network]}/tx/${txResult.digest}`
       );
-    } catch (e) {
-      console.log({ e });
-      throw e;
     } finally {
       resetInput();
       formDCA.setValue('starting', false);
