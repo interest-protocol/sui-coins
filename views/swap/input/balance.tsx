@@ -49,6 +49,8 @@ const Balance: FC<InputProps> = ({ label }) => {
   const handleMax = () => {
     if (label === 'to') return;
 
+    setValue('updateSlider', {});
+
     if (isSui(type) && balance < 1) {
       setValue('from.value', ZERO_BIG_NUMBER);
       setValue('from.display', '0');
