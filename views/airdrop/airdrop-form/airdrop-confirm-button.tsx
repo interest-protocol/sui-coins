@@ -266,11 +266,14 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
       }
     }
   };
+
+  const type = getValues('token.type');
   const airdropList = getValues('airdropList');
 
-  const airdropFee = airdropList
-    ? BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS).times(airdropList.length)
-    : ZERO_BIG_NUMBER;
+  const airdropFee =
+    airdropList && !EXCLUDED_FEE_COINS.includes(type)
+      ? BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS).times(airdropList.length)
+      : ZERO_BIG_NUMBER;
 
   const disabled = airdropFee.gt(
     coinsMap[SUI_TYPE_ARG]?.balance ?? ZERO_BIG_NUMBER
