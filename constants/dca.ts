@@ -1,14 +1,12 @@
 import type { Token } from '@interest-protocol/sui-tokens';
-import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 
 import { COINS } from './coins';
 import { Network } from './dapp';
 
 const DCA_PACKAGE =
-  '0xcd79b4f3d61afacdd30632ccdfc05f923b9847d21ba19c7bae9c73e5d860f5b5';
+  '0xd65cdf8558711ad3a76078ffe0cd099ccd8c007dba5ebef4aa7a0de30e043736';
 
 export const FAUCET_COIN_TYPES: Record<string, string> = {
-  SUI: SUI_TYPE_ARG,
   USDC: `${DCA_PACKAGE}::usdc::USDC`,
   ETH: `${DCA_PACKAGE}::eth::ETH`,
   BTC: `${DCA_PACKAGE}::btc::BTC`,
@@ -17,13 +15,13 @@ export const FAUCET_COIN_TYPES: Record<string, string> = {
 
 export const TREASURY_CAP_MAP: Record<string, string> = {
   [FAUCET_COIN_TYPES.USDC]:
-    '0x59ba3c06c55a80e64551a0f9289d5fee9522778f4d81d5871d15f6d0a7686a87',
+    '0xdf212df05a339db636d74a18fcd46ac4735797d1bade45cd8bca532d54a6dba0',
   [FAUCET_COIN_TYPES.ETH]:
-    '0xc3cea680608424c2d4f618577d2991c7a99bd29a98f58e0be75555858e9c54af',
+    '0x79660173b5435b4690711ac0ecbe8a3bc4505c6de42ea8f9442787943a8ca14b',
   [FAUCET_COIN_TYPES.BTC]:
-    '0xea65017ca55ad4b46f51c2e0ce9df86a3bcccba33ccbfa51aade38c2c92fa963',
+    '0x83dfea416599fe1b59a274e3ba01607462c6b2118109f001d1a46adbf0728d18',
   [FAUCET_COIN_TYPES.USDT]:
-    '0x99ee533652462c5f990c193bf502c16429af600d51b7bf774d1e3cf76623cab6',
+    '0x36e5246357c95fc2f12dfa0bbd5031e1353d6868ee12cb1e83228c9688d58c2e',
 };
 
 export const FAUCET_AMOUNT: Record<string, string> = {
