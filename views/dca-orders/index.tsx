@@ -98,7 +98,7 @@ const DCAOrders: FC = () => {
       ) : (
         <>
           {!!dcas?.[0]?.data.length && (
-            <Box>
+            <Box position="relative" zIndex="0">
               <Box
                 p="m"
                 pb="2xl"

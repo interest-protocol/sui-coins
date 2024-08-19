@@ -18,43 +18,51 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
   withBlocked,
 }) => (
   <ModalProvider>
-    <Box display="flex" height="100vh" overflow="hidden" bg="surface">
+    <Box bg="surface" display="flex" height="100vh" overflow="hidden">
       {!noSidebar && <Sidebar />}
       <Box
         flex="1"
         as="aside"
+        height="100vh"
         display="flex"
-        overflowY="auto"
-        overflowX="hidden"
         position="relative"
         flexDirection="column"
+        justifyContent="space-between"
       >
-        <Header withLogo={noSidebar} />
+        <Header />
         <Web3Manager features={features} withBlocked={withBlocked} />
         <Box
-          m="0"
-          mt="unset"
+          flex="1"
           width="100%"
-          height="100%"
           display="flex"
-          variant="container"
+          overflowY="auto"
           flexDirection="column"
-          px={['m', 'l', 'l', 'xl']}
           justifyContent="space-between"
         >
-          <Box as="main" flex="1" mb="10xl">
-            <Box>
-              {title && (
-                <Typography
-                  my="3rem"
-                  size="medium"
-                  variant="display"
-                  textAlign="center"
-                >
-                  {title}
-                </Typography>
-              )}
-              {children}
+          <Box
+            m="0"
+            width="100%"
+            display="flex"
+            variant="container"
+            flexDirection="column"
+            px={['m', 'l', 'l', 'xl']}
+            mt="unset"
+          >
+            <Box as="main" flex="1" mb="2xl">
+              <Box>
+                {title && (
+                  <Typography
+                    textAlign="center"
+                    color="onSurface"
+                    variant="display"
+                    size="medium"
+                    my="3rem"
+                  >
+                    {title}
+                  </Typography>
+                )}
+                {children}
+              </Box>
             </Box>
           </Box>
           <MergeCoins />
