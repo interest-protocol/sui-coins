@@ -20,6 +20,7 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
   start,
   every,
   orders,
+  active,
   isOpen,
   cooldown,
   lastTrade,
@@ -30,29 +31,21 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
 }) => {
   const isFirstRender = useIsFirstRender();
 
-  const orderPrices = orders.map(
-    ({ input_amount, output_amount, timestampMs }) => {
-      if (!(tokenIn && tokenOut)) return { valueIn: 0, price: 0, time: 0 };
+  const orderPrices = orders.map(({ output_amount, timestampMs }) => {
+    if (!(tokenIn && tokenOut)) return { valueIn: 0, price: 0, time: 0 };
 
-      const valueIn = FixedPointMath.toNumber(
-        BigNumber(input_amount),
-        tokenIn.decimals
-      );
+    const price = FixedPointMath.toNumber(
+      BigNumber(output_amount).div(
+        FixedPointMath.toNumber(BigNumber(amountPerTrade), tokenIn.decimals)
+      ),
+      tokenOut.decimals
+    );
 
-      const valueOut = FixedPointMath.toNumber(
-        BigNumber(output_amount),
-        tokenOut.decimals
-      );
-
-      const price = valueIn / valueOut;
-
-      return {
-        valueIn,
-        price: Number(+(+price.toFixed(tokenOut.decimals)).toPrecision()),
-        time: timestampMs,
-      };
-    }
-  );
+    return {
+      price: Number(+(+price.toFixed(tokenOut.decimals)).toPrecision()),
+      time: timestampMs,
+    };
+  });
 
   const maxPrice =
     tokenOut && tokenIn && max !== MAX
@@ -148,12 +141,14 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
           <Typography variant="label" size="large">
             Execution history
           </Typography>
-          <Typography variant="body" size="small">
-            Next:{' '}
-            {new Date(
-              ((lastTrade || start) + cooldown) * 1000
-            ).toLocaleString()}
-          </Typography>
+          {active && (
+            <Typography variant="body" size="small">
+              Next:{' '}
+              {new Date(
+                ((lastTrade || start) + cooldown) * 1000
+              ).toLocaleString()}
+            </Typography>
+          )}
         </Box>
         <Box display="grid" gridTemplateColumns="3fr 1fr 1fr">
           <Typography variant="label" size="medium">

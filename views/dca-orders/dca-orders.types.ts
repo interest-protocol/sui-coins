@@ -18,6 +18,7 @@ export interface DCAOrderDetailedItemProps
     | 'cooldown'
     | 'lastTrade'
     | 'start'
+    | 'active'
   > {
   isOpen: boolean;
   totalOrders: number;
