@@ -78,7 +78,7 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
       overflowY="hidden"
       style={{ originY: 0 }}
       transition={{ ease: 'easeIn' }}
-      gridTemplateColumns={['1fr', '1fr', '1fr', '1fr 2fr 2fr']}
+      gridTemplateColumns={['1fr', '1fr', '1fr', '1fr 2fr', '1fr 2fr 2fr']}
       initial={{
         scaleY: isOpen ? 0 : 1,
         opacity: isOpen ? 1 : 0,
@@ -194,6 +194,7 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
         height="20.5rem"
         bg="lowestContainer"
         flexDirection="column"
+        gridColumn={['1/-1', '1/-1', '1/-1', '1/-1', 'unset']}
       >
         <Box>
           <Typography variant="label" size="large">
