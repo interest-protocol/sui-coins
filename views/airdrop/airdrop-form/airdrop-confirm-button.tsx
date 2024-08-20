@@ -33,7 +33,7 @@ import {
   suiObjectReducer,
 } from '@/views/airdrop/airdrop-form/txb-utils';
 
-import { BATCH_SIZE } from '../airdrop.constants';
+import { BATCH_SIZE, EXCLUDED_FEE_COINS } from '../airdrop.constants';
 import { AirdropConfirmButtonProps, IAirdropForm } from '../airdrop.types';
 
 const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
@@ -51,6 +51,9 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
     try {
       const { airdropList, token } = getValues();
+      const feeNumber = EXCLUDED_FEE_COINS.includes(token.type)
+        ? '0'
+        : AIRDROP_SUI_FEE_PER_ADDRESS;
 
       if (!airdropList || !coinsMap || !coinsMap[token.type] || !currentAccount)
         return;
@@ -63,7 +66,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         .reduce((acc, data) => BigNumber(data.amount).plus(acc), BigNumber(0))
         .decimalPlaces(0);
 
-      const feeAmount = BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS)
+      const feeAmount = BigNumber(feeNumber)
         .times(airdropList.length)
         .decimalPlaces(0);
 
@@ -79,7 +82,9 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           [coinToSend],
           tx.pure.address(currentAccount.address)
         );
-        tx.transferObjects([fee], tx.pure.address(TREASURY));
+
+        if (Number(feeNumber))
+          tx.transferObjects([fee], tx.pure.address(TREASURY));
 
         const tx2 = await signAndExecute({
           suiClient,
@@ -167,9 +172,12 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           otherCoins.map((coin) => coin.coinObjectId)
         );
 
-      const [fee] = tx.splitCoins(tx.gas, [tx.pure.u64(feeAmount.toString())]);
-
-      tx.transferObjects([fee], tx.pure.address(TREASURY));
+      if (Number(feeNumber)) {
+        const [fee] = tx.splitCoins(tx.gas, [
+          tx.pure.u64(feeAmount.toString()),
+        ]);
+        tx.transferObjects([fee], tx.pure.address(TREASURY));
+      }
 
       const tx2 = await signAndExecute({
         tx,
@@ -258,11 +266,14 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
       }
     }
   };
+
+  const type = getValues('token.type');
   const airdropList = getValues('airdropList');
 
-  const airdropFee = airdropList
-    ? BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS).times(airdropList.length)
-    : ZERO_BIG_NUMBER;
+  const airdropFee =
+    airdropList && !EXCLUDED_FEE_COINS.includes(type)
+      ? BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS).times(airdropList.length)
+      : ZERO_BIG_NUMBER;
 
   const disabled = airdropFee.gt(
     coinsMap[SUI_TYPE_ARG]?.balance ?? ZERO_BIG_NUMBER

@@ -8,7 +8,10 @@ import { AIRDROP_SUI_FEE_PER_ADDRESS } from '@/constants/fees';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import { ZERO_BIG_NUMBER } from '@/utils';
-import { BATCH_SIZE } from '@/views/airdrop/airdrop.constants';
+import {
+  BATCH_SIZE,
+  EXCLUDED_FEE_COINS,
+} from '@/views/airdrop/airdrop.constants';
 
 import { AirdropSummaryProps, IAirdropForm } from '../airdrop.types';
 
@@ -23,10 +26,12 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
   const { control } = useFormContext<IAirdropForm>();
 
   const airdropList = useWatch({ control, name: 'airdropList' });
+  const type = useWatch({ control, name: 'token.type' });
 
-  const airdropFee = airdropList
-    ? BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS).times(airdropList.length)
-    : ZERO_BIG_NUMBER;
+  const airdropFee =
+    airdropList && !EXCLUDED_FEE_COINS.includes(type)
+      ? BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS).times(airdropList.length)
+      : ZERO_BIG_NUMBER;
 
   return (
     <Box display="flex" flexDirection="column" mb="m">
