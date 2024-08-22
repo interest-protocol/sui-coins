@@ -78,8 +78,6 @@ const DCAInitManager: FC = () => {
       fromType && searchParams.set('from', fromType);
       toType && searchParams.set('to', toType);
 
-      form.setValue('loading', false);
-
       const params = searchParams.toString();
 
       updateURL(`${pathname}${params ? `?${params}` : ''}`);

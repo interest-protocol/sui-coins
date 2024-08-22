@@ -216,6 +216,7 @@ const DCAFields: FC = () => {
               py="2xs"
               key={v4()}
               variant="outline"
+              disabled={!price}
               borderRadius="full"
               fontFamily="Satoshi"
               borderColor="outlineVariant"
