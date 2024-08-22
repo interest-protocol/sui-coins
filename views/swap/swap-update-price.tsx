@@ -83,10 +83,23 @@ const SwapUpdatePrice: FC = () => {
     name: 'to.display',
   });
 
+  const fromDisplay = useWatch({
+    control,
+    name: 'from.display',
+  });
+
   const [coinInValue] = useDebounce(
     useWatch({
       control,
       name: 'from.value',
+    }),
+    800
+  );
+
+  const [coinOutValue] = useDebounce(
+    useWatch({
+      control,
+      name: 'to.value',
     }),
     800
   );
@@ -99,6 +112,11 @@ const SwapUpdatePrice: FC = () => {
   const swapping = useWatch({
     control,
     name: 'swapping',
+  });
+
+  const origin = useWatch({
+    control,
+    name: 'origin',
   });
 
   const interval = useWatch({
@@ -118,13 +136,17 @@ const SwapUpdatePrice: FC = () => {
 
   const resetFields = () => {
     setValue('route', null);
-    setValue('to.display', '0');
+    setValue('error', null);
     setValue('lastFetchDate', null);
     setValue('fetchingPrices', false);
-    setValue('error', null);
+    setValue(`${origin === 'to' ? 'from' : 'to'}.display`, '0');
+    setValue(`${origin === 'to' ? 'from' : 'to'}.value`, ZERO_BIG_NUMBER);
   };
 
-  const disabled = !coinInValue || coinInValue.isZero() || !coinOutType;
+  const disabled =
+    origin === 'from'
+      ? !coinInValue || coinInValue.isZero() || !coinOutType
+      : !coinOutValue || coinOutValue.isZero() || !coinInType;
 
   const getRouterValue = (route: SwapForm['route'], aggregator: Aggregator) => {
     if (isNativeRoute(route))
@@ -184,13 +206,27 @@ const SwapUpdatePrice: FC = () => {
 
       const getAggregatorRouter = (argument: Aggregator) => {
         if (argument === Aggregator.Aftermath)
-          return aftermathRouter.getCompleteTradeRouteGivenAmountIn({
-            coinInType,
-            coinOutType,
-            referrer: TREASURY,
-            coinInAmount: BigInt(coinInValue.toFixed(0)),
-            externalFee: { recipient: TREASURY, feePercentage: EXCHANGE_FEE },
-          });
+          return origin === 'to'
+            ? aftermathRouter.getCompleteTradeRouteGivenAmountOut({
+                coinInType,
+                coinOutType,
+                referrer: TREASURY,
+                coinOutAmount: BigInt(coinOutValue.toFixed(0)),
+                externalFee: {
+                  recipient: TREASURY,
+                  feePercentage: EXCHANGE_FEE,
+                },
+              })
+            : aftermathRouter.getCompleteTradeRouteGivenAmountIn({
+                coinInType,
+                coinOutType,
+                referrer: TREASURY,
+                coinInAmount: BigInt(coinInValue.toFixed(0)),
+                externalFee: {
+                  recipient: TREASURY,
+                  feePercentage: EXCHANGE_FEE,
+                },
+              });
         if (argument === Aggregator.Hop)
           return hopSdk.quote(coinInType, coinOutType, coinInValue.toFixed(0));
 
@@ -213,22 +249,36 @@ const SwapUpdatePrice: FC = () => {
   };
 
   useEffect(() => {
-    if (!coinInValue || coinInValue.isZero()) setValue('to.display', '0');
-  }, [coinInValue, toDisplay]);
+    if (origin === 'from' && (!coinInValue || coinInValue.isZero()))
+      setValue('to.display', '0');
+    if (origin === 'to' && (!coinOutValue || coinOutValue.isZero()))
+      setValue('from.display', '0');
+  }, [coinInValue, toDisplay, coinOutValue, fromDisplay]);
 
   const { mutate, error } = useSWR(
-    `${coinInType}-${coinOutType}-${coinInValue?.toString()}-${network}-${aggregator}`,
+    `${origin === 'to' ? coinOutType : coinInType}-${
+      origin === 'to' ? coinInType : coinOutType
+    }-${
+      origin === 'to' ? coinOutValue?.toString() : coinInValue?.toString()
+    }-${network}-${aggregator}`,
     async () => {
+      console.log('1');
+
       if (disabled) {
         resetFields();
         return;
       }
 
+      console.log('2');
+
       if (swapping) return;
 
       setValue('error', null);
 
+      console.log('3');
+
       if (
+        origin === 'from' &&
         from &&
         Number(from.value) &&
         from.type &&
@@ -246,6 +296,8 @@ const SwapUpdatePrice: FC = () => {
       }
 
       setValue('fetchingPrices', true);
+
+      console.log('4');
 
       const value = await getRouteValue();
 

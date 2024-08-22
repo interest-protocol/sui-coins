@@ -12,12 +12,16 @@ import HeaderInfo from './header-info';
 import SelectToken from './select-token';
 
 const ToInput: FC = () => {
-  const { register, control, setValue, getValues } = useFormContext<SwapForm>();
+  const { register, setValue, getValues, control } = useFormContext<SwapForm>();
 
+  useWatch({ control, name: 'focus' });
+  const swapping = useWatch({ control, name: 'swapping' });
   const aggregator = useWatch({ control, name: 'settings.aggregator' });
 
+  const disabled = swapping || aggregator !== Aggregator.Aftermath;
+
   return (
-    <Box pt="5xl">
+    <>
       <HeaderInfo label="to" />
       <Box
         py="l"
@@ -34,6 +38,16 @@ const ToInput: FC = () => {
             justifyContent="flex-end"
           >
             <TextField
+              width="100%"
+              lineHeight="l"
+              placeholder="0"
+              color="onSurface"
+              disabled={disabled}
+              fontFamily="Satoshi"
+              fieldProps={{
+                width: '100%',
+                borderRadius: 'full',
+              }}
               {...register('to.display', {
                 onChange: (v: ChangeEvent<HTMLInputElement>) => {
                   const value = parseInputEventToNumberString(v);
@@ -45,15 +59,6 @@ const ToInput: FC = () => {
                   );
                 },
               })}
-              lineHeight="l"
-              placeholder="0"
-              color="onSurface"
-              fontFamily="Satoshi"
-              fieldProps={{
-                width: '100%',
-                borderRadius: 'full',
-              }}
-              disabled={!(aggregator === Aggregator.Aftermath)}
             />
           </Box>
           <SelectToken label="to" />
@@ -63,7 +68,7 @@ const ToInput: FC = () => {
           <Balance label="to" />
         </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 
