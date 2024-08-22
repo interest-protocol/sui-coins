@@ -76,6 +76,7 @@ const SwapUpdatePrice: FC = () => {
 
   const isGreaterThanAllowedWhenSui = fromBalance.minus(oneCoin).lt(fromValue);
 
+  const slippage = useWatch({ control, name: 'settings.slippage' });
   const aggregator = useWatch({ control, name: 'settings.aggregator' });
 
   const toDisplay = useWatch({
@@ -158,12 +159,20 @@ const SwapUpdatePrice: FC = () => {
       );
 
     if (aggregator === Aggregator.Aftermath)
-      return (
-        ((FixedPointMath.toNumber(coinInValue, getValues('from.decimals')) *
-          10 ** (getValues('from.decimals') - getValues('to.decimals'))) /
-          (route as RouterCompleteTradeRoute).spotPrice) *
-        (1 - EXCHANGE_FEE)
-      ).toPrecision(6);
+      return origin === 'to'
+        ? // TODO: review
+          (
+            ((FixedPointMath.toNumber(coinOutValue, getValues('to.decimals')) *
+              10 ** (getValues('to.decimals') - getValues('from.decimals'))) /
+              (route as RouterCompleteTradeRoute).spotPrice) *
+            (1 - EXCHANGE_FEE)
+          ).toPrecision(6)
+        : (
+            ((FixedPointMath.toNumber(coinInValue, getValues('from.decimals')) *
+              10 ** (getValues('from.decimals') - getValues('to.decimals'))) /
+              (route as RouterCompleteTradeRoute).spotPrice) *
+            (1 - EXCHANGE_FEE)
+          ).toPrecision(6);
 
     if (aggregator === Aggregator.Hop)
       return FixedPointMath.toNumber(
@@ -211,6 +220,7 @@ const SwapUpdatePrice: FC = () => {
                 coinInType,
                 coinOutType,
                 referrer: TREASURY,
+                slippage: Number(slippage),
                 coinOutAmount: BigInt(coinOutValue.toFixed(0)),
                 externalFee: {
                   recipient: TREASURY,
@@ -249,10 +259,14 @@ const SwapUpdatePrice: FC = () => {
   };
 
   useEffect(() => {
-    if (origin === 'from' && (!coinInValue || coinInValue.isZero()))
+    if (origin === 'from' && (!coinInValue || coinInValue.isZero())) {
       setValue('to.display', '0');
-    if (origin === 'to' && (!coinOutValue || coinOutValue.isZero()))
+      setValue('to.value', ZERO_BIG_NUMBER);
+    }
+    if (origin === 'to' && (!coinOutValue || coinOutValue.isZero())) {
       setValue('from.display', '0');
+      setValue('from.value', ZERO_BIG_NUMBER);
+    }
   }, [coinInValue, toDisplay, coinOutValue, fromDisplay]);
 
   const { mutate, error } = useSWR(
@@ -262,20 +276,14 @@ const SwapUpdatePrice: FC = () => {
       origin === 'to' ? coinOutValue?.toString() : coinInValue?.toString()
     }-${network}-${aggregator}`,
     async () => {
-      console.log('1');
-
       if (disabled) {
         resetFields();
         return;
       }
 
-      console.log('2');
-
       if (swapping) return;
 
       setValue('error', null);
-
-      console.log('3');
 
       if (
         origin === 'from' &&
@@ -297,11 +305,20 @@ const SwapUpdatePrice: FC = () => {
 
       setValue('fetchingPrices', true);
 
-      console.log('4');
-
       const value = await getRouteValue();
 
-      setValue('to.display', FixedPointMath.toBigNumber(value, 0).toString());
+      setValue(
+        `${origin === 'to' ? 'from' : 'to'}.display`,
+        FixedPointMath.toBigNumber(value, 0).toString()
+      );
+
+      setValue(
+        `${origin === 'to' ? 'from' : 'to'}.value`,
+        FixedPointMath.toBigNumber(
+          value,
+          getValues(`${origin ? 'from' : 'to'}.decimals`)
+        )
+      );
       setValue('lastFetchDate', Date.now());
 
       return;
