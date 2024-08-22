@@ -10,7 +10,12 @@ import HeaderInfo from './header-info';
 import SelectToken from './select-token';
 
 const Input: FC = () => {
-  const { register, setValue, getValues } = useFormContext<DCAForm>();
+  const {
+    register,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useFormContext<DCAForm>();
 
   return (
     <Box py="5xl" display="flex" flexDirection="column" gap="xs">
@@ -21,14 +26,24 @@ const Input: FC = () => {
         flexDirection="column"
         justifyContent="space-between"
       >
-        <Box flex="1" display="flex">
+        <Box>
           <TextField
+            status={
+              errors.from?.symbol?.message ?? errors.from?.display?.message
+                ? 'error'
+                : undefined
+            }
             width="100%"
             lineHeight="l"
             placeholder="0"
             color="onSurface"
             textAlign="right"
             fontFamily="Satoshi"
+            supportingText={
+              (errors.from?.type as any)?.message ??
+              errors.from?.display?.message ??
+              ''
+            }
             Prefix={
               <Box ml="-0.75rem">
                 <SelectToken label="from" />

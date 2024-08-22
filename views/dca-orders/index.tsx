@@ -1,4 +1,10 @@
-import { Box, Tabs, Typography } from '@interest-protocol/ui-kit';
+import {
+  Box,
+  ProgressIndicator,
+  Tabs,
+  Typography,
+} from '@interest-protocol/ui-kit';
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { v4 } from 'uuid';
@@ -7,21 +13,17 @@ import Layout from '@/components/layout';
 import { Routes, RoutesEnum } from '@/constants';
 import { useDcas } from '@/hooks/use-dca';
 import { DCA } from '@/hooks/use-dca/use-dca.types';
-import { IncineratorNoAssetsSVG } from '@/svg';
+import { ErrorSVG, IncineratorNoAssetsSVG } from '@/svg';
 
 import DCAOrderListItem from './dca-order-list-item';
-import DCAOrderListItemSkeleton from './dca-order-list-item-skeleton';
 
 const DCAOrders: FC = () => {
+  const currentAccount = useCurrentAccount();
   const { data: dcas, isLoading, mutate } = useDcas();
   const { push, pathname } = useRouter();
 
   const onChangeTab = (index: number) =>
-    push(
-      index ? Routes[RoutesEnum.DCAOrders] : Routes[RoutesEnum.DCA],
-      undefined,
-      { shallow: true }
-    );
+    push(index ? Routes[RoutesEnum.DCAOrders] : Routes[RoutesEnum.DCA]);
 
   return (
     <Layout>
@@ -40,7 +42,7 @@ const DCAOrders: FC = () => {
           ]}
         />
       </Box>
-      {!dcas && isLoading ? (
+      {!dcas || (!dcas[0]?.totalItems && !dcas[1]?.totalItems) ? (
         <Box>
           <Box
             p="m"
@@ -70,30 +72,51 @@ const DCAOrders: FC = () => {
               Actions
             </Typography>
           </Box>
-          <Box>
-            <DCAOrderListItemSkeleton />
+          <Box
+            display="flex"
+            borderRadius="s"
+            minHeight="25rem"
+            alignItems="center"
+            bg="lowestContainer"
+            justifyContent="center"
+          >
+            {!dcas ? (
+              isLoading ? (
+                <ProgressIndicator variant="loading" />
+              ) : (
+                <Box
+                  gap="m"
+                  color="error"
+                  display="flex"
+                  alignItems="center"
+                  flexDirection="column"
+                >
+                  <ErrorSVG maxWidth="2.5rem" maxHeight="2.5rem" width="100%" />
+                  <Typography variant="label" size="medium">
+                    {!currentAccount
+                      ? 'You are not connected'
+                      : 'Something went wrong'}
+                  </Typography>
+                </Box>
+              )
+            ) : !dcas[0]?.totalItems && !dcas[1]?.totalItems ? (
+              <Box
+                gap="s"
+                display="flex"
+                alignItems="center"
+                flexDirection="column"
+              >
+                <IncineratorNoAssetsSVG
+                  maxHeight="7.375rem"
+                  maxWidth="6.625rem"
+                  width="100%"
+                />
+                <Typography variant="label" size="medium">
+                  You don’t have DCAs yet
+                </Typography>
+              </Box>
+            ) : null}
           </Box>
-        </Box>
-      ) : dcas && !dcas[0]?.totalItems && !dcas[1]?.totalItems && !isLoading ? (
-        <Box
-          gap="s"
-          width="100%"
-          display="flex"
-          height="30rem"
-          alignItems="center"
-          flexDirection="column"
-          justifyContent="center"
-        >
-          <Box p="m">
-            <IncineratorNoAssetsSVG
-              maxHeight="7.375rem"
-              maxWidth="6.625rem"
-              width="100%"
-            />
-          </Box>
-          <Typography variant="label" size="medium">
-            You don’t have any DCA
-          </Typography>
         </Box>
       ) : (
         <>

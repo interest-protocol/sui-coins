@@ -6,6 +6,9 @@ import { Network } from './dapp';
 const DCA_PACKAGE =
   '0xd65cdf8558711ad3a76078ffe0cd099ccd8c007dba5ebef4aa7a0de30e043736';
 
+export const DELEGATEE =
+  '0x07f2fa921c6126da320883b832602633427ae511436dc05980e7aa0391a65f22';
+
 export const FAUCET_COIN_TYPES: Record<string, string> = {
   USDC: `${DCA_PACKAGE}::usdc::USDC`,
   ETH: `${DCA_PACKAGE}::eth::ETH`,
@@ -55,7 +58,6 @@ export const FAUCET_COINS: Array<Token> = [
 ];
 
 export const DCA_COIN_MAINNET_MOCK: Record<string, Token> = {
-  [FAUCET_COIN_TYPES.SUI]: COINS[Network.MAINNET].SUI,
   [FAUCET_COIN_TYPES.USDC]: COINS[Network.MAINNET].ETH_WORMHOLE_USDC,
   [FAUCET_COIN_TYPES.ETH]: COINS[Network.MAINNET].NATIVE_WORMHOLE_ETH,
   [FAUCET_COIN_TYPES.BTC]: COINS[Network.MAINNET].NATIVE_WORMHOLE_WBTC,
@@ -63,7 +65,6 @@ export const DCA_COIN_MAINNET_MOCK: Record<string, Token> = {
 };
 
 export const DCA_COIN_MAINNET_VALUE: Record<string, number> = {
-  [FAUCET_COIN_TYPES.SUI]: 1,
   [FAUCET_COIN_TYPES.USDC]: 1,
   [FAUCET_COIN_TYPES.ETH]: 0.1,
   [FAUCET_COIN_TYPES.BTC]: 0.000001,

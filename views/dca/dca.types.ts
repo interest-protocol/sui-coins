@@ -18,15 +18,12 @@ export interface DCAForm {
   to: DCAToken;
   from: DCAToken;
   orders: number;
-  loading: boolean;
   starting: boolean;
   intervals: number;
-  iterations: number;
   price: string | null;
-  explorerLink: string;
   error: string | null;
+  explorerLink: string;
   periodicity: TimeScale;
-  fetchingPrices: boolean;
 }
 
 export interface DCAPreviewModalProps {

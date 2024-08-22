@@ -11,6 +11,7 @@ export interface DCA {
   cooldown: number;
   delegatee: string;
   lastTrade: number;
+  isTrading: boolean;
   feePercent: number;
   timeScale: TimeScale;
   inputBalance: number;

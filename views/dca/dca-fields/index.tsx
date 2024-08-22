@@ -19,7 +19,13 @@ import DCAPeriodicity from './dca-periodicity';
 
 const DCAFields: FC = () => {
   const { coinsMap } = useWeb3();
-  const { register, getValues, setValue, control } = useFormContext<DCAForm>();
+  const {
+    register,
+    getValues,
+    setValue,
+    control,
+    formState: { errors },
+  } = useFormContext<DCAForm>();
 
   const toSymbol = getValues('to.symbol');
   const fromSymbol = getValues('from.symbol');
@@ -57,6 +63,8 @@ const DCAFields: FC = () => {
           placeholder="0"
           color="onSurface"
           fontFamily="Satoshi"
+          supportingText={errors.orders?.message}
+          status={errors.orders?.message ? 'error' : undefined}
           Suffix={
             <Typography variant="body" size="large">
               Orders
@@ -102,6 +110,8 @@ const DCAFields: FC = () => {
             placeholder="0"
             color="onSurface"
             fontFamily="Satoshi"
+            supportingText={errors.intervals?.message}
+            status={errors.intervals?.message ? 'error' : undefined}
             fieldProps={{
               mx: 0,
               px: 0,

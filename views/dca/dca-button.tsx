@@ -12,6 +12,8 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import invariant from 'tiny-invariant';
 
 import { EXPLORER_URL, Network } from '@/constants';
+import { DELEGATEE } from '@/constants/dca';
+import { EXCHANGE_FEE_PERCENTAGE } from '@/constants/fees';
 import useDcaSdk from '@/hooks/use-dca-sdk';
 import { useDialog } from '@/hooks/use-dialog';
 import { useWeb3 } from '@/hooks/use-web3';
@@ -20,9 +22,6 @@ import { coinOfValue, signAndExecute, ZERO_BIG_NUMBER } from '@/utils';
 import { DCAForm } from '@/views/dca/dca.types';
 
 import { DCAMessagesEnum } from './dca.data';
-
-const DELEGATEE =
-  '0xc23ea8e493616b1510d9405ce05593f8bd1fb30f44f92303ab2c54f6c8680ecb';
 
 const DCAButton: FC = () => {
   const dcaSdk = useDcaSdk();
@@ -35,7 +34,6 @@ const DCAButton: FC = () => {
   const signTransaction = useSignTransaction();
 
   const resetInput = () => {
-    formDCA.setValue('to.display', '0');
     formDCA.setValue('from.display', '0');
     formDCA.setValue('from.value', ZERO_BIG_NUMBER);
   };
@@ -86,6 +84,7 @@ const DCAButton: FC = () => {
         coinInType: from.type,
         timeScale: periodicity,
         every: Number(intervals),
+        fee: EXCHANGE_FEE_PERCENTAGE,
         numberOfOrders: Number(orders),
         witnessType: WITNESSES.testnet.WHITELIST_ADAPTER,
         ...(Number(min) && {

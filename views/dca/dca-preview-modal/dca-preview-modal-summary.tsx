@@ -2,7 +2,7 @@ import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { DCA_FEE_PERCENTAGE } from '@/constants/fees';
+import { EXCHANGE_FEE_PERCENTAGE } from '@/constants/fees';
 import { formatMoney } from '@/utils';
 
 import { PERIODICITY } from '../dca.data';
@@ -91,7 +91,7 @@ const DCAPreviewModalSummary: FC = () => {
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center">
             <Typography mr="s" variant="body" size="medium" color="onSurface">
-              {DCA_FEE_PERCENTAGE}%
+              {EXCHANGE_FEE_PERCENTAGE}%
             </Typography>
           </Box>
         </Box>
