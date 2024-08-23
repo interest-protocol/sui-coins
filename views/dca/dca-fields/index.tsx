@@ -159,6 +159,8 @@ const DCAFields: FC = () => {
               placeholder="0"
               color="onSurface"
               fontFamily="Satoshi"
+              supportingText={errors.min?.message}
+              status={errors.min?.message ? 'error' : undefined}
               fieldProps={{
                 mx: 0,
                 px: 0,
@@ -193,6 +195,8 @@ const DCAFields: FC = () => {
               placeholder="0"
               color="onSurface"
               fontFamily="Satoshi"
+              supportingText={errors.max?.message}
+              status={errors.max?.message ? 'error' : undefined}
               fieldProps={{
                 mx: 0,
                 px: 0,

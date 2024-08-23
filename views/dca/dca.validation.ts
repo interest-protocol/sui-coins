@@ -74,7 +74,4 @@ export const dcaValidationSchema = yup.object({
         return true;
       },
     }),
-  starting: yup.boolean().required(),
-  price: yup.string().nullable().required(),
-  explorerLink: yup.string().nullable().required(),
 });

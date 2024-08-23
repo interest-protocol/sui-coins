@@ -79,6 +79,8 @@ const PreviewSwapButton: FC = () => {
       }
     );
 
+  console.log({ errors: form.formState.errors });
+
   return (
     <>
       <DCAMessages />
