@@ -7,7 +7,7 @@ const DCA_PACKAGE =
   '0xd65cdf8558711ad3a76078ffe0cd099ccd8c007dba5ebef4aa7a0de30e043736';
 
 export const DELEGATEE =
-  '0x07f2fa921c6126da320883b832602633427ae511436dc05980e7aa0391a65f22';
+  '0xae67a84ffd814ac5005e2de892be9acb2372712b7ec9605360620e964deb09a4';
 
 export const FAUCET_COIN_TYPES: Record<string, string> = {
   USDC: `${DCA_PACKAGE}::usdc::USDC`,
