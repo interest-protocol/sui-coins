@@ -55,7 +55,6 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
   remainingOrders,
 }) => {
   const coinsType: [string, string] = [input.name, output.name];
-  console.log({ start });
 
   const dcaSdk = useDcaSdk();
   const network = useNetwork();
