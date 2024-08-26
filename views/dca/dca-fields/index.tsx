@@ -45,11 +45,10 @@ const DCAFields: FC = () => {
             Amount
           </Typography>
           <TooltipWrapper
-            border="1px solid"
+            bg="onSurface"
             whiteSpace="nowrap"
-            bg="lowestContainer"
             tooltipPosition="left"
-            borderColor="outlineVariant"
+            color="lowestContainer"
             tooltipContent="Quantity of orders"
           >
             <InfoCircleSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
@@ -91,11 +90,10 @@ const DCAFields: FC = () => {
             Frequency
           </Typography>
           <TooltipWrapper
-            border="1px solid"
+            bg="onSurface"
             whiteSpace="nowrap"
-            bg="lowestContainer"
             tooltipPosition="left"
-            borderColor="outlineVariant"
+            color="lowestContainer"
             tooltipContent="Quantity of orders"
           >
             <InfoCircleSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
@@ -130,11 +128,10 @@ const DCAFields: FC = () => {
             Enable pricing strategy
           </Typography>
           <TooltipWrapper
-            border="1px solid"
+            bg="onSurface"
             whiteSpace="nowrap"
-            bg="lowestContainer"
             tooltipPosition="left"
-            borderColor="outlineVariant"
+            color="lowestContainer"
             tooltipContent="Quantity of orders"
           >
             <InfoCircleSVG maxWidth="1rem" maxHeight="1rem" width="100%" />

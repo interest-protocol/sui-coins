@@ -1,10 +1,4 @@
-import {
-  Box,
-  Button,
-  Motion,
-  ProgressIndicator,
-  Typography,
-} from '@interest-protocol/ui-kit';
+import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
 import {
   useCurrentAccount,
   useSignTransaction,
@@ -19,6 +13,7 @@ import invariant from 'tiny-invariant';
 import { v4 } from 'uuid';
 
 import { TokenIcon } from '@/components';
+import ProgressBar from '@/components/progress-bar';
 import { useDcaOrders } from '@/hooks/use-dca';
 import useDcaSdk from '@/hooks/use-dca-sdk';
 import { useNetwork } from '@/hooks/use-network';
@@ -50,6 +45,7 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
   cooldown,
   timeScale,
   lastTrade,
+  isTrading,
   inputBalance,
   amountPerTrade,
   remainingOrders,
@@ -62,14 +58,13 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
   const currentAccount = useCurrentAccount();
   const signTransaction = useSignTransaction();
   const [isOpen, setIsOpen] = useState(false);
-  const { data: dcaOrders, isLoading } = useDcaOrders(id);
+  const { data: dcaOrders, isLoading } = useDcaOrders(id, active);
   const [[tokenIn, tokenOut], setCoins] = useState<
     [CoinMetadataWithType | null, CoinMetadataWithType | null]
   >([null, null]);
 
-  const totalOrders = dcaOrders
-    ? remainingOrders + dcaOrders.totalItems
-    : remainingOrders;
+  const totalOrders =
+    remainingOrders + (dcaOrders?.totalItems ?? 0) + (isTrading ? 1 : 0);
 
   const statusPercentage = dcaOrders
     ? (dcaOrders.data.length * 100) / totalOrders
@@ -209,7 +204,10 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
                 <Typography variant="body" size="medium">
                   {(+statusPercentage.toFixed(2)).toPrecision()}%
                 </Typography>
-                <ProgressIndicator variant="bar" value={statusPercentage} />{' '}
+                <ProgressBar
+                  value={statusPercentage}
+                  bg={active ? 'primary' : 'error'}
+                />
               </>
             ) : null}
             <Box
@@ -421,7 +419,10 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
                     <Typography variant="body" size="medium">
                       {(+statusPercentage.toFixed(2)).toPrecision()}%
                     </Typography>
-                    <ProgressIndicator variant="bar" value={statusPercentage} />{' '}
+                    <ProgressBar
+                      value={statusPercentage}
+                      bg={active ? 'primary' : 'error'}
+                    />
                   </>
                 ) : null}
                 <Box

@@ -15,6 +15,7 @@ export const useRealPrice = () => {
   const fromType = useWatch({ control, name: 'from.type' });
   const toType = useWatch({ control, name: 'to.type' });
   const hopSdk = useHopSdk();
+
   useEffect(() => {
     const coinIn = DCA_COIN_MAINNET_MOCK[fromType];
     const coinOut = DCA_COIN_MAINNET_MOCK[toType];

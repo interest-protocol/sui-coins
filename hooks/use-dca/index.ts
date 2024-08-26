@@ -11,6 +11,8 @@ export const useDcas = () => {
     () => {
       if (!currentAccount) return null;
 
+      console.log({ address: currentAccount.address });
+
       return Promise.all([
         fetch(
           `${process.env.NEXT_PUBLIC_SENTINEL_API_URL}dcas?active=true&pageSize=100&owner=${currentAccount.address}`
@@ -19,15 +21,28 @@ export const useDcas = () => {
           `${process.env.NEXT_PUBLIC_SENTINEL_API_URL}dcas?active=false&pageSize=100&owner=${currentAccount.address}`
         ).then((response) => response.json?.()),
       ]);
+    },
+    {
+      refreshInterval: 30_000,
     }
   );
 };
 
-export const useDcaOrders = (id: string) =>
-  useSWR<Paginated<DCAOrder> | null>(`dca-orders-${id}`, () => {
-    if (!id) return null;
+export const useDcaOrders = (id: string, active: boolean) =>
+  useSWR<Paginated<DCAOrder> | null>(
+    `dca-orders-${id}`,
+    () => {
+      if (!id) return null;
 
-    return fetch(
-      `${process.env.NEXT_PUBLIC_SENTINEL_API_URL}dcas/${id}/orders?pageSize=100`
-    ).then((response) => response.json?.());
-  });
+      console.log({ id });
+
+      return fetch(
+        `${process.env.NEXT_PUBLIC_SENTINEL_API_URL}dcas/${id}/orders?pageSize=100`
+      ).then((response) => response.json?.());
+    },
+    {
+      refreshWhenHidden: true,
+      refreshWhenOffline: false,
+      refreshInterval: active ? 30_000 : undefined,
+    }
+  );
