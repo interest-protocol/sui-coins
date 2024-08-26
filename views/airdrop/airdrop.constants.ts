@@ -4,4 +4,5 @@ export const BATCH_SIZE = 500;
 
 export const EXCLUDED_FEE_COINS = [
   '0x1fc50c2a9edf1497011c793cb5c88fd5f257fd7009e85a489392f388b1118f82::tusk::TUSK',
+  '0xfa7ac3951fdca92c5200d468d31a365eb03b2be9936fde615e69f0c1274ad3a0::BLUB::BLUB',
 ];
