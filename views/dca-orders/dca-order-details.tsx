@@ -67,11 +67,12 @@ const DCAOrderDetails: FC<DCAOrderDetailedItemProps> = ({
         )
       : null;
 
+  if (!isOpen) return null;
+
   return (
     <Motion
       p="xl"
       gap="3xl"
-      mt="-1rem"
       key={v4()}
       display="grid"
       bg="highContainer"

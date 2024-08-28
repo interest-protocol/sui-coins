@@ -3,10 +3,8 @@ import { FC } from 'react';
 
 import { ProgressBarProps } from './progress-bar.types';
 
-const ProgressBar: FC<ProgressBarProps> = ({ value, bg }) => (
+const ProgressBar: FC<ProgressBarProps> = ({ value, color }) => (
   <Box
-    p="2px"
-    bg={bg}
     width="100%"
     display="flex"
     aria-valuemin={0}
@@ -14,13 +12,9 @@ const ProgressBar: FC<ProgressBarProps> = ({ value, bg }) => (
     aria-valuemax={100}
     borderRadius="full"
     aria-valuenow={value}
+    bg={`${color}Container`}
   >
-    <Box
-      height="0.5rem"
-      width={`${value}%`}
-      borderRadius="full"
-      background="onPrimary"
-    />
+    <Box bg={color} height="0.5rem" width={`${value}%`} borderRadius="full" />
   </Box>
 );
 

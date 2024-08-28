@@ -6,6 +6,7 @@ import {
 } from '@mysten/dapp-kit';
 import { normalizeStructTag } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
+import { AnimatePresence } from 'framer-motion';
 import { not } from 'ramda';
 import { FC, MouseEventHandler, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -19,7 +20,7 @@ import useDcaSdk from '@/hooks/use-dca-sdk';
 import { useNetwork } from '@/hooks/use-network';
 import { CoinMetadataWithType } from '@/interface';
 import { FixedPointMath } from '@/lib';
-import { CaretRightSVG, ChevronDownSVG, TrashSVG } from '@/svg';
+import { ChevronDownSVG, ChevronRightSVG, TrashSVG } from '@/svg';
 import {
   fetchCoinMetadata,
   isSameStructTag,
@@ -118,8 +119,10 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
   return (
     <>
       <Box
-        mt="-1rem"
         overflow="hidden"
+        border="1px solid"
+        borderRadius="xs"
+        borderColor="outlineVariant"
         display={['none', 'none', 'none', 'block']}
       >
         <Box
@@ -140,45 +143,35 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
             initial={{ rotate: isOpen ? '0deg' : '90deg' }}
             animate={{ rotate: isOpen ? '90deg' : '0deg' }}
           >
-            <CaretRightSVG
+            <ChevronRightSVG
+              width="100%"
               maxWidth="1.25rem"
               maxHeight="1.25rem"
-              width="100%"
             />
           </Motion>
-          <Box
-            gap="xs"
-            display="flex"
-            alignItems="center"
-            flexDirection="column"
-          >
+          <Box gap="xs" display="flex" alignItems="center">
             <TokenIcon
               withBg
               rounded
-              size="1.1rem"
+              size="1rem"
               network={network}
               type={tokenIn?.type ?? ''}
               symbol={tokenIn?.symbol ?? ''}
             />
-            <Typography variant="body" size="medium">
+            <Typography variant="body" size="medium" color="outline">
               {tokenIn?.symbol ?? ''}
             </Typography>
           </Box>
-          <Box
-            display="flex"
-            alignItems="center"
-            flexDirection="column"
-            gap="xs"
-          >
+          <Box gap="xs" display="flex" alignItems="center">
             <TokenIcon
               withBg
               rounded
-              size="1.1rem"
+              size="1rem"
               network={network}
               type={tokenOut?.type ?? ''}
               symbol={tokenOut?.symbol ?? ''}
             />
-            <Typography variant="body" size="medium">
+            <Typography variant="body" size="medium" color="outline">
               {tokenOut?.symbol ?? ''}
             </Typography>
           </Box>
@@ -199,35 +192,19 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
             flexDirection="column"
             alignItems="flex-start"
           >
-            {remainingOrders ? (
-              <>
-                <Typography variant="body" size="medium">
-                  {(+statusPercentage.toFixed(2)).toPrecision()}%
-                </Typography>
-                <ProgressBar
-                  value={statusPercentage}
-                  bg={active ? 'primary' : 'error'}
-                />
-              </>
-            ) : null}
             <Box
-              mt="s"
               px="l"
-              border="1px solid"
-              borderRadius="full"
-              color={active ? 'primary' : remainingOrders ? 'error' : 'outline'}
-              borderColor={
-                active ? 'primary' : remainingOrders ? 'error' : 'outline'
-              }
-              bg={
-                active
-                  ? 'primaryContainer'
-                  : remainingOrders
-                    ? 'errorContainer'
-                    : 'container'
-              }
+              width="100%"
+              display="flex"
+              flexDirection="column"
+              alignItems="flex-start"
             >
-              {active ? 'Active' : remainingOrders ? 'Cancelled' : 'Done'}
+              <ProgressBar
+                value={statusPercentage}
+                color={
+                  active ? 'primary' : remainingOrders ? 'error' : 'success'
+                }
+              />
             </Box>
           </Box>
           <Box>
@@ -242,21 +219,23 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
             )}
           </Box>
         </Box>
-        <DCAOrderDetails
-          min={min}
-          max={max}
-          start={start}
-          every={every}
-          active={active}
-          isOpen={isOpen}
-          cooldown={cooldown}
-          lastTrade={lastTrade}
-          timeScale={timeScale}
-          totalOrders={totalOrders}
-          coins={[tokenIn, tokenOut]}
-          orders={dcaOrders?.data ?? []}
-          amountPerTrade={amountPerTrade}
-        />
+        <AnimatePresence>
+          <DCAOrderDetails
+            min={min}
+            max={max}
+            start={start}
+            every={every}
+            active={active}
+            isOpen={isOpen}
+            cooldown={cooldown}
+            lastTrade={lastTrade}
+            timeScale={timeScale}
+            totalOrders={totalOrders}
+            coins={[tokenIn, tokenOut]}
+            orders={dcaOrders?.data ?? []}
+            amountPerTrade={amountPerTrade}
+          />
+        </AnimatePresence>
       </Box>
       <Box
         mt="-1rem"
@@ -414,26 +393,19 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
                 flexDirection="column"
                 alignItems="flex-start"
               >
-                {remainingOrders ? (
-                  <>
-                    <Typography variant="body" size="medium">
-                      {(+statusPercentage.toFixed(2)).toPrecision()}%
-                    </Typography>
-                    <ProgressBar
-                      value={statusPercentage}
-                      bg={active ? 'primary' : 'error'}
-                    />
-                  </>
-                ) : null}
                 <Box
-                  mt="s"
                   px="l"
-                  border="1px solid"
-                  borderRadius="full"
-                  bg="primaryContainer"
-                  borderColor="primary"
+                  width="100%"
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="flex-start"
                 >
-                  {active ? 'Active' : remainingOrders ? 'Cancelled' : 'Done'}
+                  <ProgressBar
+                    value={statusPercentage}
+                    color={
+                      active ? 'primary' : remainingOrders ? 'error' : 'success'
+                    }
+                  />
                 </Box>
               </Box>
             </Box>

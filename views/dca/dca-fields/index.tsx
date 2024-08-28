@@ -99,26 +99,28 @@ const DCAFields: FC = () => {
             <InfoCircleSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
           </TooltipWrapper>
         </Box>
-        <Box display="flex" gap="s" flex="1">
-          <TextField
-            min="1"
-            width="100%"
-            type="number"
-            lineHeight="l"
-            placeholder="0"
-            color="onSurface"
-            fontFamily="Satoshi"
-            supportingText={errors.intervals?.message}
-            status={errors.intervals?.message ? 'error' : undefined}
-            fieldProps={{
-              mx: 0,
-              px: 0,
-              width: '100%',
-              height: '3.5rem',
-              borderRadius: 'xs',
-            }}
-            {...register('intervals')}
-          />
+        <Box display="grid" gap="s" gridTemplateColumns="1fr 1fr">
+          <Box width="100%">
+            <TextField
+              min="1"
+              width="100%"
+              type="number"
+              lineHeight="l"
+              placeholder="0"
+              color="onSurface"
+              fontFamily="Satoshi"
+              supportingText={errors.intervals?.message}
+              status={errors.intervals?.message ? 'error' : undefined}
+              fieldProps={{
+                mx: 0,
+                px: 0,
+                width: '100%',
+                height: '3.5rem',
+                borderRadius: 'xs',
+              }}
+              {...register('intervals')}
+            />
+          </Box>
           <DCAPeriodicity />
         </Box>
       </Box>
