@@ -9,6 +9,7 @@ import { Routes, RoutesEnum } from '@/constants';
 import { useDcas } from '@/hooks/use-dca';
 import { DCA } from '@/hooks/use-dca/use-dca.types';
 import { RefreshSVG } from '@/svg';
+import { updateURL } from '@/utils';
 
 import DCAOrderListItem from './dca-order-list-item';
 import DCAOrdersEmpty from './dca-orders-empty';
@@ -18,9 +19,17 @@ import DCAOrdersNotConnected from './dca-orders-not-connected';
 
 const DCAOrders: FC = () => {
   const [index, setIndex] = useState(0);
-  const { push, pathname } = useRouter();
+  const { push, pathname, query } = useRouter();
   const currentAccount = useCurrentAccount();
   const { data: dcas, isLoading, mutate } = useDcas();
+  const [selectedOrder, setSelectedOrder] = useState<string>(
+    query.id as string
+  );
+
+  const selectOrder = (id: string) => {
+    setSelectedOrder(id === selectedOrder ? '' : id);
+    updateURL(id === selectedOrder ? pathname : `${pathname}?id=${id}`);
+  };
 
   const onChangeTab = (index: number) =>
     push(index ? Routes[RoutesEnum.DCAOrders] : Routes[RoutesEnum.DCA]);
@@ -146,7 +155,13 @@ const DCAOrders: FC = () => {
           {dcas && dcas[index] ? (
             dcas[index].totalItems ? (
               dcas[index].data.map((dca: DCA) => (
-                <DCAOrderListItem key={v4()} {...dca} mutate={mutate} />
+                <DCAOrderListItem
+                  key={v4()}
+                  {...dca}
+                  mutate={mutate}
+                  toggleSelectOrder={selectOrder}
+                  selected={selectedOrder === dca.id}
+                />
               ))
             ) : (
               <DCAOrdersEmpty />

@@ -7,8 +7,8 @@ import {
 import { normalizeStructTag } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
 import { AnimatePresence } from 'framer-motion';
-import { not } from 'ramda';
-import { FC, MouseEventHandler, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { FC, MouseEventHandler, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import invariant from 'tiny-invariant';
 import { v4 } from 'uuid';
@@ -27,11 +27,13 @@ import {
   showTXSuccessToast,
   signAndExecute,
   throwTXIfNotSuccessful,
+  updateURL,
 } from '@/utils';
 
 import DCAOrderDetails from './dca-order-details';
 import DCAOrderListItemSkeleton from './dca-order-list-item-skeleton';
 import { DCAOrderListItemProps } from './dca-orders.types';
+import { useDCAOrdersState } from './dca-orders-manager';
 
 const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
   id,
@@ -51,6 +53,15 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
   amountPerTrade,
   remainingOrders,
 }) => {
+  const { pathname } = useRouter();
+  const { selectedId, selectId } = useDCAOrdersState();
+  const selected = useMemo(() => selectedId === id, [selectedId]);
+
+  const handleToggleDetails = () => {
+    selectId(id);
+    updateURL(selected ? pathname : `${pathname}?id=${id}`);
+  };
+
   const coinsType: [string, string] = [input.name, output.name];
 
   const dcaSdk = useDcaSdk();
@@ -58,7 +69,6 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
   const signTransaction = useSignTransaction();
-  const [isOpen, setIsOpen] = useState(false);
   const { data: dcaOrders, isLoading } = useDcaOrders(id, active);
   const [[tokenIn, tokenOut], setCoins] = useState<
     [CoinMetadataWithType | null, CoinMetadataWithType | null]
@@ -117,7 +127,7 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
   if (isLoading || !tokenIn || !tokenOut) return <DCAOrderListItemSkeleton />;
 
   return (
-    <>
+    <AnimatePresence>
       <Box
         overflow="hidden"
         border="1px solid"
@@ -136,20 +146,16 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
           position="relative"
           bg="lowestContainer"
           justifyItems="center"
-          onClick={() => setIsOpen(not)}
+          onClick={handleToggleDetails}
           gridTemplateColumns="1.25rem 1fr 1fr 1fr 1fr 1fr 1fr"
         >
-          <Motion
-            style={{ originX: 0.5, originY: 0.5 }}
-            initial={{ rotate: isOpen ? '0deg' : '90deg' }}
-            animate={{ rotate: isOpen ? '90deg' : '0deg' }}
-          >
+          <Box transform={`rotate(${selected ? '90deg' : '0deg'})`}>
             <ChevronRightSVG
               width="100%"
               maxWidth="1.25rem"
               maxHeight="1.25rem"
             />
-          </Motion>
+          </Box>
           <Box gap="xs" display="flex" alignItems="center">
             <TokenIcon
               withBg
@@ -227,7 +233,7 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
             start={start}
             every={every}
             active={active}
-            isOpen={isOpen}
+            isOpen={selected}
             cooldown={cooldown}
             lastTrade={lastTrade}
             timeScale={timeScale}
@@ -256,7 +262,7 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
           alignItems="stretch"
           bg="lowestContainer"
           flexDirection="column"
-          onClick={() => setIsOpen(not)}
+          onClick={handleToggleDetails}
         >
           <Box
             p="m"
@@ -440,8 +446,8 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
                 width="1.25rem"
                 height="1.25rem"
                 style={{ originX: 0.5, originY: 0.5 }}
-                initial={{ rotate: isOpen ? '0deg' : '180deg' }}
-                animate={{ rotate: isOpen ? '180deg' : '0deg' }}
+                initial={{ rotate: selected ? '0deg' : '180deg' }}
+                animate={{ rotate: selected ? '180deg' : '0deg' }}
               >
                 <ChevronDownSVG
                   width="100%"
@@ -459,7 +465,7 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
           max={max}
           every={every}
           start={start}
-          isOpen={isOpen}
+          isOpen={selected}
           active={active}
           cooldown={cooldown}
           lastTrade={lastTrade}
@@ -471,7 +477,7 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
           remainingOrders={remainingOrders}
         />
       </Box>
-    </>
+    </AnimatePresence>
   );
 };
 
