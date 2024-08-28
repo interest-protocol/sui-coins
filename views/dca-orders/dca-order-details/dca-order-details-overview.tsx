@@ -32,8 +32,8 @@ const DCAOrderDetailsOverview: FC<DCAOrderDetailedItemProps> = ({
     <Box
       p="m"
       gap="m"
+      bg="surface"
       display="flex"
-      bg="lowContainer"
       borderRadius="xs"
       flexDirection="column"
     >
@@ -46,7 +46,7 @@ const DCAOrderDetailsOverview: FC<DCAOrderDetailedItemProps> = ({
         flexDirection="column"
       >
         <Box display="flex" justifyContent="space-between" py="s">
-          <Typography variant="body" size="medium" color="outline">
+          <Typography variant="body" size="medium" color="onSurface">
             DCA {tokenIn?.symbol} Balance
           </Typography>
           <Typography variant="body" size="medium">
@@ -66,7 +66,7 @@ const DCAOrderDetailsOverview: FC<DCAOrderDetailedItemProps> = ({
           borderColor="outlineVariant"
           justifyContent="space-between"
         >
-          <Typography variant="body" size="medium" color="outline">
+          <Typography variant="body" size="medium" color="onSurface">
             DCA {tokenOut?.symbol} Balance
           </Typography>
           <Typography variant="body" size="medium">
@@ -79,7 +79,7 @@ const DCAOrderDetailsOverview: FC<DCAOrderDetailedItemProps> = ({
       </Box>
       <Box px="l">
         <Box py="s" display="flex" justifyContent="space-between">
-          <Typography variant="body" size="small" color="outline">
+          <Typography variant="body" size="small" color="onSurface">
             Total deposited
           </Typography>
           <Typography variant="body" size="small">
@@ -99,7 +99,7 @@ const DCAOrderDetailsOverview: FC<DCAOrderDetailedItemProps> = ({
           borderColor="outlineVariant"
           justifyContent="space-between"
         >
-          <Typography variant="body" size="small" color="outline">
+          <Typography variant="body" size="small" color="onSurface">
             Total spent
           </Typography>
           <Typography variant="body" size="small">
@@ -119,7 +119,7 @@ const DCAOrderDetailsOverview: FC<DCAOrderDetailedItemProps> = ({
           borderColor="outlineVariant"
           justifyContent="space-between"
         >
-          <Typography variant="body" size="small" color="outline">
+          <Typography variant="body" size="small" color="onSurface">
             Each order size
           </Typography>
           <Typography variant="body" size="small">
@@ -136,7 +136,7 @@ const DCAOrderDetailsOverview: FC<DCAOrderDetailedItemProps> = ({
       <Box my="xs" mx="l" borderTop="1px solid" borderColor="outlineVariant" />
       <Box px="l">
         <Box py="s" display="flex" justifyContent="space-between">
-          <Typography variant="body" size="small" color="outline">
+          <Typography variant="body" size="small" color="onSurface">
             Buying
           </Typography>
           <Box display="flex" gap="2xs" alignItems="center">
@@ -160,7 +160,7 @@ const DCAOrderDetailsOverview: FC<DCAOrderDetailedItemProps> = ({
           borderColor="outlineVariant"
           justifyContent="space-between"
         >
-          <Typography variant="body" size="small" color="outline">
+          <Typography variant="body" size="small" color="onSurface">
             Interval
           </Typography>
           <Typography variant="body" size="small">
@@ -175,7 +175,7 @@ const DCAOrderDetailsOverview: FC<DCAOrderDetailedItemProps> = ({
           borderColor="outlineVariant"
           justifyContent="space-between"
         >
-          <Typography variant="body" size="small" color="outline">
+          <Typography variant="body" size="small" color="onSurface">
             # of Orders left
           </Typography>
           <Typography variant="body" size="small">
@@ -189,7 +189,7 @@ const DCAOrderDetailsOverview: FC<DCAOrderDetailedItemProps> = ({
           borderColor="outlineVariant"
           justifyContent="space-between"
         >
-          <Typography variant="body" size="small" color="outline">
+          <Typography variant="body" size="small" color="onSurface">
             {remainingOrders ? 'Next Order' : 'Last Order'}
           </Typography>
           <Typography variant="body" size="small">
@@ -205,7 +205,7 @@ const DCAOrderDetailsOverview: FC<DCAOrderDetailedItemProps> = ({
           borderColor="outlineVariant"
           justifyContent="space-between"
         >
-          <Typography variant="body" size="small" color="outline">
+          <Typography variant="body" size="small" color="onSurface">
             Created
           </Typography>
           <Typography variant="body" size="small">

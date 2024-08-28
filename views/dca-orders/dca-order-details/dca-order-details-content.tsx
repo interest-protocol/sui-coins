@@ -26,7 +26,7 @@ const DCAOrderDetailsContent: FC<DCAOrderDetailedItemProps> = (props) => {
           </Typography>,
         ]}
       />
-      <Box mt="l">
+      <Box gap="m" mt="l" display="flex" flexDirection="column">
         {index ? (
           <DCAOrderDetailsOrders {...props} />
         ) : (

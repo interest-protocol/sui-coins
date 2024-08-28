@@ -3,6 +3,8 @@ import type { Token } from '@interest-protocol/sui-tokens';
 import { COINS } from './coins';
 import { Network } from './dapp';
 
+export const MAX_U64 = '18446744073709551615';
+
 const DCA_PACKAGE =
   '0xd65cdf8558711ad3a76078ffe0cd099ccd8c007dba5ebef4aa7a0de30e043736';
 
