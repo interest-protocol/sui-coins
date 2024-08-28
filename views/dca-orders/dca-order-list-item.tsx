@@ -126,7 +126,8 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
         display={['none', 'none', 'none', 'block']}
       >
         <Box
-          p="m"
+          px="m"
+          py="xl"
           zIndex="1"
           key={v4()}
           display="grid"
@@ -234,6 +235,7 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
             coins={[tokenIn, tokenOut]}
             orders={dcaOrders?.data ?? []}
             amountPerTrade={amountPerTrade}
+            remainingOrders={remainingOrders}
           />
         </AnimatePresence>
       </Box>
@@ -466,6 +468,7 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
           coins={[tokenIn, tokenOut]}
           orders={dcaOrders?.data ?? []}
           amountPerTrade={amountPerTrade}
+          remainingOrders={remainingOrders}
         />
       </Box>
     </>

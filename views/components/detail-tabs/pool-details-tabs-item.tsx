@@ -3,11 +3,11 @@ import { FC } from 'react';
 
 import { DetailsTabItemProps } from './pool-details-tabs.types';
 
-const DetailsTabItem: FC<DetailsTabItemProps> = ({ onChange, item }) => (
+const DetailsTabItem: FC<DetailsTabItemProps> = ({ item, onChange }) => (
   <Box
-    flex="1"
-    height="2.8rem"
+    px="4xl"
     display="flex"
+    height="2.8rem"
     cursor="pointer"
     onClick={onChange}
     alignItems="center"

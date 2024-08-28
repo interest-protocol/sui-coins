@@ -102,12 +102,9 @@ const DCAOrders: FC = () => {
                 </Typography>
               </Box>
               <Button
+                color="primary"
                 variant="outline"
-                color={
-                  dcas && dcas[index] && dcas[index].totalItems
-                    ? 'primary'
-                    : 'primaryContainer'
-                }
+                disabled={!(dcas && dcas[index] && dcas[index].totalItems)}
                 PrefixIcon={
                   <RefreshSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
                 }

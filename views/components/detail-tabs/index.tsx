@@ -16,8 +16,9 @@ const variants = {
 
 const DetailsTabs: FC<DetailsTabsProps> = ({
   items,
-  defaultTabIndex = 0,
   onChangeTab,
+  stretch = true,
+  defaultTabIndex = 0,
 }) => {
   const [tabIndex, setTabIndex] = useState(defaultTabIndex);
 
@@ -36,10 +37,10 @@ const DetailsTabs: FC<DetailsTabsProps> = ({
       borderBottomColor="outlineVariant"
     >
       {items.map((item, index) => (
-        <Box width="100%" key={v4()}>
+        <Box width={stretch ? '100%' : 'auto'} key={v4()}>
           <PoolDetailsTabsItem
-            item={item}
             key={v4()}
+            item={item}
             onChange={handleChangeTab(index)}
           />
           {tabIndex === index && (
