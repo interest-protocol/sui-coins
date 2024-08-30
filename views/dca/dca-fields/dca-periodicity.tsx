@@ -78,8 +78,8 @@ const DCAPeriodicity: FC = () => {
               textTransform="capitalize"
               nHover={{ bg: 'container' }}
               onClick={() => {
-                trigger('intervals');
                 setValue('periodicity', key);
+                trigger('intervals');
                 toggle();
               }}
             >
