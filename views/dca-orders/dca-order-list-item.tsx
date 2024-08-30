@@ -7,6 +7,7 @@ import {
 import { normalizeStructTag } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
 import { AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, MouseEventHandler, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -15,12 +16,14 @@ import { v4 } from 'uuid';
 
 import { TokenIcon } from '@/components';
 import ProgressBar from '@/components/progress-bar';
+import { EXPLORER_URL } from '@/constants';
+import { SENTINEL_API_URI } from '@/constants/dca';
 import { useDcaOrders } from '@/hooks/use-dca';
 import useDcaSdk from '@/hooks/use-dca-sdk';
 import { useNetwork } from '@/hooks/use-network';
 import { CoinMetadataWithType } from '@/interface';
 import { FixedPointMath } from '@/lib';
-import { ChevronDownSVG, ChevronRightSVG, TrashSVG } from '@/svg';
+import { ChevronDownSVG, ChevronRightSVG, LinkSVG, TrashSVG } from '@/svg';
 import {
   fetchCoinMetadata,
   isSameStructTag,
@@ -101,7 +104,9 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
 
       throwTXIfNotSuccessful(txResult);
 
-      console.log('>> destroy endpoint will call ', id);
+      await fetch(`${SENTINEL_API_URI[network]}dcas/${id}`, {
+        method: 'DELETE',
+      });
 
       showTXSuccessToast(txResult, network, 'DCA destroyed successfully');
     } catch (e) {
@@ -214,11 +219,44 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
               />
             </Box>
           </Box>
-          <Box>
+          <Box
+            gap="xs"
+            display="flex"
+            justifyContent="flex-end"
+            onClick={(e) => e.stopPropagation()}
+          >
             {active ? (
-              <Button variant="text" isIcon onClick={handleDestroyDCA}>
-                <TrashSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
-              </Button>
+              <>
+                <Button
+                  isIcon
+                  color="error"
+                  variant="text"
+                  onClick={handleDestroyDCA}
+                >
+                  <TrashSVG
+                    width="100%"
+                    maxWidth="1.25rem"
+                    maxHeight="1.25rem"
+                  />
+                </Button>
+                <Link
+                  target="_blank"
+                  href={`${EXPLORER_URL[network]}/object/${id}`}
+                >
+                  <Button
+                    isIcon
+                    variant="text"
+                    color="primary"
+                    justifySelf="self-end"
+                  >
+                    <LinkSVG
+                      width="100%"
+                      maxWidth="1.25rem"
+                      maxHeight="1.25rem"
+                    />
+                  </Button>
+                </Link>
+              </>
             ) : (
               <Typography variant="body" size="medium">
                 {new Date(start * 1000).toLocaleDateString()}
@@ -245,11 +283,7 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
           />
         </AnimatePresence>
       </Box>
-      <Box
-        mt="-1rem"
-        overflow="hidden"
-        display={['block', 'block', 'block', 'none']}
-      >
+      <Box overflow="hidden" display={['block', 'block', 'block', 'none']}>
         <Box
           py="xl"
           px="xs"
@@ -395,26 +429,18 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
                 Status
               </Typography>
               <Box
-                px="l"
+                mt="s"
                 width="100%"
                 display="flex"
                 flexDirection="column"
                 alignItems="flex-start"
               >
-                <Box
-                  px="l"
-                  width="100%"
-                  display="flex"
-                  flexDirection="column"
-                  alignItems="flex-start"
-                >
-                  <ProgressBar
-                    value={statusPercentage}
-                    color={
-                      active ? 'primary' : remainingOrders ? 'error' : 'success'
-                    }
-                  />
-                </Box>
+                <ProgressBar
+                  value={statusPercentage}
+                  color={
+                    active ? 'primary' : remainingOrders ? 'error' : 'success'
+                  }
+                />
               </Box>
             </Box>
             <Box
@@ -427,9 +453,26 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
                 Actions
               </Typography>
               {active ? (
-                <Button variant="text" isIcon onClick={handleDestroyDCA}>
-                  <TrashSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
-                </Button>
+                <Box display="flex" gap="xs" justifyContent="flex-end">
+                  <Button
+                    isIcon
+                    color="error"
+                    variant="text"
+                    onClick={handleDestroyDCA}
+                  >
+                    <TrashSVG width="100%" maxWidth="1rem" maxHeight="1rem" />
+                  </Button>
+                  <Link href={`${EXPLORER_URL[network]}/object/${id}`}>
+                    <Button
+                      isIcon
+                      variant="text"
+                      color="primary"
+                      justifySelf="self-end"
+                    >
+                      <LinkSVG width="100%" maxWidth="1rem" maxHeight="1rem" />
+                    </Button>
+                  </Link>
+                </Box>
               ) : (
                 <Typography variant="body" size="small">
                   {new Date(start * 1000).toLocaleDateString()}

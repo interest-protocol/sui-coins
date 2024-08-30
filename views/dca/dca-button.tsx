@@ -4,7 +4,6 @@ import {
   useCurrentAccount,
   useSignTransaction,
   useSuiClient,
-  useSuiClientContext,
 } from '@mysten/dapp-kit';
 import { Transaction } from '@mysten/sui/transactions';
 import { FC } from 'react';
@@ -13,10 +12,11 @@ import invariant from 'tiny-invariant';
 import { useReadLocalStorage } from 'usehooks-ts';
 
 import { EXPLORER_URL, Network } from '@/constants';
-import { DELEGATEE } from '@/constants/dca';
+import { DELEGATEE, SENTINEL_API_URI } from '@/constants/dca';
 import { EXCHANGE_FEE_PERCENTAGE } from '@/constants/fees';
 import useDcaSdk from '@/hooks/use-dca-sdk';
 import { useDialog } from '@/hooks/use-dialog';
+import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import {
@@ -33,10 +33,10 @@ import { Aggregator, DCAForm } from './dca.types';
 
 const DCAButton: FC = () => {
   const dcaSdk = useDcaSdk();
+  const network = useNetwork();
   const { coinsMap } = useWeb3();
   const suiClient = useSuiClient();
   const formDCA = useFormContext<DCAForm>();
-  const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
   const { dialog, handleClose } = useDialog();
   const signTransaction = useSignTransaction();
@@ -97,7 +97,9 @@ const DCAButton: FC = () => {
         every: Number(intervals),
         fee: EXCHANGE_FEE_PERCENTAGE,
         numberOfOrders: Number(orders),
-        witnessType: WITNESSES.testnet.WHITELIST_ADAPTER,
+        witnessType:
+          WITNESSES[network === Network.MAINNET ? 'mainnet' : 'testnet']
+            .WHITELIST_ADAPTER,
         ...(Number(min) && {
           min: BigInt(
             FixedPointMath.toBigNumber(min, to.decimals)
@@ -136,7 +138,13 @@ const DCAButton: FC = () => {
         aggregator: aggregator ?? Aggregator.Aftermath,
       });
 
-      console.log('>> create endpoint will call ', body);
+      await fetch(`${SENTINEL_API_URI[network]}dcas`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body,
+      });
 
       formDCA.setValue(
         'explorerLink',

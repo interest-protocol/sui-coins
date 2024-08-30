@@ -52,28 +52,53 @@ const DCAOrders: FC = () => {
         />
       </Box>
       <Box
-        p="2xl"
+        py="2xl"
         zIndex="0"
         borderRadius="xs"
         position="relative"
         bg="lowestContainer"
+        px={['s', 's', '2xl']}
       >
-        <Box display="flex" justifyContent="space-between">
+        <Box
+          gap="l"
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          flexDirection={['column', 'column', 'column', 'row']}
+        >
           <Tabs
             type="square"
             onChangeTab={setIndex}
             defaultTabIndex={index}
             items={[
               <Typography variant="label" size="large" as="span" key={v4()}>
-                Active orders
+                Active{' '}
+                <Typography
+                  as="span"
+                  key={v4()}
+                  size="large"
+                  variant="label"
+                  display={['none', 'none', 'inline']}
+                >
+                  orders
+                </Typography>
               </Typography>,
               <Typography variant="label" size="large" as="span" key={v4()}>
-                Previous orders
+                Previous{' '}
+                <Typography
+                  as="span"
+                  key={v4()}
+                  size="large"
+                  variant="label"
+                  display={['none', 'none', 'inline']}
+                >
+                  orders
+                </Typography>
               </Typography>,
             ]}
           />
           {index ? (
-            <Box display="flex" alignItems="center" gap="xl">
+            <Box gap="xl" display="flex" alignItems="center">
               <Box display="flex" alignItems="center" gap="xs">
                 <Box
                   bg="success"
@@ -98,7 +123,7 @@ const DCAOrders: FC = () => {
               </Box>
             </Box>
           ) : (
-            <Box display="flex" gap="l">
+            <Box display="flex" gap="l" justifyContent="flex-end">
               <Box display="flex" alignItems="center" gap="xs">
                 <Box
                   bg="primary"
@@ -113,6 +138,7 @@ const DCAOrders: FC = () => {
               <Button
                 color="primary"
                 variant="outline"
+                onClick={() => mutate()}
                 disabled={!(dcas && dcas[index] && dcas[index].totalItems)}
                 PrefixIcon={
                   <RefreshSVG maxWidth="1rem" maxHeight="1rem" width="100%" />

@@ -1,5 +1,5 @@
 import { Box, Motion } from '@interest-protocol/ui-kit';
-import { FC, useState } from 'react';
+import { FC, useId, useState } from 'react';
 import { v4 } from 'uuid';
 
 import { DetailsTabsProps } from './details-tabs.types';
@@ -20,6 +20,7 @@ const DetailsTabs: FC<DetailsTabsProps> = ({
   stretch = true,
   defaultTabIndex = 0,
 }) => {
+  const id = useId();
   const [tabIndex, setTabIndex] = useState(defaultTabIndex);
 
   const handleChangeTab = (index: number) => () => {
@@ -47,12 +48,12 @@ const DetailsTabs: FC<DetailsTabsProps> = ({
             <Motion
               px="xl"
               initial="rest"
+              overflow="hidden"
               variants={variants}
               animate="collapsed"
-              overflow="hidden"
               borderBottom="2px solid"
               borderBottomColor="primary"
-              layoutId="underline"
+              layoutId={`${id}-underline"`}
             />
           )}
         </Box>

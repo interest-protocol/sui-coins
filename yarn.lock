@@ -915,12 +915,12 @@
     ramda "^0.29.1"
     tiny-invariant "^1.3.3"
 
-"@interest-protocol/dca-sdk@3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/dca-sdk/-/dca-sdk-3.0.0.tgz#42a83dd13276f148251686abbb6c602f2d2feed6"
-  integrity sha512-wFji9v5daBW15lulSsbJF5BByJeJr6favGil0yYGuALFiua3auUNRW8EtnNupyD5tFF6XOm645B7yiuxMa155A==
+"@interest-protocol/dca-sdk@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/dca-sdk/-/dca-sdk-3.0.2.tgz#8595c44f393bf02b053acfd8f833576392965ab5"
+  integrity sha512-8zI7xk5KzjJg72PFQd3a65ENJT6jpTgjeWEtG70/x72JnlmNrnuF4d7LFzCK39q3i31K4NGwHb8Tuc8ZznQU/w==
   dependencies:
-    "@mysten/sui" "^1.6.0"
+    "@mysten/sui" "^1.5.0"
     "@polymedia/suitcase-core" "^0.0.16"
     ramda "^0.30.1"
     tiny-invariant "^1.3.3"
@@ -1267,14 +1267,14 @@
   dependencies:
     bs58 "^6.0.0"
 
-"@mysten/dapp-kit@^0.14.16":
-  version "0.14.16"
-  resolved "https://registry.yarnpkg.com/@mysten/dapp-kit/-/dapp-kit-0.14.16.tgz#c86b2c02ec7d5737c80f6e5e97cea45af0e22a92"
-  integrity sha512-mjQiHZ1JmBVYMZlmCOjqjdhWsa2FpgPNXfSLUW357YRxgvTuFX03R0wnBKPUKW5zr7nlCSOk2RXwoFYTMVOI7Q==
+"@mysten/dapp-kit@^0.14.17":
+  version "0.14.17"
+  resolved "https://registry.yarnpkg.com/@mysten/dapp-kit/-/dapp-kit-0.14.17.tgz#6eb0999c3ef48fb8b1da577b44793ae7a36a79c5"
+  integrity sha512-1geq0vah/cqSprzVssKKFCkqDeOX30SDCa2TdqIO6ywR3gN6K78Jmq0aBZWepSvkA0ytaTcmATGY7E/lccTalw==
   dependencies:
-    "@mysten/sui" "1.6.0"
-    "@mysten/wallet-standard" "0.13.1"
-    "@mysten/zksend" "0.10.5"
+    "@mysten/sui" "1.7.0"
+    "@mysten/wallet-standard" "0.13.2"
+    "@mysten/zksend" "0.10.6"
     "@radix-ui/react-dialog" "^1.1.1"
     "@radix-ui/react-dropdown-menu" "^2.1.1"
     "@radix-ui/react-slot" "^1.1.0"
@@ -1316,10 +1316,10 @@
     superstruct "^1.0.3"
     tweetnacl "^1.0.3"
 
-"@mysten/sui@1.6.0", "@mysten/sui@^1.6.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@mysten/sui/-/sui-1.6.0.tgz#ef761636ac30b3bc9b5cb932e488393df19346e9"
-  integrity sha512-duauv2/taCRx4+T/dYi25AXgZu4DAVw41jFDNhwtQ+lfJqRxRyge0D7WxAJOZHzvCDFd1Oo/mg4DFLnW78YajA==
+"@mysten/sui@1.7.0", "@mysten/sui@^1.5.0", "@mysten/sui@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@mysten/sui/-/sui-1.7.0.tgz#e429aa2fa727d282dda29888ba1107cdbaeda623"
+  integrity sha512-g88beCeYH7WVZbNW541j+Vusdxn1yd9X9TiQ8kGHbXKNIPFmc0Pf26kPwlAVnCbXslFflUgN6q4CWpAsBUIA3A==
   dependencies:
     "@graphql-typed-document-node/core" "^3.2.0"
     "@mysten/bcs" "1.0.4"
@@ -1377,21 +1377,21 @@
   dependencies:
     "@mysten/sui" "^1.4.0"
 
-"@mysten/wallet-standard@0.13.1", "@mysten/wallet-standard@^0.13.1":
-  version "0.13.1"
-  resolved "https://registry.yarnpkg.com/@mysten/wallet-standard/-/wallet-standard-0.13.1.tgz#4c020a031a13e632bcdeba2e6406fe389f152bf9"
-  integrity sha512-70LauqBoV6Dcav0uwGzM2bEZrV/AsSN60fE/NtXyhbjw9Lj4qKWY7gViAjSBCRQNcKLTfC8W7I4xFf+pY4fM9Q==
+"@mysten/wallet-standard@0.13.2", "@mysten/wallet-standard@^0.13.2":
+  version "0.13.2"
+  resolved "https://registry.yarnpkg.com/@mysten/wallet-standard/-/wallet-standard-0.13.2.tgz#3e526edc24456d2b21bfa4f8f5c81352695aeab6"
+  integrity sha512-f6PheDGUv8lIMZG2ugboFvxMqfjV//iwoi9OPPwViQbJLumnv0CMD9xFO9+iYPAd7FSW4M3bBNdQIb8IjUi7UA==
   dependencies:
-    "@mysten/sui" "1.6.0"
+    "@mysten/sui" "1.7.0"
     "@wallet-standard/core" "1.0.3"
 
-"@mysten/zksend@0.10.5", "@mysten/zksend@^0.10.5":
-  version "0.10.5"
-  resolved "https://registry.yarnpkg.com/@mysten/zksend/-/zksend-0.10.5.tgz#93903a760b9c6bb09deee040f1a42ca115080e94"
-  integrity sha512-8wPzkjIQbnCiTXvw3o4qPli35l4Bg/4Cwl163Fa6kRtbibKyboxvncoqdC8qUezGbbuDyWkgx3iaV9KPSDZkJg==
+"@mysten/zksend@0.10.6", "@mysten/zksend@^0.10.6":
+  version "0.10.6"
+  resolved "https://registry.yarnpkg.com/@mysten/zksend/-/zksend-0.10.6.tgz#bfefbd6f8c18e831fddf4c282bdc14dc0acccd42"
+  integrity sha512-yc6PplNUFXf3uiq0ntFPs8UWq1GTwgVK2q3LR8ro3GQGkoZd3bmxntNMkVtRE2rpJfOW8TZ93tfy+KwlVAgq0w==
   dependencies:
-    "@mysten/sui" "1.6.0"
-    "@mysten/wallet-standard" "0.13.1"
+    "@mysten/sui" "1.7.0"
+    "@mysten/wallet-standard" "0.13.2"
     mitt "^3.0.1"
     nanostores "^0.10.3"
     valibot "^0.36.0"

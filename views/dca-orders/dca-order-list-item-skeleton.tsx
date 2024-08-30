@@ -5,11 +5,7 @@ import { v4 } from 'uuid';
 
 const DCAOrderListItemSkeleton: FC = () => (
   <>
-    <Box
-      mt="-1rem"
-      overflow="hidden"
-      display={['none', 'none', 'none', 'block']}
-    >
+    <Box overflow="hidden" display={['none', 'none', 'none', 'block']}>
       <Box
         p="m"
         zIndex="1"
@@ -45,11 +41,7 @@ const DCAOrderListItemSkeleton: FC = () => (
         <Skeleton width="1.5rem" />
       </Box>
     </Box>
-    <Box
-      mt="-1rem"
-      overflow="hidden"
-      display={['block', 'block', 'block', 'none']}
-    >
+    <Box overflow="hidden" display={['block', 'block', 'block', 'none']}>
       <Box
         py="xl"
         px="xs"

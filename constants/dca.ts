@@ -72,3 +72,8 @@ export const DCA_COIN_MAINNET_VALUE: Record<string, number> = {
   [FAUCET_COIN_TYPES.BTC]: 0.000001,
   [FAUCET_COIN_TYPES.USDT]: 1,
 };
+
+export const SENTINEL_API_URI: Record<Network, string> = {
+  [Network.MAINNET]: process.env.NEXT_PUBLIC_MAINNET_SENTINEL_API_URL!,
+  [Network.TESTNET]: process.env.NEXT_PUBLIC_TESTNET_SENTINEL_API_URL!,
+};

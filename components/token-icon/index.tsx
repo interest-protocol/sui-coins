@@ -128,7 +128,13 @@ const TokenIcon: FC<TokenIconProps> = ({
           />
         </Box>
         {!simple && ChainIcon && (
-          <Box position="absolute" bottom="-0.3rem" right="-0.5rem">
+          <Box
+            right="-0.5rem"
+            bottom="-0.3rem"
+            position="absolute"
+            overflow="hidden"
+            borderRadius="full"
+          >
             <ChainIcon maxHeight={size} maxWidth={size} width="100%" />
           </Box>
         )}
@@ -161,7 +167,12 @@ const TokenIcon: FC<TokenIconProps> = ({
           />
         </Box>
         {!simple && ChainIcon && (
-          <Box position="absolute" bottom="-0.3rem" right="-0.5rem">
+          <Box
+            position="absolute"
+            bottom="-0.3rem"
+            right="-0.5rem"
+            borderRadius="full"
+          >
             <ChainIcon maxHeight={size} maxWidth={size} width="100%" />
           </Box>
         )}
@@ -251,7 +262,12 @@ const TokenIcon: FC<TokenIconProps> = ({
           )}
         </Box>
         {!simple && ChainIcon && (
-          <Box position="absolute" bottom="-0.3rem" right="-0.5rem">
+          <Box
+            right="-0.5rem"
+            bottom="-0.3rem"
+            position="absolute"
+            borderRadius="full"
+          >
             <ChainIcon maxHeight={size} maxWidth={size} width="100%" />
           </Box>
         )}

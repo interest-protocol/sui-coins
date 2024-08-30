@@ -90,7 +90,7 @@ const DCARecentOrders: FC = () => {
           </Box>
         </Box>
       ) : (
-        <Box>
+        <Box py="l" display="flex" flexDirection="column" gap="s">
           {dcas.map((dca) => (
             <DCAOrderListMiniItem key={v4()} {...dca} />
           ))}

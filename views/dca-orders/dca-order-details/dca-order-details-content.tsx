@@ -12,7 +12,7 @@ const DCAOrderDetailsContent: FC<DCAOrderDetailedItemProps> = (props) => {
   const [index, setIndex] = useState(0);
 
   return (
-    <Box p="xl" gap="3xl">
+    <Box py={['m', 'm', 'xl']} px={['s', 's', 'xl']} gap="3xl">
       <DetailsTabs
         stretch={false}
         onChangeTab={setIndex}

@@ -12,7 +12,7 @@ import { LOCAL_STORAGE_VERSION } from '@/constants';
 import { MAX_U64 } from '@/constants/dca';
 import { useNetwork } from '@/hooks/use-network';
 import { FixedPointMath } from '@/lib';
-import { EyeSVG, LinkSVG } from '@/svg';
+import { EyeSVG, IncineratorNoAssetsSVG } from '@/svg';
 import { formatMoney } from '@/utils';
 
 import { DCAOrderDetailedItemProps } from '../dca-orders.types';
@@ -71,11 +71,11 @@ const DCAOrderDetailsOrders: FC<DCAOrderDetailedItemProps> = ({
   return (
     <>
       <Box
-        p="l"
         gap="m"
         bg="surface"
         display="flex"
         borderRadius="xs"
+        p={['s', 's', 'l']}
         flexDirection="column"
       >
         <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -92,7 +92,16 @@ const DCAOrderDetailsOrders: FC<DCAOrderDetailedItemProps> = ({
               <EyeSVG width="100%" maxWidth="1rem" maxHeight="1rem" />
             }
           >
-            {isOpen ? 'Hide' : 'Show'} Chart
+            {isOpen ? 'Hide' : 'Show'}
+            <Typography
+              as="span"
+              size="large"
+              variant="label"
+              display={['none', 'none', 'inline']}
+            >
+              {' '}
+              Chart
+            </Typography>
           </Button>
         </Box>
         {isOpen && (
@@ -209,12 +218,20 @@ const DCAOrderDetailsOrders: FC<DCAOrderDetailedItemProps> = ({
           display="grid"
           alignItems="center"
           justifyItems="center"
-          gridTemplateColumns="1fr 1fr 1fr 2fr 1fr"
+          gridTemplateColumns={[
+            '1fr 1fr 2fr',
+            '1fr 1fr 2fr',
+            '1fr 1fr 1fr 2fr',
+          ]}
         >
           <Typography variant="label" size="large" justifySelf="self-start">
             From
           </Typography>
-          <Typography variant="label" size="large">
+          <Typography
+            size="large"
+            variant="label"
+            display={['none', 'none', 'block']}
+          >
             Rate
           </Typography>
           <Typography variant="label" size="large">
@@ -223,91 +240,127 @@ const DCAOrderDetailsOrders: FC<DCAOrderDetailedItemProps> = ({
           <Typography variant="label" size="large">
             Date/Time
           </Typography>
-          <Box as="span" />
         </Box>
-        <Box
-          gap="s"
-          display="flex"
-          overflowY="auto"
-          height="20rem"
-          flexDirection="column"
-        >
-          {orders.map(({ input_amount, output_amount, timestampMs }) => (
-            <Box
-              p="m"
-              key={v4()}
-              display="grid"
-              borderRadius="xs"
-              border="1px solid"
-              alignItems="center"
-              bg="lowestContainer"
-              justifyItems="center"
-              borderColor="outlineVariant"
-              gridTemplateColumns="1fr 1fr 1fr 2fr 1fr"
-            >
-              <Box display="flex" gap="s" justifySelf="self-start">
-                <Typography variant="body" size="medium">
-                  {formatMoney(
-                    FixedPointMath.toNumber(
-                      BigNumber(input_amount),
-                      tokenIn?.decimals
-                    )
-                  )}
-                </Typography>
-                <TokenIcon
-                  withBg
-                  rounded
-                  size="0.75rem"
-                  network={network}
-                  type={tokenIn?.type ?? ''}
-                  symbol={tokenIn?.symbol ?? ''}
-                />
-              </Box>
-              <Box>
-                <Typography variant="body" size="medium">
-                  {FixedPointMath.toNumber(
-                    BigNumber(output_amount).div(
+        {orders.length ? (
+          <Box
+            gap="s"
+            height="20rem"
+            display="flex"
+            overflowY="auto"
+            flexDirection="column"
+          >
+            {orders.map(({ input_amount, output_amount, timestampMs }) => (
+              <Box
+                p="m"
+                key={v4()}
+                display="grid"
+                borderRadius="xs"
+                border="1px solid"
+                alignItems="center"
+                bg="lowestContainer"
+                justifyItems="center"
+                borderColor="outlineVariant"
+                gridTemplateColumns={[
+                  '1fr 1fr 2fr',
+                  '1fr 1fr 2fr',
+                  '1fr 1fr 1fr 2fr',
+                ]}
+              >
+                <Box
+                  gap="s"
+                  display="flex"
+                  alignItems="center"
+                  justifySelf="self-start"
+                  flexDirection={['column-reverse', 'row']}
+                >
+                  <Typography variant="body" size="medium">
+                    {formatMoney(
                       FixedPointMath.toNumber(
-                        BigNumber(amountPerTrade),
+                        BigNumber(input_amount),
                         tokenIn?.decimals
                       )
-                    ),
-                    tokenOut?.decimals
-                  )}
-                </Typography>
-              </Box>
-              <Box display="flex" gap="s">
-                <Typography variant="body" size="medium">
-                  {formatMoney(
-                    FixedPointMath.toNumber(
-                      BigNumber(output_amount),
+                    )}
+                  </Typography>
+                  <Box display="flex">
+                    <TokenIcon
+                      withBg
+                      rounded
+                      size="0.75rem"
+                      network={network}
+                      type={tokenIn?.type ?? ''}
+                      symbol={tokenIn?.symbol ?? ''}
+                    />
+                  </Box>
+                </Box>
+                <Box display={['none', 'none', 'block']}>
+                  <Typography variant="body" size="medium">
+                    {FixedPointMath.toNumber(
+                      BigNumber(output_amount).div(
+                        FixedPointMath.toNumber(
+                          BigNumber(amountPerTrade),
+                          tokenIn?.decimals
+                        )
+                      ),
                       tokenOut?.decimals
-                    )
-                  )}
+                    )}
+                  </Typography>
+                </Box>
+                <Box
+                  gap="s"
+                  display="flex"
+                  alignItems="center"
+                  flexDirection={['column-reverse', 'row']}
+                >
+                  <Typography variant="body" size="medium">
+                    {formatMoney(
+                      FixedPointMath.toNumber(
+                        BigNumber(output_amount),
+                        tokenOut?.decimals
+                      )
+                    )}
+                  </Typography>
+                  <Box display="flex">
+                    <TokenIcon
+                      withBg
+                      rounded
+                      size="0.75rem"
+                      network={network}
+                      type={tokenOut?.type ?? ''}
+                      symbol={tokenOut?.symbol ?? ''}
+                    />
+                  </Box>
+                </Box>
+                <Typography variant="body" size="medium" textAlign="right">
+                  {new Date(timestampMs * 1000).toLocaleString()}
                 </Typography>
-                <TokenIcon
-                  withBg
-                  rounded
-                  size="0.75rem"
-                  network={network}
-                  type={tokenOut?.type ?? ''}
-                  symbol={tokenOut?.symbol ?? ''}
-                />
               </Box>
-              <Typography variant="body" size="medium">
-                {new Date(timestampMs * 1000).toLocaleString()}
+            ))}
+          </Box>
+        ) : (
+          <Box
+            gap="s"
+            height="20rem"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Box
+              gap="s"
+              display="flex"
+              alignItems="center"
+              flexDirection="column"
+            >
+              <IncineratorNoAssetsSVG
+                maxHeight="7.375rem"
+                maxWidth="6.625rem"
+                width="100%"
+              />
+              <Typography variant="label" size="medium">
+                You don’t have DCAs
               </Typography>
-              <Button
-                isIcon
-                variant="text"
-                color="primary"
-                justifySelf="self-end"
-              >
-                <LinkSVG width="100%" maxWidth="1rem" maxHeight="1rem" />
-              </Button>
             </Box>
-          ))}
-        </Box>
+          </Box>
+        )}
       </Box>
     </>
   );

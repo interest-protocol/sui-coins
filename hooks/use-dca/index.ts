@@ -1,9 +1,13 @@
 import { useCurrentAccount } from '@mysten/dapp-kit';
 import useSWR from 'swr';
 
+import { SENTINEL_API_URI } from '@/constants/dca';
+
+import { useNetwork } from '../use-network';
 import { DCA, DCAOrder, Paginated } from './use-dca.types';
 
 export const useRecentDcas = () => {
+  const network = useNetwork();
   const currentAccount = useCurrentAccount();
 
   return useSWR<ReadonlyArray<DCA> | null>(
@@ -12,7 +16,7 @@ export const useRecentDcas = () => {
       if (!currentAccount) return null;
 
       return fetch(
-        `${process.env.NEXT_PUBLIC_SENTINEL_API_URL}dcas?active=true&pageSize=5&owner=${currentAccount.address}`
+        `${SENTINEL_API_URI[network]}dcas?active=true&pageSize=5&owner=${currentAccount.address}`
       )
         .then((response) => response.json?.())
         .then((data) => data.data);
@@ -24,6 +28,7 @@ export const useRecentDcas = () => {
 };
 
 export const useDcas = () => {
+  const network = useNetwork();
   const currentAccount = useCurrentAccount();
 
   return useSWR<[Paginated<DCA>, Paginated<DCA>] | null>(
@@ -33,10 +38,10 @@ export const useDcas = () => {
 
       return Promise.all([
         fetch(
-          `${process.env.NEXT_PUBLIC_SENTINEL_API_URL}dcas?active=true&pageSize=100&owner=${currentAccount.address}`
+          `${SENTINEL_API_URI[network]}dcas?active=true&pageSize=100&owner=${currentAccount.address}`
         ).then((response) => response.json?.()),
         fetch(
-          `${process.env.NEXT_PUBLIC_SENTINEL_API_URL}dcas?active=false&pageSize=100&owner=${currentAccount.address}`
+          `${SENTINEL_API_URI[network]}dcas?active=false&pageSize=100&owner=${currentAccount.address}`
         ).then((response) => response.json?.()),
       ]);
     },
@@ -46,8 +51,10 @@ export const useDcas = () => {
   );
 };
 
-export const useDcaOrders = (id: string, active: boolean) =>
-  useSWR<Paginated<DCAOrder> | null>(
+export const useDcaOrders = (id: string, active: boolean) => {
+  const network = useNetwork();
+
+  return useSWR<Paginated<DCAOrder> | null>(
     `dca-orders-${id}`,
     () => {
       if (!id) return null;
@@ -55,7 +62,7 @@ export const useDcaOrders = (id: string, active: boolean) =>
       console.log({ id });
 
       return fetch(
-        `${process.env.NEXT_PUBLIC_SENTINEL_API_URL}dcas/${id}/orders?pageSize=100`
+        `${SENTINEL_API_URI[network]}dcas/${id}/orders?pageSize=100`
       ).then((response) => response.json?.());
     },
     {
@@ -64,3 +71,4 @@ export const useDcaOrders = (id: string, active: boolean) =>
       refreshInterval: active ? 30_000 : undefined,
     }
   );
+};
