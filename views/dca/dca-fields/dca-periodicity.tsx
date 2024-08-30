@@ -11,7 +11,7 @@ import { PERIODICITY } from '../dca.data';
 import { DCAForm } from '../dca.types';
 
 const DCAPeriodicity: FC = () => {
-  const { control, setValue } = useFormContext<DCAForm>();
+  const { control, setValue, trigger } = useFormContext<DCAForm>();
   const { id, toggle, state } = useToggleOutside({});
 
   const periodicity = useWatch({ control, name: 'periodicity' });
@@ -78,6 +78,7 @@ const DCAPeriodicity: FC = () => {
               textTransform="capitalize"
               nHover={{ bg: 'container' }}
               onClick={() => {
+                trigger('intervals');
                 setValue('periodicity', key);
                 toggle();
               }}
