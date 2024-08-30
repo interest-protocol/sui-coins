@@ -4,7 +4,7 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 import { v4 } from 'uuid';
 
 import { PoolForm } from '@/views/pools/pools.types';
-import ManageSlippage from '@/views/dca/dca-aggregator';
+import ManageSlippage from '@/views/swap/swap-settings';
 
 import PoolField from '../pool-field';
 import { PoolFormProps } from '../pool-field/pool-field.types';

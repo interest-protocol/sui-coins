@@ -7,7 +7,7 @@ import { Routes, RoutesEnum } from '@/constants';
 import { useRecentDcas } from '@/hooks/use-dca';
 import { ErrorSVG, IncineratorNoAssetsSVG } from '@/svg';
 
-import DCAOrderListMiniItem from './dca-order-list-mini-item';
+import DCAOrderListMiniItem from './dca-recent-orders-item';
 
 const DCARecentOrders: FC = () => {
   const { data: dcas, isLoading } = useRecentDcas();
