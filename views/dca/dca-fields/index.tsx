@@ -76,7 +76,9 @@ const DCAFields: FC = () => {
             height: '3.5rem',
             borderRadius: 'xs',
           }}
-          {...register('orders')}
+          {...register('orders', {
+            onChange: (e) => setValue('orders', Math.floor(e.target.value)),
+          })}
         />
       </Box>
       <Box display="flex" flexDirection="column" gap="xs">
@@ -118,7 +120,10 @@ const DCAFields: FC = () => {
                 height: '3.5rem',
                 borderRadius: 'xs',
               }}
-              {...register('intervals')}
+              {...register('intervals', {
+                onChange: (e) =>
+                  setValue('intervals', Math.floor(e.target.value)),
+              })}
             />
           </Box>
           <DCAPeriodicity />

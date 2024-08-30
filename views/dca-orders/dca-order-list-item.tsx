@@ -101,13 +101,13 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
 
       throwTXIfNotSuccessful(txResult);
 
+      console.log('>> destroy endpoint will call ', id);
+
       showTXSuccessToast(txResult, network, 'DCA destroyed successfully');
     } catch (e) {
       toast.error((e as Error)?.message || 'Error on destroy DCA');
     } finally {
-      setTimeout(() => {
-        mutate();
-      }, 10000);
+      mutate();
     }
   };
 

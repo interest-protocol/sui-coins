@@ -10,6 +10,7 @@ import { Transaction } from '@mysten/sui/transactions';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import invariant from 'tiny-invariant';
+import { useReadLocalStorage } from 'usehooks-ts';
 
 import { EXPLORER_URL, Network } from '@/constants';
 import { DELEGATEE } from '@/constants/dca';
@@ -18,10 +19,17 @@ import useDcaSdk from '@/hooks/use-dca-sdk';
 import { useDialog } from '@/hooks/use-dialog';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
-import { coinOfValue, signAndExecute, ZERO_BIG_NUMBER } from '@/utils';
-import { DCAForm } from '@/views/dca/dca.types';
+import {
+  coinOfValue,
+  getObjectIdsFromTxResult,
+  signAndExecute,
+  throwTXIfNotSuccessful,
+  ZERO_BIG_NUMBER,
+} from '@/utils';
 
+import { LOCAL_STORAGE_TOP_KEY } from '../send/send.data';
 import { DCAMessagesEnum } from './dca.data';
+import { Aggregator, DCAForm } from './dca.types';
 
 const DCAButton: FC = () => {
   const dcaSdk = useDcaSdk();
@@ -32,6 +40,9 @@ const DCAButton: FC = () => {
   const currentAccount = useCurrentAccount();
   const { dialog, handleClose } = useDialog();
   const signTransaction = useSignTransaction();
+  const aggregator = useReadLocalStorage<Aggregator>(
+    `${LOCAL_STORAGE_TOP_KEY}-suicoins-dca-aggregator`
+  );
 
   const resetInput = () => {
     formDCA.setValue('from.display', '0');
@@ -113,6 +124,19 @@ const DCAButton: FC = () => {
         currentAccount,
         signTransaction,
       });
+
+      throwTXIfNotSuccessful(txResult);
+
+      const dcaId = getObjectIdsFromTxResult(txResult, 'created');
+
+      const body = JSON.stringify({
+        dcaId,
+        inputCoinType: from.type,
+        outputCoinType: to.type,
+        aggregator: aggregator ?? Aggregator.Aftermath,
+      });
+
+      console.log('>> create endpoint will call ', body);
 
       formDCA.setValue(
         'explorerLink',

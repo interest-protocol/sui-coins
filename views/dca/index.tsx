@@ -10,6 +10,7 @@ import { useRealPrice } from './dca.hooks';
 import DCAAggregator from './dca-aggregator';
 import DCAFields from './dca-fields';
 import DCAFlipToken from './dca-flip-token';
+import DCAPoweredBy from './dca-powered-by';
 import DCARecentOrders from './dca-recent-orders';
 import Input from './input';
 import HeaderInfo from './input/header-info';
@@ -103,6 +104,7 @@ const DCA: FC = () => {
           </Box>
           <DCAFields />
           <PreviewDCAButton />
+          <DCAPoweredBy />
         </Box>
         <DCAAggregator />
         <DCARecentOrders />
