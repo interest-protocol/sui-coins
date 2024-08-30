@@ -1,7 +1,7 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import ManageSlippage from '@/views/dca/dca-aggregator';
+import ManageSlippage from '@/views/swap/swap-settings';
 
 import PoolField from '../pool-field';
 import { PoolFormProps } from '../pool-field/pool-field.types';
