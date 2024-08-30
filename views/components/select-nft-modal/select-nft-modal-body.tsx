@@ -2,6 +2,7 @@ import { Box } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { NFT } from '@/constants/nft';
 import { useNFTMetadata } from '@/hooks/use-nft-metadata';
 
 import FetchingToken from './fetching-token';
@@ -20,7 +21,9 @@ const SelectTokenModalBody: FC<SelectNFTModalBodyProps> = ({
   const search = useWatch({ control, name: 'search' });
 
   const filteredNfts =
-    nfts?.filter(({ name }) => !search || name.includes(search)) ?? [];
+    nfts?.filter(
+      ({ name, id }) => NFT.includes(id) && (!search || name.includes(search))
+    ) ?? [];
 
   return (
     <>
