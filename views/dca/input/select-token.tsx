@@ -1,6 +1,5 @@
 import { Token } from '@interest-protocol/sui-tokens';
 import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
-import { useSuiClientContext } from '@mysten/dapp-kit';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -8,6 +7,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import TokenIcon from '@/components/token-icon';
 import { Network } from '@/constants';
 import { useModal } from '@/hooks/use-modal';
+import { useNetwork } from '@/hooks/use-network';
 import { ChevronDownSVG } from '@/svg';
 import { updateURL, ZERO_BIG_NUMBER } from '@/utils';
 import SelectTokenModal from '@/views/components/select-token-modal';
@@ -16,8 +16,8 @@ import { DCAForm } from '../dca.types';
 import { InputProps } from './input.types';
 
 const SelectToken: FC<InputProps> = ({ label }) => {
+  const network = useNetwork();
   const { pathname } = useRouter();
-  const { network } = useSuiClientContext();
   const { setModal, handleClose } = useModal();
 
   const { setValue, control } = useFormContext<DCAForm>();
@@ -84,10 +84,10 @@ const SelectToken: FC<InputProps> = ({ label }) => {
         transition={{ duration: 0.3 }}
       >
         <SelectTokenModal
-          faucet
-          simple
-          closeModal={handleClose}
           onSelect={onSelect}
+          closeModal={handleClose}
+          faucet={network === Network.TESTNET}
+          simple={network === Network.TESTNET}
         />
       </Motion>,
       {
@@ -122,9 +122,9 @@ const SelectToken: FC<InputProps> = ({ label }) => {
               withBg
               rounded
               size="1.1rem"
+              network={network}
               type={currentType}
               symbol={currentSymbol}
-              network={network as Network}
             />
           ),
         })}
@@ -135,9 +135,9 @@ const SelectToken: FC<InputProps> = ({ label }) => {
             withBg
             rounded
             size="1.1rem"
+            network={network}
             type={currentType}
             symbol={currentSymbol}
-            network={network as Network}
           />
         )}
         <Typography
