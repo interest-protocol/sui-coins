@@ -2,11 +2,13 @@ import { TimeScale } from '@interest-protocol/dca-sdk';
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import BigNumber from 'bignumber.js';
 import { not } from 'ramda';
-import { FC, useState } from 'react';
+import { FC } from 'react';
+import { useLocalStorage } from 'usehooks-ts';
 import { v4 } from 'uuid';
 
 import { TokenIcon } from '@/components';
 import LinearChart from '@/components/linear-chart';
+import { LOCAL_STORAGE_VERSION } from '@/constants';
 import { MAX_U64 } from '@/constants/dca';
 import { useNetwork } from '@/hooks/use-network';
 import { FixedPointMath } from '@/lib';
@@ -25,7 +27,10 @@ const DCAOrderDetailsOrders: FC<DCAOrderDetailedItemProps> = ({
   coins: [tokenIn, tokenOut],
 }) => {
   const network = useNetwork();
-  const [isOpen, setOpen] = useState(false);
+  const [isOpen, setOpen] = useLocalStorage<boolean>(
+    `${LOCAL_STORAGE_VERSION}-sui-coins-dca-chart`,
+    true
+  );
 
   const orderPrices = orders.map(({ output_amount, timestampMs }) => {
     if (!(tokenIn && tokenOut)) return { valueIn: 0, price: 0, time: 0 };
@@ -196,8 +201,6 @@ const DCAOrderDetailsOrders: FC<DCAOrderDetailedItemProps> = ({
         gap="m"
         bg="surface"
         display="flex"
-        overflowY="auto"
-        maxHeight="20rem"
         borderRadius="xs"
         flexDirection="column"
       >
@@ -222,81 +225,89 @@ const DCAOrderDetailsOrders: FC<DCAOrderDetailedItemProps> = ({
           </Typography>
           <Box as="span" />
         </Box>
-        {orders.map(({ input_amount, output_amount, timestampMs }) => (
-          <Box
-            p="m"
-            key={v4()}
-            display="grid"
-            borderRadius="xs"
-            border="1px solid"
-            alignItems="center"
-            bg="lowestContainer"
-            justifyItems="center"
-            borderColor="outlineVariant"
-            gridTemplateColumns="1fr 1fr 1fr 2fr 1fr"
-          >
-            <Box display="flex" gap="s" justifySelf="self-start">
-              <Typography variant="body" size="medium">
-                {formatMoney(
-                  FixedPointMath.toNumber(
-                    BigNumber(input_amount),
-                    tokenIn?.decimals
-                  )
-                )}
-              </Typography>
-              <TokenIcon
-                withBg
-                rounded
-                size="0.75rem"
-                network={network}
-                type={tokenIn?.type ?? ''}
-                symbol={tokenIn?.symbol ?? ''}
-              />
-            </Box>
-            <Box>
-              <Typography variant="body" size="medium">
-                {FixedPointMath.toNumber(
-                  BigNumber(output_amount).div(
+        <Box
+          gap="s"
+          display="flex"
+          overflowY="auto"
+          height="20rem"
+          flexDirection="column"
+        >
+          {orders.map(({ input_amount, output_amount, timestampMs }) => (
+            <Box
+              p="m"
+              key={v4()}
+              display="grid"
+              borderRadius="xs"
+              border="1px solid"
+              alignItems="center"
+              bg="lowestContainer"
+              justifyItems="center"
+              borderColor="outlineVariant"
+              gridTemplateColumns="1fr 1fr 1fr 2fr 1fr"
+            >
+              <Box display="flex" gap="s" justifySelf="self-start">
+                <Typography variant="body" size="medium">
+                  {formatMoney(
                     FixedPointMath.toNumber(
-                      BigNumber(amountPerTrade),
+                      BigNumber(input_amount),
                       tokenIn?.decimals
                     )
-                  ),
-                  tokenOut?.decimals
-                )}
-              </Typography>
-            </Box>
-            <Box display="flex" gap="s">
-              <Typography variant="body" size="medium">
-                {formatMoney(
-                  FixedPointMath.toNumber(
-                    BigNumber(output_amount),
+                  )}
+                </Typography>
+                <TokenIcon
+                  withBg
+                  rounded
+                  size="0.75rem"
+                  network={network}
+                  type={tokenIn?.type ?? ''}
+                  symbol={tokenIn?.symbol ?? ''}
+                />
+              </Box>
+              <Box>
+                <Typography variant="body" size="medium">
+                  {FixedPointMath.toNumber(
+                    BigNumber(output_amount).div(
+                      FixedPointMath.toNumber(
+                        BigNumber(amountPerTrade),
+                        tokenIn?.decimals
+                      )
+                    ),
                     tokenOut?.decimals
-                  )
-                )}
+                  )}
+                </Typography>
+              </Box>
+              <Box display="flex" gap="s">
+                <Typography variant="body" size="medium">
+                  {formatMoney(
+                    FixedPointMath.toNumber(
+                      BigNumber(output_amount),
+                      tokenOut?.decimals
+                    )
+                  )}
+                </Typography>
+                <TokenIcon
+                  withBg
+                  rounded
+                  size="0.75rem"
+                  network={network}
+                  type={tokenOut?.type ?? ''}
+                  symbol={tokenOut?.symbol ?? ''}
+                />
+              </Box>
+              <Typography variant="body" size="medium">
+                {new Date(timestampMs * 1000).toLocaleString()}
               </Typography>
-              <TokenIcon
-                withBg
-                rounded
-                size="0.75rem"
-                network={network}
-                type={tokenOut?.type ?? ''}
-                symbol={tokenOut?.symbol ?? ''}
-              />
+              <Button
+                isIcon
+                variant="text"
+                color="primary"
+                justifySelf="self-end"
+              >
+                <LinkSVG width="100%" maxWidth="1rem" maxHeight="1rem" />
+              </Button>
             </Box>
-            <Typography variant="body" size="medium">
-              {new Date(timestampMs * 1000).toLocaleString()}
-            </Typography>
-            <Button
-              isIcon
-              variant="text"
-              color="primary"
-              justifySelf="self-end"
-            >
-              <LinkSVG width="100%" maxWidth="1rem" maxHeight="1rem" />
-            </Button>
-          </Box>
-        ))}
+          ))}
+        </Box>
       </Box>
     </>
   );

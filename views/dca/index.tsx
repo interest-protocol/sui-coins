@@ -7,8 +7,10 @@ import Layout from '@/components/layout';
 import { Routes, RoutesEnum } from '@/constants';
 
 import { useRealPrice } from './dca.hooks';
+import DCAAggregator from './dca-aggregator';
 import DCAFields from './dca-fields';
 import DCAFlipToken from './dca-flip-token';
+import DCARecentOrders from './dca-recent-orders';
 import Input from './input';
 import HeaderInfo from './input/header-info';
 import SelectToken from './input/select-token';
@@ -18,13 +20,12 @@ const DCA: FC = () => {
   useRealPrice();
   const { push, pathname } = useRouter();
 
-  const onChangeTab = (index: number) => {
+  const onChangeTab = (index: number) =>
     push(
       index ? Routes[RoutesEnum.DCAOrders] : Routes[RoutesEnum.DCA],
       undefined,
       { shallow: true }
     );
-  };
 
   return (
     <Layout>
@@ -44,6 +45,7 @@ const DCA: FC = () => {
         />
       </Box>
       <Box
+        gap="l"
         mx="auto"
         mt="3.5rem"
         display="flex"
@@ -102,6 +104,8 @@ const DCA: FC = () => {
           <DCAFields />
           <PreviewDCAButton />
         </Box>
+        <DCAAggregator />
+        <DCARecentOrders />
       </Box>
     </Layout>
   );

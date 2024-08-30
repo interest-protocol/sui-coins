@@ -1,7 +1,7 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import { DetailsTabItemProps } from './pool-details-tabs.types';
+import { DetailsTabItemProps } from './details-tabs.types';
 
 const DetailsTabItem: FC<DetailsTabItemProps> = ({ item, onChange }) => (
   <Box

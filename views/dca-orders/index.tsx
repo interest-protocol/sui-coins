@@ -125,6 +125,7 @@ const DCAOrders: FC = () => {
         </Box>
         <Box
           p="m"
+          mt="l"
           pb="2xl"
           alignItems="center"
           justifyItems="center"

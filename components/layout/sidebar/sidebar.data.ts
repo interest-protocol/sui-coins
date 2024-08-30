@@ -26,7 +26,7 @@ export const SIDEBAR_ITEMS: ReadonlyArray<IMenuItem> = [
     disabled: false,
     Icon: HourglassSVG,
     path: Routes[RoutesEnum.DCA],
-    networks: [Network.TESTNET],
+    networks: [Network.TESTNET, Network.MAINNET],
   },
   {
     disabled: false,

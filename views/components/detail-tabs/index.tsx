@@ -2,8 +2,8 @@ import { Box, Motion } from '@interest-protocol/ui-kit';
 import { FC, useState } from 'react';
 import { v4 } from 'uuid';
 
-import { DetailsTabsProps } from './pool-details-tabs.types';
-import PoolDetailsTabsItem from './pool-details-tabs-item';
+import { DetailsTabsProps } from './details-tabs.types';
+import PoolDetailsTabsItem from './details-tabs-item';
 
 const variants = {
   collapsed: {

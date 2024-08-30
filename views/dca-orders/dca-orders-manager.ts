@@ -13,11 +13,12 @@ export const useDCAOrdersState = create<DCAOrdersState>((set) => ({
 }));
 
 export const DCAOrdersManager: FC = () => {
-  const { query } = useRouter();
+  const { asPath } = useRouter();
   const { selectId } = useDCAOrdersState();
 
   useEffect(() => {
-    selectId((query.id as string) ?? null);
+    const params = new URLSearchParams(asPath);
+    selectId(params.get('id') || null);
   }, []);
 
   return null;

@@ -3,6 +3,26 @@ import useSWR from 'swr';
 
 import { DCA, DCAOrder, Paginated } from './use-dca.types';
 
+export const useRecentDcas = () => {
+  const currentAccount = useCurrentAccount();
+
+  return useSWR<ReadonlyArray<DCA> | null>(
+    `recent-dcas-${currentAccount?.address}`,
+    () => {
+      if (!currentAccount) return null;
+
+      return fetch(
+        `${process.env.NEXT_PUBLIC_SENTINEL_API_URL}dcas?active=true&pageSize=5&owner=${currentAccount.address}`
+      )
+        .then((response) => response.json?.())
+        .then((data) => data.data);
+    },
+    {
+      refreshInterval: 10_000,
+    }
+  );
+};
+
 export const useDcas = () => {
   const currentAccount = useCurrentAccount();
 
@@ -10,8 +30,6 @@ export const useDcas = () => {
     `dcas-${currentAccount?.address}`,
     () => {
       if (!currentAccount) return null;
-
-      console.log({ address: currentAccount.address });
 
       return Promise.all([
         fetch(

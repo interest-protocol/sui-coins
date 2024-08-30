@@ -1,6 +1,9 @@
 import { TimeScale } from '@interest-protocol/dca-sdk';
 import type { Token } from '@interest-protocol/sui-tokens';
 import type BigNumber from 'bignumber.js';
+import { FC } from 'react';
+
+import { SVGProps } from '@/components/svg/svg.types';
 
 export interface IDCASettings {
   slippage: string;
@@ -24,8 +27,31 @@ export interface DCAForm {
   error: string | null;
   explorerLink: string;
   periodicity: TimeScale;
+  aggregator: Aggregator;
 }
 
 export interface DCAPreviewModalProps {
   onClose: () => void;
+}
+
+export enum Aggregator {
+  Hop,
+  Aftermath,
+}
+
+export interface AggregatorProps {
+  url: string;
+  name: string;
+  key: Aggregator;
+  Icon: FC<SVGProps>;
+  disabled?: boolean;
+}
+
+export interface DCAAggregatorFormProps {
+  handleManageView: () => void;
+}
+
+export interface DCAAggregatorHeaderProps extends DCAAggregatorFormProps {
+  isOpen: boolean;
+  handleManageView: () => void;
 }
