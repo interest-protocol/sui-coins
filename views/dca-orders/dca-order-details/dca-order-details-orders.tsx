@@ -331,7 +331,7 @@ const DCAOrderDetailsOrders: FC<DCAOrderDetailedItemProps> = ({
                   </Box>
                 </Box>
                 <Typography variant="body" size="medium" textAlign="right">
-                  {new Date(timestampMs * 1000).toLocaleString()}
+                  {new Date(timestampMs).toLocaleString()}
                 </Typography>
               </Box>
             ))}
@@ -356,7 +356,7 @@ const DCAOrderDetailsOrders: FC<DCAOrderDetailedItemProps> = ({
                 width="100%"
               />
               <Typography variant="label" size="medium">
-                You don’t have DCAs
+                You don’t have orders
               </Typography>
             </Box>
           </Box>
