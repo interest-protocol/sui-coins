@@ -130,10 +130,11 @@ export const useOnBurn = () => {
     toast('Link copied to clipboard');
   };
 
-  const onSuccess = (tx: TimedSuiTransactionBlockResponse) => {
-    showTXSuccessToast(tx, network as Network);
-    mutate();
-  };
+  const onSuccess =
+    (message: string) => (tx: TimedSuiTransactionBlockResponse) => {
+      showTXSuccessToast(tx, network as Network, message);
+      mutate();
+    };
 
   const handleBurn = async ({ objects }: Pick<IncineratorForm, 'objects'>) => {
     const disabled = !objects || !objects.length;
@@ -145,9 +146,9 @@ export const useOnBurn = () => {
     );
 
     try {
-      await burn(objects, onSuccess);
-      toast.success(
-        `Asset${objects.length === 1 ? '' : 's'} burned successfully`
+      await burn(
+        objects,
+        onSuccess(`Asset${objects.length === 1 ? '' : 's'} burned successfully`)
       );
     } catch (e) {
       toast.error((e as any).message ?? 'Something went wrong');

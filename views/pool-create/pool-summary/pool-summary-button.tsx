@@ -14,12 +14,7 @@ import { EXPLORER_URL, Network, Routes, RoutesEnum } from '@/constants';
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { useDialog } from '@/hooks/use-dialog';
 import { useWeb3 } from '@/hooks/use-web3';
-import {
-  showTXSuccessToast,
-  signAndExecute,
-  throwTXIfNotSuccessful,
-  waitForTx,
-} from '@/utils';
+import { signAndExecute, throwTXIfNotSuccessful, waitForTx } from '@/utils';
 
 import {
   useCreateLpCoin,
@@ -85,7 +80,6 @@ const PoolSummaryButton: FC = () => {
 
     await clamm.savePool(poolId);
 
-    showTXSuccessToast(tx2, network as Network);
     setValue('executionTime', tx2.time);
 
     await waitForTx({ suiClient: client, digest: tx2.digest });

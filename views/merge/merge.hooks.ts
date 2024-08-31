@@ -6,7 +6,6 @@ import {
 import { CoinStruct } from '@mysten/sui/client';
 import { Transaction } from '@mysten/sui/transactions';
 import { SUI_TYPE_ARG } from '@mysten/sui/utils';
-import toast from 'react-hot-toast';
 import invariant from 'tiny-invariant';
 
 import { CoinObject } from '@/components/web3-manager/coins-manager/coins-manager.types';
@@ -120,8 +119,7 @@ export const useMergeCoins = () => {
         digest: txResult.digest,
       });
 
-      toast.success('Coins slot merged!');
-      showTXSuccessToast(txResult, network);
+      showTXSuccessToast(txResult, network, 'Coins slot merged!');
       i++;
     } while (coinsToMerge.some(({ objects }) => objects.length > 256 * i));
   };

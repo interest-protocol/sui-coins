@@ -35,7 +35,7 @@ const SendLink: FC<SendLinkProps> = ({ data, error, isLoading, mutate }) => {
   };
 
   const onSuccess = (tx: TimedSuiTransactionBlockResponse) => {
-    showTXSuccessToast(tx, network as Network);
+    showTXSuccessToast(tx, network as Network, 'Link reclaimed successfully');
     mutate();
   };
 
@@ -56,7 +56,6 @@ const SendLink: FC<SendLinkProps> = ({ data, error, isLoading, mutate }) => {
     setReclaiming(true);
     try {
       await reclaim(data, gasObjects, onSuccess);
-      toast.success('Link reclaimed successfully');
     } catch (e) {
       toast.error((e as Error).message ?? 'Something went wrong');
     } finally {

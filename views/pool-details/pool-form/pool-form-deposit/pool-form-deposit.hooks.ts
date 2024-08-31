@@ -97,13 +97,13 @@ export const useDeposit = () => {
 
     const { lpCoin, tx } = await clamm.addLiquidity({
       coinsIn: coins,
-      tx: initTx,
+      tx: initTx as any,
       pool: pool.poolObjectId,
       slippage: +settings.slippage,
     });
 
     tx.transferObjects([lpCoin], tx.pure.address(currentAccount.address));
 
-    return tx;
+    return tx as unknown as Transaction;
   };
 };

@@ -61,12 +61,12 @@ export const useWithdraw = () => {
 
       const response = await clamm.removeLiquidityOneCoin({
         lpCoin,
-        tx: initTx,
+        tx: initTx as any,
         pool: pool.poolObjectId,
         coinOutType: convertedType || tokenSelected,
       });
 
-      tx = response.tx;
+      tx = response.tx as unknown as Transaction;
 
       if (convertedType) {
         const cap = SCALLOP_WRAPPED_COINS_TREASURY_CAPS[network][convertedType];
@@ -84,10 +84,10 @@ export const useWithdraw = () => {
     } else {
       const response = await clamm.removeLiquidity({
         lpCoin,
-        tx: initTx,
+        tx: initTx as any,
         pool: pool.poolObjectId,
       });
-      tx = response.tx;
+      tx = response.tx as unknown as Transaction;
       if (isScallop) {
         coinsOut = [] as TransactionResult[];
 

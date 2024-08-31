@@ -99,7 +99,11 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
         throwTXIfNotSuccessful(tx2, () => setValue('error', true));
 
-        showTXSuccessToast(tx2, network as Network);
+        showTXSuccessToast(
+          tx2,
+          network as Network,
+          'Initial TX completed successfully'
+        );
 
         const [gasCoin, spendCoin] =
           (tx2.objectChanges as Array<SuiObjectChangeCreated>)!.reduce(
@@ -145,7 +149,11 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
           setValue('done', [...getValues('done'), Number(index)]);
 
-          showTXSuccessToast(tx2, network as Network);
+          showTXSuccessToast(
+            tx2,
+            network as Network,
+            `Patch ${index + 1} was completed successfully`
+          );
 
           await pauseUtilNextTx(initAirdropTxMS);
         }
@@ -191,7 +199,11 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
       throwTXIfNotSuccessful(tx2, () => setValue('error', true));
 
-      showTXSuccessToast(tx2, network as Network);
+      showTXSuccessToast(
+        tx2,
+        network as Network,
+        'Initial TX completed successfully'
+      );
 
       if (mergeCoinsPred)
         [nextDigest, nextVersion] = findNextVersionAndDigest(
@@ -253,7 +265,11 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           setValue('failed', [...getValues('failed'), Number(index)])
         );
 
-        showTXSuccessToast(tx2, network as Network);
+        showTXSuccessToast(
+          tx2,
+          network as Network,
+          `Patch ${index + 1} was completed successfully`
+        );
 
         setValue('done', [...getValues('done'), Number(index)]);
 

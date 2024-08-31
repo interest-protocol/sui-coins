@@ -1,8 +1,8 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { FC, useState } from 'react';
 
+import DetailTabs from '../../components/detail-tabs';
 import { PoolDetailsTabOption } from '../pool-details.types';
-import DetailTabs from './components/detail-tabs';
 import PoolInfoAdvanced from './pool-info-advanced';
 import PoolInfoDetail from './pool-info-detail';
 

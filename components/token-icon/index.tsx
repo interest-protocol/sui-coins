@@ -77,8 +77,6 @@ const TokenIcon: FC<TokenIconProps> = ({
   if (loadError)
     return (
       <Box
-        bg="black"
-        color="white"
         display="flex"
         overflow="hidden"
         position="relative"
@@ -86,7 +84,8 @@ const TokenIcon: FC<TokenIconProps> = ({
         justifyContent="center"
         width={`calc(${size} * 1.66)`}
         height={`calc(${size} * 1.66)`}
-        borderRadius={rounded || !withBg ? 'full' : 'xs'}
+        borderRadius={rounded ? 'full' : 'xs'}
+        {...(withBg && { bg: 'black', color: 'white' })}
       >
         <DefaultSVG
           width="100%"
@@ -129,7 +128,13 @@ const TokenIcon: FC<TokenIconProps> = ({
           />
         </Box>
         {!simple && ChainIcon && (
-          <Box position="absolute" bottom="-0.3rem" right="-0.5rem">
+          <Box
+            right="-0.5rem"
+            bottom="-0.3rem"
+            position="absolute"
+            overflow="hidden"
+            borderRadius="full"
+          >
             <ChainIcon maxHeight={size} maxWidth={size} width="100%" />
           </Box>
         )}
@@ -162,7 +167,12 @@ const TokenIcon: FC<TokenIconProps> = ({
           />
         </Box>
         {!simple && ChainIcon && (
-          <Box position="absolute" bottom="-0.3rem" right="-0.5rem">
+          <Box
+            position="absolute"
+            bottom="-0.3rem"
+            right="-0.5rem"
+            borderRadius="full"
+          >
             <ChainIcon maxHeight={size} maxWidth={size} width="100%" />
           </Box>
         )}
@@ -252,7 +262,12 @@ const TokenIcon: FC<TokenIconProps> = ({
           )}
         </Box>
         {!simple && ChainIcon && (
-          <Box position="absolute" bottom="-0.3rem" right="-0.5rem">
+          <Box
+            right="-0.5rem"
+            bottom="-0.3rem"
+            position="absolute"
+            borderRadius="full"
+          >
             <ChainIcon maxHeight={size} maxWidth={size} width="100%" />
           </Box>
         )}
