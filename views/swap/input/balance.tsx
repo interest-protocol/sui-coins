@@ -12,7 +12,7 @@ import { InputProps } from './input.types';
 
 const Balance: FC<InputProps> = ({ label }) => {
   const { coinsMap } = useWeb3();
-  const { control, setValue } = useFormContext<SwapForm>();
+  const { control, setValue, getValues } = useFormContext<SwapForm>();
 
   const type = useWatch({ control, name: `${label}.type` });
   const decimals = useWatch({ control, name: `${label}.decimals` });
@@ -49,11 +49,15 @@ const Balance: FC<InputProps> = ({ label }) => {
   const handleMax = () => {
     if (label === 'to') return;
 
+    setValue('updateSlider', {});
+
     if (isSui(type) && balance < 1) {
       setValue('from.value', ZERO_BIG_NUMBER);
       setValue('from.display', '0');
       return;
     }
+
+    if (getValues('focus')) setValue('focus', false);
 
     setValue(
       'from.value',

@@ -4,6 +4,8 @@ export const NFT: ReadonlyArray<string> = [
   '307c7e7a-be3a-43a5-ae44-37f3a37d01f9', // DSL Legacy
   'c3d1ce36-6afd-4336-b619-44c745dd7569', // Egg
   'd5ea5c61-5a91-40f2-9837-a1912a2083a1', // Tails By Typus
+  '5fb36cd5-2527-44f7-9905-61096c442647', // Rootlets
+  '67ded9ed-4dcc-4d15-9e6f-04dded46f419', // Novagen
   '09d26434-4449-45eb-b848-89c30bec2e12', // Unchained Esports
   'e5385a7a-075e-4382-96dd-1caaf960bd13', // Enforcer Machin
   'fbb4e6bc-7c71-42a6-80c2-196f876198e0', // Gommies
