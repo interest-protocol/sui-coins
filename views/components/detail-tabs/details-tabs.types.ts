@@ -6,6 +6,7 @@ export interface DetailsTabItemProps {
 }
 
 export interface DetailsTabsProps {
+  stretch?: boolean;
   defaultTabIndex?: number;
   items: ReadonlyArray<ReactNode>;
   onChangeTab?: (tabIndex: number) => void;

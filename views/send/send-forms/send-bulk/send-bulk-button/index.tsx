@@ -24,7 +24,7 @@ const SendBulkFormButton: FC = () => {
     tx: TimedSuiTransactionBlockResponse,
     links: ReadonlyArray<string>
   ) => {
-    showTXSuccessToast(tx, network as Network);
+    showTXSuccessToast(tx, network as Network, 'Link created successfully');
 
     setValue('links', links);
   };
@@ -34,7 +34,6 @@ const SendBulkFormButton: FC = () => {
 
     try {
       await createLink(object, Number(quantity), onSuccess);
-      toast.success('Link created successfully');
     } catch (e) {
       toast.error((e as any).message ?? 'Something went wrong');
     } finally {

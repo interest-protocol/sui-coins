@@ -30,12 +30,12 @@ export const suiClientRecord = {
 } as Record<Network, SuiClient>;
 
 const testnetSuiNs = new SuinsClient({
-  client: testnetClient,
+  client: testnetClient as any,
   network: 'testnet',
 });
 
 export const suiNSMainNetProvider = new SuinsClient({
-  client: mainnetClient,
+  client: mainnetClient as any,
   network: 'mainnet',
 });
 

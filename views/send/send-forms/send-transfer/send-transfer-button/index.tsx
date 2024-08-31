@@ -34,7 +34,7 @@ const SendTransferButton: FC<FormSendButtonProps> = ({ openModal }) => {
   const [address] = useDebounce(useWatch({ control, name: 'address' }), 800);
 
   const onSuccess = (tx: TimedSuiTransactionBlockResponse) =>
-    showTXSuccessToast(tx, network as Network);
+    showTXSuccessToast(tx, network as Network, 'Assets sent successfully');
 
   useEffect(() => {
     setAmountList(
@@ -77,7 +77,6 @@ const SendTransferButton: FC<FormSendButtonProps> = ({ openModal }) => {
 
     try {
       await sendAssets(objects, recipient, onSuccess);
-      toast.success('Assets sent successfully');
     } catch (e) {
       toast.error((e as any).message ?? 'Something went wrong');
     } finally {

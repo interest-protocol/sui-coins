@@ -92,7 +92,7 @@ export const useSwap = () => {
 
     const { coinOut, tx } = clamm.swapRoute({
       coinIn,
-      tx: auxTx,
+      tx: auxTx as any,
       route: [route[0], route[1]],
       poolsMap: values.route.poolsMap,
       slippage: Number((+values.settings.slippage * 100).toFixed(0)),
@@ -118,6 +118,6 @@ export const useSwap = () => {
       tx.transferObjects([coinOut], tx.pure.address(currentAccount.address));
     }
 
-    return tx;
+    return tx as unknown as Transaction;
   };
 };

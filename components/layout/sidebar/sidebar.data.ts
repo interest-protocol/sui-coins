@@ -3,34 +3,30 @@ import {
   AirdropSVG,
   CirclePlusSVG,
   DoubleChevronSVG,
+  FaucetSVG,
   FireSVG,
+  HourglassSVG,
   MenuSVG,
   MergeSVG,
-  PoolSVG,
   UploadSVG,
 } from '@/svg';
 
-import { MenuItemProps } from './sidebar.types';
+import { IMenuItem } from './sidebar.types';
 
-export const SIDEBAR_ITEMS: ReadonlyArray<
-  Omit<
-    MenuItemProps,
-    'setIsCollapsed' | 'isCollapsed' | 'setTemporarilyOpen' | 'temporarilyOpen'
-  >
-> = [
+export const SIDEBAR_ITEMS: ReadonlyArray<IMenuItem> = [
   {
     name: 'swap',
     disabled: false,
     Icon: DoubleChevronSVG,
     path: Routes[RoutesEnum.Swap],
-    networks: [Network.MAINNET, Network.TESTNET],
+    networks: [Network.MAINNET],
   },
   {
-    name: 'pool',
-    Icon: PoolSVG,
-    path: Routes[RoutesEnum.Pools],
-    networks: [Network.MAINNET, Network.TESTNET],
-    disabled: true,
+    name: 'dca',
+    disabled: false,
+    Icon: HourglassSVG,
+    path: Routes[RoutesEnum.DCA],
+    networks: [Network.TESTNET, Network.MAINNET],
   },
   {
     disabled: false,
@@ -69,6 +65,13 @@ export const SIDEBAR_ITEMS: ReadonlyArray<
       },
       {
         beta: false,
+        disabled: false,
+        Icon: FaucetSVG,
+        name: 'DCA Faucet',
+        networks: [Network.TESTNET],
+        path: Routes[RoutesEnum.Faucet],
+      },
+      {
         name: 'merge',
         disabled: false,
         Icon: MergeSVG,
