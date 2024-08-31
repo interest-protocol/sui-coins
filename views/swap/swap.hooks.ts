@@ -1,7 +1,6 @@
 import { useCurrentAccount } from '@mysten/dapp-kit';
 import { Transaction } from '@mysten/sui/transactions';
 import { normalizeStructTag } from '@mysten/sui/utils';
-import { Aftermath } from 'aftermath-ts-sdk';
 import invariant from 'tiny-invariant';
 
 import {
@@ -17,8 +16,7 @@ import { isSui } from '@/utils';
 
 import { SwapForm } from './swap.types';
 import { isAftermathRoute, isNativeRoute } from './swap.utils';
-
-export const useAftermathRouter = () => new Aftermath('MAINNET').Router();
+import { useAftermathRouter } from './swap-manager/swap-manager.hooks';
 
 export const useSwap = () => {
   const hopSdk = useHopSdk();
