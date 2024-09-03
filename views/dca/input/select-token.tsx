@@ -106,8 +106,9 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       variant="tonal"
       color="onSurface"
       borderRadius="xs"
-      borderStyle="solid"
       onClick={openModal}
+      borderStyle="solid"
+      gap={['unset', 'xs', 'xs']}
       borderColor="outlineVariant"
       height={label === 'to' ? '3.25rem' : '3rem'}
       bg={label === 'to' ? 'none' : 'lowContainer'}
