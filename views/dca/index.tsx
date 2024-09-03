@@ -56,7 +56,7 @@ const DCA: FC = () => {
         width={['100%', '100%', '100%', '39.75rem']}
       >
         <Box bg="lowestContainer" borderRadius="s" p="xl">
-          <Typography size="small" variant="display">
+          <Typography textAlign="center" size="small" variant="display">
             Trade DCA
           </Typography>
           <Input />
