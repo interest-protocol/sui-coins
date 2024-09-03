@@ -76,7 +76,7 @@ const CreateTokenForm: FC = () => {
       const tx = new Transaction();
 
       if (!coinsMap[SUI_TYPE_ARG])
-        throw new Error("You doesn't have Enough SUI on your wallet");
+        throw new Error("You doesn't have enough SUI on your wallet");
 
       tx.setGasPayment(
         coinsMap[SUI_TYPE_ARG]?.objects.map(
