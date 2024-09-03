@@ -217,7 +217,7 @@ const DCAFields: FC = () => {
             />
           </Box>
         </Box>
-        <Box display="flex" gap="m">
+        <Box display="flex" gap={['xs', 'xs', 'xs', 'm']}>
           {[0.1, 0.2, 0.3, 0.4, 0.5].map((value) => (
             <Button
               px="xs"
