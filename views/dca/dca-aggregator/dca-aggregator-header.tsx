@@ -14,7 +14,7 @@ const Header: FC<DCAAggregatorHeaderProps> = ({ isOpen, handleManageView }) => {
     `${LOCAL_STORAGE_VERSION}-suicoins-dca-aggregator`
   );
 
-  const { name, Icon } = AGGREGATORS_LIST[aggergator ?? Aggregator.Aftermath];
+  const { name, Icon } = AGGREGATORS_LIST[aggergator ?? Aggregator.Hop];
 
   return (
     <Box
