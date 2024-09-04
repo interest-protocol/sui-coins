@@ -1,4 +1,5 @@
 import { Box, ProgressIndicator, Typography } from '@interest-protocol/ui-kit';
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import Link from 'next/link';
 import { FC } from 'react';
 import { v4 } from 'uuid';
@@ -10,6 +11,7 @@ import { ErrorSVG, IncineratorNoAssetsSVG } from '@/svg';
 import DCAOrderListMiniItem from './dca-recent-orders-item';
 
 const DCARecentOrders: FC = () => {
+  const currentAccount = useCurrentAccount();
   const { data: dcas, isLoading } = useRecentDcas();
 
   return (
@@ -61,7 +63,7 @@ const DCARecentOrders: FC = () => {
           >
             <ErrorSVG maxWidth="2.5rem" maxHeight="2.5rem" width="100%" />
             <Typography variant="label" size="medium">
-              Something went wrong
+              {currentAccount ? 'Something went wrong' : 'Connect your Wallet'}
             </Typography>
           </Box>
         </Box>
