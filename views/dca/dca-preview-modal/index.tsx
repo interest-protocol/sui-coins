@@ -18,6 +18,8 @@ const DCAPreviewModal: FC<DCAPreviewModalProps> = ({ onClose }) => {
   const tokenTo = useWatch({ control, name: 'to' });
   const price = useWatch({ control, name: 'price' });
 
+  const receiveValue = Number(tokenFrom.display) * Number(price) || 0;
+
   return (
     <Box
       maxWidth="100%"
@@ -124,7 +126,10 @@ const DCAPreviewModal: FC<DCAPreviewModalProps> = ({ onClose }) => {
               </Box>
               <Box textAlign="right">
                 <Typography variant="body" size="medium">
-                  ~{Number(tokenFrom.display) * Number(price) || 0}
+                  ~
+                  {receiveValue.toString().includes('e')
+                    ? receiveValue.toFixed(10).replace(/\.?0+$/, '')
+                    : receiveValue}
                 </Typography>
               </Box>
             </Box>
