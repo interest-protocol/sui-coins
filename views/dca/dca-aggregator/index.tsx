@@ -6,16 +6,14 @@ import DCAAggregatorForm from './dca-aggregator-form';
 import Header from './dca-aggregator-header';
 
 const DCAAggregator: FC = () => {
-  const [openManage, setOpenManage] = useState(false);
-
-  return null;
+  const [openManager, setOpenManage] = useState(false);
 
   const handleManageView = () => setOpenManage(not);
 
   return (
     <Box display="flex" flexDirection="column">
-      <Header isOpen={openManage} handleManageView={handleManageView} />
-      {openManage && <DCAAggregatorForm handleManageView={handleManageView} />}
+      <Header isOpen={openManager} handleManageView={handleManageView} />
+      {openManager && <DCAAggregatorForm handleManageView={handleManageView} />}
     </Box>
   );
 };
