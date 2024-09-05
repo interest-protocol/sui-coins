@@ -234,16 +234,11 @@ const SwapUpdatePrice: FC = () => {
         from.type &&
         String(from.decimals) &&
         coinsMap[from.type]
-      ) {
-        if (isGreaterThanBalance) {
+      )
+        if (isGreaterThanBalance)
           setValue('error', SwapMessagesEnum.notEnoughToken);
-          return;
-        }
-        if (isSui(from.type) && isGreaterThanAllowedWhenSui) {
+        else if (isSui(from.type) && isGreaterThanAllowedWhenSui)
           setValue('error', SwapMessagesEnum.leastOneSui);
-          return;
-        }
-      }
 
       setValue('fetchingPrices', true);
 
