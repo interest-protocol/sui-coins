@@ -144,8 +144,14 @@ const DCAFields: FC = () => {
             <InfoCircleSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
           </TooltipWrapper>
         </Box>
-        <Box display="flex" gap="s" flex="1">
-          <Box display="flex" flexDirection="column" gap="xs" flex="1">
+        <Box display="flex" gap="s" flex="1" flexDirection="column">
+          <Box
+            gap="xs"
+            flex="1"
+            display="flex"
+            alignItems="flex-end"
+            justifyContent="space-between"
+          >
             <Typography variant="label" size="small" fontSize="xs">
               Balance:{' '}
               {fromType && coinsMap[fromType]
@@ -156,6 +162,19 @@ const DCAFields: FC = () => {
                 : 0}{' '}
               {fromSymbol}
             </Typography>
+            <Typography
+              size="small"
+              fontSize="xs"
+              variant="label"
+              textAlign="right"
+            >
+              Price
+              {price
+                ? `: 1 ${fromSymbol} = ${+(+price).toFixed(4)} ${toSymbol}`
+                : ''}
+            </Typography>
+          </Box>
+          <Box display="flex" gap="xs" flex="1">
             <TextField
               min="1"
               width="100%"
@@ -179,19 +198,6 @@ const DCAFields: FC = () => {
                 },
               })}
             />
-          </Box>
-          <Box display="flex" flexDirection="column" gap="xs" flex="1">
-            <Typography
-              size="small"
-              fontSize="xs"
-              variant="label"
-              textAlign="right"
-            >
-              Price
-              {price
-                ? `: 1 ${fromSymbol} = ${+(+price).toFixed(4)} ${toSymbol}`
-                : ''}
-            </Typography>
             <TextField
               min="1"
               width="100%"
