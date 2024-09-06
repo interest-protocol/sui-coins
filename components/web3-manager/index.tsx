@@ -6,7 +6,7 @@ import NFTMetadataManager from './nft-metadata-manger';
 import { Web3ManagerProps } from './web3-manager.types';
 
 const Web3Manager: FC<Web3ManagerProps> = ({
-  features = ['coins'],
+  features = ['coins', 'objects'],
   withBlocked,
 }) => (
   <>

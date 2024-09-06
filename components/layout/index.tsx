@@ -2,7 +2,7 @@ import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC, PropsWithChildren } from 'react';
 
 import { ModalProvider } from '@/context/modal';
-import MergeCoins from '@/views/components/merge-coins';
+import FloatingButtons from '@/views/components/floating-buttons';
 
 import Web3Manager from '../web3-manager';
 import Footer from './footer';
@@ -65,7 +65,7 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
               </Box>
             </Box>
           </Box>
-          <MergeCoins />
+          <FloatingButtons />
           <Footer />
         </Box>
       </Box>

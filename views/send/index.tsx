@@ -28,7 +28,7 @@ const Send: FC = () => {
   };
 
   return (
-    <Layout features={['coins', 'objects']}>
+    <Layout>
       <Box my="3rem" display="flex" justifyContent="center">
         <Tabs
           type="circle"

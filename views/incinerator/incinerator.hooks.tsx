@@ -34,7 +34,7 @@ import { isCoinObject } from '@/views/components/select-object-modal/select-obje
 import { IncineratorForm, ObjectField } from './incinerator.types';
 import IncineratorTokenObject from './incinerator-token-object';
 
-const useBurn = () => {
+export const useBurn = () => {
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
   const signTransaction = useSignTransaction();
