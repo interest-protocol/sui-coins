@@ -1,15 +1,17 @@
-import { Box, Typography } from '@interest-protocol/ui-kit';
+import { Box, ProgressIndicator, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { EXCHANGE_FEE_PERCENTAGE } from '@/constants/fees';
+import { useFeeFreeTokens } from '@/hooks/use-dca';
 import { formatMoney } from '@/utils';
 
 import { PERIODICITY } from '../dca.data';
 import { DCAForm } from '../dca.types';
 
 const DCAPreviewModalSummary: FC = () => {
-  const { control } = useFormContext<DCAForm>();
+  const { control, getValues } = useFormContext<DCAForm>();
+  const { data, isLoading } = useFeeFreeTokens();
 
   const min = useWatch({ control, name: 'min' });
   const max = useWatch({ control, name: 'max' });
@@ -90,9 +92,16 @@ const DCAPreviewModalSummary: FC = () => {
             DCA fee
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center">
-            <Typography mr="s" variant="body" size="medium" color="onSurface">
-              {EXCHANGE_FEE_PERCENTAGE}%
-            </Typography>
+            {!isLoading ? (
+              <Typography mr="s" variant="body" size="medium" color="onSurface">
+                {data?.includes(getValues('to.type'))
+                  ? 0
+                  : EXCHANGE_FEE_PERCENTAGE}
+                %
+              </Typography>
+            ) : (
+              <ProgressIndicator variant="loading" size={16} />
+            )}
           </Box>
         </Box>
       </Box>

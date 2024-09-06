@@ -14,6 +14,7 @@ import { useReadLocalStorage } from 'usehooks-ts';
 import { EXPLORER_URL, Network } from '@/constants';
 import { DELEGATEE, SENTINEL_API_URI } from '@/constants/dca';
 import { EXCHANGE_FEE_PERCENTAGE } from '@/constants/fees';
+import { useFeeFreeTokens } from '@/hooks/use-dca';
 import useDcaSdk from '@/hooks/use-dca-sdk';
 import { useDialog } from '@/hooks/use-dialog';
 import { useNetwork } from '@/hooks/use-network';
@@ -36,6 +37,7 @@ const DCAButton: FC = () => {
   const network = useNetwork();
   const { coinsMap } = useWeb3();
   const suiClient = useSuiClient();
+  const { data, isLoading, error } = useFeeFreeTokens();
   const formDCA = useFormContext<DCAForm>();
   const currentAccount = useCurrentAccount();
   const { dialog, handleClose } = useDialog();
@@ -65,6 +67,8 @@ const DCAButton: FC = () => {
   };
 
   const handleStartDCA = async () => {
+    if (error || isLoading) return;
+
     try {
       const { to, from, intervals, orders, periodicity, min, max } =
         formDCA.getValues();
@@ -95,8 +99,8 @@ const DCAButton: FC = () => {
         coinInType: from.type,
         timeScale: periodicity,
         every: Number(intervals),
-        fee: EXCHANGE_FEE_PERCENTAGE,
         numberOfOrders: Number(orders),
+        fee: data?.includes(to.type) ? 0 : EXCHANGE_FEE_PERCENTAGE,
         witnessType:
           WITNESSES[network === Network.MAINNET ? 'mainnet' : 'testnet']
             .WHITELIST_ADAPTER,
@@ -183,7 +187,12 @@ const DCAButton: FC = () => {
     });
 
   return (
-    <Button onClick={onStartDCA} variant="filled" justifyContent="center">
+    <Button
+      variant="filled"
+      onClick={onStartDCA}
+      justifyContent="center"
+      disabled={isLoading || error}
+    >
       <Typography variant="label" size="large">
         {starting ? 'Loading...' : 'Start DCA'}
       </Typography>

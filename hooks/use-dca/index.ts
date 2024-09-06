@@ -59,8 +59,6 @@ export const useDcaOrders = (id: string, active: boolean) => {
     () => {
       if (!id) return null;
 
-      console.log({ id });
-
       return fetch(
         `${SENTINEL_API_URI[network]}dcas/${id}/orders?pageSize=100`
       ).then((response) => response.json?.());
@@ -69,6 +67,22 @@ export const useDcaOrders = (id: string, active: boolean) => {
       refreshWhenHidden: true,
       refreshWhenOffline: false,
       refreshInterval: active ? 30_000 : undefined,
+    }
+  );
+};
+
+export const useFeeFreeTokens = () => {
+  const network = useNetwork();
+
+  return useSWR<ReadonlyArray<string>>(
+    `fee-free-tokens`,
+    () =>
+      fetch(`${SENTINEL_API_URI[network]}dcas/fee-free-list`).then(
+        (response) => response.json?.()
+      ),
+    {
+      refreshWhenHidden: true,
+      refreshWhenOffline: false,
     }
   );
 };

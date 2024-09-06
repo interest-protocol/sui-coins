@@ -8,6 +8,8 @@ import Header from './dca-aggregator-header';
 const DCAAggregator: FC = () => {
   const [openManager, setOpenManage] = useState(false);
 
+  return null;
+
   const handleManageView = () => setOpenManage(not);
 
   return (

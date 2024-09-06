@@ -51,7 +51,6 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
   cooldown,
   timeScale,
   lastTrade,
-  isTrading,
   inputBalance,
   amountPerTrade,
   remainingOrders,
@@ -77,8 +76,7 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
     [CoinMetadataWithType | null, CoinMetadataWithType | null]
   >([null, null]);
 
-  const totalOrders =
-    remainingOrders + (dcaOrders?.totalItems ?? 0) + (isTrading ? 1 : 0);
+  const totalOrders = remainingOrders + (dcaOrders?.totalItems ?? 0);
 
   const statusPercentage = dcaOrders
     ? (dcaOrders.data.length * 100) / totalOrders
