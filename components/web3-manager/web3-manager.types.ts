@@ -1,6 +1,5 @@
-export type Features = 'coins' | 'nfts' | 'objects';
+type Features = 'coins' | 'nfts';
 
 export interface Web3ManagerProps {
-  withBlocked?: boolean;
   features?: ReadonlyArray<Features>;
 }

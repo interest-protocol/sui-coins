@@ -15,7 +15,6 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
   children,
   features,
   noSidebar,
-  withBlocked,
 }) => (
   <ModalProvider>
     <Box bg="surface" display="flex" height="100vh" overflow="hidden">
@@ -30,7 +29,7 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
         justifyContent="space-between"
       >
         <Header />
-        <Web3Manager features={features} withBlocked={withBlocked} />
+        <Web3Manager features={features} />
         <Box
           flex="1"
           width="100%"
