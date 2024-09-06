@@ -14,6 +14,7 @@ import {
   WORMHOLE_TOKENS,
   WORMHOLE_TOKENS_TYPE,
 } from '@/constants/coins';
+import { FAUCET_COINS } from '@/constants/dca';
 import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
 import { CoinMetadataWithType } from '@/interface';
@@ -31,6 +32,7 @@ import {
 import { metadataToCoin } from './select-token-modal.utils';
 
 const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
+  faucet,
   control,
   handleSelectToken: onSelectToken,
 }) => {
@@ -65,20 +67,23 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
     (!isSearchAddress && filterSelected === TokenOrigin.Strict) ||
     (filterSelected === TokenOrigin.Strict &&
       isSearchAddress &&
-      STRICT_TOKENS_TYPE[network as Network].includes(search))
+      (faucet
+        ? FAUCET_COINS.map(({ type }) => type)
+        : STRICT_TOKENS_TYPE[network as Network]
+      ).includes(search))
   )
     return (
       <ModalTokenBody
         handleSelectToken={handleSelectToken}
         tokens={[
-          ...STRICT_TOKENS[network as Network].filter(
+          ...(faucet ? FAUCET_COINS : STRICT_TOKENS[network as Network]).filter(
             ({ symbol, type }) =>
               (!search ||
                 symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
                 type.includes(search)) &&
               favoriteTokenTypes?.includes(type)
           ),
-          ...STRICT_TOKENS[network as Network].filter(
+          ...(faucet ? FAUCET_COINS : STRICT_TOKENS[network as Network]).filter(
             ({ symbol, type }) =>
               (!search ||
                 symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||

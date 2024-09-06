@@ -1,16 +1,11 @@
 import { Button } from '@interest-protocol/ui-kit';
 import { useCurrentAccount, useSuiClientContext } from '@mysten/dapp-kit';
-import {
-  getFaucetHost,
-  getFaucetRequestStatus,
-  requestSuiFromFaucetV1,
-} from '@mysten/sui/faucet';
 import { FC } from 'react';
 import toast from 'react-hot-toast';
 
 import { Network } from '@/constants';
 
-const faucetHost = getFaucetHost('testnet');
+import { requestSui } from './mint.utils';
 
 const Mint: FC = () => {
   const { network } = useSuiClientContext();
@@ -22,17 +17,7 @@ const Mint: FC = () => {
     const loading = toast.loading('Minting SUI...');
 
     try {
-      const response = await requestSuiFromFaucetV1({
-        host: faucetHost,
-        recipient: currentAccount.address,
-      });
-
-      const { status } = await getFaucetRequestStatus({
-        host: faucetHost,
-        taskId: response.task || '',
-      });
-
-      if (status.status === 'DISCARDED') throw new Error('Request discarded');
+      await requestSui(currentAccount);
 
       toast.success('SUI Minted!');
     } catch (e) {

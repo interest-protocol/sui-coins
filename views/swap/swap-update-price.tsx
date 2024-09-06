@@ -26,9 +26,9 @@ import { RefreshSVG } from '@/svg';
 import { isSui, parseBigNumberish, ZERO_BIG_NUMBER } from '@/utils';
 
 import { SwapMessagesEnum } from './swap.data';
-import { useAftermathRouter } from './swap.hooks';
 import { Aggregator, SwapForm } from './swap.types';
 import { isNativeRoute } from './swap.utils';
+import { useAftermathRouter } from './swap-manager/swap-manager.hooks';
 
 const countdownRenderer =
   (interval: string): CountdownRendererFn =>

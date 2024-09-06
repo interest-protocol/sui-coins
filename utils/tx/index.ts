@@ -1,4 +1,7 @@
-import { SuiTransactionBlockResponse } from '@mysten/sui/client';
+import {
+  OwnedObjectRef,
+  SuiTransactionBlockResponse,
+} from '@mysten/sui/client';
 
 import { TimedSuiTransactionBlockResponse } from '@/interface';
 
@@ -22,8 +25,8 @@ export const signAndExecute = async ({
   options,
 }: SignAndExecuteArgs): Promise<TimedSuiTransactionBlockResponse> => {
   const { signature, bytes } = await signTransaction.mutateAsync({
-    transaction: tx,
     account: currentAccount,
+    transaction: tx,
   });
 
   const startTime = Date.now();
@@ -55,3 +58,11 @@ export const waitForTx = async ({
     timeout,
     pollInterval,
   });
+
+export const getObjectIdsFromTxResult = (
+  txResult: TimedSuiTransactionBlockResponse,
+  field: 'created' | 'mutated'
+) =>
+  txResult.effects?.[field]!.map(
+    (item: OwnedObjectRef) => item.reference.objectId
+  );

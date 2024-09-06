@@ -25,6 +25,7 @@ import { ZERO_BIG_NUMBER } from '../big-number';
 import { fetchCoinMetadata } from '../coin-metadata';
 import { getBasicCoinMetadata } from '../fn';
 import {
+  CoinOfValueArgs,
   GetCoinOfValueArgs,
   GetCoinsArgs,
   GetSafeValueArgs,
@@ -141,30 +142,54 @@ export async function getCoinOfValue({
   tx,
   account,
 }: GetCoinOfValueArgs): Promise<TransactionResult> {
-  let coinOfValue: TransactionResult;
   coinType = removeLeadingZeros(coinType);
-  if (isSui(coinType)) {
-    coinOfValue = tx.splitCoins(tx.gas, [tx.pure.u64(coinValue)]);
-  } else {
-    const paginatedCoins = await getCoins({
-      suiClient,
-      coinType,
-      cursor: null,
-      account,
-    });
 
-    // Merge all coins into one
-    const [firstCoin, ...otherCoins] = paginatedCoins;
-    const firstCoinInput = tx.object(firstCoin.coinObjectId);
-    if (otherCoins.length > 0) {
-      tx.mergeCoins(
-        firstCoinInput,
-        otherCoins.map((coin) => coin.coinObjectId)
-      );
-    }
-    coinOfValue = tx.splitCoins(firstCoinInput, [tx.pure.u64(coinValue)]);
+  if (isSui(coinType)) return tx.splitCoins(tx.gas, [tx.pure.u64(coinValue)]);
+
+  const paginatedCoins = await getCoins({
+    suiClient,
+    coinType,
+    cursor: null,
+    account,
+  });
+
+  // Merge all coins into one
+  const [firstCoin, ...otherCoins] = paginatedCoins;
+
+  const firstCoinInput = tx.object(firstCoin.coinObjectId);
+
+  if (otherCoins.length > 0) {
+    tx.mergeCoins(
+      firstCoinInput,
+      otherCoins.map((coin) => coin.coinObjectId)
+    );
   }
-  return coinOfValue;
+
+  return tx.splitCoins(firstCoinInput, [tx.pure.u64(coinValue)]);
+}
+
+export function coinOfValue({
+  coinValue,
+  coinType,
+  tx,
+  coinsMap,
+}: CoinOfValueArgs): TransactionResult {
+  coinType = removeLeadingZeros(coinType);
+
+  if (isSui(coinType)) return tx.splitCoins(tx.gas, [tx.pure.u64(coinValue)]);
+
+  // Merge all coins into one
+  const [firstCoin, ...otherCoins] = coinsMap[coinType].objects;
+
+  const firstCoinInput = tx.object(firstCoin.coinObjectId);
+
+  if (otherCoins.length > 0)
+    tx.mergeCoins(
+      firstCoinInput,
+      otherCoins.map((coin) => coin.coinObjectId)
+    );
+
+  return tx.splitCoins(firstCoinInput, [tx.pure.u64(coinValue)]);
 }
 
 export const isSui = (type: string) => isSameStructTag(type, SUI_TYPE_ARG);

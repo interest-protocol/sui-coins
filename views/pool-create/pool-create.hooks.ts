@@ -93,7 +93,7 @@ export const useCreateStablePool = () => {
 
     const { pool, poolAdmin, lpCoin, tx } = await clamm.newStable({
       coins,
-      tx: auxTx,
+      tx: auxTx as any,
       lpCoinTreasuryCap: treasuryCap,
       typeArguments: typeArguments,
     });
@@ -103,7 +103,7 @@ export const useCreateStablePool = () => {
       tx.pure.address(currentAccount.address)
     );
 
-    return clamm.shareStablePool({ tx, pool });
+    return clamm.shareStablePool({ tx, pool }) as unknown as Transaction;
   };
 };
 
@@ -166,7 +166,7 @@ export const useCreateVolatilePool = () => {
 
     const { pool, poolAdmin, lpCoin, tx } = await clamm.newVolatile({
       coins,
-      tx: auxTx,
+      tx: auxTx as any,
       lpCoinTreasuryCap: treasuryCap,
       typeArguments: typeArguments,
       prices: [price],

@@ -75,6 +75,9 @@ const CreateTokenForm: FC = () => {
 
       const tx = new Transaction();
 
+      if (!coinsMap[SUI_TYPE_ARG])
+        throw new Error("You doesn't have enough SUI on your wallet");
+
       tx.setGasPayment(
         coinsMap[SUI_TYPE_ARG]?.objects.map(
           ({ coinObjectId, digest, version }) => ({
@@ -108,11 +111,11 @@ const CreateTokenForm: FC = () => {
 
       throwTXIfNotSuccessful(tx2);
 
-      showTXSuccessToast(tx2, network as Network);
+      showTXSuccessToast(tx2, network as Network, 'Coin Generated!');
 
       await waitForTx({ suiClient, digest: tx2.digest });
 
-      await mutate();
+      mutate();
     } finally {
       setLoading(false);
     }
@@ -122,7 +125,6 @@ const CreateTokenForm: FC = () => {
     const loading = toast.loading('Generating new coin...');
     try {
       await createToken();
-      toast.success('Coin Generated!');
     } catch (e) {
       toast.error((e as Error).message || 'Something went wrong');
     } finally {

@@ -31,7 +31,7 @@ const SendClaim: FC<SendClaimProps> = ({ data, error, mutate, isLoading }) => {
   const [address] = useDebounce(useWatch({ control, name: 'address' }), 800);
 
   const onSuccess = (tx: TimedSuiTransactionBlockResponse) => {
-    showTXSuccessToast(tx, network as Network);
+    showTXSuccessToast(tx, network as Network, 'Assets claimed');
   };
 
   const isClaimed = !!data?.claimed;
@@ -51,7 +51,6 @@ const SendClaim: FC<SendClaimProps> = ({ data, error, mutate, isLoading }) => {
     setClaiming(true);
     try {
       await claim(data, address, onSuccess);
-      toast.success('Assets claimed');
     } catch (e) {
       toast.error((e as any).message ?? 'Something went wrong');
     } finally {

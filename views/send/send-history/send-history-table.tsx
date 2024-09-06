@@ -82,7 +82,7 @@ const SendHistoryTable: FC = () => {
 
   const onSuccessReclaim = (tx: TimedSuiTransactionBlockResponse) => {
     if (!currentAccount) return;
-    showTXSuccessToast(tx, network as Network);
+    showTXSuccessToast(tx, network as Network, 'Link reclaimed successfully!');
 
     setGasObjects(findNextGasCoin(tx, currentAccount.address));
 
@@ -93,7 +93,11 @@ const SendHistoryTable: FC = () => {
     tx: TimedSuiTransactionBlockResponse,
     url: string
   ) => {
-    showTXSuccessToast(tx, network as Network);
+    showTXSuccessToast(
+      tx,
+      network as Network,
+      'Link regenerated successfully!'
+    );
 
     push(`${Routes[RoutesEnum.SendLink]}#${url.split('#')[1]}`);
   };
@@ -120,7 +124,6 @@ const SendHistoryTable: FC = () => {
     const toastId = toast.loading('Reclaiming...');
     try {
       await reclaimLink(link, gasCoins, onSuccessReclaim);
-      toast.success('Link reclaimed successfully!');
     } catch (e) {
       toast.error((e as any).message ?? 'Link reclaiming failed!');
     } finally {
@@ -132,7 +135,6 @@ const SendHistoryTable: FC = () => {
     const toastId = toast.loading('Regenerating...');
     try {
       await regenerateLink(link, onSuccessRegenerate);
-      toast.success('Link regenerated successfully!');
     } catch (e) {
       toast.error((e as any).message ?? 'Link regenerating failed!');
     } finally {

@@ -27,7 +27,7 @@ const FormSendButton: FC<FormSendButtonProps> = ({ openModal }) => {
   const [amountList, setAmountList] = useState<AmountListProps[] | null>();
 
   const onSuccess = (tx: TimedSuiTransactionBlockResponse, url: string) => {
-    showTXSuccessToast(tx, network as Network);
+    showTXSuccessToast(tx, network as Network, 'Link created successfully');
 
     push(`${Routes[RoutesEnum.SendLink]}#${url.split('#')[1]}`);
   };
@@ -55,7 +55,6 @@ const FormSendButton: FC<FormSendButtonProps> = ({ openModal }) => {
 
     try {
       await createLink(objects, onSuccess);
-      toast.success('Link created successfully');
     } catch (e) {
       toast.error((e as any).message ?? 'Something went wrong');
     } finally {

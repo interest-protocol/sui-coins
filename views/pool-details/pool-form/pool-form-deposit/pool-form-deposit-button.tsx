@@ -13,12 +13,7 @@ import { useDialog } from '@/hooks/use-dialog';
 import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath, Rounding } from '@/lib';
-import {
-  showTXSuccessToast,
-  signAndExecute,
-  throwTXIfNotSuccessful,
-  waitForTx,
-} from '@/utils';
+import { signAndExecute, throwTXIfNotSuccessful, waitForTx } from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
 
 import { usePoolDetails } from '../../pool-details.context';
@@ -53,8 +48,6 @@ const PoolFormDepositButton: FC = () => {
       });
 
       throwTXIfNotSuccessful(tx);
-
-      showTXSuccessToast(tx, network as Network);
 
       await waitForTx({ suiClient, digest: tx.digest });
 

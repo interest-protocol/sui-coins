@@ -10,7 +10,11 @@ import { MenuItemProps } from '../layout/sidebar/sidebar.types';
 const MobileMenuListItem: FC<
   Omit<
     MenuItemProps,
-    'setIsCollapsed' | 'isCollapsed' | 'setTemporarilyOpen' | 'temporarilyOpen'
+    | 'setIsCollapsed'
+    | 'isCollapsed'
+    | 'setTemporarilyOpen'
+    | 'temporarilyOpen'
+    | 'open'
   >
 > = ({ accordionList, ...item }) => {
   const { asPath, push } = useRouter();

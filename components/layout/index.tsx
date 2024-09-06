@@ -2,7 +2,7 @@ import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC, PropsWithChildren } from 'react';
 
 import { ModalProvider } from '@/context/modal';
-import MergeCoins from '@/views/components/merge-coins';
+import FloatingButtons from '@/views/components/floating-buttons';
 
 import Web3Manager from '../web3-manager';
 import Footer from './footer';
@@ -15,49 +15,56 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
   children,
   features,
   noSidebar,
-  withBlocked,
 }) => (
   <ModalProvider>
-    <Box display="flex" height="100vh" overflow="hidden" bg="surface">
+    <Box bg="surface" display="flex" height="100vh" overflow="hidden">
       {!noSidebar && <Sidebar />}
       <Box
         flex="1"
         as="aside"
+        height="100vh"
         display="flex"
-        overflowY="auto"
-        overflowX="hidden"
         position="relative"
         flexDirection="column"
+        justifyContent="space-between"
       >
-        <Header withLogo={noSidebar} />
-        <Web3Manager features={features} withBlocked={withBlocked} />
+        <Header />
+        <Web3Manager features={features} />
         <Box
-          m="0"
-          mt="unset"
+          flex="1"
           width="100%"
-          height="100%"
           display="flex"
-          variant="container"
+          overflowY="auto"
           flexDirection="column"
-          px={['m', 'l', 'l', 'xl']}
           justifyContent="space-between"
         >
-          <Box as="main" flex="1" mb="10xl">
-            <Box>
-              {title && (
-                <Typography
-                  textAlign="center"
-                  variant="display"
-                  size="medium"
-                  my="3rem"
-                >
-                  {title}
-                </Typography>
-              )}
-              {children}
+          <Box
+            m="0"
+            width="100%"
+            display="flex"
+            variant="container"
+            flexDirection="column"
+            px={['m', 'l', 'l', 'xl']}
+            mt="unset"
+          >
+            <Box as="main" flex="1" mb="2xl">
+              <Box>
+                {title && (
+                  <Typography
+                    textAlign="center"
+                    color="onSurface"
+                    variant="display"
+                    size="medium"
+                    my="3rem"
+                  >
+                    {title}
+                  </Typography>
+                )}
+                {children}
+              </Box>
             </Box>
           </Box>
-          <MergeCoins />
+          <FloatingButtons />
           <Footer />
         </Box>
       </Box>
