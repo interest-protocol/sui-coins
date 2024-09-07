@@ -24,6 +24,7 @@ const DCAOrderDetailsOrders: FC<DCAOrderDetailedItemProps> = ({
   timeScale,
   totalOrders,
   amountPerTrade,
+  remainingOrders,
   coins: [tokenIn, tokenOut],
 }) => {
   const network = useNetwork();
@@ -197,7 +198,7 @@ const DCAOrderDetailsOrders: FC<DCAOrderDetailedItemProps> = ({
                     # of orders
                   </Typography>
                   <Typography variant="body" size="small">
-                    {orders?.length ?? 0}/{totalOrders}
+                    {totalOrders - remainingOrders}/{totalOrders}
                   </Typography>
                 </Box>
               </Box>

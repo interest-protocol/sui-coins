@@ -38,10 +38,10 @@ export const useDcas = () => {
 
       return Promise.all([
         fetch(
-          `${SENTINEL_API_URI[network]}dcas?active=true&pageSize=100&owner=${currentAccount.address}`
+          `${SENTINEL_API_URI[network]}dcas?active=true&pageSize=100&owner=0x40061c709edb896ad029c500de2aee3ef58a062a4b3bd05235d5ae3df6586d8b`
         ).then((response) => response.json?.()),
         fetch(
-          `${SENTINEL_API_URI[network]}dcas?active=false&pageSize=100&owner=${currentAccount.address}`
+          `${SENTINEL_API_URI[network]}dcas?active=false&pageSize=100&owner=0x40061c709edb896ad029c500de2aee3ef58a062a4b3bd05235d5ae3df6586d8b`
         ).then((response) => response.json?.()),
       ]);
     },

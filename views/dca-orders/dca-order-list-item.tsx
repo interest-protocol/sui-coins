@@ -81,7 +81,7 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
     dcaTotalOrders ?? remainingOrders + (dcaOrders?.totalItems ?? 0);
 
   const statusPercentage = dcaOrders
-    ? (dcaOrders.data.length * 100) / totalOrders
+    ? ((totalOrders - remainingOrders) * 100) / totalOrders
     : 0;
 
   const handleDestroyDCA: MouseEventHandler<HTMLButtonElement> = async (e) => {
