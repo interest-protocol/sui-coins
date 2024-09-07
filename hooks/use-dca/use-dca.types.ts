@@ -13,6 +13,7 @@ export interface DCA {
   lastTrade: number;
   isTrading: boolean;
   feePercent: number;
+  totalOrders: number;
   timeScale: TimeScale;
   inputBalance: number;
   amountPerTrade: number;
