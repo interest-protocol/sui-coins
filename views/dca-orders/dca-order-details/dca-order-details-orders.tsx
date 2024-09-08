@@ -15,25 +15,31 @@ import { FixedPointMath } from '@/lib';
 import { EyeSVG, IncineratorNoAssetsSVG } from '@/svg';
 import { formatMoney } from '@/utils';
 
-import { DCAOrderDetailedItemProps } from '../dca-orders.types';
+import { useDCAState } from '../dca-orders-manager';
 
-const DCAOrderDetailsOrders: FC<DCAOrderDetailedItemProps> = ({
-  min,
-  max,
-  orders,
-  timeScale,
-  totalOrders,
-  amountPerTrade,
-  remainingOrders,
-  coins: [tokenIn, tokenOut],
-}) => {
+const DCAOrderDetailsOrders: FC = () => {
   const network = useNetwork();
   const [isOpen, setOpen] = useLocalStorage<boolean>(
     `${LOCAL_STORAGE_VERSION}-sui-coins-dca-chart`,
     true
   );
+  const { detailedDcas, coinsMetadata, selectedId, dcaOrders } = useDCAState();
 
-  const orderPrices = orders.map(({ output_amount, timestampMs }) => {
+  const {
+    max,
+    min,
+    timeScale,
+    input,
+    output,
+    amountPerTrade,
+    totalOrders,
+    remainingOrders,
+  } = detailedDcas[selectedId!];
+
+  const tokenIn = coinsMetadata[input];
+  const tokenOut = coinsMetadata[output];
+
+  const orderPrices = dcaOrders.map(({ output_amount, timestampMs }) => {
     if (!(tokenIn && tokenOut)) return { valueIn: 0, price: 0, time: 0 };
 
     const price = FixedPointMath.toNumber(
@@ -242,7 +248,7 @@ const DCAOrderDetailsOrders: FC<DCAOrderDetailedItemProps> = ({
             Date/Time
           </Typography>
         </Box>
-        {orders.length ? (
+        {dcaOrders.length ? (
           <Box
             gap="s"
             height="20rem"
@@ -250,7 +256,7 @@ const DCAOrderDetailsOrders: FC<DCAOrderDetailedItemProps> = ({
             overflowY="auto"
             flexDirection="column"
           >
-            {orders.map(({ input_amount, output_amount, timestampMs }) => (
+            {dcaOrders.map(({ input_amount, output_amount, timestampMs }) => (
               <Box
                 p="m"
                 key={v4()}
