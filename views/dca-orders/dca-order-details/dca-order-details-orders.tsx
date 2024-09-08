@@ -111,8 +111,13 @@ const DCAOrderDetailsOrders: FC = () => {
             </Typography>
           </Button>
         </Box>
-        {isOpen && (
-          <Box gridTemplateColumns="2fr 1fr" display="grid" gap="s">
+
+        <Box
+          gap="s"
+          display="grid"
+          gridTemplateColumns={['1fr', '1fr', '1fr', '1fr', '2fr 1fr']}
+        >
+          {isOpen && (
             <Box
               px="m"
               pt="l"
@@ -136,81 +141,79 @@ const DCAOrderDetailsOrders: FC = () => {
                 }))}
               />
             </Box>
-            <Box
-              p="l"
-              gap="l"
-              borderRadius="xs"
-              bg="lowestContainer"
-              flexDirection="column"
-              display={['none', 'none', 'none', 'none', 'flex']}
-            >
-              <Typography variant="label" size="medium">
-                Order details
-              </Typography>
-              <Box display="flex" flexDirection="column" px="m">
-                <Box display="flex" justifyContent="space-between" py="s">
-                  <Typography variant="body" size="small" color="outline">
-                    Min Price
-                  </Typography>
-                  <Typography variant="body" size="small">
-                    {minPrice ? formatMoney(minPrice, undefined, true) : 'N/A'}
-                  </Typography>
-                </Box>
-                <Box
-                  py="s"
-                  display="flex"
-                  borderTop="1px solid"
-                  borderColor="outlineVariant"
-                  justifyContent="space-between"
-                >
-                  <Typography variant="body" size="small" color="outline">
-                    Max Price
-                  </Typography>
-                  <Typography variant="body" size="small">
-                    {maxPrice ? formatMoney(maxPrice, undefined, true) : 'N/A'}
-                  </Typography>
-                </Box>
-                <Box
-                  py="s"
-                  display="flex"
-                  borderTop="1px solid"
-                  borderColor="outlineVariant"
-                  justifyContent="space-between"
-                >
-                  <Typography variant="body" size="small" color="outline">
-                    Average Price
-                  </Typography>
-                  <Typography variant="body" size="small">
-                    {orderPrices.length
-                      ? `${formatMoney(
-                          orderPrices.reduce(
-                            (acc, { price }) => price + acc,
-                            0
-                          ) / orderPrices.length,
-                          1,
-                          true
-                        )} ${tokenOut?.symbol}`
-                      : 'N/A'}
-                  </Typography>
-                </Box>
-                <Box
-                  py="s"
-                  display="flex"
-                  borderTop="1px solid"
-                  borderColor="outlineVariant"
-                  justifyContent="space-between"
-                >
-                  <Typography variant="body" size="small" color="outline">
-                    # of orders
-                  </Typography>
-                  <Typography variant="body" size="small">
-                    {totalOrders - remainingOrders}/{totalOrders}
-                  </Typography>
-                </Box>
+          )}
+          <Box
+            p="l"
+            gap="l"
+            display="flex"
+            borderRadius="xs"
+            bg="lowestContainer"
+            flexDirection="column"
+          >
+            <Typography variant="label" size="medium">
+              Order details
+            </Typography>
+            <Box display="flex" flexDirection="column" px="m">
+              <Box display="flex" justifyContent="space-between" py="s">
+                <Typography variant="body" size="small" color="outline">
+                  Min Price
+                </Typography>
+                <Typography variant="body" size="small">
+                  {minPrice ? formatMoney(minPrice, undefined, true) : 'N/A'}
+                </Typography>
+              </Box>
+              <Box
+                py="s"
+                display="flex"
+                borderTop="1px solid"
+                borderColor="outlineVariant"
+                justifyContent="space-between"
+              >
+                <Typography variant="body" size="small" color="outline">
+                  Max Price
+                </Typography>
+                <Typography variant="body" size="small">
+                  {maxPrice ? formatMoney(maxPrice, undefined, true) : 'N/A'}
+                </Typography>
+              </Box>
+              <Box
+                py="s"
+                display="flex"
+                borderTop="1px solid"
+                borderColor="outlineVariant"
+                justifyContent="space-between"
+              >
+                <Typography variant="body" size="small" color="outline">
+                  Average Price
+                </Typography>
+                <Typography variant="body" size="small">
+                  {orderPrices.length
+                    ? `${formatMoney(
+                        orderPrices.reduce((acc, { price }) => price + acc, 0) /
+                          orderPrices.length,
+                        1,
+                        true
+                      )} ${tokenOut?.symbol}`
+                    : 'N/A'}
+                </Typography>
+              </Box>
+              <Box
+                py="s"
+                display="flex"
+                borderTop="1px solid"
+                borderColor="outlineVariant"
+                justifyContent="space-between"
+              >
+                <Typography variant="body" size="small" color="outline">
+                  # of orders
+                </Typography>
+                <Typography variant="body" size="small">
+                  {totalOrders - remainingOrders}/{totalOrders}
+                </Typography>
               </Box>
             </Box>
           </Box>
-        )}
+        </Box>
       </Box>
       <Box
         p="m"
