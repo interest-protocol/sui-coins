@@ -54,6 +54,7 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
   inputBalance,
   amountPerTrade,
   remainingOrders,
+  totalOrders: dcaTotalOrders,
 }) => {
   const { pathname } = useRouter();
   const { selectedId, selectId } = useDCAOrdersState();
@@ -76,10 +77,11 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
     [CoinMetadataWithType | null, CoinMetadataWithType | null]
   >([null, null]);
 
-  const totalOrders = remainingOrders + (dcaOrders?.totalItems ?? 0);
+  const totalOrders =
+    dcaTotalOrders ?? remainingOrders + (dcaOrders?.totalItems ?? 0);
 
   const statusPercentage = dcaOrders
-    ? (dcaOrders.data.length * 100) / totalOrders
+    ? ((totalOrders - remainingOrders) * 100) / totalOrders
     : 0;
 
   const handleDestroyDCA: MouseEventHandler<HTMLButtonElement> = async (e) => {
