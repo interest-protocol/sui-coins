@@ -20,7 +20,6 @@ import { fetchCoinMetadata, formatMoney, isSameStructTag } from '@/utils';
 const DCAOrderListMiniItem: FC<DCA> = ({
   id,
   input,
-  active,
   output,
   isTrading,
   inputBalance,
@@ -31,7 +30,7 @@ const DCAOrderListMiniItem: FC<DCA> = ({
   const coinsType: [string, string] = [input.name, output.name];
 
   const network = useNetwork();
-  const { data: dcaOrders, isLoading } = useDcaOrders(id, active);
+  const { data: dcaOrders, isLoading } = useDcaOrders(id);
   const [[tokenIn, tokenOut], setCoins] = useState<
     [CoinMetadataWithType | null, CoinMetadataWithType | null]
   >([null, null]);

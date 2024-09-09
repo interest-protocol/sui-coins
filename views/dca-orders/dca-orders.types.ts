@@ -9,27 +9,46 @@ export interface DCAOrderListItemProps extends DCA {
   mutate: KeyedMutator<[Paginated<DCA>, Paginated<DCA>] | null>;
 }
 
-export interface DCAOrderDetailedItemProps
+export interface DCAOrderDetailedItemProps {
+  id: string;
+}
+
+export interface DCAShortInfo
   extends Pick<
     DCA,
-    | 'min'
-    | 'max'
-    | 'every'
-    | 'timeScale'
-    | 'amountPerTrade'
-    | 'cooldown'
-    | 'lastTrade'
+    | 'id'
     | 'start'
     | 'active'
+    | 'inputBalance'
     | 'remainingOrders'
+    | 'totalOrders'
   > {
-  isOpen: boolean;
-  totalOrders: number;
-  orders: ReadonlyArray<DCAOrder>;
-  coins: [CoinMetadataWithType | null, CoinMetadataWithType | null];
+  input: string;
+  output: string;
+}
+
+export interface EnhancedDCA extends Omit<DCA, 'input' | 'output'> {
+  input: string;
+  output: string;
 }
 
 export interface DCAOrdersState {
+  loading: boolean;
+  mutateDCAs: () => void;
   selectedId: string | null;
+  dcaOrders: ReadonlyArray<DCAOrder>;
   selectId: (id: string | null) => void;
+  setLoading: (loading: boolean) => void;
+  activeDcas: ReadonlyArray<DCAShortInfo>;
+  detailedDcas: Record<string, EnhancedDCA>;
+  inactiveDcas: ReadonlyArray<DCAShortInfo>;
+  setMutateDCAs: (mutate: () => void) => void;
+  coinsMetadata: Record<string, CoinMetadataWithType>;
+  setDCAOrders: (dcaOrders: ReadonlyArray<DCAOrder>) => void;
+  setActiveDcas: (activeDcas: ReadonlyArray<DCAShortInfo>) => void;
+  setDetailedDcas: (detailedDcas: Record<string, EnhancedDCA>) => void;
+  setInactiveDcas: (inactiveDcas: ReadonlyArray<DCAShortInfo>) => void;
+  setCoinsMetadata: (
+    coinsMetadata: Record<string, CoinMetadataWithType>
+  ) => void;
 }

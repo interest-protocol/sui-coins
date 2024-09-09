@@ -15,25 +15,31 @@ import { FixedPointMath } from '@/lib';
 import { EyeSVG, IncineratorNoAssetsSVG } from '@/svg';
 import { formatMoney } from '@/utils';
 
-import { DCAOrderDetailedItemProps } from '../dca-orders.types';
+import { useDCAState } from '../dca-orders-manager';
 
-const DCAOrderDetailsOrders: FC<DCAOrderDetailedItemProps> = ({
-  min,
-  max,
-  orders,
-  timeScale,
-  totalOrders,
-  amountPerTrade,
-  remainingOrders,
-  coins: [tokenIn, tokenOut],
-}) => {
+const DCAOrderDetailsOrders: FC = () => {
   const network = useNetwork();
   const [isOpen, setOpen] = useLocalStorage<boolean>(
     `${LOCAL_STORAGE_VERSION}-sui-coins-dca-chart`,
     true
   );
+  const { detailedDcas, coinsMetadata, selectedId, dcaOrders } = useDCAState();
 
-  const orderPrices = orders.map(({ output_amount, timestampMs }) => {
+  const {
+    max,
+    min,
+    timeScale,
+    input,
+    output,
+    amountPerTrade,
+    totalOrders,
+    remainingOrders,
+  } = detailedDcas[selectedId!];
+
+  const tokenIn = coinsMetadata[input];
+  const tokenOut = coinsMetadata[output];
+
+  const orderPrices = dcaOrders.map(({ output_amount, timestampMs }) => {
     if (!(tokenIn && tokenOut)) return { valueIn: 0, price: 0, time: 0 };
 
     const price = FixedPointMath.toNumber(
@@ -105,8 +111,13 @@ const DCAOrderDetailsOrders: FC<DCAOrderDetailedItemProps> = ({
             </Typography>
           </Button>
         </Box>
-        {isOpen && (
-          <Box gridTemplateColumns="2fr 1fr" display="grid" gap="s">
+
+        <Box
+          gap="s"
+          display="grid"
+          gridTemplateColumns={['1fr', '1fr', '1fr', '1fr', '2fr 1fr']}
+        >
+          {isOpen && (
             <Box
               px="m"
               pt="l"
@@ -130,81 +141,79 @@ const DCAOrderDetailsOrders: FC<DCAOrderDetailedItemProps> = ({
                 }))}
               />
             </Box>
-            <Box
-              p="l"
-              gap="l"
-              borderRadius="xs"
-              bg="lowestContainer"
-              flexDirection="column"
-              display={['none', 'none', 'none', 'none', 'flex']}
-            >
-              <Typography variant="label" size="medium">
-                Order details
-              </Typography>
-              <Box display="flex" flexDirection="column" px="m">
-                <Box display="flex" justifyContent="space-between" py="s">
-                  <Typography variant="body" size="small" color="outline">
-                    Min Price
-                  </Typography>
-                  <Typography variant="body" size="small">
-                    {minPrice ? formatMoney(minPrice, undefined, true) : 'N/A'}
-                  </Typography>
-                </Box>
-                <Box
-                  py="s"
-                  display="flex"
-                  borderTop="1px solid"
-                  borderColor="outlineVariant"
-                  justifyContent="space-between"
-                >
-                  <Typography variant="body" size="small" color="outline">
-                    Max Price
-                  </Typography>
-                  <Typography variant="body" size="small">
-                    {maxPrice ? formatMoney(maxPrice, undefined, true) : 'N/A'}
-                  </Typography>
-                </Box>
-                <Box
-                  py="s"
-                  display="flex"
-                  borderTop="1px solid"
-                  borderColor="outlineVariant"
-                  justifyContent="space-between"
-                >
-                  <Typography variant="body" size="small" color="outline">
-                    Average Price
-                  </Typography>
-                  <Typography variant="body" size="small">
-                    {orderPrices.length
-                      ? `${formatMoney(
-                          orderPrices.reduce(
-                            (acc, { price }) => price + acc,
-                            0
-                          ) / orderPrices.length,
-                          1,
-                          true
-                        )} ${tokenOut?.symbol}`
-                      : 'N/A'}
-                  </Typography>
-                </Box>
-                <Box
-                  py="s"
-                  display="flex"
-                  borderTop="1px solid"
-                  borderColor="outlineVariant"
-                  justifyContent="space-between"
-                >
-                  <Typography variant="body" size="small" color="outline">
-                    # of orders
-                  </Typography>
-                  <Typography variant="body" size="small">
-                    {totalOrders - remainingOrders}/{totalOrders}
-                  </Typography>
-                </Box>
+          )}
+          <Box
+            p="l"
+            gap="l"
+            display="flex"
+            borderRadius="xs"
+            bg="lowestContainer"
+            flexDirection="column"
+          >
+            <Typography variant="label" size="medium">
+              Order details
+            </Typography>
+            <Box display="flex" flexDirection="column" px="m">
+              <Box display="flex" justifyContent="space-between" py="s">
+                <Typography variant="body" size="small" color="outline">
+                  Min Price
+                </Typography>
+                <Typography variant="body" size="small">
+                  {minPrice ? formatMoney(minPrice, undefined, true) : 'N/A'}
+                </Typography>
+              </Box>
+              <Box
+                py="s"
+                display="flex"
+                borderTop="1px solid"
+                borderColor="outlineVariant"
+                justifyContent="space-between"
+              >
+                <Typography variant="body" size="small" color="outline">
+                  Max Price
+                </Typography>
+                <Typography variant="body" size="small">
+                  {maxPrice ? formatMoney(maxPrice, undefined, true) : 'N/A'}
+                </Typography>
+              </Box>
+              <Box
+                py="s"
+                display="flex"
+                borderTop="1px solid"
+                borderColor="outlineVariant"
+                justifyContent="space-between"
+              >
+                <Typography variant="body" size="small" color="outline">
+                  Average Price
+                </Typography>
+                <Typography variant="body" size="small">
+                  {orderPrices.length
+                    ? `${formatMoney(
+                        orderPrices.reduce((acc, { price }) => price + acc, 0) /
+                          orderPrices.length,
+                        1,
+                        true
+                      )} ${tokenOut?.symbol}`
+                    : 'N/A'}
+                </Typography>
+              </Box>
+              <Box
+                py="s"
+                display="flex"
+                borderTop="1px solid"
+                borderColor="outlineVariant"
+                justifyContent="space-between"
+              >
+                <Typography variant="body" size="small" color="outline">
+                  # of orders
+                </Typography>
+                <Typography variant="body" size="small">
+                  {totalOrders - remainingOrders}/{totalOrders}
+                </Typography>
               </Box>
             </Box>
           </Box>
-        )}
+        </Box>
       </Box>
       <Box
         p="m"
@@ -242,7 +251,7 @@ const DCAOrderDetailsOrders: FC<DCAOrderDetailedItemProps> = ({
             Date/Time
           </Typography>
         </Box>
-        {orders.length ? (
+        {dcaOrders.length ? (
           <Box
             gap="s"
             height="20rem"
@@ -250,7 +259,7 @@ const DCAOrderDetailsOrders: FC<DCAOrderDetailedItemProps> = ({
             overflowY="auto"
             flexDirection="column"
           >
-            {orders.map(({ input_amount, output_amount, timestampMs }) => (
+            {dcaOrders.map(({ input_amount, output_amount, timestampMs }) => (
               <Box
                 p="m"
                 key={v4()}

@@ -8,25 +8,35 @@ import { FixedPointMath } from '@/lib';
 import { formatMoney, ZERO_BIG_NUMBER } from '@/utils';
 import { PERIODICITY } from '@/views/dca/dca.data';
 
-import { DCAOrderDetailedItemProps } from '../dca-orders.types';
+import { useDCAState } from '../dca-orders-manager';
 
-const DCAOrderDetailsOverview: FC<DCAOrderDetailedItemProps> = ({
-  start,
-  every,
-  orders,
-  cooldown,
-  lastTrade,
-  timeScale,
-  totalOrders,
-  amountPerTrade,
-  remainingOrders,
-  coins: [tokenIn, tokenOut],
-}) => {
+const DCAOrderDetailsOverview: FC = () => {
   const network = useNetwork();
-  const accumulatedOutput = orders.reduce(
+
+  const { detailedDcas, coinsMetadata, selectedId, dcaOrders } = useDCAState();
+
+  const {
+    every,
+    start,
+    input,
+    output,
+    cooldown,
+    lastTrade,
+    timeScale,
+    totalOrders,
+    amountPerTrade,
+    remainingOrders,
+  } = detailedDcas[selectedId!];
+
+  const executedOrders = totalOrders - remainingOrders;
+
+  const accumulatedOutput = dcaOrders.reduce(
     (acc, { output_amount }) => acc.plus(output_amount),
     ZERO_BIG_NUMBER
   );
+
+  const tokenIn = coinsMetadata[input];
+  const tokenOut = coinsMetadata[output];
 
   return (
     <Box
@@ -104,12 +114,9 @@ const DCAOrderDetailsOverview: FC<DCAOrderDetailedItemProps> = ({
           </Typography>
           <Typography variant="body" size="small">
             {formatMoney(
-              FixedPointMath.toNumber(
-                BigNumber(amountPerTrade).times(orders.length),
-                tokenIn?.decimals
-              )
+              FixedPointMath.toNumber(accumulatedOutput, tokenIn?.decimals)
             )}{' '}
-            {tokenIn?.symbol} ({(100 * orders.length) / totalOrders}%)
+            {tokenIn?.symbol} ({(100 * executedOrders) / totalOrders}%)
           </Typography>
         </Box>
         <Box

@@ -51,7 +51,7 @@ export const useDcas = () => {
   );
 };
 
-export const useDcaOrders = (id: string, active: boolean) => {
+export const useDcaOrders = (id: string) => {
   const network = useNetwork();
 
   return useSWR<Paginated<DCAOrder> | null>(
@@ -65,8 +65,8 @@ export const useDcaOrders = (id: string, active: boolean) => {
     },
     {
       refreshWhenHidden: true,
+      refreshInterval: 30_000,
       refreshWhenOffline: false,
-      refreshInterval: active ? 30_000 : undefined,
     }
   );
 };

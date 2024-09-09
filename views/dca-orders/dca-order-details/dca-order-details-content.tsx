@@ -4,11 +4,10 @@ import { v4 } from 'uuid';
 
 import DetailsTabs from '@/views/components/detail-tabs';
 
-import { DCAOrderDetailedItemProps } from '../dca-orders.types';
 import DCAOrderDetailsOrders from './dca-order-details-orders';
 import DCAOrderDetailsOverview from './dca-order-details-overview';
 
-const DCAOrderDetailsContent: FC<DCAOrderDetailedItemProps> = (props) => {
+const DCAOrderDetailsContent: FC = () => {
   const [index, setIndex] = useState(0);
 
   return (
@@ -27,11 +26,7 @@ const DCAOrderDetailsContent: FC<DCAOrderDetailedItemProps> = (props) => {
         ]}
       />
       <Box gap="m" mt="l" display="flex" flexDirection="column">
-        {index ? (
-          <DCAOrderDetailsOrders {...props} />
-        ) : (
-          <DCAOrderDetailsOverview {...props} />
-        )}
+        {index ? <DCAOrderDetailsOrders /> : <DCAOrderDetailsOverview />}
       </Box>
     </Box>
   );

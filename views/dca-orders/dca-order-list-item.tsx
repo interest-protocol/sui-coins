@@ -9,7 +9,7 @@ import BigNumber from 'bignumber.js';
 import { AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FC, MouseEventHandler, useEffect, useMemo, useState } from 'react';
+import { FC, MouseEventHandler, useMemo } from 'react';
 import toast from 'react-hot-toast';
 import invariant from 'tiny-invariant';
 import { v4 } from 'uuid';
@@ -18,15 +18,11 @@ import { TokenIcon } from '@/components';
 import ProgressBar from '@/components/progress-bar';
 import { EXPLORER_URL } from '@/constants';
 import { SENTINEL_API_URI } from '@/constants/dca';
-import { useDcaOrders } from '@/hooks/use-dca';
 import useDcaSdk from '@/hooks/use-dca-sdk';
 import { useNetwork } from '@/hooks/use-network';
-import { CoinMetadataWithType } from '@/interface';
 import { FixedPointMath } from '@/lib';
 import { ChevronDownSVG, ChevronRightSVG, LinkSVG, TrashSVG } from '@/svg';
 import {
-  fetchCoinMetadata,
-  isSameStructTag,
   showTXSuccessToast,
   signAndExecute,
   throwTXIfNotSuccessful,
@@ -35,29 +31,28 @@ import {
 
 import DCAOrderDetails from './dca-order-details';
 import DCAOrderListItemSkeleton from './dca-order-list-item-skeleton';
-import { DCAOrderListItemProps } from './dca-orders.types';
-import { useDCAOrdersState } from './dca-orders-manager';
+import { DCAShortInfo } from './dca-orders.types';
+import { useDCAState } from './dca-orders-manager';
 
-const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
+const DCAOrderListItem: FC<DCAShortInfo> = ({
   id,
-  min,
-  max,
-  every,
-  input,
   start,
-  active,
-  mutate,
+  input,
   output,
-  cooldown,
-  timeScale,
-  lastTrade,
+  active,
+  totalOrders,
   inputBalance,
-  amountPerTrade,
   remainingOrders,
-  totalOrders: dcaTotalOrders,
 }) => {
+  const dcaSdk = useDcaSdk();
+  const network = useNetwork();
+  const suiClient = useSuiClient();
   const { pathname } = useRouter();
-  const { selectedId, selectId } = useDCAOrdersState();
+  const currentAccount = useCurrentAccount();
+  const signTransaction = useSignTransaction();
+
+  const { selectedId, selectId, coinsMetadata, mutateDCAs } = useDCAState();
+
   const selected = useMemo(() => selectedId === id, [selectedId]);
 
   const handleToggleDetails = () => {
@@ -65,24 +60,11 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
     updateURL(selected ? pathname : `${pathname}?id=${id}`);
   };
 
-  const coinsType: [string, string] = [input.name, output.name];
+  const tokenIn = coinsMetadata[input];
+  const tokenOut = coinsMetadata[output];
 
-  const dcaSdk = useDcaSdk();
-  const network = useNetwork();
-  const suiClient = useSuiClient();
-  const currentAccount = useCurrentAccount();
-  const signTransaction = useSignTransaction();
-  const { data: dcaOrders, isLoading } = useDcaOrders(id, active);
-  const [[tokenIn, tokenOut], setCoins] = useState<
-    [CoinMetadataWithType | null, CoinMetadataWithType | null]
-  >([null, null]);
-
-  const totalOrders =
-    dcaTotalOrders ?? remainingOrders + (dcaOrders?.totalItems ?? 0);
-
-  const statusPercentage = dcaOrders
-    ? ((totalOrders - remainingOrders) * 100) / totalOrders
-    : 0;
+  const statusPercentage =
+    ((totalOrders - remainingOrders) * 100) / totalOrders;
 
   const handleDestroyDCA: MouseEventHandler<HTMLButtonElement> = async (e) => {
     e.stopPropagation();
@@ -91,8 +73,8 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
 
       const tx = dcaSdk.stopAndDestroy({
         dca: id,
-        coinInType: normalizeStructTag(input.name),
-        coinOutType: normalizeStructTag(output.name),
+        coinInType: normalizeStructTag(input),
+        coinOutType: normalizeStructTag(output),
       });
 
       const txResult = await signAndExecute({
@@ -112,24 +94,11 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
     } catch (e) {
       toast.error((e as Error)?.message || 'Error on destroy DCA');
     } finally {
-      mutate();
+      mutateDCAs();
     }
   };
 
-  useEffect(() => {
-    fetchCoinMetadata({
-      network,
-      types: coinsType.map(normalizeStructTag),
-    }).then((data) =>
-      setCoins(
-        coinsType.map(
-          (type) => data.find((item) => isSameStructTag(item.type, type))!
-        ) as [CoinMetadataWithType, CoinMetadataWithType]
-      )
-    );
-  }, []);
-
-  if (isLoading || !tokenIn || !tokenOut) return <DCAOrderListItemSkeleton />;
+  if (!tokenIn || !tokenOut) return <DCAOrderListItemSkeleton />;
 
   return (
     <AnimatePresence>
@@ -265,22 +234,7 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
           </Box>
         </Box>
         <AnimatePresence>
-          <DCAOrderDetails
-            min={min}
-            max={max}
-            start={start}
-            every={every}
-            active={active}
-            isOpen={selected}
-            cooldown={cooldown}
-            lastTrade={lastTrade}
-            timeScale={timeScale}
-            totalOrders={totalOrders}
-            coins={[tokenIn, tokenOut]}
-            orders={dcaOrders?.data ?? []}
-            amountPerTrade={amountPerTrade}
-            remainingOrders={remainingOrders}
-          />
+          <DCAOrderDetails id={id} />
         </AnimatePresence>
       </Box>
       <Box overflow="hidden" display={['block', 'block', 'block', 'none']}>
@@ -503,22 +457,7 @@ const DCAOrderListItem: FC<DCAOrderListItemProps> = ({
             Expand
           </Button>
         </Box>
-        <DCAOrderDetails
-          min={min}
-          max={max}
-          every={every}
-          start={start}
-          isOpen={selected}
-          active={active}
-          cooldown={cooldown}
-          lastTrade={lastTrade}
-          timeScale={timeScale}
-          totalOrders={totalOrders}
-          coins={[tokenIn, tokenOut]}
-          orders={dcaOrders?.data ?? []}
-          amountPerTrade={amountPerTrade}
-          remainingOrders={remainingOrders}
-        />
+        <DCAOrderDetails id={id} />
       </Box>
     </AnimatePresence>
   );
