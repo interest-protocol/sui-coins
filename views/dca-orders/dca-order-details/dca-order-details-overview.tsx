@@ -5,7 +5,7 @@ import { FC } from 'react';
 import { TokenIcon } from '@/components';
 import { useNetwork } from '@/hooks/use-network';
 import { FixedPointMath } from '@/lib';
-import { formatMoney } from '@/utils';
+import { formatMoney, ZERO_BIG_NUMBER } from '@/utils';
 import { PERIODICITY } from '@/views/dca/dca.data';
 
 import { useDCAState } from '../dca-orders-manager';
@@ -13,7 +13,7 @@ import { useDCAState } from '../dca-orders-manager';
 const DCAOrderDetailsOverview: FC = () => {
   const network = useNetwork();
 
-  const { detailedDcas, coinsMetadata, selectedId } = useDCAState();
+  const { detailedDcas, coinsMetadata, selectedId, dcaOrders } = useDCAState();
 
   const {
     every,
@@ -30,7 +30,10 @@ const DCAOrderDetailsOverview: FC = () => {
 
   const executedOrders = totalOrders - remainingOrders;
 
-  const accumulatedOutput = BigNumber(amountPerTrade).times(executedOrders);
+  const accumulatedOutput = dcaOrders.reduce(
+    (acc, { output_amount }) => acc.plus(output_amount),
+    ZERO_BIG_NUMBER
+  );
 
   const tokenIn = coinsMetadata[input];
   const tokenOut = coinsMetadata[output];
