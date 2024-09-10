@@ -28,11 +28,11 @@ const DCAOrderDetailsOrders: FC = () => {
   const {
     max,
     min,
-    timeScale,
     input,
     output,
-    amountPerTrade,
+    timeScale,
     totalOrders,
+    amountPerTrade,
     remainingOrders,
   } = detailedDcas[selectedId!];
 
@@ -149,6 +149,7 @@ const DCAOrderDetailsOrders: FC = () => {
             borderRadius="xs"
             bg="lowestContainer"
             flexDirection="column"
+            gridColumn={isOpen ? 'unset' : '1/-1'}
           >
             <Typography variant="label" size="medium">
               Order details

@@ -34,6 +34,7 @@ export interface EnhancedDCA extends Omit<DCA, 'input' | 'output'> {
 
 export interface DCAOrdersState {
   loading: boolean;
+  isOrdersView: boolean;
   mutateDCAs: () => void;
   selectedId: string | null;
   dcaOrders: ReadonlyArray<DCAOrder>;
@@ -43,6 +44,7 @@ export interface DCAOrdersState {
   detailedDcas: Record<string, EnhancedDCA>;
   inactiveDcas: ReadonlyArray<DCAShortInfo>;
   setMutateDCAs: (mutate: () => void) => void;
+  setIsOrdersView: (isOrdersView: boolean) => void;
   coinsMetadata: Record<string, CoinMetadataWithType>;
   setDCAOrders: (dcaOrders: ReadonlyArray<DCAOrder>) => void;
   setActiveDcas: (activeDcas: ReadonlyArray<DCAShortInfo>) => void;
