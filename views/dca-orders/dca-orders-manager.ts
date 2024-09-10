@@ -12,16 +12,18 @@ import { fetchCoinMetadata } from '@/utils';
 import { DCAOrdersState, DCAShortInfo, EnhancedDCA } from './dca-orders.types';
 
 export const useDCAState = create<DCAOrdersState>((set) => ({
+  dcaOrders: [],
   loading: false,
   activeDcas: [],
   selectedId: '',
-  dcaOrders: [],
   inactiveDcas: [],
   detailedDcas: {},
   coinsMetadata: {},
+  isOrdersView: false,
   mutateDCAs: () => {},
   setLoading: (loading: boolean) => set({ loading }),
   setMutateDCAs: (mutateDCAs: () => void) => set({ mutateDCAs }),
+  setIsOrdersView: (isOrdersView: boolean) => set({ isOrdersView }),
   setDCAOrders: (dcaOrders: ReadonlyArray<DCAOrder>) => set({ dcaOrders }),
   setDetailedDcas: (detailedDcas: Record<string, EnhancedDCA>) =>
     set({ detailedDcas }),
@@ -29,6 +31,7 @@ export const useDCAState = create<DCAOrdersState>((set) => ({
     set({ coinsMetadata }),
   selectId: (id: string | null) =>
     set(({ selectedId }) => ({
+      isOrdersView: false,
       selectedId: !id || id === selectedId ? null : id,
     })),
   setActiveDcas: (activeDcas: ReadonlyArray<DCAShortInfo>) =>

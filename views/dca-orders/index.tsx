@@ -18,8 +18,8 @@ import DCAOrdersNotConnected from './dca-orders-not-connected';
 
 const DCAOrders: FC = () => {
   const [index, setIndex] = useState(0);
-  const currentAccount = useCurrentAccount();
   const { push, pathname } = useRouter();
+  const currentAccount = useCurrentAccount();
   const { activeDcas, inactiveDcas, loading, mutateDCAs } = useDCAState();
 
   const onChangeTab = (index: number) =>
