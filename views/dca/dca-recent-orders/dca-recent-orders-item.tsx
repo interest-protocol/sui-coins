@@ -9,7 +9,6 @@ import { v4 } from 'uuid';
 import { TokenIcon } from '@/components';
 import ProgressBar from '@/components/progress-bar';
 import { Routes, RoutesEnum } from '@/constants';
-import { useDcaOrders } from '@/hooks/use-dca';
 import { DCA } from '@/hooks/use-dca/use-dca.types';
 import { useNetwork } from '@/hooks/use-network';
 import { CoinMetadataWithType } from '@/interface';
@@ -21,7 +20,7 @@ const DCAOrderListMiniItem: FC<DCA> = ({
   id,
   input,
   output,
-  isTrading,
+  totalOrders,
   inputBalance,
   remainingOrders,
 }) => {
@@ -30,17 +29,12 @@ const DCAOrderListMiniItem: FC<DCA> = ({
   const coinsType: [string, string] = [input.name, output.name];
 
   const network = useNetwork();
-  const { data: dcaOrders, isLoading } = useDcaOrders(id);
   const [[tokenIn, tokenOut], setCoins] = useState<
     [CoinMetadataWithType | null, CoinMetadataWithType | null]
   >([null, null]);
 
-  const totalOrders =
-    remainingOrders + (dcaOrders?.totalItems ?? 0) + (isTrading ? 1 : 0);
-
-  const statusPercentage = dcaOrders
-    ? (dcaOrders.data.length / totalOrders) * 100
-    : 0;
+  const statusPercentage =
+    ((totalOrders - remainingOrders) / totalOrders) * 100;
 
   useEffect(() => {
     fetchCoinMetadata({
@@ -55,7 +49,7 @@ const DCAOrderListMiniItem: FC<DCA> = ({
     );
   }, []);
 
-  if (isLoading || !tokenIn || !tokenOut)
+  if (!tokenIn || !tokenOut)
     return (
       <Box
         p="s"
