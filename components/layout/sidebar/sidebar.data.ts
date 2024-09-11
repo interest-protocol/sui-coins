@@ -3,7 +3,6 @@ import {
   AirdropSVG,
   CirclePlusSVG,
   DoubleChevronSVG,
-  FaucetSVG,
   FireSVG,
   HourglassSVG,
   MenuSVG,
@@ -27,7 +26,7 @@ export const SIDEBAR_ITEMS: ReadonlyArray<IMenuItem> = [
     disabled: false,
     Icon: HourglassSVG,
     path: Routes[RoutesEnum.DCA],
-    networks: [Network.TESTNET, Network.MAINNET],
+    networks: [Network.MAINNET],
   },
   {
     disabled: false,
@@ -63,14 +62,6 @@ export const SIDEBAR_ITEMS: ReadonlyArray<IMenuItem> = [
         Icon: UploadSVG,
         path: Routes[RoutesEnum.Send],
         networks: [Network.MAINNET, Network.TESTNET],
-      },
-      {
-        beta: false,
-        disabled: false,
-        Icon: FaucetSVG,
-        name: 'DCA Faucet',
-        networks: [Network.TESTNET],
-        path: Routes[RoutesEnum.Faucet],
       },
       {
         name: 'merge',

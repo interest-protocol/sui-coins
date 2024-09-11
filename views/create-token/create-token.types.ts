@@ -1,4 +1,9 @@
-import { Control, UseFormSetValue } from 'react-hook-form';
+import {
+  Control,
+  UseFormGetValues,
+  UseFormHandleSubmit,
+  UseFormSetValue,
+} from 'react-hook-form';
 
 export interface ICreateTokenForm {
   name: string;
@@ -13,4 +18,9 @@ export interface ICreateTokenForm {
 export interface FixedSupplyToggleProps {
   control: Control<ICreateTokenForm>;
   setValue: UseFormSetValue<ICreateTokenForm>;
+}
+
+export interface CreateTokenButtonProps {
+  getValues: UseFormGetValues<ICreateTokenForm>;
+  handleSubmit: UseFormHandleSubmit<ICreateTokenForm, undefined>;
 }
