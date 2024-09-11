@@ -22,7 +22,7 @@ export const SIDEBAR_ITEMS: ReadonlyArray<IMenuItem> = [
   },
   {
     beta: true,
-    name: 'dca',
+    name: 'DCA',
     disabled: false,
     Icon: HourglassSVG,
     path: Routes[RoutesEnum.DCA],
