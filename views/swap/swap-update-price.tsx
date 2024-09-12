@@ -26,9 +26,9 @@ import { RefreshSVG } from '@/svg';
 import { isSui, parseBigNumberish, ZERO_BIG_NUMBER } from '@/utils';
 
 import { SwapMessagesEnum } from './swap.data';
-import { useAftermathRouter } from './swap.hooks';
 import { Aggregator, SwapForm } from './swap.types';
 import { isNativeRoute } from './swap.utils';
+import { useAftermathRouter } from './swap-manager/swap-manager.hooks';
 
 const countdownRenderer =
   (interval: string): CountdownRendererFn =>
@@ -292,16 +292,11 @@ const SwapUpdatePrice: FC = () => {
         from.type &&
         String(from.decimals) &&
         coinsMap[from.type]
-      ) {
-        if (isGreaterThanBalance) {
+      )
+        if (isGreaterThanBalance)
           setValue('error', SwapMessagesEnum.notEnoughToken);
-          return;
-        }
-        if (isSui(from.type) && isGreaterThanAllowedWhenSui) {
+        else if (isSui(from.type) && isGreaterThanAllowedWhenSui)
           setValue('error', SwapMessagesEnum.leastOneSui);
-          return;
-        }
-      }
 
       setValue('fetchingPrices', true);
 

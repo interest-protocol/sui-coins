@@ -12,11 +12,7 @@ import { EXPLORER_URL, Network } from '@/constants';
 import { useDialog } from '@/hooks/use-dialog';
 import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
-import {
-  showTXSuccessToast,
-  signAndExecute,
-  throwTXIfNotSuccessful,
-} from '@/utils';
+import { signAndExecute, throwTXIfNotSuccessful } from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
 
 import PoolPreview from '../pool-form-preview';
@@ -49,8 +45,6 @@ const PoolFormWithdrawButton: FC = () => {
       });
 
       throwTXIfNotSuccessful(tx2);
-
-      showTXSuccessToast(tx2, network as Network);
 
       setValue(
         'explorerLink',

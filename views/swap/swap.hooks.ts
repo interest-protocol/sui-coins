@@ -1,7 +1,6 @@
 import { useCurrentAccount } from '@mysten/dapp-kit';
 import { Transaction } from '@mysten/sui/transactions';
 import { normalizeStructTag } from '@mysten/sui/utils';
-import { Aftermath } from 'aftermath-ts-sdk';
 import invariant from 'tiny-invariant';
 
 import {
@@ -17,8 +16,7 @@ import { isSui } from '@/utils';
 
 import { SwapForm } from './swap.types';
 import { isAftermathRoute, isNativeRoute } from './swap.utils';
-
-export const useAftermathRouter = () => new Aftermath('MAINNET').Router();
+import { useAftermathRouter } from './swap-manager/swap-manager.hooks';
 
 export const useSwap = () => {
   const hopSdk = useHopSdk();
@@ -94,7 +92,7 @@ export const useSwap = () => {
 
     const { coinOut, tx } = clamm.swapRoute({
       coinIn,
-      tx: auxTx,
+      tx: auxTx as any,
       route: [route[0], route[1]],
       poolsMap: values.route.poolsMap,
       slippage: Number((+values.settings.slippage * 100).toFixed(0)),
@@ -120,6 +118,6 @@ export const useSwap = () => {
       tx.transferObjects([coinOut], tx.pure.address(currentAccount.address));
     }
 
-    return tx;
+    return tx as unknown as Transaction;
   };
 };

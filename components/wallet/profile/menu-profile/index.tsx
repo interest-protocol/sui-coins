@@ -52,7 +52,7 @@ const MenuProfile: FC<MenuProfileProps> = ({
   return (
     <Motion
       right="0"
-      zIndex={1}
+      zIndex={3}
       bg="container"
       display="flex"
       borderRadius="s"

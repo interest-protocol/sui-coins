@@ -65,7 +65,6 @@ const Header: FC<HeaderProps> = ({ withLogo }) => (
     </Box>
     <Box
       py="m"
-      px="xl"
       top="0"
       gap="xs"
       zIndex={3}
@@ -73,14 +72,17 @@ const Header: FC<HeaderProps> = ({ withLogo }) => (
       position="relative"
       alignItems="center"
       bg="lowestContainer"
+      px={['m', 'l', 'l', 'xl']}
       justifyContent="space-between"
       gridTemplateColumns="1fr 1fr 1fr"
       display={['flex', 'flex', 'flex', 'none']}
       boxShadow="0 1.5rem 2.875rem -0.625rem rgba(13, 16, 23, 0.16)"
     >
-      <Box display="flex" alignItems="center" height="1.5rem">
-        <LogoSVG maxHeight="1.5rem" maxWidth="7.5rem" width="100%" />
-      </Box>
+      <Link href={Routes[RoutesEnum.Swap]}>
+        <Box display="flex" alignItems="center" height="1.5rem">
+          <LogoSVG maxHeight="1.5rem" maxWidth="7.5rem" width="100%" />
+        </Box>
+      </Link>
       <Box position="relative" display="flex" gap="s" alignItems="center">
         <Mint />
         <Wallet />

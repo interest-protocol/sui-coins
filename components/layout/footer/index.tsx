@@ -1,111 +1,75 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
+import Link from 'next/link';
 import { FC } from 'react';
+import { v4 } from 'uuid';
 
-import {
-  DiscordSVG,
-  GithubSVG,
-  HeartSVG,
-  IPXSVG,
-  TelegramSVG,
-  XSVG,
-} from '@/svg';
+import { IPXSVG } from '@/svg';
+
+import { SOCIAL_LINK } from './social-link.data';
 
 const Footer: FC = () => (
-  <Box display="flex" flexDirection="column" textTransform="uppercase">
-    <Box textAlign="center" mb="l">
-      <Typography variant="label" size="medium">
-        The website is maintained &
-      </Typography>
-      <Typography
+  <Box
+    py="xl"
+    gap="l"
+    px="2xl"
+    zIndex={0}
+    as="footer"
+    width="100%"
+    display="flex"
+    alignItems="center"
+    justifyContent="space-between"
+    flexDirection={['column', 'column', 'column', 'row']}
+  >
+    <Link
+      target="_blank"
+      rel="noreferrer"
+      title="Visit our landing page"
+      href="https://www.interestprotocol.com/"
+    >
+      <Box height="3rem" width="3rem" nHover={{ color: 'primary' }}>
+        <IPXSVG maxHeight="100%" maxWidth="100%" width="100%" />
+      </Box>
+    </Link>
+    <Box gap="m" display="flex" flexDirection="column" alignItems="center">
+      <Box
         gap="2xs"
-        size="medium"
         display="flex"
-        variant="label"
+        alignItems="center"
+        flexDirection="column"
         justifyContent="center"
       >
-        Made with
-        <HeartSVG maxHeight="1.125rem" maxWidth="1.125rem" width="100%" />
-        By Interest Protocol
-      </Typography>
-    </Box>
-    <Box textAlign="center" my="2xl">
-      <Typography variant="label" size="medium">
-        Follow us
-      </Typography>
-      <Box display="flex" gap="xs" justifyContent="center" mt="s">
-        <a
-          href="https://discord.com/invite/interestprotocol"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <Box
-            p="xs"
-            width="2.5rem"
-            height="2.5rem"
-            border="1px solid"
-            borderRadius="full"
-            borderColor="outline"
-          >
-            <DiscordSVG maxHeight="100%" maxWidth="100%" width="100%" />
-          </Box>
-        </a>
-        <a
-          href="https://github.com/interest-protocol/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <Box
-            p="xs"
-            width="2.5rem"
-            height="2.5rem"
-            border="1px solid"
-            borderRadius="full"
-            borderColor="outline"
-          >
-            <GithubSVG maxHeight="100%" maxWidth="100%" width="100%" />
-          </Box>
-        </a>
-        <a
-          href="https://t.me/interestprotocol"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <Box
-            p="xs"
-            width="2.5rem"
-            height="2.5rem"
-            border="1px solid"
-            borderRadius="full"
-            borderColor="outline"
-          >
-            <TelegramSVG maxHeight="100%" maxWidth="100%" width="100%" />
-          </Box>
-        </a>
-        <a href="https://x.com/IPXSui" target="_blank" rel="noreferrer">
-          <Box
-            p="xs"
-            width="2.5rem"
-            height="2.5rem"
-            border="1px solid"
-            borderRadius="full"
-            borderColor="outline"
-          >
-            <XSVG maxHeight="100%" maxWidth="100%" height="100%" />
-          </Box>
-        </a>
+        <Typography variant="label" size="small">
+          Follow us
+        </Typography>
+        <Box display="flex" gap="xs">
+          {SOCIAL_LINK.map(({ title, pathname, Icon }) => (
+            <Link
+              key={v4()}
+              href={pathname}
+              target="_blank"
+              rel="noreferrer"
+              title={`Follow us on ${title}`}
+            >
+              <Box
+                p="xs"
+                width="2.5rem"
+                height="2.5rem"
+                border="1px solid"
+                borderRadius="full"
+                borderColor="outlineVariant"
+                nHover={{ borderColor: 'outline' }}
+              >
+                <Icon maxHeight="100%" maxWidth="100%" width="100%" />
+              </Box>
+            </Link>
+          ))}
+        </Box>
       </Box>
+      <Typography variant="label" size="medium" textTransform="capitalize">
+        &copy; Interest Protocol {new Date().getFullYear()}
+      </Typography>
     </Box>
-    <Box
-      py="m"
-      display="flex"
-      borderTop="1px solid"
-      borderColor="#C6C6CA"
-      justifyContent="center"
-    >
-      <a href="https://x.com/IPXSui" target="_blank" rel="noreferrer">
-        <IPXSVG maxHeight="2.5rem" maxWidth="2.5rem" width="100%" />
-      </a>
-    </Box>
+    <Box />
   </Box>
 );
 

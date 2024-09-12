@@ -21,6 +21,7 @@ import SelectTokenModalBody from './select-token-modal-body';
 import SelectTokenFilter from './select-token-modal-filter';
 
 const SelectTokenModal: FC<SelectTokenModalProps> = ({
+  faucet,
   simple,
   onSelect,
   closeModal,
@@ -28,7 +29,7 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
   const { control, register, setValue } = useForm<SearchTokenForm>({
     defaultValues: {
       search: '',
-      filter: simple ? TokenOrigin.Wallet : TokenOrigin.Strict,
+      filter: simple && !faucet ? TokenOrigin.Wallet : TokenOrigin.Strict,
     },
   });
 
@@ -93,6 +94,7 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
         flexDirection="column"
       >
         <SelectTokenModalBody
+          faucet={faucet}
           control={control}
           handleSelectToken={handleSelectToken}
         />

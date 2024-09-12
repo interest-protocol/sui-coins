@@ -1,9 +1,9 @@
 import { Box, Motion } from '@interest-protocol/ui-kit';
-import { FC, useState } from 'react';
+import { FC, useId, useState } from 'react';
 import { v4 } from 'uuid';
 
-import { DetailsTabsProps } from './pool-details-tabs.types';
-import PoolDetailsTabsItem from './pool-details-tabs-item';
+import { DetailsTabsProps } from './details-tabs.types';
+import PoolDetailsTabsItem from './details-tabs-item';
 
 const variants = {
   collapsed: {
@@ -16,9 +16,11 @@ const variants = {
 
 const DetailsTabs: FC<DetailsTabsProps> = ({
   items,
-  defaultTabIndex = 0,
   onChangeTab,
+  stretch = true,
+  defaultTabIndex = 0,
 }) => {
+  const id = useId();
   const [tabIndex, setTabIndex] = useState(defaultTabIndex);
 
   const handleChangeTab = (index: number) => () => {
@@ -36,22 +38,22 @@ const DetailsTabs: FC<DetailsTabsProps> = ({
       borderBottomColor="outlineVariant"
     >
       {items.map((item, index) => (
-        <Box width="100%" key={v4()}>
+        <Box width={stretch ? '100%' : 'auto'} key={v4()}>
           <PoolDetailsTabsItem
-            item={item}
             key={v4()}
+            item={item}
             onChange={handleChangeTab(index)}
           />
           {tabIndex === index && (
             <Motion
               px="xl"
               initial="rest"
+              overflow="hidden"
               variants={variants}
               animate="collapsed"
-              overflow="hidden"
               borderBottom="2px solid"
               borderBottomColor="primary"
-              layoutId="underline"
+              layoutId={`${id}-underline"`}
             />
           )}
         </Box>

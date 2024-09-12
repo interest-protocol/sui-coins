@@ -31,6 +31,7 @@ export interface SwapForm {
   from: SwapToken;
   loading: boolean;
   swapping: boolean;
+  updateSlider: object;
   explorerLink: string;
   error: string | null;
   readyToSwap: boolean;

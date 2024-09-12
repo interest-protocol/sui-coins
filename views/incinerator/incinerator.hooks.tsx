@@ -34,7 +34,7 @@ import { isCoinObject } from '@/views/components/select-object-modal/select-obje
 import { IncineratorForm, ObjectField } from './incinerator.types';
 import IncineratorTokenObject from './incinerator-token-object';
 
-const useBurn = () => {
+export const useBurn = () => {
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
   const signTransaction = useSignTransaction();
@@ -130,10 +130,11 @@ export const useOnBurn = () => {
     toast('Link copied to clipboard');
   };
 
-  const onSuccess = (tx: TimedSuiTransactionBlockResponse) => {
-    showTXSuccessToast(tx, network as Network);
-    mutate();
-  };
+  const onSuccess =
+    (message: string) => (tx: TimedSuiTransactionBlockResponse) => {
+      showTXSuccessToast(tx, network as Network, message);
+      mutate();
+    };
 
   const handleBurn = async ({ objects }: Pick<IncineratorForm, 'objects'>) => {
     const disabled = !objects || !objects.length;
@@ -145,9 +146,9 @@ export const useOnBurn = () => {
     );
 
     try {
-      await burn(objects, onSuccess);
-      toast.success(
-        `Asset${objects.length === 1 ? '' : 's'} burned successfully`
+      await burn(
+        objects,
+        onSuccess(`Asset${objects.length === 1 ? '' : 's'} burned successfully`)
       );
     } catch (e) {
       toast.error((e as any).message ?? 'Something went wrong');

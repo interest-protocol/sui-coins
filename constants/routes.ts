@@ -3,16 +3,17 @@
  * @description this data type will help us to uniformize our route names
  */
 export enum RoutesEnum {
+  DCA = 'dca',
   Swap = 'swap',
   Send = 'send',
   Pools = 'pools',
   Merge = 'merge',
-  Faucet = 'faucet',
   Airdrop = 'airdrop',
   Metrics = 'metrics',
   FindPool = 'find-pool',
   SendLink = 'send-link',
   SendBulk = 'send-bulk',
+  DCAOrders = 'dca-orders',
   CreateCoin = 'create-coin',
   Incinerator = 'incinerator',
   CreatePool = 'create-pool',
@@ -27,15 +28,16 @@ export enum RoutesEnum {
  */
 export const Routes: Record<RoutesEnum, string> = {
   [RoutesEnum.Swap]: '/',
+  [RoutesEnum.DCA]: '/dca',
   [RoutesEnum.Send]: '/send',
   [RoutesEnum.Pools]: '/pools',
   [RoutesEnum.Merge]: '/merge',
-  [RoutesEnum.Faucet]: '/faucet',
   [RoutesEnum.Metrics]: '/metrics',
   [RoutesEnum.Airdrop]: '/airdrop',
   [RoutesEnum.SendLink]: '/send/link',
   [RoutesEnum.SendBulk]: '/send-bulk',
   [RoutesEnum.FindPool]: '/pools/find',
+  [RoutesEnum.DCAOrders]: '/dca/orders',
   [RoutesEnum.CreateCoin]: '/create-coin',
   [RoutesEnum.Incinerator]: '/incinerator',
   [RoutesEnum.CreatePool]: '/pools/create',

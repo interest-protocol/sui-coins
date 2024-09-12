@@ -20,6 +20,7 @@ const SwapFormFieldSlider: FC = () => {
   const { coinsMap } = useWeb3();
   const { control, setValue, getValues } = useFormContext<SwapForm>();
 
+  useWatch({ control, name: 'updateSlider' });
   const type = useWatch({ control, name: 'from.type' });
   const swapping = useWatch({ control, name: 'swapping' });
 
@@ -32,7 +33,7 @@ const SwapFormFieldSlider: FC = () => {
     ? coinsMap[type].balance.minus(safeRemoval)
     : ZERO_BIG_NUMBER;
 
-  const fromValue = type ? getValues('from.value') : ZERO_BIG_NUMBER;
+  const fromValue = getValues('from.value') ?? ZERO_BIG_NUMBER;
 
   const initial =
     fromValue && balance && !fromValue.isZero?.() && !balance.isZero?.()

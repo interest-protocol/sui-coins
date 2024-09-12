@@ -218,8 +218,6 @@ const PoolCardListContent: FC<PoolCardListContentProps> = ({
       ...new Set(pools?.flatMap((pool) => pool.coinTypes) ?? []),
     ]);
 
-  console.log({ pricesRecord });
-
   const { data: coinMetadataMap, isLoading: isCoinMetadataLoading } =
     useGetCoinMetadata([...new Set(pools?.flatMap((pool) => pool.coinTypes))]);
 
