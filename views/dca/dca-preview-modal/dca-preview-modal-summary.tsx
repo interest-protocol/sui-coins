@@ -10,6 +10,10 @@ import { formatMoney } from '@/utils';
 import { PERIODICITY } from '../dca.data';
 import { DCAForm } from '../dca.types';
 import { AGGREGATORS_LIST } from '../dca-aggregator/dca-aggregator.data';
+import {
+  getEstimatedEndDate,
+  getStartDate,
+} from './dca-preview-modal-summary.utils';
 
 const DCAPreviewModalSummary: FC = () => {
   const { control, getValues } = useFormContext<DCAForm>();
@@ -23,6 +27,9 @@ const DCAPreviewModalSummary: FC = () => {
   const aggregator = useWatch({ control, name: 'aggregator' });
 
   const { name: aggregatorName } = AGGREGATORS_LIST[aggregator];
+
+  const startDate = getStartDate();
+  const endDate = getEstimatedEndDate(Number(timeScale), Number(orders));
 
   return (
     <Box display="flex" flexDirection="column" mb="m" gap="l">
@@ -148,7 +155,7 @@ const DCAPreviewModalSummary: FC = () => {
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center">
             <Typography mr="2xs" variant="body" size="medium" color="onSurface">
-              today
+              {startDate}
             </Typography>
             <InformationCircleSVG
               color="#1B1B1F"
@@ -170,7 +177,7 @@ const DCAPreviewModalSummary: FC = () => {
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center">
             <Typography mr="2xs" variant="body" size="medium" color="onSurface">
-              today
+              {endDate}
             </Typography>
             <InformationCircleSVG
               color="#1B1B1F"
