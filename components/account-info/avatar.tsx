@@ -4,10 +4,10 @@ import { formatAddress } from '@mysten/sui/utils';
 import { FC, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
-import { useSuiNs } from '../../resui/suins';
 import { UserSVG } from '@/svg';
 import { formatSuiNS } from '@/utils';
 
+import { useSuiNs } from '../../resui/suins';
 import { AvatarProps } from './account-info.types';
 
 const Avatar: FC<AvatarProps> = ({ isLarge, account, withNameOrAddress }) => {
