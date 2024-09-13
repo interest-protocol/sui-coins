@@ -20,7 +20,7 @@ export const METHODS_ICONS: Record<
     description: 'Airdrops to holders of your favorite NFT collections.',
   },
   addressList: {
-    title: 'List of addresses',
+    title: 'Custom addresses',
     Icon: WalletSVG,
     description: 'Same airdrop value, different addresses.',
   },

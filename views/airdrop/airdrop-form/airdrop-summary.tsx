@@ -18,7 +18,7 @@ import { AirdropSummaryProps, IAirdropForm } from '../airdrop.types';
 const METHOD_TITLE = {
   csv: 'CSV',
   nft: 'NFT',
-  addressList: 'List of addresses',
+  addressList: 'Custom addresses',
 };
 
 const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {

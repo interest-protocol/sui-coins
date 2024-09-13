@@ -78,3 +78,8 @@ export interface SendAirdropArgs {
 export interface AirdropPreviewButtonProps {
   handleOpenSummaryModal: () => void;
 }
+export interface AirdropCustomAmountProps {
+  message?: string;
+  isCustomAmountActive: boolean;
+  handleCustomAmount: () => void;
+}
