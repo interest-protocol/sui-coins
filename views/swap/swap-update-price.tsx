@@ -76,6 +76,7 @@ const SwapUpdatePrice: FC = () => {
 
   const isGreaterThanAllowedWhenSui = fromBalance.minus(oneCoin).lt(fromValue);
 
+  const slippage = useWatch({ control, name: 'settings.slippage' });
   const aggregator = useWatch({ control, name: 'settings.aggregator' });
 
   const toDisplay = useWatch({
@@ -218,6 +219,7 @@ const SwapUpdatePrice: FC = () => {
                 coinInType,
                 coinOutType,
                 referrer: TREASURY,
+                slippage: Number(slippage) / 100,
                 coinOutAmount: BigInt(
                   coinOutValue.times(1 - EXCHANGE_FEE).toFixed(0)
                 ),
