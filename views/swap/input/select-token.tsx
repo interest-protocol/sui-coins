@@ -10,7 +10,7 @@ import { getAllCoinsPrice } from '@/hooks/use-get-multiple-token-price-by-type/u
 import { useModal } from '@/hooks/use-modal';
 import { useNetwork } from '@/hooks/use-network';
 import { ChevronDownSVG } from '@/svg';
-import { updateURL } from '@/utils';
+import { updateURL, ZERO_BIG_NUMBER } from '@/utils';
 import SelectTokenModal from '@/views/components/select-token-modal';
 
 import { SwapForm } from '../swap.types';
@@ -66,6 +66,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
         usdPrice: currentToken.usdPrice,
         chain: currentToken.chain,
         display: '',
+        value: ZERO_BIG_NUMBER,
       });
     }
 
@@ -76,6 +77,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       decimals,
       display: '',
       usdPrice: null,
+      value: ZERO_BIG_NUMBER,
     });
 
     getAllCoinsPrice([type], network)

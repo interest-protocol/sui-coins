@@ -8,7 +8,7 @@ import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
 import { getAllCoinsPrice } from '@/hooks/use-get-multiple-token-price-by-type/use-get-multiple-token-price-by-type.utils';
 import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
-import { getCoin, isSui, updateURL } from '@/utils';
+import { getCoin, isSui, updateURL, ZERO_BIG_NUMBER } from '@/utils';
 
 import { Aggregator, ISwapSettings, SwapForm, SwapToken } from './swap.types';
 
@@ -56,6 +56,7 @@ const SwapInitManager: FC = () => {
         decimals,
         display: '',
         usdPrice: null,
+        value: ZERO_BIG_NUMBER,
       };
     }
     if (typeof type === 'string' && type.startsWith('0x')) {
@@ -65,6 +66,7 @@ const SwapInitManager: FC = () => {
         ...coin,
         display: '',
         usdPrice: null,
+        value: ZERO_BIG_NUMBER,
       };
     }
     return null;
