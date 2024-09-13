@@ -9,7 +9,7 @@ import { useBlocklist } from '@/hooks/use-blocklist';
 import { BurnSVG } from '@/svg';
 import { getSymbolByType } from '@/utils';
 
-import { CoinObject } from '../../components/web3-manager/coins-manager/coins-manager.types';
+import { CoinObject } from '../../resui/web3-manager/coins-manager/coins-manager.types';
 import { IncineratorTokenObjectProps } from './incinerator.types';
 
 const IncineratorTokenObject: FC<IncineratorTokenObjectProps> = ({

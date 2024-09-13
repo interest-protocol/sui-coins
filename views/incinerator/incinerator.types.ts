@@ -1,6 +1,6 @@
 import type { MouseEventHandler } from 'react';
 
-import { ObjectData } from '@/components/web3-manager/all-objects-manager/all-objects.types';
+import { ObjectData } from '../../resui/web3-manager/all-objects-manager/all-objects.types';
 
 export enum IncineratorTabEnum {
   All,

@@ -1,6 +1,6 @@
 import { Control, UseFormSetValue } from 'react-hook-form';
 
-import { ObjectData } from '@/components/web3-manager/all-objects-manager/all-objects.types';
+import { ObjectData } from '../../../resui/web3-manager/all-objects-manager/all-objects.types';
 import { Network } from '@/constants';
 
 export type ObjectModalItemProps = ObjectData & {

@@ -1,7 +1,7 @@
 import { v4 } from 'uuid';
 import { create } from 'zustand';
 
-import { AllObjects } from '../../components/web3-manager/all-objects-manager/all-objects.types';
+import { AllObjects } from '../../resui/web3-manager/all-objects-manager/all-objects.types';
 import { UseObjectsResponse } from './use-objects.types';
 
 export const useObjects = create<UseObjectsResponse>((set) => {

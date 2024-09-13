@@ -4,7 +4,7 @@ import { FC, PropsWithChildren } from 'react';
 import { ModalProvider } from '@/context/modal';
 import FloatingButtons from '@/views/components/floating-buttons';
 
-import Web3Manager from '../web3-manager';
+import Web3Manager from '../../resui/web3-manager';
 import Footer from './footer';
 import Header from './header';
 import { LayoutProps } from './layout.types';
@@ -13,7 +13,6 @@ import Sidebar from './sidebar';
 const Layout: FC<PropsWithChildren<LayoutProps>> = ({
   title,
   children,
-  features,
   noSidebar,
 }) => (
   <ModalProvider>
@@ -29,7 +28,7 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
         justifyContent="space-between"
       >
         <Header />
-        <Web3Manager features={features} />
+        <Web3Manager />
         <Box
           flex="1"
           width="100%"

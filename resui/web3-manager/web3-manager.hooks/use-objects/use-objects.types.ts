@@ -1,7 +1,7 @@
 import {
   AllObjects,
   ObjectData,
-} from '@/components/web3-manager/all-objects-manager/all-objects.types';
+} from '../../resui/web3-manager/all-objects-manager/all-objects.types';
 
 export interface UseObjectsResponse {
   id: string;

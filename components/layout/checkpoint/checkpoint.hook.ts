@@ -1,17 +1,18 @@
-import { useSuiClient, useSuiClientContext } from '@mysten/dapp-kit';
+import { useSuiClient } from '@mysten/dapp-kit';
 import { useState } from 'react';
 import useSWR from 'swr';
 
 import useEventListener from '@/hooks/use-event-listener';
+import { useNetwork } from '@/hooks/use-network';
 import { makeSWRKey } from '@/utils';
 
 const useCheckpoint = () => {
+  const network = useNetwork();
   const suiClient = useSuiClient();
-  const { network } = useSuiClientContext();
   const [isOnline, setIsOnline] = useState(false);
 
-  useEventListener('offline', () => setIsOnline(false), true);
   useEventListener('online', () => setIsOnline(true), true);
+  useEventListener('offline', () => setIsOnline(false), true);
 
   const { isLoading, data, error } = useSWR(
     makeSWRKey(

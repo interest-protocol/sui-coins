@@ -1,25 +1,20 @@
-import { WalletProvider, WalletProviderProps } from '@mysten/dapp-kit';
+import { WalletProvider } from '@mysten/dapp-kit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { FC, PropsWithChildren } from 'react';
 
 import { NetworkProvider } from '../network';
-import { NetworkProviderProps } from '../network/network.types';
 import { SuiNsProvider } from '../suins';
-
-const queryClient = new QueryClient();
-
-export interface SuiProviderProps extends NetworkProviderProps {
-  wallet?: Omit<WalletProviderProps, 'children'>;
-}
+import { SuiProviderProps } from './sui-provider.types';
 
 export const SuiProvider: FC<PropsWithChildren<SuiProviderProps>> = ({
   wallet,
   children,
   networks,
+  queryConfig,
   defaultNetwork,
   onChangeNetwork,
 }) => (
-  <QueryClientProvider client={queryClient}>
+  <QueryClientProvider client={new QueryClient(queryConfig)}>
     <NetworkProvider
       networks={networks}
       defaultNetwork={defaultNetwork}

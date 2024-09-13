@@ -7,9 +7,9 @@ import { FC } from 'react';
 import useSWR from 'swr';
 
 import { OBJECT_GUARDIANS_BLOCKLIST } from '@/constants/guardians';
-import { useObjects } from '@/hooks/use-objects';
 import { makeSWRKey } from '@/utils';
 
+import { useObjects } from '../web3-manager.hooks';
 import { ObjectData, TGetAllObjects } from './all-objects.types';
 
 const getAllObjects: TGetAllObjects = async (
@@ -30,7 +30,7 @@ const getAllObjects: TGetAllObjects = async (
   return [...data, ...newData];
 };
 
-const AllObjectsManager: FC<{ withBlocked?: boolean }> = ({ withBlocked }) => {
+const AllObjectsManager: FC = () => {
   const suiClient = useSuiClient();
   const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
@@ -71,10 +71,7 @@ const AllObjectsManager: FC<{ withBlocked?: boolean }> = ({ withBlocked }) => {
             if (!objectRaw.data?.content?.dataType) return acc;
             if (objectRaw.data.content.dataType !== 'moveObject') return acc;
             if (!objectRaw.data.content.hasPublicTransfer) return acc;
-            if (
-              !withBlocked &&
-              objectGuardiansBlocklist.includes(objectRaw.data.type!)
-            )
+            if (objectGuardiansBlocklist.includes(objectRaw.data.type!))
               return acc;
 
             return [

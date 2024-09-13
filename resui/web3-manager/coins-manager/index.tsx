@@ -6,11 +6,11 @@ import useSWR from 'swr';
 
 import { Network } from '@/constants';
 import { METADATA } from '@/constants/metadata';
-import { useCoins } from '@/hooks/use-coins';
 import { useNetwork } from '@/hooks/use-network';
 import { CoinMetadataWithType } from '@/interface';
 import { fetchCoinMetadata, isSui, makeSWRKey, ZERO_BIG_NUMBER } from '@/utils';
 
+import { useCoins } from '../web3-manager.hooks';
 import { CoinsMap, TGetAllCoins } from './coins-manager.types';
 
 const getAllCoins: TGetAllCoins = async (provider, account, cursor = null) => {

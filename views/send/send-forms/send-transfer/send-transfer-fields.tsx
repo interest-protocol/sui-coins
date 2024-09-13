@@ -7,12 +7,12 @@ import {
 } from '@interest-protocol/ui-kit';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
-import { ObjectData } from '@/components/web3-manager/all-objects-manager/all-objects.types';
+import { ObjectData } from '../../../../resui/web3-manager/all-objects-manager/all-objects.types';
 import { useModal } from '@/hooks/use-modal';
 import { MinusSVG, PlusSVG } from '@/svg';
 import SelectObjectModal from '@/views/components/select-object-modal';
 
-import { CoinObject } from '../../../../components/web3-manager/coins-manager/coins-manager.types';
+import { CoinObject } from '../../../../resui/web3-manager/coins-manager/coins-manager.types';
 import SendFormSelectObject from './send-select-object';
 import { ISendTransferForm } from './send-transfer.types';
 import FormSendButton from './send-transfer-button';

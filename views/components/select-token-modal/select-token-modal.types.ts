@@ -4,7 +4,7 @@ import { Control, UseFormSetValue } from 'react-hook-form';
 
 import { Network } from '@/constants';
 
-import { CoinObject } from '../../../components/web3-manager/coins-manager/coins-manager.types';
+import { CoinObject } from '../../../resui/web3-manager/coins-manager/coins-manager.types';
 
 export interface TokenModalMetadata {
   name: string;

@@ -1,6 +1,6 @@
 import { createNetworkConfig, SuiClientProvider } from '@mysten/dapp-kit';
-import { getFullnodeUrl } from '@mysten/sui/dist/cjs/client';
-import { FC, PropsWithChildren, useState } from 'react';
+import { getFullnodeUrl } from '@mysten/sui/client';
+import { FC, PropsWithChildren } from 'react';
 import invariant from 'tiny-invariant';
 
 import { NetworkProviderProps } from './network.types';
@@ -12,36 +12,28 @@ export const NetworkProvider: FC<PropsWithChildren<NetworkProviderProps>> = ({
   defaultNetwork,
   onChangeNetwork,
 }) => {
-  const [network, setUpdateNetwork] = useState(defaultNetwork);
-
   invariant(
     networks.some(({ network, rpc }) => isValidSuiNetwork(network) || rpc),
     'No RPC provided for the unknown network'
   );
 
-  const { networkConfig } = createNetworkConfig(
-    networks.reduce(
-      (acc, { network, rpc }) => ({
-        ...acc,
-        [network]: {
-          rpc:
-            rpc ?? (isValidSuiNetwork(network) ? getFullnodeUrl(network) : ''),
-        },
-      }),
-      {}
-    )
+  const config = networks.reduce(
+    (acc, { network, rpc }) => ({
+      ...acc,
+      [network]: {
+        rpc: rpc ?? (isValidSuiNetwork(network) ? getFullnodeUrl(network) : ''),
+      },
+    }),
+    {}
   );
 
-  const changeNetwork = (network: string) => {
-    onChangeNetwork?.(network);
-    setUpdateNetwork({});
-  };
+  const { networkConfig } = createNetworkConfig(config);
 
   return (
     <SuiClientProvider
-      network={network}
       networks={networkConfig}
-      onNetworkChange={changeNetwork}
+      onNetworkChange={onChangeNetwork}
+      defaultNetwork={defaultNetwork as never}
     >
       {children}
     </SuiClientProvider>

@@ -16,7 +16,7 @@ import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
 import { FavoriteSVG } from '@/svg';
 import { getSymbolByType } from '@/utils';
 
-import { CoinObject } from '../../../components/web3-manager/coins-manager/coins-manager.types';
+import { CoinObject } from '../../../resui/web3-manager/coins-manager/coins-manager.types';
 import { ObjectModalItemProps } from './select-object-modal.types';
 
 const ObjectModalItem: FC<ObjectModalItemProps> = ({

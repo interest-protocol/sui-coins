@@ -6,7 +6,7 @@ import {
 } from '@mysten/dapp-kit';
 import { ZkSendLinkBuilder } from '@mysten/zksend';
 
-import { ObjectData } from '@/components/web3-manager/all-objects-manager/all-objects.types';
+import { ObjectData } from '../../../../../resui/web3-manager/all-objects-manager/all-objects.types';
 import { Network, SPONSOR_WALLET } from '@/constants';
 import { ZK_BAG_CONTRACT_IDS, ZK_SEND_GAS_BUDGET } from '@/constants/zksend';
 import { TimedSuiTransactionBlockResponse } from '@/interface';

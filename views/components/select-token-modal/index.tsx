@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form';
 
 import { SearchSVG, TimesSVG } from '@/svg';
 
-import { CoinObject } from '../../../components/web3-manager/coins-manager/coins-manager.types';
+import { CoinObject } from '../../../resui/web3-manager/coins-manager/coins-manager.types';
 import FavoriteTokens from './favorite-tokens';
 import {
   SearchTokenForm,
