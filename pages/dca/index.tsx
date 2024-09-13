@@ -12,9 +12,10 @@ import { dcaValidationSchema } from '@/views/dca/dca.validation';
 import DCAInitManager from '@/views/dca/dca-init-manager';
 
 const DCAPage: NextPage = () => {
-  const aggregator = useReadLocalStorage<Aggregator>(
-    `${LOCAL_STORAGE_VERSION}-suicoins-dca-aggregator`
-  )?.valueOf();
+  const aggregator =
+    useReadLocalStorage<Aggregator>(
+      `${LOCAL_STORAGE_VERSION}-suicoins-dca-aggregator`
+    ) ?? Aggregator.Hop;
 
   const form = useForm<DCAForm>({
     mode: 'onBlur',

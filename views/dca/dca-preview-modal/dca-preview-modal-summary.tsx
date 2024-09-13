@@ -4,10 +4,16 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 import { EXCHANGE_FEE_PERCENTAGE } from '@/constants/fees';
 import { useFeeFreeTokens } from '@/hooks/use-dca';
+import { InformationCircleSVG } from '@/svg';
 import { formatMoney } from '@/utils';
 
 import { PERIODICITY } from '../dca.data';
 import { DCAForm } from '../dca.types';
+import { AGGREGATORS_LIST } from '../dca-aggregator/dca-aggregator.data';
+import {
+  getEstimatedEndDate,
+  getStartDate,
+} from './dca-preview-modal-summary.utils';
 
 const DCAPreviewModalSummary: FC = () => {
   const { control, getValues } = useFormContext<DCAForm>();
@@ -18,6 +24,12 @@ const DCAPreviewModalSummary: FC = () => {
   const orders = useWatch({ control, name: 'orders' });
   const every = useWatch({ control, name: 'intervals' });
   const timeScale = useWatch({ control, name: 'periodicity' });
+  const aggregator = useWatch({ control, name: 'aggregator' });
+
+  const { name: aggregatorName } = AGGREGATORS_LIST[aggregator];
+
+  const startDate = getStartDate();
+  const endDate = getEstimatedEndDate(Number(timeScale), Number(orders));
 
   return (
     <Box display="flex" flexDirection="column" mb="m" gap="l">
@@ -32,9 +44,16 @@ const DCAPreviewModalSummary: FC = () => {
             Orders
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center">
-            <Typography mr="s" variant="body" size="medium" color="onSurface">
+            <Typography mr="2xs" variant="body" size="medium" color="onSurface">
               {orders}
             </Typography>
+            <InformationCircleSVG
+              color="#1B1B1F"
+              cursor="pointer"
+              width="0.802rem"
+              maxWidth="0.802rem"
+              maxHeight="0.802rem"
+            />
           </Box>
         </Box>
         <Box py="m" display="flex" justifyContent="space-between">
@@ -47,9 +66,16 @@ const DCAPreviewModalSummary: FC = () => {
             Periodicity
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center">
-            <Typography mr="s" variant="body" size="medium" color="onSurface">
+            <Typography mr="2xs" variant="body" size="medium" color="onSurface">
               {every} {PERIODICITY[timeScale]}
             </Typography>
+            <InformationCircleSVG
+              color="#1B1B1F"
+              cursor="pointer"
+              width="0.802rem"
+              maxWidth="0.802rem"
+              maxHeight="0.802rem"
+            />
           </Box>
         </Box>
         <Box py="m" display="flex" justifyContent="space-between">
@@ -62,9 +88,16 @@ const DCAPreviewModalSummary: FC = () => {
             Min
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center">
-            <Typography mr="s" variant="body" size="medium" color="onSurface">
+            <Typography mr="2xs" variant="body" size="medium" color="onSurface">
               {min ? formatMoney(+min) : 'N/A'}
             </Typography>
+            <InformationCircleSVG
+              color="#1B1B1F"
+              cursor="pointer"
+              width="0.802rem"
+              maxWidth="0.802rem"
+              maxHeight="0.802rem"
+            />
           </Box>
         </Box>
         <Box py="m" display="flex" justifyContent="space-between">
@@ -77,9 +110,82 @@ const DCAPreviewModalSummary: FC = () => {
             Max
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center">
-            <Typography mr="s" variant="body" size="medium" color="onSurface">
+            <Typography mr="2xs" variant="body" size="medium" color="onSurface">
               {max ? formatMoney(+max) : 'N/A'}
             </Typography>
+            <InformationCircleSVG
+              color="#1B1B1F"
+              cursor="pointer"
+              width="0.802rem"
+              maxWidth="0.802rem"
+              maxHeight="0.802rem"
+            />
+          </Box>
+        </Box>
+        <Box py="m" display="flex" justifyContent="space-between">
+          <Typography
+            variant="body"
+            size="medium"
+            opacity="0.80"
+            color="#000000A3"
+          >
+            Aggregator
+          </Typography>
+          <Box display="flex" justifyContent="center" alignItems="center">
+            <Typography mr="2xs" variant="body" size="medium" color="onSurface">
+              {aggregatorName.replace(/aggregator/gi, '').trim()}
+            </Typography>
+            <InformationCircleSVG
+              color="#1B1B1F"
+              cursor="pointer"
+              width="0.802rem"
+              maxWidth="0.802rem"
+              maxHeight="0.802rem"
+            />
+          </Box>
+        </Box>
+        <Box py="m" display="flex" justifyContent="space-between">
+          <Typography
+            variant="body"
+            size="medium"
+            opacity="0.80"
+            color="#000000A3"
+          >
+            Start date
+          </Typography>
+          <Box display="flex" justifyContent="center" alignItems="center">
+            <Typography mr="2xs" variant="body" size="medium" color="onSurface">
+              {startDate}
+            </Typography>
+            <InformationCircleSVG
+              color="#1B1B1F"
+              cursor="pointer"
+              width="0.802rem"
+              maxWidth="0.802rem"
+              maxHeight="0.802rem"
+            />
+          </Box>
+        </Box>
+        <Box py="m" display="flex" justifyContent="space-between">
+          <Typography
+            variant="body"
+            size="medium"
+            opacity="0.80"
+            color="#000000A3"
+          >
+            Estimated end date
+          </Typography>
+          <Box display="flex" justifyContent="center" alignItems="center">
+            <Typography mr="2xs" variant="body" size="medium" color="onSurface">
+              {endDate}
+            </Typography>
+            <InformationCircleSVG
+              color="#1B1B1F"
+              cursor="pointer"
+              width="0.802rem"
+              maxWidth="0.802rem"
+              maxHeight="0.802rem"
+            />
           </Box>
         </Box>
         <Box py="m" display="flex" justifyContent="space-between">
@@ -93,12 +199,26 @@ const DCAPreviewModalSummary: FC = () => {
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center">
             {!isLoading ? (
-              <Typography mr="s" variant="body" size="medium" color="onSurface">
-                {data?.includes(getValues('to.type'))
-                  ? 0
-                  : EXCHANGE_FEE_PERCENTAGE}
-                %
-              </Typography>
+              <>
+                <Typography
+                  mr="2xs"
+                  variant="body"
+                  size="medium"
+                  color="onSurface"
+                >
+                  {data?.includes(getValues('to.type'))
+                    ? 0
+                    : EXCHANGE_FEE_PERCENTAGE}
+                  %
+                </Typography>
+                <InformationCircleSVG
+                  color="#1B1B1F"
+                  cursor="pointer"
+                  width="0.802rem"
+                  maxWidth="0.802rem"
+                  maxHeight="0.802rem"
+                />
+              </>
             ) : (
               <ProgressIndicator variant="loading" size={16} />
             )}
