@@ -5,6 +5,7 @@ import { toPairs } from 'ramda';
 import { FC, useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import invariant from 'tiny-invariant';
 import { useDebounce } from 'use-debounce';
 
 import { Network } from '@/constants';
@@ -63,7 +64,10 @@ const SendTransferButton: FC<FormSendButtonProps> = ({ openModal }) => {
               ? address.slice(1)
               : address.replace('@', '.')) + '.sui'
           )
-          .then(({ targetAddress }) => targetAddress)
+          .then((client) => {
+            invariant(client);
+            return client.targetAddress;
+          })
           .catch(() =>
             setError('address', { message: 'Sui name does not exist' })
           )

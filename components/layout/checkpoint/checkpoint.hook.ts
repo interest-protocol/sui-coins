@@ -30,7 +30,7 @@ const useCheckpoint = () => {
   return {
     ok: !!data && isOnline,
     loading: isLoading && !error,
-    content: isLoading ? 'Loading...' : data ?? 'System down!',
+    content: isLoading ? 'Loading...' : `${data ?? 'System down!'}`,
   };
 };
 
