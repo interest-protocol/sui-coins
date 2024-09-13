@@ -61,8 +61,10 @@ const TokenIcon: FC<TokenIconProps> = ({
   const { data: iconSrc, isLoading } = useSWR(
     `${network}-${type}-${url}`,
     async () => {
-      if (TokenIcon || url)
-        return STRICT_TOKENS_MAP[network][type].logoUrl ?? null;
+      if (TokenIcon || url) return null;
+
+      if (STRICT_TOKENS_MAP[network][type].logoUrl)
+        return STRICT_TOKENS_MAP[network][type].logoUrl;
 
       const data = await fetchCoinMetadata({ network, type });
       return data.iconUrl;
