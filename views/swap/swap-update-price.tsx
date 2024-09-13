@@ -160,19 +160,18 @@ const SwapUpdatePrice: FC = () => {
 
     if (aggregator === Aggregator.Aftermath)
       return origin === 'to'
-        ? // TODO: review
-          (
-            ((FixedPointMath.toNumber(coinOutValue, getValues('to.decimals')) *
-              10 ** (getValues('to.decimals') - getValues('from.decimals'))) /
-              (route as RouterCompleteTradeRoute).spotPrice) *
-            (1 - EXCHANGE_FEE)
-          ).toPrecision(6)
-        : (
-            ((FixedPointMath.toNumber(coinInValue, getValues('from.decimals')) *
-              10 ** (getValues('from.decimals') - getValues('to.decimals'))) /
-              (route as RouterCompleteTradeRoute).spotPrice) *
-            (1 - EXCHANGE_FEE)
-          ).toPrecision(6);
+        ? FixedPointMath.toNumber(
+            coinOutValue
+              .times(1 - EXCHANGE_FEE)
+              .times((route as RouterCompleteTradeRoute).spotPrice),
+            getValues('from.decimals')
+          )
+        : FixedPointMath.toNumber(
+            coinInValue
+              .div((route as RouterCompleteTradeRoute).spotPrice)
+              .times(1 - EXCHANGE_FEE),
+            getValues('to.decimals')
+          );
 
     if (aggregator === Aggregator.Hop)
       return FixedPointMath.toNumber(
@@ -220,8 +219,10 @@ const SwapUpdatePrice: FC = () => {
                 coinInType,
                 coinOutType,
                 referrer: TREASURY,
-                slippage: Number(slippage),
-                coinOutAmount: BigInt(coinOutValue.toFixed(0)),
+                slippage: Number(slippage) / 100,
+                coinOutAmount: BigInt(
+                  coinOutValue.times(1 - EXCHANGE_FEE).toFixed(0)
+                ),
                 externalFee: {
                   recipient: TREASURY,
                   feePercentage: EXCHANGE_FEE,
@@ -286,7 +287,6 @@ const SwapUpdatePrice: FC = () => {
       setValue('error', null);
 
       if (
-        origin === 'from' &&
         from &&
         Number(from.value) &&
         from.type &&
