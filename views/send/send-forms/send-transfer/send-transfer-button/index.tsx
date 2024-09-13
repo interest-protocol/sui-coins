@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 import { useDebounce } from 'use-debounce';
 
 import { Network } from '@/constants';
-import { useSuiNs } from '@/context/suins';
+import { useSuiNs } from '../../../../../resui/suins';
 import { useWeb3 } from '@/hooks/use-web3';
 import { TimedSuiTransactionBlockResponse } from '@/interface';
 import { DotErrorSVG, PlusSVG } from '@/svg';
