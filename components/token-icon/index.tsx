@@ -13,6 +13,7 @@ import {
 import {
   ARBChainSVG,
   AVAXChainSVG,
+  BadgeSVG,
   BSCChainSVG,
   BTCChainSVG,
   DefaultSVG,
@@ -60,7 +61,8 @@ const TokenIcon: FC<TokenIconProps> = ({
   const { data: iconSrc, isLoading } = useSWR(
     `${network}-${type}-${url}`,
     async () => {
-      if (TokenIcon || url) return null;
+      if (TokenIcon || url)
+        return STRICT_TOKENS_MAP[network][type].logoUrl ?? null;
 
       const data = await fetchCoinMetadata({ network, type });
       return data.iconUrl;
@@ -127,6 +129,16 @@ const TokenIcon: FC<TokenIconProps> = ({
             style={{ objectFit: 'cover', position: 'relative' }}
           />
         </Box>
+        {STRICT_TOKENS_MAP[network][type] && (
+          <Box
+            top="-0.5rem"
+            right="-0.25rem"
+            overflow="hidden"
+            position="absolute"
+          >
+            <BadgeSVG maxHeight="0.75rem" maxWidth="0.75rem" width="100%" />
+          </Box>
+        )}
         {!simple && ChainIcon && (
           <Box
             right="-0.5rem"
@@ -166,6 +178,17 @@ const TokenIcon: FC<TokenIconProps> = ({
             maxHeight={size ?? '1.5rem'}
           />
         </Box>
+        {STRICT_TOKENS_MAP[network][type] && (
+          <Box
+            top="-0.5rem"
+            right="-0.25rem"
+            overflow="hidden"
+            position="absolute"
+            borderRadius="full"
+          >
+            <BadgeSVG maxHeight="0.75rem" maxWidth="0.75rem" width="100%" />
+          </Box>
+        )}
         {!simple && ChainIcon && (
           <Box
             position="absolute"
@@ -223,6 +246,17 @@ const TokenIcon: FC<TokenIconProps> = ({
             onError={onLoadError}
             style={{ objectFit: 'cover', position: 'relative' }}
           />
+          {STRICT_TOKENS_MAP[network][type] && (
+            <Box
+              top="-0.5rem"
+              right="-0.25rem"
+              overflow="hidden"
+              position="absolute"
+              borderRadius="full"
+            >
+              <BadgeSVG maxHeight="0.75rem" maxWidth="0.75rem" width="100%" />
+            </Box>
+          )}
         </Box>
       </Box>
     );
@@ -261,6 +295,17 @@ const TokenIcon: FC<TokenIconProps> = ({
             />
           )}
         </Box>
+        {STRICT_TOKENS_MAP[network][type] && (
+          <Box
+            top="-0.5rem"
+            right="-0.25rem"
+            overflow="hidden"
+            position="absolute"
+            borderRadius="full"
+          >
+            <BadgeSVG maxHeight="0.75rem" maxWidth="0.75rem" width="100%" />
+          </Box>
+        )}
         {!simple && ChainIcon && (
           <Box
             right="-0.5rem"
