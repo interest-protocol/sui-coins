@@ -67,6 +67,9 @@ const TokenIcon: FC<TokenIconProps> = ({
       if (STRICT_TOKENS_MAP[network][type].logoUrl)
         return STRICT_TOKENS_MAP[network][type].logoUrl;
 
+      if (STRICT_TOKENS_MAP[network][type].logoUrl)
+        return STRICT_TOKENS_MAP[network][type].logoUrl;
+
       const data = await fetchCoinMetadata({ network, type });
       return data.iconUrl;
     }
