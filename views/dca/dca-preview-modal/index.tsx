@@ -43,22 +43,44 @@ const DCAPreviewModal: FC<DCAPreviewModalProps> = ({ onClose }) => {
           alignItems="center"
           justifyContent="space-between"
         >
-          <ArrowLeftSVG
-            width="100%"
-            onClick={onClose}
-            maxWidth="1.5rem"
-            maxHeight="1.5rem"
-          />
+          <Box
+            p="2xs"
+            display="flex"
+            alignItems="center"
+            borderRadius="full"
+            nHover={{
+              borderRadius: 'full',
+              background: 'highestContainer',
+            }}
+          >
+            <ArrowLeftSVG
+              width="100%"
+              onClick={onClose}
+              maxWidth="1.5rem"
+              maxHeight="1.5rem"
+            />
+          </Box>
           <Typography size="large" variant="title">
             DCA
           </Typography>
-          <TimesSVG
-            onClick={onClose}
-            width="100%"
-            maxWidth="1rem"
-            cursor="pointer"
-            maxHeight="1rem"
-          />
+          <Box
+            p="xs"
+            display="flex"
+            alignItems="center"
+            borderRadius="full"
+            nHover={{
+              borderRadius: 'full',
+              background: 'highestContainer',
+            }}
+          >
+            <TimesSVG
+              onClick={onClose}
+              width="100%"
+              maxWidth="1rem"
+              cursor="pointer"
+              maxHeight="1rem"
+            />
+          </Box>
         </Box>
         <Box display="flex" flexDirection="column" gap="m">
           <Box
