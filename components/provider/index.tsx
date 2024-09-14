@@ -21,10 +21,14 @@ const networks = [
   },
 ];
 
+const onChangeNetwork = (network: string) =>
+  window.localStorage.setItem(LOCAL_NETWORK_KEY, network);
+
 const Provider: FC<PropsWithChildren> = ({ children }) => (
   <ThemeManager>
     <SuiProvider
       networks={networks}
+      onChangeNetwork={onChangeNetwork}
       wallet={{ autoConnect: true, stashedWallet: { name: 'Sui Coins' } }}
       defaultNetwork={
         window.localStorage.getItem(LOCAL_NETWORK_KEY) ?? Network.MAINNET

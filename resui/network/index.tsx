@@ -32,8 +32,8 @@ export const NetworkProvider: FC<PropsWithChildren<NetworkProviderProps>> = ({
   return (
     <SuiClientProvider
       networks={networkConfig}
+      network={defaultNetwork as never}
       onNetworkChange={onChangeNetwork}
-      defaultNetwork={defaultNetwork as never}
     >
       {children}
     </SuiClientProvider>
