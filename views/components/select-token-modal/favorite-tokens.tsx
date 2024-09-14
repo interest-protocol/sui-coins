@@ -60,7 +60,7 @@ const FavoriteTokens: FC<{ onSelectToken: (coin: CoinObject) => void }> = ({
 
   return (
     <Box display="flex" gap="xs" flexWrap="wrap">
-      {[...defaultFavoriteTokens, , ...favoriteTokens]
+      {[...defaultFavoriteTokens, ...favoriteTokens]
         .slice(0, 12)
         .map(({ type, symbol }) => (
           <Button
