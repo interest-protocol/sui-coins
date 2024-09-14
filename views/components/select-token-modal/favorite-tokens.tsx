@@ -21,6 +21,7 @@ const FavoriteTokens: FC<{ onSelectToken: (coin: CoinObject) => void }> = ({
   const favoriteTokenTypes = useReadLocalStorage<ReadonlyArray<string>>(
     `${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-tokens`
   );
+
   const favoriteTokensMeta = useReadLocalStorage<Record<string, string>>(
     `${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-tokens-meta`
   );
@@ -59,7 +60,7 @@ const FavoriteTokens: FC<{ onSelectToken: (coin: CoinObject) => void }> = ({
 
   return (
     <Box display="flex" gap="xs" flexWrap="wrap">
-      {[...defaultFavoriteTokens, ...favoriteTokens]
+      {[...defaultFavoriteTokens, , ...favoriteTokens]
         .slice(0, 12)
         .map(({ type, symbol }) => (
           <Button
