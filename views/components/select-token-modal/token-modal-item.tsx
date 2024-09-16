@@ -5,13 +5,13 @@ import {
   Typography,
   useTheme,
 } from '@interest-protocol/ui-kit';
-import { useSuiClientContext } from '@mysten/dapp-kit';
 import { FC, MouseEventHandler, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { useLocalStorage } from 'usehooks-ts';
 
 import { TokenIcon } from '@/components';
-import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
+import { LOCAL_STORAGE_VERSION } from '@/constants';
+import { useNetwork } from '@/hooks/use-network';
 import { FavoriteSVG } from '@/svg';
 
 import { TokenModalItemProps } from './select-token-modal.types';
@@ -23,8 +23,8 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
   onClick,
   selected,
 }) => {
+  const network = useNetwork();
   const { colors } = useTheme() as Theme;
-  const { network } = useSuiClientContext();
   const [isLoading, setLoading] = useState(false);
   const [favoriteTokens, setFavoriteTokens] = useLocalStorage<
     ReadonlyArray<string>
@@ -83,7 +83,7 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
           type={type}
           size="1.3rem"
           symbol={symbol}
-          network={network as Network}
+          network={network}
         />
         <Box display="flex" flexDirection="column" justifyContent="center">
           <Typography
