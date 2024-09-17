@@ -3,7 +3,7 @@ import { FC, PropsWithChildren } from 'react';
 
 import { Network } from '@/constants';
 
-import { SuiProvider } from '../../resui/sui-provider';
+import { SuiProvider } from '../../resui';
 import ThemeManager from '../theme-manager';
 
 const LOCAL_NETWORK_KEY = 'suicoins:network';

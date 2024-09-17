@@ -6,7 +6,7 @@ import { NetworkProvider } from '../network';
 import { SuiNsProvider } from '../suins';
 import { SuiProviderProps } from './sui-provider.types';
 
-export const SuiProvider: FC<PropsWithChildren<SuiProviderProps>> = ({
+const SuiProvider: FC<PropsWithChildren<SuiProviderProps>> = ({
   wallet,
   children,
   networks,
@@ -26,3 +26,5 @@ export const SuiProvider: FC<PropsWithChildren<SuiProviderProps>> = ({
     </NetworkProvider>
   </QueryClientProvider>
 );
+
+export default SuiProvider;
