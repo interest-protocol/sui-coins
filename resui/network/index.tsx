@@ -21,7 +21,7 @@ export const NetworkProvider: FC<PropsWithChildren<NetworkProviderProps>> = ({
     (acc, { network, rpc }) => ({
       ...acc,
       [network]: {
-        rpc: rpc ?? (isValidSuiNetwork(network) ? getFullnodeUrl(network) : ''),
+        url: rpc ?? (isValidSuiNetwork(network) ? getFullnodeUrl(network) : ''),
       },
     }),
     {}

@@ -28,6 +28,8 @@ const useCheckpoint = () => {
     }
   );
 
+  console.log({ data, isOnline });
+
   return {
     ok: !!data && isOnline,
     loading: isLoading && !error,
