@@ -219,6 +219,7 @@ const SwapUpdatePrice: FC = () => {
                 coinInType,
                 coinOutType,
                 referrer: TREASURY,
+                slippage: Number(slippage) / 100,
                 coinOutAmount: BigInt(
                   coinOutValue.times(1 - EXCHANGE_FEE).toFixed(0)
                 ),
