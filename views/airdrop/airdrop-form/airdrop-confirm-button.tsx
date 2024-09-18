@@ -15,7 +15,6 @@ import toast from 'react-hot-toast';
 
 import { AIRDROP_SEND_CONTRACT, Network, TREASURY } from '@/constants';
 import { AIRDROP_SUI_FEE_PER_ADDRESS } from '@/constants/fees';
-import { useWeb3 } from '@/hooks/use-web3';
 import {
   getCoins,
   isSui,
@@ -33,6 +32,7 @@ import {
   suiObjectReducer,
 } from '@/views/airdrop/airdrop-form/txb-utils';
 
+import { useWeb3 } from '../../../resui/web3-manager/web3-manager.hooks';
 import { BATCH_SIZE, EXCLUDED_FEE_COINS } from '../airdrop.constants';
 import { AirdropConfirmButtonProps, IAirdropForm } from '../airdrop.types';
 

@@ -1,6 +1,6 @@
 import { ChangeEvent } from 'react';
 
-import { ObjectData } from '@/components/web3-manager/all-objects-manager/all-objects.types';
+import { ObjectData } from '../../resui/web3-manager/all-objects-manager/all-objects.types';
 import { MAX_NUMBER_INPUT_VALUE } from '@/constants';
 
 const isExponential = (number: number) => number.toString().includes('e');

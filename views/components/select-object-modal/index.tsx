@@ -9,7 +9,7 @@ import { useSuiClientContext } from '@mysten/dapp-kit';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { ObjectData } from '@/components/web3-manager/all-objects-manager/all-objects.types';
+import { ObjectData } from '../../../resui/web3-manager/all-objects-manager/all-objects.types';
 import { Network } from '@/constants';
 import { SearchSVG, TimesSVG } from '@/svg';
 

@@ -3,7 +3,7 @@ import { formatAddress } from '@mysten/sui/utils';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { CoinObject } from '../../../../../components/web3-manager/coins-manager/coins-manager.types';
+import { CoinObject } from '../../../../../resui/web3-manager/coins-manager/coins-manager.types';
 import { ISendSimpleForm } from '../send-simple.types';
 import { SendFormSelectObjectProps } from './send-select-object.types';
 

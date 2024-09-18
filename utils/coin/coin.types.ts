@@ -2,7 +2,7 @@ import { SuiClient } from '@mysten/sui/client';
 import { Transaction } from '@mysten/sui/transactions';
 import BigNumber from 'bignumber.js';
 
-import { CoinsMap } from '@/components/web3-manager/coins-manager/coins-manager.types';
+import { CoinsMap } from '../../resui/web3-manager/coins-manager/coins-manager.types';
 
 export interface GetCoinsArgs {
   suiClient: SuiClient;

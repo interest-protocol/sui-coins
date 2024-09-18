@@ -4,7 +4,7 @@ import { useReadLocalStorage } from 'usehooks-ts';
 import { v4 } from 'uuid';
 
 import { TokenIcon } from '@/components';
-import { CoinObject } from '@/components/web3-manager/coins-manager/coins-manager.types';
+import { CoinObject } from '../../../resui/web3-manager/coins-manager/coins-manager.types';
 import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
 import { STRICT_TOKENS, STRICT_TOKENS_MAP } from '@/constants/coins';
 import { useNetwork } from '@/hooks/use-network';

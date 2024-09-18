@@ -16,7 +16,7 @@ import { v4 } from 'uuid';
 import {
   CoinObjectData,
   ObjectData,
-} from '@/components/web3-manager/all-objects-manager/all-objects.types';
+} from '../../resui/web3-manager/all-objects-manager/all-objects.types';
 import { Network } from '@/constants';
 import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';

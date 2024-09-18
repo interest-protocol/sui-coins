@@ -19,7 +19,7 @@ import { FixedPointMath } from '@/lib';
 import {
   CoinObject,
   CoinsMap,
-} from '../../components/web3-manager/coins-manager/coins-manager.types';
+} from '../../resui/web3-manager/coins-manager/coins-manager.types';
 import { isSameStructTag } from '../address';
 import { ZERO_BIG_NUMBER } from '../big-number';
 import { fetchCoinMetadata } from '../coin-metadata';

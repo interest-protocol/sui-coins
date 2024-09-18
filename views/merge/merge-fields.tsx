@@ -5,7 +5,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { v4 } from 'uuid';
 
-import type { CoinObject } from '@/components/web3-manager/coins-manager/coins-manager.types';
+import type { CoinObject } from '../../resui/web3-manager/coins-manager/coins-manager.types';
 import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
 import { CheckRoundedSVG, PlusSVG, WalletSVG } from '@/svg';

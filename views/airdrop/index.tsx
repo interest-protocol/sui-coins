@@ -7,13 +7,15 @@ import Layout from '@/components/layout';
 import AirdropForm from './airdrop-form';
 import AirdropProgressIndicator from './airdrop-progress-indicator';
 import AirdropUploadStatus from './airdrop-upload-status';
+import NFTMetadataManager from './nft-metadata-manager';
 
 const Airdrop: FC = () => {
   const { reset } = useFormContext();
   const [isProgressView, setIsProgressView] = useState(false);
 
   return (
-    <Layout title="Airdrop" features={['coins', 'nfts']}>
+    <Layout title="Airdrop">
+      <NFTMetadataManager />
       <Box width="100%">
         {isProgressView ? (
           <Box

@@ -5,7 +5,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { FixedPointMath } from '@/lib';
 import { parseInputEventToNumberString, ZERO_BIG_NUMBER } from '@/utils';
 
-import { CoinObject } from '../../../../../components/web3-manager/coins-manager/coins-manager.types';
+import { CoinObject } from '../../../../../resui/web3-manager/coins-manager/coins-manager.types';
 import { ISendSimpleForm } from '../send-simple.types';
 import SelectObject from './select-object';
 import { SendFormSelectObjectProps } from './send-select-object.types';

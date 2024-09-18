@@ -1,10 +1,8 @@
 import { useMemo } from 'react';
 
-import { ObjectData } from '@/components/web3-manager/all-objects-manager/all-objects.types';
-import { CoinObject } from '@/components/web3-manager/coins-manager/coins-manager.types';
-
+import { ObjectData } from '../../all-objects-manager/all-objects.types';
+import { CoinObject } from '../../coins-manager/coins-manager.types';
 import { useCoins } from '../use-coins';
-import { useNFTMetadata } from '../use-nft-metadata';
 import { useObjects } from '../use-objects';
 
 const getCoinsObjects = (
@@ -37,13 +35,6 @@ export const useWeb3 = () => {
     updateDelay: updateDelayObjects,
   } = useObjects();
 
-  const {
-    nfts,
-    nftsMap,
-    loading: nftsLoading,
-    error: nftsError,
-  } = useNFTMetadata();
-
   const compiledCoinsObjects = useMemo(
     () => getCoinsObjects(coinsObjects, coins),
     [coinsObjects, coins]
@@ -54,16 +45,14 @@ export const useWeb3 = () => {
     [ownedNfts, otherObjects, compiledCoinsObjects]
   );
 
-  const error = nftsError || coinsError || objectsError;
-  const loading = nftsLoading || coinsLoading || objectsLoading;
+  const error = coinsError || objectsError;
+  const loading = coinsLoading || objectsLoading;
 
   return {
-    nfts,
     coins,
     error,
     delay,
     loading,
-    nftsMap,
     objects,
     coinsMap,
     ownedNfts,
