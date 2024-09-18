@@ -53,15 +53,14 @@ const SelectToken: FC<InputProps> = ({ label }) => {
 
   const onSelect = async ({ type, decimals, symbol, chain }: Token) => {
     if (type === oppositeType) {
-      if (label === 'to')
-        setValue(label === 'to' ? 'from' : 'to', {
-          display: '',
-          value: ZERO_BIG_NUMBER,
-          type: currentToken.type,
-          chain: currentToken.chain,
-          symbol: currentToken.symbol,
-          decimals: currentToken.decimals,
-        });
+      setValue(label === 'to' ? 'from' : 'to', {
+        display: '',
+        value: ZERO_BIG_NUMBER,
+        type: currentToken.type,
+        chain: currentToken.chain,
+        symbol: currentToken.symbol,
+        decimals: currentToken.decimals,
+      });
     }
 
     setValue(label, {
