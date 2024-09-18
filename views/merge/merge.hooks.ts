@@ -32,7 +32,7 @@ export const useMergeCoins = () => {
   return async (coinsToMerge: ReadonlyArray<CoinObject>) => {
     invariant(currentAccount?.address, 'You must be connected');
 
-    for (const slotToMerge of chunk(coinsToMerge, 2047)) {
+    for (const slotToMerge of chunk(coinsToMerge, 8)) {
       let i = 0;
       let digest: string;
       let version: string;
