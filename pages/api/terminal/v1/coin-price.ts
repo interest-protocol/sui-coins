@@ -3,12 +3,6 @@ import NextCors from 'nextjs-cors';
 
 const handler: NextApiHandler = async (req, res) => {
   try {
-    await NextCors(req, res, {
-      methods: ['GET'],
-      optionsSuccessStatus: 200,
-      origin: process.env.ORIGIN ?? '*',
-    });
-
     const id = req.query.id;
     const symbol = req.query.symbol;
 

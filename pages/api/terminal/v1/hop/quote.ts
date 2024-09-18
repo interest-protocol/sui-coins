@@ -14,7 +14,7 @@ export default async function handler(
     await NextCors(req, res, {
       methods: ['GET'],
       optionsSuccessStatus: 200,
-      origin: process.env.ORIGIN ?? '*',
+      origin: '*',
     });
 
     const coinIn = req.query.coinIn as string;
