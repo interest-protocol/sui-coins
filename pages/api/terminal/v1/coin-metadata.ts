@@ -10,7 +10,7 @@ import { isInvalidNetwork } from '@/utils';
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     await NextCors(req, res, {
-      methods: ['GET'],
+      methods: ['POST'],
       optionsSuccessStatus: 200,
       origin: '*',
     });
