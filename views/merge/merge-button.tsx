@@ -46,7 +46,7 @@ const MergeButton: FC = () => {
       display="grid"
       maxWidth="25rem"
       borderRadius="xs"
-      gridTemplateColumns="1fr 3fr"
+      gridTemplateColumns="1fr 2fr"
     >
       <Button
         p="s"
@@ -54,9 +54,9 @@ const MergeButton: FC = () => {
         variant="tonal"
         justifyContent="center"
         onClick={() => reset()}
-        disabled={loading || !coinsToMerge.length}
+        disabled={loading || !ignored.length}
       >
-        clear
+        Select All
       </Button>
       <Button
         p="s"
