@@ -53,6 +53,7 @@ const SwapFormFieldSlider: FC = () => {
         initial={initial}
         disabled={!balance || balance.isZero?.() || swapping}
         onChange={(value: number) => {
+          setValue('origin', 'from');
           setValue(
             'from.display',
             Number(

@@ -15,6 +15,7 @@ export interface ISwapSettings {
 
 export interface SwapToken extends Token {
   display: string;
+  value: BigNumber;
   usdPrice: number | null;
 }
 
@@ -27,6 +28,7 @@ export enum Aggregator {
 export interface SwapForm {
   to: SwapToken;
   focus: boolean;
+  from: SwapToken;
   loading: boolean;
   swapping: boolean;
   updateSlider: object;
@@ -34,10 +36,10 @@ export interface SwapForm {
   error: string | null;
   readyToSwap: boolean;
   executionTime: number;
+  origin: 'to' | 'from';
   fetchingPrices: boolean;
   settings: ISwapSettings;
   lastFetchDate: number | null;
-  from: SwapToken & { value: BigNumber };
   route:
     | RouterCompleteTradeRoute
     | GetRouteQuotesReturn
