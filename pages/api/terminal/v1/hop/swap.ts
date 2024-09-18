@@ -13,7 +13,7 @@ export default async function handler(
     await NextCors(req, res, {
       methods: ['POST'],
       optionsSuccessStatus: 200,
-      origin: process.env.ORIGIN ?? '*',
+      origin: '*',
     });
 
     const data = req.body as SwapArg;

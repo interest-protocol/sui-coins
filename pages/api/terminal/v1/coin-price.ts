@@ -6,7 +6,7 @@ const handler: NextApiHandler = async (req, res) => {
     await NextCors(req, res, {
       methods: ['GET'],
       optionsSuccessStatus: 200,
-      origin: process.env.ORIGIN ?? '*',
+      origin: '*',
     });
 
     const id = req.query.id;
