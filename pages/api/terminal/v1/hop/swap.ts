@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import NextCors from 'nextjs-cors';
 import invariant from 'tiny-invariant';
 
 import { swap, SwapArg } from '@/server/lib/hop';
@@ -10,13 +9,15 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    await NextCors(req, res, {
-      methods: ['POST'],
-      optionsSuccessStatus: 200,
-      origin: '*',
-    });
+    const account = req.query.account as string;
+    const slippage = Number(req.query.slippage);
+    const trade = JSON.parse(req.query.trade as string);
 
-    const data = req.body as SwapArg;
+    const data: SwapArg = {
+      account,
+      slippage,
+      trade,
+    };
 
     invariant(data, 'Missing parameters');
 
