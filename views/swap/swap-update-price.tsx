@@ -151,35 +151,21 @@ const SwapUpdatePrice: FC = () => {
 
   const getRouterValue = (route: SwapForm['route'], aggregator: Aggregator) => {
     if (isNativeRoute(route))
-      return String(
-        FixedPointMath.toNumber(
-          parseBigNumberish(route.routes[0][2].amount),
-          getValues('to.decimals')
-        )
-      );
+      return parseBigNumberish(route.routes[0][2].amount);
 
     if (aggregator === Aggregator.Aftermath)
       return origin === 'to'
-        ? FixedPointMath.toNumber(
-            coinOutValue
-              .times(1 - EXCHANGE_FEE)
-              .times((route as RouterCompleteTradeRoute).spotPrice),
-            getValues('from.decimals')
-          )
-        : FixedPointMath.toNumber(
-            coinInValue
-              .div((route as RouterCompleteTradeRoute).spotPrice)
-              .times(1 - EXCHANGE_FEE),
-            getValues('to.decimals')
-          );
+        ? coinOutValue
+            .times(1 - EXCHANGE_FEE)
+            .times((route as RouterCompleteTradeRoute).spotPrice)
+        : coinInValue
+            .div((route as RouterCompleteTradeRoute).spotPrice)
+            .times(1 - EXCHANGE_FEE);
 
     if (aggregator === Aggregator.Hop)
-      return FixedPointMath.toNumber(
-        BigNumber((route as JSONQuoteResponse).amount_out_with_fee),
-        getValues('to.decimals')
-      ).toPrecision(6);
+      return BigNumber((route as JSONQuoteResponse).amount_out_with_fee);
 
-    return '0';
+    return ZERO_BIG_NUMBER;
   };
 
   const getRouteValue = async () => {
@@ -304,16 +290,14 @@ const SwapUpdatePrice: FC = () => {
 
       setValue(
         `${origin === 'to' ? 'from' : 'to'}.display`,
-        FixedPointMath.toBigNumber(value, 0).toString()
-      );
-
-      setValue(
-        `${origin === 'to' ? 'from' : 'to'}.value`,
-        FixedPointMath.toBigNumber(
-          value,
-          getValues(`${origin ? 'from' : 'to'}.decimals`)
+        String(
+          FixedPointMath.toNumber(
+            value,
+            getValues(`${origin === 'to' ? 'from' : 'to'}.decimals`)
+          )
         )
       );
+      setValue(`${origin === 'to' ? 'from' : 'to'}.value`, value);
       setValue('lastFetchDate', Date.now());
 
       return;
