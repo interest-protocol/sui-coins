@@ -288,17 +288,21 @@ const SwapUpdatePrice: FC = () => {
 
       const value = await getRouteValue();
 
-      setValue(
-        `${origin === 'to' ? 'from' : 'to'}.display`,
-        String(
-          FixedPointMath.toNumber(
-            value,
-            getValues(`${origin === 'to' ? 'from' : 'to'}.decimals`)
-          )
-        )
+      const target = origin === 'to' ? 'from' : 'to';
+      const stringValue = String(
+        FixedPointMath.toNumber(value, getValues(`${target}.decimals`))
       );
-      setValue(`${origin === 'to' ? 'from' : 'to'}.value`, value);
+
+      console.log({
+        target,
+        stringValue,
+      });
+      const focusSuffix = origin === 'to' ? 'In' : 'Out';
+      setValue(`${target}.display`, stringValue);
+      setValue(`${target}.value`, value);
       setValue('lastFetchDate', Date.now());
+      if (getValues(`focus${focusSuffix}`))
+        setValue(`focus${focusSuffix}`, false);
 
       return;
     },
