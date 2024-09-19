@@ -49,6 +49,7 @@ const FromInput: FC = () => {
                 onChange: (v: ChangeEvent<HTMLInputElement>) => {
                   setValue('updateSlider', {});
                   const value = parseInputEventToNumberString(v);
+                  setValue('origin', 'from');
                   setValue('from.display', value);
                   setValue(
                     'from.value',

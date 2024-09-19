@@ -47,23 +47,23 @@ const Balance: FC<InputProps> = ({ label }) => {
   );
 
   const handleMax = () => {
-    if (label === 'to') return;
+    setValue('origin', label);
 
     setValue('updateSlider', {});
 
     if (isSui(type) && balance < 1) {
-      setValue('from.value', ZERO_BIG_NUMBER);
-      setValue('from.display', '0');
+      setValue(`${label}.value`, ZERO_BIG_NUMBER);
+      setValue(`${label}.display`, '0');
       return;
     }
 
     if (getValues('focus')) setValue('focus', false);
 
     setValue(
-      'from.value',
+      `${label}.value`,
       coinsMap[type]?.balance.minus(isSui(type) ? 1_000_000_000 : 0)
     );
-    setValue('from.display', String(balance - (isSui(type) ? 1 : 0)));
+    setValue(`${label}.display`, String(balance - (isSui(type) ? 1 : 0)));
   };
 
   return (

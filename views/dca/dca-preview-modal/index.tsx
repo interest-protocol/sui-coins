@@ -1,4 +1,4 @@
-import { Box, Typography } from '@interest-protocol/ui-kit';
+import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
@@ -43,44 +43,15 @@ const DCAPreviewModal: FC<DCAPreviewModalProps> = ({ onClose }) => {
           alignItems="center"
           justifyContent="space-between"
         >
-          <Box
-            p="2xs"
-            display="flex"
-            alignItems="center"
-            borderRadius="full"
-            nHover={{
-              borderRadius: 'full',
-              background: 'highestContainer',
-            }}
-          >
-            <ArrowLeftSVG
-              width="100%"
-              onClick={onClose}
-              maxWidth="1.5rem"
-              maxHeight="1.5rem"
-            />
-          </Box>
+          <Button isIcon variant="text" cursor="pointer" onClick={onClose}>
+            <ArrowLeftSVG width="100%" maxWidth="1.5rem" maxHeight="1.5rem" />
+          </Button>
           <Typography size="large" variant="title">
             DCA
           </Typography>
-          <Box
-            p="xs"
-            display="flex"
-            alignItems="center"
-            borderRadius="full"
-            nHover={{
-              borderRadius: 'full',
-              background: 'highestContainer',
-            }}
-          >
-            <TimesSVG
-              onClick={onClose}
-              width="100%"
-              maxWidth="1rem"
-              cursor="pointer"
-              maxHeight="1rem"
-            />
-          </Box>
+          <Button isIcon variant="text" cursor="pointer" onClick={onClose}>
+            <TimesSVG width="100%" maxWidth="1rem" maxHeight="1rem" />
+          </Button>
         </Box>
         <Box display="flex" flexDirection="column" gap="m">
           <Box
