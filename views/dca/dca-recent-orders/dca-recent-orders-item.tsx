@@ -55,33 +55,49 @@ const DCAOrderListMiniItem: FC<DCA> = ({
         p="s"
         gap="m"
         key={v4()}
-        display="grid"
         borderRadius="xs"
         border="1px solid"
         alignItems="center"
         borderColor="outlineVariant"
+        justifyContent="space-between"
         nHover={{ borderColor: 'primary' }}
         gridTemplateColumns="3fr 2fr 2fr 2rem"
+        display={['flex', 'flex', 'flex', 'grid']}
         onClick={() => push(`${Routes[RoutesEnum.DCAOrders]}?id=${0x0}`)}
       >
-        <Box display="flex" gap="xs" alignItems="center">
-          <Box display="flex" gap="2xs" alignItems="center">
-            <Skeleton width="1rem" height="1rem" />
-            <Skeleton width="4rem" height="1rem" />
+        <Box
+          gap="xs"
+          alignItems="center"
+          display={['none', 'none', 'flex', 'flex', 'flex']}
+        >
+          <Box display="flex" gap="xs" alignItems="center">
+            <Box width="1rem">
+              <Skeleton width="100%" height="1rem" />
+            </Box>
+            <Box width={['4rem', '5rem', '5rem', '4rem']}>
+              <Skeleton width="100%" height="1rem" />
+            </Box>
           </Box>
-          <ChevronRightSVG width="100%" maxWidth="1.3rem" maxHeight="1.3rem" />
-          <Box display="flex" gap="2xs" alignItems="center">
-            <Skeleton width="1rem" height="1rem" />
-            <Skeleton width="4rem" height="1rem" />
+          <Box
+            gap="xs"
+            alignItems="center"
+            display={['none', 'none', 'flex', 'flex']}
+          >
+            <Box width="1rem">
+              <Skeleton width="100%" height="1rem" />
+            </Box>
+            <Box width={['4rem', '5rem', '5rem', '4rem']}>
+              <Skeleton width="100%" height="1rem" />
+            </Box>
           </Box>
         </Box>
-        <Typography variant="body" size="medium" fontWeight="bold">
-          <Skeleton width="5rem" height="1rem" />
-        </Typography>
-        <Box>
-          <Skeleton width="7rem" />
+        <Box width={['20%', '40%', '40%', '6rem']}>
+          <Skeleton width="100%" height="1rem" />
         </Box>
-        <ChevronRightSVG width="100%" maxWidth="1.5rem" maxHeight="1.5rem" />
+        <Box width={['80%', '80%', '40%', '8rem']}>
+          <Skeleton width="100%" />
+        </Box>
+        <ChevronRightSVG width="1.3rem" maxWidth="1.3rem" maxHeight="1.3rem" />
       </Box>
     );
 
