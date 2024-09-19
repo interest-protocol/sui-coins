@@ -293,10 +293,6 @@ const SwapUpdatePrice: FC = () => {
         FixedPointMath.toNumber(value, getValues(`${target}.decimals`))
       );
 
-      console.log({
-        target,
-        stringValue,
-      });
       const focusSuffix = origin === 'to' ? 'In' : 'Out';
       setValue(`${target}.display`, stringValue);
       setValue(`${target}.value`, value);
