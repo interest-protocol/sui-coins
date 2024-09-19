@@ -57,7 +57,10 @@ const Balance: FC<InputProps> = ({ label }) => {
       return;
     }
 
-    if (getValues('focus')) setValue('focus', false);
+    const focusSuffix = label === 'to' ? 'Out' : 'In';
+
+    if (getValues(`focus${focusSuffix}`))
+      setValue(`focus${focusSuffix}`, false);
 
     setValue(
       `${label}.value`,

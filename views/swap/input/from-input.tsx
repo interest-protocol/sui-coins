@@ -14,7 +14,7 @@ import SelectToken from './select-token';
 const FromInput: FC = () => {
   const { register, setValue, getValues, control } = useFormContext<SwapForm>();
 
-  useWatch({ control, name: 'focus' });
+  useWatch({ control, name: 'focusIn' });
   const swapping = useWatch({ control, name: 'swapping' });
 
   return (

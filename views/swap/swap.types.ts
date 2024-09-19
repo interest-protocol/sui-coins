@@ -27,7 +27,8 @@ export enum Aggregator {
 
 export interface SwapForm {
   to: SwapToken;
-  focus: boolean;
+  focusIn: boolean;
+  focusOut: boolean;
   from: SwapToken;
   loading: boolean;
   swapping: boolean;
