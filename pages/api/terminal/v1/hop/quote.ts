@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import NextCors from 'nextjs-cors';
 import invariant from 'tiny-invariant';
 
 import { quote } from '@/server/lib/hop';
@@ -11,12 +10,6 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    await NextCors(req, res, {
-      methods: ['GET'],
-      optionsSuccessStatus: 200,
-      origin: '*',
-    });
-
     const coinIn = req.query.coinIn as string;
     const coinOut = req.query.coinOut as string;
     const amountIn = req.query.amountIn as string;
