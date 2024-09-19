@@ -22,6 +22,7 @@ const PreviewSwapButton: FC = () => {
   const from = useWatch({ control, name: 'from' });
   const to = useWatch({ control, name: 'to' });
   const starting = useWatch({ control, name: 'starting' });
+  const price = useWatch({ control, name: 'price' });
 
   const fromValue = from?.value ?? ZERO_BIG_NUMBER;
 
@@ -41,6 +42,7 @@ const PreviewSwapButton: FC = () => {
     to &&
     from.type &&
     to.type &&
+    price &&
     !starting &&
     !from.value?.isZero() &&
     coinsMap[from.type] &&
