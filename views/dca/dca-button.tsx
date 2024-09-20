@@ -100,10 +100,8 @@ const DCAButton: FC = () => {
         timeScale: periodicity,
         every: Number(intervals),
         numberOfOrders: Number(orders),
+        witnessType: WITNESSES.WHITELIST_ADAPTER,
         fee: data?.includes(to.type) ? 0 : EXCHANGE_FEE_PERCENTAGE,
-        witnessType:
-          WITNESSES[network === Network.MAINNET ? 'mainnet' : 'testnet']
-            .WHITELIST_ADAPTER,
         ...(Number(min) && {
           min: BigInt(
             FixedPointMath.toBigNumber(min, to.decimals)

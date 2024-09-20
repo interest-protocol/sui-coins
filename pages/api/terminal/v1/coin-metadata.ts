@@ -11,7 +11,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const type = req.query.type as string;
     const network = req.query.network as Network;
-    const typeList = (req.query.coinsType as string).split(',');
+    const typeList = (req.query.coinsType as string)?.split(',');
 
     if (type) {
       const doc = await getCoinMetadata(type, network);
