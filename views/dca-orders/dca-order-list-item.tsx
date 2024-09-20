@@ -25,6 +25,7 @@ import ProgressBar from '@/components/progress-bar';
 import { EXPLORER_URL } from '@/constants';
 import { SENTINEL_API_URI } from '@/constants/dca';
 import useDcaSdk from '@/hooks/use-dca-sdk';
+import { useDialog } from '@/hooks/use-dialog';
 import { useModal } from '@/hooks/use-modal';
 import { useNetwork } from '@/hooks/use-network';
 import { FixedPointMath } from '@/lib';
@@ -38,6 +39,7 @@ import {
 
 import DCAOrderDetails from './dca-order-details';
 import DCAOrderListItemSkeleton from './dca-order-list-item-skeleton';
+import { DCAOrdersMessagesEnum } from './dca-orders.data';
 import { DCAShortInfo } from './dca-orders.types';
 import { useDCAState } from './dca-orders-manager';
 
@@ -57,6 +59,7 @@ const DCAOrderListItem: FC<DCAShortInfo> = ({
   const { pathname } = useRouter();
   const currentAccount = useCurrentAccount();
   const signTransaction = useSignTransaction();
+  const { dialog, handleClose: handleCloseDialog } = useDialog();
   const { setModal, handleClose } = useModal();
 
   const { selectedId, selectId, coinsMetadata, mutateDCAs } = useDCAState();
@@ -105,6 +108,28 @@ const DCAOrderListItem: FC<DCAShortInfo> = ({
     }
   };
 
+  const destroyDca = () => {
+    dialog.promise(onDestroyDca(), {
+      loading: () => ({
+        title: 'Deleting DCA...',
+        message: DCAOrdersMessagesEnum.deletingDca,
+      }),
+      error: () => ({
+        title: 'DCA Failure',
+        message: DCAOrdersMessagesEnum.deletingFailure,
+        primaryButton: { label: 'Try again', onClick: handleClose },
+      }),
+      success: () => ({
+        title: 'DCA Successfully',
+        message: DCAOrdersMessagesEnum.deletingSuccess,
+        primaryButton: {
+          label: 'Got it',
+          onClick: handleCloseDialog,
+        },
+      }),
+    });
+  };
+
   const handleDestroyDCA = () => {
     setModal(
       <Dialog
@@ -124,7 +149,7 @@ const DCAOrderListItem: FC<DCAShortInfo> = ({
             justifyContent="center"
             onClick={() => {
               handleClose();
-              onDestroyDca();
+              destroyDca();
             }}
           >
             Destroy
