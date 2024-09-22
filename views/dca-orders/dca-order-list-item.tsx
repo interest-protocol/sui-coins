@@ -16,7 +16,6 @@ import { AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, useMemo } from 'react';
-import toast from 'react-hot-toast';
 import invariant from 'tiny-invariant';
 import { v4 } from 'uuid';
 
@@ -101,8 +100,6 @@ const DCAOrderListItem: FC<DCAShortInfo> = ({
       });
 
       showTXSuccessToast(txResult, network, 'DCA destroyed successfully');
-    } catch (e) {
-      toast.error((e as Error)?.message || 'Error on destroy DCA');
     } finally {
       mutateDCAs();
     }
