@@ -1,7 +1,9 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
+import { useRouter } from 'next/router';
 import { FC, PropsWithChildren } from 'react';
 
 import { ModalProvider } from '@/context/modal';
+import { useNetwork } from '@/hooks/use-network';
 import FloatingButtons from '@/views/components/floating-buttons';
 
 import Web3Manager from '../web3-manager';
@@ -9,67 +11,76 @@ import Footer from './footer';
 import Header from './header';
 import { LayoutProps } from './layout.types';
 import Sidebar from './sidebar';
+import { existThisRouteInNetwork } from './sidebar/sidebar.utils';
 
 const Layout: FC<PropsWithChildren<LayoutProps>> = ({
   title,
   children,
   features,
   noSidebar,
-}) => (
-  <ModalProvider>
-    <Box bg="surface" display="flex" height="100vh" overflow="hidden">
-      {!noSidebar && <Sidebar />}
-      <Box
-        flex="1"
-        as="aside"
-        height="100vh"
-        display="flex"
-        position="relative"
-        flexDirection="column"
-        justifyContent="space-between"
-      >
-        <Header />
-        <Web3Manager features={features} />
+}) => {
+  const network = useNetwork();
+  const { asPath, push } = useRouter();
+
+  if (asPath != '/404' && !existThisRouteInNetwork(asPath, network))
+    push('/404');
+
+  return (
+    <ModalProvider>
+      <Box bg="surface" display="flex" height="100vh" overflow="hidden">
+        {!noSidebar && <Sidebar />}
         <Box
           flex="1"
-          width="100%"
+          as="aside"
+          height="100vh"
           display="flex"
-          overflowY="auto"
+          position="relative"
           flexDirection="column"
           justifyContent="space-between"
         >
+          <Header />
+          <Web3Manager features={features} />
           <Box
-            m="0"
+            flex="1"
             width="100%"
             display="flex"
-            variant="container"
+            overflowY="auto"
             flexDirection="column"
-            px={['m', 'l', 'l', 'xl']}
-            mt="unset"
+            justifyContent="space-between"
           >
-            <Box as="main" flex="1" mb="2xl">
-              <Box>
-                {title && (
-                  <Typography
-                    textAlign="center"
-                    color="onSurface"
-                    variant="display"
-                    size="medium"
-                    my="3rem"
-                  >
-                    {title}
-                  </Typography>
-                )}
-                {children}
+            <Box
+              m="0"
+              width="100%"
+              display="flex"
+              variant="container"
+              flexDirection="column"
+              px={['m', 'l', 'l', 'xl']}
+              mt="unset"
+            >
+              <Box as="main" flex="1" mb="2xl">
+                <Box>
+                  {title && (
+                    <Typography
+                      textAlign="center"
+                      color="onSurface"
+                      variant="display"
+                      size="medium"
+                      my="3rem"
+                    >
+                      {title}
+                    </Typography>
+                  )}
+                  {children}
+                </Box>
               </Box>
             </Box>
+            <FloatingButtons />
+            <Footer />
           </Box>
-          <FloatingButtons />
-          <Footer />
         </Box>
       </Box>
-    </Box>
-  </ModalProvider>
-);
+    </ModalProvider>
+  );
+};
 
 export default Layout;
