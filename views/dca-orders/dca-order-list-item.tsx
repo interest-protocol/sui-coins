@@ -1,4 +1,10 @@
-import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
+import {
+  Box,
+  Button,
+  Dialog,
+  Motion,
+  Typography,
+} from '@interest-protocol/ui-kit';
 import {
   useCurrentAccount,
   useSignTransaction,
@@ -9,8 +15,7 @@ import BigNumber from 'bignumber.js';
 import { AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FC, MouseEventHandler, useMemo } from 'react';
-import toast from 'react-hot-toast';
+import { FC, useMemo } from 'react';
 import invariant from 'tiny-invariant';
 import { v4 } from 'uuid';
 
@@ -19,6 +24,8 @@ import ProgressBar from '@/components/progress-bar';
 import { EXPLORER_URL } from '@/constants';
 import { SENTINEL_API_URI } from '@/constants/dca';
 import useDcaSdk from '@/hooks/use-dca-sdk';
+import { useDialog } from '@/hooks/use-dialog';
+import { useModal } from '@/hooks/use-modal';
 import { useNetwork } from '@/hooks/use-network';
 import { FixedPointMath } from '@/lib';
 import { ChevronDownSVG, ChevronRightSVG, LinkSVG, TrashSVG } from '@/svg';
@@ -31,6 +38,7 @@ import {
 
 import DCAOrderDetails from './dca-order-details';
 import DCAOrderListItemSkeleton from './dca-order-list-item-skeleton';
+import { DCAOrdersMessagesEnum } from './dca-orders.data';
 import { DCAShortInfo } from './dca-orders.types';
 import { useDCAState } from './dca-orders-manager';
 
@@ -50,6 +58,8 @@ const DCAOrderListItem: FC<DCAShortInfo> = ({
   const { pathname } = useRouter();
   const currentAccount = useCurrentAccount();
   const signTransaction = useSignTransaction();
+  const { dialog, handleClose: handleCloseDialog } = useDialog();
+  const { setModal, handleClose } = useModal();
 
   const { selectedId, selectId, coinsMetadata, mutateDCAs } = useDCAState();
 
@@ -66,8 +76,7 @@ const DCAOrderListItem: FC<DCAShortInfo> = ({
   const statusPercentage =
     ((totalOrders - remainingOrders) * 100) / totalOrders;
 
-  const handleDestroyDCA: MouseEventHandler<HTMLButtonElement> = async (e) => {
-    e.stopPropagation();
+  const onDestroyDca = async () => {
     try {
       invariant(currentAccount, 'You must be connected');
 
@@ -91,13 +100,80 @@ const DCAOrderListItem: FC<DCAShortInfo> = ({
       });
 
       showTXSuccessToast(txResult, network, 'DCA destroyed successfully');
-    } catch (e) {
-      toast.error((e as Error)?.message || 'Error on destroy DCA');
     } finally {
       mutateDCAs();
     }
   };
 
+  const destroyDca = () => {
+    dialog.promise(onDestroyDca(), {
+      loading: () => ({
+        title: 'Destroying DCA...',
+        message: DCAOrdersMessagesEnum.destroyingDCA,
+      }),
+      error: () => ({
+        title: 'DCA Failure',
+        message: DCAOrdersMessagesEnum.destroyingFailure,
+        primaryButton: { label: 'Try again', onClick: handleClose },
+      }),
+      success: () => ({
+        title: 'DCA Successfully',
+        message: DCAOrdersMessagesEnum.destroyingSuccess,
+        primaryButton: {
+          label: 'Got it',
+          onClick: handleCloseDialog,
+        },
+      }),
+    });
+  };
+
+  const handleDestroyDCA = () => {
+    setModal(
+      <Dialog
+        status="warning"
+        title="Confirmation"
+        message="Are you sure you want to destroy the DCA?"
+        primaryButton={
+          <Button
+            bg="#D87706"
+            width="60%"
+            display="flex"
+            variant="filled"
+            nHover={{
+              background: 'linear-gradient(0deg, #FFF2, #FFF2),#D87706',
+            }}
+            alignItems="center"
+            justifyContent="center"
+            onClick={() => {
+              handleClose();
+              destroyDca();
+            }}
+          >
+            Destroy
+          </Button>
+        }
+        secondaryButton={
+          <Button
+            mr="s"
+            width="30%"
+            borderColor="#C6C6CA"
+            nHover={{
+              color: '#D87706',
+              borderColor: '#D87706',
+              background: '#d877061c',
+            }}
+            display="flex"
+            variant="outline"
+            alignItems="center"
+            justifyContent="center"
+            onClick={handleClose}
+          >
+            Cancel
+          </Button>
+        }
+      />
+    );
+  };
   if (!tokenIn || !tokenOut) return <DCAOrderListItemSkeleton />;
 
   return (
