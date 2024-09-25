@@ -108,17 +108,17 @@ const DCAOrderListItem: FC<DCAShortInfo> = ({
   const destroyDca = () => {
     dialog.promise(onDestroyDca(), {
       loading: () => ({
-        title: 'Deleting DCA...',
-        message: DCAOrdersMessagesEnum.deletingDca,
+        title: 'Destroying DCA...',
+        message: DCAOrdersMessagesEnum.destroyingDCA,
       }),
       error: () => ({
         title: 'DCA Failure',
-        message: DCAOrdersMessagesEnum.deletingFailure,
+        message: DCAOrdersMessagesEnum.destroyingFailure,
         primaryButton: { label: 'Try again', onClick: handleClose },
       }),
       success: () => ({
         title: 'DCA Successfully',
-        message: DCAOrdersMessagesEnum.deletingSuccess,
+        message: DCAOrdersMessagesEnum.destroyingSuccess,
         primaryButton: {
           label: 'Got it',
           onClick: handleCloseDialog,
