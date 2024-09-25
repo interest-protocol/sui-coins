@@ -25,7 +25,7 @@ const SwapFlipToken: FC = () => {
     setValue('to', { ...tmpFrom, display: '' });
     setValue('from', { ...tmpTo, display: '', value: ZERO_BIG_NUMBER });
 
-    updateURL(`${pathname}?from=${tmpTo.type}&to=${tmpFrom.type}`);
+    updateURL(`${pathname}?from=${tmpTo?.type}&to=${tmpFrom?.type}`);
   };
 
   return (
