@@ -1,13 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import dbConnect from '@/server';
-import NFTCollectionMetadata from '@/server/model/nft-collection-metadata';
+import NFTCollectionModel from '@/server/model/nft-collection';
 
 const handler = async (_: NextApiRequest, res: NextApiResponse) => {
   try {
     await dbConnect();
 
-    const docs = await NFTCollectionMetadata.find();
+    const docs = await NFTCollectionModel.find();
 
     if (!docs.length) return res.status(204).json([]);
 
