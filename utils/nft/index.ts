@@ -10,7 +10,7 @@ export const getHoldersJSON = async (
 
   const jsonFile =
     'data:text/json;charset=utf-8,' +
-    encodeURIComponent(JSON.stringify(nfts.holders));
+    encodeURIComponent(JSON.stringify(nfts.holders, null, 2));
 
   const linkElement = document.createElement('a');
 
