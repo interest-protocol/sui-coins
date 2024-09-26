@@ -1,5 +1,13 @@
-import { Box, ProgressIndicator, Typography } from '@interest-protocol/ui-kit';
+import {
+  Box,
+  Button,
+  ProgressIndicator,
+  Typography,
+} from '@interest-protocol/ui-kit';
 import { FC, useState } from 'react';
+
+import { DownloadSVG } from '@/svg';
+import { getHoldersJSON } from '@/utils/nft';
 
 import { NFTModalItemProps } from './select-nft-modal.types';
 
@@ -11,6 +19,7 @@ const NFTModalItem: FC<NFTModalItemProps> = ({
   updatedAt,
   id,
 }) => {
+  const [isDownloading, setDownloading] = useState(false);
   const [isImageLoading, setImageLoading] = useState(true);
 
   return (
@@ -66,9 +75,39 @@ const NFTModalItem: FC<NFTModalItemProps> = ({
         alignItems="flex-end"
         flexDirection="column"
       >
-        <Typography variant="body" size="small">
-          {total} addresses
-        </Typography>
+        <Box gap="xs" display="flex" alignItems="center">
+          <Typography variant="body" size="small">
+            {total} addresses
+          </Typography>
+          <Button
+            p="0"
+            width="1.25rem"
+            height="1.25rem"
+            variant="outline"
+            borderRadius="6px"
+            alignItems="center"
+            justifyContent="center"
+            onClick={(e) => {
+              e.stopPropagation();
+              setDownloading(true);
+              getHoldersJSON(id, name, updatedAt!).then(() =>
+                setDownloading(false)
+              );
+            }}
+          >
+            {isDownloading ? (
+              <Box mt="-1rem">
+                <ProgressIndicator variant="loading" size={12} />
+              </Box>
+            ) : (
+              <DownloadSVG
+                maxWidth="0.75rem"
+                maxHeight="0.75rem"
+                width="100%"
+              />
+            )}
+          </Button>
+        </Box>
         <Typography variant="body" size="small">
           Last update: {new Date(updatedAt!).toLocaleDateString()}
         </Typography>
