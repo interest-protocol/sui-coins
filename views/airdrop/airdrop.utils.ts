@@ -44,7 +44,8 @@ export const textToAirdrop = (
   text: string,
   commonAmount: string,
   decimals: number,
-  onError: (message: string) => void
+  onError: (message: string) => void,
+  each: boolean = true
 ): AirdropData[] => {
   try {
     const lines = text.split('\n');
@@ -55,7 +56,10 @@ export const textToAirdrop = (
     addresses.forEach((address) => {
       data.push({
         address,
-        amount: FixedPointMath.toBigNumber(commonAmount, decimals).toString(),
+        amount: FixedPointMath.toBigNumber(
+          each ? commonAmount : Number(commonAmount) / address.length,
+          decimals
+        ).toString(),
       });
     });
 

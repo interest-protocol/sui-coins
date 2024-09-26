@@ -13,6 +13,7 @@ import { IAirdropForm } from '../airdrop.types';
 const AirdropCustomAmountTextField: FC = () => {
   const { network } = useSuiClientContext();
   const { register, setValue, getValues } = useFormContext<IAirdropForm>();
+  const eachAddressList = getValues('eachAddressList');
 
   return (
     <TextField
@@ -25,7 +26,13 @@ const AirdropCustomAmountTextField: FC = () => {
 
           const airdropList = getValues('airdropList')?.map(({ address }) => ({
             address,
-            amount: BigNumber(value || '0')
+            amount: BigNumber(
+              value
+                ? eachAddressList
+                  ? value
+                  : Number(value) / (getValues('airdropList')?.length ?? 1)
+                : 0
+            )
               .times(BigNumber(10).pow(getValues('token.decimals')))
               .toString(),
           }));

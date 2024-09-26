@@ -1,16 +1,18 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
-import { FC, useState } from 'react';
+import { FC } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 
+import { IAirdropForm } from '../airdrop.types';
 import AirdropCommonAmountTextField from './airdrop-common-amount-text-field';
-import AirdropCustomAmount from './airdrop-custom-amount';
+import AirdropCustomAmount from './airdrop-custom-amount-container';
 import AirdropCustomAmountTextArea from './airdrop-custom-amount-text-area';
 
 const AirdropCustomAmountMethod: FC = () => {
-  const [isActive, setIsActive] = useState<boolean>(false);
-
-  const handleCustomAmount = () => {
-    setIsActive(!isActive);
-  };
+  const { control } = useFormContext<IAirdropForm>();
+  const eachAddressList = useWatch({
+    control,
+    name: 'eachAddressList',
+  });
   return (
     <Box>
       <Box pb="m">
@@ -18,12 +20,11 @@ const AirdropCustomAmountMethod: FC = () => {
           3. Choose amount & who to send:
         </Typography>
         <AirdropCustomAmount
-          isCustomAmountActive={isActive}
-          handleCustomAmount={handleCustomAmount}
+          eachAddressList={eachAddressList}
           message="Activate this option to send different amounts simultaneously to various wallets."
         />
         <Typography variant="body" size="medium">
-          Enter amount to send {isActive && 'for each'}
+          Enter amount to send {eachAddressList && 'for each'}
         </Typography>
         <Box>
           <AirdropCommonAmountTextField />

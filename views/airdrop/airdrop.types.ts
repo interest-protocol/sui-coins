@@ -30,6 +30,7 @@ export interface IAirdropForm {
   failed: ReadonlyArray<number>;
   asset?: CoinObject | NFTCollectionMetadata;
   airdropList: ReadonlyArray<AirdropData> | null;
+  eachAddressList: boolean;
 }
 
 export interface AirdropUploadStatusCardProps {
@@ -79,7 +80,6 @@ export interface AirdropPreviewButtonProps {
   handleOpenSummaryModal: () => void;
 }
 export interface AirdropCustomAmountProps {
-  message?: string;
-  isCustomAmountActive: boolean;
-  handleCustomAmount: () => void;
+  message: string;
+  eachAddressList: boolean;
 }

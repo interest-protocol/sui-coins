@@ -5,7 +5,7 @@ import { AirdropCustomAmountProps } from '../airdrop.types';
 
 const AirdropCustomAmount: FC<AirdropCustomAmountProps> = ({
   message,
-  eachAddressList,
+  eachAddressList = true,
 }) => {
   return (
     <Box p="1rem" my="1rem" borderRadius="xs" width="100%" bg="#F8F9FD">
@@ -13,7 +13,7 @@ const AirdropCustomAmount: FC<AirdropCustomAmountProps> = ({
         <Typography as="h1" size="medium" variant="body">
           Custom amounts
         </Typography>
-        <ToggleButton defaultValue={eachAddressList} name="custom amount" />
+        <ToggleButton defaultValue={eachAddressList} name="each address list" />
       </Box>
       <Typography size="small" variant="title" color="outline" mt="0.5rem">
         {message}
