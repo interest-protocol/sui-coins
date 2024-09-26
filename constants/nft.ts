@@ -12,4 +12,5 @@ export const NFT: ReadonlyArray<string> = [
   '07231735-96de-4710-8e11-52c61a482578', // Prime Machin
   '200220c4-d7fa-41e8-a8be-63d208556336', // Unbound
   'ae2db678-d698-4a0b-a224-00c66fa9813a', // OnlySPAM
+  '67aca668-31b0-4713-91cf-079d392b041a', // Kumo
 ];
