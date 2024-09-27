@@ -3,13 +3,13 @@ import {
   useCurrentAccount,
   useSignTransaction,
   useSuiClient,
-  useSuiClientContext,
 } from '@mysten/dapp-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import invariant from 'tiny-invariant';
 
+import { useNetwork } from '@/hooks/use-network';
 import {
   showTXSuccessToast,
   signAndExecute,
@@ -22,8 +22,8 @@ import { SwapForm } from './swap.types';
 
 const SwapButton: FC = () => {
   const swap = useSwap();
+  const network = useNetwork();
   const suiClient = useSuiClient();
-  const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
   const formSwap = useFormContext<SwapForm>();
 
