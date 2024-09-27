@@ -18,7 +18,9 @@ export default async function handler(
 
     const data = await quote(coinIn, coinOut, BigInt(amountIn));
 
-    res.status(200).json(quoteResponseToJSONQuoteResponse(data));
+    const jsonData = quoteResponseToJSONQuoteResponse(data);
+
+    res.status(200).json(jsonData);
   } catch (e) {
     res.status(500).send(handleServerError(e));
   }

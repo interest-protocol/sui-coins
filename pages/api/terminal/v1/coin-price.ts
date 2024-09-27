@@ -17,10 +17,18 @@ const handler: NextApiHandler = async (req, res) => {
         },
       }
     );
+
     const data = await result.json();
+
+    if (data.status.error_code)
+      throw new Error(
+        `${data.status.error_code}: ${data.status.error_message}`
+      );
 
     return res.status(200).json(data.data);
   } catch (e) {
+    console.log({ e });
+
     res.status(500).send(e);
   }
 };
