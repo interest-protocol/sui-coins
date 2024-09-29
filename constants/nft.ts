@@ -13,4 +13,5 @@ export const NFT: ReadonlyArray<string> = [
   '200220c4-d7fa-41e8-a8be-63d208556336', // Unbound
   'ae2db678-d698-4a0b-a224-00c66fa9813a', // OnlySPAM
   '67aca668-31b0-4713-91cf-079d392b041a', // Kumo
+  'f398dbda-3a2d-45f3-8e76-1557b386dfbe', // Blubbers
 ];
