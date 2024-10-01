@@ -2,7 +2,7 @@ import { Box, ProgressIndicator, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { EXCHANGE_FEE_PERCENTAGE } from '@/constants/fees';
+import { DCA_FEE_PERCENTAGE } from '@/constants/fees';
 import { useFeeFreeTokens } from '@/hooks/use-dca';
 import { InformationCircleSVG } from '@/svg';
 import { formatMoney } from '@/utils';
@@ -208,7 +208,7 @@ const DCAPreviewModalSummary: FC = () => {
                 >
                   {data?.includes(getValues('to.type'))
                     ? 0
-                    : EXCHANGE_FEE_PERCENTAGE}
+                    : DCA_FEE_PERCENTAGE}
                   %
                 </Typography>
                 <InformationCircleSVG

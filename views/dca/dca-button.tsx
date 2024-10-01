@@ -13,7 +13,7 @@ import { useReadLocalStorage } from 'usehooks-ts';
 
 import { EXPLORER_URL, Network } from '@/constants';
 import { DELEGATEE, SENTINEL_API_URI } from '@/constants/dca';
-import { EXCHANGE_FEE_PERCENTAGE } from '@/constants/fees';
+import { DCA_FEE_PERCENTAGE } from '@/constants/fees';
 import { useFeeFreeTokens } from '@/hooks/use-dca';
 import useDcaSdk from '@/hooks/use-dca-sdk';
 import { useDialog } from '@/hooks/use-dialog';
@@ -101,7 +101,7 @@ const DCAButton: FC = () => {
         every: Number(intervals),
         numberOfOrders: Number(orders),
         witnessType: WITNESSES.WHITELIST_ADAPTER,
-        fee: data?.includes(to.type) ? 0 : EXCHANGE_FEE_PERCENTAGE,
+        fee: data?.includes(to.type) ? 0 : DCA_FEE_PERCENTAGE,
         ...(Number(min) && {
           min: BigInt(
             FixedPointMath.toBigNumber(min, to.decimals)
