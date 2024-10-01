@@ -874,10 +874,10 @@
     ramda "^0.29.1"
     tiny-invariant "^1.3.3"
 
-"@interest-protocol/dca-sdk@^4.0.2":
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/dca-sdk/-/dca-sdk-4.0.2.tgz#345ff20772597333237c768df4b1332f5ba71782"
-  integrity sha512-OCoKGpiGWQLT8en0o7CGw0e3QAPy7s+23E7EsroI4su+1QmgBak2ngrIuyP/xA3JUtPG63+zg4F4dZQ+dR20jQ==
+"@interest-protocol/dca-sdk@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/dca-sdk/-/dca-sdk-5.0.0.tgz#9313f076107dd645e4822acf73a4a6c6efde4842"
+  integrity sha512-m/TA3IlnB+V6cxrQbWKpoYwZFgTUAPlEgx3V0zO3whb/w8ky9nK7svtPdWnQTVMZjDEsz+N5bIWqGzoCeHB1bg==
   dependencies:
     "@mysten/sui" "^1.5.0"
     "@polymedia/suitcase-core" "^0.0.16"
