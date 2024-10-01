@@ -22,7 +22,11 @@ export const dcaValidationSchema = yup.object({
   to: yup.object({
     type: yup.string().required('Select the coin to get'),
   }),
-  orders: yup.number().min(2, 'You cannot add numbers less than 0').required(),
+  orders: yup
+    .number()
+    .min(2, 'You should use greater than 2')
+    .max(200, 'Should use less than 200')
+    .required(),
   periodicity: yup.number().required(),
   intervals: yup
     .number()

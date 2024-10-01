@@ -17,7 +17,7 @@
     "@hookform/resolvers": "^3.3.2",
     "@hop.ag/sdk": "^3.1.7",
     "@interest-protocol/clamm-sdk": "^9.0.1-alpha",
-    "@interest-protocol/dca-sdk": "^4.0.2",
+    "@interest-protocol/dca-sdk": "^5.0.0",
     "@interest-protocol/sui-tokens": "^1.12.3",
     "@interest-protocol/ui-kit": "^0.2.26-alpha",
     "@mysten/dapp-kit": "^0.14.20",
