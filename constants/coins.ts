@@ -82,14 +82,8 @@ export const MAINNET_BASE_COINS: Record<string, `0x${string}`> = {
     '0xe32d3ebafa42e6011b87ef1087bbc6053b499bf6f095807b9013aff5a6ecd7bb::coin::COIN',
   SOL_WORMHOLE_USDC:
     '0xb231fcda8bbddb31f2ef02e6161444aec64a514e2c89279584ac9806ce9cf037::coin::COIN',
-  ETH_CELER_WETH:
-    '0x94e7a8e71830d2b34b3edaa195dc24c45d142584f06fa257b73af753d766e690::celer_weth_coin::CELER_WETH_COIN',
-  ETH_CELER_WBTC:
-    '0x94e7a8e71830d2b34b3edaa195dc24c45d142584f06fa257b73af753d766e690::celer_wbtc_coin::CELER_WBTC_COIN',
-  ETH_CELER_USDC:
-    '0x94e7a8e71830d2b34b3edaa195dc24c45d142584f06fa257b73af753d766e690::celer_usdc_coin::CELER_USDC_COIN',
-  ETH_CELER_USDT:
-    '0x94e7a8e71830d2b34b3edaa195dc24c45d142584f06fa257b73af753d766e690::celer_usdt_coin::CELER_USDT_COIN',
+  NATIVE_SUI_BRIDGE_ETH:
+    '0xd0e89b2af5e4910726fbcd8b8dd37bb79b29e5f83f7491bca830e94f7f226d29::eth::ETH',
 };
 
 export const COIN_TYPE: Record<Network, Record<string, `0x${string}`>> = {
@@ -136,9 +130,8 @@ export const COIN_TYPE_TO_SYMBOL = {
     [COIN_TYPE[Network.MAINNET].BSC_WORMHOLE_FLOKI]:
       TOKEN_SYMBOL.WORMHOLE_FLOKI,
     [COIN_TYPE[Network.MAINNET].BSC_WORMHOLE_DOGE]: TOKEN_SYMBOL.WORMHOLE_DOGE,
-    [COIN_TYPE[Network.MAINNET].ETH_CELER_WBTC]: TOKEN_SYMBOL.ETH_CELER_WBTC,
-    [COIN_TYPE[Network.MAINNET].ETH_CELER_USDC]: TOKEN_SYMBOL.ETH_CELER_USDC,
-    [COIN_TYPE[Network.MAINNET].ETH_CELER_WETH]: TOKEN_SYMBOL.ETH_CELER_WETH,
+    [COIN_TYPE[Network.MAINNET].NATIVE_SUI_BRIDGE_ETH]:
+      TOKEN_SYMBOL.NATIVE_SUI_BRIDGE_ETH,
   },
 };
 
@@ -171,10 +164,7 @@ export const COIN_DECIMALS = {
     [COIN_TYPE[Network.MAINNET].BSC_WORMHOLE_ETH]: 8,
     [COIN_TYPE[Network.MAINNET].BSC_WORMHOLE_FLOKI]: 8,
     [COIN_TYPE[Network.MAINNET].BSC_WORMHOLE_DOGE]: 8,
-    [COIN_TYPE[Network.MAINNET].ETH_CELER_WETH]: 9,
-    [COIN_TYPE[Network.MAINNET].ETH_CELER_WBTC]: 8,
-    [COIN_TYPE[Network.MAINNET].ETH_CELER_USDC]: 6,
-    [COIN_TYPE[Network.MAINNET].ETH_CELER_USDT]: 6,
+    [COIN_TYPE[Network.MAINNET].NATIVE_SUI_BRIDGE_ETH]: 8,
   },
 };
 
@@ -355,44 +345,20 @@ export const COINS: Record<Network, Record<string, Token>> = {
       symbol: TOKEN_SYMBOL.WORMHOLE_DOGE,
       type: COIN_TYPE[Network.MAINNET].BSC_WORMHOLE_DOGE,
     },
-    ETH_CELER_WBTC: {
+    NATIVE_SUI_BRIDGE_ETH: {
       decimals:
         COIN_DECIMALS[Network.MAINNET][
-          COIN_TYPE[Network.MAINNET].ETH_CELER_WBTC
+          COIN_TYPE[Network.MAINNET].NATIVE_SUI_BRIDGE_ETH
         ],
-      symbol: TOKEN_SYMBOL.ETH_CELER_WBTC,
-      type: COIN_TYPE[Network.MAINNET].ETH_CELER_WBTC,
-    },
-    ETH_CELER_WETH: {
-      decimals:
-        COIN_DECIMALS[Network.MAINNET][
-          COIN_TYPE[Network.MAINNET].ETH_CELER_WETH
-        ],
-      symbol: TOKEN_SYMBOL.ETH_CELER_WETH,
-      type: COIN_TYPE[Network.MAINNET].ETH_CELER_WETH,
-    },
-    ETH_CELER_USDC: {
-      decimals:
-        COIN_DECIMALS[Network.MAINNET][
-          COIN_TYPE[Network.MAINNET].ETH_CELER_USDC
-        ],
-      symbol: TOKEN_SYMBOL.ETH_CELER_USDC,
-      type: COIN_TYPE[Network.MAINNET].ETH_CELER_USDC,
-    },
-    ETH_CELER_USDT: {
-      decimals:
-        COIN_DECIMALS[Network.MAINNET][
-          COIN_TYPE[Network.MAINNET].ETH_CELER_USDT
-        ],
-      symbol: TOKEN_SYMBOL.ETH_CELER_USDT,
-      type: COIN_TYPE[Network.MAINNET].ETH_CELER_USDT,
+      symbol: TOKEN_SYMBOL.NATIVE_SUI_BRIDGE_ETH,
+      type: COIN_TYPE[Network.MAINNET].NATIVE_SUI_BRIDGE_ETH,
     },
   },
 };
 
 export const MAINNET_COINS_INFO: Record<
   string,
-  { origin: string | null; bridge: 'celer' | 'wormhole' | null }
+  { origin: string | null; bridge: 'sui' | 'wormhole' | null }
 > = {
   [MAINNET_BASE_COINS.SUI]: {
     origin: null,
@@ -406,13 +372,9 @@ export const MAINNET_COINS_INFO: Record<
     origin: 'BSC',
     bridge: 'wormhole',
   },
-  [MAINNET_BASE_COINS.ETH_CELER_WETH]: {
+  [MAINNET_BASE_COINS.NATIVE_SUI_BRIDGE_ETH]: {
     origin: null,
-    bridge: 'celer',
-  },
-  [MAINNET_BASE_COINS.ETH_CELER_USDC]: {
-    origin: 'ETH',
-    bridge: 'celer',
+    bridge: 'sui',
   },
   [MAINNET_BASE_COINS.BSC_WORMHOLE_USDC]: {
     origin: 'BSC',
@@ -421,10 +383,6 @@ export const MAINNET_COINS_INFO: Record<
   [MAINNET_BASE_COINS.ETH_WORMHOLE_USDC]: {
     origin: 'ETH',
     bridge: 'wormhole',
-  },
-  [MAINNET_BASE_COINS.ETH_CELER_USDT]: {
-    origin: 'ETH',
-    bridge: 'celer',
   },
   [MAINNET_BASE_COINS.BSC_WORMHOLE_USDT]: {
     origin: 'BSC',
@@ -437,10 +395,6 @@ export const MAINNET_COINS_INFO: Record<
   [MAINNET_BASE_COINS.BSC_WORMHOLE_BTCB]: {
     origin: 'BSC',
     bridge: 'wormhole',
-  },
-  [MAINNET_BASE_COINS.ETH_CELER_WBTC]: {
-    origin: 'ETH',
-    bridge: 'celer',
   },
   [MAINNET_BASE_COINS.BSC_WORMHOLE_ADA]: {
     origin: 'BSC',
@@ -500,19 +454,16 @@ export const TOKEN_ICONS: Record<
     [MAINNET_BASE_COINS.SUI]: SUISVG,
     [MAINNET_BASE_COINS.NATIVE_WORMHOLE_ETH]: ETHSVG,
     [MAINNET_BASE_COINS.BSC_WORMHOLE_ETH]: ETHSVG,
-    [MAINNET_BASE_COINS.ETH_CELER_WETH]: ETHSVG,
-    [MAINNET_BASE_COINS.ETH_CELER_USDC]: USDCSVG,
+    [MAINNET_BASE_COINS.NATIVE_SUI_BRIDGE_ETH]: ETHSVG,
     [MAINNET_BASE_COINS.BSC_WORMHOLE_USDC]: USDCSVG,
     [MAINNET_BASE_COINS.ETH_WORMHOLE_USDC]: USDCSVG,
     [MAINNET_BASE_COINS.MATIC_WORMHOLE_USDC]: USDCSVG,
     [MAINNET_BASE_COINS.SOL_WORMHOLE_USDC]: USDCSVG,
     [MAINNET_BASE_COINS.ARB_WORMHOLE_USDC]: USDCSVG,
-    [MAINNET_BASE_COINS.ETH_CELER_USDT]: USDTSVG,
     [MAINNET_BASE_COINS.BSC_WORMHOLE_USDT]: USDTSVG,
     [MAINNET_BASE_COINS.ETH_WORMHOLE_USDT]: USDTSVG,
     [MAINNET_BASE_COINS.BSC_WORMHOLE_BTCB]: BTCSVG,
     [MAINNET_BASE_COINS.NATIVE_WORMHOLE_WBTC]: BTCSVG,
-    [MAINNET_BASE_COINS.ETH_CELER_WBTC]: BTCSVG,
     [MAINNET_BASE_COINS.BSC_WORMHOLE_ADA]: ADASVG,
     [MAINNET_BASE_COINS.NATIVE_WORMHOLE_WBNB]: BNBSVG,
     [MAINNET_BASE_COINS.NATIVE_WORMHOLE_SOL]: SOLSVG,
@@ -532,14 +483,9 @@ export const TOKEN_ICONS: Record<
   },
 };
 
-export const CELER_TOKENS_TYPE: Record<Network, ReadonlyArray<string>> = {
+export const SUI_BRIDGE_TOKENS_TYPE: Record<Network, ReadonlyArray<string>> = {
   [Network.TESTNET]: [],
-  [Network.MAINNET]: [
-    MAINNET_BASE_COINS.ETH_CELER_USDC,
-    MAINNET_BASE_COINS.ETH_CELER_USDT,
-    MAINNET_BASE_COINS.ETH_CELER_WBTC,
-    MAINNET_BASE_COINS.ETH_CELER_WETH,
-  ],
+  [Network.MAINNET]: [MAINNET_BASE_COINS.NATIVE_SUI_BRIDGE_ETH],
 };
 
 export const WORMHOLE_TOKENS: Record<Network, Array<Token>> = {
@@ -566,20 +512,17 @@ export const WORMHOLE_TOKENS: Record<Network, Array<Token>> = {
   ),
 };
 
-export const CELER_TOKENS: Record<Network, Array<Token>> = {
+export const SUI_BRIDGE_TOKENS: Record<Network, Array<Token>> = {
   [Network.TESTNET]: [],
   [Network.MAINNET]: [
-    { ...COINS[Network.MAINNET].ETH_CELER_USDC, chain: 'ETH' as Chain },
-    { ...COINS[Network.MAINNET].ETH_CELER_USDT, chain: 'ETH' as Chain },
-    { ...COINS[Network.MAINNET].ETH_CELER_WBTC, chain: 'ETH' as Chain },
-    { ...COINS[Network.MAINNET].ETH_CELER_WETH, chain: 'ETH' as Chain },
+    { ...COINS[Network.MAINNET].NATIVE_SUI_BRIDGE_ETH, chain: 'ETH' as Chain },
   ].reduce(
     (acc, curr) => {
       if (acc.some(({ type }) => curr.type === type)) return acc;
 
       return [...acc, curr];
     },
-    STRICT_LIST.filter(({ bridge }) => bridge === 'celer') as Array<
+    STRICT_LIST.filter(({ bridge }) => bridge === 'sui') as Array<
       Omit<Token, 'name'>
     >
   ),
@@ -599,7 +542,7 @@ export const STRICT_TOKENS_TYPE: Record<Network, ReadonlyArray<string>> = {
     TESTNET_BASE_COINS.USDC,
     TESTNET_BASE_COINS.USDT,
   ],
-  [Network.MAINNET]: CELER_TOKENS[Network.MAINNET].map(({ type }) => type),
+  [Network.MAINNET]: SUI_BRIDGE_TOKENS[Network.MAINNET].map(({ type }) => type),
 };
 
 export const STRICT_TOKENS: Record<Network, Array<Token>> = {
@@ -611,7 +554,7 @@ export const STRICT_TOKENS: Record<Network, Array<Token>> = {
     COINS[Network.TESTNET].USDC,
     COINS[Network.TESTNET].USDT,
     ...WORMHOLE_TOKENS[Network.TESTNET],
-    ...CELER_TOKENS[Network.TESTNET],
+    ...SUI_BRIDGE_TOKENS[Network.TESTNET],
   ],
   [Network.MAINNET]: Array(...STRICT_LIST),
 };
@@ -625,7 +568,7 @@ export const STRICT_TOKENS_MAP: Record<Network, Record<string, Token>> = {
     COINS[Network.TESTNET].USDC,
     COINS[Network.TESTNET].USDT,
     ...WORMHOLE_TOKENS[Network.TESTNET],
-    ...CELER_TOKENS[Network.TESTNET],
+    ...SUI_BRIDGE_TOKENS[Network.TESTNET],
   ].reduce((acc, curr) => ({ ...acc, [curr.type]: curr }), {}),
   [Network.MAINNET]: STRICT_LIST.reduce(
     (acc, curr) => ({ ...acc, [curr.type]: curr }),

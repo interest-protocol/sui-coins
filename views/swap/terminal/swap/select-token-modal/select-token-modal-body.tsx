@@ -7,11 +7,11 @@ import { useReadLocalStorage } from 'usehooks-ts';
 import { CoinObject } from '@/components/web3-manager/coins-manager/coins-manager.types';
 import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
 import {
-  CELER_TOKENS,
-  CELER_TOKENS_TYPE,
   STRICT_TOKENS,
   STRICT_TOKENS_MAP,
   STRICT_TOKENS_TYPE,
+  SUI_BRIDGE_TOKENS,
+  SUI_BRIDGE_TOKENS_TYPE,
   WORMHOLE_TOKENS,
   WORMHOLE_TOKENS_TYPE,
 } from '@/constants/coins';
@@ -118,23 +118,23 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
     );
 
   if (
-    (!isSearchAddress && filterSelected === TokenOrigin.Celer) ||
-    (filterSelected === TokenOrigin.Celer &&
+    (!isSearchAddress && filterSelected === TokenOrigin.SuiBridge) ||
+    (filterSelected === TokenOrigin.SuiBridge &&
       isSearchAddress &&
-      CELER_TOKENS_TYPE[network as Network].includes(search))
+      SUI_BRIDGE_TOKENS_TYPE[network as Network].includes(search))
   )
     return (
       <ModalTokenBody
         handleSelectToken={handleSelectToken}
         tokens={[
-          ...CELER_TOKENS[network as Network].filter(
+          ...SUI_BRIDGE_TOKENS[network as Network].filter(
             ({ symbol, type }) =>
               (!search ||
                 symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
                 type.includes(search)) &&
               favoriteTokenTypes?.includes(type)
           ),
-          ...CELER_TOKENS[network as Network].filter(
+          ...SUI_BRIDGE_TOKENS[network as Network].filter(
             ({ symbol, type }) =>
               (!search ||
                 symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||

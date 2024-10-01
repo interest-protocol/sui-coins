@@ -66,9 +66,8 @@ export const textToAirdrop = (
   }
 };
 
-export const getBridgeIdentifier = (bridge: 'celer' | 'wormhole' | null) => {
+export const getBridgeIdentifier = (bridge: 'sui' | 'wormhole' | null) => {
   if (bridge === 'wormhole') return 'w';
-  if (bridge === 'celer') return 'c';
   return '';
 };
 
