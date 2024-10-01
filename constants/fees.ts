@@ -8,5 +8,5 @@ export const EXCHANGE_FEE_BPS = EXCHANGE_FEE_PERCENTAGE * 100; // bps
 
 // 0.5%
 export const DCA_FEE = 0.005; // Real numeric value
-export const DCA_FEE_PERCENTAGE = EXCHANGE_FEE * 100; // percentage
-export const DCA_FEE_BPS = EXCHANGE_FEE_PERCENTAGE * 100; // bps
+export const DCA_FEE_PERCENTAGE = DCA_FEE * 100; // percentage
+export const DCA_FEE_BPS = DCA_FEE_PERCENTAGE * 100; // bps
