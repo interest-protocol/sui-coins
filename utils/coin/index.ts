@@ -6,10 +6,10 @@ import BigNumber from 'bignumber.js';
 
 import { Network } from '@/constants';
 import {
-  CELER_TOKENS,
-  CELER_TOKENS_TYPE,
   STRICT_TOKENS,
   STRICT_TOKENS_TYPE,
+  SUI_BRIDGE_TOKENS,
+  SUI_BRIDGE_TOKENS_TYPE,
   WORMHOLE_TOKENS,
   WORMHOLE_TOKENS_TYPE,
 } from '@/constants/coins';
@@ -84,7 +84,7 @@ export const getCoin = async (
     if (
       STRICT_TOKENS_TYPE[network].includes(type) ??
       WORMHOLE_TOKENS_TYPE[network].includes(type) ??
-      CELER_TOKENS_TYPE[network].includes(type)
+      SUI_BRIDGE_TOKENS_TYPE[network].includes(type)
     )
       return resolve(
         STRICT_TOKENS[network].find(
@@ -93,7 +93,7 @@ export const getCoin = async (
           WORMHOLE_TOKENS[network].find(
             ({ type: strictType }) => type === strictType
           ) ??
-          CELER_TOKENS[network].find(
+          SUI_BRIDGE_TOKENS[network].find(
             ({ type: strictType }) => type === strictType
           )!
       );

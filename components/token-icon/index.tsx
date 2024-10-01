@@ -5,8 +5,8 @@ import useSWR from 'swr';
 
 import { Network } from '@/constants';
 import {
-  CELER_TOKENS,
   STRICT_TOKENS_MAP,
+  SUI_BRIDGE_TOKENS,
   TOKEN_ICONS,
   WORMHOLE_TOKENS,
 } from '@/constants/coins';
@@ -78,7 +78,7 @@ const TokenIcon: FC<TokenIconProps> = ({
   const chain =
     STRICT_TOKENS_MAP[network][type]?.chain ??
     WORMHOLE_TOKENS[network].find((token) => token.type === type)?.chain ??
-    CELER_TOKENS[network].find((token) => token.type === type)?.chain;
+    SUI_BRIDGE_TOKENS[network].find((token) => token.type === type)?.chain;
 
   const ChainIcon = chain ? CHAIN_ICON[chain] : null;
 

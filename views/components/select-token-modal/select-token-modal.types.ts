@@ -34,7 +34,7 @@ export enum TokenOrigin {
   Strict,
   Wallet,
   Wormhole,
-  Celer,
+  SuiBridge,
 }
 
 export interface SearchTokenForm {

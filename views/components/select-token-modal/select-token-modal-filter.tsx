@@ -26,7 +26,7 @@ const SelectTokenFilter: FC<SelectTokenFilterProps> = ({
       }
     >
       {(network === Network.MAINNET
-        ? ['Strict', 'Wallet', 'Wormhole', 'Celer']
+        ? ['Strict', 'Wallet', 'Wormhole', 'Sui Bridge']
         : ['Strict', 'Wallet']
       ).map((item, index) => (
         <Box
