@@ -97,7 +97,7 @@ const SwapInitManager: FC = () => {
     to: string | undefined
   ) => {
     const TokenUSDC = STRICT_TOKENS[network].find(
-      (token) => token.name == 'USDC'
+      (token) => token.name == 'wUSDCe'
     );
 
     if (!from && !to)
