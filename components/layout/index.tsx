@@ -2,9 +2,11 @@ import { Box, Typography } from '@interest-protocol/ui-kit';
 import { useRouter } from 'next/router';
 import { FC, PropsWithChildren } from 'react';
 
+import { Routes, RoutesEnum } from '@/constants';
 import { ModalProvider } from '@/context/modal';
 import { useNetwork } from '@/hooks/use-network';
 import FloatingButtons from '@/views/components/floating-buttons';
+import ErrorPage from '@/views/error';
 
 import Web3Manager from '../web3-manager';
 import Footer from './footer';
@@ -20,10 +22,7 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
   noSidebar,
 }) => {
   const network = useNetwork();
-  const { asPath, push } = useRouter();
-
-  if (asPath != '/404' && !existThisRouteInNetwork(asPath, network))
-    push('/404');
+  const { asPath } = useRouter();
 
   return (
     <ModalProvider>
@@ -70,7 +69,16 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
                       {title}
                     </Typography>
                   )}
-                  {children}
+                  {!existThisRouteInNetwork(
+                    asPath == Routes[RoutesEnum.Swap]
+                      ? asPath
+                      : `/${asPath.split('/')[1] || '/'}`,
+                    network
+                  ) ? (
+                    <ErrorPage />
+                  ) : (
+                    children
+                  )}
                 </Box>
               </Box>
             </Box>
@@ -82,5 +90,4 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
     </ModalProvider>
   );
 };
-
 export default Layout;
