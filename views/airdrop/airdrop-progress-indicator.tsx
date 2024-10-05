@@ -7,7 +7,7 @@ import {
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { CheckSVG, WarningSVG } from '@/svg';
+import { CheckSVG, ShiftRightSVG, WarningSVG } from '@/svg';
 
 import { BATCH_SIZE } from './airdrop.constants';
 import { AirdropProgressIndicatorProps, IAirdropForm } from './airdrop.types';
@@ -15,7 +15,7 @@ import { AirdropProgressIndicatorProps, IAirdropForm } from './airdrop.types';
 const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
   goBack,
 }) => {
-  const { control } = useFormContext<IAirdropForm>();
+  const { control, getValues } = useFormContext<IAirdropForm>();
   const airdropList = useWatch({ control, name: 'airdropList' });
   const doneItems = useWatch({ control, name: 'done' });
   const failedItems = useWatch({ control, name: 'failed' });
@@ -27,11 +27,16 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
   );
 
   const isError = error || (finished && failedItems.length);
+  const token = getValues('token');
+  const airdropListAddress = getValues('airdropList');
+  const airdropTotalAmount = airdropList
+    ?.map(({ amount }) => Number(amount))
+    .reduce((value, acc) => value + acc);
 
   return (
     <Box
       p="xl"
-      gap="4xl"
+      gap="2xl"
       display="flex"
       borderRadius="m"
       bg="lowestContainer"
@@ -111,6 +116,32 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
             ? 'Sending batches'
             : 'The airdrop has been sent'}
       </Typography>
+      {(error || finished === 100) && (
+        <Box
+          p="1rem"
+          gap="xs"
+          display="flex"
+          bg="#F8F9FD"
+          borderRadius="xs"
+          alignItems="center"
+          justifyContent="center"
+          flexDirection={['column', 'column', 'column', 'row']}
+        >
+          <Typography size="medium" variant="body">
+            {Number(airdropTotalAmount).toFixed(5)} {token.symbol}
+          </Typography>
+          <ShiftRightSVG
+            maxWidth="1.5rem"
+            maxHeight="1.5rem"
+            width="100%"
+            height="100%"
+          />
+          <Typography size="medium" variant="body">
+            {airdropListAddress?.length}
+            {airdropListAddress!.length > 1 ? ' Addresses' : ' Address'}
+          </Typography>
+        </Box>
+      )}
       <Box display="flex" gap="s">
         {error && (
           <Button
