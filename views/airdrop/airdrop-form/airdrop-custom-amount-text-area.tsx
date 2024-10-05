@@ -24,6 +24,7 @@ const AirdropCustomAmountTextArea: FC = () => {
           e.target.value,
           getValues('commonAmount'),
           getValues('token.decimals'),
+          getValues('amountForAll'),
           toast.error
         );
 
