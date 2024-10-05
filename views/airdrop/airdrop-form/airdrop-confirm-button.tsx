@@ -76,12 +76,9 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         ]);
 
         tx.transferObjects(
-          [coinToSend],
+          [coinToSend, fee],
           tx.pure.address(currentAccount.address)
         );
-
-        if (AIRDROP_SUI_FEE_PER_ADDRESS)
-          tx.transferObjects([fee], tx.pure.address(TREASURY));
 
         const tx2 = await signAndExecute({
           suiClient,
@@ -102,7 +99,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           'Initial TX completed successfully'
         );
 
-        const [gasCoin, spendCoin] =
+        const [gasCoin, spendCoin, feeCoin] =
           (tx2.objectChanges as Array<SuiObjectChangeCreated>)!.reduce(
             suiObjectReducer(currentAccount.address),
             []
@@ -112,6 +109,17 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
         for (const [index, batch] of Object.entries(list)) {
           const tx = new Transaction();
+
+          const fee = tx.splitCoins(tx.objectRef(feeCoin), [
+            tx.pure.u64(
+              BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS)
+                .times(batch.length)
+                .decimalPlaces(0)
+                .toString()
+            ),
+          ]);
+
+          tx.transferObjects([fee], tx.pure.address(TREASURY));
 
           tx.setGasPayment([gasCoin]);
 
@@ -125,10 +133,11 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
             tokenType: token.type,
             coinToSend: tx.objectRef(spendCoin),
           });
+
           const initAirdropTxMS = Date.now();
 
           const nextGasInfo = findNextVersionAndDigest(tx2, gasCoin.objectId);
-
+          const nextFeeInfo = findNextVersionAndDigest(tx2, feeCoin.objectId);
           const nextSpendInfo = findNextVersionAndDigest(
             tx2,
             spendCoin.objectId
@@ -136,6 +145,9 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
           gasCoin.digest = nextGasInfo[0];
           gasCoin.version = nextGasInfo[1];
+
+          feeCoin.digest = nextFeeInfo[0];
+          feeCoin.version = nextFeeInfo[1];
 
           spendCoin.digest = nextSpendInfo[0];
           spendCoin.version = nextSpendInfo[1];
@@ -177,12 +189,9 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           otherCoins.map((coin) => coin.coinObjectId)
         );
 
-      if (AIRDROP_SUI_FEE_PER_ADDRESS) {
-        const [fee] = tx.splitCoins(tx.gas, [
-          tx.pure.u64(feeAmount.toString()),
-        ]);
-        tx.transferObjects([fee], tx.pure.address(TREASURY));
-      }
+      const [fees] = tx.splitCoins(tx.gas, [tx.pure.u64(feeAmount.toString())]);
+
+      tx.transferObjects([fees], tx.pure.address(currentAccount.address));
 
       const tx2 = await signAndExecute({
         tx,
@@ -208,7 +217,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           firstCoin.coinObjectId
         );
 
-      const [gasCoin] =
+      const [gasCoin, feeCoin] =
         (tx2.objectChanges as Array<SuiObjectChangeCreated>)!.reduce(
           suiObjectReducer(currentAccount.address),
           []
@@ -221,16 +230,27 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
       for (const [index, batch] of Object.entries(list)) {
         const tx = new Transaction();
 
-        const gas = {
-          digest: nextGasDigest,
-          objectId: gasCoin.objectId,
-          version: nextGasVersion,
-        };
+        const fee = tx.splitCoins(tx.objectRef(feeCoin), [
+          tx.pure.u64(
+            BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS)
+              .times(batch.length)
+              .decimalPlaces(0)
+              .toString()
+          ),
+        ]);
+
+        tx.transferObjects([fee], tx.pure.address(TREASURY));
 
         const coin = {
           digest: nextDigest,
           objectId: firstCoin.coinObjectId,
           version: nextVersion,
+        };
+
+        const gas = {
+          digest: nextGasDigest,
+          objectId: gasCoin.objectId,
+          version: nextGasVersion,
         };
 
         tx.setGasPayment([gas]);
@@ -247,6 +267,14 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         });
 
         const initAirdropTxMS = Date.now();
+
+        const [nextFeeDigest, nextFeeVersion] = findNextVersionAndDigest(
+          tx2,
+          feeCoin.objectId
+        );
+
+        feeCoin.digest = nextFeeDigest;
+        feeCoin.version = nextFeeVersion;
 
         [nextDigest, nextVersion] = findNextVersionAndDigest(
           tx2,
