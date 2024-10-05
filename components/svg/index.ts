@@ -26,6 +26,7 @@ export { default as CELOSVG } from './celo';
 export { default as CheckSVG } from './check';
 export { default as CheckRoundedSVG } from './check-rounded';
 export { default as CheckmarkSVG } from './checkmark';
+export { default as ChevronDoubleLeftSVG } from './chevron-double-left';
 export { default as ChevronDownSVG } from './chevron-down';
 export { default as ChevronLeftSVG } from './chevron-left';
 export { default as ChevronRightSVG } from './chevron-right';
