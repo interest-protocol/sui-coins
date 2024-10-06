@@ -7,7 +7,9 @@ import {
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { CheckSVG, ShiftRightSVG, WarningSVG } from '@/svg';
+import { FixedPointMath } from '@/lib';
+import { CheckSVG, LogoSVG, ShiftRightSVG, WarningSVG } from '@/svg';
+import { formatMoney, ZERO_BIG_NUMBER } from '@/utils';
 
 import { BATCH_SIZE } from './airdrop.constants';
 import { AirdropProgressIndicatorProps, IAirdropForm } from './airdrop.types';
@@ -29,9 +31,11 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
   const isError = error || (finished && failedItems.length);
   const token = getValues('token');
   const airdropListAddress = getValues('airdropList');
-  const airdropTotalAmount = airdropList
-    ?.map(({ amount }) => Number(amount))
-    .reduce((value, acc) => value + acc);
+  const airdropTotalAmount =
+    airdropList?.reduce(
+      (acc, { amount }) => acc.plus(amount),
+      ZERO_BIG_NUMBER
+    ) ?? ZERO_BIG_NUMBER;
 
   return (
     <Box
@@ -42,6 +46,28 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
       bg="lowestContainer"
       flexDirection="column"
     >
+      {finished === 100 && (
+        <Box
+          p="s"
+          gap="s"
+          mx="auto"
+          display="flex"
+          bg="container"
+          borderRadius="m"
+          alignItems="center"
+        >
+          <LogoSVG width="100%" maxWidth="1.5rem" maxHeight="1.5rem" />
+          <Typography
+            size="small"
+            variant="title"
+            fontWeight="700"
+            color="onSurface"
+            width="max-content"
+          >
+            SUI COINS
+          </Typography>
+        </Box>
+      )}
       <Typography
         variant="headline"
         size="large"
@@ -116,7 +142,7 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
             ? 'Sending batches'
             : 'The airdrop has been sent'}
       </Typography>
-      {(error || finished === 100) && (
+      {finished === 100 && (
         <Box
           p="1rem"
           gap="xs"
@@ -128,7 +154,10 @@ const AirdropProgressIndicator: FC<AirdropProgressIndicatorProps> = ({
           flexDirection={['column', 'column', 'column', 'row']}
         >
           <Typography size="medium" variant="body">
-            {Number(airdropTotalAmount).toFixed(5)} {token.symbol}
+            {formatMoney(
+              FixedPointMath.toNumber(airdropTotalAmount, token.decimals)
+            )}{' '}
+            {token.symbol}
           </Typography>
           <ShiftRightSVG
             maxWidth="1.5rem"
