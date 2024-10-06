@@ -9,9 +9,11 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import invariant from 'tiny-invariant';
 
+import { TokenIcon } from '@/components';
 import ChevronDoubleLeft from '@/components/svg/chevron-double-left';
 import { EXPLORER_URL, Network } from '@/constants';
 import { useDialog } from '@/hooks/use-dialog';
+import { LogoSVG } from '@/svg';
 import {
   signAndExecute,
   throwTXIfNotSuccessful,
@@ -103,71 +105,145 @@ const SwapButton: FC = () => {
         success: () => ({
           title: 'Swap Successfully',
           message: (
-            <Box display="flex" flexDirection="column" gap="m" mb="l">
-              <Typography
-                color="onSurface"
-                textAlign="center"
-                lineHeight="m"
-                variant="body"
-                size="medium"
-              >
-                Your swap was successfully, and you can check it on the Explorer
-              </Typography>
-              <Box
-                p="m"
-                gap="m"
-                bg="surface"
-                display="flex"
-                borderRadius="xs"
-                justifyContent="center"
-              >
-                <Typography
-                  alignItems="center"
-                  textAlign="center"
-                  color="onSurface"
-                  variant="body"
-                  size="medium"
+            <Box>
+              <Box display="flex" flexDirection="column" gap="m" mb="l">
+                <Box
+                  py="m"
+                  px="s"
+                  gap="s"
+                  bg="surface"
                   display="flex"
+                  borderRadius="xs"
+                  justifyContent="center"
                 >
-                  {`${formSwap.getValues('from.display')} ${formSwap.getValues('from.symbol')}`}
-                </Typography>
-                <Box>
-                  <ChevronDoubleLeft
-                    maxHeight="0.75rem"
-                    maxWidth="0.75rem"
-                    width="100%"
-                  />
+                  <Box display="flex" alignItems="center">
+                    <TokenIcon
+                      withBg
+                      rounded
+                      size="1rem"
+                      type={formSwap.getValues('from.type')}
+                      symbol={formSwap.getValues('from.symbol')}
+                      network={network as Network}
+                    />
+                    <Typography
+                      alignItems="center"
+                      textAlign="center"
+                      color="onSurface"
+                      variant="body"
+                      size="medium"
+                      display="flex"
+                      fontSize="0.9rem"
+                      ml="s"
+                    >
+                      {`${formSwap.getValues('from.display')} ${formSwap.getValues('from.symbol')}`}
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <ChevronDoubleLeft
+                      maxHeight="0.75rem"
+                      maxWidth="0.75rem"
+                      width="100%"
+                    />
+                  </Box>
+                  <Box display="flex" alignItems="center">
+                    <TokenIcon
+                      withBg
+                      rounded
+                      size="1rem"
+                      type={formSwap.getValues('to.type')}
+                      symbol={formSwap.getValues('to.symbol')}
+                      network={network as Network}
+                    />
+                    <Typography
+                      alignItems="center"
+                      textAlign="center"
+                      color="onSurface"
+                      variant="body"
+                      size="medium"
+                      display="flex"
+                      fontSize="0.9rem"
+                      ml="s"
+                    >
+                      {`${formSwap.getValues('to.display')} ${formSwap.getValues('to.symbol')}`}
+                    </Typography>
+                  </Box>
                 </Box>
                 <Typography
-                  alignItems="center"
-                  textAlign="center"
-                  color="onSurface"
-                  variant="body"
-                  size="medium"
-                  display="flex"
-                >
-                  {`${formSwap.getValues('to.display')} ${formSwap.getValues('to.symbol')}`}
-                </Typography>
-              </Box>
-              <Typography
-                color="outlineVariant"
-                textAlign="center"
-                lineHeight="m"
-                variant="body"
-                size="medium"
-              >
-                Execution time:
-                <Typography
-                  color="primary"
+                  color="outlineVariant"
                   textAlign="center"
                   lineHeight="m"
                   variant="body"
                   size="medium"
-                  as="span"
                 >
-                  {` ${+(formSwap.getValues('executionTime') / 1000).toFixed(2)}s`}
+                  Execution time:
+                  <Typography
+                    color="primary"
+                    textAlign="center"
+                    lineHeight="m"
+                    variant="body"
+                    size="medium"
+                    as="span"
+                  >
+                    {` ${+(formSwap.getValues('executionTime') / 1000).toFixed(2)}s`}
+                  </Typography>
                 </Typography>
-              </Typography>
+              </Box>
+              <Box display="flex" justifyContent="center" mb="0.5rem">
+                <Typography
+                  alignItems="center"
+                  textAlign="center"
+                  color="onSurface"
+                  variant="headline"
+                  size="small"
+                  display="flex"
+                  fontSize="1.25rem"
+                >
+                  BY:
+                </Typography>
+                <Box
+                  ml="0.75rem"
+                  display="flex"
+                  minWidth="1.5rem"
+                  minHeight="1.5rem"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <LogoSVG width="100%" maxWidth="1.5rem" maxHeight="1.5rem" />
+                </Box>
+                <Box ml="0.5rem" display="flex" alignItems="center">
+                  <Typography
+                    size="medium"
+                    variant="title"
+                    fontWeight="700"
+                    color="onSurface"
+                    width="max-content"
+                    fontSize="0.75rem"
+                  >
+                    SUI COINS
+                  </Typography>
+                </Box>
+              </Box>
+              <a
+                href="https://www.suicoins.com"
+                target="_blank"
+                rel="noopener, noreferrer"
+              >
+                <Typography
+                  alignItems="center"
+                  textAlign="center"
+                  variant="body"
+                  size="small"
+                  display="flex"
+                  lineHeight="1.5rem"
+                  fontSize="0.75rem"
+                  width="fit-content"
+                  mx="auto"
+                  color="primary"
+                  mt="0.5rem"
+                >
+                  www.suicoins.com
+                </Typography>
+              </a>
             </Box>
           ),
           primaryButton: {
