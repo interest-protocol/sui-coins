@@ -1,5 +1,4 @@
-import { Dialog } from '@interest-protocol/ui-kit';
-
+import { Dialog } from '@/components';
 import { useModal } from '@/hooks/use-modal';
 
 import { IDialogData } from './use-dialog.types';

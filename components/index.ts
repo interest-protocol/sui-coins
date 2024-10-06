@@ -1,3 +1,4 @@
+export * from './dialog';
 export { default as SEO } from './seo';
 export { default as TextField } from './text-field';
 export { default as TextareaField } from './textarea-field';
