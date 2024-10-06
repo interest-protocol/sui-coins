@@ -15,6 +15,7 @@ import toast from 'react-hot-toast';
 
 import { AIRDROP_SEND_CONTRACT, Network, TREASURY } from '@/constants';
 import { AIRDROP_SUI_FEE_PER_ADDRESS } from '@/constants/fees';
+import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
 import {
   getCoins,
@@ -44,10 +45,12 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
   const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
   const signTransaction = useSignTransaction();
+  const { handleClose } = useModal();
   const { getValues, setValue } = useFormContext<IAirdropForm>();
 
   const handleSend = async () => {
     setIsProgressView(true);
+    handleClose();
 
     try {
       const { airdropList, token } = getValues();
@@ -301,6 +304,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         await pauseUtilNextTx(initAirdropTxMS);
       }
     } catch (e: any) {
+      handleClose();
       toast.error((e?.message as string) ?? e ?? 'Something went wrong!');
       if (((e?.message as string) ?? e) === 'Rejected from user') {
         setValue('error', true);
