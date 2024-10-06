@@ -2,6 +2,7 @@ import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
 import AirdropCommonAmountTextField from './airdrop-common-amount-text-field';
+import AirdropCommonAmountToggle from './airdrop-common-amount-toggle';
 import AirdropCustomAmountTextArea from './airdrop-custom-amount-text-area';
 
 const AirdropCustomAmountMethod: FC = () => (
@@ -10,6 +11,7 @@ const AirdropCustomAmountMethod: FC = () => (
       <Typography variant="body" size="large" mb="m">
         3. Choose amount & who to send:
       </Typography>
+      <AirdropCommonAmountToggle />
       <Typography variant="body" size="small">
         Enter Amount to Send
       </Typography>

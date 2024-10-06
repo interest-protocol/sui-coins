@@ -1,11 +1,11 @@
 import { TextField } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
-import BigNumber from 'bignumber.js';
 import { ChangeEvent, FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { TokenIcon } from '@/components';
 import { Network } from '@/constants';
+import { FixedPointMath } from '@/lib';
 import { parseInputEventToNumberString } from '@/utils';
 
 import { IAirdropForm } from '../airdrop.types';
@@ -23,10 +23,15 @@ const AirdropCustomAmountTextField: FC = () => {
           const value = parseInputEventToNumberString(v);
           setValue('commonAmount', value || '');
 
+          const amountForAll = getValues('amountForAll');
           const airdropList = getValues('airdropList')?.map(({ address }) => ({
             address,
-            amount: BigNumber(value || '0')
-              .times(BigNumber(10).pow(getValues('token.decimals')))
+            amount: FixedPointMath.toBigNumber(
+              value || '0',
+              getValues('token.decimals')
+            )
+              .div(!amountForAll ? 1 : getValues('airdropList')?.length ?? 1)
+              .decimalPlaces(0)
               .toString(),
           }));
 

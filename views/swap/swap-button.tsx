@@ -1,4 +1,4 @@
-import { Button, Typography } from '@interest-protocol/ui-kit';
+import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import {
   useCurrentAccount,
   useSignTransaction,
@@ -9,6 +9,7 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import invariant from 'tiny-invariant';
 
+import ChevronDoubleLeft from '@/components/svg/chevron-double-left';
 import { EXPLORER_URL, Network } from '@/constants';
 import { useDialog } from '@/hooks/use-dialog';
 import {
@@ -83,40 +84,106 @@ const SwapButton: FC = () => {
         `${EXPLORER_URL[network as Network]}/tx/${tx2.digest}`
       );
     } finally {
-      resetInput();
       formSwap.setValue('swapping', false);
     }
   };
 
-  const onSwap = () =>
+  const onSwap = async () => {
     readyToSwap &&
-    dialog.promise(handleSwap(), {
-      loading: () => ({
-        title: 'Swapping...',
-        message: SwapMessagesEnum.swapping,
-      }),
-      error: () => ({
-        title: 'Swap Failure',
-        message: SwapMessagesEnum.swapFailure,
-        primaryButton: { label: 'Try again', onClick: handleClose },
-      }),
-      success: () => ({
-        title: 'Swap Successfully',
-        message: `${SwapMessagesEnum.swapSuccess}. Tx finalized in ${+(
-          formSwap.getValues('executionTime') / 1000
-        ).toFixed(2)} sec`,
-        primaryButton: {
-          label: 'See on Explorer',
-          onClick: gotoExplorer,
-        },
-        secondaryButton: (
-          <Button variant="outline" mr="s" onClick={handleClose}>
-            got it
-          </Button>
-        ),
-      }),
-    });
+      (await dialog.promise(handleSwap(), {
+        loading: () => ({
+          title: 'Swapping...',
+          message: SwapMessagesEnum.swapping,
+        }),
+        error: () => ({
+          title: 'Swap Failure',
+          message: SwapMessagesEnum.swapFailure,
+          primaryButton: { label: 'Try again', onClick: handleClose },
+        }),
+        success: () => ({
+          title: 'Swap Successfully',
+          message: (
+            <Box display="flex" flexDirection="column" gap="m" mb="l">
+              <Typography
+                color="onSurface"
+                textAlign="center"
+                lineHeight="m"
+                variant="body"
+                size="medium"
+              >
+                Your swap was successfully, and you can check it on the Explorer
+              </Typography>
+              <Box
+                p="m"
+                gap="m"
+                bg="surface"
+                display="flex"
+                borderRadius="xs"
+                justifyContent="center"
+              >
+                <Typography
+                  alignItems="center"
+                  textAlign="center"
+                  color="onSurface"
+                  variant="body"
+                  size="medium"
+                  display="flex"
+                >
+                  {`${formSwap.getValues('from.display')} ${formSwap.getValues('from.symbol')}`}
+                </Typography>
+                <Box>
+                  <ChevronDoubleLeft
+                    maxHeight="0.75rem"
+                    maxWidth="0.75rem"
+                    width="100%"
+                  />
+                </Box>
+                <Typography
+                  alignItems="center"
+                  textAlign="center"
+                  color="onSurface"
+                  variant="body"
+                  size="medium"
+                  display="flex"
+                >
+                  {`${formSwap.getValues('to.display')} ${formSwap.getValues('to.symbol')}`}
+                </Typography>
+              </Box>
+              <Typography
+                color="outlineVariant"
+                textAlign="center"
+                lineHeight="m"
+                variant="body"
+                size="medium"
+              >
+                Execution time:
+                <Typography
+                  color="primary"
+                  textAlign="center"
+                  lineHeight="m"
+                  variant="body"
+                  size="medium"
+                  as="span"
+                >
+                  {` ${+(formSwap.getValues('executionTime') / 1000).toFixed(2)}s`}
+                </Typography>
+              </Typography>
+            </Box>
+          ),
+          primaryButton: {
+            label: 'See on Explorer',
+            onClick: gotoExplorer,
+          },
+          secondaryButton: (
+            <Button variant="outline" mr="s" onClick={handleClose}>
+              got it
+            </Button>
+          ),
+        }),
+      }));
 
+    resetInput();
+  };
   return (
     <Button
       onClick={onSwap}

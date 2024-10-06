@@ -25,6 +25,7 @@ export interface IAirdropForm {
   decimals: number;
   token: CoinObject;
   commonAmount: string;
+  amountForAll: boolean;
   tokenUSDPrice?: number;
   done: ReadonlyArray<number>;
   failed: ReadonlyArray<number>;

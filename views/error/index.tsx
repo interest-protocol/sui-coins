@@ -2,16 +2,20 @@ import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 
+import { Network, Routes, RoutesEnum } from '@/constants';
+import { useNetwork } from '@/hooks/use-network';
 import { ComputerEyesSVG, DiedComputerSVG } from '@/svg';
 
 import { ErrorProps } from './error.types';
 
 const Error: FC<ErrorProps> = ({ message, linkGoTo }) => {
+  const network = useNetwork();
   const { push } = useRouter();
 
   return (
     <Box variant="container">
       <Box
+        pt="4xl"
         width="100%"
         color="onSurface"
         gridColumn={['1/-1', '1/-1', '1/-1', '2/12']}
@@ -49,7 +53,13 @@ const Error: FC<ErrorProps> = ({ message, linkGoTo }) => {
           mx="auto"
           bg="onSurface"
           variant="filled"
-          onClick={() => push(linkGoTo || '/')}
+          onClick={() =>
+            push(
+              linkGoTo || network === Network.MAINNET
+                ? '/'
+                : Routes[RoutesEnum.CreateCoin]
+            )
+          }
         >
           Back home!
         </Button>

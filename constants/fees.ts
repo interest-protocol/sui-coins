@@ -1,4 +1,4 @@
-// Less than 1 cent per TX - amount 5000000
+// Less than 1 cent per TX - amount 7000000
 export const AIRDROP_SUI_FEE_PER_ADDRESS = 7_000_000;
 
 // 0.25%
