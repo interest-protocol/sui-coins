@@ -120,7 +120,7 @@ const SwapButton: FC = () => {
                     <TokenIcon
                       withBg
                       rounded
-                      size="1rem"
+                      size="0.75rem"
                       type={formSwap.getValues('from.type')}
                       symbol={formSwap.getValues('from.symbol')}
                       network={network as Network}
@@ -138,7 +138,7 @@ const SwapButton: FC = () => {
                       {`${formSwap.getValues('from.display')} ${formSwap.getValues('from.symbol')}`}
                     </Typography>
                   </Box>
-                  <Box>
+                  <Box display="flex" alignItems="center">
                     <ChevronDoubleLeft
                       maxHeight="0.75rem"
                       maxWidth="0.75rem"
@@ -149,7 +149,7 @@ const SwapButton: FC = () => {
                     <TokenIcon
                       withBg
                       rounded
-                      size="1rem"
+                      size="0.75rem"
                       type={formSwap.getValues('to.type')}
                       symbol={formSwap.getValues('to.symbol')}
                       network={network as Network}
@@ -175,6 +175,7 @@ const SwapButton: FC = () => {
                   size="medium"
                   fontSize="0.75rem"
                   lineHeight="1.5rem"
+                  fontWeight="400"
                 >
                   Execution time:
                   <Typography
@@ -254,11 +255,10 @@ const SwapButton: FC = () => {
             label: 'See on Explorer',
             onClick: gotoExplorer,
           },
-          secondaryButton: (
-            <Button variant="outline" mr="s" onClick={handleClose}>
-              got it
-            </Button>
-          ),
+          secondaryButton: {
+            label: 'got it',
+            onClick: handleClose,
+          },
         }),
       }));
 

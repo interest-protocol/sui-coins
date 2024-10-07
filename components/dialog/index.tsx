@@ -130,7 +130,6 @@ export const Dialog: FC<DialogProps> = ({
                     marginRight="s"
                     variant="outline"
                     borderRadius="xs"
-                    color={COLOR_MAP.info}
                     justifyContent="center"
                     borderColor="outlineVariant"
                     onClick={(secondaryButton as IDialogButton).onClick}
