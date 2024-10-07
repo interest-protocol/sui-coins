@@ -106,7 +106,7 @@ const SwapButton: FC = () => {
           title: 'Swap Successfully',
           message: (
             <Box>
-              <Box display="flex" flexDirection="column" gap="m" mb="l">
+              <Box display="flex" flexDirection="column" gap="m" mb="2rem">
                 <Box
                   py="m"
                   px="s"
@@ -171,18 +171,20 @@ const SwapButton: FC = () => {
                 <Typography
                   color="outlineVariant"
                   textAlign="center"
-                  lineHeight="m"
                   variant="body"
                   size="medium"
+                  fontSize="0.75rem"
+                  lineHeight="1.5rem"
                 >
                   Execution time:
                   <Typography
                     color="primary"
                     textAlign="center"
-                    lineHeight="m"
                     variant="body"
                     size="medium"
                     as="span"
+                    fontSize="0.75rem"
+                    lineHeight="1.5rem"
                   >
                     {` ${+(formSwap.getValues('executionTime') / 1000).toFixed(2)}s`}
                   </Typography>
@@ -196,7 +198,8 @@ const SwapButton: FC = () => {
                   variant="headline"
                   size="small"
                   display="flex"
-                  fontSize="1.25rem"
+                  fontSize="1rem"
+                  lineHeight="1.406rem"
                 >
                   BY:
                 </Typography>
@@ -218,6 +221,7 @@ const SwapButton: FC = () => {
                     color="onSurface"
                     width="max-content"
                     fontSize="0.75rem"
+                    lineHeight="1.125rem"
                   >
                     SUI COINS
                   </Typography>
