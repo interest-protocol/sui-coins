@@ -83,11 +83,15 @@ export const Dialog: FC<DialogProps> = ({
               justifyContent="center"
               color={COLOR_MAP[status]}
               boxShadow="inset 0px 0px 0px 4px #FFFFFFB8"
-              backgroundColor={`${COLOR_MAP[status]}Container`}
+              backgroundColor={
+                status == 'success'
+                  ? '#BAF6CF'
+                  : `${COLOR_MAP[status]}Container`
+              }
             >
               <Icon
-                maxWidth="1.5rem"
-                maxHeight="1.5rem"
+                maxWidth="1.3rem"
+                maxHeight="1.3rem"
                 width="100%"
                 height="100%"
               />
