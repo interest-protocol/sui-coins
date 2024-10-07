@@ -75,16 +75,22 @@ export const Dialog: FC<DialogProps> = ({
             />
           ) : (
             <Box
-              p="s"
-              color={COLOR_MAP[status]}
+              width="3rem"
+              height="3rem"
               display="flex"
               borderRadius="50%"
-              boxShadow="inset 0px 0px 0px 4px #FFFFFFB8"
               alignItems="center"
-              width="fit-content"
+              justifyContent="center"
+              color={COLOR_MAP[status]}
+              boxShadow="inset 0px 0px 0px 4px #FFFFFFB8"
               backgroundColor={`${COLOR_MAP[status]}Container`}
             >
-              <Icon maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+              <Icon
+                maxWidth="1.5rem"
+                maxHeight="1.5rem"
+                width="100%"
+                height="100%"
+              />
             </Box>
           )
         ) : null}

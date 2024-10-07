@@ -129,10 +129,10 @@ const SwapButton: FC = () => {
                       alignItems="center"
                       textAlign="center"
                       color="onSurface"
+                      fontSize="0.9rem"
                       variant="body"
                       size="medium"
                       display="flex"
-                      fontSize="0.9rem"
                       ml="s"
                     >
                       {`${formSwap.getValues('from.display')} ${formSwap.getValues('from.symbol')}`}
