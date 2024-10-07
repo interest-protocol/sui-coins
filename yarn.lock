@@ -889,10 +889,10 @@
   resolved "https://registry.yarnpkg.com/@interest-protocol/move-bytecode-template/-/move-bytecode-template-0.0.4-alpha.tgz#5b0175067646850512531f3de085d37e4428e4ca"
   integrity sha512-BHbIpCKTQZVsrHqVr62X0k8w36ML7Wvjpq3+Q6evfbUtDO9jqohFA5dQ96xixR3sxXfgz4m2mv476+vhJNmVvg==
 
-"@interest-protocol/sui-tokens@^2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/sui-tokens/-/sui-tokens-2.0.2.tgz#0f2ea7ab8d21248283b874374f532ad0301fdf7c"
-  integrity sha512-EPQwF/EJdvL2Cg5/glZaM8qDx8pdZRGmOgMr8qDlSlszH9f0WcVsmuIxbi9MyZfzgmQB5Kos0e29iKoKIAtV/A==
+"@interest-protocol/sui-tokens@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/sui-tokens/-/sui-tokens-2.1.0.tgz#8ae5ecd496819d2c3e7e44823c28b164ece24fbc"
+  integrity sha512-4VhBvb+dW/gkFJNDnIS00gwRmqjIabimFuZiiCnhreRmEPe8eJSh5dRlqz1Wu2grCc+y/kymAkcDUoEYVseZ6A==
 
 "@interest-protocol/ui-kit@^0.2.26-alpha":
   version "0.2.26-alpha"
