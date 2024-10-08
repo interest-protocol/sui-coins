@@ -21,8 +21,9 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
   noSidebar,
 }) => {
   const network = useNetwork();
-  const { pathname } = useRouter();
+  const { pathname, route, asPath } = useRouter();
 
+  console.log(pathname.split('/'), '<<check', pathname);
   return (
     <ModalProvider>
       <Box bg="surface" display="flex" height="100vh" overflow="hidden">
@@ -68,7 +69,10 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
                       {title}
                     </Typography>
                   )}
-                  {!existThisRouteInNetwork(pathname, network) ? (
+                  {!existThisRouteInNetwork(
+                    `/${pathname.split('/')[1]}`,
+                    network
+                  ) ? (
                     <ErrorPage message="Something went wrong - Try switch network" />
                   ) : (
                     children
