@@ -43,7 +43,9 @@ export const Dialog: FC<DialogProps> = ({
         <Typography
           color={
             // eslint-disable-next-line no-constant-condition
-            status === 'loading' || 'general' ? 'onSurface' : COLOR_MAP[status]
+            status === 'loading' || status === 'general'
+              ? 'onSurface'
+              : COLOR_MAP[status]
           }
           flex="1"
           textAlign="center"

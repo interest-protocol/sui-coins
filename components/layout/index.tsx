@@ -2,7 +2,6 @@ import { Box, Typography } from '@interest-protocol/ui-kit';
 import { useRouter } from 'next/router';
 import { FC, PropsWithChildren } from 'react';
 
-import { Routes, RoutesEnum } from '@/constants';
 import { ModalProvider } from '@/context/modal';
 import { useNetwork } from '@/hooks/use-network';
 import FloatingButtons from '@/views/components/floating-buttons';
@@ -22,7 +21,7 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
   noSidebar,
 }) => {
   const network = useNetwork();
-  const { asPath } = useRouter();
+  const { pathname } = useRouter();
 
   return (
     <ModalProvider>
@@ -69,13 +68,8 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
                       {title}
                     </Typography>
                   )}
-                  {!existThisRouteInNetwork(
-                    asPath == Routes[RoutesEnum.Swap]
-                      ? asPath
-                      : `/${asPath.split('/')[1] || '/'}`,
-                    network
-                  ) ? (
-                    <ErrorPage />
+                  {!existThisRouteInNetwork(pathname, network) ? (
+                    <ErrorPage message="Something went wrong - Try switch network" />
                   ) : (
                     children
                   )}
