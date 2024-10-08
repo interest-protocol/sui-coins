@@ -96,9 +96,14 @@ const SwapInitManager: FC = () => {
     from: string | undefined,
     to: string | undefined
   ) => {
-    const TokenUSDC = STRICT_TOKENS[network].find(
-      (token) => token.name == 'wUSDCe'
+    const TokenUSDC = STRICT_TOKENS[network].find((token) =>
+      network == Network.MAINNET
+        ? token.name == 'wUSDCe'
+        : token.symbol == 'USDC'
     );
+
+    if (to == 'USDC') to = TokenUSDC?.type;
+    if (from == 'USDC') from = TokenUSDC?.type;
 
     if (!from && !to)
       return await Promise.all([
