@@ -21,9 +21,7 @@ export const useRecentDcas = () => {
         .then((response) => response.json?.())
         .then((data) => data.data);
     },
-    {
-      refreshInterval: 10_000,
-    }
+    { refreshInterval: 10_000 }
   );
 };
 
@@ -45,9 +43,7 @@ export const useDcas = () => {
         ).then((response) => response.json?.()),
       ]);
     },
-    {
-      refreshInterval: 30_000,
-    }
+    { refreshInterval: 30_000 }
   );
 };
 
@@ -77,8 +73,8 @@ export const useFeeFreeTokens = () => {
   return useSWR<ReadonlyArray<string>>(
     `fee-free-tokens`,
     () =>
-      fetch(`${SENTINEL_API_URI[network]}dcas/fee-free-list`).then((response) =>
-        response.json?.()
+      fetch(`${SENTINEL_API_URI[network]}dcas/fee-free-list`).then(
+        (response) => response.json?.()
       ),
     {
       refreshWhenHidden: true,
