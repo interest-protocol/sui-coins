@@ -21,9 +21,8 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
   noSidebar,
 }) => {
   const network = useNetwork();
-  const { pathname, route, asPath } = useRouter();
+  const { pathname } = useRouter();
 
-  console.log(pathname.split('/'), '<<check', pathname);
   return (
     <ModalProvider>
       <Box bg="surface" display="flex" height="100vh" overflow="hidden">
