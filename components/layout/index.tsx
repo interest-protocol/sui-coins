@@ -68,7 +68,10 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
                       {title}
                     </Typography>
                   )}
-                  {!existThisRouteInNetwork(pathname, network) ? (
+                  {!existThisRouteInNetwork(
+                    `/${pathname.split('/')[1]}`,
+                    network
+                  ) ? (
                     <ErrorPage message="Something went wrong - Try switch network" />
                   ) : (
                     children
