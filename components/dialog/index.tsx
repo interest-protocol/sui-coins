@@ -75,16 +75,26 @@ export const Dialog: FC<DialogProps> = ({
             />
           ) : (
             <Box
-              p="s"
-              color={COLOR_MAP[status]}
+              width="3rem"
+              height="3rem"
               display="flex"
               borderRadius="50%"
-              boxShadow="inset 0px 0px 0px 4px #FFFFFFB8"
               alignItems="center"
-              width="fit-content"
-              backgroundColor={`${COLOR_MAP[status]}Container`}
+              justifyContent="center"
+              color={COLOR_MAP[status]}
+              boxShadow="inset 0px 0px 0px 4px #FFFFFFB8"
+              backgroundColor={
+                status == 'success'
+                  ? '#BAF6CF'
+                  : `${COLOR_MAP[status]}Container`
+              }
             >
-              <Icon maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+              <Icon
+                maxWidth="1.3rem"
+                maxHeight="1.3rem"
+                width="100%"
+                height="100%"
+              />
             </Box>
           )
         ) : null}
@@ -120,7 +130,6 @@ export const Dialog: FC<DialogProps> = ({
                     marginRight="s"
                     variant="outline"
                     borderRadius="xs"
-                    color={COLOR_MAP.info}
                     justifyContent="center"
                     borderColor="outlineVariant"
                     onClick={(secondaryButton as IDialogButton).onClick}

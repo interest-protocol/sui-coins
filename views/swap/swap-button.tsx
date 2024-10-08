@@ -106,7 +106,7 @@ const SwapButton: FC = () => {
           title: 'Swap Successfully',
           message: (
             <Box>
-              <Box display="flex" flexDirection="column" gap="m" mb="l">
+              <Box display="flex" flexDirection="column" gap="m" mb="2rem">
                 <Box
                   py="m"
                   px="s"
@@ -120,7 +120,7 @@ const SwapButton: FC = () => {
                     <TokenIcon
                       withBg
                       rounded
-                      size="1rem"
+                      size="0.75rem"
                       type={formSwap.getValues('from.type')}
                       symbol={formSwap.getValues('from.symbol')}
                       network={network as Network}
@@ -129,16 +129,16 @@ const SwapButton: FC = () => {
                       alignItems="center"
                       textAlign="center"
                       color="onSurface"
+                      fontSize="0.9rem"
                       variant="body"
                       size="medium"
                       display="flex"
-                      fontSize="0.9rem"
                       ml="s"
                     >
                       {`${formSwap.getValues('from.display')} ${formSwap.getValues('from.symbol')}`}
                     </Typography>
                   </Box>
-                  <Box>
+                  <Box display="flex" alignItems="center">
                     <ChevronDoubleLeft
                       maxHeight="0.75rem"
                       maxWidth="0.75rem"
@@ -149,7 +149,7 @@ const SwapButton: FC = () => {
                     <TokenIcon
                       withBg
                       rounded
-                      size="1rem"
+                      size="0.75rem"
                       type={formSwap.getValues('to.type')}
                       symbol={formSwap.getValues('to.symbol')}
                       network={network as Network}
@@ -171,18 +171,21 @@ const SwapButton: FC = () => {
                 <Typography
                   color="outlineVariant"
                   textAlign="center"
-                  lineHeight="m"
                   variant="body"
                   size="medium"
+                  fontSize="0.75rem"
+                  lineHeight="1.5rem"
+                  fontWeight="400"
                 >
                   Execution time:
                   <Typography
                     color="primary"
                     textAlign="center"
-                    lineHeight="m"
                     variant="body"
                     size="medium"
                     as="span"
+                    fontSize="0.75rem"
+                    lineHeight="1.5rem"
                   >
                     {` ${+(formSwap.getValues('executionTime') / 1000).toFixed(2)}s`}
                   </Typography>
@@ -196,7 +199,8 @@ const SwapButton: FC = () => {
                   variant="headline"
                   size="small"
                   display="flex"
-                  fontSize="1.25rem"
+                  fontSize="1rem"
+                  lineHeight="1.406rem"
                 >
                   BY:
                 </Typography>
@@ -218,6 +222,7 @@ const SwapButton: FC = () => {
                     color="onSurface"
                     width="max-content"
                     fontSize="0.75rem"
+                    lineHeight="1.125rem"
                   >
                     SUI COINS
                   </Typography>
@@ -250,11 +255,10 @@ const SwapButton: FC = () => {
             label: 'See on Explorer',
             onClick: gotoExplorer,
           },
-          secondaryButton: (
-            <Button variant="outline" mr="s" onClick={handleClose}>
-              got it
-            </Button>
-          ),
+          secondaryButton: {
+            label: 'got it',
+            onClick: handleClose,
+          },
         }),
       }));
 
