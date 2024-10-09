@@ -51,6 +51,7 @@ const AirdropCustomAmountTextField: FC = () => {
           network={network as Network}
           type={getValues('token.type')}
           symbol={getValues('token.symbol')}
+          url={getValues('token.metadata.iconUrl')}
         />
       }
     />

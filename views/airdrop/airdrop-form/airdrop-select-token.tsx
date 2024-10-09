@@ -66,6 +66,7 @@ const AirdropSelectToken: FC = () => {
             withBg
             type={token.type}
             symbol={token.symbol}
+            url={token.metadata.iconUrl}
             network={network as Network}
           />
         )}

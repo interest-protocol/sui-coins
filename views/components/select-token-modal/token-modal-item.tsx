@@ -21,6 +21,7 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
   name,
   symbol,
   onClick,
+  logoUrl,
   selected,
 }) => {
   const network = useNetwork();
@@ -82,6 +83,7 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
           withBg
           type={type}
           size="1.3rem"
+          url={logoUrl}
           symbol={symbol}
           network={network}
         />

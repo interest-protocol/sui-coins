@@ -76,6 +76,7 @@ const DCAPreviewModal: FC<DCAPreviewModalProps> = ({ onClose }) => {
                   withBg
                   network={network}
                   type={tokenFrom.type}
+                  url={tokenFrom.logoUrl}
                   symbol={tokenFrom.symbol}
                 />
                 <Typography size="small" variant="title">
@@ -111,6 +112,7 @@ const DCAPreviewModal: FC<DCAPreviewModalProps> = ({ onClose }) => {
                   withBg
                   network={network}
                   type={tokenTo.type}
+                  url={tokenTo.logoUrl}
                   symbol={tokenTo.symbol}
                 />
                 <Typography size="small" variant="title">

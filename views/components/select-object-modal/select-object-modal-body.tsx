@@ -35,7 +35,9 @@ const SelectObjectModalBody: FC<SelectObjectModalBodyProps> = ({
     (!isSearchAddress && filterSelected === ObjectOrigin.Coins) ||
     (filterSelected === ObjectOrigin.Coins &&
       isSearchAddress &&
-      coinsObjects.some(({ type }) => isSameStructTag(type, search)))
+      coinsObjects.some(({ type }) =>
+        type ? isSameStructTag(type, search) : false
+      ))
   )
     return (
       <ModalObjectBody

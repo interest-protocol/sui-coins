@@ -19,7 +19,7 @@ const SendAssetDetails: FC<SendAssetDetailsProps> = ({ assets, network }) => {
 
   return (
     <Box px="2xl" py="l" display="flex" gap="s" flexDirection="column">
-      {coins?.map(({ type, symbol, decimals }) => (
+      {coins?.map(({ type, symbol, decimals, iconUrl }) => (
         <Box
           key={v4()}
           display="flex"
@@ -31,6 +31,7 @@ const SendAssetDetails: FC<SendAssetDetailsProps> = ({ assets, network }) => {
               withBg
               size="1rem"
               type={type}
+              url={iconUrl}
               symbol={symbol}
               network={network}
             />
