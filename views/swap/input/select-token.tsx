@@ -6,6 +6,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 import TokenIcon from '@/components/token-icon';
 import { Network } from '@/constants';
+import { STRICT_TOKENS_MAP } from '@/constants/coins';
 import { getAllCoinsPrice } from '@/hooks/use-get-multiple-token-price-by-type/use-get-multiple-token-price-by-type.utils';
 import { useModal } from '@/hooks/use-modal';
 import { useNetwork } from '@/hooks/use-network';
@@ -40,7 +41,9 @@ const SelectToken: FC<InputProps> = ({ label }) => {
 
   const changeURL = (type: string, oppositeType?: string) => {
     const searchParams = new URLSearchParams(location.search);
-    searchParams.set(label, type);
+    const token = STRICT_TOKENS_MAP[network][type];
+
+    searchParams.set(label, token?.symbol || type);
 
     if (oppositeType)
       searchParams.set(label === 'to' ? 'from' : 'to', oppositeType);
