@@ -152,10 +152,6 @@ const DCAButton: FC = () => {
         'explorerLink',
         `${EXPLORER_URL[network as Network]}/tx/${txResult.digest}`
       );
-    } catch (e) {
-      console.log({ e });
-
-      throw e;
     } finally {
       resetInput();
       formDCA.setValue('starting', false);

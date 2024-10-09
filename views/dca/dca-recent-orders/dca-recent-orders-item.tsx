@@ -130,6 +130,7 @@ const DCAOrderListMiniItem: FC<DCA> = ({
             loaderSize={16}
             network={network}
             type={tokenIn.type}
+            url={tokenIn.iconUrl}
             symbol={tokenIn.symbol}
           />
           <Typography variant="body" size="medium">
@@ -147,6 +148,7 @@ const DCAOrderListMiniItem: FC<DCA> = ({
             loaderSize={16}
             network={network}
             type={tokenOut.type}
+            url={tokenOut.iconUrl}
             symbol={tokenOut.symbol}
           />
           <Typography variant="body" size="medium">

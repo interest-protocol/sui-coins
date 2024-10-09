@@ -31,6 +31,24 @@ export const fetchCoinMetadata: FetchCoinMetadata = async (args) => {
 
     if (metadatas[args.type]) return metadatas[args.type];
 
+    if (args.network === Network.MAINNET)
+      return await fetch(
+        'https://sui-coin-purse-production.up.railway.app/api/fetch-coin',
+        {
+          method: 'POST',
+          headers: {
+            accept: '*/*',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ coinType: args.type }),
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          metadatas[args.type] = data;
+          return data;
+        });
+
     return await fetch('/api/auth/v1/coin-metadata', {
       method: 'POST',
       headers: {
@@ -61,22 +79,43 @@ export const fetchCoinMetadata: FetchCoinMetadata = async (args) => {
 
   if (!missingTypes.length) return cachedMetadatas;
 
-  const missingMetadatas = await fetch('/api/auth/v1/coin-metadata', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ coinsType: missingTypes, network: args.network }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      data.forEach(
-        (metadata: CoinMetadataWithType) =>
-          (metadatas[metadata.type] = metadata)
-      );
+  let missingMetadatas = [];
 
-      return data;
-    });
+  if (args.network === Network.MAINNET)
+    missingMetadatas = await fetch(
+      'https://sui-coin-purse-production.up.railway.app/api/fetch-coins',
+      {
+        method: 'POST',
+        headers: { accept: '*/*', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ coinTypes: args.types }),
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        data.forEach(
+          (metadata: CoinMetadataWithType) =>
+            (metadatas[metadata.type] = metadata)
+        );
+
+        return data;
+      });
+  else
+    missingMetadatas = await fetch('/api/auth/v1/coin-metadata', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ coinsType: missingTypes, network: args.network }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        data.forEach(
+          (metadata: CoinMetadataWithType) =>
+            (metadatas[metadata.type] = metadata)
+        );
+
+        return data;
+      });
 
   return [...missingMetadatas, ...cachedMetadatas];
 };

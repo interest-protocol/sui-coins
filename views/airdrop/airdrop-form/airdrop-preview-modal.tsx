@@ -23,7 +23,10 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
   const { network } = useSuiClientContext();
   const { control } = useFormContext<IAirdropForm>();
 
-  const { symbol, decimals, type } = useWatch({ control, name: 'token' });
+  const { symbol, decimals, type, metadata } = useWatch({
+    control,
+    name: 'token',
+  });
   const usdPrice = useWatch({ control, name: 'tokenUSDPrice' });
   const airdropList = useWatch({ control, name: 'airdropList' });
 
@@ -93,6 +96,7 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
               <TokenIcon
                 type={type}
                 symbol={symbol}
+                url={metadata.iconUrl}
                 network={network as Network}
               />
               <Typography size="small" variant="title">

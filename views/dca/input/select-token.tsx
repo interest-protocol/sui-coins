@@ -27,7 +27,12 @@ const SelectToken: FC<InputProps> = ({ label }) => {
     name: label,
   });
 
-  const { symbol: currentSymbol, type: currentType } = currentToken ?? {
+  const {
+    symbol: currentSymbol,
+    type: currentType,
+    logoUrl: currentUrl,
+  } = currentToken ?? {
+    logoUrl: undefined,
     symbol: undefined,
     type: undefined,
   };
@@ -122,6 +127,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
               withBg
               rounded
               size="1.1rem"
+              url={currentUrl}
               network={network}
               type={currentType}
               symbol={currentSymbol}
@@ -135,6 +141,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
             withBg
             rounded
             size="1.1rem"
+            url={currentUrl}
             network={network}
             type={currentType}
             symbol={currentSymbol}

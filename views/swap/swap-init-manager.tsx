@@ -5,6 +5,7 @@ import { useFormContext } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
 
 import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
+import { STRICT_TOKENS } from '@/constants/coins';
 import { getAllCoinsPrice } from '@/hooks/use-get-multiple-token-price-by-type/use-get-multiple-token-price-by-type.utils';
 import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
@@ -45,6 +46,8 @@ const SwapInitManager: FC = () => {
   const getSwapToken = async (
     type: `0x${string}`
   ): Promise<SwapToken | null> => {
+    if (!type) return null;
+
     if (isSui(type)) {
       const decimals = 9;
       const symbol = 'SUI';
@@ -104,8 +107,20 @@ const SwapInitManager: FC = () => {
       const searchParams = new URLSearchParams(asPath.split('?')[1]);
 
       const [fromType, toType] = await Promise.all([
-        setDefaultToken(from as `0x${string}`, 'from'),
-        from !== to ? setDefaultToken(to as `0x${string}`, 'to') : undefined,
+        setDefaultToken(
+          from
+            ? JSON.parse(JSON.stringify(from as `0x${string}`))
+            : STRICT_TOKENS[Network.MAINNET][0].type,
+          'from'
+        ),
+        from !== to
+          ? setDefaultToken(
+              to
+                ? JSON.parse(JSON.stringify(to as `0x${string}`))
+                : STRICT_TOKENS[Network.MAINNET][1].type,
+              'to'
+            )
+          : undefined,
       ]);
 
       searchParams.delete('from');
