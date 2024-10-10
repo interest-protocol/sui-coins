@@ -2,6 +2,7 @@ import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 import { CoinBalance } from '@mysten/sui/dist/cjs/client';
 import { normalizeStructTag, SUI_TYPE_ARG } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
+import { isEmpty } from 'ramda';
 import { FC } from 'react';
 import useSWR from 'swr';
 
@@ -18,15 +19,17 @@ const CoinsManager: FC = () => {
   const network = useNetwork();
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
-  const { id, delay, updateCoins, updateLoading, updateError } = useCoins();
+  const { id, delay, coinsMap, updateCoins, updateLoading, updateError } =
+    useCoins();
 
   useSWR(
     makeSWRKey([id, network, currentAccount?.address], CoinsManager.name),
     async () => {
       try {
         updateError(false);
-        updateLoading(true);
         if (!currentAccount?.address) return updateCoins({} as CoinsMap);
+
+        if (isEmpty(coinsMap)) updateLoading(true);
 
         const allCoinsRaw = await suiClient.getAllBalances({
           owner: currentAccount.address,
