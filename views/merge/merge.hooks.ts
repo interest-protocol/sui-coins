@@ -14,6 +14,7 @@ import { TimedSuiTransactionBlockResponse } from '@/interface';
 import { FixedPointMath } from '@/lib';
 import {
   chunk,
+  getCoins,
   isSui,
   showTXSuccessToast,
   signAndExecute,
@@ -37,16 +38,28 @@ export const useMergeCoins = () => {
       let digest: string;
       let version: string;
       let txResult: TimedSuiTransactionBlockResponse | undefined;
-      const gasObjectId = coinsMap[SUI_TYPE_ARG]?.objects[0].coinObjectId;
+      const gasObjectId = (
+        await suiClient.getCoins({
+          owner: currentAccount.address,
+          coinType: SUI_TYPE_ARG,
+          limit: 1,
+        })
+      ).data[0].coinObjectId;
 
       do {
         const tx = new Transaction();
 
         slotToMerge
           .filter(
-            ({ type, objects }) => !isSui(type) && objects.length > 256 * i
+            ({ type, objectsCount }) => !isSui(type) && objectsCount > 256 * i
           )
-          .forEach(({ objects: [target, ...others] }) => {
+          .forEach(async ({ type }) => {
+            const [target, ...others] = await getCoins({
+              suiClient,
+              coinType: type,
+              account: currentAccount.address,
+            });
+
             let targetVersion, targetDigest;
             if (txResult)
               [targetDigest, targetVersion] = findNextVersionAndDigest(
@@ -66,8 +79,13 @@ export const useMergeCoins = () => {
             );
           });
 
-        if (coinsMap[SUI_TYPE_ARG]?.objects.length > 256 * (i + 1)) {
-          const gasCoins = coinsMap[SUI_TYPE_ARG].objects.toSorted((a, b) =>
+        if (coinsMap[SUI_TYPE_ARG]?.objectsCount > 256 * (i + 1)) {
+          const allSuiObjects = await getCoins({
+            suiClient,
+            account: currentAccount.address,
+            coinType: SUI_TYPE_ARG,
+          });
+          const gasCoins = allSuiObjects.toSorted((a, b) =>
             FixedPointMath.toBigNumber(a.balance).gt(
               FixedPointMath.toBigNumber(b.balance)
             )
@@ -121,7 +139,7 @@ export const useMergeCoins = () => {
 
         showTXSuccessToast(txResult, network, 'Coins slot merged!');
         i++;
-      } while (slotToMerge.some(({ objects }) => objects.length > 256 * i));
+      } while (slotToMerge.some(({ objectsCount }) => objectsCount > 256 * i));
     }
   };
 };

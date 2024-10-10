@@ -1,4 +1,5 @@
 import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
+import { CoinBalance } from '@mysten/sui/dist/cjs/client';
 import { normalizeStructTag, SUI_TYPE_ARG } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
 import { FC } from 'react';
@@ -9,22 +10,9 @@ import { METADATA } from '@/constants/metadata';
 import { useCoins } from '@/hooks/use-coins';
 import { useNetwork } from '@/hooks/use-network';
 import { CoinMetadataWithType } from '@/interface';
-import { fetchCoinMetadata, isSui, makeSWRKey, ZERO_BIG_NUMBER } from '@/utils';
+import { fetchCoinMetadata, isSui, makeSWRKey } from '@/utils';
 
-import { CoinsMap, TGetAllCoins } from './coins-manager.types';
-
-const getAllCoins: TGetAllCoins = async (provider, account, cursor = null) => {
-  const { data, nextCursor, hasNextPage } = await provider.getAllCoins({
-    owner: account,
-    cursor,
-  });
-
-  if (!hasNextPage) return data;
-
-  const newData = await getAllCoins(provider, account, nextCursor);
-
-  return [...data, ...newData];
-};
+import { CoinsMap } from './coins-manager.types';
 
 const CoinsManager: FC = () => {
   const network = useNetwork();
@@ -40,7 +28,19 @@ const CoinsManager: FC = () => {
         updateLoading(true);
         if (!currentAccount?.address) return updateCoins({} as CoinsMap);
 
-        const coinsRaw = await getAllCoins(suiClient, currentAccount.address);
+        const allCoinsRaw = await suiClient.getAllBalances({
+          owner: currentAccount.address,
+        });
+
+        const coinsRaw = allCoinsRaw.reduce(
+          (acc, coin) =>
+            Number(coin.totalBalance)
+              ? isSui(coin.coinType)
+                ? [coin, ...acc]
+                : [...acc, coin]
+              : acc,
+          [] as ReadonlyArray<CoinBalance>
+        );
 
         if (!coinsRaw.length) return updateCoins({} as CoinsMap);
 
@@ -71,7 +71,7 @@ const CoinsManager: FC = () => {
         if (!filteredCoinsRaw.length) return updateCoins({} as CoinsMap);
 
         const coins = filteredCoinsRaw.reduce(
-          (acc, { coinType, ...coinRaw }) => {
+          (acc, { coinType, totalBalance, coinObjectCount }) => {
             const type = normalizeStructTag(coinType) as `0x${string}`;
             const { symbol, decimals, ...metadata } = dbCoinsMetadata[type];
 
@@ -80,18 +80,12 @@ const CoinsManager: FC = () => {
                 ...acc,
                 [SUI_TYPE_ARG as `0x${string}`]: {
                   ...acc[SUI_TYPE_ARG as `0x${string}`],
-                  ...coinRaw,
                   type: SUI_TYPE_ARG as `0x${string}`,
                   symbol,
                   decimals,
                   metadata,
-                  balance: BigNumber(coinRaw.balance).plus(
-                    acc[SUI_TYPE_ARG as `0x${string}`]?.balance ??
-                      ZERO_BIG_NUMBER
-                  ),
-                  objects: (acc[SUI_TYPE_ARG as string]?.objects ?? []).concat([
-                    { ...coinRaw, type: SUI_TYPE_ARG as `0x${string}` },
-                  ]),
+                  balance: BigNumber(totalBalance),
+                  objectsCount: coinObjectCount,
                 },
               };
 
@@ -99,17 +93,12 @@ const CoinsManager: FC = () => {
               ...acc,
               [type]: {
                 ...acc[type],
-                ...coinRaw,
                 type,
                 symbol,
                 decimals,
                 metadata,
-                balance: BigNumber(coinRaw.balance).plus(
-                  acc[type]?.balance ?? ZERO_BIG_NUMBER
-                ),
-                objects: (acc[type]?.objects ?? []).concat([
-                  { ...coinRaw, type },
-                ]),
+                objectsCount: coinObjectCount,
+                balance: BigNumber(totalBalance),
               },
             };
           },

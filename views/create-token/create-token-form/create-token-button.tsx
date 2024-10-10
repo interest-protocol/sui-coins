@@ -16,6 +16,7 @@ import { useWeb3 } from '@/hooks/use-web3';
 import { getBytecode } from '@/lib/move-template/coin';
 import initMoveByteCodeTemplate from '@/lib/move-template/move-bytecode-template';
 import {
+  getCoins,
   showTXSuccessToast,
   signAndExecute,
   throwTXIfNotSuccessful,
@@ -59,14 +60,18 @@ const CreateTokenButton: FC<CreateTokenButtonProps> = ({
       if (!coinsMap[SUI_TYPE_ARG])
         throw new Error("You doesn't have enough SUI on your wallet");
 
+      const allSuiCoins = await getCoins({
+        suiClient,
+        coinType: SUI_TYPE_ARG,
+        account: currentAccount.address,
+      });
+
       tx.setGasPayment(
-        coinsMap[SUI_TYPE_ARG]?.objects.map(
-          ({ coinObjectId, digest, version }) => ({
-            objectId: coinObjectId,
-            digest: digest!,
-            version: version!,
-          })
-        )
+        allSuiCoins.map(({ coinObjectId, digest, version }) => ({
+          objectId: coinObjectId,
+          digest: digest!,
+          version: version!,
+        }))
       );
 
       const [upgradeCap] = tx.publish({

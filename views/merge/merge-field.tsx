@@ -18,15 +18,15 @@ const MergeField: FC<MergeFieldProps> = ({
   symbol,
   remove,
   balance,
-  objects,
   decimals,
+  objectsCount,
 }) => {
   const network = useNetwork();
   const { handleClose, setModal } = useModal();
   const { setValue, getValues } = useFormContext<IMergeForm>();
 
   const onSelect = (coin: CoinObject) => {
-    if (!(coin.objects.length > 1))
+    if (!(coin.objectsCount > 1))
       return toast.error('This coin do not have objects to merge');
 
     const ignored = new Set(getValues('ignored'));
@@ -89,7 +89,7 @@ const MergeField: FC<MergeFieldProps> = ({
           </Typography>
         </Box>
         <Typography variant="body" size="small" color="outline">
-          {objects.length} objects to merge
+          {objectsCount} objects to merge
         </Typography>
       </Box>
     </Box>

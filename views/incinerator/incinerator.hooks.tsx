@@ -24,6 +24,7 @@ import { TimedSuiTransactionBlockResponse } from '@/interface';
 import { FixedPointMath } from '@/lib';
 import { CopySVG } from '@/svg';
 import {
+  getCoins,
   showTXSuccessToast,
   signAndExecute,
   throwTXIfNotSuccessful,
@@ -48,46 +49,51 @@ export const useBurn = () => {
 
     const tx = new Transaction();
 
-    const objectsToTransfer = objects.map((object) => {
-      if (!isCoinObject(object as ObjectData)) return object.objectId;
+    const objectsToTransfer = await Promise.all(
+      objects.map(async (object) => {
+        if (!isCoinObject(object as ObjectData)) return object.objectId;
 
-      const objectBalance = BigNumber(object.display?.balance || '0');
+        const objectBalance = BigNumber(object.display?.balance || '0');
 
-      if (objectBalance.isZero()) {
-        tx.moveCall({
-          target: '0x2::coin::destroy_zero',
-          arguments: [tx.object(object.objectId)],
-          typeArguments: [object.display?.type || ''],
-        });
-        return null;
-      }
+        if (objectBalance.isZero()) {
+          tx.moveCall({
+            target: '0x2::coin::destroy_zero',
+            arguments: [tx.object(object.objectId)],
+            typeArguments: [object.display?.type || ''],
+          });
+          return null;
+        }
 
-      const amount = FixedPointMath.toBigNumber(
-        object.value,
-        Number(object.display!.decimals!)
-      );
-
-      if (amount.isZero() && !objectBalance.isZero()) return null;
-
-      const [firstCoin, ...otherCoins] = (object as CoinObjectData).display
-        .objects;
-
-      const firstCoinObject = tx.object(firstCoin.coinObjectId);
-
-      if (otherCoins.length)
-        tx.mergeCoins(
-          firstCoinObject,
-          otherCoins.map((coin) => coin.coinObjectId)
+        const amount = FixedPointMath.toBigNumber(
+          object.value,
+          Number(object.display!.decimals!)
         );
 
-      if (amount.gte(object.display!.balance)) return firstCoinObject;
+        if (amount.isZero() && !objectBalance.isZero()) return null;
 
-      const [splittedCoin] = tx.splitCoins(firstCoinObject, [
-        tx.pure.u64(amount.decimalPlaces(0).toString()),
-      ]);
+        const [firstCoin, ...otherCoins] = await getCoins({
+          suiClient,
+          account: currentAccount.address,
+          coinType: (object as CoinObjectData).display.type,
+        });
 
-      return splittedCoin;
-    });
+        const firstCoinObject = tx.object(firstCoin.coinObjectId);
+
+        if (otherCoins.length)
+          tx.mergeCoins(
+            firstCoinObject,
+            otherCoins.map((coin) => coin.coinObjectId)
+          );
+
+        if (amount.gte(object.display!.balance)) return firstCoinObject;
+
+        const [splittedCoin] = tx.splitCoins(firstCoinObject, [
+          tx.pure.u64(amount.decimalPlaces(0).toString()),
+        ]);
+
+        return splittedCoin;
+      })
+    );
 
     const toTransfer = objectsToTransfer.filter((x) => x != null) as
       | TransactionObjectArgument[]

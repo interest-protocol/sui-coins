@@ -25,10 +25,10 @@ import { ZERO_BIG_NUMBER } from '../big-number';
 import { fetchCoinMetadata } from '../coin-metadata';
 import { getBasicCoinMetadata } from '../fn';
 import {
-  CoinOfValueArgs,
   GetCoinOfValueArgs,
   GetCoinsArgs,
   GetSafeValueArgs,
+  TGetAllCoins,
 } from './coin.types';
 
 export const isSymbol = (text: string): boolean =>
@@ -56,9 +56,9 @@ export const safePoolSymbolFromType = (type: string): string =>
 
 export const coinDataToCoinObject = (coinData: CoinData): CoinObject => ({
   ...coinData,
+  objectsCount: 0,
   balance: ZERO_BIG_NUMBER,
   metadata: { name: formatAddress(coinData.type), description: '' },
-  objects: [],
 });
 
 const coinObjectToToken = (coin: CoinObject): Token => ({
@@ -146,15 +146,14 @@ export async function getCoinOfValue({
 
   if (isSui(coinType)) return tx.splitCoins(tx.gas, [tx.pure.u64(coinValue)]);
 
-  const paginatedCoins = await getCoins({
+  const coins = await getCoins({
     suiClient,
     coinType,
     cursor: null,
     account,
   });
 
-  // Merge all coins into one
-  const [firstCoin, ...otherCoins] = paginatedCoins;
+  const [firstCoin, ...otherCoins] = coins;
 
   const firstCoinInput = tx.object(firstCoin.coinObjectId);
 
@@ -164,30 +163,6 @@ export async function getCoinOfValue({
       otherCoins.map((coin) => coin.coinObjectId)
     );
   }
-
-  return tx.splitCoins(firstCoinInput, [tx.pure.u64(coinValue)]);
-}
-
-export function coinOfValue({
-  coinValue,
-  coinType,
-  tx,
-  coinsMap,
-}: CoinOfValueArgs): TransactionResult {
-  coinType = removeLeadingZeros(coinType);
-
-  if (isSui(coinType)) return tx.splitCoins(tx.gas, [tx.pure.u64(coinValue)]);
-
-  // Merge all coins into one
-  const [firstCoin, ...otherCoins] = coinsMap[coinType].objects;
-
-  const firstCoinInput = tx.object(firstCoin.coinObjectId);
-
-  if (otherCoins.length > 0)
-    tx.mergeCoins(
-      firstCoinInput,
-      otherCoins.map((coin) => coin.coinObjectId)
-    );
 
   return tx.splitCoins(firstCoinInput, [tx.pure.u64(coinValue)]);
 }
@@ -207,4 +182,21 @@ export const getSafeValue = ({
   const safeAmount0 = amount0.gt(safeBalance) ? safeBalance : amount0;
 
   return safeAmount0.isNegative() ? BigNumber(0) : safeAmount0;
+};
+
+export const getAllCoins: TGetAllCoins = async (
+  provider,
+  account,
+  cursor = null
+) => {
+  const { data, nextCursor, hasNextPage } = await provider.getAllCoins({
+    owner: account,
+    cursor,
+  });
+
+  if (!hasNextPage) return data;
+
+  const newData = await getAllCoins(provider, account, nextCursor);
+
+  return [...data, ...newData];
 };

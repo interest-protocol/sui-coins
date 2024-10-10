@@ -18,10 +18,9 @@ import { useFeeFreeTokens } from '@/hooks/use-dca';
 import useDcaSdk from '@/hooks/use-dca-sdk';
 import { useDialog } from '@/hooks/use-dialog';
 import { useNetwork } from '@/hooks/use-network';
-import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import {
-  coinOfValue,
+  getCoinOfValue,
   getObjectIdsFromTxResult,
   signAndExecute,
   throwTXIfNotSuccessful,
@@ -35,7 +34,6 @@ import { Aggregator, DCAForm } from './dca.types';
 const DCAButton: FC = () => {
   const dcaSdk = useDcaSdk();
   const network = useNetwork();
-  const { coinsMap } = useWeb3();
   const suiClient = useSuiClient();
   const { data, isLoading, error } = useFeeFreeTokens();
   const formDCA = useFormContext<DCAForm>();
@@ -84,10 +82,11 @@ const DCAButton: FC = () => {
 
       const initTx = new Transaction();
 
-      const coinIn = coinOfValue({
-        coinsMap,
+      const coinIn = await getCoinOfValue({
+        suiClient,
         tx: initTx,
         coinType: from.type,
+        account: currentAccount.address,
         coinValue: from.value.toString(),
       });
 

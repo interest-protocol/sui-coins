@@ -4,25 +4,30 @@ import {
   ProgressIndicator,
   Typography,
 } from '@interest-protocol/ui-kit';
-import { useSuiClientContext } from '@mysten/dapp-kit';
+import {
+  useCurrentAccount,
+  useSuiClient,
+  useSuiClientContext,
+} from '@mysten/dapp-kit';
 import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { Network } from '@/constants';
-import { SUI_TYPE_ARG_LONG } from '@/constants/coins';
 import { useWeb3 } from '@/hooks/use-web3';
 import { TimedSuiTransactionBlockResponse } from '@/interface';
 import { CheckmarkSVG, ErrorSVG } from '@/svg';
-import { showTXSuccessToast } from '@/utils';
+import { getCoins, showTXSuccessToast } from '@/utils';
 
 import { useReclaimLink } from './send-link.hooks';
 import { SendLinkProps } from './send-link.types';
 
 const SendLink: FC<SendLinkProps> = ({ data, error, isLoading, mutate }) => {
   const { coinsMap } = useWeb3();
+  const suiClient = useSuiClient();
   const reclaim = useReclaimLink();
   const { network } = useSuiClientContext();
+  const currentAccount = useCurrentAccount();
   const [isReclaiming, setReclaiming] = useState(false);
 
   const url = location.href;
@@ -40,11 +45,18 @@ const SendLink: FC<SendLinkProps> = ({ data, error, isLoading, mutate }) => {
   };
 
   const onReclaim = async () => {
-    const gasCoin = coinsMap[SUI_TYPE_ARG] ?? coinsMap[SUI_TYPE_ARG_LONG];
+    const gasCoin = coinsMap[SUI_TYPE_ARG];
 
-    if (!data || !gasCoin) return toast.error('Something went wrong');
+    if (!data || !gasCoin || !currentAccount)
+      return toast.error('Something went wrong');
 
-    const gasObjects = gasCoin.objects.map(
+    const gasCoinObjects = await getCoins({
+      coinType: SUI_TYPE_ARG,
+      suiClient,
+      account: currentAccount.address,
+    });
+
+    const gasObjects = gasCoinObjects.map(
       ({ digest, version, coinObjectId }) => ({
         digest: digest!,
         version: version!,
