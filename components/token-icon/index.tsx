@@ -208,7 +208,6 @@ const TokenIcon: FC<TokenIconProps> = ({
   if (url)
     return (
       <Box
-        bg="black"
         color="white"
         display="flex"
         position="relative"
