@@ -1,4 +1,4 @@
-import { useCurrentAccount } from '@mysten/dapp-kit';
+import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 import { Transaction } from '@mysten/sui/transactions';
 import { normalizeStructTag } from '@mysten/sui/utils';
 import invariant from 'tiny-invariant';
@@ -11,9 +11,8 @@ import {
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { useHopSdk } from '@/hooks/use-hop-sdk';
 import { useNetwork } from '@/hooks/use-network';
-import { useWeb3 } from '@/hooks/use-web3';
-import { isSui } from '@/utils';
 
+import { getCoinOfValue } from './../../utils/coin/index';
 import { SwapForm } from './swap.types';
 import { isAftermathRoute, isNativeRoute } from './swap.utils';
 import { useAftermathRouter } from './swap-manager/swap-manager.hooks';
@@ -21,7 +20,7 @@ import { useAftermathRouter } from './swap-manager/swap-manager.hooks';
 export const useSwap = () => {
   const hopSdk = useHopSdk();
   const clamm = useClammSdk();
-  const { coinsMap } = useWeb3();
+  const suiClient = useSuiClient();
   const afRouter = useAftermathRouter();
   const currentAccount = useCurrentAccount();
   const network = useNetwork();
@@ -53,42 +52,30 @@ export const useSwap = () => {
 
     const auxTx = new Transaction();
 
-    const [coinIn] = [values.from].map(({ type, value }) => {
-      if (isSui(type))
-        return auxTx.splitCoins(auxTx.gas, [
-          auxTx.pure.u64(value.decimalPlaces(0).toFixed(0)),
-        ])[0];
+    let coinIn;
 
-      const [firstCoin, ...otherCoins] = coinsMap[type].objects;
-
-      const firstCoinObject = auxTx.object(firstCoin.coinObjectId);
-
-      if (otherCoins.length)
-        auxTx.mergeCoins(
-          firstCoinObject,
-          otherCoins.map((coin) => coin.coinObjectId)
-        );
-
-      const [splittedCoin] = auxTx.splitCoins(firstCoinObject, [
-        auxTx.pure.u64(value.decimalPlaces(0).toFixed(0)),
-      ]);
-
-      const wrappedCoin = COIN_TO_WRAPPED[network][normalizeStructTag(type)];
-
-      if (wrappedCoin) {
-        const cap = SCALLOP_WRAPPED_COINS_TREASURY_CAPS[network][wrappedCoin];
-
-        const coinOut = auxTx.moveCall({
-          target: `${pkgs.SCALLOP_COINS_WRAPPER}::wrapped_scoin::mint`,
-          typeArguments: [type, wrappedCoin],
-          arguments: [auxTx.object(cap), splittedCoin],
-        });
-
-        return coinOut;
-      }
-
-      return splittedCoin;
+    const splittedCoin = await getCoinOfValue({
+      suiClient,
+      tx: auxTx,
+      coinType: values.from.type,
+      coinValue: values.from.value.toString(),
+      account: currentAccount.address,
     });
+
+    const wrappedFromCoin =
+      COIN_TO_WRAPPED[network][normalizeStructTag(values.from.type)];
+
+    if (wrappedFromCoin) {
+      const cap = SCALLOP_WRAPPED_COINS_TREASURY_CAPS[network][wrappedFromCoin];
+
+      const coinOut = auxTx.moveCall({
+        target: `${pkgs.SCALLOP_COINS_WRAPPER}::wrapped_scoin::mint`,
+        typeArguments: [values.from.type, wrappedFromCoin],
+        arguments: [auxTx.object(cap), splittedCoin],
+      });
+
+      coinIn = coinOut;
+    } else coinIn = splittedCoin;
 
     const { coinOut, tx } = clamm.swapRoute({
       coinIn,
@@ -98,18 +85,18 @@ export const useSwap = () => {
       slippage: Number((+values.settings.slippage * 100).toFixed(0)),
     });
 
-    const wrappedCoin =
+    const wrappedToCoin =
       COIN_TO_WRAPPED[network][normalizeStructTag(values.to.type)];
 
-    if (wrappedCoin) {
+    if (wrappedToCoin) {
       const cap =
         SCALLOP_WRAPPED_COINS_TREASURY_CAPS[network][
-          normalizeStructTag(wrappedCoin)
+          normalizeStructTag(wrappedToCoin)
         ];
 
       const coinY = tx.moveCall({
         target: `${pkgs.SCALLOP_COINS_WRAPPER}::wrapped_scoin::burn`,
-        typeArguments: [normalizeStructTag(values.to.type), wrappedCoin],
+        typeArguments: [normalizeStructTag(values.to.type), wrappedToCoin],
         arguments: [tx.object(cap), coinOut],
       });
 

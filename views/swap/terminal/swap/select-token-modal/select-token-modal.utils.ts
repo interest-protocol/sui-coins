@@ -10,7 +10,7 @@ export const metadataToCoin = (coinMetadata: CoinMetadataWithType) => {
     symbol,
     decimals,
     metadata,
-    objects: [],
+    objectsCount: 0,
     balance: ZERO_BIG_NUMBER,
   };
 };
@@ -22,8 +22,8 @@ export const mapMetadataToCoin = (
   if (!coinType || !coinsMetadata[coinType])
     return {
       decimals: 0,
-      objects: [],
       type: coinType,
+      objectsCount: 0,
       balance: ZERO_BIG_NUMBER,
       symbol: getSymbolByType(coinType),
       metadata: {

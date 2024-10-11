@@ -26,7 +26,7 @@ const FloatingButtons: FC = () => {
   const { data, isLoading, error } = useBlocklist();
   const { coins, coinsMap, mutate, objects: allObjects } = useWeb3();
 
-  const coinsToMerge = coins.filter(({ objects }) => objects.length > 1);
+  const coinsToMerge = coins.filter(({ objectsCount }) => objectsCount > 1);
 
   const handleMergeCoins = async () => {
     if (loading) return;

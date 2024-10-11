@@ -1,13 +1,12 @@
-import { useCurrentAccount } from '@mysten/dapp-kit';
+import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 import { Transaction } from '@mysten/sui/transactions';
 import { normalizeSuiAddress } from '@mysten/sui/utils';
 
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
-import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import { getLpCoinBytecode } from '@/lib/move-template/lp-coin';
 import initMoveByteCodeTemplate from '@/lib/move-template/move-bytecode-template';
-import { isSui } from '@/utils';
+import { getCoinOfValue } from '@/utils';
 
 import { Token } from './pool-create.types';
 
@@ -53,7 +52,7 @@ export const useCreateLpCoin = () => {
 
 export const useCreateStablePool = () => {
   const clamm = useClammSdk();
-  const { coinsMap } = useWeb3();
+  const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
 
   return async (
@@ -67,27 +66,17 @@ export const useCreateStablePool = () => {
 
     const auxTx = new Transaction();
 
-    const coins = tokens.map(({ type, value }) => {
-      const [firstCoin, ...otherCoins] = coinsMap[type].objects;
-
-      const firstCoinObject = auxTx.object(firstCoin.coinObjectId);
-
-      if (otherCoins.length)
-        auxTx.mergeCoins(
-          firstCoinObject,
-          otherCoins.map((coin) => coin.coinObjectId)
-        );
-
-      const [splittedCoin] = auxTx.splitCoins(firstCoinObject, [
-        auxTx.pure.u64(
-          FixedPointMath.toBigNumber(value, coinsMap[type].decimals)
-            .decimalPlaces(0)
-            .toString()
-        ),
-      ]);
-
-      return splittedCoin;
-    });
+    const coins = await Promise.all(
+      tokens.map(({ type, value }) =>
+        getCoinOfValue({
+          suiClient,
+          tx: auxTx,
+          coinValue: value,
+          coinType: type,
+          account: currentAccount.address,
+        })
+      )
+    );
 
     const typeArguments = [...tokens.map((token) => token.type), coinType];
 
@@ -109,7 +98,7 @@ export const useCreateStablePool = () => {
 
 export const useCreateVolatilePool = () => {
   const clamm = useClammSdk();
-  const { coinsMap } = useWeb3();
+  const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
 
   return async (
@@ -123,37 +112,17 @@ export const useCreateVolatilePool = () => {
 
     const auxTx = new Transaction();
 
-    const coins = tokens.map(({ type, value }) => {
-      if (isSui(type))
-        return auxTx.splitCoins(auxTx.gas, [
-          auxTx.pure.u64(
-            FixedPointMath.toBigNumber(value, coinsMap[type].decimals)
-              .decimalPlaces(0)
-              .toString()
-          ),
-        ])[0];
-
-      const [firstCoin, ...otherCoins] = coinsMap[type].objects;
-
-      const firstCoinObject = auxTx.object(firstCoin.coinObjectId);
-
-      if (otherCoins.length)
-        auxTx.mergeCoins(
-          firstCoinObject,
-          otherCoins.map((coin) => coin.coinObjectId)
-        );
-
-      const [splittedCoin] = auxTx.splitCoins(firstCoinObject, [
-        auxTx.pure.u64(
-          FixedPointMath.toBigNumber(value, coinsMap[type].decimals)
-            .decimalPlaces(0)
-            .toString()
-        ),
-      ]);
-
-      return splittedCoin;
-    });
-
+    const coins = await Promise.all(
+      tokens.map(({ type, value }) =>
+        getCoinOfValue({
+          suiClient,
+          tx: auxTx,
+          coinValue: value,
+          coinType: type,
+          account: currentAccount.address,
+        })
+      )
+    );
     const typeArguments = [...tokens.map((token) => token.type), lpCoinType];
 
     const PRECISION = 18;

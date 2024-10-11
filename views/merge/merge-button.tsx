@@ -17,7 +17,7 @@ const MergeButton: FC = () => {
 
   const ignored = useWatch({ control, name: 'ignored' });
 
-  const allCoinsToMerge = coins.filter(({ objects }) => objects.length > 1);
+  const allCoinsToMerge = coins.filter(({ objectsCount }) => objectsCount > 1);
 
   const coinsToMerge = allCoinsToMerge.filter(
     ({ type }) => !ignored.includes(type)

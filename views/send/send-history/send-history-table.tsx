@@ -7,7 +7,11 @@ import {
   TooltipWrapper,
   Typography,
 } from '@interest-protocol/ui-kit';
-import { useCurrentAccount, useSuiClientContext } from '@mysten/dapp-kit';
+import {
+  useCurrentAccount,
+  useSuiClient,
+  useSuiClientContext,
+} from '@mysten/dapp-kit';
 import type { SuiObjectRef } from '@mysten/sui/client';
 import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 import type { ZkSendLink } from '@mysten/zksend';
@@ -19,7 +23,6 @@ import { v4 } from 'uuid';
 
 import { EXPLORER_URL, Network, Routes, RoutesEnum } from '@/constants';
 import { useModal } from '@/hooks/use-modal';
-import { useWeb3 } from '@/hooks/use-web3';
 import { TimedSuiTransactionBlockResponse } from '@/interface';
 import {
   ChevronLeftSVG,
@@ -31,7 +34,7 @@ import {
   ReloadSVG,
   SendSVG,
 } from '@/svg';
-import { showTXSuccessToast } from '@/utils';
+import { getCoins, showTXSuccessToast } from '@/utils';
 import PoweredByZkSend from '@/views/components/powered-by-zksend';
 import { useReclaimLink } from '@/views/send-link/send-link.hooks';
 
@@ -41,7 +44,7 @@ import SendHistoryDetailsModal from './send-history-details';
 
 const SendHistoryTable: FC = () => {
   const { push } = useRouter();
-  const { coinsMap } = useWeb3();
+  const suiClient = useSuiClient();
   const reclaimLink = useReclaimLink();
   const { network } = useSuiClientContext();
   const regenerateLink = useRegenerateLink();
@@ -113,12 +116,16 @@ const SendHistoryTable: FC = () => {
   const handleReclaimLink = async (link: ZkSendLink) => {
     const gasCoins = gasObjects.length
       ? gasObjects
-      : coinsMap[SUI_TYPE_ARG]?.objects.map(
-          ({ coinObjectId, digest, version }) => ({
-            objectId: coinObjectId,
+      : await getCoins({
+          suiClient,
+          account: currentAccount!.address,
+          coinType: SUI_TYPE_ARG,
+        }).then((data) =>
+          data.map(({ digest, version, coinObjectId }) => ({
             digest,
             version,
-          })
+            objectId: coinObjectId,
+          }))
         );
 
     const toastId = toast.loading('Reclaiming...');

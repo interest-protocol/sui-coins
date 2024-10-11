@@ -1,4 +1,4 @@
-import { useCurrentAccount } from '@mysten/dapp-kit';
+import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 import { Transaction } from '@mysten/sui/transactions';
 import invariant from 'tiny-invariant';
 
@@ -10,12 +10,13 @@ import {
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
-import { getSafeValue, isScallopPool, isSui } from '@/utils';
+import { getCoinOfValue, getSafeValue, isScallopPool } from '@/utils';
 import { PoolForm } from '@/views/pools/pools.types';
 
 export const useDeposit = () => {
   const clamm = useClammSdk();
   const { coinsMap } = useWeb3();
+  const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
   const network = useNetwork();
   const pkgs = CLAMM_PACKAGE_ADDRESSES[network];
@@ -33,67 +34,55 @@ export const useDeposit = () => {
       network,
     });
 
-    const coins = tokenList.map(({ value, type }) => {
-      if (!+value) {
-        const rightType =
-          isScallop && !!WRAPPED_CONVERSION_MAP[network][type]
-            ? WRAPPED_CONVERSION_MAP[network][type]
-            : type;
+    const coins = await Promise.all(
+      tokenList.map(async ({ value, type }) => {
+        if (!+value) {
+          const rightType =
+            isScallop && !!WRAPPED_CONVERSION_MAP[network][type]
+              ? WRAPPED_CONVERSION_MAP[network][type]
+              : type;
 
-        const coinZero = initTx.moveCall({
-          target: `0x2::coin::zero`,
-          typeArguments: [rightType],
+          const coinZero = initTx.moveCall({
+            target: `0x2::coin::zero`,
+            typeArguments: [rightType],
+          });
+
+          return coinZero;
+        }
+
+        const safeValue = getSafeValue({
+          coinValue: value,
+          coinType: type,
+          balance: coinsMap[type].balance,
+          decimals: coinsMap[type].decimals,
         });
 
-        return coinZero;
-      }
+        const splittedCoin = await getCoinOfValue({
+          suiClient,
+          tx: initTx,
+          coinType: type,
+          coinValue: safeValue.toString(),
+          account: currentAccount.address,
+        });
 
-      const safeValue = getSafeValue({
-        coinValue: value,
-        coinType: type,
-        balance: coinsMap[type].balance,
-        decimals: coinsMap[type].decimals,
-      });
+        if (isScallop && !!WRAPPED_CONVERSION_MAP[network][type]) {
+          const wrappedType = WRAPPED_CONVERSION_MAP[network][type];
+          const cap = SCALLOP_WRAPPED_COINS_TREASURY_CAPS[network][wrappedType];
 
-      if (isSui(type)) {
-        const [splittedCoin] = initTx.splitCoins(initTx.gas, [
-          initTx.pure.u64(safeValue.toString()),
-        ]);
+          if (!cap) return splittedCoin;
+
+          const wrappedCoin = initTx.moveCall({
+            target: `${pkgs.SCALLOP_COINS_WRAPPER}::wrapped_scoin::mint`,
+            typeArguments: [type, wrappedType],
+            arguments: [initTx.object(cap), splittedCoin],
+          });
+
+          return wrappedCoin;
+        }
 
         return splittedCoin;
-      }
-
-      const [firstCoin, ...otherCoins] = coinsMap[type].objects;
-
-      const firstCoinObject = initTx.object(firstCoin.coinObjectId);
-
-      if (otherCoins.length)
-        initTx.mergeCoins(
-          firstCoinObject,
-          otherCoins.map((coin) => coin.coinObjectId)
-        );
-
-      const [splittedCoin] = initTx.splitCoins(firstCoinObject, [
-        initTx.pure.u64(safeValue.toString()),
-      ]);
-
-      if (isScallop && !!WRAPPED_CONVERSION_MAP[network][type]) {
-        const wrappedType = WRAPPED_CONVERSION_MAP[network][type];
-        const cap = SCALLOP_WRAPPED_COINS_TREASURY_CAPS[network][wrappedType];
-
-        if (!cap) return splittedCoin;
-
-        const wrappedCoin = initTx.moveCall({
-          target: `${pkgs.SCALLOP_COINS_WRAPPER}::wrapped_scoin::mint`,
-          typeArguments: [type, wrappedType],
-          arguments: [initTx.object(cap), splittedCoin],
-        });
-
-        return wrappedCoin;
-      }
-
-      return splittedCoin;
-    });
+      })
+    );
 
     const { lpCoin, tx } = await clamm.addLiquidity({
       coinsIn: coins,

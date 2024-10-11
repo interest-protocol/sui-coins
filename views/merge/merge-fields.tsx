@@ -30,14 +30,14 @@ const MergeCoinsForm: FC = () => {
     setValue('ignored', Array.from(ignoredSet));
   };
 
-  const allCoinsToMerge = coins.filter(({ objects }) => objects.length > 1);
+  const allCoinsToMerge = coins.filter(({ objectsCount }) => objectsCount > 1);
 
   const coinsToMerge = allCoinsToMerge.filter(
     ({ type }) => !ignored.includes(type)
   );
 
   const onSelect = (coin: CoinObject) => {
-    if (!(coin.objects.length > 1))
+    if (!(coin.objectsCount > 1))
       return toast.error('This coin do not have objects to merge');
 
     const ignoredSet = new Set(ignored);

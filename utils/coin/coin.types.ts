@@ -1,4 +1,4 @@
-import { SuiClient } from '@mysten/sui/client';
+import { CoinStruct, SuiClient } from '@mysten/sui/client';
 import { Transaction } from '@mysten/sui/transactions';
 import BigNumber from 'bignumber.js';
 
@@ -32,3 +32,9 @@ export interface GetSafeValueArgs {
   balance: BigNumber;
   decimals: number;
 }
+
+export type TGetAllCoins = (
+  provider: SuiClient,
+  account: string,
+  cursor?: string | null
+) => Promise<ReadonlyArray<CoinStruct>>;

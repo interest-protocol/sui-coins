@@ -8,6 +8,6 @@ export interface TokenIconProps {
   withBg?: boolean;
   network: Network;
   rounded?: boolean;
-  loaderSize?: number;
   url?: string | null;
+  loaderSize?: number;
 }
