@@ -35,6 +35,7 @@ export enum TokenOrigin {
   Wallet,
   Wormhole,
   SuiBridge,
+  Fav,
 }
 
 export interface SearchTokenForm {
@@ -46,6 +47,12 @@ export interface SelectTokenModalBodyProps
   extends Pick<SelectTokenModalProps, 'faucet'> {
   control: Control<SearchTokenForm>;
   handleSelectToken: (coin: CoinObject) => void;
+}
+
+export interface FavoritesModalBodyProps {
+  search: string;
+  types: ReadonlyArray<string>;
+  handleSelectToken: (type: string, chain?: Chain) => void;
 }
 
 export interface SelectTokenBaseTokensProps {

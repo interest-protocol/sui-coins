@@ -24,7 +24,7 @@
     "@mysten/sui": "^1.9.0",
     "@mysten/suins": "^0.4.0",
     "@mysten/wallet-standard": "^0.13.4",
-    "@mysten/zksend": "^0.11.2",
+    "@mysten/zksend": "^0.11.6",
     "@shinami/clients": "^0.8.1",
     "@stylin.js/react": "^1.0.4-alpha.0",
     "@tanstack/react-query": "^5.45.1",

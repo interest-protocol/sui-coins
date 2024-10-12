@@ -1,6 +1,5 @@
 import { Chain } from '@interest-protocol/sui-tokens';
 import { isValidSuiAddress } from '@mysten/sui/utils';
-import { empty } from 'ramda';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
@@ -22,6 +21,7 @@ import { CoinMetadataWithType } from '@/interface';
 import { coinDataToCoinObject, fetchCoinMetadata } from '@/utils';
 
 import { CoinObject } from '../../../components/web3-manager/coins-manager/coins-manager.types';
+import FavoritesModalBody from './favorites-modal-body';
 import FetchingToken from './fetching-token';
 import ModalTokenBody from './modal-token-body';
 import ModalTokenSearch from './modal-token-search';
@@ -42,8 +42,6 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   const favoriteTokenTypes = useReadLocalStorage<ReadonlyArray<string>>(
     `${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-tokens`
   );
-
-  console.log({ coinsLoading, empty: empty({}) });
 
   const filterSelected = useWatch({ control, name: 'filter' });
   const search = useWatch({ control, name: 'search' });
@@ -176,6 +174,20 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
             ({ symbol, type }) =>
               !search || symbol.includes(search) || type.includes(search)
           )}
+      />
+    );
+
+  if (
+    (!isSearchAddress && filterSelected === TokenOrigin.Fav) ||
+    (filterSelected === TokenOrigin.Fav &&
+      isSearchAddress &&
+      favoriteTokenTypes?.includes(search))
+  )
+    return (
+      <FavoritesModalBody
+        search={search}
+        types={favoriteTokenTypes ?? []}
+        handleSelectToken={handleSelectToken}
       />
     );
 
