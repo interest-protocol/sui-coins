@@ -23,9 +23,9 @@ export const useLinkList = (currentCursor: string | null) => {
       if (!currentAccount || !suiClient) return;
 
       const { links, hasNextPage, cursor } = await listCreatedLinks({
-        client: suiClient,
         host: '/send/link',
         path: location.origin,
+        client: suiClient as any,
         address: currentAccount.address,
         contract: ZK_BAG_CONTRACT_IDS[network as Network],
         network: network === Network.MAINNET ? 'mainnet' : 'testnet',
@@ -53,7 +53,7 @@ export const useRegenerateLink = () => {
     );
 
     const tx = await signAndExecute({
-      tx: transaction,
+      tx: transaction as any,
       signTransaction,
       suiClient,
       currentAccount,
