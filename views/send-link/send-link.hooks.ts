@@ -20,7 +20,7 @@ export const useLink = () => {
 
   return useSWR<ZkSendLink>(`${location}-${network}`, () =>
     ZkSendLink.fromUrl(location.href, {
-      client: suiClient,
+      client: suiClient as any,
       host: '/send/link',
       path: location.origin,
       contract: ZK_BAG_CONTRACT_IDS[network as Network],
