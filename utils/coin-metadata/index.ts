@@ -3,6 +3,7 @@ import { normalizeStructTag } from '@mysten/sui/utils';
 import { Network } from '@/constants';
 import { CoinMetadataWithType } from '@/interface';
 
+import { isSameStructTag } from '../address';
 import coinMetadataJsonRaw from './coin-metadata.json';
 import {
   FetchCoinMetadata,
@@ -74,7 +75,7 @@ export const fetchCoinMetadata: FetchCoinMetadata = async (args) => {
   }, [] as ReadonlyArray<CoinMetadataWithType>);
 
   const missingTypes = uniqueTypes.filter(
-    (type) => !coinMetadataMap[args.network][normalizeStructTag(type)]
+    (type) => !cachedMetadatas.some((meta) => isSameStructTag(meta.type, type))
   );
 
   if (!missingTypes.length) return cachedMetadatas;
@@ -87,7 +88,7 @@ export const fetchCoinMetadata: FetchCoinMetadata = async (args) => {
       {
         method: 'POST',
         headers: { accept: '*/*', 'Content-Type': 'application/json' },
-        body: JSON.stringify({ coinTypes: args.types }),
+        body: JSON.stringify({ coinTypes: missingTypes }),
       }
     )
       .then((res) => res.json())
@@ -117,5 +118,5 @@ export const fetchCoinMetadata: FetchCoinMetadata = async (args) => {
         return data;
       });
 
-  return [...missingMetadatas, ...cachedMetadatas];
+  return [...cachedMetadatas, ...missingMetadatas];
 };

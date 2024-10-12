@@ -22,6 +22,7 @@ import { CoinMetadataWithType } from '@/interface';
 import { coinDataToCoinObject, fetchCoinMetadata } from '@/utils';
 
 import { CoinObject } from '../../../components/web3-manager/coins-manager/coins-manager.types';
+import FavoritesModalBody from './favorites-modal-body';
 import FetchingToken from './fetching-token';
 import ModalTokenBody from './modal-token-body';
 import ModalTokenSearch from './modal-token-search';
@@ -176,6 +177,20 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
             ({ symbol, type }) =>
               !search || symbol.includes(search) || type.includes(search)
           )}
+      />
+    );
+
+  if (
+    (!isSearchAddress && filterSelected === TokenOrigin.Fav) ||
+    (filterSelected === TokenOrigin.Fav &&
+      isSearchAddress &&
+      favoriteTokenTypes?.includes(search))
+  )
+    return (
+      <FavoritesModalBody
+        search={search}
+        types={favoriteTokenTypes ?? []}
+        handleSelectToken={handleSelectToken}
       />
     );
 

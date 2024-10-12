@@ -35,9 +35,9 @@ const useCreateLink = () => {
     if (!currentAccount) throw new Error('There is not an account');
 
     const link = new ZkSendLinkBuilder({
-      client: suiClient,
       path: '/send/link',
       host: location.origin,
+      client: suiClient as any,
       sender: currentAccount.address,
       contract: ZK_BAG_CONTRACT_IDS[network as Network],
       network: network === Network.MAINNET ? 'mainnet' : 'testnet',
@@ -73,8 +73,8 @@ const useCreateLink = () => {
     );
 
     const tx2 = await signAndExecute({
-      tx,
       suiClient,
+      tx: tx as any,
       currentAccount,
       signTransaction,
       options: {
