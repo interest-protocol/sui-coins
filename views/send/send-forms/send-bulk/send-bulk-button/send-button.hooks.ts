@@ -44,7 +44,7 @@ const useCreateLink = () => {
 
     const links = Array.from({ length: quantity }, () => {
       const link = new ZkSendLinkBuilder({
-        client: suiClient,
+        client: suiClient as any,
         path: '/send/link',
         host: location.origin,
         sender: currentAccount.address,
@@ -60,7 +60,7 @@ const useCreateLink = () => {
 
     const tx = await ZkSendLinkBuilder.createLinks({
       links,
-      client: suiClient,
+      client: suiClient as any,
       contract: ZK_BAG_CONTRACT_IDS[network as Network],
       network: network === Network.MAINNET ? 'mainnet' : 'testnet',
     });
@@ -75,8 +75,8 @@ const useCreateLink = () => {
     );
 
     const tx2 = await signAndExecute({
-      tx,
       suiClient,
+      tx: tx as any,
       currentAccount,
       signTransaction,
       options: {
