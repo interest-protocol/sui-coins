@@ -5,5 +5,6 @@ export interface MergeFieldProps extends CoinObject {
 }
 
 export interface IMergeForm {
+  executionTime: number;
   ignored: ReadonlyArray<string>;
 }

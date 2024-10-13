@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@interest-protocol/ui-kit';
+import { Button, Typography } from '@interest-protocol/ui-kit';
 import {
   useCurrentAccount,
   useSignTransaction,
@@ -9,11 +9,8 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import invariant from 'tiny-invariant';
 
-import { TokenIcon } from '@/components';
-import ChevronDoubleLeft from '@/components/svg/chevron-double-left';
 import { EXPLORER_URL, Network } from '@/constants';
 import { useDialog } from '@/hooks/use-dialog';
-import { LogoSVG } from '@/svg';
 import {
   signAndExecute,
   throwTXIfNotSuccessful,
@@ -22,6 +19,8 @@ import {
 } from '@/utils';
 import { SwapForm } from '@/views/swap/swap.types';
 
+import SuccessModal from '../components/success-modal';
+import SuccessModalTokenCard from '../components/success-modal/success-modal-token-card';
 import { SwapMessagesEnum } from './swap.data';
 import { useSwap } from './swap.hooks';
 
@@ -103,153 +102,16 @@ const SwapButton: FC = () => {
           primaryButton: { label: 'Try again', onClick: handleClose },
         }),
         success: () => ({
-          title: 'Swap Successfully',
+          title: 'Swap Successful',
           message: (
-            <Box>
-              <Box display="flex" flexDirection="column" gap="m" mb="2rem">
-                <Box
-                  py="m"
-                  px="s"
-                  gap="s"
-                  bg="surface"
-                  display="flex"
-                  borderRadius="xs"
-                  justifyContent="center"
-                >
-                  <Box display="flex" alignItems="center">
-                    <TokenIcon
-                      withBg
-                      rounded
-                      size="0.75rem"
-                      type={formSwap.getValues('from.type')}
-                      symbol={formSwap.getValues('from.symbol')}
-                      network={network as Network}
-                    />
-                    <Typography
-                      alignItems="center"
-                      textAlign="center"
-                      color="onSurface"
-                      fontSize="0.9rem"
-                      variant="body"
-                      size="medium"
-                      display="flex"
-                      ml="s"
-                    >
-                      {`${formSwap.getValues('from.display')} ${formSwap.getValues('from.symbol')}`}
-                    </Typography>
-                  </Box>
-                  <Box display="flex" alignItems="center">
-                    <ChevronDoubleLeft
-                      maxHeight="0.75rem"
-                      maxWidth="0.75rem"
-                      width="100%"
-                    />
-                  </Box>
-                  <Box display="flex" alignItems="center">
-                    <TokenIcon
-                      withBg
-                      rounded
-                      size="0.75rem"
-                      type={formSwap.getValues('to.type')}
-                      symbol={formSwap.getValues('to.symbol')}
-                      network={network as Network}
-                    />
-                    <Typography
-                      alignItems="center"
-                      textAlign="center"
-                      color="onSurface"
-                      variant="body"
-                      size="medium"
-                      display="flex"
-                      fontSize="0.9rem"
-                      ml="s"
-                    >
-                      {`${formSwap.getValues('to.display')} ${formSwap.getValues('to.symbol')}`}
-                    </Typography>
-                  </Box>
-                </Box>
-                <Typography
-                  color="outlineVariant"
-                  textAlign="center"
-                  variant="body"
-                  size="medium"
-                  fontSize="0.75rem"
-                  lineHeight="1.5rem"
-                  fontWeight="400"
-                >
-                  Execution time:
-                  <Typography
-                    color="primary"
-                    textAlign="center"
-                    variant="body"
-                    size="medium"
-                    as="span"
-                    fontSize="0.75rem"
-                    lineHeight="1.5rem"
-                  >
-                    {` ${+(formSwap.getValues('executionTime') / 1000).toFixed(2)}s`}
-                  </Typography>
-                </Typography>
-              </Box>
-              <Box display="flex" justifyContent="center" mb="0.5rem">
-                <Typography
-                  alignItems="center"
-                  textAlign="center"
-                  color="onSurface"
-                  variant="headline"
-                  size="small"
-                  display="flex"
-                  fontSize="1rem"
-                  lineHeight="1.406rem"
-                >
-                  BY:
-                </Typography>
-                <Box
-                  ml="0.75rem"
-                  display="flex"
-                  minWidth="1.5rem"
-                  minHeight="1.5rem"
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  <LogoSVG width="100%" maxWidth="1.5rem" maxHeight="1.5rem" />
-                </Box>
-                <Box ml="0.5rem" display="flex" alignItems="center">
-                  <Typography
-                    size="medium"
-                    variant="title"
-                    fontWeight="700"
-                    color="onSurface"
-                    width="max-content"
-                    fontSize="0.75rem"
-                    lineHeight="1.125rem"
-                  >
-                    SUI COINS
-                  </Typography>
-                </Box>
-              </Box>
-              <a
-                href="https://www.suicoins.com"
-                target="_blank"
-                rel="noopener, noreferrer"
-              >
-                <Typography
-                  alignItems="center"
-                  textAlign="center"
-                  variant="body"
-                  size="small"
-                  display="flex"
-                  lineHeight="1.5rem"
-                  fontSize="0.75rem"
-                  width="fit-content"
-                  mx="auto"
-                  color="primary"
-                  mt="0.5rem"
-                >
-                  www.suicoins.com
-                </Typography>
-              </a>
-            </Box>
+            <SuccessModal
+              transactionTime={`${+(formSwap.getValues('executionTime') / 1000).toFixed(2)}`}
+            >
+              <SuccessModalTokenCard
+                from={formSwap.getValues('from')}
+                to={formSwap.getValues('to')}
+              />
+            </SuccessModal>
           ),
           primaryButton: {
             label: 'See on Explorer',

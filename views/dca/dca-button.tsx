@@ -27,6 +27,8 @@ import {
   ZERO_BIG_NUMBER,
 } from '@/utils';
 
+import SuccessModal from '../components/success-modal';
+import SuccessModalTokenCard from '../components/success-modal/success-modal-token-card';
 import { LOCAL_STORAGE_TOP_KEY } from '../send/send.data';
 import { DCAMessagesEnum } from './dca.data';
 import { Aggregator, DCAForm } from './dca.types';
@@ -129,6 +131,7 @@ const DCAButton: FC = () => {
       });
 
       throwTXIfNotSuccessful(txResult);
+      formDCA.setValue('executionTime', txResult.time);
 
       const dcaId = getObjectIdsFromTxResult(txResult, 'created');
 
@@ -169,17 +172,26 @@ const DCAButton: FC = () => {
         primaryButton: { label: 'Try again', onClick: handleClose },
       }),
       success: () => ({
-        title: 'DCA Successfully',
-        message: DCAMessagesEnum.dcaSuccess,
+        title: 'DCA Successful',
+        message: (
+          <SuccessModal
+            transactionTime={`${+(formDCA.getValues('executionTime') / 1000).toFixed(2)}`}
+          >
+            <SuccessModalTokenCard
+              withoutAmount
+              to={formDCA.getValues('to')}
+              from={formDCA.getValues('from')}
+            />
+          </SuccessModal>
+        ),
         primaryButton: {
           label: 'See on Explorer',
           onClick: gotoExplorer,
         },
-        secondaryButton: (
-          <Button variant="outline" mr="s" onClick={handleClose}>
-            got it
-          </Button>
-        ),
+        secondaryButton: {
+          label: 'got it',
+          onClick: handleClose,
+        },
       }),
     });
 

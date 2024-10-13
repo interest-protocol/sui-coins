@@ -30,7 +30,10 @@ export const useMergeCoins = () => {
   const currentAccount = useCurrentAccount();
   const signTransaction = useSignTransaction();
 
-  return async (coinsToMerge: ReadonlyArray<CoinObject>) => {
+  return async (
+    coinsToMerge: ReadonlyArray<CoinObject>,
+    onSetExecutionTime: (time: number) => void
+  ) => {
     invariant(currentAccount?.address, 'You must be connected');
 
     for (const slotToMerge of chunk(coinsToMerge, 8)) {
@@ -137,6 +140,7 @@ export const useMergeCoins = () => {
           digest: txResult.digest,
         });
 
+        onSetExecutionTime(txResult.time);
         showTXSuccessToast(txResult, network, 'Coins slot merged!');
         i++;
       } while (slotToMerge.some(({ objectsCount }) => objectsCount > 256 * i));
