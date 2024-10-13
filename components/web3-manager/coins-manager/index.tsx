@@ -3,7 +3,7 @@ import { CoinBalance } from '@mysten/sui/dist/cjs/client';
 import { normalizeStructTag, SUI_TYPE_ARG } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
 import { isEmpty } from 'ramda';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import useSWR from 'swr';
 
 import { Network } from '@/constants';
@@ -21,6 +21,10 @@ const CoinsManager: FC = () => {
   const currentAccount = useCurrentAccount();
   const { id, delay, coinsMap, updateCoins, updateLoading, updateError } =
     useCoins();
+
+  useEffect(() => {
+    updateCoins({} as CoinsMap);
+  }, [currentAccount]);
 
   useSWR(
     makeSWRKey([id, network, currentAccount?.address], CoinsManager.name),
