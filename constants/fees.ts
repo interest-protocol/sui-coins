@@ -1,4 +1,4 @@
-// Less than 1 cent per TX - amount 7000000
+// create token fee: 25 SUI
 export const CREATE_TOKEN_SUI_FEE = 25_000_000_000;
 
 // Less than 1 cent per TX - amount 7000000
