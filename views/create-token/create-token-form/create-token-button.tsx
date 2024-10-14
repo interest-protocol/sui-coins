@@ -7,6 +7,7 @@ import {
 } from '@mysten/dapp-kit';
 import { Transaction } from '@mysten/sui/transactions';
 import { normalizeSuiAddress, SUI_TYPE_ARG } from '@mysten/sui/utils';
+import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -14,6 +15,7 @@ import toast from 'react-hot-toast';
 import { Network, TREASURY } from '@/constants';
 import { CREATE_TOKEN_SUI_FEE } from '@/constants/fees';
 import { useWeb3 } from '@/hooks/use-web3';
+import { FixedPointMath } from '@/lib';
 import { getBytecode } from '@/lib/move-template/coin';
 import initMoveByteCodeTemplate from '@/lib/move-template/move-bytecode-template';
 import { DotErrorSVG } from '@/svg';
@@ -114,7 +116,9 @@ const CreateTokenButton: FC<CreateTokenButtonProps> = ({
     : !coinsMap[SUI_TYPE_ARG]
       ? 'No SUI found! Add Sui to your wallet'
       : coinsMap[SUI_TYPE_ARG].balance.lt(CREATE_TOKEN_SUI_FEE)
-        ? 'It costs 5 Sui to create a coin'
+        ? `It costs ${FixedPointMath.toNumber(
+            BigNumber(CREATE_TOKEN_SUI_FEE)
+          )} Sui to create a coin`
         : null;
 
   const disabled = loading || !!error;
