@@ -114,7 +114,7 @@ const CreateTokenButton: FC<CreateTokenButtonProps> = ({
     : !coinsMap[SUI_TYPE_ARG]
       ? 'No SUI found! Add Sui to your wallet'
       : coinsMap[SUI_TYPE_ARG].balance.lt(CREATE_TOKEN_SUI_FEE)
-        ? 'You must have 25 SUI for fee'
+        ? 'It costs 25 Sui to create a coin'
         : null;
 
   const disabled = loading || !!error;
