@@ -1,4 +1,4 @@
-import { Button } from '@interest-protocol/ui-kit';
+import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import {
   useCurrentAccount,
   useSignTransaction,
@@ -11,12 +11,13 @@ import { FC } from 'react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
-import { Network } from '@/constants';
+import { Network, TREASURY } from '@/constants';
+import { CREATE_TOKEN_SUI_FEE } from '@/constants/fees';
 import { useWeb3 } from '@/hooks/use-web3';
 import { getBytecode } from '@/lib/move-template/coin';
 import initMoveByteCodeTemplate from '@/lib/move-template/move-bytecode-template';
+import { DotErrorSVG } from '@/svg';
 import {
-  getCoins,
   showTXSuccessToast,
   signAndExecute,
   throwTXIfNotSuccessful,
@@ -60,19 +61,9 @@ const CreateTokenButton: FC<CreateTokenButtonProps> = ({
       if (!coinsMap[SUI_TYPE_ARG])
         throw new Error("You doesn't have enough SUI on your wallet");
 
-      const allSuiCoins = await getCoins({
-        suiClient,
-        coinType: SUI_TYPE_ARG,
-        account: currentAccount.address,
-      });
+      const [fee] = tx.splitCoins(tx.gas, [String(CREATE_TOKEN_SUI_FEE)]);
 
-      tx.setGasPayment(
-        allSuiCoins.map(({ coinObjectId, digest, version }) => ({
-          objectId: coinObjectId,
-          digest: digest!,
-          version: version!,
-        }))
-      );
+      tx.transferObjects([fee], tx.pure.address(TREASURY));
 
       const [upgradeCap] = tx.publish({
         modules: [
@@ -118,22 +109,57 @@ const CreateTokenButton: FC<CreateTokenButtonProps> = ({
     }
   };
 
+  const error = !currentAccount
+    ? 'Please, connect your wallet'
+    : !coinsMap[SUI_TYPE_ARG]
+      ? 'No SUI found! Add Sui to your wallet'
+      : coinsMap[SUI_TYPE_ARG].balance.lt(CREATE_TOKEN_SUI_FEE)
+        ? 'It costs 25 Sui to create a coin'
+        : null;
+
+  const disabled = loading || !!error;
+
   return (
-    <Button
-      py="s"
-      px="xl"
-      fontSize="s"
-      bg="primary"
-      type="submit"
-      variant="filled"
-      color="onPrimary"
-      borderRadius="xs"
-      fontFamily="Proto"
-      onClick={handleSubmit(onSubmit)}
-      disabled={!currentAccount || loading}
+    <Box
+      gap="m"
+      display="flex"
+      alignItems="center"
+      flexDirection="column"
+      justifyContent="center"
     >
-      Create coin
-    </Button>
+      {error && (
+        <Box
+          p="s"
+          gap="s"
+          display="flex"
+          borderRadius="xs"
+          border="1px solid"
+          bg="errorContainer"
+          color="onErrorContainer"
+          borderColor="onErrorContainer"
+        >
+          <DotErrorSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+          <Typography variant="label" size="medium">
+            {error}
+          </Typography>
+        </Box>
+      )}
+      <Button
+        py="s"
+        px="xl"
+        fontSize="s"
+        bg="primary"
+        type="submit"
+        variant="filled"
+        color="onPrimary"
+        borderRadius="xs"
+        fontFamily="Proto"
+        disabled={disabled}
+        onClick={handleSubmit(onSubmit)}
+      >
+        Create coin
+      </Button>
+    </Box>
   );
 };
 

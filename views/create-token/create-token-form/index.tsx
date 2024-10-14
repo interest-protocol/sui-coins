@@ -133,12 +133,10 @@ const CreateTokenForm: FC = () => {
           >
             <FixedSupplyToggle control={control} setValue={setValue} />
           </Box>
-          <Box display="flex" justifyContent="center">
-            <CreateTokenButton
-              handleSubmit={handleSubmit}
-              getValues={getValues}
-            />
-          </Box>
+          <CreateTokenButton
+            handleSubmit={handleSubmit}
+            getValues={getValues}
+          />
         </Box>
       </form>
     </Box>
