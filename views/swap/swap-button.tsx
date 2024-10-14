@@ -103,7 +103,7 @@ const SwapButton: FC = () => {
           primaryButton: { label: 'Try again', onClick: handleClose },
         }),
         success: () => ({
-          title: 'Swap Successfully',
+          title: 'Completed!',
           message: (
             <Box>
               <Box display="flex" flexDirection="column" gap="m" mb="2rem">
@@ -135,7 +135,9 @@ const SwapButton: FC = () => {
                       display="flex"
                       ml="s"
                     >
-                      {`${formSwap.getValues('from.display')} ${formSwap.getValues('from.symbol')}`}
+                      {`${formSwap.getValues(
+                        'from.display'
+                      )} ${formSwap.getValues('from.symbol')}`}
                     </Typography>
                   </Box>
                   <Box display="flex" alignItems="center">
@@ -164,7 +166,9 @@ const SwapButton: FC = () => {
                       fontSize="0.9rem"
                       ml="s"
                     >
-                      {`${formSwap.getValues('to.display')} ${formSwap.getValues('to.symbol')}`}
+                      {`${formSwap.getValues(
+                        'to.display'
+                      )} ${formSwap.getValues('to.symbol')}`}
                     </Typography>
                   </Box>
                 </Box>
@@ -187,7 +191,9 @@ const SwapButton: FC = () => {
                     fontSize="0.75rem"
                     lineHeight="1.5rem"
                   >
-                    {` ${+(formSwap.getValues('executionTime') / 1000).toFixed(2)}s`}
+                    {` ${+(formSwap.getValues('executionTime') / 1000).toFixed(
+                      2
+                    )}s`}
                   </Typography>
                 </Typography>
               </Box>

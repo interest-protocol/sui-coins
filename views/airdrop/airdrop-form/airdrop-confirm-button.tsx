@@ -164,7 +164,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           showTXSuccessToast(
             tx2,
             network as Network,
-            `Patch ${index + 1} was completed successfully`
+            `Patch ${Number(index) + 1} was completed successfully`
           );
 
           await pauseUtilNextTx(initAirdropTxMS);
@@ -296,7 +296,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         showTXSuccessToast(
           tx2,
           network as Network,
-          `Patch ${index + 1} was completed successfully`
+          `Patch ${Number(index) + 1} was completed successfully`
         );
 
         setValue('done', [...getValues('done'), Number(index)]);

@@ -17,8 +17,6 @@ const FavoritesModalBody: FC<FavoritesModalBodyProps> = ({
   const [coins, setCoins] = useState<ReadonlyArray<CoinMetadataWithType>>([]);
   const [isLoading, setLoading] = useState(false);
 
-  console.log({ types });
-
   useEffect(() => {
     setLoading(true);
     fetchCoinMetadata({ network, types })
