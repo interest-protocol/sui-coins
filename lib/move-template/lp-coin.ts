@@ -53,8 +53,8 @@ export const getLpCoinBytecode = (info: GetByteCodeArgs) => {
   const templateByteCode = fromHEX(getLpCoinTemplateByteCode());
 
   const modifiedByteCode = template.update_identifiers(templateByteCode, {
-    LP_COIN: info.symbol.toUpperCase().replaceAll('-', '_').trim(),
-    lp_coin: info.symbol.toLowerCase().replaceAll('-', '_').trim(),
+    LP_COIN: info.symbol.trim().toUpperCase().replaceAll('-', '_'),
+    lp_coin: info.symbol.trim().toLowerCase().replaceAll('-', '_'),
   });
 
   let updated = updateDecimals(modifiedByteCode, 9);
