@@ -87,8 +87,8 @@ export const getBytecode = (info: ICreateTokenForm & { recipient: string }) => {
   );
 
   const modifiedByteCode = template.update_identifiers(templateByteCode, {
-    COIN_TEMPLATE: info.symbol.toUpperCase().replaceAll(' ', '_'),
-    coin_template: info.symbol.toLowerCase().replaceAll(' ', '_'),
+    COIN_TEMPLATE: info.symbol.toUpperCase().replaceAll(' ', '_').trim(),
+    coin_template: info.symbol.toLowerCase().replaceAll(' ', '_').trim(),
   });
 
   let updated = updateDecimals(modifiedByteCode, info.decimals);
