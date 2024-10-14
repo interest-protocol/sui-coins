@@ -1,4 +1,10 @@
-import { Box, Button, Typography } from '@interest-protocol/ui-kit';
+import {
+  Box,
+  Button,
+  Theme,
+  Typography,
+  useTheme,
+} from '@interest-protocol/ui-kit';
 import {
   useCurrentAccount,
   useSignTransaction,
@@ -33,13 +39,13 @@ const CreateTokenButton: FC<CreateTokenButtonProps> = ({
   getValues,
   handleSubmit,
 }) => {
-  const [loading, setLoading] = useState(false);
-
   const suiClient = useSuiClient();
+  const { colors } = useTheme() as Theme;
+  const { coinsMap, mutate } = useWeb3();
   const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
   const signTransaction = useSignTransaction();
-  const { coinsMap, mutate } = useWeb3();
+  const [loading, setLoading] = useState(false);
 
   const createToken = async () => {
     try {
@@ -131,7 +137,7 @@ const CreateTokenButton: FC<CreateTokenButtonProps> = ({
       flexDirection="column"
       justifyContent="center"
     >
-      {error && (
+      {error ? (
         <Box
           p="s"
           gap="s"
@@ -142,9 +148,36 @@ const CreateTokenButton: FC<CreateTokenButtonProps> = ({
           color="onErrorContainer"
           borderColor="onErrorContainer"
         >
-          <DotErrorSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+          <DotErrorSVG
+            width="100%"
+            maxWidth="1rem"
+            maxHeight="1rem"
+            dotColor={colors.error}
+          />
           <Typography variant="label" size="medium">
             {error}
+          </Typography>
+        </Box>
+      ) : (
+        <Box
+          p="s"
+          gap="s"
+          display="flex"
+          color="outline"
+          bg="lowContainer"
+          borderRadius="xs"
+          border="1px solid"
+          borderColor="outline"
+        >
+          <DotErrorSVG
+            width="100%"
+            maxWidth="1rem"
+            maxHeight="1rem"
+            dotColor={colors.outlineVariant}
+          />
+          <Typography variant="label" size="medium">
+            It costs {FixedPointMath.toNumber(BigNumber(CREATE_TOKEN_SUI_FEE))}{' '}
+            Sui to create a coin
           </Typography>
         </Box>
       )}
