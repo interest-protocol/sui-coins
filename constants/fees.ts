@@ -1,5 +1,5 @@
-// create token fee: 10 SUI
-export const CREATE_TOKEN_SUI_FEE = 10_000_000_000;
+// create token fee: 5 SUI
+export const CREATE_TOKEN_SUI_FEE = 5_000_000_000;
 
 // Less than 1 cent per TX - amount 7000000
 export const AIRDROP_SUI_FEE_PER_ADDRESS = 7_000_000;
