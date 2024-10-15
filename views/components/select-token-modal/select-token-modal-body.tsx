@@ -44,8 +44,6 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
     `${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-tokens`
   );
 
-  console.log({ coinsLoading, empty: empty({}) });
-
   const filterSelected = useWatch({ control, name: 'filter' });
   const search = useWatch({ control, name: 'search' });
 
