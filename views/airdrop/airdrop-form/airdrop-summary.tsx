@@ -15,6 +15,7 @@ import { AirdropSummaryProps, IAirdropForm } from '../airdrop.types';
 const METHOD_TITLE = {
   csv: 'CSV',
   nft: 'NFT',
+  suiPlay: 'SuiPlay Soulbound',
   addressList: 'List of addresses',
 };
 
