@@ -16,7 +16,7 @@ export interface AirdropData {
   amount: string;
 }
 
-export type TMethod = 'csv' | 'nft' | 'addressList';
+export type TMethod = 'csv' | 'nft' | 'addressList' | 'suiPlay';
 
 export interface IAirdropForm {
   error: boolean;
@@ -30,6 +30,7 @@ export interface IAirdropForm {
   done: ReadonlyArray<number>;
   failed: ReadonlyArray<number>;
   asset?: CoinObject | NFTCollectionMetadata;
+  tier: 'The Mythics' | 'The Exalted' | 'All';
   airdropList: ReadonlyArray<AirdropData> | null;
 }
 
