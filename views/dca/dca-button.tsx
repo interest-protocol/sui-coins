@@ -172,7 +172,7 @@ const DCAButton: FC = () => {
         primaryButton: { label: 'Try again', onClick: handleClose },
       }),
       success: () => ({
-        title: 'DCA Successful',
+        title: 'DCA Created',
         message: (
           <SuccessModal
             transactionTime={`${+(formDCA.getValues('executionTime') / 1000).toFixed(2)}`}
