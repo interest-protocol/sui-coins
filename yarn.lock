@@ -833,10 +833,10 @@
   resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-3.9.0.tgz#cf540ac21c6c0cd24a40cf53d8e6d64391fb753d"
   integrity sha512-bU0Gr4EepJ/EQsH/IwEzYLsT/PEj5C0ynLQ4m+GSHS+xKH4TfSelhluTgOaoc4kA5s7eCsQbM4wvZLzELmWzUg==
 
-"@hop.ag/sdk@^3.1.7":
-  version "3.2.7"
-  resolved "https://registry.yarnpkg.com/@hop.ag/sdk/-/sdk-3.2.7.tgz#1a063b6ab1821850d67f1638783f35791682df7b"
-  integrity sha512-AyeXHrurfwDaueqhTaG72INQak7JQNw4PJmpMyW7THbCgkAGKhiW/nhQvZZBdOXCstComHL08iCRWucIh+mCAw==
+"@hop.ag/sdk@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@hop.ag/sdk/-/sdk-4.0.1.tgz#9b196a6e0d876316d5f41392bd1eb7dd7b9c8173"
+  integrity sha512-7u07Y3onNxudRDVCQZgbNzGr8mO7uxzKjSieDaHUk34tkWHD2DBofoDKJZKTAosmSDBjRJKRgggiGOBciDNnpA==
   dependencies:
     "@mysten/sui" "^1.2.0"
     cross-fetch "^4.0.0"
