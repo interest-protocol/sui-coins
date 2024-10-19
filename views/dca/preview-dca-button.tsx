@@ -23,6 +23,8 @@ const PreviewSwapButton: FC = () => {
   const to = useWatch({ control, name: 'to' });
   const starting = useWatch({ control, name: 'starting' });
   const price = useWatch({ control, name: 'price' });
+  const orders = useWatch({ control, name: 'orders' });
+  const error = useWatch({ control, name: 'error' });
 
   const fromValue = from?.value ?? ZERO_BIG_NUMBER;
 
@@ -38,6 +40,7 @@ const PreviewSwapButton: FC = () => {
   const isGreaterThanAllowedWhenSui = fromBalance.minus(oneCoin).lt(fromValue);
 
   const ableToSwap =
+    !error &&
     from &&
     to &&
     from.type &&
@@ -71,14 +74,31 @@ const PreviewSwapButton: FC = () => {
     setValue('error', null);
   }, [from, to]);
 
+  useEffect(() => {
+    if (from?.type)
+      fetch('https://rates-api-production.up.railway.app/api/fetch-quote', {
+        method: 'POST',
+        headers: {
+          accept: '*/*',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          coins: [from.type],
+        }),
+      })
+        .then((res) => res.json?.())
+        .then((data) => {
+          if (data[0].price * (Number(from.display) / orders) < 3)
+            setValue('error', DCAMessagesEnum.dcaOrderMinAmount);
+        });
+  }, [from?.display, orders]);
+
   const handlePreview = () =>
     setModal(
       <FormProvider {...form}>
         <DCAPreviewModal onClose={handleClose} />
       </FormProvider>,
-      {
-        custom: true,
-      }
+      { custom: true }
     );
 
   return (
