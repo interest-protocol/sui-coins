@@ -88,7 +88,7 @@ const PreviewSwapButton: FC = () => {
       })
         .then((res) => res.json?.())
         .then((data) => {
-          if (data[0].price * (Number(from.display) / Number(orders)))
+          if (data[0].price * (Number(from.display) / orders) < 3)
             setValue('error', DCAMessagesEnum.dcaOrderMinAmount);
         });
   }, [from?.display, orders]);
