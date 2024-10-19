@@ -7,6 +7,7 @@ export enum DCAMessagesEnum {
   starting = 'We are starting the DCA, and you will let you know when it is done',
   dcaFailure = 'Your DCA failed, please try again or contact the support team',
   dcaSuccess = 'Your DCA was successfully, and you can check it on the Explorer',
+  dcaOrderMinAmount = 'You must set at least 3$ per order',
 }
 
 export const PERIODICITY: Record<TimeScale, string> = {
