@@ -22,12 +22,10 @@ const SelectTokenFilter: FC<SelectTokenFilterProps> = ({
   return (
     <Box
       mt="s"
-      gap="2xs"
-      display="grid"
+      gap="s"
+      display="flex"
       flexWrap="wrap"
-      gridTemplateColumns={
-        network === Network.MAINNET ? '1.5rem 1fr 1fr 1fr 1fr' : '1fr 1fr'
-      }
+      justifyContent="space-between"
     >
       <Box
         key={v4()}
