@@ -15,8 +15,8 @@ const Balance: FC<InputProps> = ({ label }) => {
   const { control, setValue } = useFormContext<DCAForm>();
 
   const type = useWatch({ control, name: `${label}.type` });
-  const decimals = useWatch({ control, name: `${label}.decimals` });
   const symbol = useWatch({ control, name: `${label}.symbol` });
+  const decimals = useWatch({ control, name: `${label}.decimals` });
 
   if (!type)
     return (

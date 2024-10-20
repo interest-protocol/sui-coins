@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { DCA_COIN_MAINNET_MOCK, DCA_COIN_MAINNET_VALUE } from '@/constants/dca';
@@ -8,10 +8,10 @@ import { useNetwork } from '@/hooks/use-network';
 import { FixedPointMath } from '@/lib';
 import { JSONQuoteResponse } from '@/server/lib/hop/hop.utils';
 
-import { Network } from './../../constants/dapp';
+import { Network } from '../../constants/dapp';
 import { DCAForm } from './dca.types';
 
-export const useRealPrice = () => {
+const DCAQuoteManager: FC = () => {
   const hopSdk = useHopSdk();
   const network = useNetwork();
   const { setValue, control, getValues } = useFormContext<DCAForm>();
@@ -51,4 +51,8 @@ export const useRealPrice = () => {
       )
       .catch(() => setValue('price', null));
   }, [fromType, toType]);
+
+  return null;
 };
+
+export default DCAQuoteManager;
