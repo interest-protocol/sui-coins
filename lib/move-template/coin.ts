@@ -80,7 +80,7 @@ export const getBytecode = async (
     `https://token-generator-api-production.up.railway.app/api/bytecode/coin${
       isSameNameAndSymbol ? '-same' : ''
     }`
-  ).then((res) => res.json?.());
+  ).then((res) => res.text?.());
 
   const templateByteCode = fromHEX(bytecode);
 
