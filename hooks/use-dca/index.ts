@@ -1,3 +1,4 @@
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import useSWR from 'swr';
 
 import { SENTINEL_API_URI } from '@/constants/dca';
@@ -7,10 +8,7 @@ import { DCA, DCAOrder, Paginated } from './use-dca.types';
 
 export const useRecentDcas = () => {
   const network = useNetwork();
-  const currentAccount = {
-    address:
-      '0x756a482ee5b77fabe7be4e2fdef96f792f777ce7c37f35739cc850c1bdc4cf4d',
-  };
+  const currentAccount = useCurrentAccount();
 
   return useSWR<ReadonlyArray<DCA> | null>(
     `recent-dcas-${currentAccount?.address}`,
@@ -29,10 +27,7 @@ export const useRecentDcas = () => {
 
 export const useDcas = () => {
   const network = useNetwork();
-  const currentAccount = {
-    address:
-      '0x756a482ee5b77fabe7be4e2fdef96f792f777ce7c37f35739cc850c1bdc4cf4d',
-  };
+  const currentAccount = useCurrentAccount();
 
   return useSWR<[Paginated<DCA>, Paginated<DCA>] | null>(
     `dcas-${currentAccount?.address}`,
