@@ -34,6 +34,7 @@ import {
   signAndExecute,
   throwTXIfNotSuccessful,
   updateURL,
+  waitForTx,
 } from '@/utils';
 
 import DCAOrderDetails from './dca-order-details';
@@ -91,6 +92,11 @@ const DCAOrderListItem: FC<DCAShortInfo> = ({
         suiClient,
         currentAccount,
         signTransaction,
+      });
+
+      await waitForTx({
+        suiClient,
+        digest: txResult.digest,
       });
 
       throwTXIfNotSuccessful(txResult);

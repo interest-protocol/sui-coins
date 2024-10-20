@@ -73,15 +73,13 @@ const CreateTokenButton: FC<CreateTokenButtonProps> = ({
 
       tx.transferObjects([fee], tx.pure.address(TREASURY));
 
+      const bytecode = await getBytecode({
+        ...getValues(),
+        recipient: currentAccount.address,
+      });
+
       const [upgradeCap] = tx.publish({
-        modules: [
-          [
-            ...getBytecode({
-              ...getValues(),
-              recipient: currentAccount.address,
-            }),
-          ],
-        ],
+        modules: [[...bytecode]],
         dependencies: [normalizeSuiAddress('0x1'), normalizeSuiAddress('0x2')],
       });
 

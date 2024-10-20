@@ -6,11 +6,11 @@ import { v4 } from 'uuid';
 import Layout from '@/components/layout';
 import { Routes, RoutesEnum } from '@/constants';
 
-import { useRealPrice } from './dca.hooks';
 import DCAAggregator from './dca-aggregator';
 import DCAFields from './dca-fields';
 import DCAFlipToken from './dca-flip-token';
 import DCAPoweredBy from './dca-powered-by';
+import DCAQuoteManager from './dca-quote-manager';
 import DCARecentOrders from './dca-recent-orders';
 import Input from './input';
 import HeaderInfo from './input/header-info';
@@ -18,7 +18,6 @@ import SelectToken from './input/select-token';
 import PreviewDCAButton from './preview-dca-button';
 
 const DCA: FC = () => {
-  useRealPrice();
   const { push, pathname } = useRouter();
 
   const onChangeTab = (index: number) =>
@@ -109,6 +108,7 @@ const DCA: FC = () => {
         <DCAAggregator />
         <DCARecentOrders />
       </Box>
+      <DCAQuoteManager />
     </Layout>
   );
 };
