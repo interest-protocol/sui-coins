@@ -54,7 +54,11 @@ const AirdropChooseMethod: FC = () => {
                   borderRadius="full"
                   justifyContent="center"
                 >
-                  <Icon width="100%" maxWidth="1.5rem" maxHeight="1.5rem" />
+                  {typeof Icon === 'string' ? (
+                    <img src={Icon} alt="SuiPlay" />
+                  ) : (
+                    <Icon width="100%" maxWidth="1.5rem" maxHeight="1.5rem" />
+                  )}
                 </Box>
                 <Box>
                   <Typography fontWeight="700" variant="body" size="large">
