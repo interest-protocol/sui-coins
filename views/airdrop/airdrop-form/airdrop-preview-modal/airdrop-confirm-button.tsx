@@ -124,7 +124,10 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
           tx.transferObjects([fee], tx.pure.address(TREASURY));
 
-          tx.setGasPayment([gasCoin, ...(!index ? gasCoins : [])]);
+          tx.setGasPayment([
+            gasCoin,
+            ...(!index ? gasCoins.splice(0, 250) : []),
+          ]);
 
           const tx2 = await sendAirdrop({
             tx,
@@ -256,7 +259,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           version: nextGasVersion,
         };
 
-        tx.setGasPayment([gas, ...(!index ? gasCoins : [])]);
+        tx.setGasPayment([gas, ...(!index ? gasCoins.splice(0, 250) : [])]);
 
         const tx2 = await sendAirdrop({
           tx,
