@@ -7,7 +7,7 @@ import { TMethod } from '../airdrop.types';
 
 export const METHODS_ICONS: Record<
   TMethod,
-  { title: string; Icon: FC<SVGProps>; description: string }
+  { title: string; Icon: string | FC<SVGProps>; description: string }
 > = {
   csv: {
     title: 'CSV',
@@ -17,6 +17,11 @@ export const METHODS_ICONS: Record<
   nft: {
     title: 'NFT',
     Icon: NftSVG,
+    description: 'Airdrops to holders of your favorite NFT collections.',
+  },
+  suiPlay: {
+    title: 'SuiPlay Soulbound',
+    Icon: '/images/suiplay/suiplay.png',
     description: 'Airdrops to holders of your favorite NFT collections.',
   },
   addressList: {
