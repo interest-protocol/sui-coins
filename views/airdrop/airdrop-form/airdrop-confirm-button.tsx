@@ -102,7 +102,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           'Initial TX completed successfully'
         );
 
-        const [gasCoin, spendCoin, feeCoin] =
+        const [gasCoin, spendCoin, feeCoin, ...gasCoins] =
           (tx2.objectChanges as Array<SuiObjectChangeCreated>)!.reduce(
             suiObjectReducer(currentAccount.address),
             []
@@ -124,7 +124,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
           tx.transferObjects([fee], tx.pure.address(TREASURY));
 
-          tx.setGasPayment([gasCoin]);
+          tx.setGasPayment([gasCoin, ...(!index ? gasCoins : [])]);
 
           const tx2 = await sendAirdrop({
             tx,
@@ -220,7 +220,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           firstCoin.coinObjectId
         );
 
-      const [gasCoin, feeCoin] =
+      const [gasCoin, feeCoin, ...gasCoins] =
         (tx2.objectChanges as Array<SuiObjectChangeCreated>)!.reduce(
           suiObjectReducer(currentAccount.address),
           []
@@ -256,7 +256,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           version: nextGasVersion,
         };
 
-        tx.setGasPayment([gas]);
+        tx.setGasPayment([gas, ...(!index ? gasCoins : [])]);
 
         const tx2 = await sendAirdrop({
           tx,
