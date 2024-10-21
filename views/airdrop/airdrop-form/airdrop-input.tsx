@@ -9,6 +9,7 @@ import AirdropCustomAmountMethod from './airdrop-custom-amount-method';
 import AirdropNftCoinsMethod from './airdrop-nft-coins-method';
 import AirdropPreviewButton from './airdrop-preview-button';
 import AirdropPreviewModal from './airdrop-preview-modal';
+import AirdropSuiPlayHoldersMethod from './airdrop-sui-play-holders';
 import AirdropUploadFile from './airdrop-upload-file';
 
 const AirdropInput: FC<AirdropInputProps> = ({ setIsProgressView }) => {
@@ -43,7 +44,7 @@ const AirdropInput: FC<AirdropInputProps> = ({ setIsProgressView }) => {
     >
       {method === 'csv' && <AirdropUploadFile />}
       {method === 'nft' && <AirdropNftCoinsMethod />}
-      {method === 'suiPlay' && <AirdropNftCoinsMethod />}
+      {method === 'suiPlay' && <AirdropSuiPlayHoldersMethod />}
       {method === 'addressList' && <AirdropCustomAmountMethod />}
       <AirdropPreviewButton handleOpenSummaryModal={handleOpenSummaryModal} />
     </Box>

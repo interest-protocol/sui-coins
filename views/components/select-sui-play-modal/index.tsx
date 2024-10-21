@@ -3,8 +3,8 @@ import { FC } from 'react';
 
 import { TimesSVG } from '@/svg';
 
+import ModalSuiPlayBody from './modal-sui-play-body';
 import { SelectSuiPlayModalProps } from './select-sui-play-modal.types';
-import SelectTokenModalBody from './select-sui-play-modal-body';
 
 const SelectSuiPlayModal: FC<SelectSuiPlayModalProps> = ({
   onSelect,
@@ -21,8 +21,6 @@ const SelectSuiPlayModal: FC<SelectSuiPlayModalProps> = ({
       width="25rem"
       display="flex"
       bg="onPrimary"
-      height="41rem"
-      maxHeight="90vh"
       overflow="hidden"
       color="onSurface"
       borderRadius="xs"
@@ -52,7 +50,7 @@ const SelectSuiPlayModal: FC<SelectSuiPlayModalProps> = ({
         initial={{ height: 0 }}
         animate={{ height: 'auto' }}
       >
-        <SelectTokenModalBody handleSelectTier={handleSelectTier} />
+        <ModalSuiPlayBody handleSelectTier={handleSelectTier} />
       </Motion>
     </Motion>
   );

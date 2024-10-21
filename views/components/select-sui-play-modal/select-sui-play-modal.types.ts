@@ -1,5 +1,6 @@
 export interface SuiPlayModalItemProps {
   image: string;
+  holders: number;
   updatedAt: number;
   selected: boolean;
   onClick: () => void;

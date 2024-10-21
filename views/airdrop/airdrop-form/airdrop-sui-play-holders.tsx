@@ -4,6 +4,7 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { SUIPLAY_SOULBOUND } from '@/constants';
+import { SUIPLAY_HOLDERS } from '@/constants/nft';
 import { useModal } from '@/hooks/use-modal';
 import { ChevronRightSVG } from '@/svg';
 import SelectSuiPlayModal from '@/views/components/select-sui-play-modal';
@@ -22,23 +23,7 @@ const AirdropSuiPlayHoldersMethod: FC = () => {
     tier: 'The Mythics' | 'The Exalted' | 'All'
   ) => {
     setValue('tier', tier);
-    const holders = await fetch('/sui-play-holders.json')
-      .then((res) => res.json?.())
-      .then(
-        (
-          data: ReadonlyArray<{
-            suiAddress: string;
-            tier: 'The Mythics' | 'The Exalted';
-          }>
-        ) =>
-          data.reduce(
-            (acc, item) =>
-              tier === 'All' || tier === item.tier
-                ? [...acc, item.suiAddress]
-                : acc,
-            [] as ReadonlyArray<string>
-          )
-      );
+    const holders = SUIPLAY_HOLDERS[tier];
 
     const airdropList = holders.map((address) => ({
       address,
@@ -116,7 +101,7 @@ const AirdropSuiPlayHoldersMethod: FC = () => {
                 </Box>
               )}
               <Typography variant="body" size="large" flex="1" as="span">
-                .name
+                {tier}
               </Typography>
               <Box rotate="90deg">
                 <ChevronRightSVG

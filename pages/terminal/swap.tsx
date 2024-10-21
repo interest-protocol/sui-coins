@@ -1,8 +1,17 @@
+import type {
+  SwapInterfaceProps,
+  Aggregator,
+} from '@interest-protocol/sui-coins-terminal';
 import { NextPage } from 'next';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 
-import { Aggregator } from '@/views/swap/swap.types';
-import { SwapInterface, SwapInterfaceProps } from '@/views/swap/terminal';
+const SwapTerminal = dynamic(
+  import('@interest-protocol/sui-coins-terminal').then(
+    ({ SwapTerminal }) => SwapTerminal
+  ),
+  { ssr: false }
+);
 
 const SwapPage: NextPage = () => {
   const {
@@ -19,7 +28,7 @@ const SwapPage: NextPage = () => {
     slippage: (slippage as `${number}`) ?? undefined,
   } as SwapInterfaceProps;
 
-  return <SwapInterface {...props} />;
+  return <SwapTerminal {...props} />;
 };
 
 export default SwapPage;

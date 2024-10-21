@@ -49,6 +49,7 @@ const AirdropChooseMethod: FC = () => {
                   height="2.5rem"
                   bg="#0053DB14"
                   minWidth="2.5rem"
+                  overflow="hidden"
                   minHeight="2.5rem"
                   alignItems="center"
                   borderRadius="full"

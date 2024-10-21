@@ -52,9 +52,9 @@ const NFTModalItem: FC<NFTModalItemProps> = ({
             </Box>
           )}
           <img
-            src={`/images/nft/${id}.webp`}
             alt={name}
             width="100%"
+            src={`/images/nft/${id}.webp`}
             onLoad={() => setImageLoading(false)}
           />
         </Box>
@@ -81,9 +81,9 @@ const NFTModalItem: FC<NFTModalItemProps> = ({
           </Typography>
           <Button
             p="0"
+            variant="text"
             width="1.25rem"
             height="1.25rem"
-            variant="outline"
             borderRadius="6px"
             alignItems="center"
             justifyContent="center"
@@ -101,14 +101,14 @@ const NFTModalItem: FC<NFTModalItemProps> = ({
               </Box>
             ) : (
               <DownloadSVG
-                maxWidth="0.75rem"
-                maxHeight="0.75rem"
                 width="100%"
+                maxWidth="0.825rem"
+                maxHeight="0.825rem"
               />
             )}
           </Button>
         </Box>
-        <Typography variant="body" size="small">
+        <Typography variant="body" size="small" color="outline">
           Last update: {new Date(updatedAt!).toLocaleDateString()}
         </Typography>
       </Box>
