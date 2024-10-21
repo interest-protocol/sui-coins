@@ -1,6 +1,6 @@
 import type {
-  SwapInterfaceProps,
   Aggregator,
+  SwapInterfaceProps,
 } from '@interest-protocol/sui-coins-terminal';
 import { NextPage } from 'next';
 import dynamic from 'next/dynamic';
