@@ -14,8 +14,8 @@ const AirdropForm: FC<AirdropInputProps> = ({ setIsProgressView }) => (
     maxWidth="39.5rem"
     flexDirection="column"
   >
-    <AirdropChooseCoin />
     <AirdropChooseMethod />
+    <AirdropChooseCoin />
     <AirdropInput setIsProgressView={setIsProgressView} />
   </Box>
 );

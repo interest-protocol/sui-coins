@@ -10,7 +10,7 @@ import { ChevronRightSVG } from '@/svg';
 import SelectSuiPlayModal from '@/views/components/select-sui-play-modal';
 
 import { IAirdropForm } from '../airdrop.types';
-import AirdropCommonAmountTextField from './airdrop-common-amount-text-field';
+import AirdropCommonAmountTextField from './airdrop-common-amount-method/airdrop-common-amount-text-field';
 
 const AirdropSuiPlayHoldersMethod: FC = () => {
   const { setModal, handleClose } = useModal();

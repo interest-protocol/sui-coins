@@ -9,14 +9,14 @@ import { useModal } from '@/hooks/use-modal';
 import useTokenPriceByType from '@/hooks/use-token-price';
 import { ChevronRightSVG } from '@/svg';
 
-import { CoinObject } from '../../../components/web3-manager/coins-manager/coins-manager.types';
-import SelectTokenModal from '../../components/select-token-modal';
-import { IAirdropForm } from '../airdrop.types';
-import { getSymbol } from '../airdrop.utils';
+import { CoinObject } from '../../../../components/web3-manager/coins-manager/coins-manager.types';
+import SelectTokenModal from '../../../components/select-token-modal';
+import { IAirdropForm } from '../../airdrop.types';
+import { getSymbol } from '../../airdrop.utils';
 
 const BOX_ID = 'dropdown-id';
 
-const AirdropSelectToken: FC = () => {
+const AirdropSelectToken: FC<{ isStrict: boolean }> = ({ isStrict }) => {
   const { network } = useSuiClientContext();
   const { setModal, handleClose } = useModal();
   const { control, setValue } = useFormContext<IAirdropForm>();
@@ -39,7 +39,11 @@ const AirdropSelectToken: FC = () => {
         initial={{ scale: 0.85 }}
         transition={{ duration: 0.3 }}
       >
-        <SelectTokenModal closeModal={handleClose} onSelect={onSelect} />
+        <SelectTokenModal
+          strictOnly={isStrict}
+          closeModal={handleClose}
+          onSelect={onSelect}
+        />
       </Motion>,
       {
         custom: true,

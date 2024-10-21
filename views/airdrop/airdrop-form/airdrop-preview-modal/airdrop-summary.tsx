@@ -10,7 +10,7 @@ import { FixedPointMath } from '@/lib';
 import { ZERO_BIG_NUMBER } from '@/utils';
 import { BATCH_SIZE } from '@/views/airdrop/airdrop.constants';
 
-import { AirdropSummaryProps, IAirdropForm } from '../airdrop.types';
+import { AirdropSummaryProps, IAirdropForm } from '../../airdrop.types';
 
 const METHOD_TITLE = {
   csv: 'CSV',

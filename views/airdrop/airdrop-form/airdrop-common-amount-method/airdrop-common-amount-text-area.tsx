@@ -4,8 +4,8 @@ import toast from 'react-hot-toast';
 
 import { TextareaField } from '@/components';
 
-import { IAirdropForm } from '../airdrop.types';
-import { textToAirdrop } from '../airdrop.utils';
+import { IAirdropForm } from '../../airdrop.types';
+import { textToAirdrop } from '../../airdrop.utils';
 
 const AirdropCustomAmountTextArea: FC = () => {
   const { setValue, getValues } = useFormContext<IAirdropForm>();

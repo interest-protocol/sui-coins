@@ -7,17 +7,14 @@ import { IAirdropForm } from '../airdrop.types';
 import { METHODS_ICONS } from './airdrop-form.data';
 
 const AirdropChooseMethod: FC = () => {
-  const { control, setValue } = useFormContext<IAirdropForm>();
-  const token = useWatch({ control, name: 'token' });
+  const { control, setValue, resetField } = useFormContext<IAirdropForm>();
   const method = useWatch({ control, name: 'method' });
-
-  if (!token) return null;
 
   return (
     <Box p="xl" borderRadius="xs" bg="lowestContainer">
       <Box display="flex" flexDirection="column" mb="m">
         <Typography variant="body" size="large">
-          2. Choose Delivery Method
+          1. Choose Delivery Method
         </Typography>
       </Box>
       {toPairs(METHODS_ICONS).map(
@@ -30,9 +27,10 @@ const AirdropChooseMethod: FC = () => {
             nHover={{ bg: '#0053DB14', cursor: 'pointer' }}
             onClick={() => {
               setValue('method', key);
-              setValue('asset', undefined);
-              setValue('airdropList', null);
-              setValue('commonAmount', '0');
+              resetField('asset');
+              resetField('token');
+              resetField('airdropList');
+              resetField('commonAmount');
             }}
           >
             <Box

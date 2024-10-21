@@ -5,8 +5,8 @@ import { FormProvider, useFormContext, useWatch } from 'react-hook-form';
 import { useModal } from '@/hooks/use-modal';
 
 import { AirdropInputProps, IAirdropForm } from '../airdrop.types';
-import AirdropCustomAmountMethod from './airdrop-custom-amount-method';
-import AirdropNftCoinsMethod from './airdrop-nft-coins-method';
+import AirdropCustomAmountMethod from './airdrop-common-amount-method';
+import AirdropNftCoinsMethod from './airdrop-common-amount-method/airdrop-nft-coins-method';
 import AirdropPreviewButton from './airdrop-preview-button';
 import AirdropPreviewModal from './airdrop-preview-modal';
 import AirdropSuiPlayHoldersMethod from './airdrop-sui-play-holders';

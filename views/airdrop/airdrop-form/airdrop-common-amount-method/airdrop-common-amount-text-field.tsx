@@ -8,7 +8,7 @@ import { Network } from '@/constants';
 import { FixedPointMath } from '@/lib';
 import { parseInputEventToNumberString } from '@/utils';
 
-import { IAirdropForm } from '../airdrop.types';
+import { IAirdropForm } from '../../airdrop.types';
 
 const AirdropCustomAmountTextField: FC = () => {
   const { network } = useSuiClientContext();

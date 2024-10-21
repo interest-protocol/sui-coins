@@ -10,8 +10,8 @@ import { FixedPointMath } from '@/lib';
 import { ArrowLeftSVG, TimesSVG } from '@/svg';
 import { formatMoney } from '@/utils';
 
-import { AirdropPreviewModalProps, IAirdropForm } from '../airdrop.types';
-import { getSymbol } from '../airdrop.utils';
+import { AirdropPreviewModalProps, IAirdropForm } from '../../airdrop.types';
+import { getSymbol } from '../../airdrop.utils';
 import AirdropConfirmButton from './airdrop-confirm-button';
 import AirdropSummary from './airdrop-summary';
 

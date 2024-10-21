@@ -34,8 +34,8 @@ import {
   suiObjectReducer,
 } from '@/views/airdrop/airdrop-form/txb-utils';
 
-import { BATCH_SIZE } from '../airdrop.constants';
-import { AirdropConfirmButtonProps, IAirdropForm } from '../airdrop.types';
+import { BATCH_SIZE } from '../../airdrop.constants';
+import { AirdropConfirmButtonProps, IAirdropForm } from '../../airdrop.types';
 
 const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
   setIsProgressView,

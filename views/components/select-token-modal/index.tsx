@@ -25,6 +25,7 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
   simple,
   onSelect,
   closeModal,
+  strictOnly,
 }) => {
   const { control, register, setValue } = useForm<SearchTokenForm>({
     defaultValues: {
@@ -79,7 +80,7 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
             Prefix={<SearchSVG maxWidth="1rem" maxHeight="1rem" width="100%" />}
           />
         </Box>
-        {!simple && (
+        {!simple && !strictOnly && (
           <>
             <FavoriteTokens onSelectToken={handleSelectToken} />
             <SelectTokenFilter control={control} setValue={setValue} />
