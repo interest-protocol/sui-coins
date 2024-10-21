@@ -26,6 +26,7 @@ export interface DCAForm {
   price: string | null;
   error: string | null;
   explorerLink: string;
+  executionTime: number;
   periodicity: TimeScale;
   aggregator: Aggregator;
 }
