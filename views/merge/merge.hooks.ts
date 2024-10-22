@@ -5,6 +5,7 @@ import {
 } from '@mysten/dapp-kit';
 import { Transaction } from '@mysten/sui/transactions';
 import { SUI_TYPE_ARG } from '@mysten/sui/utils';
+import BigNumber from 'bignumber.js';
 import invariant from 'tiny-invariant';
 
 import { CoinObject } from '@/components/web3-manager/coins-manager/coins-manager.types';
@@ -41,11 +42,12 @@ export const useMergeCoins = () => {
       let digest: string;
       let version: string;
       let txResult: TimedSuiTransactionBlockResponse | undefined;
+
       const gasObjectId = (
         await suiClient.getCoins({
+          limit: 1,
           owner: currentAccount.address,
           coinType: SUI_TYPE_ARG,
-          limit: 1,
         })
       ).data[0].coinObjectId;
 
@@ -54,7 +56,7 @@ export const useMergeCoins = () => {
 
         slotToMerge
           .filter(
-            ({ type, objectsCount }) => !isSui(type) && objectsCount > 256 * i
+            ({ type, objectsCount }) => !isSui(type) && objectsCount > 200 * i
           )
           .forEach(async ({ type }) => {
             const [target, ...others] = await getCoins({
@@ -64,6 +66,7 @@ export const useMergeCoins = () => {
             });
 
             let targetVersion, targetDigest;
+
             if (txResult)
               [targetDigest, targetVersion] = findNextVersionAndDigest(
                 txResult,
@@ -77,32 +80,31 @@ export const useMergeCoins = () => {
                 version: targetVersion ?? target.version,
               }),
               others
-                .slice(256 * i, 256 * (i + 1) - 1)
+                .slice(200 * i, 200 * (i + 1) - 1)
                 .map(({ coinObjectId }) => tx.object(coinObjectId))
             );
           });
 
-        if (coinsMap[SUI_TYPE_ARG]?.objectsCount > 256 * (i + 1)) {
+        if (coinsMap[SUI_TYPE_ARG]?.objectsCount > 200 * (i + 1)) {
           const allSuiObjects = await getCoins({
             suiClient,
             account: currentAccount.address,
             coinType: SUI_TYPE_ARG,
           });
+
           const gasCoins = allSuiObjects.toSorted((a, b) =>
-            FixedPointMath.toBigNumber(a.balance).gt(
-              FixedPointMath.toBigNumber(b.balance)
+            FixedPointMath.toNumber(
+              BigNumber(b.balance).minus(BigNumber(a.balance))
             )
-              ? -1
-              : 1
           );
 
           let gasCoinsFormatted = gasCoins
             .filter((item) => item)
-            .slice(256 * i, 256 * (i + 1) - 1)
+            .slice(200 * i, 200 * (i + 1) - 1)
             .map(({ coinObjectId, version, digest }) => ({
-              objectId: coinObjectId,
-              version,
               digest,
+              version,
+              objectId: coinObjectId,
             }));
 
           if (txResult) {
@@ -114,7 +116,7 @@ export const useMergeCoins = () => {
             ];
           }
 
-          tx.setGasPayment(gasCoinsFormatted.slice(0, 255));
+          tx.setGasPayment(gasCoinsFormatted.slice(0, 200));
         } else if (txResult) {
           [digest, version] = findNextVersionAndDigest(txResult, gasObjectId);
 
@@ -143,7 +145,7 @@ export const useMergeCoins = () => {
         onSetExecutionTime && onSetExecutionTime(txResult.time);
         showTXSuccessToast(txResult, network, 'Coins slot merged!');
         i++;
-      } while (slotToMerge.some(({ objectsCount }) => objectsCount > 256 * i));
+      } while (slotToMerge.some(({ objectsCount }) => objectsCount > 200 * i));
     }
   };
 };
