@@ -5,8 +5,8 @@ import toast from 'react-hot-toast';
 
 import { FolderSVG } from '@/svg';
 
-import { IAirdropForm } from '../airdrop.types';
-import { csvToAirdrop } from '../airdrop.utils';
+import { IAirdropForm } from '../../../airdrop.types';
+import { csvToAirdrop } from '../../../airdrop.utils';
 import AirdropUploadFileCard from './airdrop-upload-file-card';
 
 const AirdropUploadFile: FC = () => {
@@ -63,7 +63,7 @@ const AirdropUploadFile: FC = () => {
   return (
     <Box display="flex" flexDirection="column" gap="s">
       <Typography variant="body" size="large">
-        3. Upload file{' '}
+        2. Upload CSV file{' '}
         <Typography
           as="strong"
           size="small"

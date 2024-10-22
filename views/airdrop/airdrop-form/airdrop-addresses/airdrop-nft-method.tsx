@@ -13,9 +13,8 @@ import SelectTokenModal from '@/views/components/select-token-modal';
 import { CoinObject } from '../../../../components/web3-manager/coins-manager/coins-manager.types';
 import { IAirdropForm } from '../../airdrop.types';
 import { getSymbol } from '../../airdrop.utils';
-import AirdropCommonAmountTextField from './airdrop-common-amount-text-field';
 
-const AirdropNftCoinsMethod: FC = () => {
+const AirdropNftMethod: FC = () => {
   const { nftsMap } = useWeb3();
   const { setModal, handleClose } = useModal();
 
@@ -78,7 +77,7 @@ const AirdropNftCoinsMethod: FC = () => {
   return (
     <Box display="flex" flexDirection="column" gap="s">
       <Typography variant="body" size="large">
-        3. Who to send & amount
+        2. Who to send & amount
       </Typography>
       <Box>
         <Typography variant="body" size="small">
@@ -140,14 +139,8 @@ const AirdropNftCoinsMethod: FC = () => {
           </Box>
         </Box>
       </Box>
-      <Box>
-        <Typography variant="body" size="small">
-          Enter amount to send per {method === 'nft' ? 'NFT' : 'Coin'}
-        </Typography>
-        <AirdropCommonAmountTextField />
-      </Box>
     </Box>
   );
 };
 
-export default AirdropNftCoinsMethod;
+export default AirdropNftMethod;

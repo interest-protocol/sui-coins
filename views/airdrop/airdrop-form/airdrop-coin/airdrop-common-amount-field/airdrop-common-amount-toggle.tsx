@@ -4,7 +4,7 @@ import { useFormContext } from 'react-hook-form';
 
 import { FixedPointMath } from '@/lib';
 
-import { IAirdropForm } from '../../airdrop.types';
+import { IAirdropForm } from '../../../airdrop.types';
 
 const AirdropCommonAmountToggle: FC = () => {
   const { getValues, setValue } = useFormContext<IAirdropForm>();

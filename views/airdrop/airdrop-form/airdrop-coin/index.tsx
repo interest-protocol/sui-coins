@@ -2,14 +2,17 @@ import { Box, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { AirdropCoinProps, IAirdropForm } from '../../airdrop.types';
 import AirdropChooseCoinBalance from './airdrop-choose-coin-balance';
+import AirdropInput from './airdrop-input';
 import AirdropSelectToken from './airdrop-select-token';
 
-const AirdropChooseCoin: FC = () => {
-  const { control } = useFormContext();
+const AirdropCoin: FC<AirdropCoinProps> = ({ setIsProgressView }) => {
+  const { control } = useFormContext<IAirdropForm>();
   const method = useWatch({ control, name: 'method' });
+  const airdropList = useWatch({ control, name: 'airdropList' });
 
-  if (!method) return null;
+  if (!method || !airdropList?.length) return null;
 
   return (
     <Box
@@ -22,13 +25,14 @@ const AirdropChooseCoin: FC = () => {
     >
       <Box display="flex" justifyContent="space-between" alignItems="flex-end">
         <Typography variant="body" size="large">
-          2. Choose a {method === 'suiPlay' && 'whitelisted'} coin
+          3. Choose a {method === 'suiPlay' && 'whitelisted'} coin
         </Typography>
         <AirdropChooseCoinBalance />
       </Box>
       <AirdropSelectToken isStrict={method === 'suiPlay'} />
+      <AirdropInput setIsProgressView={setIsProgressView} />
     </Box>
   );
 };
 
-export default AirdropChooseCoin;
+export default AirdropCoin;

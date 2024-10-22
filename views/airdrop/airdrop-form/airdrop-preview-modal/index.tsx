@@ -43,10 +43,10 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
   return (
     <Box
       maxWidth="95%"
-      borderRadius="xs"
+      maxHeight="90vh"
       width="26.875rem"
       minHeight="30rem"
-      maxHeight="90vh"
+      borderRadius="xs  "
       alignItems="center"
       display="inline-flex"
       justifyContent="space-between"

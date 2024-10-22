@@ -3,8 +3,8 @@ import { toPairs } from 'ramda';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { IAirdropForm } from '../airdrop.types';
-import { METHODS_ICONS } from './airdrop-form.data';
+import { IAirdropForm } from '../../airdrop.types';
+import { METHODS_ICONS } from '../airdrop-form.data';
 
 const AirdropChooseMethod: FC = () => {
   const { control, setValue, resetField } = useFormContext<IAirdropForm>();

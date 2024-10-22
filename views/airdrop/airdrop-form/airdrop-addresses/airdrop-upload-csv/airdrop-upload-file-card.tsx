@@ -10,7 +10,10 @@ import { useFormContext } from 'react-hook-form';
 
 import { FileSVG, TimesSVG } from '@/svg';
 
-import { AirdropUploadFileCardProps, IAirdropForm } from '../airdrop.types';
+import {
+  AirdropUploadFileCardProps,
+  IAirdropForm,
+} from '../../../airdrop.types';
 
 const AirdropUploadFileCard: FC<AirdropUploadFileCardProps> = ({
   name,

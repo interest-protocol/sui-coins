@@ -53,7 +53,7 @@ export interface AirdropProgressIndicatorProps {
   goBack: () => void;
 }
 
-export interface AirdropInputProps {
+export interface AirdropCoinProps {
   setIsProgressView: Dispatch<SetStateAction<boolean>>;
 }
 

@@ -9,8 +9,7 @@ import { useModal } from '@/hooks/use-modal';
 import { ChevronRightSVG } from '@/svg';
 import SelectSuiPlayModal from '@/views/components/select-sui-play-modal';
 
-import { IAirdropForm } from '../airdrop.types';
-import AirdropCommonAmountTextField from './airdrop-common-amount-method/airdrop-common-amount-text-field';
+import { IAirdropForm } from '../../airdrop.types';
 
 const AirdropSuiPlayHoldersMethod: FC = () => {
   const { setModal, handleClose } = useModal();
@@ -58,7 +57,7 @@ const AirdropSuiPlayHoldersMethod: FC = () => {
   return (
     <Box display="flex" flexDirection="column" gap="s">
       <Typography variant="body" size="large">
-        3. Who to send & amount
+        2. Who to send & amount
       </Typography>
       <Box>
         <Typography variant="body" size="small">
@@ -113,12 +112,6 @@ const AirdropSuiPlayHoldersMethod: FC = () => {
             </Box>
           </Box>
         </Box>
-      </Box>
-      <Box>
-        <Typography variant="body" size="small">
-          Enter amount to send per Soulbound
-        </Typography>
-        <AirdropCommonAmountTextField />
       </Box>
     </Box>
   );

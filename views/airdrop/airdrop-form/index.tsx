@@ -1,12 +1,12 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 
-import { AirdropInputProps } from '../airdrop.types';
-import AirdropChooseCoin from './airdrop-choose-coin';
+import { AirdropCoinProps } from '../airdrop.types';
+import AirdropAddresses from './airdrop-addresses';
 import AirdropChooseMethod from './airdrop-choose-method';
-import AirdropInput from './airdrop-input';
+import AirdropCoin from './airdrop-coin';
 
-const AirdropForm: FC<AirdropInputProps> = ({ setIsProgressView }) => (
+const AirdropForm: FC<AirdropCoinProps> = ({ setIsProgressView }) => (
   <Box
     gap="xs"
     mx="auto"
@@ -15,8 +15,8 @@ const AirdropForm: FC<AirdropInputProps> = ({ setIsProgressView }) => (
     flexDirection="column"
   >
     <AirdropChooseMethod />
-    <AirdropChooseCoin />
-    <AirdropInput setIsProgressView={setIsProgressView} />
+    <AirdropAddresses />
+    <AirdropCoin setIsProgressView={setIsProgressView} />
   </Box>
 );
 

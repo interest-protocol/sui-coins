@@ -6,7 +6,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { useWeb3 } from '@/hooks/use-web3';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
-import { AirdropPreviewButtonProps, IAirdropForm } from '../airdrop.types';
+import { AirdropPreviewButtonProps, IAirdropForm } from '../../airdrop.types';
 
 const AirdropPreviewButton: FC<AirdropPreviewButtonProps> = ({
   handleOpenSummaryModal,
