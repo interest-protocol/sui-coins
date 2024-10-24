@@ -17,8 +17,9 @@ const AirdropChooseMethod: FC = () => {
           1. Choose Delivery Method
         </Typography>
       </Box>
-      {toPairs(METHODS_ICONS).map(
-        ([key, { title, description, Icon }], index) => (
+      {toPairs(METHODS_ICONS)
+        .filter(([key]) => key !== 'suiPlay')
+        .map(([key, { title, description, Icon }], index) => (
           <Box
             mb="2xs"
             padding="m"
@@ -71,8 +72,7 @@ const AirdropChooseMethod: FC = () => {
               <RadioButton defaultValue={method === key} />
             </Box>
           </Box>
-        )
-      )}
+        ))}
     </Box>
   );
 };
