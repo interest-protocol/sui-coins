@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@interest-protocol/ui-kit';
+import { Box, Tag, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
@@ -46,45 +46,82 @@ const Balance: FC<InputProps> = ({ label }) => {
     coinsMap[type]?.decimals ?? decimals
   );
 
-  const handleMax = () => {
-    if (label === 'to') return;
+  const adjustBalance = (deduction: number, divisor: number = 1) => {
+    const adjustedBalance = balance / divisor - (isSui(type) ? deduction : 0);
 
-    if (isSui(type) && balance < 1) {
+    if (adjustedBalance < 1 && isSui(type)) {
       setValue('from.value', ZERO_BIG_NUMBER);
       setValue('from.display', '0');
-      return;
+    } else {
+      setValue(
+        'from.value',
+        coinsMap[type]?.balance
+          .dividedBy(divisor)
+          .minus(isSui(type) ? deduction * 1_000_000_000 : 0)
+      );
+      setValue('from.display', String(adjustedBalance));
     }
-
-    setValue(
-      'from.value',
-      coinsMap[type]?.balance.minus(isSui(type) ? 1_000_000_000 : 0)
-    );
-    setValue('from.display', String(balance - (isSui(type) ? 1 : 0)));
   };
 
+  const handleMax = () => label !== 'to' && adjustBalance(1);
+
+  const handleHalf = () => label !== 'to' && adjustBalance(0.5, 2);
+
   return (
-    <Button
-      p="2xs"
-      gap="0.5rem"
-      color="outline"
-      variant="outline"
-      alignItems="center"
-      onClick={handleMax}
-      borderColor="transparent"
-      nHover={{ bg: 'unset', borderColor: 'primary' }}
-    >
-      <Box width="1rem" height="1rem">
-        <SubtractBox
-          maxHeight="100%"
-          maxWidth="100%"
-          width="100%"
-          height="100%"
-        />
+    <Box gap="xs" display="flex" alignItems="center" justifyContent="center">
+      <Box
+        p="2xs"
+        gap="0.5rem"
+        display="flex"
+        color="outline"
+        alignItems="center"
+        borderColor="transparent"
+      >
+        <Box width="1rem" height="1rem">
+          <SubtractBox
+            maxHeight="100%"
+            maxWidth="100%"
+            width="100%"
+            height="100%"
+          />
+        </Box>
+        <Typography size="small" variant="body" fontSize="s">
+          {symbol ? `${balance} ${symbol}` : '0'}
+        </Typography>
       </Box>
-      <Typography size="small" variant="body" fontSize="s">
-        {symbol ? `${balance} ${symbol}` : '0'}
-      </Typography>
-    </Button>
+      {label === 'from' && (
+        <Box display="flex" gap="xs">
+          <Tag
+            size="small"
+            variant="outline"
+            nFocus={{
+              color: '#0053DB',
+              borderColor: '#0053DB',
+              background: '#0053DB14',
+            }}
+            fontFamily="Satoshi"
+            onClick={handleHalf}
+            nHover={{ bg: 'unset', borderColor: 'primary', color: 'primary' }}
+          >
+            HALF
+          </Tag>
+          <Tag
+            size="small"
+            variant="outline"
+            nFocus={{
+              color: '#0053DB',
+              borderColor: '#0053DB',
+              background: '#0053DB14',
+            }}
+            onClick={handleMax}
+            fontFamily="Satoshi"
+            nHover={{ bg: 'unset', borderColor: 'primary', color: 'primary' }}
+          >
+            MAX
+          </Tag>
+        </Box>
+      )}
+    </Box>
   );
 };
 

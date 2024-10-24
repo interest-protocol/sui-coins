@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@interest-protocol/ui-kit';
+import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
 import { values } from 'ramda';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -45,13 +45,19 @@ const DCAAggregatorForm: FC<DCAAggregatorFormProps> = ({
     resetFields();
   };
   return (
-    <Box
+    <Motion
       py="2xl"
       px="2xl"
       gap="xl"
       bg="onPrimary"
       display="flex"
       flexDirection="column"
+      borderBottomLeftRadius="s"
+      borderBottomRightRadius="s"
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.3 }}
+      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: -20 }}
     >
       <Box display="flex" flexWrap="wrap" gap="s">
         {values(AGGREGATORS_LIST).map(({ disabled, name, key, Icon }) => (
@@ -101,7 +107,7 @@ const DCAAggregatorForm: FC<DCAAggregatorFormProps> = ({
           </Typography>
         </Button>
       </Box>
-    </Box>
+    </Motion>
   );
 };
 

@@ -1,6 +1,7 @@
 import { Network } from '@/constants';
 
 export interface TokenIconProps {
+  bg?: string;
   type: string;
   size?: string;
   symbol: string;

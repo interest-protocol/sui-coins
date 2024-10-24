@@ -30,6 +30,7 @@ export { default as ChevronDoubleLeftSVG } from './chevron-double-left';
 export { default as ChevronDownSVG } from './chevron-down';
 export { default as ChevronLeftSVG } from './chevron-left';
 export { default as ChevronRightSVG } from './chevron-right';
+export { default as ChevronUpSVG } from './chevron-up';
 export { default as CircleSVG } from './circle';
 export { default as CircleCheckSVG } from './circle-check';
 export { default as CirclePlusSVG } from './circle-plus';

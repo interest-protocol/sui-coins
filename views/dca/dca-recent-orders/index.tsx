@@ -81,13 +81,15 @@ const DCARecentOrders: FC = () => {
             alignItems="center"
             flexDirection="column"
           >
-            <IncineratorNoAssetsSVG
-              maxHeight="5rem"
-              maxWidth="5rem"
-              width="100%"
-            />
+            <Box mb="s">
+              <IncineratorNoAssetsSVG
+                width="100%"
+                maxWidth="5rem"
+                maxHeight="5rem"
+              />
+            </Box>
             <Typography variant="label" size="medium">
-              You {"don't"} have recent DCAs
+              You {"don't"} have any HISTORY
             </Typography>
           </Box>
         </Box>
