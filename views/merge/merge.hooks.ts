@@ -3,7 +3,6 @@ import {
   useSignTransaction,
   useSuiClient,
 } from '@mysten/dapp-kit';
-import { CoinStruct } from '@mysten/sui/client';
 import { Transaction } from '@mysten/sui/transactions';
 import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
@@ -22,9 +21,8 @@ import {
 } from '@/utils';
 
 import { findNextVersionAndDigest } from '../airdrop/airdrop-form/txb-utils';
-import { getObjectsToMerge, MERGE_OBJECTS_LIMIT } from './merge.utils';
 
-const TX_OBJECTS_LIMIT = 4000;
+export const MERGE_OBJECTS_LIMIT = 200;
 
 export const useMergeCoins = () => {
   const network = useNetwork();
@@ -38,109 +36,131 @@ export const useMergeCoins = () => {
   ) => {
     invariant(currentAccount?.address, 'You must be connected');
 
-    let i = 0;
-    let j = 0;
-    let suiDigest;
-    let suiVersion;
-    let suiIndex = 0;
+    for (const { type, objectsCount } of coinsToMerge) {
+      const coinObjects = await getCoins({
+        suiClient,
+        coinType: type,
+        account: currentAccount.address,
+      });
 
-    const objectsToMerge = await getObjectsToMerge({
-      suiClient,
-      account: currentAccount.address,
-      coinsToMerge: coinsToMerge.filter(({ type }) => !isSui(type)),
-    });
+      const primaryCoin = coinObjects[0];
 
-    const suiObjects = await getCoins({
-      suiClient,
-      coinType: SUI_TYPE_ARG,
-      account: currentAccount.address,
-    });
-
-    const sortedSuiObjects = suiObjects.toSorted((a, b) =>
-      FixedPointMath.toNumber(BigNumber(b.balance).minus(BigNumber(a.balance)))
-    );
-
-    const mergingSui: [CoinStruct, ReadonlyArray<ReadonlyArray<CoinStruct>>] = [
-      sortedSuiObjects[0],
-      splitArray(sortedSuiObjects.slice(1), MERGE_OBJECTS_LIMIT),
-    ];
-
-    suiDigest = sortedSuiObjects[0].digest;
-    suiVersion = sortedSuiObjects[0].version;
-    const suiObjectId = sortedSuiObjects[0].coinObjectId;
-
-    do {
-      let totalMergingObjects = mergingSui[1][suiIndex]?.length ?? 0;
-
-      const mergingItems: Array<[string, ReadonlyArray<CoinStruct>]> = [];
-
-      do {
-        if (objectsToMerge[j][1][i].length) {
-          if (
-            totalMergingObjects + objectsToMerge[j][1][i].length >
-            TX_OBJECTS_LIMIT
-          ) {
-            j++;
-            break;
-          }
-          mergingItems.push([objectsToMerge[j][0], objectsToMerge[j][1][i]]);
-          totalMergingObjects += objectsToMerge[j][1][i].length;
-        }
-        j++;
-      } while (objectsToMerge[j]);
-
-      if (!objectsToMerge[j]) {
-        j = 0;
-        i++;
-      }
-
-      const tx = new Transaction();
-
-      if (suiObjects.length > 256 && mergingSui[1][suiIndex]?.length) {
-        tx.setGasPayment([
-          {
-            digest: suiDigest,
-            version: suiVersion,
-            objectId: suiObjectId,
-          },
-          ...mergingSui[1][suiIndex].map(
-            ({ digest, version, coinObjectId }) => ({
-              digest,
-              version,
-              objectId: coinObjectId,
-            })
-          ),
-        ]);
-
-        suiIndex++;
-      }
-
-      mergingItems.forEach(([primaryObject, otherObjects]) => {
-        if (isSui(otherObjects[0].coinType)) return tx.setGasPayment([]);
-
-        return tx.mergeCoins(
-          tx.object(primaryObject),
-          otherObjects.map(({ coinObjectId }) => tx.object(coinObjectId))
+      const sortedCoinToMerge = coinObjects
+        .slice(1)
+        .toSorted((a, b) =>
+          FixedPointMath.toNumber(
+            BigNumber(b.balance).minus(BigNumber(a.balance))
+          )
         );
-      });
 
-      const txResult = await signAndExecute({
-        tx,
-        suiClient,
-        currentAccount,
-        signTransaction,
-        options: { showObjectChanges: true },
-      });
+      const coinToMergeIterable = splitArray(
+        sortedCoinToMerge,
+        MERGE_OBJECTS_LIMIT
+      );
 
-      await waitForTx({
-        suiClient,
-        digest: txResult.digest,
-      });
+      if (isSui(type)) {
+        if (objectsCount > 256) {
+          let gasDigest = primaryCoin.digest;
+          let gasVersion = primaryCoin.version;
+          const gasObjectId = primaryCoin.coinObjectId;
 
-      [suiDigest, suiVersion] = findNextVersionAndDigest(txResult, suiObjectId);
+          for (const gasItemsToMerge of coinToMergeIterable) {
+            const tx = new Transaction();
 
-      onSetExecutionTime && onSetExecutionTime(txResult.time);
-      showTXSuccessToast(txResult, network, 'Coins slot merged!');
-    } while (!j && objectsToMerge.some(([, objects]) => objects[i]));
+            tx.setGasPayment([
+              { objectId: gasObjectId, digest: gasDigest, version: gasVersion },
+              ...gasItemsToMerge.map(({ coinObjectId, version, digest }) => ({
+                digest,
+                version,
+                objectId: coinObjectId,
+              })),
+            ]);
+
+            const txResult = await signAndExecute({
+              tx,
+              suiClient,
+              currentAccount,
+              signTransaction,
+              options: { showObjectChanges: true },
+            });
+
+            await waitForTx({
+              suiClient,
+              digest: txResult.digest,
+            });
+
+            [gasDigest, gasVersion] = findNextVersionAndDigest(
+              txResult,
+              gasObjectId
+            );
+
+            onSetExecutionTime && onSetExecutionTime(txResult.time);
+            showTXSuccessToast(txResult, network, 'Coins slot merged!');
+          }
+        } else {
+          if (!coinsToMerge.filter(({ type }) => !isSui(type)).length) {
+            const txResult = await signAndExecute({
+              suiClient,
+              currentAccount,
+              signTransaction,
+              tx: new Transaction(),
+              options: { showObjectChanges: true },
+            });
+
+            await waitForTx({
+              suiClient,
+              digest: txResult.digest,
+            });
+
+            onSetExecutionTime && onSetExecutionTime(txResult.time);
+            showTXSuccessToast(txResult, network, 'Coins slot merged!');
+          }
+        }
+      } else {
+        const gasObject = await suiClient.getCoins({
+          limit: 1,
+          coinType: SUI_TYPE_ARG,
+          owner: currentAccount.address,
+        });
+
+        let gasDigest = gasObject.data[0].digest;
+        let gasVersion = gasObject.data[0].version;
+        const gasObjectId = gasObject.data[0].coinObjectId;
+
+        for (const itemsToMerge of coinToMergeIterable) {
+          const tx = new Transaction();
+
+          tx.mergeCoins(
+            tx.object(primaryCoin.coinObjectId),
+            itemsToMerge.map(({ coinObjectId }) => tx.object(coinObjectId))
+          );
+
+          tx.setGasPayment([
+            { objectId: gasObjectId, digest: gasDigest, version: gasVersion },
+          ]);
+
+          const txResult = await signAndExecute({
+            tx,
+            suiClient,
+            currentAccount,
+            signTransaction,
+            options: { showObjectChanges: true },
+          });
+
+          await waitForTx({
+            suiClient,
+            digest: txResult.digest,
+          });
+
+          [gasDigest, gasVersion] = findNextVersionAndDigest(
+            txResult,
+            gasObjectId
+          );
+
+          onSetExecutionTime && onSetExecutionTime(txResult.time);
+          showTXSuccessToast(txResult, network, 'Coins slot merged!');
+        }
+      }
+    }
   };
 };
