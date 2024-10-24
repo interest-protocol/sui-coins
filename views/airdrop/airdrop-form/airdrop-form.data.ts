@@ -7,21 +7,26 @@ import { TMethod } from '../airdrop.types';
 
 export const METHODS_ICONS: Record<
   TMethod,
-  { title: string; Icon: FC<SVGProps>; description: string }
+  { title: string; Icon: string | FC<SVGProps>; description: string }
 > = {
+  suiPlay: {
+    title: 'SuiPlay Holders',
+    Icon: '/images/suiplay/suiplay.png',
+    description: 'Drop to SuiPlay Souldbound NFT holders.',
+  },
   csv: {
     title: 'CSV',
     Icon: FileSVG,
-    description: 'Upload a CSV file with wallet addresses and amounts.',
+    description: 'Upload a CSV with addresses and allocations.',
   },
   nft: {
     title: 'NFT',
     Icon: NftSVG,
-    description: 'Airdrops to holders of your favorite NFT collections.',
+    description: 'Drop to holders of specific NFTs.',
   },
   addressList: {
-    title: 'List of addresses',
+    title: 'Custom Addresses',
     Icon: WalletSVG,
-    description: 'Same airdrop value, different addresses.',
+    description: 'Airdrop the same amount to multiple addresses',
   },
 };

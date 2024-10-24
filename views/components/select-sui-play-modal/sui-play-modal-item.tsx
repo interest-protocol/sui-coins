@@ -7,17 +7,17 @@ import {
 import { FC, useState } from 'react';
 
 import { DownloadSVG } from '@/svg';
-import { getHoldersJSON } from '@/utils/nft';
 
-import { NFTModalItemProps } from './select-nft-modal.types';
+import { SuiPlayModalItemProps } from './select-sui-play-modal.types';
+import { getSuiPlayHoldersJSON } from './select-sui-play-modal.utils';
 
-const NFTModalItem: FC<NFTModalItemProps> = ({
-  name,
-  total,
+const SuiPlayModalItem: FC<SuiPlayModalItemProps> = ({
+  tier,
+  image,
+  holders,
   onClick,
   selected,
   updatedAt,
-  id,
 }) => {
   const [isDownloading, setDownloading] = useState(false);
   const [isImageLoading, setImageLoading] = useState(true);
@@ -27,13 +27,14 @@ const NFTModalItem: FC<NFTModalItemProps> = ({
       p="xl"
       display="flex"
       cursor="pointer"
+      borderRadius="xs"
       color="onSurface"
       alignItems="center"
       justifyContent="space-between"
       onClick={selected ? undefined : onClick}
       transition="background 500ms ease-in-out"
       nHover={{ bg: 'rgba(0, 83, 219, 0.08)' }}
-      bg={selected ? 'rgba(0, 83, 219, 0.08)' : 'unset'}
+      bg={selected ? 'rgba(0, 83, 219, 0.08)' : 'lowestContainer'}
     >
       <Box display="flex" alignItems="center">
         <Box
@@ -52,9 +53,9 @@ const NFTModalItem: FC<NFTModalItemProps> = ({
             </Box>
           )}
           <img
-            alt={name}
+            alt={tier}
+            src={image}
             width="100%"
-            src={`/images/nft/${id}.webp`}
             onLoad={() => setImageLoading(false)}
           />
         </Box>
@@ -65,7 +66,7 @@ const NFTModalItem: FC<NFTModalItemProps> = ({
           justifyContent="center"
         >
           <Typography variant="title" size="medium">
-            {name}
+            {tier}
           </Typography>
         </Box>
       </Box>
@@ -77,7 +78,7 @@ const NFTModalItem: FC<NFTModalItemProps> = ({
       >
         <Box gap="xs" display="flex" alignItems="center">
           <Typography variant="body" size="small">
-            {total} addresses
+            {holders} addresses
           </Typography>
           <Button
             p="0"
@@ -90,7 +91,7 @@ const NFTModalItem: FC<NFTModalItemProps> = ({
             onClick={(e) => {
               e.stopPropagation();
               setDownloading(true);
-              getHoldersJSON(id, name, updatedAt!).then(() =>
+              getSuiPlayHoldersJSON(tier, updatedAt!).then(() =>
                 setDownloading(false)
               );
             }}
@@ -109,11 +110,11 @@ const NFTModalItem: FC<NFTModalItemProps> = ({
           </Button>
         </Box>
         <Typography variant="body" size="small" color="outline">
-          Last update: {new Date(updatedAt!).toLocaleDateString()}
+          Last update: {new Date(updatedAt).toLocaleDateString()}
         </Typography>
       </Box>
     </Box>
   );
 };
 
-export default NFTModalItem;
+export default SuiPlayModalItem;

@@ -1,11 +1,12 @@
 import { Box, Button } from '@interest-protocol/ui-kit';
 import { FC, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import toast from 'react-hot-toast';
 
+import { useDialog } from '@/hooks/use-dialog';
 import { useWeb3 } from '@/hooks/use-web3';
 import { MergeSVG, TrashSVG } from '@/svg';
 
+import SuccessModal from '../components/success-modal';
 import { useMergeCoins } from './merge.hooks';
 import { IMergeForm } from './merge.types';
 
@@ -13,7 +14,8 @@ const MergeButton: FC = () => {
   const mergeCoins = useMergeCoins();
   const { coins, mutate } = useWeb3();
   const [loading, setLoading] = useState(false);
-  const { control, reset, setValue } = useFormContext<IMergeForm>();
+  const { control, reset, setValue, getValues } = useFormContext<IMergeForm>();
+  const { dialog, handleClose } = useDialog();
 
   const ignored = useWatch({ control, name: 'ignored' });
 
@@ -29,20 +31,57 @@ const MergeButton: FC = () => {
       allCoinsToMerge.map(({ type }) => type)
     );
 
-  const handleMergeCoins = async () => {
-    if (loading) return;
-    setLoading(true);
-    const toastId = toast.loading('Merging coins...');
+  const onSetExecutionTime = (time: number) => {
+    setValue('executionTime', time);
+  };
+
+  const onMergeCoins = async () => {
     try {
-      await mergeCoins(coinsToMerge);
-      toast.success('All coins merged!');
-    } catch (e) {
-      toast.error((e as Error).message ?? 'Failed to merge coins.');
+      await mergeCoins(coinsToMerge, onSetExecutionTime);
     } finally {
-      toast.dismiss(toastId);
-      setLoading(false);
       mutate();
     }
+  };
+
+  const handleMergeCoins = async () => {
+    setLoading(true);
+    await dialog.promise(onMergeCoins(), {
+      loading: () => ({
+        title: 'Merging coins...',
+        message:
+          'We are starting merge your coins, and you will let you know when it is done',
+      }),
+      error: () => ({
+        title: 'Merge Coins Failure',
+        message: 'Failed to merge coins.',
+        primaryButton: { label: 'Try again', onClick: handleClose },
+      }),
+      success: () => ({
+        title: 'Merge Coin Successful',
+        message: (
+          <SuccessModal
+            transactionTime={`${+(getValues('executionTime') / 1000).toFixed(2)}`}
+          >
+            <Box
+              py="m"
+              px="s"
+              gap="s"
+              bg="surface"
+              display="flex"
+              borderRadius="xs"
+              justifyContent="center"
+            >
+              All coins merged!
+            </Box>
+          </SuccessModal>
+        ),
+        primaryButton: {
+          label: 'Got it',
+          onClick: handleClose,
+        },
+      }),
+    });
+    setLoading(false);
   };
 
   return (

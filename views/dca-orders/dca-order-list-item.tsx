@@ -15,7 +15,7 @@ import BigNumber from 'bignumber.js';
 import { AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useState } from 'react';
 import invariant from 'tiny-invariant';
 import { v4 } from 'uuid';
 
@@ -37,6 +37,9 @@ import {
   waitForTx,
 } from '@/utils';
 
+import SuccessModal from '../components/success-modal';
+import SuccessModalTokenCard from '../components/success-modal/success-modal-token-card';
+import { DCAToken } from '../dca/dca.types';
 import DCAOrderDetails from './dca-order-details';
 import DCAOrderListItemSkeleton from './dca-order-list-item-skeleton';
 import { DCAOrdersMessagesEnum } from './dca-orders.data';
@@ -53,6 +56,7 @@ const DCAOrderListItem: FC<DCAShortInfo> = ({
   inputBalance,
   remainingOrders,
 }) => {
+  const [executionTime, setExecutionTime] = useState(0);
   const dcaSdk = useDcaSdk();
   const network = useNetwork();
   const suiClient = useSuiClient();
@@ -100,7 +104,7 @@ const DCAOrderListItem: FC<DCAShortInfo> = ({
       });
 
       throwTXIfNotSuccessful(txResult);
-
+      setExecutionTime(txResult.time);
       await fetch(`${SENTINEL_API_URI[network]}dcas/${id}`, {
         method: 'DELETE',
       });
@@ -124,7 +128,17 @@ const DCAOrderListItem: FC<DCAShortInfo> = ({
       }),
       success: () => ({
         title: 'DCA Successfully',
-        message: DCAOrdersMessagesEnum.destroyingSuccess,
+        message: (
+          <SuccessModal
+            transactionTime={`${+(executionTime / 1000).toFixed(2)}`}
+          >
+            <SuccessModalTokenCard
+              withoutAmount
+              to={tokenOut as unknown as DCAToken}
+              from={tokenIn as unknown as DCAToken}
+            />
+          </SuccessModal>
+        ),
         primaryButton: {
           label: 'Got it',
           onClick: handleCloseDialog,

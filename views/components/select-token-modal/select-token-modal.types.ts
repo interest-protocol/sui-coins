@@ -21,6 +21,7 @@ export interface TokenModalItemProps extends Omit<Token, 'decimals'> {
 export interface SelectTokenModalProps {
   faucet?: boolean;
   simple?: boolean;
+  strictOnly?: boolean;
   closeModal: () => void;
   onSelect: (coin: CoinObject) => void;
 }
