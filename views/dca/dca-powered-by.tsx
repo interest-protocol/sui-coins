@@ -15,6 +15,8 @@ const DCAPoweredBy: FC = () => {
 
   const { url, name, Icon } = AGGREGATORS_LIST[aggregator];
 
+  return null;
+
   return (
     <Box
       gap="m"
@@ -22,6 +24,7 @@ const DCAPoweredBy: FC = () => {
       display="flex"
       alignItems="center"
       flexDirection="column"
+      border="1px solid red"
     >
       <a target="_blank" rel="noopener, noreferrer" href={url}>
         <Box

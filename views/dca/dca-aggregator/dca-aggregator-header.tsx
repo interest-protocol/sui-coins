@@ -1,20 +1,29 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { FC } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
 
 import { LOCAL_STORAGE_VERSION } from '@/constants';
-import { CogsSVG, MinusSVG } from '@/svg';
+import { ChevronDownSVG, ChevronUpSVG } from '@/svg';
 
-import { Aggregator, DCAAggregatorHeaderProps } from '../dca.types';
+import { Aggregator, DCAAggregatorHeaderProps, DCAForm } from '../dca.types';
 import { AGGREGATORS_LIST } from './dca-aggregator.data';
 
 const Header: FC<DCAAggregatorHeaderProps> = ({ isOpen, handleManageView }) => {
-  const ManageIcon = isOpen ? MinusSVG : CogsSVG;
-  const aggergator = useReadLocalStorage<Aggregator>(
+  const Chevron = isOpen ? ChevronUpSVG : ChevronDownSVG;
+
+  const { control } = useFormContext<DCAForm>();
+
+  const formAggregator = useWatch({ control, name: 'aggregator' });
+
+  const localStorageAggregator = useReadLocalStorage<Aggregator>(
     `${LOCAL_STORAGE_VERSION}-suicoins-dca-aggregator`
   );
 
-  const { name, Icon } = AGGREGATORS_LIST[aggergator ?? Aggregator.Hop];
+  const selectedAggregator =
+    formAggregator ?? localStorageAggregator ?? Aggregator.Hop;
+
+  const { name, Icon } = AGGREGATORS_LIST[selectedAggregator];
 
   return (
     <Box
@@ -25,6 +34,10 @@ const Header: FC<DCAAggregatorHeaderProps> = ({ isOpen, handleManageView }) => {
       borderRadius="s"
       alignItems="center"
       justifyContent="space-between"
+      {...(isOpen && {
+        borderBottomRightRadius: 'unset',
+        borderBottomLeftRadius: 'unset',
+      })}
     >
       <Typography
         gap="xs"
@@ -40,7 +53,7 @@ const Header: FC<DCAAggregatorHeaderProps> = ({ isOpen, handleManageView }) => {
         </Typography>
       </Typography>
       <Button isIcon variant="text" onClick={handleManageView}>
-        <ManageIcon maxWidth="1.25rem" maxHeight="1.25rem" width="100%" />
+        <Chevron maxWidth="1.25rem" maxHeight="1.25rem" width="100%" />
       </Button>
     </Box>
   );
