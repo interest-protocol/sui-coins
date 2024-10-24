@@ -1,6 +1,6 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import { useCurrentAccount } from '@mysten/dapp-kit';
-import { type FC } from 'react';
+import { type FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { v4 } from 'uuid';
@@ -15,12 +15,16 @@ import { IMergeForm } from './merge.types';
 import MergeField from './merge-field';
 
 const MergeCoinsForm: FC = () => {
-  const { coins } = useWeb3();
+  const { coins, setDelay } = useWeb3();
   const currentAccount = useCurrentAccount();
   const { setModal, handleClose } = useModal();
   const { control, setValue } = useFormContext<IMergeForm>();
 
   const ignored = useWatch({ control, name: 'ignored' });
+
+  useEffect(() => {
+    setDelay(0);
+  }, []);
 
   const remove = (type: string) => {
     const ignoredSet = new Set(ignored);
@@ -53,7 +57,13 @@ const MergeCoinsForm: FC = () => {
     );
 
   return (
-    <Box display="flex" flexDirection="column" gap="l">
+    <Box
+      gap="l"
+      display="flex"
+      overflowY="auto"
+      maxHeight="25rem"
+      flexDirection="column"
+    >
       {coinsToMerge.map((coin) => (
         <MergeField key={v4()} {...coin} remove={remove} />
       ))}

@@ -40,6 +40,11 @@ const SwapButton: FC = () => {
     formSwap.setValue('from.value', ZERO_BIG_NUMBER);
   };
 
+  const onClose = () => {
+    handleClose();
+    resetInput();
+  };
+
   const swapping = useWatch({
     control: formSwap.control,
     name: 'swapping',
@@ -99,13 +104,15 @@ const SwapButton: FC = () => {
         error: () => ({
           title: 'Swap Failure',
           message: SwapMessagesEnum.swapFailure,
-          primaryButton: { label: 'Try again', onClick: handleClose },
+          primaryButton: { label: 'Try again', onClick: onClose },
         }),
         success: () => ({
           title: 'Swap Successful',
           message: (
             <SuccessModal
-              transactionTime={`${+(formSwap.getValues('executionTime') / 1000).toFixed(2)}`}
+              transactionTime={`${+(
+                formSwap.getValues('executionTime') / 1000
+              ).toFixed(2)}`}
             >
               <SuccessModalTokenCard
                 from={formSwap.getValues('from')}
@@ -119,13 +126,12 @@ const SwapButton: FC = () => {
           },
           secondaryButton: {
             label: 'got it',
-            onClick: handleClose,
+            onClick: onClose,
           },
         }),
       }));
-
-    resetInput();
   };
+
   return (
     <Button
       onClick={onSwap}
