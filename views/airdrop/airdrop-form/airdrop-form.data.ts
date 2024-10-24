@@ -9,11 +9,11 @@ export const METHODS_ICONS: Record<
   TMethod,
   { title: string; Icon: string | FC<SVGProps>; description: string }
 > = {
-  // suiPlay: {
-  //   title: 'SuiPlay Holders',
-  //   Icon: '/images/suiplay/suiplay.png',
-  //   description: 'Drop to SuiPlay Souldbound NFT holders.',
-  // },
+  suiPlay: {
+    title: 'SuiPlay Holders',
+    Icon: '/images/suiplay/suiplay.png',
+    description: 'Drop to SuiPlay Souldbound NFT holders.',
+  },
   csv: {
     title: 'CSV',
     Icon: FileSVG,

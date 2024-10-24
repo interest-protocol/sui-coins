@@ -5,7 +5,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { IAirdropForm } from '../../airdrop.types';
 import AirdropAddressesListMethod from './airdrop-address-list-method';
 import AirdropNftMethod from './airdrop-nft-method';
-// import AirdropSuiPlayHoldersMethod from './airdrop-sui-play-holders';
+import AirdropSuiPlayHoldersMethod from './airdrop-sui-play-holders';
 import AirdropUploadCSV from './airdrop-upload-csv';
 
 const AirdropAddresses: FC = () => {
@@ -26,7 +26,7 @@ const AirdropAddresses: FC = () => {
     >
       {method === 'csv' && <AirdropUploadCSV />}
       {method === 'nft' && <AirdropNftMethod />}
-      {/* {method === 'suiPlay' && <AirdropSuiPlayHoldersMethod />} */}
+      {method === 'suiPlay' && <AirdropSuiPlayHoldersMethod />}
       {method === 'addressList' && <AirdropAddressesListMethod />}
     </Box>
   );
