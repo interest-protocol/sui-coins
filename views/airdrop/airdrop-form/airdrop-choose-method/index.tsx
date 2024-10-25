@@ -18,7 +18,11 @@ const AirdropChooseMethod: FC = () => {
         </Typography>
       </Box>
       {toPairs(METHODS_ICONS)
-        .filter(([key]) => key !== 'suiPlay')
+        .filter(
+          ([key]) =>
+            JSON.parse(process.env.NEXT_PUBLIC_SUI_PLAY ?? 'false') ||
+            key !== 'suiPlay'
+        )
         .map(([key, { title, description, Icon }], index) => (
           <Box
             mb="2xs"
