@@ -16,12 +16,6 @@ const AirdropChooseMethod: FC = () => {
       key !== 'suiPlay'
   );
 
-  console.log({
-    methods,
-    suiPlayFeature: JSON.parse(process.env.NEXT_PUBLIC_SUI_PLAY ?? 'false'),
-    env: process.env.NEXT_PUBLIC_SUI_PLAY,
-  });
-
   return (
     <Box p="xl" borderRadius="xs" bg="lowestContainer">
       <Box display="flex" flexDirection="column" mb="m">
