@@ -10,6 +10,7 @@ import { PERIODICITY } from '@/views/dca/dca.data';
 
 import { useDCAState } from '../dca-orders-manager';
 import DCAOrderDetailsOverviewLine from './dca-order-details-overview-line';
+import DCAOrderDetailsOverviewUSD from './dca-order-details-overview-usd';
 
 const DCAOrderDetailsOverview: FC = () => {
   const network = useNetwork();
@@ -105,14 +106,7 @@ const DCAOrderDetailsOverview: FC = () => {
             FixedPointMath.toNumber(accumulatedOutput, tokenIn?.decimals)
           )} ${tokenIn?.symbol} (${(100 * executedOrders) / totalOrders}%)`}
         />
-        <DCAOrderDetailsOverviewLine
-          title="Total Spent in $"
-          value={`-- USD`}
-        />
-        <DCAOrderDetailsOverviewLine
-          title="Average Price in USD"
-          value={`-- USD`}
-        />
+        <DCAOrderDetailsOverviewUSD />
         <DCAOrderDetailsOverviewLine
           title="Ammount per Order"
           value={`0.025 ${tokenIn?.symbol}`}

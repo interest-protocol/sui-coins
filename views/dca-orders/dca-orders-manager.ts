@@ -171,7 +171,7 @@ export const DCAOrdersManager: FC = () => {
   }, [dcas]);
 
   useEffect(() => {
-    setDCAOrders(dcaOrders?.data ?? []);
+    setDCAOrders(dcaOrders ?? []);
   }, [dcaOrders]);
 
   return null;
