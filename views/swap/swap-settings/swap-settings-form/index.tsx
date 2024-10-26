@@ -8,15 +8,11 @@ import { ClockSVG, PercentageSVG } from '@/svg';
 import { parseInputEventToNumberString } from '@/utils';
 
 import { ISwapSettings, SwapForm } from '../../swap.types';
-import SwapAggregatorManager from './swap-aggregator-manager';
 import { SwapSettingsFromProps } from './swap-settings-form.types';
 
 const SLIPPAGE_BUTTONS = ['0.1', '0.5', '1'];
 
-const SwapSettingsForm: FC<SwapSettingsFromProps> = ({
-  noAgg,
-  handleManageView,
-}) => {
+const SwapSettingsForm: FC<SwapSettingsFromProps> = ({ handleManageView }) => {
   const { getValues, setValue } = useFormContext<SwapForm>();
 
   const formTmpSettings = useForm<ISwapSettings>({
@@ -130,12 +126,6 @@ const SwapSettingsForm: FC<SwapSettingsFromProps> = ({
           />
         </Box>
       </Box>
-      {!noAgg && (
-        <SwapAggregatorManager
-          setValue={formTmpSettings.setValue}
-          control={formTmpSettings.control}
-        />
-      )}
       <Box display="flex" gap="0.5rem" justifyContent="flex-end">
         <Button
           px="l"

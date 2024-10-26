@@ -12,10 +12,6 @@ export interface SwapAggregatorManagerProps {
   setValue: UseFormSetValue<ISwapSettings>;
 }
 
-export interface SwapSettingsProps {
-  noAgg?: boolean;
-}
-
-export interface SwapSettingsFromProps extends SwapSettingsProps {
+export interface SwapSettingsFromProps {
   handleManageView: () => void;
 }
