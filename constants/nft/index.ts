@@ -15,6 +15,7 @@ export const NFT: ReadonlyArray<string> = [
   '67aca668-31b0-4713-91cf-079d392b041a', // Kumo
   'f398dbda-3a2d-45f3-8e76-1557b386dfbe', // Blubbers
   '79238543-5a4d-4944-a301-27ce8bf640c6', // PUGWIF PFP
+  'cb2e0bfd-84b1-41cb-b492-bf25078431f1', // AEON
 ];
 
 export * from './sui-play';
