@@ -833,16 +833,6 @@
   resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-3.9.0.tgz#cf540ac21c6c0cd24a40cf53d8e6d64391fb753d"
   integrity sha512-bU0Gr4EepJ/EQsH/IwEzYLsT/PEj5C0ynLQ4m+GSHS+xKH4TfSelhluTgOaoc4kA5s7eCsQbM4wvZLzELmWzUg==
 
-"@hop.ag/sdk@^4.0.1":
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/@hop.ag/sdk/-/sdk-4.0.1.tgz#9b196a6e0d876316d5f41392bd1eb7dd7b9c8173"
-  integrity sha512-7u07Y3onNxudRDVCQZgbNzGr8mO7uxzKjSieDaHUk34tkWHD2DBofoDKJZKTAosmSDBjRJKRgggiGOBciDNnpA==
-  dependencies:
-    "@mysten/sui" "^1.2.0"
-    cross-fetch "^4.0.0"
-    tslib "^2.6.2"
-    zod "^3.23.8"
-
 "@humanwhocodes/config-array@^0.11.14":
   version "0.11.14"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.11.14.tgz#d78e481a039f7566ecc9660b4ea7fe6b1fec442b"
@@ -1439,7 +1429,7 @@
     tweetnacl "^1.0.3"
     valibot "^0.36.0"
 
-"@mysten/sui@1.9.0", "@mysten/sui@^1.1.2", "@mysten/sui@^1.2.0", "@mysten/sui@^1.5.0", "@mysten/sui@^1.8.0", "@mysten/sui@^1.9.0":
+"@mysten/sui@1.9.0", "@mysten/sui@^1.1.2", "@mysten/sui@^1.5.0", "@mysten/sui@^1.8.0", "@mysten/sui@^1.9.0":
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/@mysten/sui/-/sui-1.9.0.tgz#f37a53d637cf9bbd26e3ba7224efbade6233a729"
   integrity sha512-AcnwVK7ro8+GWAp/vz0V35naS1/PD1FkYlH6rglupKWvVIpnmEBgjr+XE7U4LvtAyoXPiE4uj/MhXLIx5rZuzw==
@@ -4130,13 +4120,6 @@ create-require@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/create-require/-/create-require-1.1.1.tgz#c1d7e8f1e5f6cfc9ff65f9cd352d37348756c333"
   integrity sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==
-
-cross-fetch@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-4.0.0.tgz#f037aef1580bb3a1a35164ea2a848ba81b445983"
-  integrity sha512-e4a5N8lVvuLgAWgnCrLr2PP0YyDOTHa9H/Rj54dirp61qXnNq46m82bRhNqIA5VccJtWBvPTFRV3TtvHUKPB1g==
-  dependencies:
-    node-fetch "^2.6.12"
 
 cross-spawn@^7.0.0, cross-spawn@^7.0.2, cross-spawn@^7.0.3:
   version "7.0.3"
@@ -7591,7 +7574,7 @@ node-fetch@2.6.9:
   dependencies:
     whatwg-url "^5.0.0"
 
-node-fetch@^2.6.1, node-fetch@^2.6.12, node-fetch@^2.6.7:
+node-fetch@^2.6.1, node-fetch@^2.6.7:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.7.0.tgz#d0f0fa6e3e2dc1d27efcd8ad99d550bda94d187d"
   integrity sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==
