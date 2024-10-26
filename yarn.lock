@@ -874,13 +874,12 @@
     ramda "^0.29.1"
     tiny-invariant "^1.3.3"
 
-"@interest-protocol/dca-sdk@^5.1.0":
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/dca-sdk/-/dca-sdk-5.1.0.tgz#3452f31b31276f27e975a79cbf6810152426a689"
-  integrity sha512-K40DF4b6+EUm96YpFGGCo96Y7GnNoJOKSe7yfe0kpTckrc2gBeHyBfOnIz9VVKCHBKxKCt2qEjtdxtPQhaWz+A==
+"@interest-protocol/dca-sdk@^5.1.2":
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/dca-sdk/-/dca-sdk-5.1.2.tgz#ed15ecb343804091528dc968b55c75cbaf2bbe29"
+  integrity sha512-HgsuqbF8mN5lX4I6mOEn4uyeUb+j2CXlrVMXAJcOoHJ3lcYlRwKT2j1+/NKIFJhaiN7W+rVQbpwnOh+NslYxtA==
   dependencies:
     "@mysten/sui" "^1.5.0"
-    "@polymedia/suitcase-core" "^0.0.16"
     ramda "^0.30.1"
     tiny-invariant "^1.3.3"
 
@@ -889,10 +888,10 @@
   resolved "https://registry.yarnpkg.com/@interest-protocol/move-bytecode-template/-/move-bytecode-template-0.0.4-alpha.tgz#5b0175067646850512531f3de085d37e4428e4ca"
   integrity sha512-BHbIpCKTQZVsrHqVr62X0k8w36ML7Wvjpq3+Q6evfbUtDO9jqohFA5dQ96xixR3sxXfgz4m2mv476+vhJNmVvg==
 
-"@interest-protocol/sui-coins-terminal@^0.2.5-alpha.0":
-  version "0.2.5-alpha.0"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/sui-coins-terminal/-/sui-coins-terminal-0.2.5-alpha.0.tgz#9d1971dd2610516963615db7cced0328732604ef"
-  integrity sha512-uH4oHzDUB2oBquX9yZpaScujrDXxofUN1Q7NEtElAxAOlB+QQGnhXtKCYM5YXwjtQ1069eaeqTW09WldDeWqhg==
+"@interest-protocol/sui-coins-terminal@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/sui-coins-terminal/-/sui-coins-terminal-0.3.0.tgz#1f60a7dc286a8f4b70cf1169d44fb39350ddd153"
+  integrity sha512-lq/16x1oyH+bBioreICJ040McmXkzMUwHAvjfN/gelyyxWFvjeX5JoASmJOEsBFfUJyEzqLZ84F7EBXrTaXikg==
   dependencies:
     "@emotion/react" "^11.11.1"
     "@interest-protocol/sui-tokens" "^2.0.4"
@@ -1808,11 +1807,6 @@
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.1.1.tgz#1ec17e2edbec25c8306d424ecfbf13c7de1aaa31"
   integrity sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==
-
-"@polymedia/suitcase-core@^0.0.16":
-  version "0.0.16"
-  resolved "https://registry.yarnpkg.com/@polymedia/suitcase-core/-/suitcase-core-0.0.16.tgz#72ccc0317cf4a0249600721d8f1004070819f29b"
-  integrity sha512-spGFgagbDh3K9AlSTImHzYII5jXpMxXH0OJu8WV1pYetO9YJeFcP50OJICO3KuQYSbx/P0Pd3/ipGeZVQKWoBA==
 
 "@polymedia/suitcase-core@^0.0.3":
   version "0.0.3"
