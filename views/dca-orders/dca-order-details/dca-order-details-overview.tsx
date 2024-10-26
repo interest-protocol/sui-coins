@@ -9,6 +9,7 @@ import { formatMoney, ZERO_BIG_NUMBER } from '@/utils';
 import { PERIODICITY } from '@/views/dca/dca.data';
 
 import { useDCAState } from '../dca-orders-manager';
+import DCAOrderDetailsOverviewLine from './dca-order-details-overview-line';
 
 const DCAOrderDetailsOverview: FC = () => {
   const network = useNetwork();
@@ -88,57 +89,34 @@ const DCAOrderDetailsOverview: FC = () => {
         </Box>
       </Box>
       <Box px="l">
-        <Box py="s" display="flex" justifyContent="space-between">
-          <Typography variant="body" size="small" color="onSurface">
-            Total deposited
-          </Typography>
-          <Typography variant="body" size="small">
-            {formatMoney(
-              FixedPointMath.toNumber(
-                BigNumber(amountPerTrade).times(totalOrders),
-                tokenIn?.decimals
-              )
-            )}{' '}
-            {tokenIn?.symbol}
-          </Typography>
-        </Box>
-        <Box
-          py="s"
-          display="flex"
-          borderTop="1px solid"
-          borderColor="outlineVariant"
-          justifyContent="space-between"
-        >
-          <Typography variant="body" size="small" color="onSurface">
-            Total spent
-          </Typography>
-          <Typography variant="body" size="small">
-            {formatMoney(
-              FixedPointMath.toNumber(accumulatedOutput, tokenIn?.decimals)
-            )}{' '}
-            {tokenIn?.symbol} ({(100 * executedOrders) / totalOrders}%)
-          </Typography>
-        </Box>
-        <Box
-          py="s"
-          display="flex"
-          borderTop="1px solid"
-          borderColor="outlineVariant"
-          justifyContent="space-between"
-        >
-          <Typography variant="body" size="small" color="onSurface">
-            Each order size
-          </Typography>
-          <Typography variant="body" size="small">
-            {formatMoney(
-              FixedPointMath.toNumber(
-                BigNumber(amountPerTrade),
-                tokenIn?.decimals
-              )
-            )}{' '}
-            {tokenIn?.symbol}
-          </Typography>
-        </Box>
+        <DCAOrderDetailsOverviewLine
+          isFirstLine
+          title="Total deposited"
+          value={`${formatMoney(
+            FixedPointMath.toNumber(
+              BigNumber(amountPerTrade).times(totalOrders),
+              tokenIn?.decimals
+            )
+          )} ${tokenIn?.symbol}`}
+        />
+        <DCAOrderDetailsOverviewLine
+          title="Total spent"
+          value={`${formatMoney(
+            FixedPointMath.toNumber(accumulatedOutput, tokenIn?.decimals)
+          )} ${tokenIn?.symbol} (${(100 * executedOrders) / totalOrders}%)`}
+        />
+        <DCAOrderDetailsOverviewLine
+          title="Total Spent in $"
+          value={`-- USD`}
+        />
+        <DCAOrderDetailsOverviewLine
+          title="Average Price in USD"
+          value={`-- USD`}
+        />
+        <DCAOrderDetailsOverviewLine
+          title="Ammount per Order"
+          value={`0.025 ${tokenIn?.symbol}`}
+        />
       </Box>
       <Box my="xs" mx="l" borderTop="1px solid" borderColor="outlineVariant" />
       <Box px="l">
