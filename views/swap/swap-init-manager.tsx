@@ -25,7 +25,7 @@ const SwapInitManager: FC = () => {
 
   const settings = useReadLocalStorage<ISwapSettings>(
     `${LOCAL_STORAGE_VERSION}-sui-coins-settings`
-  ) ?? { interval: '10', slippage: '0.1', aggregator: Aggregator.Hop };
+  ) ?? { interval: '10', slippage: '0.1', aggregator: Aggregator.Aftermath };
 
   useEffect(() => {
     form.reset();
@@ -33,12 +33,7 @@ const SwapInitManager: FC = () => {
     form.setValue('settings', {
       ...defaultSettings,
       ...settings,
-      ...(process.env.VERCEL_ENV === 'production' &&
-      settings.aggregator === Aggregator.Interest
-        ? {
-            aggregator: Aggregator.Hop,
-          }
-        : {}),
+      aggregator: Aggregator.Aftermath,
     });
     updateURL(pathname);
   }, [network]);

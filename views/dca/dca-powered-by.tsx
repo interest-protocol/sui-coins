@@ -11,7 +11,7 @@ const DCAPoweredBy: FC = () => {
   const aggregator =
     useReadLocalStorage<Aggregator>(
       `${LOCAL_STORAGE_VERSION}-suicoins-dca-aggregator`
-    ) ?? Aggregator.Hop;
+    ) ?? Aggregator.Aftermath;
 
   const { url, name, Icon } = AGGREGATORS_LIST[aggregator];
 

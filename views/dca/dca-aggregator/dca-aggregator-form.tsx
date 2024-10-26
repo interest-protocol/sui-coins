@@ -17,7 +17,7 @@ const DCAAggregatorForm: FC<DCAAggregatorFormProps> = ({
   const { setValue, control } = useFormContext<DCAForm>();
   const [stored, setLocalAggregator] = useLocalStorage(
     `${LOCAL_STORAGE_VERSION}-suicoins-dca-aggregator`,
-    Aggregator.Hop
+    Aggregator.Aftermath
   );
 
   const aggregator = useWatch({ control, name: 'aggregator' });

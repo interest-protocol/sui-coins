@@ -139,7 +139,7 @@ const DCAButton: FC = () => {
         dcaId,
         inputCoinType: from.type,
         outputCoinType: to.type,
-        aggregator: aggregator ?? Aggregator.Hop,
+        aggregator: aggregator ?? Aggregator.Aftermath,
       });
 
       await fetch(`${SENTINEL_API_URI[network]}dcas`, {
