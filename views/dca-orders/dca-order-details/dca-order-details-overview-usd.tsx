@@ -16,7 +16,7 @@ const DCAOrderDetailsOverviewUSD: FC = () => {
 
   const totalSpent = dcaOrders.reduce(
     (acc, { input_price, input_amount }) =>
-      acc.plus(BigNumber(input_amount).times(input_price)),
+      acc.plus(BigNumber(input_amount).times(input_price ?? 0)),
     ZERO_BIG_NUMBER
   );
 
@@ -32,7 +32,7 @@ const DCAOrderDetailsOverviewUSD: FC = () => {
         title="Average Price in USD"
         value={formatDollars(
           FixedPointMath.toNumber(
-            totalSpent.div(dcaOrders.length),
+            totalSpent.div(dcaOrders.length ?? 1),
             tokenIn.decimals
           )
         )}
