@@ -131,7 +131,7 @@ const DCAFields: FC = () => {
           <DCAPeriodicity />
         </Box>
       </Box>
-      <Box display="flex" flexDirection="column" gap="xs">
+      <Box display="flex" flexDirection="column" gap="xs" mt="l">
         <Box gap="xs" display="flex" alignItems="center">
           <Typography variant="label" size="medium" fontSize="s">
             SLIPPAGE
@@ -143,7 +143,9 @@ const DCAFields: FC = () => {
             color="lowestContainer"
             tooltipContent="Quantity of orders"
           >
-            <InfoCircleSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+            <Box display="flex" alignItems="center">
+              <InfoCircleSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+            </Box>
           </TooltipWrapper>
         </Box>
         <Box display="flex" gap="s" flex="1" flexDirection="column">
@@ -154,7 +156,14 @@ const DCAFields: FC = () => {
             alignItems="flex-end"
             justifyContent="space-between"
           >
-            <Typography variant="label" size="small" fontSize="xs">
+            <Typography
+              variant="label"
+              size="small"
+              fontSize="xs"
+              fontFamily="Satoshi"
+              textTransform="uppercase"
+              fontWeight="400"
+            >
               Balance:{' '}
               {fromType && coinsMap[fromType]
                 ? FixedPointMath.toNumber(
@@ -169,6 +178,9 @@ const DCAFields: FC = () => {
               fontSize="xs"
               variant="label"
               textAlign="right"
+              fontFamily="Satoshi"
+              textTransform="uppercase"
+              fontWeight="400"
             >
               Price
               {price
