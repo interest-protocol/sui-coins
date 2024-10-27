@@ -575,19 +575,3 @@ export const STRICT_TOKENS_MAP: Record<Network, Record<string, Token>> = {
     {}
   ),
 };
-
-export const CMC_COIN_ID = {
-  [Network.TESTNET]: {
-    [SUI_TYPE_ARG_LONG]: 20947,
-    [TESTNET_BASE_COINS.SUI]: 20947,
-    [TESTNET_BASE_COINS.BNB]: 1839,
-    [TESTNET_BASE_COINS.BTC]: 1,
-    [TESTNET_BASE_COINS.USDC]: 3408,
-    [TESTNET_BASE_COINS.USDT]: 825,
-    [TESTNET_BASE_COINS.ETH]: 1027,
-  },
-  [Network.MAINNET]: {
-    [SUI_TYPE_ARG_LONG]: 20947,
-    [MAINNET_BASE_COINS.SUI]: 20947,
-  },
-};
