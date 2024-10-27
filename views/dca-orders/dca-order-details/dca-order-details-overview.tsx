@@ -108,8 +108,12 @@ const DCAOrderDetailsOverview: FC = () => {
         />
         <DCAOrderDetailsOverviewUSD />
         <DCAOrderDetailsOverviewLine
-          title="Ammount per Order"
-          value={`0.025 ${tokenIn?.symbol}`}
+          title="Amount per Order"
+          value={`
+            ${FixedPointMath.toNumber(
+              BigNumber(amountPerTrade),
+              tokenIn?.decimals
+            )} ${tokenIn?.symbol}`}
         />
       </Box>
       <Box my="xs" mx="l" borderTop="1px solid" borderColor="outlineVariant" />
