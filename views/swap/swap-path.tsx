@@ -1,5 +1,5 @@
 import { Box, Button, Motion, Typography } from '@interest-protocol/ui-kit';
-import { not, toPairs, values } from 'ramda';
+import { not } from 'ramda';
 import { FC, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
@@ -7,7 +7,6 @@ import { v4 } from 'uuid';
 import { ChevronDownSVG, SwapSVG } from '@/svg';
 import { SwapForm } from '@/views/swap/swap.types';
 
-import { isAftermathRoute } from './swap.utils';
 import { isNativeRoute } from './swap.utils';
 import SwapPathLine from './swap-path-line';
 
@@ -29,17 +28,10 @@ const SwapPath: FC = () => {
         ([a, b], [paths]) => [a + 1, b + paths.length],
         [0, 0]
       )
-    : isAftermathRoute(route)
-      ? route.routes.reduce(
-          ([a, b], { paths }) => [a + 1, b + paths.length],
-          [0, 0]
-        )
-      : !toPairs(route.trade.edges).length
-        ? [1, 1]
-        : toPairs(route.trade.edges).reduce(
-            ([a, b], [, paths]) => [a + 1, b + paths.length + 1],
-            [0, 0]
-          );
+    : route.routes.reduce(
+        ([a, b], { paths }) => [a + 1, b + paths.length],
+        [0, 0]
+      );
 
   return (
     <>
@@ -130,57 +122,31 @@ const SwapPath: FC = () => {
           flexDirection="column"
           alignItems={['unset', 'unset', 'center']}
         >
-          {isNativeRoute(route) ? (
-            route.routes.map(([paths], index) => (
-              <SwapPathLine
-                key={v4()}
-                position={index + 1}
-                paths={paths
-                  .slice(0, -1)
-                  .map((path, index) => [
-                    path as string,
-                    paths[index + 1] as string,
-                    'IPX CLAMM',
+          {isNativeRoute(route)
+            ? route.routes.map(([paths], index) => (
+                <SwapPathLine
+                  key={v4()}
+                  position={index + 1}
+                  paths={paths
+                    .slice(0, -1)
+                    .map((path, index) => [
+                      path as string,
+                      paths[index + 1] as string,
+                      'IPX CLAMM',
+                    ])}
+                />
+              ))
+            : route.routes.map(({ paths }, index) => (
+                <SwapPathLine
+                  key={v4()}
+                  position={index + 1}
+                  paths={paths.map(({ coinIn, coinOut, protocolName }) => [
+                    coinIn.type,
+                    coinOut.type,
+                    protocolName as string,
                   ])}
-              />
-            ))
-          ) : isAftermathRoute(route) ? (
-            route.routes.map(({ paths }, index) => (
-              <SwapPathLine
-                key={v4()}
-                position={index + 1}
-                paths={paths.map(({ coinIn, coinOut, protocolName }) => [
-                  coinIn.type,
-                  coinOut.type,
-                  protocolName as string,
-                ])}
-              />
-            ))
-          ) : !toPairs(route.trade.edges).length ? (
-            <SwapPathLine
-              key={v4()}
-              position={1}
-              paths={[
-                [
-                  values(route.trade.nodes)[0].amount_in.token as string,
-                  values(route.trade.nodes)[0].amount_out.token as string,
-                  values(route.trade.nodes)[0].pool.sui_exchange as string,
-                ],
-              ]}
-            />
-          ) : (
-            toPairs(route.trade.edges).map(([final, paths], index) => (
-              <SwapPathLine
-                key={v4()}
-                position={index + 1}
-                paths={[...paths, final].map((type) => [
-                  route.trade.nodes[type].amount_in.token as string,
-                  route.trade.nodes[type].amount_out.token as string,
-                  route.trade.nodes[type].pool.sui_exchange as string,
-                ])}
-              />
-            ))
-          )}
+                />
+              ))}
         </Box>
       )}
     </>

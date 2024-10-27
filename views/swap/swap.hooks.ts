@@ -9,16 +9,14 @@ import {
   SCALLOP_WRAPPED_COINS_TREASURY_CAPS,
 } from '@/constants/clamm';
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
-import { useHopSdk } from '@/hooks/use-hop-sdk';
 import { useNetwork } from '@/hooks/use-network';
 
 import { getCoinOfValue } from './../../utils/coin/index';
 import { SwapForm } from './swap.types';
-import { isAftermathRoute, isNativeRoute } from './swap.utils';
+import { isNativeRoute } from './swap.utils';
 import { useAftermathRouter } from './swap-manager/swap-manager.hooks';
 
 export const useSwap = () => {
-  const hopSdk = useHopSdk();
   const clamm = useClammSdk();
   const suiClient = useSuiClient();
   const afRouter = useAftermathRouter();
@@ -30,20 +28,11 @@ export const useSwap = () => {
     invariant(values.route && currentAccount, 'Something went wrong');
 
     if (!isNativeRoute(values.route)) {
-      if (isAftermathRoute(values.route))
-        return afRouter.getTransactionForCompleteTradeRoute({
-          walletAddress: currentAccount.address,
-          completeRoute: values.route,
-          slippage: Number(values.settings.slippage) / 100,
-        });
-
-      const trade = values.route.trade;
-
-      return hopSdk.swap(
-        trade,
-        currentAccount.address,
-        +values.settings.slippage * 100
-      ) as unknown as Transaction;
+      return afRouter.getTransactionForCompleteTradeRoute({
+        walletAddress: currentAccount.address,
+        completeRoute: values.route,
+        slippage: Number(values.settings.slippage) / 100,
+      });
     }
 
     // Native Swap - Interest

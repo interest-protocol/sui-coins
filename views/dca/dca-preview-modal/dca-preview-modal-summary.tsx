@@ -9,7 +9,6 @@ import { formatMoney } from '@/utils';
 
 import { PERIODICITY } from '../dca.data';
 import { DCAForm } from '../dca.types';
-import { AGGREGATORS_LIST } from '../dca-aggregator/dca-aggregator.data';
 import {
   getEstimatedEndDate,
   getStartDate,
@@ -24,9 +23,6 @@ const DCAPreviewModalSummary: FC = () => {
   const orders = useWatch({ control, name: 'orders' });
   const every = useWatch({ control, name: 'intervals' });
   const timeScale = useWatch({ control, name: 'periodicity' });
-  const aggregator = useWatch({ control, name: 'aggregator' });
-
-  const { name: aggregatorName } = AGGREGATORS_LIST[aggregator];
 
   const startDate = getStartDate();
   const endDate = getEstimatedEndDate(Number(timeScale), Number(orders));
@@ -112,28 +108,6 @@ const DCAPreviewModalSummary: FC = () => {
           <Box display="flex" justifyContent="center" alignItems="center">
             <Typography mr="2xs" variant="body" size="medium" color="onSurface">
               {max ? formatMoney(+max) : 'N/A'}
-            </Typography>
-            <InformationCircleSVG
-              color="#1B1B1F"
-              cursor="pointer"
-              width="0.802rem"
-              maxWidth="0.802rem"
-              maxHeight="0.802rem"
-            />
-          </Box>
-        </Box>
-        <Box py="m" display="flex" justifyContent="space-between">
-          <Typography
-            variant="body"
-            size="medium"
-            opacity="0.80"
-            color="#000000A3"
-          >
-            Aggregator
-          </Typography>
-          <Box display="flex" justifyContent="center" alignItems="center">
-            <Typography mr="2xs" variant="body" size="medium" color="onSurface">
-              {aggregatorName.replace(/aggregator/gi, '').trim()}
             </Typography>
             <InformationCircleSVG
               color="#1B1B1F"

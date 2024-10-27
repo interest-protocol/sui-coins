@@ -12,7 +12,11 @@ const SwapPage: NextPage = () => {
       focusIn: true,
       focusOut: true,
       loading: true,
-      settings: { interval: '10', slippage: '0.1', aggregator: Aggregator.Hop },
+      settings: {
+        interval: '10',
+        slippage: '0.1',
+        aggregator: Aggregator.Aftermath,
+      },
     },
   });
 
