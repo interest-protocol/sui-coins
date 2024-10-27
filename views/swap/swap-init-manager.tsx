@@ -25,7 +25,7 @@ const SwapInitManager: FC = () => {
 
   const settings = useReadLocalStorage<ISwapSettings>(
     `${LOCAL_STORAGE_VERSION}-sui-coins-settings`
-  ) ?? { interval: '10', slippage: '0.1', aggregator: Aggregator.Hop };
+  ) ?? { interval: '10', slippage: '0.1', aggregator: Aggregator.Aftermath };
 
   useEffect(() => {
     form.reset();
@@ -33,12 +33,7 @@ const SwapInitManager: FC = () => {
     form.setValue('settings', {
       ...defaultSettings,
       ...settings,
-      ...(process.env.VERCEL_ENV === 'production' &&
-      settings.aggregator === Aggregator.Interest
-        ? {
-            aggregator: Aggregator.Hop,
-          }
-        : {}),
+      aggregator: Aggregator.Aftermath,
     });
     updateURL(pathname);
   }, [network]);
@@ -88,7 +83,11 @@ const SwapInitManager: FC = () => {
     form.setValue(field, token);
 
     getAllCoinsPrice([token.type], network)
-      .then((data) => form.setValue(`${field}.usdPrice`, data[token.type]))
+      .then((data) => {
+        console.log({ data });
+
+        form.setValue(`${field}.usdPrice`, data[token.type]);
+      })
       .catch(console.log);
 
     return STRICT_TOKENS_MAP[network][token.type]?.symbol || token.type;

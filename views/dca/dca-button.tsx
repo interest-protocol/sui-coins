@@ -42,9 +42,10 @@ const DCAButton: FC = () => {
   const currentAccount = useCurrentAccount();
   const { dialog, handleClose } = useDialog();
   const signTransaction = useSignTransaction();
-  const aggregator = useReadLocalStorage<Aggregator>(
-    `${LOCAL_STORAGE_TOP_KEY}-suicoins-dca-aggregator`
-  );
+  const aggregator =
+    useReadLocalStorage<Aggregator>(
+      `${LOCAL_STORAGE_TOP_KEY}-suicoins-dca-aggregator`
+    ) ?? Aggregator.Hop;
 
   const resetInput = () => {
     formDCA.setValue('from.display', '0');

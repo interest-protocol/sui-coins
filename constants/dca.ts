@@ -1,6 +1,5 @@
 import type { Token } from '@interest-protocol/sui-tokens';
 
-import { COINS } from './coins';
 import { Network } from './dapp';
 
 export const MAX_U64 = '18446744073709551615';
@@ -58,13 +57,6 @@ export const FAUCET_COINS: Array<Token> = [
     type: FAUCET_COIN_TYPES.USDT as `0x${string}`,
   },
 ];
-
-export const DCA_COIN_MAINNET_MOCK: Record<string, Token> = {
-  [FAUCET_COIN_TYPES.USDC]: COINS[Network.MAINNET].ETH_WORMHOLE_USDC,
-  [FAUCET_COIN_TYPES.ETH]: COINS[Network.MAINNET].NATIVE_WORMHOLE_ETH,
-  [FAUCET_COIN_TYPES.BTC]: COINS[Network.MAINNET].SUI,
-  [FAUCET_COIN_TYPES.USDT]: COINS[Network.MAINNET].ETH_WORMHOLE_USDT,
-};
 
 export const DCA_COIN_MAINNET_VALUE: Record<string, number> = {
   [FAUCET_COIN_TYPES.USDC]: 1,

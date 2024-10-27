@@ -25,15 +25,14 @@ export interface DCA {
 export interface DCAOrder {
   dca: string;
   fee: number;
-  input: {
-    name: number;
-  };
-  input_amount: number;
-  output: {
-    name: number;
-  };
-  output_amount: number;
+  digest: string;
   timestampMs: number;
+  input_price: number;
+  output_price: number;
+  input_amount: number;
+  output_amount: number;
+  input: { name: number };
+  output: { name: number };
 }
 
 export interface Paginated<T> {

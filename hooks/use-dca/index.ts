@@ -50,14 +50,23 @@ export const useDcas = () => {
 export const useDcaOrders = (id: string) => {
   const network = useNetwork();
 
-  return useSWR<Paginated<DCAOrder> | null>(
+  return useSWR<ReadonlyArray<DCAOrder> | null>(
     `dca-orders-${id}`,
-    () => {
+    async () => {
       if (!id) return null;
 
-      return fetch(
-        `${SENTINEL_API_URI[network]}dcas/${id}/orders?pageSize=100`
-      ).then((response) => response.json?.());
+      return (
+        await Promise.all(
+          [1, 2].map((page) =>
+            fetch(
+              `${SENTINEL_API_URI[network]}dcas/${id}/orders?pageSize=100&page=${page}`
+            )
+              .then((response) => response.json?.())
+              .then(({ data }: Paginated<DCAOrder>) => data)
+              .catch(() => [])
+          )
+        )
+      ).flat();
     },
     {
       refreshWhenHidden: true,
@@ -73,8 +82,8 @@ export const useFeeFreeTokens = () => {
   return useSWR<ReadonlyArray<string>>(
     `fee-free-tokens`,
     () =>
-      fetch(`${SENTINEL_API_URI[network]}dcas/fee-free-list`).then(
-        (response) => response.json?.()
+      fetch(`${SENTINEL_API_URI[network]}dcas/fee-free-list`).then((response) =>
+        response.json?.()
       ),
     {
       refreshWhenHidden: true,

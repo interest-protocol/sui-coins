@@ -5,7 +5,6 @@ import type BigNumber from 'bignumber.js';
 import { FC } from 'react';
 
 import { SVGProps } from '@/components/svg/svg.types';
-import type { JSONQuoteResponse } from '@/server/lib/hop/hop.utils';
 
 export interface ISwapSettings {
   slippage: string;
@@ -20,7 +19,6 @@ export interface SwapToken extends Token {
 }
 
 export enum Aggregator {
-  Hop = 'hop',
   Interest = 'interest',
   Aftermath = 'aftermath',
 }
@@ -41,11 +39,7 @@ export interface SwapForm {
   fetchingPrices: boolean;
   settings: ISwapSettings;
   lastFetchDate: number | null;
-  route:
-    | RouterCompleteTradeRoute
-    | GetRouteQuotesReturn
-    | JSONQuoteResponse
-    | null;
+  route: RouterCompleteTradeRoute | GetRouteQuotesReturn | null;
 }
 
 export interface SwapPreviewModalProps {

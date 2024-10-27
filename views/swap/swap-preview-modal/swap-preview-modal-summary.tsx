@@ -14,7 +14,6 @@ import { ZERO_BIG_NUMBER } from '@/utils';
 import { useSwap } from '../swap.hooks';
 import { SwapForm } from '../swap.types';
 import { isNativeRoute } from '../swap.utils';
-import { isAftermathRoute } from '../swap.utils';
 
 const SwapPreviewModalSummary: FC = () => {
   const swap = useSwap();
@@ -32,9 +31,7 @@ const SwapPreviewModalSummary: FC = () => {
   const trackKey = route
     ? isNativeRoute(route)
       ? route?.routes[0][2].amount.toString()
-      : isAftermathRoute(route)
-        ? route.spotPrice
-        : route.amount_out_with_fee.toString()
+      : route.spotPrice
     : 0;
 
   const { data: fees, isLoading } = useSWR(

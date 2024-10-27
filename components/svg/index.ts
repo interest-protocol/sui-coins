@@ -71,7 +71,6 @@ export { default as FTMChainSVG } from './ftm-chain';
 export { default as GithubSVG } from './github';
 export { default as HamburgerSVG } from './hamburger';
 export { default as HeartSVG } from './heart';
-export { default as HopSVG } from './hop';
 export { default as HourglassSVG } from './hourglass';
 export { default as IncineratorNoAssetsSVG } from './incinerator-no-assets';
 export { default as InfoSVG } from './info';

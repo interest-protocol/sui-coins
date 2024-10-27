@@ -6,10 +6,8 @@ import { v4 } from 'uuid';
 import Layout from '@/components/layout';
 import { Routes, RoutesEnum } from '@/constants';
 
-import DCAAggregator from './dca-aggregator';
 import DCAFields from './dca-fields';
 import DCAFlipToken from './dca-flip-token';
-import DCAPoweredBy from './dca-powered-by';
 import DCAQuoteManager from './dca-quote-manager';
 import DCARecentOrders from './dca-recent-orders';
 import Input from './input';
@@ -104,8 +102,6 @@ const DCA: FC = () => {
           <DCAFields />
           <PreviewDCAButton />
         </Box>
-        <DCAPoweredBy />
-        <DCAAggregator />
         <DCARecentOrders />
       </Box>
       <DCAQuoteManager />

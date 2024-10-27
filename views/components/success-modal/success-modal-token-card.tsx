@@ -14,6 +14,7 @@ const SuccessModalTokenCard: FC<SuccessModalTokenCardProps> = ({
   withoutAmount,
 }) => {
   const { network } = useSuiClientContext();
+
   return (
     <Box
       py="m"

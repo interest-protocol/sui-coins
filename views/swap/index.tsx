@@ -9,7 +9,6 @@ import Slider from './input/slider';
 import PreviewSwapButton from './preview-swap-button';
 import SwapFlipToken from './swap-flip-token';
 import SwapPath from './swap-path';
-import SwapPoweredBy from './swap-powered-by';
 import SwapSettings from './swap-settings';
 import SwapUpdatePrice from './swap-update-price';
 
@@ -83,7 +82,6 @@ const Swap: FC = () => (
           <Input label="to" />
         </Box>
         <PreviewSwapButton />
-        <SwapPoweredBy />
       </Box>
       <SwapPath />
       <Box my="xs" bg="lowestContainer" borderRadius="xs">
