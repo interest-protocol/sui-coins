@@ -1,11 +1,11 @@
 import {
   Box,
-  Button,
+  Tag,
   TextField,
   TooltipWrapper,
   Typography,
 } from '@interest-protocol/ui-kit';
-import { ChangeEvent, FC } from 'react';
+import { ChangeEvent, FC, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
@@ -26,6 +26,8 @@ const DCAFields: FC = () => {
     control,
     formState: { errors },
   } = useFormContext<DCAForm>();
+
+  const [activeTag, setActiveTag] = useState<number | null>(null);
 
   const toSymbol = getValues('to.symbol');
   const fromSymbol = getValues('from.symbol');
@@ -129,10 +131,10 @@ const DCAFields: FC = () => {
           <DCAPeriodicity />
         </Box>
       </Box>
-      <Box display="flex" flexDirection="column" gap="xs">
+      <Box display="flex" flexDirection="column" gap="xs" mt="l">
         <Box gap="xs" display="flex" alignItems="center">
           <Typography variant="label" size="medium" fontSize="s">
-            Enable pricing strategy
+            SLIPPAGE
           </Typography>
           <TooltipWrapper
             bg="onSurface"
@@ -141,7 +143,9 @@ const DCAFields: FC = () => {
             color="lowestContainer"
             tooltipContent="Quantity of orders"
           >
-            <InfoCircleSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+            <Box display="flex" alignItems="center">
+              <InfoCircleSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+            </Box>
           </TooltipWrapper>
         </Box>
         <Box display="flex" gap="s" flex="1" flexDirection="column">
@@ -152,7 +156,14 @@ const DCAFields: FC = () => {
             alignItems="flex-end"
             justifyContent="space-between"
           >
-            <Typography variant="label" size="small" fontSize="xs">
+            <Typography
+              variant="label"
+              size="small"
+              fontSize="xs"
+              fontFamily="Satoshi"
+              textTransform="uppercase"
+              fontWeight="400"
+            >
               Balance:{' '}
               {fromType && coinsMap[fromType]
                 ? FixedPointMath.toNumber(
@@ -167,6 +178,9 @@ const DCAFields: FC = () => {
               fontSize="xs"
               variant="label"
               textAlign="right"
+              fontFamily="Satoshi"
+              textTransform="uppercase"
+              fontWeight="400"
             >
               Price
               {price
@@ -224,16 +238,18 @@ const DCAFields: FC = () => {
           </Box>
         </Box>
         <Box display="flex" gap={['xs', 'xs', 'xs', 'm']}>
-          {[0.1, 0.2, 0.3, 0.4, 0.5].map((value) => (
-            <Button
-              px="xs"
+          {[0.1, 0.2, 0.3, 0.4, 0.5].map((value, index) => (
+            <Tag
               py="2xs"
               key={v4()}
+              size="small"
               variant="outline"
               disabled={!price}
-              borderRadius="full"
-              fontFamily="Satoshi"
-              borderColor="outlineVariant"
+              {...(activeTag === index && {
+                color: '#0053DB',
+                borderColor: '#0053DB',
+                background: '#0053DB14',
+              })}
               onClick={() => {
                 if (!price) return;
 
@@ -252,10 +268,12 @@ const DCAFields: FC = () => {
                     (Number(price) - Number(price) * value).toFixed(decimals)
                   ).toPrecision()
                 );
+
+                setActiveTag(index);
               }}
             >
               {value * 100}%
-            </Button>
+            </Tag>
           ))}
         </Box>
       </Box>
