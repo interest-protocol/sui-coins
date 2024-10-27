@@ -1,5 +1,3 @@
-import { normalizeStructTag } from '@mysten/sui/utils';
-
 import { Network } from '@/constants';
 import { COIN_TO_WRAPPED, WRAPPED_TO_COIN } from '@/constants/clamm';
 
@@ -16,12 +14,11 @@ export const getPrices = (types: ReadonlyArray<string>, network: Network) =>
     .then((res) => res.json?.())
     .then((data) =>
       types.reduce(
-        (acc, type) =>
-          data[normalizeStructTag(type)].price > 0
+        (acc, type, index) =>
+          data[index].price > 0
             ? {
                 ...acc,
-                [WRAPPED_TO_COIN[network][type] ?? type]:
-                  data[normalizeStructTag(type)].price,
+                [WRAPPED_TO_COIN[network][type] ?? type]: data[index].price,
               }
             : acc,
         {} as Record<string, number>
