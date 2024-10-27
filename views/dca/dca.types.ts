@@ -36,6 +36,7 @@ export interface DCAPreviewModalProps {
 }
 
 export enum Aggregator {
+  Hop,
   Aftermath,
 }
 

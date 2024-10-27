@@ -10,7 +10,7 @@ import { dcaValidationSchema } from '@/views/dca/dca.validation';
 import DCAInitManager from '@/views/dca/dca-init-manager';
 
 const DCAPage: NextPage = () => {
-  const aggregator = Aggregator.Aftermath;
+  const aggregator = Aggregator.Hop;
 
   const form = useForm<DCAForm>({
     mode: 'onBlur',
