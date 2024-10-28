@@ -101,7 +101,6 @@ const SelectToken: FC<InputProps> = ({ label }) => {
 
   return (
     <Button
-      py={label == 'from' ? 'xs' : 's'}
       fontSize="s"
       variant="tonal"
       color="onSurface"
@@ -109,10 +108,12 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       onClick={openModal}
       borderStyle="solid"
       gap={['unset', 's', 's']}
-      borderColor="highestContainer"
+      borderColor="outlineVariant"
+      height={label == 'to' ? '3.5rem' : ''}
       {...(label === 'to' && { px: 'xs' })}
       borderWidth={label === 'to' ? '1px' : '0px'}
       bg={label === 'to' ? 'none' : 'lowContainer'}
+      py={label == 'to' ? 'unset' : currentType ? 'xs' : 's'}
       SuffixIcon={
         label == 'to' ? (
           <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
@@ -139,7 +140,6 @@ const SelectToken: FC<InputProps> = ({ label }) => {
         {currentType && label === 'to' && (
           <TokenIcon
             withBg
-            bg="#6FBCF0"
             size="1.4rem"
             url={currentUrl}
             network={network}
