@@ -140,7 +140,6 @@ const SelectToken: FC<InputProps> = ({ label }) => {
         {currentType && label === 'to' && (
           <TokenIcon
             withBg
-            bg="#6FBCF0"
             size="1.4rem"
             url={currentUrl}
             network={network}
