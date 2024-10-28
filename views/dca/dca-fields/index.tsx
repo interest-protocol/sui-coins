@@ -125,8 +125,8 @@ const DCAFields: FC = () => {
         </Box>
       </Box>
       <Box display="flex" flexDirection="column" gap="xs" mt="l">
-        <Box display="flex">
-          <Box gap="xs" display="flex" alignItems="center">
+        <Box display="flex" flexDirection="column">
+          <Box mb="s" gap="xs" display="flex" alignItems="center">
             <Typography variant="label" size="medium" fontSize="s">
               SLIPPAGE
             </Typography>
@@ -142,30 +142,26 @@ const DCAFields: FC = () => {
               </Box>
             </TooltipWrapper>
           </Box>
-          <Box display="flex" gap="s" flex="1" flexDirection="column">
-            <Box
-              gap="xs"
-              flex="1"
-              display="flex"
-              alignItems="flex-end"
-              justifyContent="flex-end"
-            >
-              <Typography
-                size="small"
-                fontSize="xs"
-                variant="label"
-                textAlign="right"
-                fontFamily="Satoshi"
-                textTransform="uppercase"
-                fontWeight="400"
-              >
-                Price
-                {price
-                  ? `: 1 ${fromSymbol} = ${+(+price).toFixed(4)} ${toSymbol}`
-                  : ''}
-              </Typography>
+          {price && (
+            <Box display="flex" gap="s" flexDirection="column">
+              <Box gap="xs" flex="1" display="flex">
+                <Typography
+                  size="small"
+                  fontSize="xs"
+                  variant="label"
+                  textAlign="right"
+                  fontFamily="Satoshi"
+                  textTransform="uppercase"
+                  fontWeight="400"
+                >
+                  Price
+                  {price
+                    ? `: 1 ${fromSymbol} = ${+(+price).toFixed(4)} ${toSymbol}`
+                    : ''}
+                </Typography>
+              </Box>
             </Box>
-          </Box>
+          )}
         </Box>
         <Box display="flex" gap="xs" flex="1">
           <TextField
