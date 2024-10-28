@@ -26,6 +26,7 @@ const DCAFields: FC = () => {
   const toSymbol = getValues('to.symbol');
   const fromSymbol = getValues('from.symbol');
   const price = useWatch({ control, name: 'price' });
+
   return (
     <Box gap="l" display="flex" flexDirection="column">
       <Box display="flex" flexDirection="column" gap="xs">
@@ -124,38 +125,46 @@ const DCAFields: FC = () => {
         </Box>
       </Box>
       <Box display="flex" flexDirection="column" gap="xs" mt="l">
-        <Box gap="xs" display="flex" alignItems="center">
-          <Typography variant="label" size="medium" fontSize="s">
-            SLIPPAGE
-          </Typography>
-          <TooltipWrapper
-            bg="onSurface"
-            whiteSpace="nowrap"
-            tooltipPosition="left"
-            color="lowestContainer"
-            tooltipContent="Quantity of orders"
-          >
-            <Box display="flex" alignItems="center">
-              <InfoCircleSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
-            </Box>
-          </TooltipWrapper>
-        </Box>
-        <Box display="flex" gap="s" flex="1" flexDirection="column">
-          <Box gap="xs" flex="1" display="flex" alignItems="flex-end">
-            <Typography
-              size="small"
-              fontSize="xs"
-              variant="label"
-              textAlign="right"
-              fontFamily="Satoshi"
-              textTransform="uppercase"
-              fontWeight="400"
-            >
-              Price
-              {price
-                ? `: 1 ${fromSymbol} = ${+(+price).toFixed(4)} ${toSymbol}`
-                : ''}
+        <Box display="flex">
+          <Box gap="xs" display="flex" alignItems="center">
+            <Typography variant="label" size="medium" fontSize="s">
+              SLIPPAGE
             </Typography>
+            <TooltipWrapper
+              bg="onSurface"
+              whiteSpace="nowrap"
+              tooltipPosition="left"
+              color="lowestContainer"
+              tooltipContent="Quantity of orders"
+            >
+              <Box display="flex" alignItems="center">
+                <InfoCircleSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+              </Box>
+            </TooltipWrapper>
+          </Box>
+          <Box display="flex" gap="s" flex="1" flexDirection="column">
+            <Box
+              gap="xs"
+              flex="1"
+              display="flex"
+              alignItems="flex-end"
+              justifyContent="flex-end"
+            >
+              <Typography
+                size="small"
+                fontSize="xs"
+                variant="label"
+                textAlign="right"
+                fontFamily="Satoshi"
+                textTransform="uppercase"
+                fontWeight="400"
+              >
+                Price
+                {price
+                  ? `: 1 ${fromSymbol} = ${+(+price).toFixed(4)} ${toSymbol}`
+                  : ''}
+              </Typography>
+            </Box>
           </Box>
         </Box>
         <Box display="flex" gap="xs" flex="1">

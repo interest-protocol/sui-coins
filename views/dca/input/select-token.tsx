@@ -101,7 +101,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
 
   return (
     <Button
-      py="xs"
+      py={label == 'from' ? 'xs' : 's'}
       fontSize="s"
       variant="tonal"
       color="onSurface"
