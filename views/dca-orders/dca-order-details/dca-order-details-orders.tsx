@@ -1,6 +1,7 @@
 import { TimeScale } from '@interest-protocol/dca-sdk';
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
 import BigNumber from 'bignumber.js';
+import Link from 'next/link';
 import { not } from 'ramda';
 import { FC } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
@@ -8,12 +9,12 @@ import { v4 } from 'uuid';
 
 import { TokenIcon } from '@/components';
 import LinearChart from '@/components/linear-chart';
-import { LOCAL_STORAGE_VERSION } from '@/constants';
+import { EXPLORER_URL, LOCAL_STORAGE_VERSION } from '@/constants';
 import { MAX_U64 } from '@/constants/dca';
 import { useNetwork } from '@/hooks/use-network';
 import { FixedPointMath } from '@/lib';
-import { EyeSVG, IncineratorNoAssetsSVG } from '@/svg';
-import { formatMoney } from '@/utils';
+import { EyeSVG, IncineratorNoAssetsSVG, LinkSVG } from '@/svg';
+import { formatDollars, formatMoney } from '@/utils';
 
 import { useDCAState } from '../dca-orders-manager';
 
@@ -111,7 +112,6 @@ const DCAOrderDetailsOrders: FC = () => {
             </Typography>
           </Button>
         </Box>
-
         <Box
           gap="s"
           display="grid"
@@ -232,7 +232,7 @@ const DCAOrderDetailsOrders: FC = () => {
           gridTemplateColumns={[
             '1fr 1fr 2fr',
             '1fr 1fr 2fr',
-            '1fr 1fr 1fr 2fr',
+            '1fr 1fr 1fr 1fr 1fr',
           ]}
         >
           <Typography variant="label" size="large" justifySelf="self-start">
@@ -251,6 +251,7 @@ const DCAOrderDetailsOrders: FC = () => {
           <Typography variant="label" size="large">
             Date/Time
           </Typography>
+          <Box />
         </Box>
         {dcaOrders.length ? (
           <Box
@@ -260,92 +261,155 @@ const DCAOrderDetailsOrders: FC = () => {
             overflowY="auto"
             flexDirection="column"
           >
-            {dcaOrders.map(({ input_amount, output_amount, timestampMs }) => (
-              <Box
-                p="m"
-                key={v4()}
-                display="grid"
-                borderRadius="xs"
-                border="1px solid"
-                alignItems="center"
-                bg="lowestContainer"
-                justifyItems="center"
-                borderColor="outlineVariant"
-                gridTemplateColumns={[
-                  '1fr 1fr 2fr',
-                  '1fr 1fr 2fr',
-                  '1fr 1fr 1fr 2fr',
-                ]}
-              >
+            {dcaOrders.map(
+              ({
+                digest,
+                timestampMs,
+                input_price,
+                output_price,
+                input_amount,
+                output_amount,
+              }) => (
                 <Box
-                  gap="s"
-                  display="flex"
+                  p="m"
+                  key={v4()}
+                  display="grid"
+                  borderRadius="xs"
+                  border="1px solid"
                   alignItems="center"
-                  justifySelf="self-start"
-                  flexDirection={['column-reverse', 'row']}
+                  bg="lowestContainer"
+                  justifyItems="center"
+                  borderColor="outlineVariant"
+                  gridTemplateColumns={[
+                    '1fr 1fr 2fr',
+                    '1fr 1fr 2fr',
+                    '1fr 1fr 1fr 1fr 1fr',
+                  ]}
                 >
-                  <Typography variant="body" size="medium">
-                    {formatMoney(
-                      FixedPointMath.toNumber(
-                        BigNumber(input_amount),
-                        tokenIn?.decimals
-                      )
+                  <Box display="flex" flexDirection="column">
+                    <Box
+                      gap="s"
+                      display="flex"
+                      alignItems="center"
+                      justifySelf="self-start"
+                      flexDirection={['column-reverse', 'row']}
+                    >
+                      <Typography variant="body" size="medium">
+                        {formatMoney(
+                          FixedPointMath.toNumber(
+                            BigNumber(input_amount),
+                            tokenIn?.decimals
+                          )
+                        )}
+                      </Typography>
+                      <Box display="flex">
+                        <TokenIcon
+                          withBg
+                          rounded
+                          size="0.75rem"
+                          network={network}
+                          type={tokenIn?.type ?? ''}
+                          symbol={tokenIn?.symbol ?? ''}
+                        />
+                      </Box>
+                    </Box>
+                    {input_price && (
+                      <Typography variant="body" size="small" color="outline">
+                        {formatDollars(
+                          FixedPointMath.toNumber(
+                            BigNumber(input_amount).times(input_price),
+                            tokenIn?.decimals
+                          )
+                        )}
+                      </Typography>
                     )}
-                  </Typography>
-                  <Box display="flex">
-                    <TokenIcon
-                      withBg
-                      rounded
-                      size="0.75rem"
-                      network={network}
-                      type={tokenIn?.type ?? ''}
-                      symbol={tokenIn?.symbol ?? ''}
-                    />
                   </Box>
-                </Box>
-                <Box display={['none', 'none', 'block']}>
-                  <Typography variant="body" size="medium">
-                    {FixedPointMath.toNumber(
-                      BigNumber(output_amount).div(
-                        FixedPointMath.toNumber(
-                          BigNumber(amountPerTrade),
-                          tokenIn?.decimals
-                        )
-                      ),
-                      tokenOut?.decimals
-                    )}
-                  </Typography>
-                </Box>
-                <Box
-                  gap="s"
-                  display="flex"
-                  alignItems="center"
-                  flexDirection={['column-reverse', 'row']}
-                >
-                  <Typography variant="body" size="medium">
-                    {formatMoney(
-                      FixedPointMath.toNumber(
-                        BigNumber(output_amount),
+                  <Box display={['none', 'none', 'block']}>
+                    <Typography variant="body" size="medium">
+                      {FixedPointMath.toNumber(
+                        BigNumber(output_amount).div(
+                          FixedPointMath.toNumber(
+                            BigNumber(input_amount),
+                            tokenIn?.decimals
+                          )
+                        ),
                         tokenOut?.decimals
-                      )
+                      )}
+                    </Typography>
+                    {input_price && output_price && (
+                      <Typography variant="body" size="small" color="outline">
+                        {formatDollars(
+                          FixedPointMath.toNumber(
+                            BigNumber(input_amount).times(input_price),
+                            tokenIn?.decimals
+                          ) /
+                            FixedPointMath.toNumber(
+                              BigNumber(output_amount).times(output_price),
+                              tokenOut?.decimals
+                            )
+                        )}
+                      </Typography>
                     )}
+                  </Box>
+                  <Box display="flex" flexDirection="column">
+                    <Box
+                      gap="s"
+                      display="flex"
+                      alignItems="center"
+                      flexDirection={['column-reverse', 'row']}
+                    >
+                      <Typography variant="body" size="medium">
+                        {formatMoney(
+                          FixedPointMath.toNumber(
+                            BigNumber(output_amount),
+                            tokenOut?.decimals
+                          )
+                        )}
+                      </Typography>
+                      <Box display="flex">
+                        <TokenIcon
+                          withBg
+                          rounded
+                          size="0.75rem"
+                          network={network}
+                          type={tokenOut?.type ?? ''}
+                          symbol={tokenOut?.symbol ?? ''}
+                        />
+                      </Box>
+                    </Box>
+                    {output_price && (
+                      <Typography variant="body" size="small" color="outline">
+                        {formatDollars(
+                          FixedPointMath.toNumber(
+                            BigNumber(output_amount).times(output_price),
+                            tokenOut?.decimals
+                          )
+                        )}
+                      </Typography>
+                    )}
+                  </Box>
+                  <Typography variant="body" size="medium" textAlign="right">
+                    {new Date(timestampMs).toLocaleString()}
                   </Typography>
-                  <Box display="flex">
-                    <TokenIcon
-                      withBg
-                      rounded
-                      size="0.75rem"
-                      network={network}
-                      type={tokenOut?.type ?? ''}
-                      symbol={tokenOut?.symbol ?? ''}
-                    />
+                  <Box>
+                    <Link href={`${EXPLORER_URL[network]}/tx/${digest}`}>
+                      <Button
+                        isIcon
+                        variant="text"
+                        color="primary"
+                        justifySelf="self-end"
+                      >
+                        <LinkSVG
+                          width="100%"
+                          maxWidth="1rem"
+                          maxHeight="1rem"
+                        />
+                      </Button>
+                    </Link>
                   </Box>
                 </Box>
-                <Typography variant="body" size="medium" textAlign="right">
-                  {new Date(timestampMs).toLocaleString()}
-                </Typography>
-              </Box>
-            ))}
+              )
+            )}
           </Box>
         ) : (
           <Box

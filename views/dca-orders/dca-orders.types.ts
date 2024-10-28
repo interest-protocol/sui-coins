@@ -32,6 +32,12 @@ export interface EnhancedDCA extends Omit<DCA, 'input' | 'output'> {
   output: string;
 }
 
+export interface DCAOrderDetailsOverviewLineProps {
+  title: string;
+  value: string;
+  isFirstLine?: boolean;
+}
+
 export interface DCAOrdersState {
   loading: boolean;
   isOrdersView: boolean;

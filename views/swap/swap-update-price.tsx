@@ -17,11 +17,9 @@ import { TREASURY } from '@/constants';
 import { COIN_TO_WRAPPED } from '@/constants/clamm';
 import { EXCHANGE_FEE } from '@/constants/fees';
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
-import { useHopSdk } from '@/hooks/use-hop-sdk';
 import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
-import { JSONQuoteResponse } from '@/server/lib/hop/hop.utils';
 import { RefreshSVG } from '@/svg';
 import { isSui, parseBigNumberish, ZERO_BIG_NUMBER } from '@/utils';
 
@@ -48,7 +46,6 @@ const countdownRenderer =
 
 const SwapUpdatePrice: FC = () => {
   const clamm = useClammSdk();
-  const hopSdk = useHopSdk();
   const { coinsMap } = useWeb3();
   const network = useNetwork();
   const aftermathRouter = useAftermathRouter();
@@ -162,9 +159,6 @@ const SwapUpdatePrice: FC = () => {
             .div((route as RouterCompleteTradeRoute).spotPrice)
             .times(1 - EXCHANGE_FEE);
 
-    if (aggregator === Aggregator.Hop)
-      return BigNumber((route as JSONQuoteResponse).amount_out_with_fee);
-
     return ZERO_BIG_NUMBER;
   };
 
@@ -224,8 +218,6 @@ const SwapUpdatePrice: FC = () => {
                   feePercentage: EXCHANGE_FEE,
                 },
               });
-        if (argument === Aggregator.Hop)
-          return hopSdk.quote(coinInType, coinOutType, coinInValue.toFixed(0));
 
         return;
       };

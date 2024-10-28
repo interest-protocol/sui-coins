@@ -833,16 +833,6 @@
   resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-3.9.0.tgz#cf540ac21c6c0cd24a40cf53d8e6d64391fb753d"
   integrity sha512-bU0Gr4EepJ/EQsH/IwEzYLsT/PEj5C0ynLQ4m+GSHS+xKH4TfSelhluTgOaoc4kA5s7eCsQbM4wvZLzELmWzUg==
 
-"@hop.ag/sdk@^4.0.1":
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/@hop.ag/sdk/-/sdk-4.0.1.tgz#9b196a6e0d876316d5f41392bd1eb7dd7b9c8173"
-  integrity sha512-7u07Y3onNxudRDVCQZgbNzGr8mO7uxzKjSieDaHUk34tkWHD2DBofoDKJZKTAosmSDBjRJKRgggiGOBciDNnpA==
-  dependencies:
-    "@mysten/sui" "^1.2.0"
-    cross-fetch "^4.0.0"
-    tslib "^2.6.2"
-    zod "^3.23.8"
-
 "@humanwhocodes/config-array@^0.11.14":
   version "0.11.14"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.11.14.tgz#d78e481a039f7566ecc9660b4ea7fe6b1fec442b"
@@ -874,13 +864,12 @@
     ramda "^0.29.1"
     tiny-invariant "^1.3.3"
 
-"@interest-protocol/dca-sdk@^5.1.0":
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/dca-sdk/-/dca-sdk-5.1.0.tgz#3452f31b31276f27e975a79cbf6810152426a689"
-  integrity sha512-K40DF4b6+EUm96YpFGGCo96Y7GnNoJOKSe7yfe0kpTckrc2gBeHyBfOnIz9VVKCHBKxKCt2qEjtdxtPQhaWz+A==
+"@interest-protocol/dca-sdk@^5.1.2":
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/dca-sdk/-/dca-sdk-5.1.2.tgz#ed15ecb343804091528dc968b55c75cbaf2bbe29"
+  integrity sha512-HgsuqbF8mN5lX4I6mOEn4uyeUb+j2CXlrVMXAJcOoHJ3lcYlRwKT2j1+/NKIFJhaiN7W+rVQbpwnOh+NslYxtA==
   dependencies:
     "@mysten/sui" "^1.5.0"
-    "@polymedia/suitcase-core" "^0.0.16"
     ramda "^0.30.1"
     tiny-invariant "^1.3.3"
 
@@ -889,10 +878,10 @@
   resolved "https://registry.yarnpkg.com/@interest-protocol/move-bytecode-template/-/move-bytecode-template-0.0.4-alpha.tgz#5b0175067646850512531f3de085d37e4428e4ca"
   integrity sha512-BHbIpCKTQZVsrHqVr62X0k8w36ML7Wvjpq3+Q6evfbUtDO9jqohFA5dQ96xixR3sxXfgz4m2mv476+vhJNmVvg==
 
-"@interest-protocol/sui-coins-terminal@^0.2.5-alpha.0":
-  version "0.2.5-alpha.0"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/sui-coins-terminal/-/sui-coins-terminal-0.2.5-alpha.0.tgz#9d1971dd2610516963615db7cced0328732604ef"
-  integrity sha512-uH4oHzDUB2oBquX9yZpaScujrDXxofUN1Q7NEtElAxAOlB+QQGnhXtKCYM5YXwjtQ1069eaeqTW09WldDeWqhg==
+"@interest-protocol/sui-coins-terminal@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/sui-coins-terminal/-/sui-coins-terminal-0.3.0.tgz#1f60a7dc286a8f4b70cf1169d44fb39350ddd153"
+  integrity sha512-lq/16x1oyH+bBioreICJ040McmXkzMUwHAvjfN/gelyyxWFvjeX5JoASmJOEsBFfUJyEzqLZ84F7EBXrTaXikg==
   dependencies:
     "@emotion/react" "^11.11.1"
     "@interest-protocol/sui-tokens" "^2.0.4"
@@ -929,10 +918,10 @@
   resolved "https://registry.yarnpkg.com/@interest-protocol/sui-tokens/-/sui-tokens-2.3.0.tgz#328a5be44771e1daa40ae523f3c0b3b1e1b51271"
   integrity sha512-npvThb6z+9g6QXcvIuOmpf+SjENP0tmEwasa65kj/lJTDmMgNDHR2ZbB9t/4ZzeWzv0MEJKAyb3IsheowyouZA==
 
-"@interest-protocol/sui-tokens@^3.4.1":
-  version "3.4.1"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/sui-tokens/-/sui-tokens-3.4.1.tgz#3b0a3e601f43b4f55e2a973bceb8ba089fad6115"
-  integrity sha512-ket3Mx0p4VXxryKeG1rYAVmylCC8sYbjTxeYgpWV0ng3g8j+i+LM01l0dvmnIkty2HMzQchwjIO2zcFHKbNLZw==
+"@interest-protocol/sui-tokens@^3.4.2":
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/sui-tokens/-/sui-tokens-3.4.2.tgz#93851d1bfc9844bbc8936570a5301d6daba857cf"
+  integrity sha512-l9dUAJ45VeNJwDitqa0PLznQf6Wt+fdIr7YHrl1+D8MmaHtKHKvk2hKf6SItcFDiHgZlkT3blumJZ9hSHuE6yw==
 
 "@interest-protocol/tokens@^1.3.0":
   version "1.3.0"
@@ -1439,7 +1428,7 @@
     tweetnacl "^1.0.3"
     valibot "^0.36.0"
 
-"@mysten/sui@1.9.0", "@mysten/sui@^1.1.2", "@mysten/sui@^1.2.0", "@mysten/sui@^1.5.0", "@mysten/sui@^1.8.0", "@mysten/sui@^1.9.0":
+"@mysten/sui@1.9.0", "@mysten/sui@^1.1.2", "@mysten/sui@^1.5.0", "@mysten/sui@^1.8.0", "@mysten/sui@^1.9.0":
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/@mysten/sui/-/sui-1.9.0.tgz#f37a53d637cf9bbd26e3ba7224efbade6233a729"
   integrity sha512-AcnwVK7ro8+GWAp/vz0V35naS1/PD1FkYlH6rglupKWvVIpnmEBgjr+XE7U4LvtAyoXPiE4uj/MhXLIx5rZuzw==
@@ -1808,11 +1797,6 @@
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.1.1.tgz#1ec17e2edbec25c8306d424ecfbf13c7de1aaa31"
   integrity sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==
-
-"@polymedia/suitcase-core@^0.0.16":
-  version "0.0.16"
-  resolved "https://registry.yarnpkg.com/@polymedia/suitcase-core/-/suitcase-core-0.0.16.tgz#72ccc0317cf4a0249600721d8f1004070819f29b"
-  integrity sha512-spGFgagbDh3K9AlSTImHzYII5jXpMxXH0OJu8WV1pYetO9YJeFcP50OJICO3KuQYSbx/P0Pd3/ipGeZVQKWoBA==
 
 "@polymedia/suitcase-core@^0.0.3":
   version "0.0.3"
@@ -4130,13 +4114,6 @@ create-require@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/create-require/-/create-require-1.1.1.tgz#c1d7e8f1e5f6cfc9ff65f9cd352d37348756c333"
   integrity sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==
-
-cross-fetch@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-4.0.0.tgz#f037aef1580bb3a1a35164ea2a848ba81b445983"
-  integrity sha512-e4a5N8lVvuLgAWgnCrLr2PP0YyDOTHa9H/Rj54dirp61qXnNq46m82bRhNqIA5VccJtWBvPTFRV3TtvHUKPB1g==
-  dependencies:
-    node-fetch "^2.6.12"
 
 cross-spawn@^7.0.0, cross-spawn@^7.0.2, cross-spawn@^7.0.3:
   version "7.0.3"
@@ -7591,7 +7568,7 @@ node-fetch@2.6.9:
   dependencies:
     whatwg-url "^5.0.0"
 
-node-fetch@^2.6.1, node-fetch@^2.6.12, node-fetch@^2.6.7:
+node-fetch@^2.6.1, node-fetch@^2.6.7:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.7.0.tgz#d0f0fa6e3e2dc1d27efcd8ad99d550bda94d187d"
   integrity sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==
