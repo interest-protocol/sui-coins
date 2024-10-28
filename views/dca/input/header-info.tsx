@@ -14,7 +14,7 @@ const HeaderInfo: FC<InputProps> = ({ label }) => {
   return (
     <Box display="flex" justifyContent="space-between" alignItems="center">
       <Typography variant="label" size="medium" fontSize="s">
-        {label == 'from' ? 'I WANT TO TRADE' : 'I WANT TO BUY'}
+        {label == 'from' ? 'I WANT TO SELL' : 'I WANT TO BUY'}
         <Typography
           as="span"
           size="small"
