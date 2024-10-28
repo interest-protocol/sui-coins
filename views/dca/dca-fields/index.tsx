@@ -5,7 +5,7 @@ import {
   TooltipWrapper,
   Typography,
 } from '@interest-protocol/ui-kit';
-import { ChangeEvent, FC, useState } from 'react';
+import { ChangeEvent, FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
@@ -23,7 +23,6 @@ const DCAFields: FC = () => {
     control,
     formState: { errors },
   } = useFormContext<DCAForm>();
-  const [activeTag, setActiveTag] = useState<number | null>(null);
   const toSymbol = getValues('to.symbol');
   const fromSymbol = getValues('from.symbol');
   const price = useWatch({ control, name: 'price' });
@@ -208,18 +207,18 @@ const DCAFields: FC = () => {
           />
         </Box>
         <Box display="flex" gap={['xs', 'xs', 'xs', 'm']}>
-          {[0.1, 0.2, 0.3, 0.4, 0.5].map((value, index) => (
+          {[0.1, 0.2, 0.3, 0.4, 0.5].map((value) => (
             <Tag
               py="2xs"
               key={v4()}
               size="small"
               variant="outline"
               disabled={!price}
-              {...(activeTag === index && {
+              nFocus={{
                 color: '#0053DB',
                 borderColor: '#0053DB',
                 background: '#0053DB14',
-              })}
+              }}
               onClick={() => {
                 if (!price) return;
                 const decimals = getValues('to.decimals');
@@ -235,7 +234,6 @@ const DCAFields: FC = () => {
                     (Number(price) - Number(price) * value).toFixed(decimals)
                   ).toPrecision()
                 );
-                setActiveTag(index);
               }}
             >
               {value * 100}%
