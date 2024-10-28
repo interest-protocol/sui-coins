@@ -9,8 +9,6 @@ import { ChangeEvent, FC, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
-import { useWeb3 } from '@/hooks/use-web3';
-import { FixedPointMath } from '@/lib';
 import { InfoCircleSVG } from '@/svg';
 import { parseInputEventToNumberString } from '@/utils';
 
@@ -18,7 +16,6 @@ import { DCAForm } from '../dca.types';
 import DCAPeriodicity from './dca-periodicity';
 
 const DCAFields: FC = () => {
-  const { coinsMap } = useWeb3();
   const {
     register,
     getValues,
@@ -26,14 +23,10 @@ const DCAFields: FC = () => {
     control,
     formState: { errors },
   } = useFormContext<DCAForm>();
-
   const [activeTag, setActiveTag] = useState<number | null>(null);
-
   const toSymbol = getValues('to.symbol');
   const fromSymbol = getValues('from.symbol');
   const price = useWatch({ control, name: 'price' });
-  const fromType = useWatch({ control, name: 'from.type' });
-
   return (
     <Box gap="l" display="flex" flexDirection="column">
       <Box display="flex" flexDirection="column" gap="xs">
@@ -149,30 +142,7 @@ const DCAFields: FC = () => {
           </TooltipWrapper>
         </Box>
         <Box display="flex" gap="s" flex="1" flexDirection="column">
-          <Box
-            gap="xs"
-            flex="1"
-            display="flex"
-            alignItems="flex-end"
-            justifyContent="space-between"
-          >
-            <Typography
-              variant="label"
-              size="small"
-              fontSize="xs"
-              fontFamily="Satoshi"
-              textTransform="uppercase"
-              fontWeight="400"
-            >
-              Balance:{' '}
-              {fromType && coinsMap[fromType]
-                ? FixedPointMath.toNumber(
-                    coinsMap[fromType].balance,
-                    coinsMap[fromType].decimals
-                  )
-                : 0}{' '}
-              {fromSymbol}
-            </Typography>
+          <Box gap="xs" flex="1" display="flex" alignItems="flex-end">
             <Typography
               size="small"
               fontSize="xs"
@@ -188,54 +158,54 @@ const DCAFields: FC = () => {
                 : ''}
             </Typography>
           </Box>
-          <Box display="flex" gap="xs" flex="1">
-            <TextField
-              min="1"
-              width="100%"
-              lineHeight="l"
-              placeholder="0"
-              color="onSurface"
-              fontFamily="Satoshi"
-              supportingText={errors.min?.message}
-              status={errors.min?.message ? 'error' : undefined}
-              fieldProps={{
-                mx: 0,
-                px: 0,
-                width: '100%',
-                height: '3.5rem',
-                borderRadius: 'xs',
-              }}
-              {...register('min', {
-                onChange: (v: ChangeEvent<HTMLInputElement>) => {
-                  const value = parseInputEventToNumberString(v);
-                  setValue('min', value);
-                },
-              })}
-            />
-            <TextField
-              min="1"
-              width="100%"
-              lineHeight="l"
-              placeholder="0"
-              color="onSurface"
-              fontFamily="Satoshi"
-              supportingText={errors.max?.message}
-              status={errors.max?.message ? 'error' : undefined}
-              fieldProps={{
-                mx: 0,
-                px: 0,
-                width: '100%',
-                height: '3.5rem',
-                borderRadius: 'xs',
-              }}
-              {...register('max', {
-                onChange: (v: ChangeEvent<HTMLInputElement>) => {
-                  const value = parseInputEventToNumberString(v);
-                  setValue('max', value);
-                },
-              })}
-            />
-          </Box>
+        </Box>
+        <Box display="flex" gap="xs" flex="1">
+          <TextField
+            min="1"
+            width="100%"
+            lineHeight="l"
+            placeholder="0"
+            color="onSurface"
+            fontFamily="Satoshi"
+            supportingText={errors.min?.message}
+            status={errors.min?.message ? 'error' : undefined}
+            fieldProps={{
+              mx: 0,
+              px: 0,
+              width: '100%',
+              height: '3.5rem',
+              borderRadius: 'xs',
+            }}
+            {...register('min', {
+              onChange: (v: ChangeEvent<HTMLInputElement>) => {
+                const value = parseInputEventToNumberString(v);
+                setValue('min', value);
+              },
+            })}
+          />
+          <TextField
+            min="1"
+            width="100%"
+            lineHeight="l"
+            placeholder="0"
+            color="onSurface"
+            fontFamily="Satoshi"
+            supportingText={errors.max?.message}
+            status={errors.max?.message ? 'error' : undefined}
+            fieldProps={{
+              mx: 0,
+              px: 0,
+              width: '100%',
+              height: '3.5rem',
+              borderRadius: 'xs',
+            }}
+            {...register('max', {
+              onChange: (v: ChangeEvent<HTMLInputElement>) => {
+                const value = parseInputEventToNumberString(v);
+                setValue('max', value);
+              },
+            })}
+          />
         </Box>
         <Box display="flex" gap={['xs', 'xs', 'xs', 'm']}>
           {[0.1, 0.2, 0.3, 0.4, 0.5].map((value, index) => (
@@ -252,23 +222,19 @@ const DCAFields: FC = () => {
               })}
               onClick={() => {
                 if (!price) return;
-
                 const decimals = getValues('to.decimals');
-
                 setValue(
                   'max',
                   Number(
                     (Number(price) + Number(price) * value).toFixed(decimals)
                   ).toPrecision()
                 );
-
                 setValue(
                   'min',
                   Number(
                     (Number(price) - Number(price) * value).toFixed(decimals)
                   ).toPrecision()
                 );
-
                 setActiveTag(index);
               }}
             >
@@ -280,5 +246,4 @@ const DCAFields: FC = () => {
     </Box>
   );
 };
-
 export default DCAFields;
