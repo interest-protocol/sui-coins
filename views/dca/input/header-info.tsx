@@ -25,9 +25,11 @@ const HeaderInfo: FC<InputProps> = ({ label }) => {
           : {symbol}
         </Typography>
       </Typography>
-      <Box display="flex" gap="xs">
-        <Balance label={label} />
-      </Box>
+      {label == 'from' && (
+        <Box display="flex" gap="xs">
+          <Balance label={label} />
+        </Box>
+      )}
     </Box>
   );
 };
