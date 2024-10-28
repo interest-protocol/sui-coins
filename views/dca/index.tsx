@@ -54,7 +54,7 @@ const DCA: FC = () => {
       >
         <Box bg="lowestContainer" borderRadius="s" p="xl">
           <Typography textAlign="left" size="small" variant="display">
-            Trade DCA
+            DCA
           </Typography>
           <Input />
           <Box
