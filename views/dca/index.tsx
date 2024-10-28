@@ -53,7 +53,13 @@ const DCA: FC = () => {
         width={['100%', '100%', '100%', '39.75rem']}
       >
         <Box bg="lowestContainer" borderRadius="s" p="xl">
-          <Typography textAlign="left" size="small" variant="display">
+          <Typography
+            size="large"
+            fontWeight="700"
+            variant="headline"
+            textAlign="center"
+            fontFamily="Satoshi"
+          >
             DCA
           </Typography>
           <Input />
