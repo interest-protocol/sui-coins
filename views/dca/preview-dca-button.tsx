@@ -17,7 +17,7 @@ const PreviewSwapButton: FC = () => {
   const form = useFormContext<DCAForm>();
   const { setModal, handleClose } = useModal();
 
-  const { control, setValue, getValues } = form;
+  const { control, setValue } = form;
 
   const from = useWatch({ control, name: 'from' });
   const to = useWatch({ control, name: 'to' });
@@ -69,31 +69,18 @@ const PreviewSwapButton: FC = () => {
         setValue('error', DCAMessagesEnum.notEnoughToken);
         return;
       }
+
+      if (
+        from.usdValue &&
+        from.usdValue * (Number(from.display) / orders) < 3
+      ) {
+        setValue('error', DCAMessagesEnum.dcaOrderMinAmount);
+        return;
+      }
     }
 
     setValue('error', null);
-  }, [from, to]);
-
-  useEffect(() => {
-    if (from?.type)
-      fetch('https://rates-api-production.up.railway.app/api/fetch-quote', {
-        method: 'POST',
-        headers: {
-          accept: '*/*',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          coins: [from.type],
-        }),
-      })
-        .then((res) => res.json?.())
-        .then((data) => {
-          if (data[0].price * (Number(from.display) / orders) < 3)
-            setValue('error', DCAMessagesEnum.dcaOrderMinAmount);
-          else if (getValues('error') === DCAMessagesEnum.dcaOrderMinAmount)
-            setValue('error', null);
-        });
-  }, [from?.display, orders]);
+  }, [from, to, orders]);
 
   const handlePreview = () =>
     setModal(
