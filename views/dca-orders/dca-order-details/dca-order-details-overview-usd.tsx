@@ -8,7 +8,8 @@ import { useDCAState } from '../dca-orders-manager';
 import DCAOrderDetailsOverviewLine from './dca-order-details-overview-line';
 
 const DCAOrderDetailsOverviewUSD: FC = () => {
-  const { dcaOrders, detailedDcas, selectedId, coinsMetadata } = useDCAState();
+  const { dcaOrders, detailedDcas, selectedId, coinsMetadata, loading } =
+    useDCAState();
 
   const { input } = detailedDcas[selectedId!];
 
@@ -20,6 +21,14 @@ const DCAOrderDetailsOverviewUSD: FC = () => {
     ZERO_BIG_NUMBER
   );
 
+  if (loading)
+    return (
+      <>
+        <DCAOrderDetailsOverviewLine value="--" title="Total Spent in $" />
+        <DCAOrderDetailsOverviewLine value="--" title="Average Price in USD" />
+      </>
+    );
+
   return (
     <>
       <DCAOrderDetailsOverviewLine
@@ -28,15 +37,17 @@ const DCAOrderDetailsOverviewUSD: FC = () => {
           FixedPointMath.toNumber(totalSpent, tokenIn.decimals)
         )}
       />
-      <DCAOrderDetailsOverviewLine
-        title="Average Price in USD"
-        value={formatDollars(
-          FixedPointMath.toNumber(
-            totalSpent.div(dcaOrders.length ?? 1),
-            tokenIn.decimals
-          )
-        )}
-      />
+      {!totalSpent.isZero() && (
+        <DCAOrderDetailsOverviewLine
+          title="Average Price in USD"
+          value={formatDollars(
+            FixedPointMath.toNumber(
+              totalSpent.div(dcaOrders.length ?? 1),
+              tokenIn.decimals
+            )
+          )}
+        />
+      )}
     </>
   );
 };
