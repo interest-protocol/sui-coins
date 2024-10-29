@@ -39,6 +39,7 @@ const CHAIN_ICON: Record<Chain, FC<SVGProps>> = {
 };
 
 const TokenIcon: FC<TokenIconProps> = ({
+  bg,
   url,
   type,
   symbol,
@@ -90,7 +91,7 @@ const TokenIcon: FC<TokenIconProps> = ({
         width={`calc(${size} * 1.66)`}
         height={`calc(${size} * 1.66)`}
         borderRadius={rounded ? 'full' : 'xs'}
-        {...(withBg && { bg: 'black', color: 'white' })}
+        {...(withBg && { bg: bg ?? 'black', color: 'white' })}
       >
         <DefaultSVG
           width="100%"
@@ -173,7 +174,7 @@ const TokenIcon: FC<TokenIconProps> = ({
           width={`calc(${size} * 1.66)`}
           height={`calc(${size} * 1.66)`}
           borderRadius={rounded ? 'full' : 'xs'}
-          {...(withBg && { bg: 'black', color: 'white' })}
+          {...(withBg && { bg: bg ?? 'black', color: 'white' })}
         >
           <TokenIcon
             width="100%"

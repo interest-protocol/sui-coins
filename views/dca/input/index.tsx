@@ -29,29 +29,29 @@ const Input: FC = () => {
         <Box>
           <TextField
             status={
-              errors.from?.symbol?.message ?? errors.from?.display?.message
+              (errors.from?.symbol?.message ?? errors.from?.display?.message)
                 ? 'error'
                 : undefined
             }
             width="100%"
             lineHeight="l"
             placeholder="0"
+            textAlign="left"
             color="onSurface"
-            textAlign="right"
             fontFamily="Satoshi"
             supportingText={
               (errors.from?.type as any)?.message ??
               errors.from?.display?.message ??
               ''
             }
-            Prefix={
-              <Box ml="-0.75rem">
+            Suffix={
+              <Box mr="-0.6rem">
                 <SelectToken label="from" />
               </Box>
             }
             fieldProps={{
-              mx: 0,
               px: 0,
+              mx: 0,
               width: '100%',
               height: '3.5rem',
               borderRadius: 'xs',

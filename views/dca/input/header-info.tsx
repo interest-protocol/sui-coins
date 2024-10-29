@@ -14,7 +14,7 @@ const HeaderInfo: FC<InputProps> = ({ label }) => {
   return (
     <Box display="flex" justifyContent="space-between" alignItems="center">
       <Typography variant="label" size="medium" fontSize="s">
-        {label == 'from' ? 'I WANT TO ALLOCATE' : 'TO BUY'}
+        {label == 'from' ? 'I WANT TO SELL' : 'I WANT TO BUY'}
         <Typography
           as="span"
           size="small"
@@ -25,9 +25,11 @@ const HeaderInfo: FC<InputProps> = ({ label }) => {
           : {symbol}
         </Typography>
       </Typography>
-      <Box display="flex" gap="xs">
-        <Balance label={label} />
-      </Box>
+      {label == 'from' && (
+        <Box display="flex" gap="xs">
+          <Balance label={label} />
+        </Box>
+      )}
     </Box>
   );
 };

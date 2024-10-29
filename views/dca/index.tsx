@@ -6,10 +6,8 @@ import { v4 } from 'uuid';
 import Layout from '@/components/layout';
 import { Routes, RoutesEnum } from '@/constants';
 
-import DCAAggregator from './dca-aggregator';
 import DCAFields from './dca-fields';
 import DCAFlipToken from './dca-flip-token';
-import DCAPoweredBy from './dca-powered-by';
 import DCAQuoteManager from './dca-quote-manager';
 import DCARecentOrders from './dca-recent-orders';
 import Input from './input';
@@ -55,8 +53,14 @@ const DCA: FC = () => {
         width={['100%', '100%', '100%', '39.75rem']}
       >
         <Box bg="lowestContainer" borderRadius="s" p="xl">
-          <Typography textAlign="center" size="small" variant="display">
-            Trade DCA
+          <Typography
+            size="large"
+            fontWeight="700"
+            variant="headline"
+            textAlign="center"
+            fontFamily="Satoshi"
+          >
+            DCA
           </Typography>
           <Input />
           <Box
@@ -103,9 +107,7 @@ const DCA: FC = () => {
           </Box>
           <DCAFields />
           <PreviewDCAButton />
-          <DCAPoweredBy />
         </Box>
-        <DCAAggregator />
         <DCARecentOrders />
       </Box>
       <DCAQuoteManager />

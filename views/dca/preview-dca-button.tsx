@@ -115,7 +115,7 @@ const PreviewSwapButton: FC = () => {
           disabled={!ableToSwap}
           onClick={form.handleSubmit(handlePreview)}
         >
-          {starting ? 'Starting DCA...' : 'Preview DCA'}
+          {starting ? 'Starting DCA...' : 'Start DCA'}
         </Button>
       </Box>
     </>

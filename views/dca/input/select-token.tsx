@@ -8,7 +8,7 @@ import TokenIcon from '@/components/token-icon';
 import { Network } from '@/constants';
 import { useModal } from '@/hooks/use-modal';
 import { useNetwork } from '@/hooks/use-network';
-import { ChevronDownSVG } from '@/svg';
+import { ChevronDownSVG, ChevronRightSVG } from '@/svg';
 import { updateURL, ZERO_BIG_NUMBER } from '@/utils';
 import SelectTokenModal from '@/views/components/select-token-modal';
 
@@ -101,21 +101,25 @@ const SelectToken: FC<InputProps> = ({ label }) => {
 
   return (
     <Button
-      px="s"
-      py="auto"
       fontSize="s"
       variant="tonal"
       color="onSurface"
       borderRadius="xs"
       onClick={openModal}
       borderStyle="solid"
-      gap={['unset', 'xs', 'xs']}
+      gap={['unset', 's', 's']}
       borderColor="outlineVariant"
-      height={label === 'to' ? '3.25rem' : '3rem'}
-      bg={label === 'to' ? 'none' : 'lowContainer'}
+      height={label == 'to' ? '3.5rem' : ''}
+      {...(label === 'to' && { px: 'xs' })}
       borderWidth={label === 'to' ? '1px' : '0px'}
+      bg={label === 'to' ? 'none' : 'lowContainer'}
+      py={label == 'to' ? 'unset' : currentType ? 'xs' : 's'}
       SuffixIcon={
-        <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+        label == 'to' ? (
+          <ChevronDownSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+        ) : (
+          <ChevronRightSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+        )
       }
       {...(currentType &&
         label === 'from' && {
@@ -136,8 +140,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
         {currentType && label === 'to' && (
           <TokenIcon
             withBg
-            rounded
-            size="1.1rem"
+            size="1.4rem"
             url={currentUrl}
             network={network}
             type={currentType}
