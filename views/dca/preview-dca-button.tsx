@@ -17,7 +17,7 @@ const PreviewSwapButton: FC = () => {
   const form = useFormContext<DCAForm>();
   const { setModal, handleClose } = useModal();
 
-  const { control, setValue } = form;
+  const { control, setValue, getValues } = form;
 
   const from = useWatch({ control, name: 'from' });
   const to = useWatch({ control, name: 'to' });
@@ -90,6 +90,8 @@ const PreviewSwapButton: FC = () => {
         .then((data) => {
           if (data[0].price * (Number(from.display) / orders) < 3)
             setValue('error', DCAMessagesEnum.dcaOrderMinAmount);
+          else if (getValues('error') === DCAMessagesEnum.dcaOrderMinAmount)
+            setValue('error', null);
         });
   }, [from?.display, orders]);
 
