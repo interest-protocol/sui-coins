@@ -5,7 +5,7 @@ import {
   TooltipWrapper,
   Typography,
 } from '@interest-protocol/ui-kit';
-import { ChangeEvent, FC, useState } from 'react';
+import { ChangeEvent, FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { v4 } from 'uuid';
 
@@ -23,9 +23,6 @@ const DCAFields: FC = () => {
     control,
     formState: { errors },
   } = useFormContext<DCAForm>();
-
-  const [activeTag, setActiveTag] = useState<number | null>(null);
-
   const toSymbol = getValues('to.symbol');
   const fromSymbol = getValues('from.symbol');
   const price = useWatch({ control, name: 'price' });
@@ -128,8 +125,8 @@ const DCAFields: FC = () => {
         </Box>
       </Box>
       <Box display="flex" flexDirection="column" gap="xs" mt="l">
-        <Box display="flex">
-          <Box gap="xs" display="flex" alignItems="center">
+        <Box display="flex" flexDirection="column">
+          <Box mb="s" gap="xs" display="flex" alignItems="center">
             <Typography variant="label" size="medium" fontSize="s">
               SLIPPAGE
             </Typography>
@@ -145,30 +142,26 @@ const DCAFields: FC = () => {
               </Box>
             </TooltipWrapper>
           </Box>
-          <Box display="flex" gap="s" flex="1" flexDirection="column">
-            <Box
-              gap="xs"
-              flex="1"
-              display="flex"
-              alignItems="flex-end"
-              justifyContent="flex-end"
-            >
-              <Typography
-                size="small"
-                fontSize="xs"
-                variant="label"
-                textAlign="right"
-                fontFamily="Satoshi"
-                textTransform="uppercase"
-                fontWeight="400"
-              >
-                Price
-                {price
-                  ? `: 1 ${fromSymbol} = ${+(+price).toFixed(4)} ${toSymbol}`
-                  : ''}
-              </Typography>
+          {price && (
+            <Box display="flex" gap="s" flexDirection="column">
+              <Box gap="xs" flex="1" display="flex">
+                <Typography
+                  size="small"
+                  fontSize="xs"
+                  variant="label"
+                  textAlign="right"
+                  fontFamily="Satoshi"
+                  textTransform="uppercase"
+                  fontWeight="400"
+                >
+                  Price
+                  {price
+                    ? `: 1 ${fromSymbol} = ${+(+price).toFixed(4)} ${toSymbol}`
+                    : ''}
+                </Typography>
+              </Box>
             </Box>
-          </Box>
+          )}
         </Box>
         <Box display="flex" gap="xs" flex="1">
           <TextField
@@ -219,38 +212,33 @@ const DCAFields: FC = () => {
           />
         </Box>
         <Box display="flex" gap={['xs', 'xs', 'xs', 'm']}>
-          {[0.1, 0.2, 0.3, 0.4, 0.5].map((value, index) => (
+          {[0.1, 0.2, 0.3, 0.4, 0.5].map((value) => (
             <Tag
               py="2xs"
               key={v4()}
               size="small"
               variant="outline"
               disabled={!price}
-              {...(activeTag === index && {
+              nFocus={{
                 color: '#0053DB',
                 borderColor: '#0053DB',
                 background: '#0053DB14',
-              })}
+              }}
               onClick={() => {
                 if (!price) return;
-
                 const decimals = getValues('to.decimals');
-
                 setValue(
                   'max',
                   Number(
                     (Number(price) + Number(price) * value).toFixed(decimals)
                   ).toPrecision()
                 );
-
                 setValue(
                   'min',
                   Number(
                     (Number(price) - Number(price) * value).toFixed(decimals)
                   ).toPrecision()
                 );
-
-                setActiveTag(index);
               }}
             >
               {value * 100}%
@@ -261,5 +249,4 @@ const DCAFields: FC = () => {
     </Box>
   );
 };
-
 export default DCAFields;
