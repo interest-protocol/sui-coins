@@ -32,7 +32,7 @@ const DCAQuoteManager: FC = () => {
           'price',
           FixedPointMath.toNumber(
             coinInValue.div(route.spotPrice),
-            coinIn.decimals
+            coinOut.decimals
           ).toString()
         )
       )
