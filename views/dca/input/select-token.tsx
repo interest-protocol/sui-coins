@@ -74,6 +74,19 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       value: ZERO_BIG_NUMBER,
     });
 
+    await fetch('https://rates-api-production.up.railway.app/api/fetch-quote', {
+      method: 'POST',
+      headers: {
+        accept: '*/*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        coins: [type],
+      }),
+    })
+      .then((res) => res.json?.())
+      .then((data) => setValue(`${label}.usdValue`, data[0].price));
+
     changeURL(type, type === oppositeType ? currentToken.type : undefined);
   };
 

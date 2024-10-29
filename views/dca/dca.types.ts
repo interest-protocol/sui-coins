@@ -13,6 +13,7 @@ export interface IDCASettings {
 export interface DCAToken extends Token {
   display: string;
   value: BigNumber;
+  usdValue?: number;
 }
 
 export interface DCAForm {
