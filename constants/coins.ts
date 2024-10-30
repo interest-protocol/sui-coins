@@ -1,4 +1,8 @@
-import { Chain, STRICT_LIST, Token } from '@interest-protocol/sui-tokens';
+import {
+  Chain,
+  SUI_VERIFIED_COINS,
+  Token,
+} from '@interest-protocol/sui-tokens';
 import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 import { FC } from 'react';
 
@@ -508,7 +512,9 @@ export const WORMHOLE_TOKENS: Record<Network, Array<Token>> = {
 
       return [...acc, curr];
     },
-    STRICT_LIST.filter(({ bridge }) => bridge === 'wormhole') as Array<Token>
+    SUI_VERIFIED_COINS.filter(
+      ({ bridge }) => bridge === 'wormhole'
+    ) as Array<Token>
   ),
 };
 
@@ -522,7 +528,7 @@ export const SUI_BRIDGE_TOKENS: Record<Network, Array<Token>> = {
 
       return [...acc, curr];
     },
-    STRICT_LIST.filter(({ bridge }) => bridge === 'sui') as Array<
+    SUI_VERIFIED_COINS.filter(({ bridge }) => bridge === 'sui') as Array<
       Omit<Token, 'name'>
     >
   ),
@@ -542,7 +548,7 @@ export const STRICT_TOKENS_TYPE: Record<Network, ReadonlyArray<string>> = {
     TESTNET_BASE_COINS.USDC,
     TESTNET_BASE_COINS.USDT,
   ],
-  [Network.MAINNET]: SUI_BRIDGE_TOKENS[Network.MAINNET].map(({ type }) => type),
+  [Network.MAINNET]: SUI_VERIFIED_COINS.map(({ type }) => type),
 };
 
 export const STRICT_TOKENS: Record<Network, Array<Token>> = {
@@ -556,7 +562,7 @@ export const STRICT_TOKENS: Record<Network, Array<Token>> = {
     ...WORMHOLE_TOKENS[Network.TESTNET],
     ...SUI_BRIDGE_TOKENS[Network.TESTNET],
   ],
-  [Network.MAINNET]: Array(...STRICT_LIST),
+  [Network.MAINNET]: Array(...SUI_VERIFIED_COINS),
 };
 
 export const STRICT_TOKENS_MAP: Record<Network, Record<string, Token>> = {
@@ -570,7 +576,7 @@ export const STRICT_TOKENS_MAP: Record<Network, Record<string, Token>> = {
     ...WORMHOLE_TOKENS[Network.TESTNET],
     ...SUI_BRIDGE_TOKENS[Network.TESTNET],
   ].reduce((acc, curr) => ({ ...acc, [curr.type]: curr }), {}),
-  [Network.MAINNET]: STRICT_LIST.reduce(
+  [Network.MAINNET]: SUI_VERIFIED_COINS.reduce(
     (acc, curr) => ({ ...acc, [curr.type]: curr }),
     {}
   ),
