@@ -83,11 +83,7 @@ const SwapInitManager: FC = () => {
     form.setValue(field, token);
 
     getAllCoinsPrice([token.type], network)
-      .then((data) => {
-        console.log({ data });
-
-        form.setValue(`${field}.usdPrice`, data[token.type]);
-      })
+      .then((data) => form.setValue(`${field}.usdPrice`, data[token.type]))
       .catch(console.log);
 
     return STRICT_TOKENS_MAP[network][token.type]?.symbol || token.type;
