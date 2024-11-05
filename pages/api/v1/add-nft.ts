@@ -13,8 +13,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const metadata = await fetchNftMetadata(id);
 
-    console.log(metadata);
-
     if (!metadata) throw new Error('Metadata not fetched');
 
     await NFTCollectionMetadata.create({
