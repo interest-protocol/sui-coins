@@ -36,6 +36,7 @@ const DCAInitManager: FC = () => {
         value: ZERO_BIG_NUMBER,
       };
     }
+
     if (typeof type === 'string' && type.startsWith('0x')) {
       const coin = await getCoin(type, network as Network, coinsMap);
 
@@ -45,6 +46,7 @@ const DCAInitManager: FC = () => {
         value: ZERO_BIG_NUMBER,
       };
     }
+
     return null;
   };
 
@@ -59,6 +61,19 @@ const DCAInitManager: FC = () => {
     if (!token) return;
 
     form.setValue(field, token);
+
+    await fetch('https://rates-api-production.up.railway.app/api/fetch-quote', {
+      method: 'POST',
+      headers: {
+        accept: '*/*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        coins: [value],
+      }),
+    })
+      .then((res) => res.json?.())
+      .then((data) => form.setValue(`${field}.usdValue`, data[0].price));
 
     return token.type;
   };
