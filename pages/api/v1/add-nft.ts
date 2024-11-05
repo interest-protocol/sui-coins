@@ -13,22 +13,25 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const metadata = await fetchNftMetadata(id);
 
+    console.log(metadata);
+
     if (!metadata) throw new Error('Metadata not fetched');
 
-    await Promise.all([
-      NFTCollectionMetadata.create({
-        ...metadata,
-        updatedAt: Date.now(),
-      }).then((doc) => doc.save()),
-      NFTCollection.create({
-        holders: [],
-        name: metadata.name,
-        collectionId: metadata.id,
-      }).then((doc) => doc.save()),
-    ]);
+    await NFTCollectionMetadata.create({
+      ...metadata,
+      updatedAt: Date.now(),
+    }).then((doc) => doc.save());
+
+    await NFTCollection.create({
+      holders: [],
+      name: metadata.name,
+      collectionId: metadata.id,
+    }).then((doc) => doc.save());
 
     return res.status(200).send('Data created successfully');
   } catch (e) {
+    console.log(e);
+
     res.status(500).send('Something went wrong!');
   }
 };
