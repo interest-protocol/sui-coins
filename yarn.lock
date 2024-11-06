@@ -918,10 +918,10 @@
   resolved "https://registry.yarnpkg.com/@interest-protocol/sui-tokens/-/sui-tokens-2.3.0.tgz#328a5be44771e1daa40ae523f3c0b3b1e1b51271"
   integrity sha512-npvThb6z+9g6QXcvIuOmpf+SjENP0tmEwasa65kj/lJTDmMgNDHR2ZbB9t/4ZzeWzv0MEJKAyb3IsheowyouZA==
 
-"@interest-protocol/sui-tokens@^4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/sui-tokens/-/sui-tokens-4.0.0.tgz#44a509ef0478d78b8304e385e001049c77d93e1a"
-  integrity sha512-rcxqaaKiTqcvEt3xfWjFCHAaXG5BZ0qBOJiuqPY4ROVQhpnCrYtnxkIsy+OM5nR/5sCaRfZZB7yTQ4SsHHeU9w==
+"@interest-protocol/sui-tokens@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/sui-tokens/-/sui-tokens-4.1.0.tgz#c340f073ca5dfa852b89665e1630744196963f6f"
+  integrity sha512-09/n/OdkC+vOXuXbFhjaYIgTt9vUmzSNtEm4aaftz83DRLG+Hc2wnCDRapufmGWZKgPIueGt5Co8PXchJjbKvw==
 
 "@interest-protocol/tokens@^1.3.0":
   version "1.3.0"
