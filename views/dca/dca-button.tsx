@@ -45,7 +45,7 @@ const DCAButton: FC = () => {
   const aggregator =
     useReadLocalStorage<Aggregator>(
       `${LOCAL_STORAGE_TOP_KEY}-suicoins-dca-aggregator`
-    ) ?? Aggregator.Hop;
+    ) ?? Aggregator.Aftermath;
 
   const resetInput = () => {
     formDCA.setValue('from.display', '0');
@@ -140,7 +140,7 @@ const DCAButton: FC = () => {
         dcaId,
         inputCoinType: from.type,
         outputCoinType: to.type,
-        aggregator: aggregator ?? Aggregator.Hop,
+        aggregator: aggregator ?? Aggregator.Aftermath,
       });
 
       await fetch(`${SENTINEL_API_URI[network]}dcas`, {
@@ -176,7 +176,9 @@ const DCAButton: FC = () => {
         title: 'DCA Created',
         message: (
           <SuccessModal
-            transactionTime={`${+(formDCA.getValues('executionTime') / 1000).toFixed(2)}`}
+            transactionTime={`${+(
+              formDCA.getValues('executionTime') / 1000
+            ).toFixed(2)}`}
           >
             <SuccessModalTokenCard
               withoutAmount
