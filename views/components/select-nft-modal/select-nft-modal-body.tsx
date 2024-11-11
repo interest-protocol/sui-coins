@@ -22,7 +22,9 @@ const SelectTokenModalBody: FC<SelectNFTModalBodyProps> = ({
 
   const filteredNfts =
     nfts?.filter(
-      ({ name, id }) => NFT.includes(id) && (!search || name.includes(search))
+      ({ name, id }) =>
+        NFT.includes(id) &&
+        (!search || name.toLowerCase().startsWith(search.toLowerCase()))
     ) ?? [];
 
   return (
