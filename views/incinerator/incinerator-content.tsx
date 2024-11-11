@@ -32,7 +32,7 @@ const IncineratorContent: FC = () => {
   if (empty) return <IncineratorNoAsset />;
 
   return (
-    <Box mb="l" display="grid" gap="l">
+    <Box display="grid">
       <IncineratorTable />
       <IncineratorButton />
     </Box>

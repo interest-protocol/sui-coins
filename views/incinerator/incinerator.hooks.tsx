@@ -1,9 +1,14 @@
-import { Box, Button, Typography } from '@interest-protocol/ui-kit';
+import {
+  Box,
+  Button,
+  Theme,
+  Typography,
+  useTheme,
+} from '@interest-protocol/ui-kit';
 import {
   useCurrentAccount,
   useSignTransaction,
   useSuiClient,
-  useSuiClientContext,
 } from '@mysten/dapp-kit';
 import { Transaction } from '@mysten/sui/transactions';
 import { TransactionObjectArgument } from '@mysten/sui/transactions';
@@ -18,11 +23,13 @@ import {
   ObjectData,
 } from '@/components/web3-manager/all-objects-manager/all-objects.types';
 import { Network } from '@/constants';
+import { STRICT_TOKENS_TYPE } from '@/constants/coins';
 import { useModal } from '@/hooks/use-modal';
+import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
 import { TimedSuiTransactionBlockResponse } from '@/interface';
 import { FixedPointMath } from '@/lib';
-import { CopySVG } from '@/svg';
+import { CopySVG, DotErrorSVG } from '@/svg';
 import {
   getCoins,
   showTXSuccessToast,
@@ -119,8 +126,9 @@ export const useBurn = () => {
 
 export const useOnBurn = () => {
   const burn = useBurn();
+  const network = useNetwork();
   const { setDelay, mutate } = useWeb3();
-  const { network } = useSuiClientContext();
+  const { colors } = useTheme() as Theme;
   const { setModal, handleClose } = useModal();
   const { setValue } = useFormContext<IncineratorForm>();
 
@@ -238,6 +246,41 @@ export const useOnBurn = () => {
               );
             })}
           </Box>
+        </Box>
+        <Box display="flex" flexDirection="column" gap="s">
+          {objects.some(
+            ({ type }) =>
+              type === '0x2::kiosk::Kiosk' ||
+              type === '0x2::kiosk::KioskOwnerCap' ||
+              type === '0x3::staking_pool::StakedSui' ||
+              type.endsWith('::personal_kiosk::PersonalKioskCap') ||
+              STRICT_TOKENS_TYPE[network].some((verified) =>
+                type.includes(verified)
+              )
+          ) && (
+            <Box
+              p="s"
+              gap="s"
+              alignItems="center"
+              display="flex"
+              maxWidth="27rem"
+              borderRadius="xs"
+              border="1px solid"
+              bg="errorContainer"
+              color="onErrorContainer"
+              borderColor="onErrorContainer"
+            >
+              <DotErrorSVG
+                dotColor={colors.error}
+                maxHeight="1rem"
+                maxWidth="1rem"
+                width="100%"
+              />
+              <Typography variant="label" size="medium">
+                Alert! You are burning a verified asset.
+              </Typography>
+            </Box>
+          )}
         </Box>
         <Box display="flex" gap="s" justifyContent="center">
           <Button variant="outline" onClick={handleClose}>

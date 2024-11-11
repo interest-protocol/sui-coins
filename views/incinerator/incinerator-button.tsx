@@ -1,4 +1,4 @@
-import { Button } from '@interest-protocol/ui-kit';
+import { Box, Button } from '@interest-protocol/ui-kit';
 import { prop } from 'ramda';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -18,9 +18,25 @@ const IncineratorButton: FC = () => {
   const handleBurn = () => onBurn({ objects });
 
   return (
-    <Button mx="auto" variant="filled" onClick={handleBurn} disabled={disabled}>
-      Burn {objects.length} Asset{objects.length === 1 ? '' : 's'}
-    </Button>
+    <Box
+      py="l"
+      mt="3xl"
+      bottom="0"
+      display="flex"
+      position="sticky"
+      bg="lowestContainer"
+      flexDirection="column"
+      justifyContent="center"
+    >
+      <Button
+        mx="auto"
+        variant="filled"
+        onClick={handleBurn}
+        disabled={disabled}
+      >
+        Burn {objects.length} Asset{objects.length === 1 ? '' : 's'}
+      </Button>
+    </Box>
   );
 };
 
