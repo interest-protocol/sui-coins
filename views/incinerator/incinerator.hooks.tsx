@@ -248,20 +248,16 @@ export const useOnBurn = () => {
           </Box>
         </Box>
         <Box display="flex" flexDirection="column" gap="s">
-          {(objects.some(
+          {objects.some(
             ({ type }) =>
-              type.endsWith('::personal_kiosk::PersonalKioskCap') ||
               type === '0x2::kiosk::Kiosk' ||
-              type === '0x2::kiosk::KioskOwnerCap'
-          ) ||
-            objects.some(({ type }) =>
+              type === '0x2::kiosk::KioskOwnerCap' ||
+              type === '0x3::staking_pool::StakedSui' ||
+              type.endsWith('::personal_kiosk::PersonalKioskCap') ||
               STRICT_TOKENS_TYPE[network].some((verified) =>
                 type.includes(verified)
               )
-            ) ||
-            objects.some(
-              ({ type }) => type === '0x3::staking_pool::StakedSui'
-            )) && (
+          ) && (
             <Box
               p="s"
               gap="s"
