@@ -1,4 +1,10 @@
-import { Box, Button, Typography } from '@interest-protocol/ui-kit';
+import {
+  Box,
+  Button,
+  Theme,
+  Typography,
+  useTheme,
+} from '@interest-protocol/ui-kit';
 import {
   useCurrentAccount,
   useSignTransaction,
@@ -22,7 +28,7 @@ import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
 import { TimedSuiTransactionBlockResponse } from '@/interface';
 import { FixedPointMath } from '@/lib';
-import { CopySVG } from '@/svg';
+import { CopySVG, DotErrorSVG } from '@/svg';
 import {
   getCoins,
   showTXSuccessToast,
@@ -120,6 +126,7 @@ export const useBurn = () => {
 export const useOnBurn = () => {
   const burn = useBurn();
   const { setDelay, mutate } = useWeb3();
+  const { colors } = useTheme() as Theme;
   const { network } = useSuiClientContext();
   const { setModal, handleClose } = useModal();
   const { setValue } = useFormContext<IncineratorForm>();
@@ -180,10 +187,29 @@ export const useOnBurn = () => {
           Caution
         </Typography>
         <Box>
-          <Typography variant="body" size="medium" maxWidth="27rem">
-            This is irreversible. Please double-check the types of assets you
-            are burning.
-          </Typography>
+          <Box
+            p="s"
+            mx="xl"
+            my="4xl"
+            gap="s"
+            display="flex"
+            borderRadius="xs"
+            border="1px solid"
+            bg="errorContainer"
+            color="onErrorContainer"
+            borderColor="onErrorContainer"
+          >
+            <DotErrorSVG
+              dotColor={colors.error}
+              maxHeight="1rem"
+              maxWidth="1rem"
+              width="100%"
+            />
+            <Typography variant="label" size="medium">
+              This is irreversible. Please double-check the types of assets you
+              are burning.
+            </Typography>
+          </Box>
           <Box
             my="l"
             gap="xs"
