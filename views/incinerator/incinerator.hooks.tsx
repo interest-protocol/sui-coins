@@ -248,12 +248,20 @@ export const useOnBurn = () => {
           </Box>
         </Box>
         <Box display="flex" flexDirection="column" gap="s">
-          {objects.some(
+          {(objects.some(
             ({ type }) =>
               type.endsWith('::personal_kiosk::PersonalKioskCap') ||
               type === '0x2::kiosk::Kiosk' ||
               type === '0x2::kiosk::KioskOwnerCap'
-          ) && (
+          ) ||
+            objects.some(({ type }) =>
+              STRICT_TOKENS_TYPE[network].some((verified) =>
+                type.includes(verified)
+              )
+            ) ||
+            objects.some(
+              ({ type }) => type === '0x3::staking_pool::StakedSui'
+            )) && (
             <Box
               p="s"
               gap="s"
@@ -273,59 +281,7 @@ export const useOnBurn = () => {
                 width="100%"
               />
               <Typography variant="label" size="medium">
-                Alert! You are burning some Kiosk important object.
-              </Typography>
-            </Box>
-          )}
-          {objects.some(({ type }) =>
-            STRICT_TOKENS_TYPE[network].includes(type)
-          ) && (
-            <Box
-              p="s"
-              gap="s"
-              alignItems="center"
-              display="flex"
-              maxWidth="27rem"
-              borderRadius="xs"
-              border="1px solid"
-              bg="errorContainer"
-              color="onErrorContainer"
-              borderColor="onErrorContainer"
-            >
-              <DotErrorSVG
-                dotColor={colors.error}
-                maxHeight="1rem"
-                maxWidth="1rem"
-                width="100%"
-              />
-              <Typography variant="label" size="medium">
-                Alert! You are burning some verified coin.
-              </Typography>
-            </Box>
-          )}
-          {objects.some(
-            ({ type }) => type === '0x3::staking_pool::StakedSui'
-          ) && (
-            <Box
-              p="s"
-              gap="s"
-              alignItems="center"
-              display="flex"
-              maxWidth="27rem"
-              borderRadius="xs"
-              border="1px solid"
-              bg="errorContainer"
-              color="onErrorContainer"
-              borderColor="onErrorContainer"
-            >
-              <DotErrorSVG
-                dotColor={colors.error}
-                maxHeight="1rem"
-                maxWidth="1rem"
-                width="100%"
-              />
-              <Typography variant="label" size="medium">
-                Alert! You are burning some important Staking object.
+                Alert! You are burning a legitimate asset.
               </Typography>
             </Box>
           )}
