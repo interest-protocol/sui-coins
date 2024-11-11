@@ -277,7 +277,7 @@ export const useOnBurn = () => {
                 width="100%"
               />
               <Typography variant="label" size="medium">
-                Alert! You are burning a legitimate asset.
+                Alert! You are burning a verified asset.
               </Typography>
             </Box>
           )}
