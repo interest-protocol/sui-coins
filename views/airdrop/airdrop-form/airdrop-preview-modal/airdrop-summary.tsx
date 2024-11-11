@@ -1,6 +1,7 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
+import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
@@ -20,14 +21,16 @@ const METHOD_TITLE = {
 };
 
 const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
+  const { query } = useRouter();
   const { coinsMap } = useWeb3();
   const { control } = useFormContext<IAirdropForm>();
 
   const airdropList = useWatch({ control, name: 'airdropList' });
 
-  const airdropFee = airdropList
-    ? BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS).times(airdropList.length)
-    : ZERO_BIG_NUMBER;
+  const airdropFee =
+    airdropList && query['discount'] !== 'free'
+      ? BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS).times(airdropList.length)
+      : ZERO_BIG_NUMBER;
 
   return (
     <Box display="flex" flexDirection="column" mb="m">
