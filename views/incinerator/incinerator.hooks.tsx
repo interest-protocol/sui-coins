@@ -189,10 +189,10 @@ export const useOnBurn = () => {
         <Box>
           <Box
             p="s"
-            mx="xl"
-            my="4xl"
             gap="s"
+            alignItems="center"
             display="flex"
+            maxWidth="27rem"
             borderRadius="xs"
             border="1px solid"
             bg="errorContainer"
