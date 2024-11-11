@@ -42,10 +42,10 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 }) => {
   const { coinsMap } = useWeb3();
   const suiClient = useSuiClient();
+  const { handleClose } = useModal();
   const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
   const signTransaction = useSignTransaction();
-  const { handleClose } = useModal();
   const { getValues, setValue } = useFormContext<IAirdropForm>();
 
   const handleSend = async () => {
