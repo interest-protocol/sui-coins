@@ -38,6 +38,8 @@ import {
 import { BATCH_SIZE } from '../../airdrop.constants';
 import { AirdropConfirmButtonProps, IAirdropForm } from '../../airdrop.types';
 
+const feeFree = JSON.parse(process.env.NEXT_PUBLIC_FEE_FREE ?? 'false');
+
 const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
   setIsProgressView,
 }) => {
@@ -56,7 +58,9 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
     try {
       const feePerAddress =
-        query['discount'] === 'free' ? 0 : AIRDROP_SUI_FEE_PER_ADDRESS;
+        feeFree && query['discount'] === 'free'
+          ? 0
+          : AIRDROP_SUI_FEE_PER_ADDRESS;
 
       const { airdropList, token } = getValues();
 

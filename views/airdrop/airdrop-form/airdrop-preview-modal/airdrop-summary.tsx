@@ -20,6 +20,8 @@ const METHOD_TITLE = {
   addressList: 'List of addresses',
 };
 
+const feeFree = JSON.parse(process.env.NEXT_PUBLIC_FEE_FREE ?? 'false');
+
 const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
   const { query } = useRouter();
   const { coinsMap } = useWeb3();
@@ -28,9 +30,9 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
   const airdropList = useWatch({ control, name: 'airdropList' });
 
   const airdropFee =
-    airdropList && query['discount'] !== 'free'
-      ? BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS).times(airdropList.length)
-      : ZERO_BIG_NUMBER;
+    !airdropList || (feeFree && query['discount'] !== 'free')
+      ? ZERO_BIG_NUMBER
+      : BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS).times(airdropList.length);
 
   return (
     <Box display="flex" flexDirection="column" mb="m">
