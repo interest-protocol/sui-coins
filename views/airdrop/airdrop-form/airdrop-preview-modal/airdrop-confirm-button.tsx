@@ -9,6 +9,7 @@ import { SuiObjectChangeCreated } from '@mysten/sui/client';
 import { Transaction } from '@mysten/sui/transactions';
 import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
+import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -37,9 +38,12 @@ import {
 import { BATCH_SIZE } from '../../airdrop.constants';
 import { AirdropConfirmButtonProps, IAirdropForm } from '../../airdrop.types';
 
+const feeFree = JSON.parse(process.env.NEXT_PUBLIC_FEE_FREE ?? 'false');
+
 const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
   setIsProgressView,
 }) => {
+  const { query } = useRouter();
   const { coinsMap } = useWeb3();
   const suiClient = useSuiClient();
   const { handleClose } = useModal();
@@ -53,6 +57,11 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
     handleClose();
 
     try {
+      const feePerAddress =
+        feeFree && query['discount'] === 'free'
+          ? 0
+          : AIRDROP_SUI_FEE_PER_ADDRESS;
+
       const { airdropList, token } = getValues();
 
       if (!airdropList || !coinsMap || !coinsMap[token.type] || !currentAccount)
@@ -66,7 +75,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         .reduce((acc, data) => BigNumber(data.amount).plus(acc), BigNumber(0))
         .decimalPlaces(0);
 
-      const feeAmount = BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS)
+      const feeAmount = BigNumber(feePerAddress)
         .times(airdropList.length)
         .decimalPlaces(0);
 
@@ -115,7 +124,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
           const fee = tx.splitCoins(tx.objectRef(feeCoin), [
             tx.pure.u64(
-              BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS)
+              BigNumber(feePerAddress)
                 .times(batch.length)
                 .decimalPlaces(0)
                 .toString()
