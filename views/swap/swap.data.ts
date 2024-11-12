@@ -1,4 +1,4 @@
-import { AftermathSVG, InterestSVG } from '@/svg';
+import { AftermathSVG, InterestSVG, SevenKAggregatorSVG } from '@/svg';
 
 import { Aggregator, AggregatorProps } from './swap.types';
 
@@ -15,6 +15,13 @@ export const AGGREGATORS_LIST: Record<Aggregator, AggregatorProps> = {
     name: 'Interest',
     Icon: InterestSVG,
     key: Aggregator.Interest,
+  },
+  [Aggregator.SevenK]: {
+    name: '7K',
+    disabled: true,
+    url: 'https://7k.ag/',
+    key: Aggregator.SevenK,
+    Icon: SevenKAggregatorSVG,
   },
 };
 

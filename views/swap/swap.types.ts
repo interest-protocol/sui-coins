@@ -21,6 +21,7 @@ export interface SwapToken extends Token {
 export enum Aggregator {
   Interest = 'interest',
   Aftermath = 'aftermath',
+  SevenK = '7k',
 }
 
 export interface SwapForm {
