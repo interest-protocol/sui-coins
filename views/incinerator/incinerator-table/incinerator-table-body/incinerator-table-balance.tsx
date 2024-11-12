@@ -8,10 +8,12 @@ import { formatMoney } from '@/utils';
 
 import {
   IncineratorForm,
-  IncineratorTableRowProps,
+  IncineratorTableColumnAndRowProps,
 } from '../../incinerator.types';
 
-const IncineratorTableBalance: FC<IncineratorTableRowProps> = ({ index }) => {
+const IncineratorTableBalance: FC<IncineratorTableColumnAndRowProps> = ({
+  index,
+}) => {
   const { coinsMap } = useWeb3();
   const { control } = useFormContext<IncineratorForm>();
 

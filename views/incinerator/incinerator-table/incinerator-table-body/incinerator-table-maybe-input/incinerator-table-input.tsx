@@ -16,11 +16,13 @@ import { parseInputEventToNumberString, ZERO_BIG_NUMBER } from '@/utils';
 
 import type {
   IncineratorForm,
-  IncineratorTableRowProps,
+  IncineratorTableColumnAndRowProps,
 } from '../../../incinerator.types';
 import IncineratorTableRowActionButton from './incinerator-table-actions';
 
-const IncineratorTableInputMax: FC<IncineratorTableRowProps> = ({ index }) => {
+const IncineratorTableInputMax: FC<IncineratorTableColumnAndRowProps> = ({
+  index,
+}) => {
   const { coinsMap } = useWeb3();
   const { setValue, getValues } = useFormContext<IncineratorForm>();
 
@@ -51,7 +53,9 @@ const IncineratorTableInputMax: FC<IncineratorTableRowProps> = ({ index }) => {
   );
 };
 
-const IncineratorTableInput: FC<IncineratorTableRowProps> = ({ index }) => {
+const IncineratorTableInput: FC<IncineratorTableColumnAndRowProps> = ({
+  index,
+}) => {
   const { control, setValue, getValues } = useFormContext<IncineratorForm>();
 
   const display = useWatch({ control, name: `objects.${index}.display` });
