@@ -26,15 +26,21 @@ export interface IncineratorForm {
   objects: ReadonlyArray<ObjectField>;
 }
 
-export interface IncineratorTableRowProps {
+export interface IncineratorTableColumnAndRowProps {
   index: number;
+}
+
+export interface IncineratorTableRowProps
+  extends IncineratorTableColumnAndRowProps {
+  object: ObjectField;
 }
 
 export interface IncineratorTokenObjectProps {
   object: ObjectField;
 }
 
-export interface IncineratorTableColumnProps extends IncineratorTableRowProps {
+export interface IncineratorTableColumnProps
+  extends IncineratorTableColumnAndRowProps {
   value: string;
 }
 

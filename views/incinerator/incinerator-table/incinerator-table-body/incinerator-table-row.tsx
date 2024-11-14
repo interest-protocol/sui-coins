@@ -12,10 +12,12 @@ import IncineratorTableBalance from './incinerator-table-balance';
 import IncineratorTableCheckbox from './incinerator-table-checkbox';
 import QtyIncinerate from './incinerator-table-maybe-input';
 
-const IncineratorTableRow: FC<IncineratorTableRowProps> = ({ index }) => {
+const IncineratorTableRow: FC<IncineratorTableRowProps> = ({
+  index,
+  object,
+}) => {
   const { control, setValue, getValues } = useFormContext<IncineratorForm>();
 
-  const object = getValues(`objects.${index}`);
   const active = useWatch({ control, name: `objects.${index}.active` });
 
   if (!object) return null;

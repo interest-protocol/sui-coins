@@ -13,11 +13,11 @@ const IncineratorHeader: FC = () => {
 
   return (
     <Box
-      gap="l"
       p="xl"
+      gap="l"
       display="flex"
-      justifyContent="space-between"
       alignItems="center"
+      justifyContent="space-between"
       flexDirection={['column', 'column', 'column', 'row']}
     >
       <Typography variant="title" size="large" fontSize="5xl" fontWeight="700">
