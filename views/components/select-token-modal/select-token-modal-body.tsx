@@ -1,6 +1,5 @@
 import { Chain } from '@interest-protocol/sui-tokens';
 import { isValidSuiAddress } from '@mysten/sui/utils';
-import { empty } from 'ramda';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
