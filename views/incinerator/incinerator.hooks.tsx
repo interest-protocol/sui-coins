@@ -293,12 +293,17 @@ export const useOnBurn = () => {
           )}
         </Box>
         <Box display="flex" gap="s" justifyContent="center">
-          <Button variant="outline" onClick={handleClose}>
+          <Button
+            variant="outline"
+            onClick={handleClose}
+            fontSize={['0.8rem', '0.8rem', '0.875rem']}
+          >
             Cancel
           </Button>
           <Button
             variant="filled"
             justifyContent="center"
+            fontSize={['0.8rem', '0.8rem', '0.875rem']}
             onClick={() => {
               handleClose();
               handleBurn({ objects });
