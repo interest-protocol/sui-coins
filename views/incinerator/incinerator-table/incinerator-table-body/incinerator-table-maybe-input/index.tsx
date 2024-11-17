@@ -7,11 +7,11 @@ import { formatMoney } from '@/utils';
 
 import {
   IncineratorForm,
-  IncineratorTableRowProps,
+  IncineratorTableColumnAndRowProps,
 } from '../../../incinerator.types';
 import IncineratorTableInput from './incinerator-table-input';
 
-const IncineratorTableMaybeInput: FC<IncineratorTableRowProps> = ({
+const IncineratorTableMaybeInput: FC<IncineratorTableColumnAndRowProps> = ({
   index,
 }) => {
   const { control, setValue, getValues } = useFormContext<IncineratorForm>();

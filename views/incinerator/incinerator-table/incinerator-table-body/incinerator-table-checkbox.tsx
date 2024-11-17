@@ -6,10 +6,12 @@ import { v4 } from 'uuid';
 
 import {
   IncineratorForm,
-  IncineratorTableRowProps,
+  IncineratorTableColumnAndRowProps,
 } from '../../incinerator.types';
 
-const IncineratorTableCheckbox: FC<IncineratorTableRowProps> = ({ index }) => {
+const IncineratorTableCheckbox: FC<IncineratorTableColumnAndRowProps> = ({
+  index,
+}) => {
   const { control, setValue } = useFormContext<IncineratorForm>();
 
   const active = useWatch({ control, name: `objects.${index}.active` });

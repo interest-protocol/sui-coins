@@ -18,13 +18,14 @@ const SelectTokenModalBody: FC<SelectNFTModalBodyProps> = ({
 }) => {
   const { nfts, loading, error } = useNFTMetadata();
   const { control } = useFormContext<SearchNFTForm>();
-  const search = useWatch({ control, name: 'search' });
+  const search = useWatch({ control, name: 'search' })
+    .toLocaleLowerCase()
+    .trim();
 
   const filteredNfts =
     nfts?.filter(
       ({ name, id }) =>
-        NFT.includes(id) &&
-        (!search || name.toLowerCase().startsWith(search.toLowerCase()))
+        NFT.includes(id) && (!search || name.toLowerCase().includes(search))
     ) ?? [];
 
   return (
