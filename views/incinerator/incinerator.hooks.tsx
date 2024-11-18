@@ -193,12 +193,7 @@ export const useOnBurn = () => {
           Caution
         </Typography>
         <Box>
-          <Typography
-            size="medium"
-            variant="body"
-            color="warning"
-            maxWidth="27rem"
-          >
+          <Typography size="medium" variant="body" maxWidth="27rem">
             This is irreversible. Please double-check the types of assets you
             are burning.
           </Typography>
