@@ -5,7 +5,6 @@ import useSWR from 'swr';
 
 import { Network } from '@/constants';
 import {
-  STRICT_TOKENS_MAP,
   SUI_BRIDGE_TOKENS,
   TOKEN_ICONS,
   WORMHOLE_TOKENS,
@@ -26,6 +25,7 @@ import { fetchCoinMetadata } from '@/utils';
 import FTMChain from '../svg/ftm-chain';
 import { SVGProps } from '../svg/svg.types';
 import { TokenIconProps } from './token-icon.types';
+import { useStrictTokens } from '@/hooks/use-strict-tokens';
 
 const CHAIN_ICON: Record<Chain, FC<SVGProps>> = {
   BSC: BSCChainSVG,
@@ -50,6 +50,7 @@ const TokenIcon: FC<TokenIconProps> = ({
   size = '1.5rem',
   loaderSize = 16,
 }) => {
+  const { data: tokens } = useStrictTokens();
   const isMainnet = network === Network.MAINNET;
   const TokenIcon = TOKEN_ICONS[network]?.[isMainnet ? type : symbol] ?? null;
 
@@ -62,10 +63,8 @@ const TokenIcon: FC<TokenIconProps> = ({
   const { data: iconSrc, isLoading } = useSWR(
     `${network}-${type}-${url}`,
     async () => {
-      if (TokenIcon || STRICT_TOKENS_MAP[network][type]?.logoUrl)
-        return STRICT_TOKENS_MAP[network][type].logoUrl ?? null;
-
-      if (url) return url;
+      if (TokenIcon || tokens?.strictTokensMap[type]?.logoUrl)
+        return tokens?.strictTokensMap[type].logoUrl ?? null;
 
       const data = await fetchCoinMetadata({ network, type });
 
@@ -74,7 +73,7 @@ const TokenIcon: FC<TokenIconProps> = ({
   );
 
   const chain =
-    STRICT_TOKENS_MAP[network][type]?.chain ??
+    tokens?.strictTokensMap[type]?.chain ??
     WORMHOLE_TOKENS[network].find((token) => token.type === type)?.chain ??
     SUI_BRIDGE_TOKENS[network].find((token) => token.type === type)?.chain;
 
@@ -133,7 +132,7 @@ const TokenIcon: FC<TokenIconProps> = ({
             style={{ objectFit: 'cover', position: 'relative' }}
           />
         </Box>
-        {STRICT_TOKENS_MAP[network][type] && (
+        {tokens?.strictTokensMap[type] && (
           <Box
             top="-0.5rem"
             right="-0.25rem"
@@ -182,7 +181,7 @@ const TokenIcon: FC<TokenIconProps> = ({
             maxHeight={size ?? '1.5rem'}
           />
         </Box>
-        {STRICT_TOKENS_MAP[network][type] && (
+        {tokens?.strictTokensMap[type] && (
           <Box
             top="-0.5rem"
             right="-0.25rem"
@@ -249,7 +248,7 @@ const TokenIcon: FC<TokenIconProps> = ({
             onError={onLoadError}
             style={{ objectFit: 'cover', position: 'relative' }}
           />
-          {STRICT_TOKENS_MAP[network][type] && (
+          {tokens?.strictTokensMap[type] && (
             <Box
               top="-0.5rem"
               right="-0.25rem"
@@ -298,7 +297,7 @@ const TokenIcon: FC<TokenIconProps> = ({
             />
           )}
         </Box>
-        {STRICT_TOKENS_MAP[network][type] && (
+        {tokens?.strictTokensMap[type] && (
           <Box
             top="-0.5rem"
             right="-0.25rem"

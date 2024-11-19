@@ -5,9 +5,9 @@ import { formatAddress, SUI_TYPE_ARG } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
 
 import { Network } from '@/constants';
+import { StrictTokens } from '@/hooks/use-strict-tokens';
 import {
   STRICT_TOKENS,
-  STRICT_TOKENS_TYPE,
   SUI_BRIDGE_TOKENS,
   SUI_BRIDGE_TOKENS_TYPE,
   WORMHOLE_TOKENS,
@@ -78,21 +78,19 @@ const coinMetadataToToken = (coin: CoinMetadataWithType): Token => ({
 export const getCoin = async (
   type: `0x${string}`,
   network: Network,
-  coinsMap: CoinsMap
+  coinsMap: CoinsMap,
+  strictTokens?: StrictTokens
 ): Promise<Token> =>
   new Promise((resolve) => {
     if (
-      STRICT_TOKENS_TYPE[network].includes(type) ??
+      strictTokens?.strictTokensType.includes(type) ??
       WORMHOLE_TOKENS_TYPE[network].includes(type) ??
       SUI_BRIDGE_TOKENS_TYPE[network].includes(type)
     )
       return resolve(
-        STRICT_TOKENS[network].find(
+        WORMHOLE_TOKENS[network].find(
           ({ type: strictType }) => type === strictType
         ) ??
-          WORMHOLE_TOKENS[network].find(
-            ({ type: strictType }) => type === strictType
-          ) ??
           SUI_BRIDGE_TOKENS[network].find(
             ({ type: strictType }) => type === strictType
           )!

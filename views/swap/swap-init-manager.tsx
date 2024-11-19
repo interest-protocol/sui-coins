@@ -4,7 +4,7 @@ import { FC, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
 
-import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
+import { LOCAL_STORAGE_VERSION } from '@/constants';
 import { STRICT_TOKENS, STRICT_TOKENS_MAP } from '@/constants/coins';
 import { getAllCoinsPrice } from '@/hooks/use-get-multiple-token-price-by-type/use-get-multiple-token-price-by-type.utils';
 import { useNetwork } from '@/hooks/use-network';
@@ -12,8 +12,10 @@ import { useWeb3 } from '@/hooks/use-web3';
 import { getCoin, isSui, updateURL, ZERO_BIG_NUMBER } from '@/utils';
 
 import { Aggregator, ISwapSettings, SwapForm, SwapToken } from './swap.types';
+import { useStrictTokens } from '@/hooks/use-strict-tokens';
 
 const SwapInitManager: FC = () => {
+  const { data } = useStrictTokens();
   const { coinsMap } = useWeb3();
   const form = useFormContext<SwapForm>();
   const network = useNetwork();
@@ -58,7 +60,7 @@ const SwapInitManager: FC = () => {
       };
     }
     if (typeof type === 'string' && type.startsWith('0x')) {
-      const coin = await getCoin(type, network as Network, coinsMap);
+      const coin = await getCoin(type, network, coinsMap, data);
 
       return {
         ...coin,
@@ -93,7 +95,7 @@ const SwapInitManager: FC = () => {
     from: string | undefined,
     to: string | undefined
   ) => {
-    const TokenUSDC = STRICT_TOKENS[network].find(
+    const TokenUSDC = data?.strictTokens.find(
       (token) => token.symbol == 'USDC'
     );
 
