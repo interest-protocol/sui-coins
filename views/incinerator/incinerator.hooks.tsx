@@ -193,15 +193,28 @@ export const useOnBurn = () => {
           Caution
         </Typography>
         <Box>
-          <Typography
-            size="large"
-            variant="body"
+          <Box
+            p="l"
+            gap="l"
+            display="flex"
             maxWidth="27rem"
-            color="outline"
+            borderRadius="s"
+            border="1px solid"
+            borderColor="error"
           >
-            This is irreversible. Please double-check the types of assets you
-            are burning.
-          </Typography>
+            <Box color="error">
+              <ErrorSVG maxHeight="3rem" maxWidth="3rem" width="100%" />
+            </Box>
+            <Box display="flex" gap="xs" flexDirection="column">
+              <Typography size="large" variant="body" color="error">
+                Important
+              </Typography>
+              <Typography size="large" variant="body" color="outline">
+                You are about to burn an asset. This action is irreversible.
+                Ensure you are burning the correct asset.
+              </Typography>
+            </Box>
+          </Box>
           <Box
             my="l"
             gap="xs"
