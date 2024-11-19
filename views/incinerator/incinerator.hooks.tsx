@@ -29,7 +29,7 @@ import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
 import { TimedSuiTransactionBlockResponse } from '@/interface';
 import { FixedPointMath } from '@/lib';
-import { CopySVG, DotErrorSVG } from '@/svg';
+import { CopySVG, DotErrorSVG, ErrorSVG } from '@/svg';
 import {
   getCoins,
   showTXSuccessToast,
@@ -193,10 +193,28 @@ export const useOnBurn = () => {
           Caution
         </Typography>
         <Box>
-          <Typography size="medium" variant="body" maxWidth="27rem">
-            This is irreversible. Please double-check the types of assets you
-            are burning.
-          </Typography>
+          <Box
+            p="l"
+            gap="l"
+            display="flex"
+            maxWidth="27rem"
+            borderRadius="s"
+            border="1px solid"
+            borderColor="error"
+          >
+            <Box color="error">
+              <ErrorSVG maxHeight="3rem" maxWidth="3rem" width="100%" />
+            </Box>
+            <Box display="flex" gap="xs" flexDirection="column">
+              <Typography size="large" variant="body" color="error">
+                Important
+              </Typography>
+              <Typography size="large" variant="body" color="outline">
+                You are about to burn an asset. This action is irreversible.
+                Ensure you are burning the correct asset.
+              </Typography>
+            </Box>
+          </Box>
           <Box
             my="l"
             gap="xs"
