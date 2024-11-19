@@ -5,14 +5,13 @@ import { formatAddress, SUI_TYPE_ARG } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
 
 import { Network } from '@/constants';
-import { StrictTokens } from '@/hooks/use-strict-tokens';
 import {
-  STRICT_TOKENS,
   SUI_BRIDGE_TOKENS,
   SUI_BRIDGE_TOKENS_TYPE,
   WORMHOLE_TOKENS,
   WORMHOLE_TOKENS_TYPE,
 } from '@/constants/coins';
+import { StrictTokens } from '@/hooks/use-strict-tokens';
 import { CoinData, CoinMetadataWithType } from '@/interface';
 import { FixedPointMath } from '@/lib';
 

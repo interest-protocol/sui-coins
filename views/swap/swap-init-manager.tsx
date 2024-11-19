@@ -8,11 +8,11 @@ import { LOCAL_STORAGE_VERSION } from '@/constants';
 import { STRICT_TOKENS, STRICT_TOKENS_MAP } from '@/constants/coins';
 import { getAllCoinsPrice } from '@/hooks/use-get-multiple-token-price-by-type/use-get-multiple-token-price-by-type.utils';
 import { useNetwork } from '@/hooks/use-network';
+import { useStrictTokens } from '@/hooks/use-strict-tokens';
 import { useWeb3 } from '@/hooks/use-web3';
 import { getCoin, isSui, updateURL, ZERO_BIG_NUMBER } from '@/utils';
 
 import { Aggregator, ISwapSettings, SwapForm, SwapToken } from './swap.types';
-import { useStrictTokens } from '@/hooks/use-strict-tokens';
 
 const SwapInitManager: FC = () => {
   const { data } = useStrictTokens();

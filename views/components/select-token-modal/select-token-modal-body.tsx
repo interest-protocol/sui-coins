@@ -3,7 +3,6 @@ import { isValidSuiAddress } from '@mysten/sui/utils';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { useStrictTokens } from '../../../hooks/use-strict-tokens';
 
 import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
 import {
@@ -19,6 +18,7 @@ import { CoinMetadataWithType } from '@/interface';
 import { coinDataToCoinObject, fetchCoinMetadata } from '@/utils';
 
 import { CoinObject } from '../../../components/web3-manager/coins-manager/coins-manager.types';
+import { useStrictTokens } from '../../../hooks/use-strict-tokens';
 import FavoritesModalBody from './favorites-modal-body';
 import FetchingToken from './fetching-token';
 import ModalTokenBody from './modal-token-body';
