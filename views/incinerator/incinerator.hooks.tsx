@@ -184,11 +184,16 @@ export const useOnBurn = () => {
         bg="lowestContainer"
         flexDirection="column"
       >
-        <Typography variant="title" size="large" textAlign="center">
+        <Typography
+          size="large"
+          color="error"
+          variant="title"
+          textAlign="center"
+        >
           Caution
         </Typography>
         <Box>
-          <Typography variant="body" size="medium" maxWidth="27rem">
+          <Typography size="medium" variant="body" maxWidth="27rem">
             This is irreversible. Please double-check the types of assets you
             are burning.
           </Typography>
@@ -283,12 +288,17 @@ export const useOnBurn = () => {
           )}
         </Box>
         <Box display="flex" gap="s" justifyContent="center">
-          <Button variant="outline" onClick={handleClose}>
+          <Button
+            variant="outline"
+            onClick={handleClose}
+            fontSize={['0.8rem', '0.8rem', '0.875rem']}
+          >
             Cancel
           </Button>
           <Button
             variant="filled"
             justifyContent="center"
+            fontSize={['0.8rem', '0.8rem', '0.875rem']}
             onClick={() => {
               handleClose();
               handleBurn({ objects });
