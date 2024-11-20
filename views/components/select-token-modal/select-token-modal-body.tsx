@@ -43,7 +43,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   );
 
   const filterSelected = useWatch({ control, name: 'filter' });
-  const search = useWatch({ control, name: 'search' });
+  const search = useWatch({ control, name: 'search' }).trim();
 
   const handleSelectToken = async (type: string, chain?: Chain) => {
     if (coinsMap[type]) return onSelectToken(coinsMap[type]);
@@ -113,16 +113,18 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
         handleSelectToken={handleSelectToken}
         tokens={[
           ...WORMHOLE_TOKENS[network as Network].filter(
-            ({ symbol, type }) =>
+            ({ symbol, type, name }) =>
               (!search ||
                 symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+                name?.toLocaleLowerCase().includes(search.toLowerCase()) ||
                 type.includes(search)) &&
               favoriteTokenTypes?.includes(type)
           ),
           ...WORMHOLE_TOKENS[network as Network].filter(
-            ({ symbol, type }) =>
+            ({ symbol, type, name }) =>
               (!search ||
                 symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+                name?.toLocaleLowerCase().includes(search.toLowerCase()) ||
                 type.includes(search)) &&
               !favoriteTokenTypes?.includes(type)
           ),
@@ -141,16 +143,18 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
         handleSelectToken={handleSelectToken}
         tokens={[
           ...SUI_BRIDGE_TOKENS[network as Network].filter(
-            ({ symbol, type }) =>
+            ({ symbol, type, name }) =>
               (!search ||
                 symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+                name?.toLocaleLowerCase().includes(search.toLowerCase()) ||
                 type.includes(search)) &&
               favoriteTokenTypes?.includes(type)
           ),
           ...SUI_BRIDGE_TOKENS[network as Network].filter(
-            ({ symbol, type }) =>
+            ({ symbol, type, name }) =>
               (!search ||
                 symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+                name?.toLocaleLowerCase().includes(search.toLowerCase()) ||
                 type.includes(search)) &&
               !favoriteTokenTypes?.includes(type)
           ),
@@ -178,8 +182,13 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
         tokens={(coins as Array<CoinObject>)
           ?.sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
           .filter(
-            ({ symbol, type }) =>
-              !search || symbol.includes(search) || type.includes(search)
+            ({ symbol, type, metadata }) =>
+              !search ||
+              symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+              metadata.name
+                ?.toLocaleLowerCase()
+                .includes(search.toLowerCase()) ||
+              type.includes(search)
           )}
       />
     );
