@@ -9,6 +9,7 @@ import {
   TOKEN_ICONS,
   WORMHOLE_TOKENS,
 } from '@/constants/coins';
+import { useStrictTokens } from '@/hooks/use-strict-tokens';
 import {
   ARBChainSVG,
   AVAXChainSVG,
@@ -25,7 +26,6 @@ import { fetchCoinMetadata } from '@/utils';
 import FTMChain from '../svg/ftm-chain';
 import { SVGProps } from '../svg/svg.types';
 import { TokenIconProps } from './token-icon.types';
-import { useStrictTokens } from '@/hooks/use-strict-tokens';
 
 const CHAIN_ICON: Record<Chain, FC<SVGProps>> = {
   BSC: BSCChainSVG,

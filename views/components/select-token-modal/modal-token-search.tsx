@@ -1,3 +1,4 @@
+import { Box } from '@interest-protocol/ui-kit';
 import { FC, useId } from 'react';
 import useSWR from 'swr';
 import { v4 } from 'uuid';
@@ -29,13 +30,15 @@ const ModalTokenSearch: FC<ModalTokenSearchProps> = ({
   if (error) return <NotFound />;
 
   return (
-    <TokenModalItem
-      key={v4()}
-      selected={false}
-      type={search as `0x${string}`}
-      symbol={tokenMetadata!.symbol}
-      onClick={() => handleSelectToken(search)}
-    />
+    <Box p="m">
+      <TokenModalItem
+        key={v4()}
+        selected={false}
+        type={search as `0x${string}`}
+        symbol={tokenMetadata!.symbol}
+        onClick={() => handleSelectToken(search)}
+      />
+    </Box>
   );
 };
 

@@ -4,7 +4,7 @@ import { FC, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
 
-import { LOCAL_STORAGE_VERSION } from '@/constants';
+import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
 import { STRICT_TOKENS, STRICT_TOKENS_MAP } from '@/constants/coins';
 import { getAllCoinsPrice } from '@/hooks/use-get-multiple-token-price-by-type/use-get-multiple-token-price-by-type.utils';
 import { useNetwork } from '@/hooks/use-network';
@@ -95,7 +95,7 @@ const SwapInitManager: FC = () => {
     from: string | undefined,
     to: string | undefined
   ) => {
-    const TokenUSDC = data?.strictTokens.find(
+    const TokenUSDC = STRICT_TOKENS[network].find(
       (token) => token.symbol == 'USDC'
     );
 
@@ -125,7 +125,7 @@ const SwapInitManager: FC = () => {
       from
         ? setDefaultToken(
             STRICT_TOKENS_MAP[network][from]?.type ||
-              STRICT_TOKENS[network].find(
+              data?.strictTokens.find(
                 (token) => token.symbol == from || token.type == from
               )?.type ||
               from,
@@ -136,7 +136,7 @@ const SwapInitManager: FC = () => {
         ? from !== to
           ? setDefaultToken(
               STRICT_TOKENS_MAP[network][to]?.type ||
-                STRICT_TOKENS[network].find(
+                data?.strictTokens.find(
                   (token) => token.symbol == to || token.type == to
                 )?.type ||
                 to,

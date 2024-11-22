@@ -3,7 +3,6 @@ import { isValidSuiAddress } from '@mysten/sui/utils';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { useStrictTokens } from '../../../hooks/use-strict-tokens';
 
 import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
 import {
@@ -19,6 +18,7 @@ import { CoinMetadataWithType } from '@/interface';
 import { coinDataToCoinObject, fetchCoinMetadata } from '@/utils';
 
 import { CoinObject } from '../../../components/web3-manager/coins-manager/coins-manager.types';
+import { useStrictTokens } from '../../../hooks/use-strict-tokens';
 import FavoritesModalBody from './favorites-modal-body';
 import FetchingToken from './fetching-token';
 import ModalTokenBody from './modal-token-body';
@@ -42,12 +42,8 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
     `${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-tokens`
   );
 
-  console.log('coinsMap >>', coinsMap);
-  console.log('****************');
-  console.log('Data >>', data);
-
   const filterSelected = useWatch({ control, name: 'filter' });
-  const search = useWatch({ control, name: 'search' });
+  const search = useWatch({ control, name: 'search' }).trim();
 
   const handleSelectToken = async (type: string, chain?: Chain) => {
     if (coinsMap[type]) return onSelectToken(coinsMap[type]);
@@ -117,16 +113,18 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
         handleSelectToken={handleSelectToken}
         tokens={[
           ...WORMHOLE_TOKENS[network as Network].filter(
-            ({ symbol, type }) =>
+            ({ symbol, type, name }) =>
               (!search ||
                 symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+                name?.toLocaleLowerCase().includes(search.toLowerCase()) ||
                 type.includes(search)) &&
               favoriteTokenTypes?.includes(type)
           ),
           ...WORMHOLE_TOKENS[network as Network].filter(
-            ({ symbol, type }) =>
+            ({ symbol, type, name }) =>
               (!search ||
                 symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+                name?.toLocaleLowerCase().includes(search.toLowerCase()) ||
                 type.includes(search)) &&
               !favoriteTokenTypes?.includes(type)
           ),
@@ -145,16 +143,18 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
         handleSelectToken={handleSelectToken}
         tokens={[
           ...SUI_BRIDGE_TOKENS[network as Network].filter(
-            ({ symbol, type }) =>
+            ({ symbol, type, name }) =>
               (!search ||
                 symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+                name?.toLocaleLowerCase().includes(search.toLowerCase()) ||
                 type.includes(search)) &&
               favoriteTokenTypes?.includes(type)
           ),
           ...SUI_BRIDGE_TOKENS[network as Network].filter(
-            ({ symbol, type }) =>
+            ({ symbol, type, name }) =>
               (!search ||
                 symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+                name?.toLocaleLowerCase().includes(search.toLowerCase()) ||
                 type.includes(search)) &&
               !favoriteTokenTypes?.includes(type)
           ),
@@ -182,8 +182,13 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
         tokens={(coins as Array<CoinObject>)
           ?.sort(({ type }) => (favoriteTokenTypes?.includes(type) ? -1 : 1))
           .filter(
-            ({ symbol, type }) =>
-              !search || symbol.includes(search) || type.includes(search)
+            ({ symbol, type, metadata }) =>
+              !search ||
+              symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
+              metadata.name
+                ?.toLocaleLowerCase()
+                .includes(search.toLowerCase()) ||
+              type.includes(search)
           )}
       />
     );

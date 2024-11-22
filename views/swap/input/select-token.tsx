@@ -6,7 +6,6 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 import TokenIcon from '@/components/token-icon';
 import { Network } from '@/constants';
-import { STRICT_TOKENS_MAP } from '@/constants/coins';
 import { getAllCoinsPrice } from '@/hooks/use-get-multiple-token-price-by-type/use-get-multiple-token-price-by-type.utils';
 import { useModal } from '@/hooks/use-modal';
 import { useNetwork } from '@/hooks/use-network';
@@ -16,10 +15,12 @@ import SelectTokenModal from '@/views/components/select-token-modal';
 
 import { SwapForm } from '../swap.types';
 import { InputProps } from './input.types';
+import { useStrictTokens } from '@/hooks/use-strict-tokens';
 
 const SelectToken: FC<InputProps> = ({ label }) => {
   const { pathname } = useRouter();
   const network = useNetwork();
+  const { data } = useStrictTokens();
   const { setModal, handleClose } = useModal();
 
   const { setValue, control } = useFormContext<SwapForm>();
@@ -41,7 +42,7 @@ const SelectToken: FC<InputProps> = ({ label }) => {
 
   const changeURL = (type: string, oppositeType?: string) => {
     const searchParams = new URLSearchParams(location.search);
-    const token = STRICT_TOKENS_MAP[network][type];
+    const token = data?.strictTokensMap[type];
 
     searchParams.set(label, token?.symbol || type);
 

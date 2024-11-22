@@ -5,18 +5,20 @@ import { v4 } from 'uuid';
 
 import { TokenIcon } from '@/components';
 import { CoinObject } from '@/components/web3-manager/coins-manager/coins-manager.types';
-import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
-import { STRICT_TOKENS, STRICT_TOKENS_MAP } from '@/constants/coins';
+import { LOCAL_STORAGE_VERSION } from '@/constants';
+import { STRICT_TOKENS } from '@/constants/coins';
 import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
 import { coinDataToCoinObject, fetchCoinMetadata } from '@/utils';
 
 import { metadataToCoin } from './select-token-modal.utils';
+import { useStrictTokens } from '@/hooks/use-strict-tokens';
 
 const FavoriteTokens: FC<{ onSelectToken: (coin: CoinObject) => void }> = ({
   onSelectToken,
 }) => {
   const network = useNetwork();
+  const { data } = useStrictTokens();
   const { coinsMap } = useWeb3();
   const favoriteTokenTypes = useReadLocalStorage<ReadonlyArray<string>>(
     `${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-tokens`
@@ -45,8 +47,7 @@ const FavoriteTokens: FC<{ onSelectToken: (coin: CoinObject) => void }> = ({
   const handleSelectToken = async (type: string) => {
     if (coinsMap[type]) return onSelectToken(coinsMap[type]);
 
-    const token = STRICT_TOKENS_MAP[network as Network][type];
-
+    const token = data?.strictTokensMap[type];
     if (token) return onSelectToken(coinDataToCoinObject(token));
 
     const metadata = await fetchCoinMetadata({ type, network });
