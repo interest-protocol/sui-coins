@@ -6,13 +6,12 @@ import BigNumber from 'bignumber.js';
 
 import { Network } from '@/constants';
 import {
-  STRICT_TOKENS,
-  STRICT_TOKENS_TYPE,
   SUI_BRIDGE_TOKENS,
   SUI_BRIDGE_TOKENS_TYPE,
   WORMHOLE_TOKENS,
   WORMHOLE_TOKENS_TYPE,
 } from '@/constants/coins';
+import { StrictTokens } from '@/hooks/use-strict-tokens';
 import { CoinData, CoinMetadataWithType } from '@/interface';
 import { FixedPointMath } from '@/lib';
 
@@ -78,18 +77,17 @@ const coinMetadataToToken = (coin: CoinMetadataWithType): Token => ({
 export const getCoin = async (
   type: `0x${string}`,
   network: Network,
-  coinsMap: CoinsMap
+  coinsMap: CoinsMap,
+  tokens?: StrictTokens
 ): Promise<Token> =>
   new Promise((resolve) => {
     if (
-      STRICT_TOKENS_TYPE[network].includes(type) ??
+      tokens?.strictTokensType.includes(type) ??
       WORMHOLE_TOKENS_TYPE[network].includes(type) ??
       SUI_BRIDGE_TOKENS_TYPE[network].includes(type)
     )
       return resolve(
-        STRICT_TOKENS[network].find(
-          ({ type: strictType }) => type === strictType
-        ) ??
+        tokens?.strictTokensMap[type] ??
           WORMHOLE_TOKENS[network].find(
             ({ type: strictType }) => type === strictType
           ) ??

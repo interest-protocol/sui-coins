@@ -6,9 +6,6 @@ import { useReadLocalStorage } from 'usehooks-ts';
 
 import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
 import {
-  STRICT_TOKENS,
-  STRICT_TOKENS_MAP,
-  STRICT_TOKENS_TYPE,
   SUI_BRIDGE_TOKENS,
   SUI_BRIDGE_TOKENS_TYPE,
   WORMHOLE_TOKENS,
@@ -16,6 +13,7 @@ import {
 } from '@/constants/coins';
 import { FAUCET_COINS } from '@/constants/dca';
 import { useNetwork } from '@/hooks/use-network';
+import { useStrictTokens } from '@/hooks/use-strict-tokens';
 import { useWeb3 } from '@/hooks/use-web3';
 import { CoinMetadataWithType } from '@/interface';
 import { coinDataToCoinObject, fetchCoinMetadata } from '@/utils';
@@ -38,6 +36,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   handleSelectToken: onSelectToken,
 }) => {
   const network = useNetwork();
+  const { data: tokens } = useStrictTokens();
   const { coins, coinsMap, coinsLoading } = useWeb3();
   const favoriteTokenTypes = useReadLocalStorage<ReadonlyArray<string>>(
     `${LOCAL_STORAGE_VERSION}-sui-coins-${network}-favorite-tokens`
@@ -49,7 +48,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
   const handleSelectToken = async (type: string, chain?: Chain) => {
     if (coinsMap[type]) return onSelectToken(coinsMap[type]);
 
-    const token = STRICT_TOKENS_MAP[network as Network][type];
+    const token = tokens?.strictTokensMap[type];
 
     if (token) return onSelectToken(coinDataToCoinObject(token));
 
@@ -70,14 +69,14 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
       isSearchAddress &&
       (faucet
         ? FAUCET_COINS.map(({ type }) => type)
-        : STRICT_TOKENS_TYPE[network as Network]
+        : tokens?.strictTokensType ?? []
       ).includes(search))
   )
     return (
       <ModalTokenBody
         handleSelectToken={handleSelectToken}
         tokens={[
-          ...(faucet ? FAUCET_COINS : STRICT_TOKENS[network as Network]).filter(
+          ...(faucet ? FAUCET_COINS : tokens?.strictTokens ?? []).filter(
             ({ symbol, type, name }) =>
               (!search ||
                 symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
@@ -85,7 +84,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
                 type.includes(search)) &&
               favoriteTokenTypes?.includes(type)
           ),
-          ...(faucet ? FAUCET_COINS : STRICT_TOKENS[network as Network]).filter(
+          ...(faucet ? FAUCET_COINS : tokens?.strictTokens ?? []).filter(
             ({ symbol, type, name }) =>
               (!search ||
                 symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
