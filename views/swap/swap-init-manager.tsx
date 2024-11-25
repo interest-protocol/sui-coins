@@ -94,29 +94,29 @@ const SwapInitManager: FC = () => {
     from: string | undefined,
     to: string | undefined
   ) => {
-    const TokenUSDC = tokens?.strictTokens.find(
+    const tokenUSDC = tokens?.strictTokens.find(
       (token) => token.symbol == 'USDC'
     );
 
     if (!from && !to)
       return await Promise.all([
         setDefaultToken(SUI_TYPE_ARG as `0x${string}`, 'from'),
-        setDefaultToken(TokenUSDC?.type as `0x${string}`, 'to'),
+        setDefaultToken(tokenUSDC?.type as `0x${string}`, 'to'),
       ]);
 
     if (to && !from) {
       if (!tokens?.strictTokensMap[to]) {
-        if (TokenUSDC?.symbol == to) from = SUI_TYPE_ARG;
+        if (tokenUSDC?.symbol == to) from = SUI_TYPE_ARG;
         if (tokens?.strictTokensMap[SUI_TYPE_ARG]?.symbol === to)
-          from = TokenUSDC?.type;
+          from = tokenUSDC?.type;
       }
     }
 
     if (from && !to) {
       if (!tokens?.strictTokensMap[from]) {
-        if (TokenUSDC?.symbol == from) to = SUI_TYPE_ARG;
+        if (tokenUSDC?.symbol == from) to = SUI_TYPE_ARG;
         if (tokens?.strictTokensMap[SUI_TYPE_ARG]?.symbol === from)
-          to = TokenUSDC?.type;
+          to = tokenUSDC?.type;
       }
     }
 
