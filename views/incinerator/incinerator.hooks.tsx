@@ -23,9 +23,9 @@ import {
   ObjectData,
 } from '@/components/web3-manager/all-objects-manager/all-objects.types';
 import { Network } from '@/constants';
-import { STRICT_TOKENS_TYPE } from '@/constants/coins';
 import { useModal } from '@/hooks/use-modal';
 import { useNetwork } from '@/hooks/use-network';
+import { useStrictTokens } from '@/hooks/use-strict-tokens';
 import { useWeb3 } from '@/hooks/use-web3';
 import { TimedSuiTransactionBlockResponse } from '@/interface';
 import { FixedPointMath } from '@/lib';
@@ -129,6 +129,7 @@ export const useOnBurn = () => {
   const network = useNetwork();
   const { setDelay, mutate } = useWeb3();
   const { colors } = useTheme() as Theme;
+  const { data: tokens } = useStrictTokens();
   const { setModal, handleClose } = useModal();
   const { setValue } = useFormContext<IncineratorForm>();
 
@@ -277,7 +278,7 @@ export const useOnBurn = () => {
               type === '0x2::kiosk::KioskOwnerCap' ||
               type === '0x3::staking_pool::StakedSui' ||
               type.endsWith('::personal_kiosk::PersonalKioskCap') ||
-              STRICT_TOKENS_TYPE[network].some((verified) =>
+              tokens?.strictTokensType.some((verified) =>
                 type.includes(verified)
               )
           ) && (

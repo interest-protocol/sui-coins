@@ -5,18 +5,19 @@ import { useFormContext } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
 
 import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
-import { STRICT_TOKENS, STRICT_TOKENS_MAP } from '@/constants/coins';
 import { getAllCoinsPrice } from '@/hooks/use-get-multiple-token-price-by-type/use-get-multiple-token-price-by-type.utils';
 import { useNetwork } from '@/hooks/use-network';
+import { useStrictTokens } from '@/hooks/use-strict-tokens';
 import { useWeb3 } from '@/hooks/use-web3';
 import { getCoin, isSui, updateURL, ZERO_BIG_NUMBER } from '@/utils';
 
 import { Aggregator, ISwapSettings, SwapForm, SwapToken } from './swap.types';
 
 const SwapInitManager: FC = () => {
+  const network = useNetwork();
   const { coinsMap } = useWeb3();
   const form = useFormContext<SwapForm>();
-  const network = useNetwork();
+  const { data: tokens } = useStrictTokens();
   const {
     query: { to, from },
     pathname,
@@ -86,44 +87,44 @@ const SwapInitManager: FC = () => {
       .then((data) => form.setValue(`${field}.usdPrice`, data[token.type]))
       .catch(console.log);
 
-    return STRICT_TOKENS_MAP[network][token.type]?.symbol || token.type;
+    return tokens?.strictTokensMap[token.type]?.symbol || token.type;
   };
 
   const setTokenType = async (
     from: string | undefined,
     to: string | undefined
   ) => {
-    const TokenUSDC = STRICT_TOKENS[network].find(
+    const tokenUSDC = tokens?.strictTokens.find(
       (token) => token.symbol == 'USDC'
     );
 
     if (!from && !to)
       return await Promise.all([
         setDefaultToken(SUI_TYPE_ARG as `0x${string}`, 'from'),
-        setDefaultToken(TokenUSDC?.type as `0x${string}`, 'to'),
+        setDefaultToken(tokenUSDC?.type as `0x${string}`, 'to'),
       ]);
 
     if (to && !from) {
-      if (!STRICT_TOKENS_MAP[network][to]) {
-        if (TokenUSDC?.symbol == to) from = SUI_TYPE_ARG;
-        if (STRICT_TOKENS_MAP[network][SUI_TYPE_ARG]?.symbol === to)
-          from = TokenUSDC?.type;
+      if (!tokens?.strictTokensMap[to]) {
+        if (tokenUSDC?.symbol == to) from = SUI_TYPE_ARG;
+        if (tokens?.strictTokensMap[SUI_TYPE_ARG]?.symbol === to)
+          from = tokenUSDC?.type;
       }
     }
 
     if (from && !to) {
-      if (!STRICT_TOKENS_MAP[network][from]) {
-        if (TokenUSDC?.symbol == from) to = SUI_TYPE_ARG;
-        if (STRICT_TOKENS_MAP[network][SUI_TYPE_ARG]?.symbol === from)
-          to = TokenUSDC?.type;
+      if (!tokens?.strictTokensMap[from]) {
+        if (tokenUSDC?.symbol == from) to = SUI_TYPE_ARG;
+        if (tokens?.strictTokensMap[SUI_TYPE_ARG]?.symbol === from)
+          to = tokenUSDC?.type;
       }
     }
 
     return await Promise.all([
       from
         ? setDefaultToken(
-            STRICT_TOKENS_MAP[network][from]?.type ||
-              STRICT_TOKENS[network].find(
+            (tokens?.strictTokensMap[from]?.type as `0x${string}`) ||
+              tokens?.strictTokens.find(
                 (token) => token.symbol == from || token.type == from
               )?.type ||
               from,
@@ -133,8 +134,8 @@ const SwapInitManager: FC = () => {
       to
         ? from !== to
           ? setDefaultToken(
-              STRICT_TOKENS_MAP[network][to]?.type ||
-                STRICT_TOKENS[network].find(
+              (tokens?.strictTokensMap[to]?.type as `0x${string}`) ||
+                tokens?.strictTokens.find(
                   (token) => token.symbol == to || token.type == to
                 )?.type ||
                 to,
@@ -157,6 +158,8 @@ const SwapInitManager: FC = () => {
     (async () => {
       const searchParams = new URLSearchParams(asPath.split('?')[1]);
 
+      if (!tokens) return;
+
       const [fromType, toType] = await setTokenType(
         from as `0x${string}`,
         to as `0x${string}`
@@ -176,7 +179,7 @@ const SwapInitManager: FC = () => {
         )}`
       );
     })();
-  }, [network, to, from]);
+  }, [network, to, from, tokens]);
 
   return null;
 };
