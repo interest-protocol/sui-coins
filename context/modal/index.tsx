@@ -1,5 +1,5 @@
 import { Modal } from '@interest-protocol/ui-kit';
-import { ModalProps } from '@interest-protocol/ui-kit/dist/components/modal/modal.types';
+import { ModalProps } from '@interest-protocol/ui-kit/dist/lib/components/modal/modal.types';
 import {
   createContext,
   FC,
