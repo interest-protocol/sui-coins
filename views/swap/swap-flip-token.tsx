@@ -3,8 +3,7 @@ import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { STRICT_TOKENS_MAP } from '@/constants/coins';
-import { useNetwork } from '@/hooks/use-network';
+import { useStrictTokens } from '@/hooks/use-strict-tokens';
 import { SwapSVG } from '@/svg';
 import { updateURL, ZERO_BIG_NUMBER } from '@/utils';
 
@@ -13,7 +12,7 @@ import { SwapForm } from './swap.types';
 const SwapFlipToken: FC = () => {
   const { pathname } = useRouter();
   const form = useFormContext<SwapForm>();
-  const network = useNetwork();
+  const { data: tokens } = useStrictTokens();
 
   const { setValue, control } = form;
 
@@ -30,10 +29,8 @@ const SwapFlipToken: FC = () => {
 
     updateURL(
       `${pathname}?from=${
-        STRICT_TOKENS_MAP[network][tmpTo?.type]?.symbol || tmpTo?.type
-      }&to=${
-        STRICT_TOKENS_MAP[network][tmpFrom?.type]?.symbol || tmpFrom?.type
-      }`
+        tokens?.strictTokensMap[tmpTo?.type]?.symbol || tmpTo?.type
+      }&to=${tokens?.strictTokensMap[tmpFrom?.type]?.symbol || tmpFrom?.type}`
     );
   };
 
