@@ -16,7 +16,7 @@ const AirdropCustomAmountTextField: FC = () => {
     useFormContext<IAirdropForm>();
 
   const onChange = (v: ChangeEvent<HTMLInputElement>) => {
-    const value = parseInputEventToNumberString(v) || '';
+    const value = parseInputEventToNumberString(v);
     setValue('commonAmount', value || '');
 
     const amountForAll = getValues('amountForAll');
