@@ -1,6 +1,6 @@
 import { Box, TextField } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
-import { ChangeEvent, FC } from 'react';
+import { ChangeEvent, FC, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { TokenIcon } from '@/components';
@@ -12,7 +12,32 @@ import { IAirdropForm } from '../../../airdrop.types';
 
 const AirdropCustomAmountTextField: FC = () => {
   const { network } = useSuiClientContext();
-  const { register, setValue, getValues } = useFormContext<IAirdropForm>();
+  const { register, setValue, getValues, setFocus } =
+    useFormContext<IAirdropForm>();
+
+  const onChange = (v: ChangeEvent<HTMLInputElement>) => {
+    const value = parseInputEventToNumberString(v) || '';
+    setValue('commonAmount', value || '');
+
+    const amountForAll = getValues('amountForAll');
+    const airdropList = getValues('airdropList')?.map(({ address }) => ({
+      address,
+      amount: FixedPointMath.toBigNumber(
+        value || '0',
+        getValues('token.decimals')
+      )
+        .div(!amountForAll ? 1 : (getValues('airdropList')?.length ?? 1))
+        .decimalPlaces(0)
+        .toString(),
+    }));
+
+    setValue('airdropList', airdropList ?? null);
+    setFocus('commonAmount');
+  };
+
+  useEffect(() => {
+    setFocus('commonAmount');
+  }, [setFocus]);
 
   return (
     <Box>
@@ -20,28 +45,7 @@ const AirdropCustomAmountTextField: FC = () => {
         placeholder="0"
         nPlaceholder={{ opacity: 0.7 }}
         {...register('commonAmount', {
-          onChange: (v: ChangeEvent<HTMLInputElement>) => {
-            const value = parseInputEventToNumberString(v);
-            setValue('commonAmount', value || '');
-
-            const amountForAll = getValues('amountForAll');
-            const airdropList = getValues('airdropList')?.map(
-              ({ address }) => ({
-                address,
-                amount: FixedPointMath.toBigNumber(
-                  value || '0',
-                  getValues('token.decimals')
-                )
-                  .div(
-                    !amountForAll ? 1 : getValues('airdropList')?.length ?? 1
-                  )
-                  .decimalPlaces(0)
-                  .toString(),
-              })
-            );
-
-            setValue('airdropList', airdropList ?? null);
-          },
+          onChange,
         })}
         fieldProps={{
           mt: 's',
