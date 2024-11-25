@@ -32,7 +32,6 @@ const AirdropCustomAmountTextField: FC = () => {
     }));
 
     setValue('airdropList', airdropList ?? null);
-    setFocus('commonAmount');
   };
 
   useEffect(() => {
