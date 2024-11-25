@@ -31,6 +31,7 @@ const AirdropSuiPlayHoldersMethod: FC = () => {
         .toString(),
     }));
 
+    setValue('step', 2);
     setValue('airdropList', airdropList);
   };
 

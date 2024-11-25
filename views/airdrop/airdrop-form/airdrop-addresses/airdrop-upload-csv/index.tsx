@@ -28,6 +28,7 @@ const AirdropUploadFile: FC = () => {
     const airdrop = csvToAirdrop(await file.text(), decimals, toast.error);
 
     setValue('airdropList', airdrop);
+    setValue('step', 2);
   };
 
   const handleDropFile: DragEventHandler<HTMLDivElement> = async (e) => {
@@ -58,6 +59,7 @@ const AirdropUploadFile: FC = () => {
 
     const airdrop = csvToAirdrop(await file.text(), decimals, toast.error);
     setValue('airdropList', airdrop);
+    setValue('step', 2);
   };
 
   return (

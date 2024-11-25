@@ -10,9 +10,9 @@ import AirdropSelectToken from './airdrop-select-token';
 const AirdropCoin: FC<AirdropCoinProps> = ({ setIsProgressView }) => {
   const { control } = useFormContext<IAirdropForm>();
   const method = useWatch({ control, name: 'method' });
-  const airdropList = useWatch({ control, name: 'airdropList' });
+  const step = useWatch({ control, name: 'step' });
 
-  if (!method || !airdropList?.length) return null;
+  if (step !== 2) return null;
 
   return (
     <Box
