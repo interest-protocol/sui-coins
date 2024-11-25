@@ -930,16 +930,15 @@
   dependencies:
     "@openzeppelin/contracts-upgradeable" "^4.7.0"
 
-"@interest-protocol/ui-kit@0.3.1-beta":
-  version "0.3.1-beta"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/ui-kit/-/ui-kit-0.3.1-beta.tgz#67548607c16e32512ddd5e931a5b9bcc1de86088"
-  integrity sha512-3esQu0OQBc3/DJ/NBxziQuICuxBr4PAs8PTWyS/RRBNXOdtXM4zTGNXBFgCGt6gMQAQdm0jZkTY8ru7A0rNUUQ==
+"@interest-protocol/ui-kit@0.2.26-alpha":
+  version "0.2.26-alpha"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/ui-kit/-/ui-kit-0.2.26-alpha.tgz#eb50521280cb117ddff92be013dbbca1e9fa9356"
+  integrity sha512-7c/p17tXmC+hWM9ELD3ue+M+uqZzb1u9kpMyb3rC4r1uEO4O+vcW2E2xWktk84rus0RJODzX3JfuN8obL+FDdQ==
   dependencies:
     "@emotion/react" "^11.10.6"
     "@stylin.js/react" "^1.0.1"
     "@types/react-modal" "^3.16.0"
     framer-motion "^10.11.2"
-    playwright "^1.43.0"
     ramda "^0.29.0"
     react "^18.2.0"
     react-dom "^18.2.0"
@@ -948,10 +947,10 @@
     recharts "^2.10.4"
     uuid "^8.3.2"
 
-"@interest-protocol/ui-kit@^0.3.3-beta":
-  version "0.3.3-beta"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/ui-kit/-/ui-kit-0.3.3-beta.tgz#de7c013e53f05d4a7f048259bc777f6ebf041898"
-  integrity sha512-/40fmCHRB17Ne/D9hb/2pue/+b6EqS3PhKthVNz2VgY8WXFuQYHmWlMqFNm5Z6IhN+l0gfQ5lCSj+0WC3P6rwQ==
+"@interest-protocol/ui-kit@0.3.1-beta":
+  version "0.3.1-beta"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/ui-kit/-/ui-kit-0.3.1-beta.tgz#67548607c16e32512ddd5e931a5b9bcc1de86088"
+  integrity sha512-3esQu0OQBc3/DJ/NBxziQuICuxBr4PAs8PTWyS/RRBNXOdtXM4zTGNXBFgCGt6gMQAQdm0jZkTY8ru7A0rNUUQ==
   dependencies:
     "@emotion/react" "^11.10.6"
     "@stylin.js/react" "^1.0.1"
