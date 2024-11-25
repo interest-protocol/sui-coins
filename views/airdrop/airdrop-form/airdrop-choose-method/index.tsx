@@ -31,7 +31,9 @@ const AirdropChooseMethod: FC = () => {
           borderRadius="xs"
           nHover={{ bg: '#0053DB14', cursor: 'pointer' }}
           onClick={() => {
+            setValue('step', 1);
             setValue('method', key);
+
             resetField('asset');
             resetField('token');
             resetField('airdropList');
