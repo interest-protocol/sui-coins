@@ -5,7 +5,8 @@ export const validationSchema = yup.object({
   symbol: yup
     .string()
     .required('Symbol is a required field')
-    .matches(/^[aA-zZ\s]+$/, 'Only alphabets are allowed for this field'),
+    .matches(/^[aA-zZ\s]+$/, 'Only alphabets are allowed for this field')
+    .max(12, 'Symbol must be at most 12 characters long'),
   description: yup
     .string()
     .required('You must provide a description')

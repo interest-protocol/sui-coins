@@ -53,9 +53,15 @@ const CreateTokenForm: FC = () => {
             supportingText={errors.name?.message}
           />
           <TextField
+            maxWidth="12ch"
             label="Coin Symbol"
             placeholder="Eg. SUI"
-            {...register('symbol')}
+            {...register('symbol', {
+              onChange: (e: ChangeEvent<HTMLInputElement>) => {
+                const value = e.target.value.slice(0, 12);
+                setValue('symbol', value);
+              },
+            })}
             status={errors.symbol && 'error'}
             supportingText={errors.symbol?.message}
           />
