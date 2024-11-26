@@ -33,7 +33,7 @@ const AirdropAddressesListMethod: FC = () => {
             toast.error
           );
 
-          setValue('step', 2);
+          setValue('step', airdropValue.length ? 2 : 1);
           setValue('airdropList', airdropValue);
         }}
       />

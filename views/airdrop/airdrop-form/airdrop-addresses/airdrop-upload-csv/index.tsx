@@ -46,7 +46,7 @@ const AirdropUploadFile: FC = () => {
 
       const airdrop = csvToAirdrop(await file.text(), decimals, toast.error);
       setValue('airdropList', airdrop);
-
+      setValue('step', 2);
       return;
     }
 
