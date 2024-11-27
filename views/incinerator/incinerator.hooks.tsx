@@ -184,6 +184,8 @@ export const useOnBurn = () => {
         borderRadius="m"
         bg="lowestContainer"
         flexDirection="column"
+        maxHeight="80vh"
+        overflowY="auto"
       >
         <Typography
           size="large"
