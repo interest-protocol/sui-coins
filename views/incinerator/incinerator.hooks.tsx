@@ -220,7 +220,6 @@ export const useOnBurn = () => {
             my="l"
             gap="xs"
             display="flex"
-            overflowY="auto"
             maxHeight="20rem"
             flexDirection="column"
           >
