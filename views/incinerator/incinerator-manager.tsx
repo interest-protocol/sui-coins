@@ -41,6 +41,10 @@ const IncineratorManager: FC = () => {
   const updateAssets = () => {
     if (reset) setValue('reset', false);
 
+    setDelay(undefined);
+
+    if (loading) return;
+
     setValue('empty', !displayObjects[tab].length);
 
     setValue(
@@ -72,7 +76,6 @@ const IncineratorManager: FC = () => {
 
   useEffect(() => {
     if (!loading && !error) {
-      if (!reset && delay !== undefined) setDelay(undefined);
       updateAssets();
     }
   }, [objects, loading]);
