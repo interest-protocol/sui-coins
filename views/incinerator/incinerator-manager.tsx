@@ -13,7 +13,6 @@ const IncineratorManager: FC = () => {
   const currentAccount = useCurrentAccount();
   const { control, setValue } = useFormContext<IncineratorForm>();
   const {
-    delay,
     error,
     mutate,
     objects,
