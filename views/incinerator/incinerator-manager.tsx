@@ -13,7 +13,6 @@ const IncineratorManager: FC = () => {
   const currentAccount = useCurrentAccount();
   const { control, setValue } = useFormContext<IncineratorForm>();
   const {
-    delay,
     error,
     mutate,
     objects,
@@ -40,6 +39,10 @@ const IncineratorManager: FC = () => {
 
   const updateAssets = () => {
     if (reset) setValue('reset', false);
+
+    setDelay(undefined);
+
+    if (loading) return;
 
     setValue('empty', !displayObjects[tab].length);
 
@@ -72,7 +75,6 @@ const IncineratorManager: FC = () => {
 
   useEffect(() => {
     if (!loading && !error) {
-      if (!reset && delay !== undefined) setDelay(undefined);
       updateAssets();
     }
   }, [objects, loading]);
