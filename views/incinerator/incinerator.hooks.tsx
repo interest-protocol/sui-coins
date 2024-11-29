@@ -185,7 +185,7 @@ export const useOnBurn = () => {
         bg="lowestContainer"
         flexDirection="column"
         maxHeight="80vh"
-        overflowY="auto"
+        overflowY={['auto', 'auto', 'unset', 'unset', 'unset']}
       >
         <Typography
           size="large"
