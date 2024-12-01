@@ -48,6 +48,7 @@ const MergeField: FC<MergeFieldProps> = ({
         <Button
           p="2xs"
           width="100%"
+          overflow="hidden"
           variant="outline"
           borderRadius="xs"
           onClick={openModal}
@@ -60,14 +61,19 @@ const MergeField: FC<MergeFieldProps> = ({
             <ChevronDownSVG width="100%" maxWidth="1rem" maxHeight="1rem" />
           }
         >
-          <Typography
-            size="large"
-            width="100%"
-            variant="body"
-            color="onSurface"
-          >
-            {symbol}
-          </Typography>
+          <Box width="100%" display="flex" justifyContent="flex-start">
+            <Typography
+              size="large"
+              variant="body"
+              maxWidth="12ch"
+              color="onSurface"
+              overflow="hidden"
+              whiteSpace="nowrap"
+              textOverflow="ellipsis"
+            >
+              {symbol}
+            </Typography>
+          </Box>
         </Button>
         <Button
           isIcon
@@ -79,12 +85,25 @@ const MergeField: FC<MergeFieldProps> = ({
           <MinusSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
         </Button>
       </Box>
-      <Box display="flex" justifyContent="space-between" px="2xs">
+      <Box
+        display="flex"
+        overflow="hidden"
+        justifyContent="space-between"
+        px="2xs"
+      >
         <Box display="flex" color="outline" gap="0.5rem" alignItems="center">
           <Box width="1rem" height="1rem">
             <SubtractBoxSVG width="100%" maxWidth="100%" maxHeight="100%" />
           </Box>
-          <Typography size="small" variant="body" fontSize="s">
+          <Typography
+            size="small"
+            fontSize="s"
+            variant="body"
+            maxWidth="12ch"
+            overflow="hidden"
+            whiteSpace="nowrap"
+            textOverflow="ellipsis"
+          >
             {FixedPointMath.toNumber(balance, decimals)} {symbol}
           </Typography>
         </Box>

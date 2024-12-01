@@ -141,9 +141,11 @@ const SelectToken: FC<InputProps> = ({ label }) => {
       <Typography
         size="large"
         variant="label"
-        overflow="hidden"
+        maxWidth="12ch"
+        overflowX="hidden"
         whiteSpace="nowrap"
         fontFamily="Satoshi"
+        textOverflow="ellipsis"
         width={['0px', 'auto']}
         display={[currentType ? 'none' : 'block', 'block']}
       >
