@@ -218,7 +218,14 @@ export const useOnBurn = () => {
               </Typography>
             </Box>
           </Box>
-          <Box my="l" gap="xs" display="flex" flexDirection="column">
+          <Box
+            my="l"
+            gap="xs"
+            display="flex"
+            overflowY="auto"
+            maxHeight="20rem"
+            flexDirection="column"
+          >
             {objects.map((object) => {
               const objectType = object.type
                 ? object.type
