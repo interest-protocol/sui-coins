@@ -30,7 +30,7 @@ const CreateTokenForm: FC = () => {
   });
 
   const handleFixedSupplyChange = (newValue: boolean) => {
-    setValue('fixedSupply', newValue, { shouldValidate: true });
+    setValue('fixedSupply', newValue);
     setValue('totalSupply', getValues('totalSupply'), { shouldValidate: true });
   };
 
