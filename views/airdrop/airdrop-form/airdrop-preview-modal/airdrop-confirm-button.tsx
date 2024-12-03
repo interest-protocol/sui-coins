@@ -57,12 +57,12 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
     handleClose();
 
     try {
+      const { airdropList, token, method } = getValues();
+
       const feePerAddress =
         feeFree && query['discount'] === 'free'
           ? 0
-          : AIRDROP_SUI_FEE_PER_ADDRESS;
-
-      const { airdropList, token } = getValues();
+          : AIRDROP_SUI_FEE_PER_ADDRESS * (method === 'suiPlay' ? 0.5 : 1);
 
       if (!airdropList || !coinsMap || !coinsMap[token.type] || !currentAccount)
         return;
@@ -327,7 +327,10 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
   const airdropList = getValues('airdropList');
 
   const airdropFee = airdropList
-    ? BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS).times(airdropList.length)
+    ? BigNumber(
+        AIRDROP_SUI_FEE_PER_ADDRESS *
+          (getValues('method') === 'suiPlay' ? 0.5 : 1)
+      ).times(airdropList.length)
     : ZERO_BIG_NUMBER;
 
   const disabled = airdropFee.gt(
