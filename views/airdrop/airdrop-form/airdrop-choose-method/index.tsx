@@ -7,7 +7,7 @@ import { IAirdropForm } from '../../airdrop.types';
 import { METHODS_ICONS } from '../airdrop-form.data';
 
 const AirdropChooseMethod: FC = () => {
-  const { control, setValue, resetField } = useFormContext<IAirdropForm>();
+  const { control, setValue, reset } = useFormContext<IAirdropForm>();
   const method = useWatch({ control, name: 'method' });
 
   const methods = toPairs(METHODS_ICONS).filter(
@@ -31,13 +31,9 @@ const AirdropChooseMethod: FC = () => {
           borderRadius="xs"
           nHover={{ bg: '#0053DB14', cursor: 'pointer' }}
           onClick={() => {
+            reset();
             setValue('step', 1);
             setValue('method', key);
-
-            resetField('asset');
-            resetField('token');
-            resetField('airdropList');
-            resetField('commonAmount');
           }}
         >
           <Box
