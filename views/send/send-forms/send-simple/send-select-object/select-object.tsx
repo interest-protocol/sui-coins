@@ -103,8 +103,11 @@ const SelectObject: FC<SendFormSelectObjectProps> = ({ index }) => {
           size="large"
           variant="label"
           pr={['0', 'xs']}
+          maxWidth="12ch"
+          color="onSurface"
           overflow="hidden"
           whiteSpace="nowrap"
+          textOverflow="ellipsis"
           width={['0px', 'auto']}
           display={[type ? 'none' : 'block', 'block']}
         >

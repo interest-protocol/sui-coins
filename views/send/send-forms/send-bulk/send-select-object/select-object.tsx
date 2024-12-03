@@ -88,8 +88,10 @@ const SelectObject: FC = () => {
         <Typography
           size="large"
           variant="label"
+          maxWidth="12ch"
           overflow="hidden"
           whiteSpace="nowrap"
+          textOverflow="ellipsis"
           width={['0px', 'auto']}
           display={[type ? 'none' : 'block', 'block']}
         >
