@@ -32,7 +32,9 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
   const airdropFee =
     !airdropList || (feeFree && query['discount'] !== 'free')
       ? ZERO_BIG_NUMBER
-      : BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS).times(airdropList.length);
+      : BigNumber(
+          AIRDROP_SUI_FEE_PER_ADDRESS * (method === 'suiPlay' ? 0.5 : 1)
+        ).times(airdropList.length);
 
   return (
     <Box display="flex" flexDirection="column" mb="m">
