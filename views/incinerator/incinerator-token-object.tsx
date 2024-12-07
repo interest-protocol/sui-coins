@@ -14,6 +14,7 @@ import { IncineratorTokenObjectProps } from './incinerator.types';
 
 const IncineratorTokenObject: FC<IncineratorTokenObjectProps> = ({
   object,
+  shortTooltip,
 }) => {
   const { data } = useBlocklist();
   const { display, type, kind } = object;
@@ -42,7 +43,7 @@ const IncineratorTokenObject: FC<IncineratorTokenObjectProps> = ({
       <Box>
         <TooltipWrapper
           fontSize="2xs"
-          maxWidth="20rem"
+          maxWidth={shortTooltip ? '12rem' : '20rem'}
           bg="highContainer"
           wordWrap="break-word"
           tooltipPosition="top"

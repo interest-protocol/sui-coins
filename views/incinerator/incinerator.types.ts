@@ -37,6 +37,7 @@ export interface IncineratorTableRowProps
 
 export interface IncineratorTokenObjectProps {
   object: ObjectField;
+  shortTooltip?: boolean;
 }
 
 export interface IncineratorTableColumnProps

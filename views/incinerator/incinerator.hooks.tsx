@@ -185,7 +185,7 @@ export const useOnBurn = () => {
         bg="lowestContainer"
         flexDirection="column"
         maxHeight="80vh"
-        overflowY={['auto', 'auto', 'unset', 'unset', 'unset']}
+        overflowY="auto"
       >
         <Typography
           size="large"
@@ -218,14 +218,7 @@ export const useOnBurn = () => {
               </Typography>
             </Box>
           </Box>
-          <Box
-            my="l"
-            gap="xs"
-            display="flex"
-            overflowY="auto"
-            maxHeight="20rem"
-            flexDirection="column"
-          >
+          <Box my="l" gap="xs" display="flex" flexDirection="column">
             {objects.map((object) => {
               const objectType = object.type
                 ? object.type
@@ -245,7 +238,7 @@ export const useOnBurn = () => {
                   nHover={{ bg: 'container' }}
                   justifyContent="space-between"
                 >
-                  <IncineratorTokenObject object={object} />
+                  <IncineratorTokenObject object={object} shortTooltip />
                   <Box textAlign="right">
                     <Typography size="medium" variant="body">
                       {object.value}
