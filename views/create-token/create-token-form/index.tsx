@@ -19,7 +19,7 @@ const CreateTokenForm: FC = () => {
     getValues,
     setValue,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<ICreateTokenForm>({
     defaultValues: {
       fixedSupply: true,
@@ -144,6 +144,7 @@ const CreateTokenForm: FC = () => {
             />
           </Box>
           <CreateTokenButton
+            isFormValid={isValid}
             handleSubmit={handleSubmit}
             getValues={getValues}
           />
