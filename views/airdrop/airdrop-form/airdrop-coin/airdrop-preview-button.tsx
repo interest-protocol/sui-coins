@@ -33,15 +33,24 @@ const AirdropPreviewButton: FC<AirdropPreviewButtonProps> = ({
       ZERO_BIG_NUMBER
     );
 
-    if (totalAirdropAmount.isZero()) return true;
+    if (totalAirdropAmount.isZero()) {
+      setIsError(true);
+      return true;
+    }
 
     if (!coinsMap[tokenType]) return true;
 
     const tokenBalance = coinsMap[tokenType].balance;
-    if (tokenBalance.isZero() || tokenBalance.lt(totalAirdropAmount)) {
+
+    if (
+      coinsMap[tokenType].balance.isZero() ||
+      tokenBalance.lt(totalAirdropAmount)
+    ) {
       setIsError(true);
       return true;
     }
+
+    if (isError) setIsError(false);
 
     return false;
   }, [airdropList, coinsMap[tokenType]]);
