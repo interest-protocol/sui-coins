@@ -95,17 +95,23 @@ const MergeField: FC<MergeFieldProps> = ({
           <Box width="1rem" height="1rem">
             <SubtractBoxSVG width="100%" maxWidth="100%" maxHeight="100%" />
           </Box>
-          <Typography
-            size="small"
-            fontSize="s"
-            variant="body"
-            maxWidth="12ch"
-            overflow="hidden"
-            whiteSpace="nowrap"
-            textOverflow="ellipsis"
-          >
-            {FixedPointMath.toNumber(balance, decimals)} {symbol}
+          <Typography size="small" fontSize="s" variant="body">
+            {FixedPointMath.toNumber(balance, decimals)}
           </Typography>
+          {symbol && (
+            <Typography
+              ml="-0.2rem"
+              size="small"
+              fontSize="s"
+              variant="body"
+              maxWidth="12ch"
+              overflow="hidden"
+              whiteSpace="nowrap"
+              textOverflow="ellipsis"
+            >
+              {symbol}
+            </Typography>
+          )}
         </Box>
         <Typography variant="body" size="small" color="outline">
           {objectsCount} objects to merge
