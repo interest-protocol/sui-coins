@@ -14,6 +14,7 @@ import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { AirdropPreviewButtonProps, IAirdropForm } from '../../airdrop.types';
 import { DotErrorSVG } from '@/svg';
+import { FixedPointMath } from '@/lib';
 
 const AirdropPreviewButton: FC<AirdropPreviewButtonProps> = ({
   handleOpenSummaryModal,
@@ -22,6 +23,7 @@ const AirdropPreviewButton: FC<AirdropPreviewButtonProps> = ({
   const { colors } = useTheme() as Theme;
   const { control } = useFormContext<IAirdropForm>();
   const airdropList = useWatch({ control, name: 'airdropList' });
+  const tokenDecimals = useWatch({ control, name: 'token.decimals' });
   const tokenType = useWatch({ control, name: 'token.type' });
   const [isError, setIsError] = useState(false);
 
@@ -40,11 +42,16 @@ const AirdropPreviewButton: FC<AirdropPreviewButtonProps> = ({
 
     if (!coinsMap[tokenType]) return true;
 
-    const tokenBalance = coinsMap[tokenType].balance;
+    const tokenBalance = FixedPointMath.toNumber(
+      coinsMap[tokenType]?.balance ?? ZERO_BIG_NUMBER,
+      tokenDecimals
+    );
+
+    const formattedAirdropAmount = FixedPointMath.toNumber(totalAirdropAmount);
 
     if (
       coinsMap[tokenType].balance.isZero() ||
-      tokenBalance.lt(totalAirdropAmount)
+      tokenBalance < formattedAirdropAmount
     ) {
       setIsError(true);
       return true;
