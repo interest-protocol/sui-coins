@@ -37,7 +37,6 @@ import { Blacklist } from './blacklist';
 
 const CreateTokenButton: FC<CreateTokenButtonProps> = ({
   getValues,
-  isFormValid,
   handleSubmit,
 }) => {
   const suiClient = useSuiClient();
@@ -126,10 +125,11 @@ const CreateTokenButton: FC<CreateTokenButtonProps> = ({
           )} Sui to create a coin`
         : null;
 
-  const disabled = loading || !!error || !isFormValid;
+  const disabled = loading || !!error;
 
   return (
     <Box
+      px="m"
       gap="m"
       display="flex"
       alignItems="center"
@@ -167,6 +167,8 @@ const CreateTokenButton: FC<CreateTokenButtonProps> = ({
           borderRadius="xs"
           border="1px solid"
           borderColor="outline"
+          width="fill-available"
+          justifyContent="center"
         >
           <DotErrorSVG
             width="100%"

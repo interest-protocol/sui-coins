@@ -21,7 +21,6 @@ export interface FixedSupplyToggleProps {
 }
 
 export interface CreateTokenButtonProps {
-  isFormValid: boolean;
   getValues: UseFormGetValues<ICreateTokenForm>;
   handleSubmit: UseFormHandleSubmit<ICreateTokenForm, undefined>;
 }
