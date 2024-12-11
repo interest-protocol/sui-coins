@@ -3,16 +3,17 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { useBlocklist } from '@/hooks/use-blocklist';
+import { useVerifiedDeFiNfts } from '@/hooks/use-verified-defi-nfts';
 import { BurnSVG } from '@/svg';
 
 import { useOnBurn } from './incinerator.hooks';
 import { IncineratorForm } from './incinerator.types';
 
 const IncineratorBurnScams: FC = () => {
-  const { control, setValue } = useFormContext<IncineratorForm>();
-  const { data, isLoading, error } = useBlocklist();
-
   const onBurn = useOnBurn();
+  const { data, isLoading, error } = useBlocklist();
+  const { data: verifiedDeFiNfts } = useVerifiedDeFiNfts();
+  const { control, setValue } = useFormContext<IncineratorForm>();
 
   const objects = useWatch({ control, name: 'objects' });
 
@@ -29,6 +30,9 @@ const IncineratorBurnScams: FC = () => {
     const selectObjects = objects.reduce(
       (acc, curr, index) => {
         if (
+          verifiedDeFiNfts?.includes(
+            curr.kind === 'Coin' ? curr.display!.type : curr.type
+          ) ||
           !data.includes(curr.kind === 'Coin' ? curr.display!.type : curr.type)
         )
           return acc;

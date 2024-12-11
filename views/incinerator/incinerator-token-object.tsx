@@ -41,11 +41,12 @@ const IncineratorTokenObject: FC<IncineratorTokenObjectProps> = ({
       />
       <Box>
         <TooltipWrapper
-          bg="highContainer"
+          fontSize="2xs"
           maxWidth="20rem"
+          bg="highContainer"
           wordWrap="break-word"
-          tooltipContent={type}
           tooltipPosition="top"
+          tooltipContent={type}
         >
           <Box display="flex" gap="2xs">
             {data?.includes(kind === 'Coin' ? display!.type : type) && (
@@ -53,7 +54,15 @@ const IncineratorTokenObject: FC<IncineratorTokenObjectProps> = ({
                 <BurnSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
               </Box>
             )}
-            <Typography size="medium" variant="body" whiteSpace="nowrap">
+            <Typography
+              size="medium"
+              variant="body"
+              maxWidth="12ch"
+              color="onSurface"
+              overflow="hidden"
+              whiteSpace="nowrap"
+              textOverflow="ellipsis"
+            >
               {type === displayName ? formatAddress(type) : displayName}
             </Typography>
           </Box>
