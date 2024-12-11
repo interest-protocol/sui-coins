@@ -129,6 +129,7 @@ const CreateTokenButton: FC<CreateTokenButtonProps> = ({
 
   return (
     <Box
+      px="m"
       gap="m"
       display="flex"
       alignItems="center"
@@ -166,6 +167,8 @@ const CreateTokenButton: FC<CreateTokenButtonProps> = ({
           borderRadius="xs"
           border="1px solid"
           borderColor="outline"
+          width="fill-available"
+          justifyContent="center"
         >
           <DotErrorSVG
             width="100%"
