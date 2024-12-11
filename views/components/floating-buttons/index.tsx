@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 
 import { useBlocklist } from '@/hooks/use-blocklist';
 import { useNetwork } from '@/hooks/use-network';
+import { useVerifiedDeFiNfts } from '@/hooks/use-verified-defi-nfts';
 import { useWeb3 } from '@/hooks/use-web3';
 import { TimedSuiTransactionBlockResponse } from '@/interface';
 import { BurnSVG, MergeSVG } from '@/svg';
@@ -24,6 +25,7 @@ const FloatingButtons: FC = () => {
   const mergeCoins = useMergeCoins();
   const [loading, setLoading] = useState(false);
   const { data, isLoading, error } = useBlocklist();
+  const { data: verifiedDeFiNfts } = useVerifiedDeFiNfts();
   const { coins, coinsMap, mutate, objects: allObjects } = useWeb3();
 
   const coinsToMerge = coins.filter(({ objectsCount }) => objectsCount > 1);
@@ -47,6 +49,9 @@ const FloatingButtons: FC = () => {
   const scamObjects = objectDataToObjectField(allObjects, coinsMap).reduce(
     (acc, curr) => {
       if (
+        verifiedDeFiNfts?.includes(
+          curr.kind === 'Coin' ? curr.display!.type : curr.type
+        ) ||
         !data?.includes(curr.kind === 'Coin' ? curr.display!.type : curr.type)
       )
         return acc;
