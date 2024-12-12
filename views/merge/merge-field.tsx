@@ -55,7 +55,9 @@ const MergeField: FC<MergeFieldProps> = ({
           nHover={{ color: 'unset' }}
           borderColor="outlineVariant"
           PrefixIcon={
-            <TokenIcon withBg type={type} symbol={symbol} network={network} />
+            <Box display="flex" gap="s" alignItems="center">
+              <TokenIcon withBg type={type} symbol={symbol} network={network} />
+            </Box>
           }
           SuffixIcon={
             <ChevronDownSVG width="100%" maxWidth="1rem" maxHeight="1rem" />
