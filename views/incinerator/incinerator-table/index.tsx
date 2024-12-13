@@ -5,7 +5,7 @@ import IncineratorTableBody from './incinerator-table-body';
 import IncineratorTableHeader from './incinerator-table-header';
 
 const IncineratorTable: FC = () => (
-  <Box overflowX="auto">
+  <Box overflow={['auto', 'auto', 'unset', 'unset', 'unset']}>
     <Motion
       mt="2xs"
       as="table"
