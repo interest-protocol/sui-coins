@@ -31,7 +31,7 @@ const AirdropPreviewButton: FC<AirdropPreviewButtonProps> = ({
     if (!airdropList || !airdropList.length) return true;
 
     const totalAirdropAmount = airdropList.reduce(
-      (acc, { amount }) => acc.plus(BigNumber(amount ?? 0)),
+      (acc, { amount }) => acc.plus(BigNumber(amount)),
       ZERO_BIG_NUMBER
     );
 
