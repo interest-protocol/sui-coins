@@ -55,7 +55,9 @@ const MergeField: FC<MergeFieldProps> = ({
           nHover={{ color: 'unset' }}
           borderColor="outlineVariant"
           PrefixIcon={
-            <TokenIcon withBg type={type} symbol={symbol} network={network} />
+            <Box display="flex" gap="s" alignItems="center">
+              <TokenIcon withBg type={type} symbol={symbol} network={network} />
+            </Box>
           }
           SuffixIcon={
             <ChevronDownSVG width="100%" maxWidth="1rem" maxHeight="1rem" />
@@ -106,6 +108,20 @@ const MergeField: FC<MergeFieldProps> = ({
           >
             {FixedPointMath.toNumber(balance, decimals)} {symbol}
           </Typography>
+          {symbol && (
+            <Typography
+              ml="-0.2rem"
+              size="small"
+              fontSize="s"
+              variant="body"
+              maxWidth="12ch"
+              overflow="hidden"
+              whiteSpace="nowrap"
+              textOverflow="ellipsis"
+            >
+              {symbol}
+            </Typography>
+          )}
         </Box>
         <Typography variant="body" size="small" color="outline">
           {objectsCount} objects to merge

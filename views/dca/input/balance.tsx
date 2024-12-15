@@ -68,7 +68,13 @@ const Balance: FC<InputProps> = ({ label }) => {
   const handleHalf = () => label !== 'to' && adjustBalance(0.5, 2);
 
   return (
-    <Box gap="xs" display="flex" alignItems="center" justifyContent="center">
+    <Box
+      gap="xs"
+      display="flex"
+      flexWrap="wrap"
+      alignItems="center"
+      justifyContent="flex-end"
+    >
       <Box
         p="2xs"
         gap="0.5rem"
@@ -85,9 +91,34 @@ const Balance: FC<InputProps> = ({ label }) => {
             height="100%"
           />
         </Box>
-        <Typography size="small" variant="body" fontSize="s">
+        <Typography
+          fontSize="s"
+          size="small"
+          variant="body"
+          maxWidth="12ch"
+          color="onSurface"
+          overflow="hidden"
+          whiteSpace="nowrap"
+          textOverflow="ellipsis"
+        >
           {symbol ? `${balance} ${symbol}` : '0'}
         </Typography>
+        {symbol && (
+          <Typography
+            size="small"
+            fontSize="s"
+            ml="-0.2rem"
+            variant="body"
+            maxWidth="12ch"
+            overflowX="hidden"
+            overflowY="hidden"
+            whiteSpace="nowrap"
+            fontFamily="Satoshi"
+            textOverflow="ellipsis"
+          >
+            {symbol}
+          </Typography>
+        )}
       </Box>
       {label === 'from' && (
         <Box display="flex" gap="xs">

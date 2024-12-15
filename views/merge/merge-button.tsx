@@ -93,6 +93,8 @@ const MergeButton: FC = () => {
       display="grid"
       maxWidth="25rem"
       borderRadius="xs"
+      bottom="0"
+      position="sticky"
       gridTemplateColumns="1fr 2fr 3fr"
     >
       <Button

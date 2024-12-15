@@ -100,6 +100,22 @@ const Balance: FC<InputProps> = ({ label }) => {
       >
         {symbol ? `${balance} ${symbol}` : '0'}
       </Typography>
+      {symbol && (
+        <Typography
+          size="small"
+          fontSize="s"
+          ml="-0.2rem"
+          variant="body"
+          maxWidth="12ch"
+          overflowX="hidden"
+          overflowY="hidden"
+          whiteSpace="nowrap"
+          fontFamily="Satoshi"
+          textOverflow="ellipsis"
+        >
+          {symbol}
+        </Typography>
+      )}
     </Button>
   );
 };
