@@ -88,17 +88,8 @@ const Balance: FC<InputProps> = ({ label }) => {
           height="100%"
         />
       </Box>
-      <Typography
-        fontSize="s"
-        size="small"
-        variant="body"
-        maxWidth="12ch"
-        color="onSurface"
-        overflow="hidden"
-        whiteSpace="nowrap"
-        textOverflow="ellipsis"
-      >
-        {symbol ? `${balance} ${symbol}` : '0'}
+      <Typography fontSize="s" size="small" variant="body">
+        {symbol ? `${balance}` : '0'}
       </Typography>
       {symbol && (
         <Typography
