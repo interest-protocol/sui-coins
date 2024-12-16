@@ -20,6 +20,7 @@ const MenuProfile: FC<MenuProfileProps> = ({
   isOpen,
   handleOpenSwitch,
   handleCloseProfile,
+  handleOpenExplorer,
 }) => {
   const { network } = useSuiClientContext();
   const { breakpoints } = useTheme() as Theme;
@@ -35,6 +36,10 @@ const MenuProfile: FC<MenuProfileProps> = ({
       disconnect();
     },
     switchAccounts: handleOpenSwitch,
+    changeExplorer: () => {
+      handleOpenExplorer();
+      handleCloseProfile();
+    },
     viewInExplorer: () => {
       window.open(
         `${EXPLORER_URL[network as Network]}/account/${account}`,

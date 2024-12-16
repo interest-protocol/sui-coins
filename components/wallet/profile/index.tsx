@@ -8,15 +8,17 @@ import { useIsFirstRender } from '@/hooks/use-is-first-render';
 
 import MenuProfile from './menu-profile';
 import MenuSwitchAccount from './menu-switch-account';
-
+import MenuExplorer from './menu-explorer';
 const BOX_ID = 'wallet-box';
 
 const Profile: FC = () => {
   const [isOpenProfile, setIsOpenProfile] = useState(false);
   const [isOpenAccount, setIsOpenAccount] = useState(false);
+  const [isOpenExplorer, setIsOpenExplorer] = useState(false);
   const [menuIsDropdown, setMenuIsDropdown] = useState(
     isOpenProfile || isOpenAccount
   );
+  const [explorer, setExplorer] = useState<string | null>(null);
   const currentAccount = useCurrentAccount();
   const isFirstRender = useIsFirstRender();
   const account = currentAccount?.address || '';
@@ -33,6 +35,14 @@ const Profile: FC = () => {
       return;
 
     handleCloseProfile();
+  };
+
+  const handleExplorer = (item: string) => {
+    setExplorer(item);
+
+    if (explorer) {
+      localStorage.setItem('explorer', explorer);
+    }
   };
 
   const connectedBoxRef =
@@ -55,6 +65,16 @@ const Profile: FC = () => {
 
   const handleCloseAccount = () => {
     setIsOpenAccount(false);
+  };
+
+  const handleOpenExplorer = () => {
+    handleCloseProfile();
+    setIsOpenExplorer(true);
+  };
+
+  const handleCloseExplorer = () => {
+    setIsOpenExplorer(false);
+    setIsOpenProfile(true);
   };
 
   const handleCloseAll = () => {
@@ -110,12 +130,21 @@ const Profile: FC = () => {
             isOpen={isOpenProfile}
             handleOpenSwitch={handleOpenAccount}
             handleCloseProfile={handleCloseProfile}
+            handleOpenExplorer={handleOpenExplorer}
           />
           {isOpenAccount && (
             <MenuSwitchAccount
               isOpen={isOpenAccount}
               onBack={handleOpenProfile}
               handleCloseProfile={handleCloseProfile}
+            />
+          )}
+          {isOpenExplorer && (
+            <MenuExplorer
+              handleCloseProfile={handleCloseProfile}
+              handleExplorer={() => handleExplorer(explorer)}
+              onBack={handleCloseExplorer}
+              isOpen={isOpenExplorer}
             />
           )}
         </>

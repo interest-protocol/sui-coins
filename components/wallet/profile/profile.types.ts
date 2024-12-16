@@ -6,6 +6,7 @@ export interface MenuProfileProps {
   isOpen: boolean;
   handleOpenSwitch: () => void;
   handleCloseProfile: () => void;
+  handleOpenExplorer: () => void;
 }
 
 export interface ProfileMenuItemProps {
@@ -23,8 +24,21 @@ export interface MenuSwitchAccountProps {
   handleCloseProfile: () => void;
 }
 
+export interface MenuExplorerProps {
+  isOpen: boolean;
+  onBack: () => void;
+  explorer: string;
+  handleCloseProfile: () => void;
+  handleExplorer?: () => void;
+}
+
 export interface MenuSwitchAccountHeaderProps {
   onBack: () => void;
   handleCloseProfile: () => void;
   size: number;
+}
+
+export interface MenuOptionExplorer {
+  onBack: () => void;
+  onSelect: () => void;
 }
