@@ -144,6 +144,7 @@ const CreateTokenButton: FC<CreateTokenButtonProps> = ({
           borderRadius="xs"
           border="1px solid"
           bg="errorContainer"
+          width="fill-available"
           color="onErrorContainer"
           borderColor="onErrorContainer"
         >
