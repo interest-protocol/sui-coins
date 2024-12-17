@@ -88,7 +88,7 @@ const Balance: FC<InputProps> = ({ label }) => {
           height="100%"
         />
       </Box>
-      <Typography size="small" variant="body" fontSize="s">
+      <Typography fontSize="s" size="small" variant="body">
         {symbol ? `${balance}` : '0'}
       </Typography>
       {symbol && (
