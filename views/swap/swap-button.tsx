@@ -3,14 +3,14 @@ import {
   useCurrentAccount,
   useSignTransaction,
   useSuiClient,
-  useSuiClientContext,
 } from '@mysten/dapp-kit';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import invariant from 'tiny-invariant';
 
-import { EXPLORER_URL, Network } from '@/constants';
+import { ExplorerMode } from '@/constants';
 import { useDialog } from '@/hooks/use-dialog';
+import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import {
   signAndExecute,
   throwTXIfNotSuccessful,
@@ -27,7 +27,7 @@ import { useSwap } from './swap.hooks';
 const SwapButton: FC = () => {
   const swap = useSwap();
   const suiClient = useSuiClient();
-  const { network } = useSuiClientContext();
+  const getExplorerUrl = useGetExplorerUrl();
   const currentAccount = useCurrentAccount();
   const formSwap = useFormContext<SwapForm>();
   const { dialog, handleClose } = useDialog();
@@ -87,7 +87,7 @@ const SwapButton: FC = () => {
 
       formSwap.setValue(
         'explorerLink',
-        `${EXPLORER_URL[network as Network]}/tx/${tx2.digest}`
+        getExplorerUrl(tx2.digest, ExplorerMode.Transaction)
       );
     } finally {
       formSwap.setValue('swapping', false);
