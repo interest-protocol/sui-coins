@@ -21,10 +21,11 @@ import { v4 } from 'uuid';
 
 import { TokenIcon } from '@/components';
 import ProgressBar from '@/components/progress-bar';
-import { EXPLORER_URL } from '@/constants';
+import { ExplorerMode } from '@/constants';
 import { SENTINEL_API_URI } from '@/constants/dca';
 import useDcaSdk from '@/hooks/use-dca-sdk';
 import { useDialog } from '@/hooks/use-dialog';
+import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useModal } from '@/hooks/use-modal';
 import { useNetwork } from '@/hooks/use-network';
 import { FixedPointMath } from '@/lib';
@@ -56,15 +57,16 @@ const DCAOrderListItem: FC<DCAShortInfo> = ({
   inputBalance,
   remainingOrders,
 }) => {
-  const [executionTime, setExecutionTime] = useState(0);
   const dcaSdk = useDcaSdk();
   const network = useNetwork();
   const suiClient = useSuiClient();
   const { pathname } = useRouter();
   const currentAccount = useCurrentAccount();
+  const getExplorerUrl = useGetExplorerUrl();
   const signTransaction = useSignTransaction();
-  const { dialog, handleClose: handleCloseDialog } = useDialog();
   const { setModal, handleClose } = useModal();
+  const [executionTime, setExecutionTime] = useState(0);
+  const { dialog, handleClose: handleCloseDialog } = useDialog();
 
   const { selectedId, selectId, coinsMetadata, mutateDCAs } = useDCAState();
 
@@ -109,7 +111,11 @@ const DCAOrderListItem: FC<DCAShortInfo> = ({
         method: 'DELETE',
       });
 
-      showTXSuccessToast(txResult, network, 'DCA destroyed successfully');
+      showTXSuccessToast(
+        txResult,
+        getExplorerUrl,
+        'DCA destroyed successfully'
+      );
     } finally {
       mutateDCAs();
     }
@@ -306,7 +312,7 @@ const DCAOrderListItem: FC<DCAShortInfo> = ({
                 </Button>
                 <Link
                   target="_blank"
-                  href={`${EXPLORER_URL[network]}/object/${id}`}
+                  href={getExplorerUrl(id, ExplorerMode.Object)}
                 >
                   <Button
                     isIcon
@@ -512,7 +518,7 @@ const DCAOrderListItem: FC<DCAShortInfo> = ({
                   >
                     <TrashSVG width="100%" maxWidth="1rem" maxHeight="1rem" />
                   </Button>
-                  <Link href={`${EXPLORER_URL[network]}/object/${id}`}>
+                  <Link href={getExplorerUrl(id, ExplorerMode.Object)}>
                     <Button
                       isIcon
                       variant="text"

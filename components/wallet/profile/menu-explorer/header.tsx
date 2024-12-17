@@ -6,10 +6,9 @@ import { ArrowLeftSVG } from '@/svg';
 import MenuButton from '../../menu-button';
 import { MenuSwitchAccountHeaderProps } from '../profile.types';
 
-const MenueExplorerHeader: FC<MenuSwitchAccountHeaderProps> = ({
+const MenuExplorerHeader: FC<Omit<MenuSwitchAccountHeaderProps, 'size'>> = ({
   onBack,
   handleCloseProfile,
-  size,
 }) => (
   <>
     <Box
@@ -51,4 +50,4 @@ const MenueExplorerHeader: FC<MenuSwitchAccountHeaderProps> = ({
   </>
 );
 
-export default MenueExplorerHeader;
+export default MenuExplorerHeader;

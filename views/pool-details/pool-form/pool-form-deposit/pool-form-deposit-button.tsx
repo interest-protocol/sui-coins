@@ -3,13 +3,13 @@ import {
   useCurrentAccount,
   useSignTransaction,
   useSuiClient,
-  useSuiClientContext,
 } from '@mysten/dapp-kit';
 import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { EXPLORER_URL, Network } from '@/constants';
+import { ExplorerMode } from '@/constants';
 import { useDialog } from '@/hooks/use-dialog';
+import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useModal } from '@/hooks/use-modal';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath, Rounding } from '@/lib';
@@ -24,9 +24,9 @@ const PoolFormDepositButton: FC = () => {
   const deposit = useDeposit();
   const suiClient = useSuiClient();
   const { pool } = usePoolDetails();
-  const { network } = useSuiClientContext();
-  const currentAccount = useCurrentAccount();
   const { coinsMap, mutate } = useWeb3();
+  const currentAccount = useCurrentAccount();
+  const getExplorerUrl = useGetExplorerUrl();
   const { dialog, handleClose } = useDialog();
   const signTransaction = useSignTransaction();
   const { setModal, handleClose: closeModal } = useModal();
@@ -53,7 +53,7 @@ const PoolFormDepositButton: FC = () => {
 
       setValue(
         'explorerLink',
-        `${EXPLORER_URL[network as Network]}/tx/${tx.digest}`
+        getExplorerUrl(tx.digest, ExplorerMode.Transaction)
       );
       setValue('executionTime', tx.time);
     } finally {

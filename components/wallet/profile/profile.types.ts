@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import { SVGProps } from '@/components/svg/svg.types';
+import { Explorer } from '@/constants';
 
 export interface MenuProfileProps {
   isOpen: boolean;
@@ -27,9 +28,9 @@ export interface MenuSwitchAccountProps {
 export interface MenuExplorerProps {
   isOpen: boolean;
   onBack: () => void;
-  explorer: string;
+  explorer: Explorer;
   handleCloseProfile: () => void;
-  handleExplorer?: () => void;
+  handleExplorer: (explorer: Explorer) => void;
 }
 
 export interface MenuSwitchAccountHeaderProps {

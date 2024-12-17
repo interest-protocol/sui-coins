@@ -3,7 +3,6 @@ import {
   useCurrentAccount,
   useSignTransaction,
   useSuiClient,
-  useSuiClientContext,
 } from '@mysten/dapp-kit';
 import { SuiObjectChangeCreated } from '@mysten/sui/client';
 import { Transaction } from '@mysten/sui/transactions';
@@ -16,7 +15,9 @@ import toast from 'react-hot-toast';
 
 import { AIRDROP_SEND_CONTRACT, Network, TREASURY } from '@/constants';
 import { AIRDROP_SUI_FEE_PER_ADDRESS } from '@/constants/fees';
+import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useModal } from '@/hooks/use-modal';
+import { useNetwork } from '@/hooks/use-network';
 import { useWeb3 } from '@/hooks/use-web3';
 import {
   getCoins,
@@ -43,11 +44,12 @@ const feeFree = JSON.parse(process.env.NEXT_PUBLIC_FEE_FREE ?? 'false');
 const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
   setIsProgressView,
 }) => {
+  const network = useNetwork();
   const { query } = useRouter();
   const { coinsMap } = useWeb3();
   const suiClient = useSuiClient();
   const { handleClose } = useModal();
-  const { network } = useSuiClientContext();
+  const getExplorerUrl = useGetExplorerUrl();
   const currentAccount = useCurrentAccount();
   const signTransaction = useSignTransaction();
   const { getValues, setValue } = useFormContext<IAirdropForm>();
@@ -107,7 +109,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
         showTXSuccessToast(
           tx2,
-          network as Network,
+          getExplorerUrl,
           'Initial TX completed successfully'
         );
 
@@ -175,7 +177,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
           showTXSuccessToast(
             tx2,
-            network as Network,
+            getExplorerUrl,
             `Patch ${Number(index) + 1} was completed successfully`
           );
 
@@ -222,7 +224,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
       showTXSuccessToast(
         tx2,
-        network as Network,
+        getExplorerUrl,
         'Initial TX completed successfully'
       );
 
@@ -307,7 +309,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
         showTXSuccessToast(
           tx2,
-          network as Network,
+          getExplorerUrl,
           `Patch ${Number(index) + 1} was completed successfully`
         );
 

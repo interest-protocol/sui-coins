@@ -1,14 +1,11 @@
 import { Box, Motion, Theme, useTheme } from '@interest-protocol/ui-kit';
-import {
-  useCurrentAccount,
-  useDisconnectWallet,
-  useSuiClientContext,
-} from '@mysten/dapp-kit';
+import { useCurrentAccount, useDisconnectWallet } from '@mysten/dapp-kit';
 import { FC, useState } from 'react';
 import { v4 } from 'uuid';
 
-import { EXPLORER_URL, Network, wrapperVariants } from '@/constants';
+import { ExplorerMode, wrapperVariants } from '@/constants';
 import useEventListener from '@/hooks/use-event-listener';
+import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 
 import MenuButton from '../../menu-button';
 import { MenuProfileProps } from '../profile.types';
@@ -22,7 +19,7 @@ const MenuProfile: FC<MenuProfileProps> = ({
   handleCloseProfile,
   handleOpenExplorer,
 }) => {
-  const { network } = useSuiClientContext();
+  const getExplorerUrl = useGetExplorerUrl();
   const { breakpoints } = useTheme() as Theme;
   const [isDesktop, setIsDesktop] = useState(false);
   const currentAccount = useCurrentAccount();
@@ -42,7 +39,7 @@ const MenuProfile: FC<MenuProfileProps> = ({
     },
     viewInExplorer: () => {
       window.open(
-        `${EXPLORER_URL[network as Network]}/account/${account}`,
+        getExplorerUrl(account, ExplorerMode.Account),
         '_blank',
         'noopener, noreferrer'
       );

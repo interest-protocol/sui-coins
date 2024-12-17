@@ -1,24 +1,31 @@
 import { Box } from '@interest-protocol/ui-kit';
 import { useCurrentAccount } from '@mysten/dapp-kit';
 import { FC, useEffect, useState } from 'react';
+import { useLocalStorage } from 'usehooks-ts';
 
 import Avatar from '@/components/account-info/avatar';
+import { LOCAL_STORAGE_VERSION } from '@/constants';
+import { Explorer, EXPLORER_STORAGE_KEY } from '@/constants/explorer';
 import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
 import { useIsFirstRender } from '@/hooks/use-is-first-render';
 
+import MenuExplorer from './menu-explorer';
 import MenuProfile from './menu-profile';
 import MenuSwitchAccount from './menu-switch-account';
-import MenuExplorer from './menu-explorer';
+
 const BOX_ID = 'wallet-box';
 
 const Profile: FC = () => {
   const [isOpenProfile, setIsOpenProfile] = useState(false);
   const [isOpenAccount, setIsOpenAccount] = useState(false);
   const [isOpenExplorer, setIsOpenExplorer] = useState(false);
+  const [explorer, setExplorer] = useLocalStorage<Explorer>(
+    `${LOCAL_STORAGE_VERSION}-${EXPLORER_STORAGE_KEY}`,
+    Explorer.SuiVision
+  );
   const [menuIsDropdown, setMenuIsDropdown] = useState(
     isOpenProfile || isOpenAccount
   );
-  const [explorer, setExplorer] = useState<string | null>(null);
   const currentAccount = useCurrentAccount();
   const isFirstRender = useIsFirstRender();
   const account = currentAccount?.address || '';
@@ -35,14 +42,6 @@ const Profile: FC = () => {
       return;
 
     handleCloseProfile();
-  };
-
-  const handleExplorer = (item: string) => {
-    setExplorer(item);
-
-    if (explorer) {
-      localStorage.setItem('explorer', explorer);
-    }
   };
 
   const connectedBoxRef =
@@ -141,10 +140,11 @@ const Profile: FC = () => {
           )}
           {isOpenExplorer && (
             <MenuExplorer
-              handleCloseProfile={handleCloseProfile}
-              handleExplorer={() => handleExplorer(explorer)}
-              onBack={handleCloseExplorer}
+              explorer={explorer}
               isOpen={isOpenExplorer}
+              onBack={handleCloseExplorer}
+              handleExplorer={setExplorer}
+              handleCloseProfile={handleCloseProfile}
             />
           )}
         </>
