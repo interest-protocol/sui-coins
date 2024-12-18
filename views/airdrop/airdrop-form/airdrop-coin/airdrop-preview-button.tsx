@@ -49,8 +49,6 @@ const AirdropPreviewButton: FC<AirdropPreviewButtonProps> = ({
       return true;
     }
 
-    console.log('Token _> ', token);
-
     const totalAirdropAmount = airdropList.reduce(
       (acc, { amount }) => acc.plus(BigNumber(amount)),
       ZERO_BIG_NUMBER
