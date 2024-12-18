@@ -22,9 +22,9 @@ const CoinsManager: FC = () => {
   const { id, delay, coinsMap, updateCoins, updateLoading, updateError } =
     useCoins();
 
-  useEffect(() => {
+  /*useEffect(() => {
     updateCoins({} as CoinsMap);
-  }, [currentAccount]);
+  }, [currentAccount]);*/
 
   useSWR(
     makeSWRKey([id, network, currentAccount?.address], CoinsManager.name),
