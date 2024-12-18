@@ -81,3 +81,8 @@ export interface SendAirdropArgs {
 export interface AirdropPreviewButtonProps {
   handleOpenSummaryModal: () => void;
 }
+
+export interface ErrorProps {
+  state: boolean;
+  message?: string;
+}
