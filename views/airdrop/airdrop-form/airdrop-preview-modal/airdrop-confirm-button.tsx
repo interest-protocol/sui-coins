@@ -103,6 +103,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
             showObjectChanges: true,
           },
         });
+
         const initTransferTxMS = Date.now();
 
         throwTXIfNotSuccessful(tx2, () => setValue('error', true));
