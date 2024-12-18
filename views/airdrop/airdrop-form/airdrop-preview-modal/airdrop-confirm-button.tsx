@@ -127,6 +127,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
         const coinsObject = await suiClient.multiGetObjects({
           ids: coins.map(({ objectId }) => objectId),
+          options: { showContent: true },
         });
 
         const { gasCoin, spendCoin, feeCoin } = coinsObject.reduce(
@@ -271,6 +272,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
       const coinsObject = await suiClient.multiGetObjects({
         ids: coins.map(({ objectId }) => objectId),
+        options: { showContent: true },
       });
 
       const { gasCoin, feeCoin } = coinsObject.reduce((acc, curr, index) => {
