@@ -130,8 +130,6 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           options: { showContent: true },
         });
 
-        console.log({ coinsObject });
-
         const { gasCoin, spendCoin, feeCoin } = coinsObject.reduce(
           (acc, curr, index) => {
             const balance = path(
