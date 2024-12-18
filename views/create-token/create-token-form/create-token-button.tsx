@@ -9,7 +9,6 @@ import {
   useCurrentAccount,
   useSignTransaction,
   useSuiClient,
-  useSuiClientContext,
 } from '@mysten/dapp-kit';
 import { Transaction } from '@mysten/sui/transactions';
 import { normalizeSuiAddress, SUI_TYPE_ARG } from '@mysten/sui/utils';
@@ -18,8 +17,9 @@ import { FC } from 'react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
-import { Network, TREASURY } from '@/constants';
+import { TREASURY } from '@/constants';
 import { CREATE_TOKEN_SUI_FEE } from '@/constants/fees';
+import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useWeb3 } from '@/hooks/use-web3';
 import { FixedPointMath } from '@/lib';
 import { getBytecode } from '@/lib/move-template/coin';
@@ -42,8 +42,8 @@ const CreateTokenButton: FC<CreateTokenButtonProps> = ({
   const suiClient = useSuiClient();
   const { colors } = useTheme() as Theme;
   const { coinsMap, mutate } = useWeb3();
-  const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
+  const getExplorerUrl = useGetExplorerUrl();
   const signTransaction = useSignTransaction();
   const [loading, setLoading] = useState(false);
 
@@ -94,7 +94,7 @@ const CreateTokenButton: FC<CreateTokenButtonProps> = ({
 
       throwTXIfNotSuccessful(tx2);
 
-      showTXSuccessToast(tx2, network as Network, 'Coin Generated!');
+      showTXSuccessToast(tx2, getExplorerUrl, 'Coin Generated!');
 
       await waitForTx({ suiClient, digest: tx2.digest });
 
@@ -129,6 +129,7 @@ const CreateTokenButton: FC<CreateTokenButtonProps> = ({
 
   return (
     <Box
+      px="m"
       gap="m"
       display="flex"
       alignItems="center"
@@ -143,6 +144,7 @@ const CreateTokenButton: FC<CreateTokenButtonProps> = ({
           borderRadius="xs"
           border="1px solid"
           bg="errorContainer"
+          width="fill-available"
           color="onErrorContainer"
           borderColor="onErrorContainer"
         >
@@ -166,6 +168,8 @@ const CreateTokenButton: FC<CreateTokenButtonProps> = ({
           borderRadius="xs"
           border="1px solid"
           borderColor="outline"
+          width="fill-available"
+          justifyContent="center"
         >
           <DotErrorSVG
             width="100%"

@@ -1,7 +1,8 @@
 import {
   ActivitySVG,
   AssetsSVG,
-  LinkSVG,
+  ExternalSVG,
+  GlobeSVG,
   LogoutSVG,
   SwitchSVG,
 } from '@/components/svg';
@@ -26,7 +27,14 @@ export const MENU_PROFILE_DATA: ReadonlyArray<ProfileMenuItemProps> = [
   {
     name: 'viewInExplorer',
     description: 'View in explorer',
-    Icon: LinkSVG,
+    Icon: ExternalSVG,
+    hasBorder: false,
+    disabled: false,
+  },
+  {
+    name: 'changeExplorer',
+    description: 'Change explorer',
+    Icon: GlobeSVG,
     hasBorder: false,
     disabled: false,
   },

@@ -1,5 +1,4 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
-import { useSuiClientContext } from '@mysten/dapp-kit';
 import { isValidSuiAddress } from '@mysten/sui/utils';
 import { toPairs } from 'ramda';
 import { FC, useEffect, useState } from 'react';
@@ -8,8 +7,8 @@ import toast from 'react-hot-toast';
 import invariant from 'tiny-invariant';
 import { useDebounce } from 'use-debounce';
 
-import { Network } from '@/constants';
 import { useSuiNs } from '@/context/suins';
+import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useWeb3 } from '@/hooks/use-web3';
 import { TimedSuiTransactionBlockResponse } from '@/interface';
 import { DotErrorSVG, PlusSVG } from '@/svg';
@@ -27,7 +26,7 @@ const SendTransferButton: FC<FormSendButtonProps> = ({ openModal }) => {
   const { coinsMap } = useWeb3();
   const { suinsClient } = useSuiNs();
   const sendAssets = useSendAssets();
-  const { network } = useSuiClientContext();
+  const getExplorerUrl = useGetExplorerUrl();
   const { control, setError } = useFormContext<ISendTransferForm>();
   const [amountList, setAmountList] = useState<AmountListProps[] | null>();
 
@@ -35,7 +34,7 @@ const SendTransferButton: FC<FormSendButtonProps> = ({ openModal }) => {
   const [address] = useDebounce(useWatch({ control, name: 'address' }), 800);
 
   const onSuccess = (tx: TimedSuiTransactionBlockResponse) =>
-    showTXSuccessToast(tx, network as Network, 'Assets sent successfully');
+    showTXSuccessToast(tx, getExplorerUrl, 'Assets sent successfully');
 
   useEffect(() => {
     setAmountList(

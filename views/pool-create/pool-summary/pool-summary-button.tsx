@@ -3,16 +3,16 @@ import {
   useCurrentAccount,
   useSignTransaction,
   useSuiClient,
-  useSuiClientContext,
 } from '@mysten/dapp-kit';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import invariant from 'tiny-invariant';
 
-import { EXPLORER_URL, Network, Routes, RoutesEnum } from '@/constants';
+import { ExplorerMode, Routes, RoutesEnum } from '@/constants';
 import { useClammSdk } from '@/hooks/use-clamm-sdk';
 import { useDialog } from '@/hooks/use-dialog';
+import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useWeb3 } from '@/hooks/use-web3';
 import { signAndExecute, throwTXIfNotSuccessful, waitForTx } from '@/utils';
 
@@ -31,8 +31,8 @@ const PoolSummaryButton: FC = () => {
   const client = useSuiClient();
   const signTxb = useSignTransaction();
   const createLpCoin = useCreateLpCoin();
-  const { network } = useSuiClientContext();
   const currentAccount = useCurrentAccount();
+  const getExplorerUrl = useGetExplorerUrl();
   const { dialog, handleClose } = useDialog();
   const createStablePool = useCreateStablePool();
   const createVolatilePool = useCreateVolatilePool();
@@ -86,7 +86,7 @@ const PoolSummaryButton: FC = () => {
 
     setValue(
       'explorerLink',
-      `${EXPLORER_URL[network as Network]}/tx/${tx2.digest}`
+      getExplorerUrl(tx2.digest, ExplorerMode.Transaction)
     );
 
     mutate();

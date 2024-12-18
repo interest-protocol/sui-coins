@@ -29,6 +29,11 @@ const CreateTokenForm: FC = () => {
     reValidateMode: 'onBlur',
   });
 
+  const handleFixedSupplyChange = (newValue: boolean) => {
+    setValue('fixedSupply', newValue);
+    setValue('totalSupply', getValues('totalSupply'), { shouldValidate: true });
+  };
+
   return (
     <Box
       as="form"
@@ -131,7 +136,12 @@ const CreateTokenForm: FC = () => {
             borderRadius="xs"
             flexDirection="column"
           >
-            <FixedSupplyToggle control={control} setValue={setValue} />
+            <FixedSupplyToggle
+              control={control}
+              setValue={(name, value) =>
+                handleFixedSupplyChange(value as boolean)
+              }
+            />
           </Box>
           <CreateTokenButton
             handleSubmit={handleSubmit}

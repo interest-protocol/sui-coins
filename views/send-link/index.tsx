@@ -4,16 +4,12 @@ import {
   ProgressIndicator,
   Typography,
 } from '@interest-protocol/ui-kit';
-import {
-  useCurrentAccount,
-  useSuiClient,
-  useSuiClientContext,
-} from '@mysten/dapp-kit';
+import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
 
-import { Network } from '@/constants';
+import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useWeb3 } from '@/hooks/use-web3';
 import { TimedSuiTransactionBlockResponse } from '@/interface';
 import { CheckmarkSVG, ErrorSVG } from '@/svg';
@@ -26,7 +22,7 @@ const SendLink: FC<SendLinkProps> = ({ data, error, isLoading, mutate }) => {
   const { coinsMap } = useWeb3();
   const suiClient = useSuiClient();
   const reclaim = useReclaimLink();
-  const { network } = useSuiClientContext();
+  const getExplorerUrl = useGetExplorerUrl();
   const currentAccount = useCurrentAccount();
   const [isReclaiming, setReclaiming] = useState(false);
 
@@ -39,10 +35,9 @@ const SendLink: FC<SendLinkProps> = ({ data, error, isLoading, mutate }) => {
     toast('Copied to clipboard');
   };
 
-  const onSuccess = (tx: TimedSuiTransactionBlockResponse) => {
-    showTXSuccessToast(tx, network as Network, 'Link reclaimed successfully');
-    mutate();
-  };
+  const onSuccess = (tx: TimedSuiTransactionBlockResponse) =>
+    showTXSuccessToast(tx, getExplorerUrl, 'Link reclaimed successfully');
+  mutate();
 
   const onReclaim = async () => {
     const gasCoin = coinsMap[SUI_TYPE_ARG];
