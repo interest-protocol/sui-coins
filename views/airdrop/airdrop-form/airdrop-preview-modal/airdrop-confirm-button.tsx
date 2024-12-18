@@ -125,8 +125,6 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
             []
           );
 
-        console.log({ coins });
-
         const coinsObject = await suiClient.multiGetObjects({
           ids: coins.map(({ objectId }) => objectId),
           options: { showContent: true },
@@ -136,14 +134,10 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
         const { gasCoin, spendCoin, feeCoin } = coinsObject.reduce(
           (acc, curr, index) => {
-            console.log({ curr });
-
             const balance = path(
               ['data', 'content', 'fields', 'balance'],
               curr
             );
-
-            console.log({ index, balance });
 
             return {
               ...acc,
@@ -151,13 +145,11 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
                 ? 'spendCoin'
                 : balance === feeAmount.toString()
                   ? 'feeCoin'
-                  : 'gasCoins']: coins[index],
+                  : 'gasCoin']: coins[index],
             };
           },
           {} as ResultCoins
         );
-
-        console.log({ gasCoin, spendCoin, feeCoin });
 
         await pauseUtilNextTx(initTransferTxMS);
 
@@ -277,8 +269,6 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           []
         );
 
-      console.log({ coins });
-
       const coinsObject = await suiClient.multiGetObjects({
         ids: coins.map(({ objectId }) => objectId),
         options: { showContent: true },
@@ -289,7 +279,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
         return {
           ...acc,
-          [balance === feeAmount.toString() ? 'feeCoin' : 'gasCoins']:
+          [balance === feeAmount.toString() ? 'feeCoin' : 'gasCoin']:
             coins[index],
         };
       }, {} as ResultCoins);
