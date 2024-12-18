@@ -267,6 +267,8 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           []
         );
 
+      console.log({ coins });
+
       const coinsObject = await suiClient.multiGetObjects({
         ids: coins.map(({ objectId }) => objectId),
         options: { showContent: true },
@@ -291,7 +293,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
         const fee = tx.splitCoins(tx.objectRef(feeCoin), [
           tx.pure.u64(
-            BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS)
+            BigNumber(feePerAddress)
               .times(batch.length)
               .decimalPlaces(0)
               .toString()
@@ -345,6 +347,18 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           gasCoin.objectId
         );
 
+        const feeInfoRaw = await suiClient.getObject({
+          id: gasCoin.objectId,
+          options: { showContent: true },
+        });
+
+        const feeBalance = path(
+          ['data', 'content', 'fields', 'balance'],
+          feeInfoRaw
+        );
+
+        console.log('>> fee after load :: ', feeBalance);
+
         throwTXIfNotSuccessful(tx2, () =>
           setValue('failed', [...getValues('failed'), Number(index)])
         );
@@ -370,12 +384,13 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
   const airdropList = getValues('airdropList');
 
-  const airdropFee = airdropList
-    ? BigNumber(
-        AIRDROP_SUI_FEE_PER_ADDRESS *
-          (getValues('method') === 'suiPlay' ? 0.5 : 1)
-      ).times(airdropList.length)
-    : ZERO_BIG_NUMBER;
+  const airdropFee =
+    !airdropList || (feeFree && query['discount'] === 'free')
+      ? ZERO_BIG_NUMBER
+      : BigNumber(
+          AIRDROP_SUI_FEE_PER_ADDRESS *
+            (getValues('method') === 'suiPlay' ? 0.5 : 1)
+        ).times(airdropList.length);
 
   const disabled = airdropFee.gt(
     coinsMap[SUI_TYPE_ARG]?.balance ?? ZERO_BIG_NUMBER
