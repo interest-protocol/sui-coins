@@ -11,7 +11,6 @@ const AirdropChooseCoinBalance: FC = () => {
   const { control } = useFormContext();
   const token = useWatch({ control, name: 'token' });
 
-  console.log(coinsMap, '>>>Seee', loading);
   if (!token) return null;
 
   return (
