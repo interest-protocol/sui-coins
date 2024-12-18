@@ -16,7 +16,6 @@ const MergeButton: FC = () => {
   const [loading, setLoading] = useState(false);
   const { control, reset, setValue, getValues } = useFormContext<IMergeForm>();
   const { dialog, handleClose } = useDialog();
-
   const ignored = useWatch({ control, name: 'ignored' });
 
   const allCoinsToMerge = coins.filter(({ objectsCount }) => objectsCount > 1);
@@ -38,6 +37,9 @@ const MergeButton: FC = () => {
   const onMergeCoins = async () => {
     try {
       await mergeCoins(coinsToMerge, onSetExecutionTime);
+    } catch (e) {
+      console.warn({ e });
+      throw e;
     } finally {
       mutate();
     }
@@ -54,13 +56,18 @@ const MergeButton: FC = () => {
       error: () => ({
         title: 'Merge Coins Failure',
         message: 'Failed to merge coins.',
-        primaryButton: { label: 'Try again', onClick: handleClose },
+        primaryButton: {
+          label: 'Try again',
+          onClick: () => handleClose(),
+        },
       }),
       success: () => ({
         title: 'Merge Coin Successful',
         message: (
           <SuccessModal
-            transactionTime={`${+(getValues('executionTime') / 1000).toFixed(2)}`}
+            transactionTime={`${+(getValues('executionTime') / 1000).toFixed(
+              2
+            )}`}
           >
             <Box
               py="m"
