@@ -9,6 +9,7 @@ import { Transaction } from '@mysten/sui/transactions';
 import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
 import { useRouter } from 'next/router';
+import { path } from 'ramda';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -37,7 +38,11 @@ import {
 } from '@/views/airdrop/airdrop-form/txb-utils';
 
 import { BATCH_SIZE } from '../../airdrop.constants';
-import { AirdropConfirmButtonProps, IAirdropForm } from '../../airdrop.types';
+import {
+  AirdropConfirmButtonProps,
+  IAirdropForm,
+  ResultCoins,
+} from '../../airdrop.types';
 
 const feeFree = JSON.parse(process.env.NEXT_PUBLIC_FEE_FREE ?? 'false');
 
@@ -114,11 +119,37 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           'Initial TX completed successfully'
         );
 
-        const [gasCoin, spendCoin, feeCoin] =
+        const coins =
           (tx2.objectChanges as Array<SuiObjectChangeCreated>)!.reduce(
             suiObjectReducer(currentAccount.address),
             []
           );
+
+        const coinsObject = await suiClient.multiGetObjects({
+          ids: coins.map(({ objectId }) => objectId),
+        });
+
+        const { gasCoin, spendCoin, feeCoin } = coinsObject.reduce(
+          (acc, curr, index) => {
+            const balance = path(['data, content', 'fields', 'balance'], curr);
+            if (balance === totalAmount.toString())
+              return {
+                ...acc,
+                spendCoin: coins[index],
+              };
+            if (balance === feeAmount.toString())
+              return {
+                ...acc,
+                feeCoin: coins[index],
+              };
+
+            return {
+              ...acc,
+              gasCoins: coins[index],
+            };
+          },
+          {} as ResultCoins
+        );
 
         await pauseUtilNextTx(initTransferTxMS);
 
@@ -232,11 +263,29 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           firstCoin.coinObjectId
         );
 
-      const [gasCoin, feeCoin] =
+      const coins =
         (tx2.objectChanges as Array<SuiObjectChangeCreated>)!.reduce(
           suiObjectReducer(currentAccount.address),
           []
         );
+
+      const coinsObject = await suiClient.multiGetObjects({
+        ids: coins.map(({ objectId }) => objectId),
+      });
+
+      const { gasCoin, feeCoin } = coinsObject.reduce((acc, curr, index) => {
+        const balance = path(['data, content', 'fields', 'balance'], curr);
+        if (balance === feeAmount.toString())
+          return {
+            ...acc,
+            feeCoin: coins[index],
+          };
+
+        return {
+          ...acc,
+          gasCoins: coins[index],
+        };
+      }, {} as ResultCoins);
 
       await pauseUtilNextTx(initMergeAndSplitTxMS);
 

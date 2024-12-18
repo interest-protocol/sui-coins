@@ -12,6 +12,7 @@ const AirdropPreviewButton: FC<AirdropPreviewButtonProps> = ({
   handleOpenSummaryModal,
 }) => {
   const { coinsMap } = useWeb3();
+
   const { control } = useFormContext<IAirdropForm>();
   const airdropList = useWatch({ control, name: 'airdropList' });
   const tokenType = useWatch({ control, name: 'token.type' });
