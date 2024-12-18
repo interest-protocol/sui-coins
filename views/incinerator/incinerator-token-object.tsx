@@ -19,7 +19,7 @@ const IncineratorTokenObject: FC<IncineratorTokenObjectProps> = ({
   const { display, type, kind } = object;
   const { network } = useSuiClientContext();
   const displayName = display
-    ? (display as Record<string, string>).name ?? display.symbol ?? type
+    ? ((display as Record<string, string>).name ?? display.symbol ?? type)
     : type;
 
   const { symbol, type: coinType } = (display as CoinObject) ?? {
@@ -54,7 +54,15 @@ const IncineratorTokenObject: FC<IncineratorTokenObjectProps> = ({
                 <BurnSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
               </Box>
             )}
-            <Typography size="medium" variant="body" whiteSpace="nowrap">
+            <Typography
+              size="medium"
+              variant="body"
+              maxWidth="12ch"
+              color="onSurface"
+              overflow="hidden"
+              whiteSpace="nowrap"
+              textOverflow="ellipsis"
+            >
               {type === displayName ? formatAddress(type) : displayName}
             </Typography>
           </Box>

@@ -22,10 +22,11 @@ import {
   CoinObjectData,
   ObjectData,
 } from '@/components/web3-manager/all-objects-manager/all-objects.types';
-import { Network } from '@/constants';
+import { useBlocklist } from '@/hooks/use-blocklist';
+import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useModal } from '@/hooks/use-modal';
-import { useNetwork } from '@/hooks/use-network';
 import { useStrictTokens } from '@/hooks/use-strict-tokens';
+import { useVerifiedDeFiNfts } from '@/hooks/use-verified-defi-nfts';
 import { useWeb3 } from '@/hooks/use-web3';
 import { TimedSuiTransactionBlockResponse } from '@/interface';
 import { FixedPointMath } from '@/lib';
@@ -43,9 +44,11 @@ import { IncineratorForm, ObjectField } from './incinerator.types';
 import IncineratorTokenObject from './incinerator-token-object';
 
 export const useBurn = () => {
+  const { data } = useBlocklist();
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
   const signTransaction = useSignTransaction();
+  const { data: verifiedDeFiNfts } = useVerifiedDeFiNfts();
 
   return async (
     objects: ReadonlyArray<ObjectField>,
@@ -53,61 +56,138 @@ export const useBurn = () => {
   ) => {
     if (!suiClient) throw new Error('Provider not found');
     if (!currentAccount) throw new Error('There is not an account');
+    if (!data || !verifiedDeFiNfts) throw new Error('No Blocklist');
 
     const tx = new Transaction();
 
     const objectsToTransfer = await Promise.all(
-      objects.map(async (object) => {
-        if (!isCoinObject(object as ObjectData)) return object.objectId;
+      objects
+        .filter(
+          (obj) =>
+            verifiedDeFiNfts?.includes(
+              obj.kind === 'Coin' ? obj.display!.type : obj.type
+            ) ||
+            !data.includes(obj.kind === 'Coin' ? obj.display!.type : obj.type)
+        )
+        .map(async (object) => {
+          if (!isCoinObject(object as ObjectData)) return object.objectId;
 
-        const objectBalance = BigNumber(object.display?.balance || '0');
+          const objectBalance = BigNumber(object.display?.balance || '0');
 
-        if (objectBalance.isZero()) {
-          tx.moveCall({
-            target: '0x2::coin::destroy_zero',
-            arguments: [tx.object(object.objectId)],
-            typeArguments: [object.display?.type || ''],
-          });
-          return null;
-        }
+          if (objectBalance.isZero()) {
+            tx.moveCall({
+              target: '0x2::coin::destroy_zero',
+              arguments: [tx.object(object.objectId)],
+              typeArguments: [object.display?.type || ''],
+            });
+            return null;
+          }
 
-        const amount = FixedPointMath.toBigNumber(
-          object.value,
-          Number(object.display!.decimals!)
-        );
-
-        if (amount.isZero() && !objectBalance.isZero()) return null;
-
-        const [firstCoin, ...otherCoins] = await getCoins({
-          suiClient,
-          account: currentAccount.address,
-          coinType: (object as CoinObjectData).display.type,
-        });
-
-        const firstCoinObject = tx.object(firstCoin.coinObjectId);
-
-        if (otherCoins.length)
-          tx.mergeCoins(
-            firstCoinObject,
-            otherCoins.map((coin) => coin.coinObjectId)
+          const amount = FixedPointMath.toBigNumber(
+            object.value,
+            Number(object.display!.decimals!)
           );
 
-        if (amount.gte(object.display!.balance)) return firstCoinObject;
+          if (amount.isZero() && !objectBalance.isZero()) return null;
 
-        const [splittedCoin] = tx.splitCoins(firstCoinObject, [
-          tx.pure.u64(amount.decimalPlaces(0).toString()),
-        ]);
+          const [firstCoin, ...otherCoins] = await getCoins({
+            suiClient,
+            account: currentAccount.address,
+            coinType: (object as CoinObjectData).display.type,
+          });
 
-        return splittedCoin;
-      })
+          const firstCoinObject = tx.object(firstCoin.coinObjectId);
+
+          if (otherCoins.length)
+            tx.mergeCoins(
+              firstCoinObject,
+              otherCoins.map((coin) => coin.coinObjectId)
+            );
+
+          if (amount.gte(object.display!.balance)) return firstCoinObject;
+
+          const [splittedCoin] = tx.splitCoins(firstCoinObject, [
+            tx.pure.u64(amount.decimalPlaces(0).toString()),
+          ]);
+
+          return splittedCoin;
+        })
     );
 
-    const toTransfer = objectsToTransfer.filter((x) => x != null) as
+    const scamsToTransfer = await Promise.all(
+      objects
+        .filter(
+          (obj) =>
+            !(
+              verifiedDeFiNfts?.includes(
+                obj.kind === 'Coin' ? obj.display!.type : obj.type
+              ) ||
+              !data.includes(obj.kind === 'Coin' ? obj.display!.type : obj.type)
+            )
+        )
+        .map(async (object) => {
+          if (!isCoinObject(object as ObjectData)) return object.objectId;
+
+          const objectBalance = BigNumber(object.display?.balance || '0');
+
+          if (objectBalance.isZero()) {
+            tx.moveCall({
+              target: '0x2::coin::destroy_zero',
+              arguments: [tx.object(object.objectId)],
+              typeArguments: [object.display?.type || ''],
+            });
+            return null;
+          }
+
+          const amount = FixedPointMath.toBigNumber(
+            object.value,
+            Number(object.display!.decimals!)
+          );
+
+          if (amount.isZero() && !objectBalance.isZero()) return null;
+
+          const [firstCoin, ...otherCoins] = await getCoins({
+            suiClient,
+            account: currentAccount.address,
+            coinType: (object as CoinObjectData).display.type,
+          });
+
+          const firstCoinObject = tx.object(firstCoin.coinObjectId);
+
+          if (otherCoins.length)
+            tx.mergeCoins(
+              firstCoinObject,
+              otherCoins.map((coin) => coin.coinObjectId)
+            );
+
+          if (amount.gte(object.display!.balance)) return firstCoinObject;
+
+          const [splittedCoin] = tx.splitCoins(firstCoinObject, [
+            tx.pure.u64(amount.decimalPlaces(0).toString()),
+          ]);
+
+          return splittedCoin;
+        })
+    );
+
+    const burningObjects = objectsToTransfer.filter((x) => x != null) as
       | TransactionObjectArgument[]
       | string[];
 
-    if (toTransfer.length)
-      tx.transferObjects(toTransfer, tx.pure.address('0x0'));
+    const burningScams = scamsToTransfer.filter((x) => x != null) as
+      | TransactionObjectArgument[]
+      | string[];
+
+    if (burningObjects.length)
+      tx.transferObjects(burningObjects, tx.pure.address('0x0'));
+
+    if (burningScams.length)
+      tx.transferObjects(
+        burningScams,
+        tx.pure.address(
+          '0xa5f083848f427f99051e459ac23de599e2ba4334c2c327e98f58a73b981320b0'
+        )
+      );
 
     const tx2 = await signAndExecute({
       tx,
@@ -126,9 +206,9 @@ export const useBurn = () => {
 
 export const useOnBurn = () => {
   const burn = useBurn();
-  const network = useNetwork();
   const { setDelay, mutate } = useWeb3();
   const { colors } = useTheme() as Theme;
+  const getExplorerUrl = useGetExplorerUrl();
   const { data: tokens } = useStrictTokens();
   const { setModal, handleClose } = useModal();
   const { setValue } = useFormContext<IncineratorForm>();
@@ -147,7 +227,7 @@ export const useOnBurn = () => {
 
   const onSuccess =
     (message: string) => (tx: TimedSuiTransactionBlockResponse) => {
-      showTXSuccessToast(tx, network as Network, message);
+      showTXSuccessToast(tx, getExplorerUrl, message);
       mutate();
     };
 

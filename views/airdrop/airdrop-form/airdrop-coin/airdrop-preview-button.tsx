@@ -28,8 +28,8 @@ const AirdropPreviewButton: FC<AirdropPreviewButtonProps> = ({
   const { control } = useFormContext<IAirdropForm>();
 
   const airdropList = useWatch({ control, name: 'airdropList' });
-  const tokenDecimals = useWatch({ control, name: 'token.decimals' });
   const token = useWatch({ control, name: 'token' });
+  const tokenDecimals = useWatch({ control, name: 'token.decimals' });
   const tokenType = useWatch({ control, name: 'token.type' });
   const [isError, setIsError] = useState<ErrorProps>({
     state: false,
@@ -48,6 +48,8 @@ const AirdropPreviewButton: FC<AirdropPreviewButtonProps> = ({
       });
       return true;
     }
+
+    console.log('Token _> ', token);
 
     const totalAirdropAmount = airdropList.reduce(
       (acc, { amount }) => acc.plus(BigNumber(amount)),

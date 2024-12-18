@@ -1,5 +1,6 @@
 import { useSignTransaction } from '@mysten/dapp-kit';
 import { SuiClient } from '@mysten/sui/client';
+import { SuiObjectRef } from '@mysten/sui/dist/cjs/bcs/types';
 import {
   Transaction,
   TransactionObjectArgument,
@@ -86,3 +87,7 @@ export interface ErrorProps {
   state: boolean;
   message?: string;
 }
+export type ResultCoins = Record<
+  'gasCoin' | 'spendCoin' | 'feeCoin',
+  SuiObjectRef
+>;
