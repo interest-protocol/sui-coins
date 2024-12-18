@@ -125,32 +125,39 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
             []
           );
 
+        console.log({ coins });
+
         const coinsObject = await suiClient.multiGetObjects({
           ids: coins.map(({ objectId }) => objectId),
           options: { showContent: true },
         });
 
+        console.log({ coinsObject });
+
         const { gasCoin, spendCoin, feeCoin } = coinsObject.reduce(
           (acc, curr, index) => {
-            const balance = path(['data, content', 'fields', 'balance'], curr);
-            if (balance === totalAmount.toString())
-              return {
-                ...acc,
-                spendCoin: coins[index],
-              };
-            if (balance === feeAmount.toString())
-              return {
-                ...acc,
-                feeCoin: coins[index],
-              };
+            console.log({ curr });
+
+            const balance = path(
+              ['data', 'content', 'fields', 'balance'],
+              curr
+            );
+
+            console.log({ index, balance });
 
             return {
               ...acc,
-              gasCoins: coins[index],
+              [balance === totalAmount.toString()
+                ? 'spendCoin'
+                : balance === feeAmount.toString()
+                  ? 'feeCoin'
+                  : 'gasCoins']: coins[index],
             };
           },
           {} as ResultCoins
         );
+
+        console.log({ gasCoin, spendCoin, feeCoin });
 
         await pauseUtilNextTx(initTransferTxMS);
 
@@ -270,22 +277,20 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           []
         );
 
+      console.log({ coins });
+
       const coinsObject = await suiClient.multiGetObjects({
         ids: coins.map(({ objectId }) => objectId),
         options: { showContent: true },
       });
 
       const { gasCoin, feeCoin } = coinsObject.reduce((acc, curr, index) => {
-        const balance = path(['data, content', 'fields', 'balance'], curr);
-        if (balance === feeAmount.toString())
-          return {
-            ...acc,
-            feeCoin: coins[index],
-          };
+        const balance = path(['data', 'content', 'fields', 'balance'], curr);
 
         return {
           ...acc,
-          gasCoins: coins[index],
+          [balance === feeAmount.toString() ? 'feeCoin' : 'gasCoins']:
+            coins[index],
         };
       }, {} as ResultCoins);
 
