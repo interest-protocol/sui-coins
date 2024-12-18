@@ -267,8 +267,6 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           []
         );
 
-      console.log({ coins });
-
       const coinsObject = await suiClient.multiGetObjects({
         ids: coins.map(({ objectId }) => objectId),
         options: { showContent: true },
@@ -346,18 +344,6 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           tx2,
           gasCoin.objectId
         );
-
-        const feeInfoRaw = await suiClient.getObject({
-          id: gasCoin.objectId,
-          options: { showContent: true },
-        });
-
-        const feeBalance = path(
-          ['data', 'content', 'fields', 'balance'],
-          feeInfoRaw
-        );
-
-        console.log('>> fee after load :: ', feeBalance);
 
         throwTXIfNotSuccessful(tx2, () =>
           setValue('failed', [...getValues('failed'), Number(index)])
