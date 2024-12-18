@@ -52,7 +52,7 @@ const SelectObject: FC = () => {
       }
     );
 
-  const displayName = object ? object.symbol ?? type : type;
+  const displayName = object ? (object.symbol ?? type) : type;
 
   const { symbol, type: coinType } = object ?? {
     type,
