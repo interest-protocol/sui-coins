@@ -60,10 +60,9 @@ const MergeCoinsForm: FC = () => {
     <Box
       gap="l"
       display="flex"
-      overflowY="auto"
+      overflowY="scroll"
       maxHeight="25rem"
       flexDirection="column"
-      overflow="hidden"
     >
       {coinsToMerge.map((coin) => (
         <MergeField key={v4()} {...coin} remove={remove} />
