@@ -64,7 +64,7 @@ const AirdropCommonAmountToggle: FC = () => {
                   getValues('token.decimals')
                 )
                   .div(
-                    !amountForAll ? 1 : getValues('airdropList')?.length ?? 1
+                    !amountForAll ? 1 : (getValues('airdropList')?.length ?? 1)
                   )
                   .decimalPlaces(0)
                   .toString(),

@@ -45,8 +45,8 @@ const AirdropNftMethod: FC = () => {
 
     const airdropList = nft.holders.map((address) => ({
       address,
-      amount: BigNumber(getValues('commonAmount'))
-        .times(BigNumber(10).pow(getValues('token.decimals')))
+      amount: BigNumber(getValues('commonAmount') || 0)
+        .times(BigNumber(10).pow(getValues('token.decimals') || 0))
         .toString(),
     }));
 
