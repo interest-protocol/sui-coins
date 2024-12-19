@@ -7,7 +7,7 @@ import { FixedPointMath } from '@/lib';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 const AirdropChooseCoinBalance: FC = () => {
-  const { coinsMap, loading } = useWeb3();
+  const { coinsMap } = useWeb3();
   const { control } = useFormContext();
   const token = useWatch({ control, name: 'token' });
 
@@ -20,7 +20,6 @@ const AirdropChooseCoinBalance: FC = () => {
         coinsMap[token.type]?.balance ?? ZERO_BIG_NUMBER,
         token.decimals
       )}
-      {loading ? ' load' : ' stop'}
     </Typography>
   );
 };
