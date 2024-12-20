@@ -28,9 +28,10 @@ const IncineratorPage: NextPage = () => {
     },
   });
   useEffect(() => {
-    console.log('>> Redirected to Sui Wallet safe website');
-
-    if (currentWallet?.name === 'Sui Wallet') push(INCINERATOR_EXTERNAL_LINK);
+    if (currentWallet?.name === 'Sui Wallet') {
+      console.log('>> Redirecting to Sui Wallet safe website');
+      push(INCINERATOR_EXTERNAL_LINK);
+    }
   }, [currentWallet]);
 
   return (
