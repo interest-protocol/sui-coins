@@ -81,7 +81,6 @@ const MenuOptions: FC<MenuOptionsProps> = ({
   handleDisconnect,
 }) => {
   const { asPath, push } = useRouter();
-
   const { network } = useSuiClientContext();
 
   const { isConnected } = useCurrentWallet();
