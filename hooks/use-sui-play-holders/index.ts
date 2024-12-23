@@ -2,15 +2,7 @@ import useSWR from 'swr';
 
 interface SuiPlayRawNFT {
   owner: string;
-  content: {
-    id: string;
-    tier: string;
-    name: string;
-    order: string;
-    datetime: string;
-    payment_chain: string;
-    payment_tx_digest: string;
-  };
+  isMythic: boolean;
 }
 
 interface SuiPlayHolders {
@@ -28,7 +20,7 @@ export const useSuiPlayHolders = () =>
       data.holders as ReadonlyArray<SuiPlayRawNFT>
     ).reduce(
       ([mythics, exalted], curr) =>
-        curr.content.tier === 'The Mythics'
+        curr.isMythic
           ? [[...mythics, curr.owner], exalted]
           : [mythics, [...exalted, curr.owner]],
       [[], []] as [ReadonlyArray<string>, ReadonlyArray<string>]
