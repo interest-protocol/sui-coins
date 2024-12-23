@@ -16,21 +16,25 @@ export const useSuiPlayHolders = () =>
       'https://interest-protocol.github.io/public/sui/sui-play-holders.json'
     ).then((res) => res.json());
 
-    const [theMythics, theExalted] = (
+    const [theMythics, theExalted, all] = (
       data.holders as ReadonlyArray<SuiPlayRawNFT>
     ).reduce(
-      ([mythics, exalted], curr) =>
+      ([mythics, exalted, all], curr) =>
         curr.isMythic
-          ? [[...mythics, curr.owner], exalted]
-          : [mythics, [...exalted, curr.owner]],
-      [[], []] as [ReadonlyArray<string>, ReadonlyArray<string>]
+          ? [[...mythics, curr.owner], exalted, [...all, curr.owner]]
+          : [mythics, [...exalted, curr.owner], [...all, curr.owner]],
+      [[], [], []] as [
+        ReadonlyArray<string>,
+        ReadonlyArray<string>,
+        ReadonlyArray<string>,
+      ]
     );
 
     return {
       holders: {
         'The Mythics': theMythics,
         'The Exalted': theExalted,
-        All: [...theMythics, ...theExalted],
+        All: all,
       },
       lastUpdateAt: data.lastUpdateAt,
     };
