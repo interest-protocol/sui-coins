@@ -60,7 +60,7 @@ const MergeCoinsForm: FC = () => {
     <Box
       gap="l"
       display="flex"
-      overflowY="scroll"
+      overflowY="auto"
       maxHeight="25rem"
       flexDirection="column"
     >
