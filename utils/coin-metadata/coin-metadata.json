@@ -1,5 +1,12 @@
 {
   "sui:mainnet": {
+    "0xd5fcf6a2947411e145a01e31cf97d43d13d9cd37b7cac2bb3296f7539ebaaf4a::rex::REX": {
+      "name": "SUI REX",
+      "decimals": 12,
+      "symbol": "REX",
+      "logoUrl": "https://images.hop.ag/ipfs/QmUzqQG6zVXzQ3moLjrFhb3MnrAG2ufmKS6emzd7L2xNqn",
+      "type": "0xd5fcf6a2947411e145a01e31cf97d43d13d9cd37b7cac2bb3296f7539ebaaf4a::rex::REX"
+    },
     "0x9eed28fc98688a799fe51aa6ed39b851bd09d950fc785b2d7c9f543796254631::drip::DRIP": {
       "decimals": 9,
       "description": "Dripward $DRIP is the first Meme Coin on SuiNetwork",
