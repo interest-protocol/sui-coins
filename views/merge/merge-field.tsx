@@ -97,18 +97,20 @@ const MergeField: FC<MergeFieldProps> = ({
           <Box width="1rem" height="1rem">
             <SubtractBoxSVG width="100%" maxWidth="100%" maxHeight="100%" />
           </Box>
-          <Typography size="small" fontSize="s" variant="body">
+          <Typography fontSize="s" size="small" variant="body">
             {FixedPointMath.toNumber(balance, decimals)}
           </Typography>
           {symbol && (
             <Typography
-              ml="-0.2rem"
               size="small"
               fontSize="s"
+              ml="-0.2rem"
               variant="body"
               maxWidth="12ch"
-              overflow="hidden"
+              overflowX="hidden"
+              overflowY="hidden"
               whiteSpace="nowrap"
+              fontFamily="Satoshi"
               textOverflow="ellipsis"
             >
               {symbol}

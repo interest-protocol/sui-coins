@@ -16,7 +16,17 @@ export const validationSchema = yup.object({
   imageUrl: yup.string(),
   totalSupply: yup
     .string()
-    .matches(/[^0]+/, 'You cannot add numbers less than 0')
+    .test(
+      'total-supply-validation',
+      'Total Supply must be greater than 0 when Fixed Supply is active',
+      function (value) {
+        const { fixedSupply } = this.parent;
+        if (fixedSupply) {
+          return value !== undefined && parseFloat(value) > 0;
+        }
+        return true;
+      }
+    )
     .required('Total Supply is a required field'),
   decimals: yup
     .number()

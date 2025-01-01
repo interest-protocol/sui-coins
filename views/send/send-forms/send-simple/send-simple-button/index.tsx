@@ -1,12 +1,12 @@
 import { Box, Button, Typography } from '@interest-protocol/ui-kit';
-import { useSuiClientContext } from '@mysten/dapp-kit';
 import { useRouter } from 'next/router';
 import { toPairs } from 'ramda';
 import { FC, useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { Network, Routes, RoutesEnum } from '@/constants';
+import { Routes, RoutesEnum } from '@/constants';
+import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useWeb3 } from '@/hooks/use-web3';
 import { TimedSuiTransactionBlockResponse } from '@/interface';
 import { DotErrorSVG, PlusSVG } from '@/svg';
@@ -21,13 +21,13 @@ const FormSendButton: FC<FormSendButtonProps> = ({ openModal }) => {
   const { push } = useRouter();
   const { coinsMap } = useWeb3();
   const createLink = useCreateLink();
-  const { network } = useSuiClientContext();
+  const getExplorerUrl = useGetExplorerUrl();
   const { control } = useFormContext<ISendSimpleForm>();
   const objects = useWatch({ control, name: 'objects' });
   const [amountList, setAmountList] = useState<AmountListProps[] | null>();
 
   const onSuccess = (tx: TimedSuiTransactionBlockResponse, url: string) => {
-    showTXSuccessToast(tx, network as Network, 'Link created successfully');
+    showTXSuccessToast(tx, getExplorerUrl, 'Link created successfully');
 
     push(`${Routes[RoutesEnum.SendLink]}#${url.split('#')[1]}`);
   };

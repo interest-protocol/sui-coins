@@ -6,11 +6,13 @@ import {
   Typography,
   useTheme,
 } from '@interest-protocol/ui-kit';
+import { useCurrentWallet } from '@mysten/dapp-kit';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
 import { Routes, RoutesEnum } from '@/constants';
+import { ArrowObliqueSVG } from '@/svg';
 
 import { MenuItemTitleContentProps } from '../sidebar.types';
 import CollapseIcon from './collapsible-icon';
@@ -39,9 +41,11 @@ const MenuItemTitleContent: FC<MenuItemTitleContentProps> = ({
   disabled,
   isCollapsed,
   accordionList,
+  suiWalletLink,
 }) => {
   const { asPath, push } = useRouter();
   const { colors } = useTheme() as Theme;
+  const { currentWallet } = useCurrentWallet();
 
   const isSelected =
     path === Routes[RoutesEnum.Swap]
@@ -49,8 +53,11 @@ const MenuItemTitleContent: FC<MenuItemTitleContentProps> = ({
       : asPath.startsWith(path!) ||
         accordionList?.some(({ path }) => path === asPath);
 
+  const isSuiWallet = !!suiWalletLink && currentWallet?.name === 'Sui Wallet';
+
   const onClick = () => {
     if (accordionList || disabled || !path) return;
+
     push(path);
   };
 
@@ -83,6 +90,9 @@ const MenuItemTitleContent: FC<MenuItemTitleContentProps> = ({
           {name}
         </Typography>
       </Box>
+      {isSuiWallet && (
+        <ArrowObliqueSVG maxHeight="1.5rem" maxWidth="1.5em" width="100%" />
+      )}
       {beta &&
         (isCollapsed ? (
           <Box
@@ -114,13 +124,10 @@ const MenuItemTitleContent: FC<MenuItemTitleContentProps> = ({
 };
 
 const MenuItemTitle: FC<MenuItemTitleContentProps> = ({
-  Icon,
   name,
-  path,
-  beta,
   disabled,
   isCollapsed,
-  accordionList,
+  ...props
 }) => {
   if (isCollapsed)
     return (
@@ -142,26 +149,20 @@ const MenuItemTitle: FC<MenuItemTitleContentProps> = ({
         }
       >
         <MenuItemTitleContent
-          Icon={Icon}
           name={name}
-          path={path}
-          beta={beta}
           disabled={disabled}
           isCollapsed={isCollapsed}
-          accordionList={accordionList}
+          {...props}
         />
       </TooltipWrapper>
     );
 
   return (
     <MenuItemTitleContent
-      Icon={Icon}
       name={name}
-      path={path}
-      beta={beta}
       disabled={disabled}
       isCollapsed={isCollapsed}
-      accordionList={accordionList}
+      {...props}
     />
   );
 };

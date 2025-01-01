@@ -9,7 +9,7 @@ import BigNumber from 'bignumber.js';
 import invariant from 'tiny-invariant';
 
 import { CoinObject } from '@/components/web3-manager/coins-manager/coins-manager.types';
-import { useNetwork } from '@/hooks/use-network';
+import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { FixedPointMath } from '@/lib';
 import {
   getCoins,
@@ -25,9 +25,9 @@ import { findNextVersionAndDigest } from '../airdrop/airdrop-form/txb-utils';
 export const MERGE_OBJECTS_LIMIT = 200;
 
 export const useMergeCoins = () => {
-  const network = useNetwork();
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
+  const getExplorerUrl = useGetExplorerUrl();
   const signTransaction = useSignTransaction();
 
   return async (
@@ -95,7 +95,7 @@ export const useMergeCoins = () => {
             );
 
             onSetExecutionTime && onSetExecutionTime(txResult.time);
-            showTXSuccessToast(txResult, network, 'Coins slot merged!');
+            showTXSuccessToast(txResult, getExplorerUrl, 'Coins slot merged!');
           }
         } else {
           if (!coinsToMerge.filter(({ type }) => !isSui(type)).length) {
@@ -113,7 +113,7 @@ export const useMergeCoins = () => {
             });
 
             onSetExecutionTime && onSetExecutionTime(txResult.time);
-            showTXSuccessToast(txResult, network, 'Coins slot merged!');
+            showTXSuccessToast(txResult, getExplorerUrl, 'Coins slot merged!');
           }
         }
       } else {
@@ -158,7 +158,7 @@ export const useMergeCoins = () => {
           );
 
           onSetExecutionTime && onSetExecutionTime(txResult.time);
-          showTXSuccessToast(txResult, network, 'Coins slot merged!');
+          showTXSuccessToast(txResult, getExplorerUrl, 'Coins slot merged!');
         }
       }
     }
