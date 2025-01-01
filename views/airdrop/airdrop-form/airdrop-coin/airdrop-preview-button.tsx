@@ -70,7 +70,7 @@ const AirdropPreviewButton: FC<AirdropPreviewButtonProps> = ({
       if (totalAirdropAmount > tokenBalance) {
         setIsError({
           state: true,
-          message: `You do not have enough tokens. Total amount to aidrop is ${totalAirdropAmount} ${token?.symbol}.`,
+          message: `You do not have enough tokens. Total amount to airdrop is ${totalAirdropAmount} ${token?.symbol}.`,
         });
         return true;
       }
