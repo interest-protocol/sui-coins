@@ -10,6 +10,7 @@ import { ArrowTopRightSVG } from '@/svg';
 import SideBarMenuItem from './menu-item';
 import { SIDEBAR_ITEMS } from './sidebar.data';
 import { MenuListProps } from './sidebar.types';
+import Image from 'next/image';
 
 const SidebarMenuList: FC<MenuListProps> = ({
   open,
@@ -59,7 +60,14 @@ const SidebarMenuList: FC<MenuListProps> = ({
                   alignItems="center"
                   justifyContent="center"
                 >
-                  <img src={img} alt={name} width="80%" height="80%" />
+                  <Image
+                    style={{
+                      width: '80%',
+                      height: '80%',
+                    }}
+                    src={img}
+                    alt={name}
+                  />
                 </Box>
               </Box>
             ) : (
@@ -84,7 +92,14 @@ const SidebarMenuList: FC<MenuListProps> = ({
                       alignItems="center"
                       justifyContent="center"
                     >
-                      <img src={img} alt={name} width="80%" height="80%" />
+                      <Image
+                        style={{
+                          width: '80%',
+                          height: '80%',
+                        }}
+                        src={img}
+                        alt={name}
+                      />
                     </Box>
                   </Box>
                   <Typography

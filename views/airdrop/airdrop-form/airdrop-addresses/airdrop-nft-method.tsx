@@ -13,6 +13,7 @@ import SelectTokenModal from '@/views/components/select-token-modal';
 import { CoinObject } from '../../../../components/web3-manager/coins-manager/coins-manager.types';
 import { IAirdropForm } from '../../airdrop.types';
 import { getSymbol } from '../../airdrop.utils';
+import Image from 'next/image';
 
 const AirdropNftMethod: FC = () => {
   const { nftsMap } = useWeb3();
@@ -110,8 +111,8 @@ const AirdropNftMethod: FC = () => {
                   alignItems="center"
                   justifyContent="center"
                 >
-                  <img
-                    width="100%"
+                  <Image
+                    style={{ width: '100%' }}
                     alt={(asset as NFTCollectionMetadata).name}
                     src={`/images/nft/${
                       (asset as NFTCollectionMetadata).id

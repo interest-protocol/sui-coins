@@ -14,6 +14,7 @@ import { useWeb3 } from '@/hooks/use-web3';
 import { TimedSuiTransactionBlockResponse } from '@/interface';
 import { CheckmarkSVG, ErrorSVG } from '@/svg';
 import { getCoins, showTXSuccessToast } from '@/utils';
+import Image from 'next/image';
 
 import { useReclaimLink } from './send-link.hooks';
 import { SendLinkProps } from './send-link.types';
@@ -152,8 +153,8 @@ const SendLink: FC<SendLinkProps> = ({ data, error, isLoading, mutate }) => {
         borderColor="outlineVariant"
       >
         {data ? (
-          <img
-            width="150"
+          <Image
+            style={{ width: '150' }}
             alt="QR Code"
             src={`https://api.qrserver.com/v1/create-qr-code?data=${url}&size=150x150`}
           />

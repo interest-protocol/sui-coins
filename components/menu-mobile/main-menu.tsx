@@ -9,6 +9,7 @@ import MenuButton from '../wallet/menu-button';
 import { MainMenuMobileProps } from './menu.types';
 import MobileMenuList from './menu-list';
 import MenuSettingsList from './menu-settings';
+import Image from 'next/image';
 
 const MainMenu: FC<MainMenuMobileProps> = ({ closeMenu }) => (
   <Box
@@ -61,7 +62,14 @@ const MainMenu: FC<MainMenuMobileProps> = ({ closeMenu }) => (
                   overflow="hidden"
                   borderRadius="50%"
                 >
-                  <img src={img} alt={name} width="100%" height="100%" />
+                  <Image
+                    src={img}
+                    alt={name}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                    }}
+                  />
                 </Box>
                 <Typography
                   size="large"

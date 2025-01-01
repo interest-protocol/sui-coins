@@ -57,9 +57,38 @@ const Document = () => (
         href="/favicon-16x16.png"
       />
       <link rel="manifest" href="/manifest.json" />
+      <link rel="canonical" href="https://www.suicoins.com" />
       <meta name="msapplication-TileColor" content="#ffffff" />
       <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
       <meta name="theme-color" content="#ffffff" />
+      <meta
+        name="description"
+        content="Swap coins, Create token, Airdrop and incinerator your crypto assets."
+      />
+      <meta
+        name="keywords"
+        content="Crypto, DeFi, Swap coins, Tokens, Coins, Airdrop, Incinerator, Send coin"
+      />
+      <meta name="author" content="Interest Protocol" />
+      <meta
+        property="og:title"
+        content="Sui coins - Swap coins, Create token, Airdrop and incinerator your crypto assets."
+      />
+      <meta property="og:locale" content="en_US" />
+      <meta property="og:type" content="web app" />
+      <meta property="og:site_name" content="Sui coins" />
+      <meta property="og:url" content="https://www.suicoins.com" />
+      <meta
+        property="og:image:alt"
+        content="Sui coins - Swap coins, Create token, Airdrop and incinerator your crypto assets."
+      />
+
+      <meta name="apple-mobile-web-app-capable" content="no" />
+      <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+      <meta
+        name="apple-mobile-web-app-title"
+        content="https://www.suicoins.com/"
+      />
     </Head>
     <body id="body">
       <Main />
