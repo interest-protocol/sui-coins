@@ -208,7 +208,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
           showTXSuccessToast(
             tx2,
             getExplorerUrl,
-            `Patch ${Number(index) + 1} was completed successfully`
+            `Batch ${Number(index) + 1} was completed successfully`
           );
 
           await pauseUtilNextTx(initAirdropTxMS);
@@ -298,7 +298,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
         const fee = tx.splitCoins(tx.objectRef(feeCoin), [
           tx.pure.u64(
-            BigNumber(AIRDROP_SUI_FEE_PER_ADDRESS)
+            BigNumber(feePerAddress)
               .times(batch.length)
               .decimalPlaces(0)
               .toString()
@@ -359,7 +359,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
         showTXSuccessToast(
           tx2,
           getExplorerUrl,
-          `Patch ${Number(index) + 1} was completed successfully`
+          `Batch ${Number(index) + 1} was completed successfully`
         );
 
         setValue('done', [...getValues('done'), Number(index)]);
@@ -377,12 +377,13 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
   const airdropList = getValues('airdropList');
 
-  const airdropFee = airdropList
-    ? BigNumber(
-        AIRDROP_SUI_FEE_PER_ADDRESS *
-          (getValues('method') === 'suiPlay' ? 0.5 : 1)
-      ).times(airdropList.length)
-    : ZERO_BIG_NUMBER;
+  const airdropFee =
+    !airdropList || (feeFree && query['discount'] === 'free')
+      ? ZERO_BIG_NUMBER
+      : BigNumber(
+          AIRDROP_SUI_FEE_PER_ADDRESS *
+            (getValues('method') === 'suiPlay' ? 0.5 : 1)
+        ).times(airdropList.length);
 
   const disabled = airdropFee.gt(
     coinsMap[SUI_TYPE_ARG]?.balance ?? ZERO_BIG_NUMBER

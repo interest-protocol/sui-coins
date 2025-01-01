@@ -1,3 +1,5 @@
+export const INCINERATOR_EXTERNAL_LINK = 'https://www.incinerator.suicoins.com';
+
 export enum Keys {
   Enter = 'Enter',
   Escape = 'Escape',

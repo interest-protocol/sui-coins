@@ -30,7 +30,7 @@ const AirdropSummary: FC<AirdropSummaryProps> = ({ method }) => {
   const airdropList = useWatch({ control, name: 'airdropList' });
 
   const airdropFee =
-    !airdropList || (feeFree && query['discount'] !== 'free')
+    !airdropList || (feeFree && query['discount'] === 'free')
       ? ZERO_BIG_NUMBER
       : BigNumber(
           AIRDROP_SUI_FEE_PER_ADDRESS * (method === 'suiPlay' ? 0.5 : 1)

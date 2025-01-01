@@ -10,6 +10,8 @@ import { FC, useMemo, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { useWeb3 } from '@/hooks/use-web3';
+import { FixedPointMath } from '@/lib';
+import { DotErrorSVG } from '@/svg';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 import {
@@ -17,71 +19,64 @@ import {
   ErrorProps,
   IAirdropForm,
 } from '../../airdrop.types';
-import { DotErrorSVG } from '@/svg';
-import { FixedPointMath } from '@/lib';
 
 const AirdropPreviewButton: FC<AirdropPreviewButtonProps> = ({
   handleOpenSummaryModal,
 }) => {
   const { coinsMap } = useWeb3();
   const { colors } = useTheme() as Theme;
+
   const { control } = useFormContext<IAirdropForm>();
 
-  const airdropList = useWatch({ control, name: 'airdropList' });
   const token = useWatch({ control, name: 'token' });
-  const tokenDecimals = useWatch({ control, name: 'token.decimals' });
-  const tokenType = useWatch({ control, name: 'token.type' });
+  const method = useWatch({ control, name: 'method' });
+  const airdropList = useWatch({ control, name: 'airdropList' });
+  const commonAmount = useWatch({ control, name: 'commonAmount' });
+  const amountForAll = useWatch({ control, name: 'amountForAll' });
   const [isError, setIsError] = useState<ErrorProps>({
     state: false,
   });
 
   const isDisabled = useMemo(() => {
+    const totalAirdropAmount = FixedPointMath.toNumber(
+      (airdropList || []).reduce(
+        (acc, { amount }) => acc.plus(BigNumber(amount == 'NaN' ? 0 : amount)),
+        ZERO_BIG_NUMBER
+      )
+    );
+
+    const airdropSize = (airdropList || []).length;
+    const currentAmount = commonAmount
+      ? +(Number(commonAmount) / (amountForAll ? airdropSize : 1)).toFixed(
+          token?.decimals
+        )
+      : 0;
+
+    if (!currentAmount) {
+      if (method != 'csv') {
+        setIsError({
+          state: false,
+        });
+        return true;
+      }
+    }
+
     const tokenBalance = FixedPointMath.toNumber(
-      coinsMap[tokenType]?.balance ?? ZERO_BIG_NUMBER,
-      tokenDecimals
+      coinsMap[token?.type]?.balance ?? ZERO_BIG_NUMBER,
+      token?.decimals
     );
 
-    if (!airdropList || !airdropList.length) {
+    if (token) {
+      if (totalAirdropAmount > tokenBalance) {
+        setIsError({
+          state: true,
+          message: `You do not have enough tokens. Total amount to aidrop is ${totalAirdropAmount} ${token?.symbol}.`,
+        });
+        return true;
+      }
+    } else {
       setIsError({
-        state: true,
-        message: 'Please select an airdrop list',
-      });
-      return true;
-    }
-
-    const totalAirdropAmount = airdropList.reduce(
-      (acc, { amount }) => acc.plus(BigNumber(amount)),
-      ZERO_BIG_NUMBER
-    );
-
-    if (tokenBalance === 0) {
-      setIsError({
-        state: true,
-        message: "You don't have enough balance to airdrop",
-      });
-      return true;
-    }
-
-    if (totalAirdropAmount.isZero()) {
-      setIsError({
-        state: true,
-        message:
-          'Your total amount to aidrop is 0, Please verify if you have enough amount',
-      });
-      return true;
-    }
-
-    if (!coinsMap[tokenType]) return true;
-
-    const formattedAirdropAmount = FixedPointMath.toNumber(totalAirdropAmount);
-
-    if (
-      coinsMap[tokenType].balance.isZero() ||
-      tokenBalance < formattedAirdropAmount
-    ) {
-      setIsError({
-        state: true,
-        message: 'Your balance is less than the total airdrop amount',
+        state: false,
       });
       return true;
     }
@@ -92,7 +87,7 @@ const AirdropPreviewButton: FC<AirdropPreviewButtonProps> = ({
       });
 
     return false;
-  }, [airdropList, coinsMap[tokenType]]);
+  }, [airdropList, coinsMap[token?.type]]);
 
   return (
     <>
