@@ -9,6 +9,7 @@ export interface AccordionItemProps {
   beta?: boolean;
   disabled: boolean;
   Icon: FC<SVGProps>;
+  suiWalletLink?: string;
   networks: ReadonlyArray<Network>;
 }
 
