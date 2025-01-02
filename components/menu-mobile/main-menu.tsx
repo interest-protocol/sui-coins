@@ -1,4 +1,5 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
+import Image from 'next/image';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
@@ -9,7 +10,6 @@ import MenuButton from '../wallet/menu-button';
 import { MainMenuMobileProps } from './menu.types';
 import MobileMenuList from './menu-list';
 import MenuSettingsList from './menu-settings';
-import Image from 'next/image';
 
 const MainMenu: FC<MainMenuMobileProps> = ({ closeMenu }) => (
   <Box

@@ -14,7 +14,7 @@ const SendSelectObjectHeader: FC = () => {
     type: undefined,
   };
 
-  const displayName = object ? object.symbol ?? type : type;
+  const displayName = object ? (object.symbol ?? type) : type;
 
   const symbol = object?.symbol ?? '';
 

@@ -1,5 +1,6 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
+import Image from 'next/image';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
@@ -10,7 +11,6 @@ import { ArrowTopRightSVG } from '@/svg';
 import SideBarMenuItem from './menu-item';
 import { SIDEBAR_ITEMS } from './sidebar.data';
 import { MenuListProps } from './sidebar.types';
-import Image from 'next/image';
 
 const SidebarMenuList: FC<MenuListProps> = ({
   open,

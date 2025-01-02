@@ -1,5 +1,6 @@
 import { Box, Motion, Typography } from '@interest-protocol/ui-kit';
 import BigNumber from 'bignumber.js';
+import Image from 'next/image';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
@@ -13,7 +14,6 @@ import SelectTokenModal from '@/views/components/select-token-modal';
 import { CoinObject } from '../../../../components/web3-manager/coins-manager/coins-manager.types';
 import { IAirdropForm } from '../../airdrop.types';
 import { getSymbol } from '../../airdrop.utils';
-import Image from 'next/image';
 
 const AirdropNftMethod: FC = () => {
   const { nftsMap } = useWeb3();

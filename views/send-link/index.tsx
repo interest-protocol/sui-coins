@@ -6,6 +6,7 @@ import {
 } from '@interest-protocol/ui-kit';
 import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 import { SUI_TYPE_ARG } from '@mysten/sui/utils';
+import Image from 'next/image';
 import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -14,7 +15,6 @@ import { useWeb3 } from '@/hooks/use-web3';
 import { TimedSuiTransactionBlockResponse } from '@/interface';
 import { CheckmarkSVG, ErrorSVG } from '@/svg';
 import { getCoins, showTXSuccessToast } from '@/utils';
-import Image from 'next/image';
 
 import { useReclaimLink } from './send-link.hooks';
 import { SendLinkProps } from './send-link.types';
