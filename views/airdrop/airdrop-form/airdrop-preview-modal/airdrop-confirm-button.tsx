@@ -132,18 +132,21 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
         const { gasCoin, spendCoin, feeCoin } = coinsObject.reduce(
           (acc, curr, index) => {
-            const balance = path(
-              ['data', 'content', 'fields', 'balance'],
-              curr
-            );
+            const balance = path(['data, content', 'fields', 'balance'], curr);
+            if (balance === totalAmount.toString())
+              return {
+                ...acc,
+                spendCoin: coins[index],
+              };
+            if (balance === feeAmount.toString())
+              return {
+                ...acc,
+                feeCoin: coins[index],
+              };
 
             return {
               ...acc,
-              [balance === totalAmount.toString()
-                ? 'spendCoin'
-                : balance === feeAmount.toString()
-                  ? 'feeCoin'
-                  : 'gasCoin']: coins[index],
+              gasCoins: coins[index],
             };
           },
           {} as ResultCoins
@@ -273,12 +276,16 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
       });
 
       const { gasCoin, feeCoin } = coinsObject.reduce((acc, curr, index) => {
-        const balance = path(['data', 'content', 'fields', 'balance'], curr);
+        const balance = path(['data, content', 'fields', 'balance'], curr);
+        if (balance === feeAmount.toString())
+          return {
+            ...acc,
+            feeCoin: coins[index],
+          };
 
         return {
           ...acc,
-          [balance === feeAmount.toString() ? 'feeCoin' : 'gasCoin']:
-            coins[index],
+          gasCoins: coins[index],
         };
       }, {} as ResultCoins);
 
