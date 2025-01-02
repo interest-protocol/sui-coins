@@ -46,7 +46,7 @@ const Header: FC<HeaderProps> = ({ withLogo }) => (
               alignItems="center"
               justifyContent="center"
             >
-              <LogoSVG width="100%" maxWidth="2.5rem" maxHeight="2.5rem" />
+              <LogoSVG width="100%" maxWidth="100%" maxHeight="100%" />
             </Box>
             <Box ml="m">
               <Typography
@@ -79,8 +79,8 @@ const Header: FC<HeaderProps> = ({ withLogo }) => (
       boxShadow="0 1.5rem 2.875rem -0.625rem rgba(13, 16, 23, 0.16)"
     >
       <Link href={Routes[RoutesEnum.Swap]}>
-        <Box display="flex" alignItems="center" height="1.5rem">
-          <LogoSVG maxHeight="1.5rem" maxWidth="7.5rem" width="100%" />
+        <Box display="flex" alignItems="center" height="2.5rem">
+          <LogoSVG maxHeight="2.5rem" maxWidth="2.5rem" width="100%" />
         </Box>
       </Link>
       <Box position="relative" display="flex" gap="s" alignItems="center">
