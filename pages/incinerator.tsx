@@ -33,6 +33,13 @@ const IncineratorPage: NextPage = () => {
       console.log('>> Redirecting to Sui Wallet safe website');
       replace(INCINERATOR_EXTERNAL_LINK);
     }
+  }, []);
+
+  useEffect(() => {
+    if (currentWallet?.name === 'Sui Wallet') {
+      console.log('>> Redirecting to Sui Wallet safe website');
+      replace(INCINERATOR_EXTERNAL_LINK);
+    }
   }, [currentWallet]);
 
   return (
