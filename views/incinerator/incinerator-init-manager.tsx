@@ -11,6 +11,7 @@ const IncineratorInitManager: FC = () => {
   const { currentWallet } = useCurrentWallet();
 
   useEffect(() => {
+    console.log('>> Wallet name: ', currentWallet?.name);
     if (currentWallet?.name === 'Sui Wallet') {
       console.log('>> Redirecting to Sui Wallet safe website');
       replace(INCINERATOR_EXTERNAL_LINK);
