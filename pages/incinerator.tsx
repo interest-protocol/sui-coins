@@ -15,7 +15,7 @@ import {
 
 const IncineratorPage: NextPage = () => {
   const { currentWallet } = useCurrentWallet();
-  const { push } = useRouter();
+  const { replace } = useRouter();
 
   const form = useForm<IncineratorForm>({
     defaultValues: {
@@ -27,10 +27,11 @@ const IncineratorPage: NextPage = () => {
       tab: IncineratorTabEnum.All,
     },
   });
+
   useEffect(() => {
     if (currentWallet?.name === 'Sui Wallet') {
       console.log('>> Redirecting to Sui Wallet safe website');
-      push(INCINERATOR_EXTERNAL_LINK);
+      replace(INCINERATOR_EXTERNAL_LINK);
     }
   }, [currentWallet]);
 
