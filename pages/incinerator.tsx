@@ -1,8 +1,12 @@
+import { useCurrentWallet } from '@mysten/dapp-kit';
 import { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { SEO } from '@/components';
 import Layout from '@/components/layout';
+import { INCINERATOR_EXTERNAL_LINK } from '@/constants';
 import Incinerator from '@/views/incinerator';
 import {
   IncineratorForm,
@@ -10,6 +14,9 @@ import {
 } from '@/views/incinerator/incinerator.types';
 
 const IncineratorPage: NextPage = () => {
+  const { currentWallet } = useCurrentWallet();
+  const { push } = useRouter();
+
   const form = useForm<IncineratorForm>({
     defaultValues: {
       search: '',
@@ -20,6 +27,12 @@ const IncineratorPage: NextPage = () => {
       tab: IncineratorTabEnum.All,
     },
   });
+  useEffect(() => {
+    if (currentWallet?.name === 'Sui Wallet') {
+      console.log('>> Redirecting to Sui Wallet safe website');
+      push(INCINERATOR_EXTERNAL_LINK);
+    }
+  }, [currentWallet]);
 
   return (
     <FormProvider {...form}>
