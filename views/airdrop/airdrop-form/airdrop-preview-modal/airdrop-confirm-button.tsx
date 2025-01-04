@@ -132,21 +132,17 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
         const { gasCoin, spendCoin, feeCoin } = coinsObject.reduce(
           (acc, curr, index) => {
-            const balance = path(['data, content', 'fields', 'balance'], curr);
-            if (balance === totalAmount.toString())
-              return {
-                ...acc,
-                spendCoin: coins[index],
-              };
-            if (balance === feeAmount.toString())
-              return {
-                ...acc,
-                feeCoin: coins[index],
-              };
-
+            const balance = path(
+              ['data', 'content', 'fields', 'balance'],
+              curr
+            );
             return {
               ...acc,
-              gasCoins: coins[index],
+              [balance === totalAmount.toString()
+                ? 'spendCoin'
+                : balance === feeAmount.toString()
+                  ? 'feeCoin'
+                  : 'gasCoin']: coins[index],
             };
           },
           {} as ResultCoins
@@ -276,16 +272,12 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
       });
 
       const { gasCoin, feeCoin } = coinsObject.reduce((acc, curr, index) => {
-        const balance = path(['data, content', 'fields', 'balance'], curr);
-        if (balance === feeAmount.toString())
-          return {
-            ...acc,
-            feeCoin: coins[index],
-          };
+        const balance = path(['data', 'content', 'fields', 'balance'], curr);
 
         return {
           ...acc,
-          gasCoins: coins[index],
+          [balance === feeAmount.toString() ? 'feeCoin' : 'gasCoin']:
+            coins[index],
         };
       }, {} as ResultCoins);
 
@@ -366,10 +358,14 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
         await pauseUtilNextTx(initAirdropTxMS);
       }
-    } catch (e: any) {
+    } catch (e) {
       handleClose();
-      toast.error((e?.message as string) ?? e ?? 'Something went wrong!');
-      if (((e?.message as string) ?? e) === 'Rejected from user') {
+      console.log({ e });
+
+      toast.error(
+        ((e as Error)?.message as string) ?? e ?? 'Something went wrong!'
+      );
+      if ((((e as Error)?.message as string) ?? e) === 'Rejected from user') {
         setValue('error', true);
       }
     }
