@@ -146,7 +146,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
             return {
               ...acc,
-              gasCoins: coins[index],
+              gasCoin: coins[index],
             };
           },
           {} as ResultCoins
@@ -285,7 +285,7 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
         return {
           ...acc,
-          gasCoins: coins[index],
+          gasCoin: coins[index],
         };
       }, {} as ResultCoins);
 
