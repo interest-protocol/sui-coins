@@ -6,7 +6,7 @@ import { useLocalStorage } from 'usehooks-ts';
 import Avatar from '@/components/account-info/avatar';
 import { LOCAL_STORAGE_VERSION } from '@/constants';
 import { Explorer, EXPLORER_STORAGE_KEY } from '@/constants/explorer';
-import { Rpc, RPC_KEY } from '@/constants/rpc';
+import { RPC_KEY, RpcEnum } from '@/constants/rpc';
 import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
 import { useIsFirstRender } from '@/hooks/use-is-first-render';
 
@@ -26,26 +26,20 @@ const Profile: FC = () => {
     `${LOCAL_STORAGE_VERSION}-${EXPLORER_STORAGE_KEY}`,
     Explorer.SuiVision
   );
-  const [rpc, setRPC] = useLocalStorage<Rpc>(
+  const [rpc, setRPC] = useLocalStorage<RpcEnum>(
     `${LOCAL_STORAGE_VERSION}-${RPC_KEY}`,
-    Rpc.fullnode
+    RpcEnum.shinami
   );
   const [menuIsDropdown, setMenuIsDropdown] = useState(
-    isOpenProfile ||
-      isOpenAccount ||
-      isOpenRPC /* || isOpenExplorer || isOpenRPC*/
+    isOpenProfile || isOpenAccount
   );
   const currentAccount = useCurrentAccount();
   const isFirstRender = useIsFirstRender();
   const account = currentAccount?.address || '';
 
   useEffect(() => {
-    setMenuIsDropdown(
-      isOpenProfile ||
-        isOpenAccount ||
-        isOpenRPC /*|| isOpenExplorer || isOpenRPC*/
-    );
-  }, [isOpenAccount, isOpenRPC /*, isOpenExplorer, isOpenRPC*/, isOpenProfile]);
+    setMenuIsDropdown(isOpenProfile || isOpenAccount);
+  }, [isOpenAccount, isOpenProfile]);
 
   const closeDropdown = (event: any) => {
     if (
@@ -142,9 +136,7 @@ const Profile: FC = () => {
             'flex',
           ]}
           onClick={
-            isOpenProfile || isOpenAccount || isOpenRPC
-              ? handleCloseAll
-              : handleOpenProfile
+            isOpenProfile || isOpenAccount ? handleCloseAll : handleOpenProfile
           }
         >
           <Avatar isLarge />
