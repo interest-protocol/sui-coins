@@ -111,7 +111,7 @@ const AirdropNftMethod: FC = () => {
                   alignItems="center"
                   justifyContent="center"
                 >
-                  <Image
+                  <img
                     style={{ width: '100%' }}
                     alt={(asset as NFTCollectionMetadata).name}
                     src={`/images/nft/${
