@@ -20,9 +20,9 @@ const SendSelectObjectHeader: FC<SendFormSelectObjectProps> = ({ index }) => {
   };
 
   const displayName = object?.display
-    ? (object.display as Record<string, string>).name ??
+    ? ((object.display as Record<string, string>).name ??
       object.display.symbol ??
-      type
+      type)
     : type;
 
   const symbol = (object?.display as CoinObject)?.symbol ?? '';
@@ -33,8 +33,10 @@ const SendSelectObjectHeader: FC<SendFormSelectObjectProps> = ({ index }) => {
       pr="xs"
       size="large"
       variant="label"
+      maxWidth="20ch"
       overflow="hidden"
       whiteSpace="nowrap"
+      textOverflow="ellipsis"
       width={['auto', '0px']}
       display={['block', 'none']}
     >

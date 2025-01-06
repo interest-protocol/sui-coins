@@ -1,9 +1,9 @@
 export interface SuiPlayModalItemProps {
   image: string;
-  holders: number;
   updatedAt: number;
   selected: boolean;
   onClick: () => void;
+  holders: ReadonlyArray<string>;
   tier: 'The Exalted' | 'The Mythics' | 'All';
 }
 

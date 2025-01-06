@@ -12,6 +12,7 @@ import {
   IncineratorForm,
   IncineratorTabEnum,
 } from '@/views/incinerator/incinerator.types';
+import IncineratorInitManager from '@/views/incinerator/incinerator-init-manager';
 
 const IncineratorPage: NextPage = () => {
   const { currentWallet } = useCurrentWallet();
@@ -39,6 +40,7 @@ const IncineratorPage: NextPage = () => {
       <Layout>
         <SEO pageTitle="Incinerator" />
         <Incinerator />
+        <IncineratorInitManager />
       </Layout>
     </FormProvider>
   );
