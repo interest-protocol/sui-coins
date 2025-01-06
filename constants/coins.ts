@@ -88,6 +88,8 @@ export const MAINNET_BASE_COINS: Record<string, `0x${string}`> = {
     '0xb231fcda8bbddb31f2ef02e6161444aec64a514e2c89279584ac9806ce9cf037::coin::COIN',
   NATIVE_SUI_BRIDGE_ETH:
     '0xd0e89b2af5e4910726fbcd8b8dd37bb79b29e5f83f7491bca830e94f7f226d29::eth::ETH',
+  ETH_SUI_BRIDGE_USDT:
+    '0x3e8ef5e52c47a96c4cd0d05472aff75c293d0e52d0ef1d63119cbdd8be4404d3::suiusdt::SUIUSDT',
 };
 
 export const COIN_TYPE: Record<Network, Record<string, `0x${string}`>> = {
@@ -136,6 +138,8 @@ export const COIN_TYPE_TO_SYMBOL = {
     [COIN_TYPE[Network.MAINNET].BSC_WORMHOLE_DOGE]: TOKEN_SYMBOL.WORMHOLE_DOGE,
     [COIN_TYPE[Network.MAINNET].NATIVE_SUI_BRIDGE_ETH]:
       TOKEN_SYMBOL.NATIVE_SUI_BRIDGE_ETH,
+    [COIN_TYPE[Network.MAINNET].ETH_SUI_BRIDGE_USDT]:
+      TOKEN_SYMBOL.ETH_SUI_BRIDGE_USDT,
   },
 };
 
@@ -169,6 +173,7 @@ export const COIN_DECIMALS = {
     [COIN_TYPE[Network.MAINNET].BSC_WORMHOLE_FLOKI]: 8,
     [COIN_TYPE[Network.MAINNET].BSC_WORMHOLE_DOGE]: 8,
     [COIN_TYPE[Network.MAINNET].NATIVE_SUI_BRIDGE_ETH]: 8,
+    [COIN_TYPE[Network.MAINNET].ETH_SUI_BRIDGE_USDT]: 9,
   },
 };
 
@@ -357,6 +362,14 @@ export const COINS: Record<Network, Record<string, Token>> = {
       symbol: TOKEN_SYMBOL.NATIVE_SUI_BRIDGE_ETH,
       type: COIN_TYPE[Network.MAINNET].NATIVE_SUI_BRIDGE_ETH,
     },
+    ETH_SUI_BRIDGE_USDT: {
+      decimals:
+        COIN_DECIMALS[Network.MAINNET][
+          COIN_TYPE[Network.MAINNET].ETH_SUI_BRIDGE_USDT
+        ],
+      symbol: TOKEN_SYMBOL.ETH_SUI_BRIDGE_USDT,
+      type: COIN_TYPE[Network.MAINNET].ETH_SUI_BRIDGE_USDT,
+    },
   },
 };
 
@@ -489,7 +502,10 @@ export const TOKEN_ICONS: Record<
 
 export const SUI_BRIDGE_TOKENS_TYPE: Record<Network, ReadonlyArray<string>> = {
   [Network.TESTNET]: [],
-  [Network.MAINNET]: [MAINNET_BASE_COINS.NATIVE_SUI_BRIDGE_ETH],
+  [Network.MAINNET]: [
+    MAINNET_BASE_COINS.NATIVE_SUI_BRIDGE_ETH,
+    MAINNET_BASE_COINS.ETH_SUI_BRIDGE_USDT,
+  ],
 };
 
 export const WORMHOLE_TOKENS: Record<Network, Array<Token>> = {
@@ -522,6 +538,7 @@ export const SUI_BRIDGE_TOKENS: Record<Network, Array<Token>> = {
   [Network.TESTNET]: [],
   [Network.MAINNET]: [
     { ...COINS[Network.MAINNET].NATIVE_SUI_BRIDGE_ETH, chain: 'ETH' as Chain },
+    { ...COINS[Network.MAINNET].ETH_SUI_BRIDGE_USDT, chain: 'ETH' as Chain },
   ].reduce(
     (acc, curr) => {
       if (acc.some(({ type }) => curr.type === type)) return acc;

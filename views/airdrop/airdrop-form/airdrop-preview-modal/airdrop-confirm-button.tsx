@@ -136,7 +136,6 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
               ['data', 'content', 'fields', 'balance'],
               curr
             );
-
             return {
               ...acc,
               [balance === totalAmount.toString()
@@ -359,10 +358,14 @@ const AirdropConfirmButton: FC<AirdropConfirmButtonProps> = ({
 
         await pauseUtilNextTx(initAirdropTxMS);
       }
-    } catch (e: any) {
+    } catch (e) {
       handleClose();
-      toast.error((e?.message as string) ?? e ?? 'Something went wrong!');
-      if (((e?.message as string) ?? e) === 'Rejected from user') {
+      console.log({ e });
+
+      toast.error(
+        ((e as Error)?.message as string) ?? e ?? 'Something went wrong!'
+      );
+      if ((((e as Error)?.message as string) ?? e) === 'Rejected from user') {
         setValue('error', true);
       }
     }
