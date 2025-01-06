@@ -11,9 +11,10 @@ import { formatSuiNS } from '@/utils';
 import { AvatarProps } from './account-info.types';
 
 const Avatar: FC<AvatarProps> = ({ isLarge, account, withNameOrAddress }) => {
-  const { names, images, loading } = useSuiNs();
-  const currentAccount = useCurrentAccount();
   const SIZE = isLarge ? '2.2rem' : '1.5rem';
+
+  const currentAccount = useCurrentAccount();
+  const { names, images, loading } = useSuiNs();
   const [imgLoading, setImgLoading] = useState(true);
 
   const localAccount = account ?? currentAccount!.address!;
