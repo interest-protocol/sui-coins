@@ -63,16 +63,16 @@ const Document = () => (
       <meta name="theme-color" content="#ffffff" />
       <meta
         name="description"
-        content="Swap coins, Create token, Airdrop and incinerator your crypto assets."
+        content="Sui coins - Trade crypto, swap coins, create tokens, airdrop, and incinerator your crypto assets—all in one seamless platform."
       />
       <meta
         name="keywords"
-        content="Crypto, DeFi, Swap coins, Tokens, Coins, Airdrop, Incinerator, Send coin"
+        content="Sui coins - Trade crypto, swap coins, create tokens, airdrop, and incinerator your crypto assets—all in one seamless platform."
       />
       <meta name="author" content="Interest Protocol" />
       <meta
         property="og:title"
-        content="Sui coins - Swap coins, Create token, Airdrop and incinerator your crypto assets."
+        content="Sui coins - Trade crypto, swap coins, create tokens, airdrop, and incinerator your crypto assets—all in one seamless platform."
       />
       <meta property="og:locale" content="en_US" />
       <meta property="og:type" content="web app" />
@@ -80,7 +80,7 @@ const Document = () => (
       <meta property="og:url" content="https://www.suicoins.com" />
       <meta
         property="og:image:alt"
-        content="Sui coins - Swap coins, Create token, Airdrop and incinerator your crypto assets."
+        content="Sui coins - Trade crypto, swap coins, create tokens, airdrop, and incinerator your crypto assets—all in one seamless platform."
       />
 
       <meta name="apple-mobile-web-app-capable" content="no" />
