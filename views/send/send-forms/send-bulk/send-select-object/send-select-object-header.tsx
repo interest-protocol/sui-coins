@@ -14,7 +14,7 @@ const SendSelectObjectHeader: FC = () => {
     type: undefined,
   };
 
-  const displayName = object ? object.symbol ?? type : type;
+  const displayName = object ? (object.symbol ?? type) : type;
 
   const symbol = object?.symbol ?? '';
 
@@ -27,9 +27,11 @@ const SendSelectObjectHeader: FC = () => {
         m="xs"
         pr="xs"
         size="large"
+        maxWidth="12ch"
         variant="label"
         overflow="hidden"
         whiteSpace="nowrap"
+        textOverflow="ellipsis"
         width={['auto', '0px']}
         display={['block', 'none']}
       >

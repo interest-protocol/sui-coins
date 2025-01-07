@@ -21,6 +21,7 @@ const IncineratorPage: NextPage = () => {
       tab: IncineratorTabEnum.All,
     },
   });
+
   return (
     <FormProvider {...form}>
       <Layout>
