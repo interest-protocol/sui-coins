@@ -99,7 +99,14 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
                 url={metadata.iconUrl}
                 network={network as Network}
               />
-              <Typography size="small" variant="title">
+              <Typography
+                size="small"
+                variant="title"
+                maxWidth="12ch"
+                overflow="hidden"
+                whiteSpace="nowrap"
+                textOverflow="ellipsis"
+              >
                 {symbol}
               </Typography>
             </Box>

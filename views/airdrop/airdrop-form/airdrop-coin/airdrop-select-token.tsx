@@ -55,7 +55,6 @@ const AirdropSelectToken: FC<{ isStrict: boolean }> = ({ isStrict }) => {
     <Box position="relative" id={BOX_ID}>
       <Box
         p="xs"
-        gap="xs"
         display="flex"
         minWidth="8rem"
         cursor="pointer"
@@ -64,19 +63,31 @@ const AirdropSelectToken: FC<{ isStrict: boolean }> = ({ isStrict }) => {
         alignItems="center"
         onClick={openModal}
         borderColor="outlineVariant"
+        justifyContent="space-between"
       >
-        {token && (
-          <TokenIcon
-            withBg
-            type={token.type}
-            symbol={token.symbol}
-            url={token.metadata.iconUrl}
-            network={network as Network}
-          />
-        )}
-        <Typography variant="label" size="large" flex="1" as="span">
-          {token ? getSymbol(token.symbol, token.type) : '---'}
-        </Typography>
+        <Box gap="xs" display="flex" alignItems="center">
+          {token && (
+            <TokenIcon
+              withBg
+              type={token.type}
+              symbol={token.symbol}
+              url={token.metadata.iconUrl}
+              network={network as Network}
+            />
+          )}
+          <Typography
+            flex="1"
+            as="span"
+            size="large"
+            variant="label"
+            maxWidth="12ch"
+            overflow="hidden"
+            whiteSpace="nowrap"
+            textOverflow="ellipsis"
+          >
+            {token ? getSymbol(token.symbol, token.type) : '---'}
+          </Typography>
+        </Box>
         <Box rotate="90deg">
           <ChevronRightSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
         </Box>

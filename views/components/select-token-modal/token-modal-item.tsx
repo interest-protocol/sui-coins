@@ -94,7 +94,7 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
             overflow="hidden"
             whiteSpace="nowrap"
             textOverflow="ellipsis"
-            maxWidth={['unset', '5rem']}
+            maxWidth={['12ch', '5rem']}
           >
             {symbol}
           </Typography>
@@ -113,7 +113,7 @@ const TokenModalItem: FC<TokenModalItemProps> = ({
                 overflow="hidden"
                 whiteSpace="nowrap"
                 textOverflow="ellipsis"
-                maxWidth={['unset', '5rem']}
+                maxWidth={['12ch', '5rem']}
               >
                 {name}
               </Typography>

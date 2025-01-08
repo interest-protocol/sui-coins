@@ -29,7 +29,6 @@ const SelectNFTModal: FC<SelectNFTModalProps> = ({ onSelect, closeModal }) => {
     <FormProvider {...form}>
       <Motion
         layout
-        width="25rem"
         display="flex"
         bg="onPrimary"
         height="41rem"
@@ -38,6 +37,7 @@ const SelectNFTModal: FC<SelectNFTModalProps> = ({ onSelect, closeModal }) => {
         color="onSurface"
         borderRadius="xs"
         flexDirection="column"
+        width={['100%', '25rem']}
         boxShadow="0 0 5px #3334"
         transition={{ duration: 0.3 }}
       >
