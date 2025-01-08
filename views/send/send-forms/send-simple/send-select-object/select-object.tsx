@@ -102,8 +102,8 @@ const SelectObject: FC<SendFormSelectObjectProps> = ({ index }) => {
         <Typography
           size="large"
           variant="label"
-          pr={['0', 'xs']}
           maxWidth="12ch"
+          pr={['0', 'xs']}
           color="onSurface"
           overflow="hidden"
           whiteSpace="nowrap"

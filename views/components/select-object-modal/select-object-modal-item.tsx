@@ -96,9 +96,12 @@ const ObjectModalItem: FC<ObjectModalItemProps> = ({
         >
           <Typography
             size="medium"
-            display="flex"
             variant="title"
+            maxWidth="12ch"
+            overflow="hidden"
+            whiteSpace="nowrap"
             alignItems="flex-end"
+            textOverflow="ellipsis"
           >
             {type === displayName ? formatAddress(type) : displayName}
           </Typography>

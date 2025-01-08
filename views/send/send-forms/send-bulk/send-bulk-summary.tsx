@@ -5,6 +5,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 import { ZK_SEND_GAS_BUDGET } from '@/constants/zksend';
 import { FixedPointMath } from '@/lib';
+import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { ISendBulkForm } from './send-bulk.types';
 
@@ -18,8 +19,8 @@ const SendBulkSummary: FC = () => {
   const decimals = useWatch({ control, name: 'object.decimals' });
 
   const displayBalance = balance
-    ? `${FixedPointMath.toNumber(balance, decimals)} ${symbol}`
-    : '--';
+    ? `${FixedPointMath.toNumber(balance, decimals)}`
+    : ZERO_BIG_NUMBER;
 
   const displayAmountToSend =
     Number(value) && Number(quantity)
@@ -41,9 +42,24 @@ const SendBulkSummary: FC = () => {
         <Typography variant="body" size="medium" color="outline">
           Balance
         </Typography>
-        <Typography variant="body" size="medium">
-          {displayBalance}
-        </Typography>
+        {displayBalance ? (
+          <Typography variant="body" size="medium">
+            {displayBalance.toString()}
+            <Typography
+              size="medium"
+              variant="body"
+              color="outline"
+              maxWidth="12ch"
+              overflow="hidden"
+              whiteSpace="nowrap"
+              textOverflow="ellipsis"
+            >
+              {symbol}
+            </Typography>
+          </Typography>
+        ) : (
+          '--'
+        )}
       </Box>
       <Box
         py="m"
@@ -85,7 +101,11 @@ const SendBulkSummary: FC = () => {
                 as="strong"
                 size="medium"
                 variant="body"
+                maxWidth="15ch"
                 fontWeight="bold"
+                overflow="hidden"
+                whiteSpace="nowrap"
+                textOverflow="ellipsis"
               >
                 {value} {symbol}
               </Typography>{' '}

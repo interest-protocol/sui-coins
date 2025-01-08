@@ -28,8 +28,10 @@ const SendSelectObjectHeader: FC = () => {
         pr="xs"
         size="large"
         variant="label"
+        maxWidth="15ch"
         overflow="hidden"
         whiteSpace="nowrap"
+        textOverflow="ellipsis"
         width={['auto', '0px']}
         display={['block', 'none']}
       >
