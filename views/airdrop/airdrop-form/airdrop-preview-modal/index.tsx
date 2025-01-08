@@ -92,7 +92,7 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
             alignItems="center"
             justifyContent="space-between"
           >
-            <Box display="flex" alignItems="center" gap="m">
+            <Box display="flex" alignItems="center" gap="xs">
               <TokenIcon
                 type={type}
                 symbol={symbol}
@@ -102,7 +102,7 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
               <Typography
                 size="small"
                 variant="title"
-                maxWidth="12ch"
+                maxWidth="10ch"
                 overflow="hidden"
                 whiteSpace="nowrap"
                 textOverflow="ellipsis"
@@ -111,8 +111,18 @@ const AirdropPreviewModal: FC<AirdropPreviewModalProps> = ({
               </Typography>
             </Box>
             <Box textAlign="right">
-              <Typography size="medium" variant="body">
-                {formatMoney(total)} {getSymbol(symbol, type)}
+              <Typography gap="2xs" display="flex" size="medium" variant="body">
+                {formatMoney(total)}
+                <Typography
+                  size="medium"
+                  variant="body"
+                  maxWidth="10ch"
+                  overflow="hidden"
+                  whiteSpace="nowrap"
+                  textOverflow="ellipsis"
+                >
+                  {getSymbol(symbol, type)}
+                </Typography>
               </Typography>
               <Typography variant="body" size="small" color="#000000A3">
                 {usdPrice ? formatMoney(usdPrice * total) : '--'} USD
