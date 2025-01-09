@@ -3,6 +3,7 @@ import {
   Network,
   Routes,
   RoutesEnum,
+  SUI_TERMINAL_EXTERNAL_LINK,
 } from '@/constants';
 import {
   AirdropSVG,
@@ -12,7 +13,7 @@ import {
   HourglassSVG,
   MenuSVG,
   MergeSVG,
-  UploadSVG,
+  SwapTerminalSVG,
 } from '@/svg';
 
 import { IMenuItem } from './sidebar.types';
@@ -62,10 +63,11 @@ export const SIDEBAR_ITEMS: ReadonlyArray<IMenuItem> = [
     accordionList: [
       {
         beta: false,
-        name: 'send',
+        isExternalLink: true,
+        name: 'swap terminal',
         disabled: false,
-        Icon: UploadSVG,
-        path: Routes[RoutesEnum.Send],
+        Icon: SwapTerminalSVG,
+        path: SUI_TERMINAL_EXTERNAL_LINK,
         networks: [Network.MAINNET, Network.TESTNET],
       },
       {
