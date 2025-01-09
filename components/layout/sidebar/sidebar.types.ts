@@ -10,6 +10,7 @@ export interface AccordionItemProps {
   disabled: boolean;
   Icon: FC<SVGProps>;
   suiWalletLink?: string;
+  isExternalLink?: boolean;
   networks: ReadonlyArray<Network>;
 }
 
