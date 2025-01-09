@@ -63,7 +63,7 @@ export const SIDEBAR_ITEMS: ReadonlyArray<IMenuItem> = [
     accordionList: [
       {
         beta: false,
-        name: 'Sui Terminal',
+        name: 'terminal',
         disabled: false,
         Icon: UploadSVG,
         path: SUI_TERMINAL_EXTERNAL_LINK,
