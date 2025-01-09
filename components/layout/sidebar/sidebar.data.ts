@@ -3,6 +3,7 @@ import {
   Network,
   Routes,
   RoutesEnum,
+  SUI_TERMINAL_EXTERNAL_LINK,
 } from '@/constants';
 import {
   AirdropSVG,
@@ -62,10 +63,10 @@ export const SIDEBAR_ITEMS: ReadonlyArray<IMenuItem> = [
     accordionList: [
       {
         beta: false,
-        name: 'send',
+        name: 'Sui Terminal',
         disabled: false,
         Icon: UploadSVG,
-        path: Routes[RoutesEnum.Send],
+        path: SUI_TERMINAL_EXTERNAL_LINK,
         networks: [Network.MAINNET, Network.TESTNET],
       },
       {
