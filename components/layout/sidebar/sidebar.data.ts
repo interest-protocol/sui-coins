@@ -14,6 +14,7 @@ import {
   MenuSVG,
   MergeSVG,
   SwapTerminalSVG,
+  UploadSVG,
 } from '@/svg';
 
 import { IMenuItem } from './sidebar.types';
@@ -68,6 +69,14 @@ export const SIDEBAR_ITEMS: ReadonlyArray<IMenuItem> = [
         disabled: false,
         Icon: SwapTerminalSVG,
         path: SUI_TERMINAL_EXTERNAL_LINK,
+        networks: [Network.MAINNET, Network.TESTNET],
+      },
+      {
+        beta: false,
+        name: 'send',
+        disabled: false,
+        Icon: UploadSVG,
+        path: Routes[RoutesEnum.Send],
         networks: [Network.MAINNET, Network.TESTNET],
       },
       {
