@@ -18,11 +18,7 @@ import { CoinsMap } from './coins-manager.types';
 const CoinsManager: FC = () => {
   const network = useNetwork();
   const suiClient = useSuiClient();
-  const currentAccount =
-    /*{
-    address:
-      '0xdd224f2287f0b38693555c6077abe85fcb4aa13e355ad54bc167611896b007e6',
-  };*/ useCurrentAccount();
+  const currentAccount = useCurrentAccount();
   const { id, delay, coinsMap, updateCoins, updateLoading, updateError } =
     useCoins();
 
