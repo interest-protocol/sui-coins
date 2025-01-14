@@ -556,7 +556,7 @@ const DCAOrderListItem: FC<DCAShortInfo> = ({
               </Motion>
             }
           >
-            Expand
+            {selected ? 'Collapse' : 'Expand'}
           </Button>
         </Box>
         <DCAOrderDetails id={id} />
