@@ -211,6 +211,7 @@ export const useOnBurn = () => {
   const getExplorerUrl = useGetExplorerUrl();
   const { data: tokens } = useStrictTokens();
   const { setModal, handleClose } = useModal();
+  const { data: verifiedNfts } = useVerifiedDeFiNfts();
   const { setValue } = useFormContext<IncineratorForm>();
 
   const refresh = () => {
@@ -355,7 +356,8 @@ export const useOnBurn = () => {
               type.endsWith('::personal_kiosk::PersonalKioskCap') ||
               tokens?.strictTokensType.some((verified) =>
                 type.includes(verified)
-              )
+              ) ||
+              verifiedNfts?.some((verified) => type.includes(verified))
           ) && (
             <Box
               p="s"
