@@ -6,8 +6,8 @@ export const validationSchema = yup.object({
     .string()
     .required('Symbol is a required field')
     .matches(
-      /^[a-zA-Z][\x21-\x7E]*$/,
-      'This symbol is not following ASCII pattern'
+      /^[a-zA-Z][a-zA-Z0-9]*$/,
+      'This symbol must start with a letter and can only contain letters and numbers'
     ),
   description: yup
     .string()
