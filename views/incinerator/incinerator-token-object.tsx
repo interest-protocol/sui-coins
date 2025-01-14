@@ -51,7 +51,7 @@ const IncineratorTokenObject: FC<IncineratorTokenObjectProps> = ({
           tooltipContent={type}
         >
           <Box display="flex" gap="2xs">
-            {!verifiedNfts.includes(kind === 'Coin' ? display!.type : type) &&
+            {!verifiedNfts?.includes(kind === 'Coin' ? display!.type : type) &&
               scam?.includes(kind === 'Coin' ? display!.type : type) && (
                 <Box color="error" width="1rem">
                   <BurnSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
