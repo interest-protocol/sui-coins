@@ -1,5 +1,4 @@
 import { Box, ProgressIndicator, Typography } from '@interest-protocol/ui-kit';
-import { useCurrentAccount } from '@mysten/dapp-kit';
 import { formatAddress } from '@mysten/sui/utils';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -17,7 +16,6 @@ import {
 } from './dca-preview-modal-summary.utils';
 
 const DCAPreviewModalSummary: FC = () => {
-  const currentAccount = useCurrentAccount();
   const { data, isLoading } = useFeeFreeTokens();
   const { control, getValues } = useFormContext<DCAForm>();
 
@@ -34,10 +32,6 @@ const DCAPreviewModalSummary: FC = () => {
     control,
     name: 'isToCustomRecipient',
   });
-
-  const recipientAddress = isToCustomRecipient
-    ? customRecipientAddress
-    : currentAccount?.address || '';
 
   const startDate = getStartDate();
   const endDate = getEstimatedEndDate(Number(timeScale), Number(orders));
@@ -213,39 +207,41 @@ const DCAPreviewModalSummary: FC = () => {
             )}
           </Box>
         </Box>
-        <Box py="m" display="flex" justifyContent="space-between">
-          <Typography
-            variant="body"
-            size="medium"
-            opacity="0.80"
-            color="#000000A3"
-          >
-            Recipient address
-          </Typography>
-          <Box display="flex" justifyContent="center" alignItems="center">
-            {!isLoading ? (
-              <>
-                <Typography
-                  mr="2xs"
-                  variant="body"
-                  size="medium"
-                  color="onSurface"
-                >
-                  {formatAddress(recipientAddress)}
-                </Typography>
-                <InformationCircleSVG
-                  color="#1B1B1F"
-                  cursor="pointer"
-                  width="0.802rem"
-                  maxWidth="0.802rem"
-                  maxHeight="0.802rem"
-                />
-              </>
-            ) : (
-              <ProgressIndicator variant="loading" size={16} />
-            )}
+        {isToCustomRecipient && (
+          <Box py="m" display="flex" justifyContent="space-between">
+            <Typography
+              variant="body"
+              size="medium"
+              opacity="0.80"
+              color="#000000A3"
+            >
+              Recipient address
+            </Typography>
+            <Box display="flex" justifyContent="center" alignItems="center">
+              {!isLoading ? (
+                <>
+                  <Typography
+                    mr="2xs"
+                    variant="body"
+                    size="medium"
+                    color="onSurface"
+                  >
+                    {formatAddress(customRecipientAddress)}
+                  </Typography>
+                  <InformationCircleSVG
+                    color="#1B1B1F"
+                    cursor="pointer"
+                    width="0.802rem"
+                    maxWidth="0.802rem"
+                    maxHeight="0.802rem"
+                  />
+                </>
+              ) : (
+                <ProgressIndicator variant="loading" size={16} />
+              )}
+            </Box>
           </Box>
-        </Box>
+        )}
       </Box>
     </Box>
   );
