@@ -73,8 +73,17 @@ const DCAButton: FC = () => {
     if (error || isLoading) return;
 
     try {
-      const { to, from, intervals, orders, periodicity, min, max } =
-        formDCA.getValues();
+      const {
+        to,
+        from,
+        intervals,
+        orders,
+        periodicity,
+        min,
+        max,
+        customRecipientAddress: recipient,
+        isToCustomRecipient,
+      } = formDCA.getValues();
 
       invariant(currentAccount, 'Need to connect wallet');
 
@@ -124,7 +133,9 @@ const DCAButton: FC = () => {
         }),
       };
 
-      const tx = dcaSdk.newAndShare(args);
+      const tx = isToCustomRecipient
+        ? dcaSdk.newAndShareWithRecipient({ ...args, recipient })
+        : dcaSdk.newAndShare(args);
 
       const txResult = await signAndExecute({
         tx,
@@ -143,6 +154,7 @@ const DCAButton: FC = () => {
         inputCoinType: from.type,
         outputCoinType: to.type,
         aggregator: aggregator ?? Aggregator.Aftermath,
+        ...(recipient && { recipient }),
       });
 
       await fetch(`${SENTINEL_API_URI[network]}dcas`, {
