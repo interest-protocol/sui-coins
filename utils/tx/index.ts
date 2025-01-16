@@ -62,7 +62,7 @@ export const waitForTx = async ({
 export const getObjectIdsFromTxResult = (
   txResult: TimedSuiTransactionBlockResponse,
   field: 'created' | 'mutated'
-) =>
-  txResult.effects?.[field]!.map(
+): ReadonlyArray<string> =>
+  txResult.effects![field]!.map(
     (item: OwnedObjectRef) => item.reference.objectId
   );
