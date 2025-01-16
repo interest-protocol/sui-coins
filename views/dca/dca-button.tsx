@@ -147,7 +147,9 @@ const DCAButton: FC = () => {
       throwTXIfNotSuccessful(txResult);
       formDCA.setValue('executionTime', txResult.time);
 
-      const dcaId = getObjectIdsFromTxResult(txResult, 'created');
+      const createdObjects = getObjectIdsFromTxResult(txResult, 'created');
+
+      const dcaId = createdObjects[1] ?? createdObjects[0];
 
       const body = JSON.stringify({
         dcaId,
