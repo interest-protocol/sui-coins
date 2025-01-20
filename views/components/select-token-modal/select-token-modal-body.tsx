@@ -69,14 +69,14 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
       isSearchAddress &&
       (faucet
         ? FAUCET_COINS.map(({ type }) => type)
-        : tokens?.strictTokensType ?? []
+        : (tokens?.strictTokensType ?? [])
       ).includes(search))
   )
     return (
       <ModalTokenBody
         handleSelectToken={handleSelectToken}
         tokens={[
-          ...(faucet ? FAUCET_COINS : tokens?.strictTokens ?? []).filter(
+          ...(faucet ? FAUCET_COINS : (tokens?.strictTokens ?? [])).filter(
             ({ symbol, type, name }) =>
               (!search ||
                 symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||
@@ -84,7 +84,7 @@ const SelectTokenModalBody: FC<SelectTokenModalBodyProps> = ({
                 type.includes(search)) &&
               favoriteTokenTypes?.includes(type)
           ),
-          ...(faucet ? FAUCET_COINS : tokens?.strictTokens ?? []).filter(
+          ...(faucet ? FAUCET_COINS : (tokens?.strictTokens ?? [])).filter(
             ({ symbol, type, name }) =>
               (!search ||
                 symbol.toLocaleLowerCase().includes(search.toLowerCase()) ||

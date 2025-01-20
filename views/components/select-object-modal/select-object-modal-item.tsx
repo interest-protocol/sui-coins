@@ -50,7 +50,7 @@ const ObjectModalItem: FC<ObjectModalItemProps> = ({
   };
 
   const displayName = display
-    ? (display as Record<string, string>).name ?? display.symbol ?? type
+    ? ((display as Record<string, string>).name ?? display.symbol ?? type)
     : type;
 
   const { symbol, type: coinType } = (display as CoinObject) ?? {
