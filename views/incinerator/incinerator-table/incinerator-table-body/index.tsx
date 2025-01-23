@@ -12,7 +12,6 @@ const IncineratorTableBody: FC = () => {
   const { fields } = useFieldArray({ control, name: 'objects' });
   const search = useWatch({ control, name: 'search' });
 
-  console.log('fields', fields);
 
   const normalizedSearch = search?.toLowerCase().trim() || '';
 
