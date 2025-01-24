@@ -2,13 +2,16 @@ import { Box, Typography } from '@interest-protocol/ui-kit';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 
+import { ArrowObliqueSVG } from '@/svg';
+
 import { AccordionItemProps } from '../sidebar.types';
 
 const AccordionItem: FC<AccordionItemProps> = ({
   name,
   path,
-  disabled,
   beta,
+  disabled,
+  isExternalLink,
 }) => {
   const { push, asPath } = useRouter();
 
@@ -46,19 +49,26 @@ const AccordionItem: FC<AccordionItemProps> = ({
       >
         {name}
       </Typography>
-      {beta && (
-        <Typography
-          px="2xs"
-          size="small"
-          variant="label"
-          border="1px solid"
-          borderRadius="2xs"
-          bg="errorContainer"
-          color="onErrorContainer"
-        >
-          Beta
-        </Typography>
-      )}
+      <Box display="flex" alignItems="center" gap="s">
+        {beta && (
+          <Typography
+            px="2xs"
+            size="small"
+            variant="label"
+            border="1px solid"
+            borderRadius="2xs"
+            bg="errorContainer"
+            color="onErrorContainer"
+          >
+            Beta
+          </Typography>
+        )}
+        {isExternalLink && (
+          <Box pr="m" display="flex" alignItems="center">
+            <ArrowObliqueSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+          </Box>
+        )}
+      </Box>
     </Box>
   );
 };

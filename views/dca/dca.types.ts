@@ -30,6 +30,8 @@ export interface DCAForm {
   executionTime: number;
   periodicity: TimeScale;
   aggregator: Aggregator;
+  isToCustomRecipient: boolean;
+  customRecipientAddress: string;
 }
 
 export interface DCAPreviewModalProps {

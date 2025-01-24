@@ -43,7 +43,7 @@ const PoolPreviewWrapperFooter: FC<PoolPreviewWrapperProps> = ({
                 <ProgressIndicator variant="loading" size={16} />
               </Box>
             ) : (
-              fees.data?.[0] ?? '--'
+              (fees.data?.[0] ?? '--')
             )
           }
         />

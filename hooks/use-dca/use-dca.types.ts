@@ -12,6 +12,7 @@ export interface DCA {
   delegatee: string;
   lastTrade: number;
   isTrading: boolean;
+  recipient?: string;
   feePercent: number;
   totalOrders: number;
   timeScale: TimeScale;

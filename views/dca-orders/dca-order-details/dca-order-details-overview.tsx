@@ -1,11 +1,16 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
+import { formatAddress } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
+import Link from 'next/link';
 import { FC } from 'react';
 
 import { TokenIcon } from '@/components';
+import { ExplorerMode } from '@/constants';
+import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useNetwork } from '@/hooks/use-network';
 import { FixedPointMath } from '@/lib';
-import { formatMoney, ZERO_BIG_NUMBER } from '@/utils';
+import { CopySVG } from '@/svg';
+import { copyToClipboard, formatMoney, ZERO_BIG_NUMBER } from '@/utils';
 import { PERIODICITY } from '@/views/dca/dca.data';
 
 import { useDCAState } from '../dca-orders-manager';
@@ -14,15 +19,18 @@ import DCAOrderDetailsOverviewUSD from './dca-order-details-overview-usd';
 
 const DCAOrderDetailsOverview: FC = () => {
   const network = useNetwork();
+  const getExplorerUrl = useGetExplorerUrl();
 
   const { detailedDcas, coinsMetadata, selectedId, dcaOrders } = useDCAState();
 
   const {
+    owner,
     every,
     start,
     input,
     output,
     cooldown,
+    recipient,
     lastTrade,
     timeScale,
     totalOrders,
@@ -39,6 +47,8 @@ const DCAOrderDetailsOverview: FC = () => {
 
   const tokenIn = coinsMetadata[input];
   const tokenOut = coinsMetadata[output];
+
+  const account = recipient || owner;
 
   return (
     <Box
@@ -150,6 +160,41 @@ const DCAOrderDetailsOverview: FC = () => {
             Every {every} {PERIODICITY[timeScale]}
             {every !== 1 ? 's' : ''}
           </Typography>
+        </Box>
+
+        <Box
+          py="s"
+          display="flex"
+          borderTop="1px solid"
+          borderColor="outlineVariant"
+          justifyContent="space-between"
+        >
+          <Typography variant="body" size="small" color="onSurface">
+            Recipient
+          </Typography>
+          <Box display="flex" alignItems="center" gap="xs">
+            <Link
+              target="_blank"
+              href={getExplorerUrl(account, ExplorerMode.Account)}
+            >
+              <Typography
+                variant="body"
+                size="small"
+                nHover={{ textDecoration: 'underline' }}
+              >
+                {formatAddress(account)}
+              </Typography>
+            </Link>
+            <Box
+              onClick={(e) => {
+                e.stopPropagation();
+                copyToClipboard(account);
+              }}
+              cursor="pointer"
+            >
+              <CopySVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+            </Box>
+          </Box>
         </Box>
         <Box
           py="s"
