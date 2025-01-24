@@ -13,6 +13,7 @@ import { v4 } from 'uuid';
 
 import { Routes, RoutesEnum } from '@/constants';
 import { ArrowObliqueSVG } from '@/svg';
+import { noop } from '@/utils';
 
 import { MenuItemTitleContentProps } from '../sidebar.types';
 import CollapseIcon from './collapsible-icon';
@@ -62,64 +63,66 @@ const MenuItemTitleContent: FC<MenuItemTitleContentProps> = ({
   };
 
   return (
-    <Motion
-      mx="auto"
-      key={v4()}
-      zIndex="1"
-      width="auto"
-      height="3rem"
-      display="flex"
-      overflow="hidden"
-      color="onSurface"
-      onClick={onClick}
-      position="relative"
-      alignItems="center"
-      opacity={disabled ? 0.7 : 1}
-      justifyContent="space-between"
-      p={isCollapsed ? '0.65rem' : 's'}
-      borderRadius={isCollapsed ? 'm' : 'xs'}
-      cursor={disabled ? 'not-allowed' : 'pointer'}
-      bg={isSelected ? `${colors.primary}29` : undefined}
-    >
-      {!disabled && !isSelected && <MenuItemTitleBackground />}
-      <Box display="flex" alignItems="center">
-        <Box width="1.2rem" height="1.2rem" m="2xs">
-          <Icon maxHeight="1.2rem" maxWidth="1.2rem" width="100%" />
-        </Box>
-        <Typography ml="l" size="large" variant="label" width="max-content">
-          {name}
-        </Typography>
-      </Box>
-      {isSuiWallet && (
-        <ArrowObliqueSVG maxHeight="1.5rem" maxWidth="1.5em" width="100%" />
-      )}
-      {beta &&
-        (isCollapsed ? (
-          <Box
-            bg="error"
-            top="0.75rem"
-            width="0.5rem"
-            left="1.75rem"
-            height="0.5rem"
-            position="absolute"
-            borderRadius="50%"
-          />
-        ) : (
-          <Typography
-            px="xs"
-            py="2xs"
-            size="small"
-            variant="label"
-            border="1px solid"
-            borderRadius="2xs"
-            bg="errorContainer"
-            color="onErrorContainer"
-          >
-            Beta
+    <a href={suiWalletLink ? (isSuiWallet ? suiWalletLink : noop) : noop}>
+      <Motion
+        mx="auto"
+        key={v4()}
+        zIndex="1"
+        width="auto"
+        height="3rem"
+        display="flex"
+        overflow="hidden"
+        color="onSurface"
+        onClick={onClick}
+        position="relative"
+        alignItems="center"
+        opacity={disabled ? 0.7 : 1}
+        justifyContent="space-between"
+        p={isCollapsed ? '0.65rem' : 's'}
+        borderRadius={isCollapsed ? 'm' : 'xs'}
+        cursor={disabled ? 'not-allowed' : 'pointer'}
+        bg={isSelected ? `${colors.primary}29` : undefined}
+      >
+        {!disabled && !isSelected && <MenuItemTitleBackground />}
+        <Box display="flex" alignItems="center">
+          <Box width="1.2rem" height="1.2rem" m="2xs">
+            <Icon maxHeight="1.2rem" maxWidth="1.2rem" width="100%" />
+          </Box>
+          <Typography ml="l" size="large" variant="label" width="max-content">
+            {name}
           </Typography>
-        ))}
-      {!isCollapsed && accordionList && <CollapseIcon />}
-    </Motion>
+        </Box>
+        {isSuiWallet && (
+          <ArrowObliqueSVG maxHeight="1.5rem" maxWidth="1.5em" width="100%" />
+        )}
+        {beta &&
+          (isCollapsed ? (
+            <Box
+              bg="error"
+              top="0.75rem"
+              width="0.5rem"
+              left="1.75rem"
+              height="0.5rem"
+              position="absolute"
+              borderRadius="50%"
+            />
+          ) : (
+            <Typography
+              px="xs"
+              py="2xs"
+              size="small"
+              variant="label"
+              border="1px solid"
+              borderRadius="2xs"
+              bg="errorContainer"
+              color="onErrorContainer"
+            >
+              Beta
+            </Typography>
+          ))}
+        {!isCollapsed && accordionList && <CollapseIcon />}
+      </Motion>
+    </a>
   );
 };
 
