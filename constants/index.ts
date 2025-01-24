@@ -7,6 +7,7 @@ export enum Keys {
 }
 
 export * from './dapp';
+export * from './explorer';
 export * from './partners';
 export * from './routes';
 export * from './suiplay';
