@@ -1,8 +1,8 @@
 // create token fee: 2 SUI
 export const CREATE_TOKEN_SUI_FEE = 2_000_000_000;
 
-// amount 0.04 SUI (4000000 MIST) per address
-export const AIRDROP_SUI_FEE_PER_ADDRESS = 4_000_000;
+// amount 0.002 SUI (2000000 MIST) per address
+export const AIRDROP_SUI_FEE_PER_ADDRESS = 2_000_000;
 
 // 0.25%
 export const EXCHANGE_FEE = 0.0025; // Real numeric value

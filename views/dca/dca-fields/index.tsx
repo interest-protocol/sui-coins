@@ -2,6 +2,7 @@ import {
   Box,
   Tag,
   TextField,
+  ToggleButton,
   TooltipWrapper,
   Typography,
 } from '@interest-protocol/ui-kit';
@@ -26,6 +27,10 @@ const DCAFields: FC = () => {
   const toSymbol = getValues('to.symbol');
   const fromSymbol = getValues('from.symbol');
   const price = useWatch({ control, name: 'price' });
+  const isToCustomRecipient = useWatch({
+    control,
+    name: 'isToCustomRecipient',
+  });
 
   return (
     <Box gap="l" display="flex" flexDirection="column">
@@ -244,6 +249,67 @@ const DCAFields: FC = () => {
               {value * 100}%
             </Tag>
           ))}
+        </Box>
+        <Box mt="l">
+          <Box display="flex" justifyContent="space-between">
+            <Typography variant="title" size="medium" fontWeight="500">
+              Add custom recipient
+            </Typography>
+            <ToggleButton
+              name="isToCustomRecipient"
+              defaultValue={getValues('isToCustomRecipient')}
+              onChange={() => {
+                setValue(
+                  'isToCustomRecipient',
+                  !getValues('isToCustomRecipient')
+                );
+              }}
+            />
+          </Box>
+          {isToCustomRecipient && (
+            <Box>
+              <Box mt="s" mb="xs" gap="xs" display="flex" alignItems="center">
+                <Typography variant="label" size="medium" fontSize="s">
+                  Recipient Address
+                </Typography>
+                <TooltipWrapper
+                  bg="onSurface"
+                  whiteSpace="nowrap"
+                  tooltipPosition="left"
+                  color="lowestContainer"
+                  tooltipContent="Add a new recipient address"
+                >
+                  <Box display="flex" alignItems="center">
+                    <InfoCircleSVG
+                      maxWidth="1rem"
+                      maxHeight="1rem"
+                      width="100%"
+                    />
+                  </Box>
+                </TooltipWrapper>
+              </Box>
+              <TextField
+                width="100%"
+                lineHeight="l"
+                placeholder="0x0123456789abcdef..."
+                color="onSurface"
+                fontFamily="Satoshi"
+                nPlaceholder={{ opacity: 0.7 }}
+                supportingText={errors.customRecipientAddress?.message}
+                status={
+                  errors.customRecipientAddress?.message ? 'error' : undefined
+                }
+                fieldProps={{
+                  mx: 0,
+                  px: 0,
+                  width: '100%',
+                  height: '3.5rem',
+                  borderRadius: 'xs',
+                }}
+                {...register('customRecipientAddress')}
+              />
+            </Box>
+          )}
         </Box>
       </Box>
     </Box>

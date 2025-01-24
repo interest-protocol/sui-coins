@@ -10,6 +10,7 @@ import {
   useSuiClientContext,
 } from '@mysten/dapp-kit';
 import { SUI_TYPE_ARG } from '@mysten/sui/utils';
+import Image from 'next/image';
 import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -157,8 +158,8 @@ const SendLink: FC<SendLinkProps> = ({ data, error, isLoading, mutate }) => {
         borderColor="outlineVariant"
       >
         {data ? (
-          <img
-            width="150"
+          <Image
+            style={{ width: '150' }}
             alt="QR Code"
             src={`https://api.qrserver.com/v1/create-qr-code?data=${url}&size=150x150`}
           />

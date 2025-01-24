@@ -1,4 +1,10 @@
-import { Network, Routes, RoutesEnum } from '@/constants';
+import {
+  INCINERATOR_EXTERNAL_LINK,
+  Network,
+  Routes,
+  RoutesEnum,
+  SUI_TERMINAL_EXTERNAL_LINK,
+} from '@/constants';
 import {
   AirdropSVG,
   CirclePlusSVG,
@@ -7,6 +13,7 @@ import {
   HourglassSVG,
   MenuSVG,
   MergeSVG,
+  SwapTerminalSVG,
   UploadSVG,
 } from '@/svg';
 
@@ -46,6 +53,7 @@ export const SIDEBAR_ITEMS: ReadonlyArray<IMenuItem> = [
     disabled: false,
     name: 'incinerator',
     path: Routes[RoutesEnum.Incinerator],
+    suiWalletLink: INCINERATOR_EXTERNAL_LINK,
     networks: [Network.MAINNET, Network.TESTNET],
   },
   {
@@ -54,6 +62,15 @@ export const SIDEBAR_ITEMS: ReadonlyArray<IMenuItem> = [
     disabled: false,
     networks: [Network.MAINNET, Network.TESTNET],
     accordionList: [
+      {
+        beta: false,
+        isExternalLink: true,
+        name: 'swap terminal',
+        disabled: false,
+        Icon: SwapTerminalSVG,
+        path: SUI_TERMINAL_EXTERNAL_LINK,
+        networks: [Network.MAINNET, Network.TESTNET],
+      },
       {
         beta: false,
         name: 'send',

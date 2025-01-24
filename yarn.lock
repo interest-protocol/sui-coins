@@ -864,10 +864,10 @@
     ramda "^0.29.1"
     tiny-invariant "^1.3.3"
 
-"@interest-protocol/dca-sdk@^5.1.2":
-  version "5.1.2"
-  resolved "https://registry.yarnpkg.com/@interest-protocol/dca-sdk/-/dca-sdk-5.1.2.tgz#ed15ecb343804091528dc968b55c75cbaf2bbe29"
-  integrity sha512-HgsuqbF8mN5lX4I6mOEn4uyeUb+j2CXlrVMXAJcOoHJ3lcYlRwKT2j1+/NKIFJhaiN7W+rVQbpwnOh+NslYxtA==
+"@interest-protocol/dca-sdk@^5.2.0":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@interest-protocol/dca-sdk/-/dca-sdk-5.2.0.tgz#603c23eecf3d03f19f161b4284e0af87ee2e0503"
+  integrity sha512-WfcIhvtDvF0Sz2PHMYWhVOeP+PYiW09VYaKPI1HmKhrFGkXnByGAFMMpTZKzLzHhereiOIr1LdIKZcI408mJZQ==
   dependencies:
     "@mysten/sui" "^1.5.0"
     ramda "^0.30.1"
