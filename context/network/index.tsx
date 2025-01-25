@@ -1,16 +1,15 @@
 import { createNetworkConfig, SuiClientProvider } from '@mysten/dapp-kit';
-import { getFullnodeUrl } from '@mysten/sui/client';
 import { FC, PropsWithChildren, useMemo, useState } from 'react';
 import { useReadLocalStorage } from 'usehooks-ts';
 
 import { LOCAL_STORAGE_VERSION, Network } from '@/constants';
-import { RPC_KEY, RPC_LIST, RpcEnum } from '@/constants/rpc';
+import { RPC_KEY, RPC_MAP, RPCEnum } from '@/constants/rpc';
 
 const LOCAL_NETWORK_KEY = 'suicoins:network';
 
 export const NetworkProvider: FC<PropsWithChildren> = ({ children }) => {
   const [updateNetwork, setUpdateNetwork] = useState({});
-  const currentRPC = useReadLocalStorage<RpcEnum>(
+  const currentRPC = useReadLocalStorage<RPCEnum>(
     `${LOCAL_STORAGE_VERSION}-${RPC_KEY}`
   );
 
@@ -23,14 +22,10 @@ export const NetworkProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const { networkConfig } = createNetworkConfig({
     [Network.TESTNET]: {
-      url:
-        RPC_LIST[network][currentRPC || RpcEnum.shinami] ||
-        getFullnodeUrl('testnet'),
+      url: RPC_MAP[network][currentRPC as RPCEnum],
     },
     [Network.MAINNET]: {
-      url:
-        RPC_LIST[network][currentRPC || RpcEnum.shinami] ||
-        getFullnodeUrl('mainnet'),
+      url: RPC_MAP[network][currentRPC as RPCEnum],
     },
   });
 

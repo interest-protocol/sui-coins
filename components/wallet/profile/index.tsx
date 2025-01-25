@@ -6,7 +6,7 @@ import { useLocalStorage } from 'usehooks-ts';
 import Avatar from '@/components/account-info/avatar';
 import { LOCAL_STORAGE_VERSION } from '@/constants';
 import { Explorer, EXPLORER_STORAGE_KEY } from '@/constants/explorer';
-import { RPC_KEY, RpcEnum } from '@/constants/rpc';
+import { RPC_KEY, RPCEnum } from '@/constants/rpc';
 import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
 import { useIsFirstRender } from '@/hooks/use-is-first-render';
 
@@ -26,9 +26,9 @@ const Profile: FC = () => {
     `${LOCAL_STORAGE_VERSION}-${EXPLORER_STORAGE_KEY}`,
     Explorer.SuiVision
   );
-  const [rpc, setRPC] = useLocalStorage<RpcEnum>(
+  const [rpc, setRPC] = useLocalStorage<RPCEnum>(
     `${LOCAL_STORAGE_VERSION}-${RPC_KEY}`,
-    RpcEnum.shinami
+    RPCEnum.Shinami
   );
   const [menuIsDropdown, setMenuIsDropdown] = useState(
     isOpenProfile || isOpenAccount

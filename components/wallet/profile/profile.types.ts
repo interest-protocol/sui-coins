@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { SVGProps } from '@/components/svg/svg.types';
 import { Explorer } from '@/constants';
-import { RpcEnum } from '@/constants/rpc';
+import { RPCEnum } from '@/constants/rpc';
 
 export interface MenuProfileProps {
   isOpen: boolean;
@@ -33,8 +33,8 @@ export interface MenuExplorerProps extends MenuSwitchAccountProps {
 }
 
 export interface MenuRPCProps extends MenuSwitchAccountProps {
-  rpc: RpcEnum;
-  handleRPC: (rpc: RpcEnum) => void;
+  rpc: RPCEnum;
+  handleRPC: (rpc: RPCEnum) => void;
 }
 
 export interface MenuSwitchAccountHeaderProps {
