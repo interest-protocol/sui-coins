@@ -9,9 +9,9 @@ const LOCAL_NETWORK_KEY = 'suicoins:network';
 
 export const NetworkProvider: FC<PropsWithChildren> = ({ children }) => {
   const [updateNetwork, setUpdateNetwork] = useState({});
-  const currentRPC = useReadLocalStorage<RPCEnum>(
-    `${LOCAL_STORAGE_VERSION}-${RPC_KEY}`
-  );
+  const currentRPC =
+    useReadLocalStorage<RPCEnum>(`${LOCAL_STORAGE_VERSION}-${RPC_KEY}`) ??
+    RPCEnum.Shinami;
 
   const network = useMemo(
     () =>
