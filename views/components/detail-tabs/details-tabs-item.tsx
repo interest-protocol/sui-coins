@@ -5,7 +5,7 @@ import { DetailsTabItemProps } from './details-tabs.types';
 
 const DetailsTabItem: FC<DetailsTabItemProps> = ({ item, onChange }) => (
   <Box
-    px="4xl"
+    width="100%"
     display="flex"
     height="2.8rem"
     cursor="pointer"

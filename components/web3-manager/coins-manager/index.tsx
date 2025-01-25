@@ -11,7 +11,7 @@ import { METADATA } from '@/constants/metadata';
 import { useCoins } from '@/hooks/use-coins';
 import { useNetwork } from '@/hooks/use-network';
 import { CoinMetadataWithType } from '@/interface';
-import { fetchCoinMetadata, isSui, makeSWRKey } from '@/utils';
+import { chunk, fetchCoinMetadata, isSui, makeSWRKey } from '@/utils';
 
 import { CoinsMap } from './coins-manager.types';
 
@@ -52,19 +52,29 @@ const CoinsManager: FC = () => {
         ];
 
         const dbCoinsMetadata: Record<string, CoinMetadataWithType> =
-          await fetchCoinMetadata({ network, types: coinsType }).then((data) =>
-            data.reduce((acc, item) => {
-              const override =
-                METADATA[network as Network][normalizeStructTag(item.type)] ||
-                item;
-              return {
-                ...acc,
-                [normalizeStructTag(override.type)]: {
-                  ...override,
-                  type: normalizeStructTag(override.type),
-                },
-              };
-            }, {})
+          await Promise.all(
+            chunk(coinsType, 50).map((types) =>
+              fetchCoinMetadata({ network, types }).then((data) =>
+                data.reduce((acc, item) => {
+                  const override =
+                    METADATA[network as Network][
+                      normalizeStructTag(item.type)
+                    ] || item;
+                  return {
+                    ...acc,
+                    [normalizeStructTag(override.type)]: {
+                      ...override,
+                      type: normalizeStructTag(override.type),
+                    },
+                  };
+                }, {})
+              )
+            )
+          ).then((data: ReadonlyArray<Record<string, CoinMetadataWithType>>) =>
+            data.reduce(
+              (acc, metadataMap) => ({ ...acc, ...metadataMap }),
+              {} as Record<string, CoinMetadataWithType>
+            )
           );
 
         const filteredCoinsRaw = coinsRaw.filter(

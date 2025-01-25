@@ -56,7 +56,7 @@ const PoolFormWithdrawReceiveTokens: FC<TokenListProps> = ({ type }) => {
             <ProgressIndicator size={16} variant="loading" />
           ) : (
             <Typography variant="body" ml="m" size="large">
-              {isOneCoin ? (tokenSelected ? value ?? 0 : 0) : value ?? 0}
+              {isOneCoin ? (tokenSelected ? (value ?? 0) : 0) : (value ?? 0)}
             </Typography>
           )}
         </Box>

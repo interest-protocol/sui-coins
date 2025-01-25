@@ -1,4 +1,5 @@
 import { TimeScale } from '@interest-protocol/dca-sdk';
+import { isValidSuiAddress } from '@mysten/sui/utils';
 import * as yup from 'yup';
 
 export const dcaValidationSchema = yup.object({
@@ -28,6 +29,18 @@ export const dcaValidationSchema = yup.object({
     .max(200, 'Should use less than 200')
     .required(),
   periodicity: yup.number().required(),
+  customRecipientAddress: yup.string().test({
+    name: 'customRecipientAddress',
+    test(value, ctx) {
+      if (!ctx.parent.isToCustomRecipient) return true;
+      if (!isValidSuiAddress(value || ''))
+        return ctx.createError({
+          message: 'Recipient should be a SUI valid address',
+        });
+
+      return true;
+    },
+  }),
   intervals: yup
     .number()
     .required()

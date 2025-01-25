@@ -4,9 +4,11 @@ import {
   TooltipWrapper,
   Typography,
 } from '@interest-protocol/ui-kit';
+import { useCurrentWallet } from '@mysten/dapp-kit';
 import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
 
+import { INCINERATOR_EXTERNAL_LINK } from '@/constants';
 import { useBlocklist } from '@/hooks/use-blocklist';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useVerifiedDeFiNfts } from '@/hooks/use-verified-defi-nfts';
@@ -21,8 +23,9 @@ import { useMergeCoins } from '@/views/merge/merge.hooks';
 
 const FloatingButtons: FC = () => {
   const burn = useBurn();
-  const getExplorerUrl = useGetExplorerUrl();
   const mergeCoins = useMergeCoins();
+  const getExplorerUrl = useGetExplorerUrl();
+  const { currentWallet } = useCurrentWallet();
   const [loading, setLoading] = useState(false);
   const { data, isLoading, error } = useBlocklist();
   const { data: verifiedDeFiNfts } = useVerifiedDeFiNfts();
@@ -72,6 +75,11 @@ const FloatingButtons: FC = () => {
 
   const onSelectScams = async () => {
     if (disabled) return;
+
+    const isSuiWallet = currentWallet?.name === 'Sui Wallet';
+
+    if (isSuiWallet)
+      return window.open(INCINERATOR_EXTERNAL_LINK, '_blank', 'noreferrer');
 
     setLoading(true);
     const toastId = toast.loading('Burning Scams...');
