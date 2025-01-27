@@ -50,7 +50,7 @@ const ObjectModalItem: FC<ObjectModalItemProps> = ({
   };
 
   const displayName = display
-    ? (display as Record<string, string>).name ?? display.symbol ?? type
+    ? ((display as Record<string, string>).name ?? display.symbol ?? type)
     : type;
 
   const { symbol, type: coinType } = (display as CoinObject) ?? {
@@ -96,9 +96,12 @@ const ObjectModalItem: FC<ObjectModalItemProps> = ({
         >
           <Typography
             size="medium"
-            display="flex"
             variant="title"
+            maxWidth="12ch"
+            overflow="hidden"
+            whiteSpace="nowrap"
             alignItems="flex-end"
+            textOverflow="ellipsis"
           >
             {type === displayName ? formatAddress(type) : displayName}
           </Typography>

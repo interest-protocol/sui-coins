@@ -6,6 +6,7 @@ import { FC } from 'react';
 import { TokenIcon } from '@/components';
 import { Network } from '@/constants';
 import { useBlocklist } from '@/hooks/use-blocklist';
+import { useVerifiedDeFiNfts } from '@/hooks/use-verified-defi-nfts';
 import { BurnSVG } from '@/svg';
 import { getSymbolByType } from '@/utils';
 
@@ -15,11 +16,12 @@ import { IncineratorTokenObjectProps } from './incinerator.types';
 const IncineratorTokenObject: FC<IncineratorTokenObjectProps> = ({
   object,
 }) => {
-  const { data } = useBlocklist();
+  const { data: scam } = useBlocklist();
   const { display, type, kind } = object;
   const { network } = useSuiClientContext();
+  const { data: verifiedNfts } = useVerifiedDeFiNfts();
   const displayName = display
-    ? (display as Record<string, string>).name ?? display.symbol ?? type
+    ? ((display as Record<string, string>).name ?? display.symbol ?? type)
     : type;
 
   const { symbol, type: coinType } = (display as CoinObject) ?? {
@@ -49,11 +51,12 @@ const IncineratorTokenObject: FC<IncineratorTokenObjectProps> = ({
           tooltipContent={type}
         >
           <Box display="flex" gap="2xs">
-            {data?.includes(kind === 'Coin' ? display!.type : type) && (
-              <Box color="error" width="1rem">
-                <BurnSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
-              </Box>
-            )}
+            {!verifiedNfts?.includes(kind === 'Coin' ? display!.type : type) &&
+              scam?.includes(kind === 'Coin' ? display!.type : type) && (
+                <Box color="error" width="1rem">
+                  <BurnSVG maxHeight="1rem" maxWidth="1rem" width="100%" />
+                </Box>
+              )}
             <Typography
               size="medium"
               variant="body"

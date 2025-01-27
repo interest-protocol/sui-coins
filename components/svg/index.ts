@@ -112,6 +112,7 @@ export { default as SUISVG } from './sui';
 export { default as SuiLogoSVG } from './sui-logo';
 export { default as SwapSVG } from './swap';
 export { default as SwapArrowSVG } from './swap-arrow';
+export { default as SwapTerminalSVG } from './swap-terminal';
 export { default as SwitchSVG } from './switch';
 export { default as TelegramSVG } from './telegram';
 export { default as ThreeDotsSVG } from './three-dots';

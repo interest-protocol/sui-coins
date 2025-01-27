@@ -18,6 +18,5 @@ export const NFT: ReadonlyArray<string> = [
   'cb2e0bfd-84b1-41cb-b492-bf25078431f1', // AEON
   '37569e2d-03e4-4bfb-ab55-0dae8943e6d3', // DoubleUp Citizen
   '4b7f929a-2ae8-417a-8e07-ef6d5eb4f1d7', // Rinoco
+  'e15727d4-4cfd-44de-8b71-abe103c1549a', // Sweebs
 ];
-
-export * from './sui-play';

@@ -41,13 +41,13 @@ const treatMoneyDecimals = (
               ? `${integralPart.slice(0, -3)}.${integralPart.slice(-3, -1)}`
               : `${integralPart}.${
                   +integralPart >= 10
-                    ? decimalPart?.slice(0, 2) ?? 0
-                    : decimalPart ?? 0
+                    ? (decimalPart?.slice(0, 2) ?? 0)
+                    : (decimalPart ?? 0)
                 }`
             : `${integralPart}.${
                 +integralPart >= 10
-                  ? decimalPart?.slice(0, 2) ?? 0
-                  : decimalPart ?? 0
+                  ? (decimalPart?.slice(0, 2) ?? 0)
+                  : (decimalPart ?? 0)
               }`
   );
 
@@ -60,7 +60,7 @@ const treatMoneyDecimals = (
   const decimalDigits =
     integralDigits <= 6 && +integralPart >= 10
       ? 2
-      : newMoneyString.split('.')[1]?.length ?? baseDecimals;
+      : (newMoneyString.split('.')[1]?.length ?? baseDecimals);
 
   return {
     newMoney,

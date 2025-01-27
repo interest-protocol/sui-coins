@@ -31,7 +31,8 @@ const DetailsTabs: FC<DetailsTabsProps> = ({
   return (
     <Box
       height="3rem"
-      display="flex"
+      display="grid"
+      gridTemplateColumns="1fr 1fr"
       borderBottom="1px solid"
       borderTopLeftRadius="inherit"
       borderTopRightRadius="inherit"

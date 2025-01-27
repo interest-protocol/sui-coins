@@ -1,4 +1,5 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
+import Image from 'next/image';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
@@ -61,7 +62,14 @@ const MainMenu: FC<MainMenuMobileProps> = ({ closeMenu }) => (
                   overflow="hidden"
                   borderRadius="50%"
                 >
-                  <img src={img} alt={name} width="100%" height="100%" />
+                  <Image
+                    src={img}
+                    alt={name}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                    }}
+                  />
                 </Box>
                 <Typography
                   size="large"

@@ -10,6 +10,7 @@ import {
   WORMHOLE_TOKENS,
 } from '@/constants/coins';
 import { useStrictTokens } from '@/hooks/use-strict-tokens';
+import { useVerifiedDeFiNfts } from '@/hooks/use-verified-defi-nfts';
 import {
   ARBChainSVG,
   AVAXChainSVG,
@@ -51,11 +52,14 @@ const TokenIcon: FC<TokenIconProps> = ({
   loaderSize = 16,
 }) => {
   const { data: tokens } = useStrictTokens();
+  const [loading, setLoading] = useState(true);
   const isMainnet = network === Network.MAINNET;
+  const [loadError, setLoadError] = useState(false);
+  const { data: verifiedNfts } = useVerifiedDeFiNfts();
   const TokenIcon = TOKEN_ICONS[network]?.[isMainnet ? type : symbol] ?? null;
 
-  const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState(false);
+  const isVerified =
+    verifiedNfts?.includes(type) || tokens?.strictTokensMap[type];
 
   const stopLoading = () => setLoading(false);
   const onLoadError = () => setLoadError(true);
@@ -134,7 +138,7 @@ const TokenIcon: FC<TokenIconProps> = ({
             style={{ objectFit: 'cover', position: 'relative' }}
           />
         </Box>
-        {tokens?.strictTokensMap[type] && (
+        {isVerified && (
           <Box
             top="-0.5rem"
             right="-0.25rem"
@@ -183,7 +187,7 @@ const TokenIcon: FC<TokenIconProps> = ({
             maxHeight={size ?? '1.5rem'}
           />
         </Box>
-        {tokens?.strictTokensMap[type] && (
+        {isVerified && (
           <Box
             top="-0.5rem"
             right="-0.25rem"
@@ -250,7 +254,7 @@ const TokenIcon: FC<TokenIconProps> = ({
             onError={onLoadError}
             style={{ objectFit: 'cover', position: 'relative' }}
           />
-          {tokens?.strictTokensMap[type] && (
+          {isVerified && (
             <Box
               top="-0.5rem"
               right="-0.25rem"
@@ -299,7 +303,7 @@ const TokenIcon: FC<TokenIconProps> = ({
             />
           )}
         </Box>
-        {tokens?.strictTokensMap[type] && (
+        {isVerified && (
           <Box
             top="-0.5rem"
             right="-0.25rem"

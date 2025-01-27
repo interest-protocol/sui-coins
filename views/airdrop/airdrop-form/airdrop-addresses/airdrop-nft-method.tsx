@@ -1,5 +1,6 @@
 import { Box, Motion, Typography } from '@interest-protocol/ui-kit';
 import BigNumber from 'bignumber.js';
+import Image from 'next/image';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
@@ -45,8 +46,8 @@ const AirdropNftMethod: FC = () => {
 
     const airdropList = nft.holders.map((address) => ({
       address,
-      amount: BigNumber(getValues('commonAmount'))
-        .times(BigNumber(10).pow(getValues('token.decimals')))
+      amount: BigNumber(getValues('commonAmount') || 0)
+        .times(BigNumber(10).pow(getValues('token.decimals') || 0))
         .toString(),
     }));
 
@@ -111,7 +112,7 @@ const AirdropNftMethod: FC = () => {
                   justifyContent="center"
                 >
                   <img
-                    width="100%"
+                    style={{ width: '100%' }}
                     alt={(asset as NFTCollectionMetadata).name}
                     src={`/images/nft/${
                       (asset as NFTCollectionMetadata).id
