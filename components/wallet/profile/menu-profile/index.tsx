@@ -15,6 +15,7 @@ import UserInfo from './user-info';
 
 const MenuProfile: FC<MenuProfileProps> = ({
   isOpen,
+  handleOpenRPC,
   handleOpenSwitch,
   handleCloseProfile,
   handleOpenExplorer,
@@ -33,6 +34,7 @@ const MenuProfile: FC<MenuProfileProps> = ({
       disconnect();
     },
     switchAccounts: handleOpenSwitch,
+    switchRPC: handleOpenRPC,
     changeExplorer: () => {
       handleOpenExplorer();
       handleCloseProfile();
