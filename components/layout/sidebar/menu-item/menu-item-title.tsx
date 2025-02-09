@@ -47,6 +47,7 @@ const MenuItemTitleContent: FC<MenuItemTitleContentProps> = ({
   const { colors } = useTheme() as Theme;
   const { currentWallet } = useCurrentWallet();
 
+  const isIcon = typeof Icon === 'function';
   const isSelected =
     path === Routes[RoutesEnum.Swap]
       ? asPath === path
@@ -83,8 +84,20 @@ const MenuItemTitleContent: FC<MenuItemTitleContentProps> = ({
     >
       {!disabled && !isSelected && <MenuItemTitleBackground />}
       <Box display="flex" alignItems="center">
-        <Box width="1.2rem" height="1.2rem" m="2xs">
-          <Icon maxHeight="1.2rem" maxWidth="1.2rem" width="100%" />
+        <Box width="1.2rem" height={isIcon ? '1.2rem' : 'unset'} m="2xs">
+          {isIcon ? (
+            <Icon maxHeight="1.2rem" maxWidth="1.2rem" width="100%" />
+          ) : (
+            <Box display="flex" alignItems="center">
+              <img
+                src={Icon}
+                width="30.25rem"
+                height="30.25rem"
+                alt="menu-icon"
+                style={{ borderRadius: '1rem', marginLeft: '-0.4rem' }}
+              />
+            </Box>
+          )}
         </Box>
         <Typography ml="l" size="large" variant="label" width="max-content">
           {name}
