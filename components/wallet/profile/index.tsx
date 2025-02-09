@@ -6,22 +6,29 @@ import { useLocalStorage } from 'usehooks-ts';
 import Avatar from '@/components/account-info/avatar';
 import { LOCAL_STORAGE_VERSION } from '@/constants';
 import { Explorer, EXPLORER_STORAGE_KEY } from '@/constants/explorer';
+import { RPC_KEY, RPCEnum } from '@/constants/rpc';
 import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
 import { useIsFirstRender } from '@/hooks/use-is-first-render';
 
 import MenuExplorer from './menu-explorer';
 import MenuProfile from './menu-profile';
 import MenuSwitchAccount from './menu-switch-account';
+import MenuSwitchRPC from './menu-switch-rpc';
 
 const BOX_ID = 'wallet-box';
 
 const Profile: FC = () => {
+  const [isOpenRPC, setIsOpenRPC] = useState(false);
   const [isOpenProfile, setIsOpenProfile] = useState(false);
   const [isOpenAccount, setIsOpenAccount] = useState(false);
   const [isOpenExplorer, setIsOpenExplorer] = useState(false);
   const [explorer, setExplorer] = useLocalStorage<Explorer>(
     `${LOCAL_STORAGE_VERSION}-${EXPLORER_STORAGE_KEY}`,
     Explorer.SuiVision
+  );
+  const [rpc, setRPC] = useLocalStorage<RPCEnum>(
+    `${LOCAL_STORAGE_VERSION}-${RPC_KEY}`,
+    RPCEnum.Shinami
   );
   const [menuIsDropdown, setMenuIsDropdown] = useState(
     isOpenProfile || isOpenAccount
@@ -62,6 +69,11 @@ const Profile: FC = () => {
     setIsOpenAccount(true);
   };
 
+  const handleOpenRPC = () => {
+    handleCloseProfile();
+    setIsOpenRPC(true);
+  };
+
   const handleCloseAccount = () => {
     setIsOpenAccount(false);
   };
@@ -73,12 +85,19 @@ const Profile: FC = () => {
 
   const handleCloseExplorer = () => {
     setIsOpenExplorer(false);
+    setIsOpenProfile(false);
+  };
+
+  const handleCloseRPC = () => {
+    setIsOpenRPC(false);
     setIsOpenProfile(true);
   };
 
   const handleCloseAll = () => {
+    handleCloseRPC();
     handleCloseAccount();
     handleCloseProfile();
+    handleCloseExplorer();
   };
 
   return (
@@ -127,6 +146,7 @@ const Profile: FC = () => {
         <>
           <MenuProfile
             isOpen={isOpenProfile}
+            handleOpenRPC={handleOpenRPC}
             handleOpenSwitch={handleOpenAccount}
             handleCloseProfile={handleCloseProfile}
             handleOpenExplorer={handleOpenExplorer}
@@ -135,6 +155,15 @@ const Profile: FC = () => {
             <MenuSwitchAccount
               isOpen={isOpenAccount}
               onBack={handleOpenProfile}
+              handleCloseProfile={handleCloseProfile}
+            />
+          )}
+          {isOpenRPC && (
+            <MenuSwitchRPC
+              rpc={rpc}
+              isOpen={isOpenRPC}
+              handleRPC={setRPC}
+              onBack={handleCloseRPC}
               handleCloseProfile={handleCloseProfile}
             />
           )}

@@ -48,7 +48,19 @@ const MobileMenuListItem: FC<
                 justifyContent="space-between"
               >
                 <Box display="flex" alignItems="center">
-                  <Icon maxHeight="1rem" maxWidth="1rem" width="1.2rem" />
+                  {typeof Icon === 'function' ? (
+                    <Icon maxHeight="1.2rem" maxWidth="1.2rem" width="100%" />
+                  ) : (
+                    <Box display="flex" alignItems="center">
+                      <img
+                        src={Icon}
+                        width="30.25rem"
+                        height="30.25rem"
+                        alt="menu-icon"
+                        style={{ borderRadius: '1rem', marginLeft: '-0.4rem' }}
+                      />
+                    </Box>
+                  )}
                   <Typography
                     ml="s"
                     size="small"
@@ -106,7 +118,19 @@ const MobileMenuListItem: FC<
           justifyContent="space-between"
         >
           <Box display="flex" alignItems="center">
-            <Icon maxHeight="1rem" maxWidth="1rem" width="1.2rem" />
+            {typeof Icon === 'function' ? (
+              <Icon maxHeight="1.2rem" maxWidth="1.2rem" width="100%" />
+            ) : (
+              <Box display="flex" alignItems="center">
+                <img
+                  src={Icon}
+                  width="30.25rem"
+                  height="30.25rem"
+                  alt="menu-icon"
+                  style={{ borderRadius: '1rem', marginLeft: '-0.4rem' }}
+                />
+              </Box>
+            )}
             <Typography
               ml="s"
               size="small"

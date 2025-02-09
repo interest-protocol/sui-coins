@@ -1,5 +1,6 @@
 import { Box, Typography } from '@interest-protocol/ui-kit';
 import { useSuiClientContext } from '@mysten/dapp-kit';
+import Image from 'next/image';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
@@ -59,7 +60,14 @@ const SidebarMenuList: FC<MenuListProps> = ({
                   alignItems="center"
                   justifyContent="center"
                 >
-                  <img src={img} alt={name} width="80%" height="80%" />
+                  <Image
+                    style={{
+                      width: '80%',
+                      height: '80%',
+                    }}
+                    src={img}
+                    alt={name}
+                  />
                 </Box>
               </Box>
             ) : (
@@ -84,7 +92,14 @@ const SidebarMenuList: FC<MenuListProps> = ({
                       alignItems="center"
                       justifyContent="center"
                     >
-                      <img src={img} alt={name} width="80%" height="80%" />
+                      <Image
+                        style={{
+                          width: '80%',
+                          height: '80%',
+                        }}
+                        src={img}
+                        alt={name}
+                      />
                     </Box>
                   </Box>
                   <Typography
