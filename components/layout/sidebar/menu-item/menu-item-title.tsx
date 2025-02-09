@@ -42,6 +42,7 @@ const MenuItemTitleContent: FC<MenuItemTitleContentProps> = ({
   isCollapsed,
   accordionList,
   suiWalletLink,
+  isExternalLink,
 }) => {
   const { asPath, push } = useRouter();
   const { colors } = useTheme() as Theme;
@@ -103,7 +104,7 @@ const MenuItemTitleContent: FC<MenuItemTitleContentProps> = ({
           {name}
         </Typography>
       </Box>
-      {isSuiWallet && (
+      {(isSuiWallet || isExternalLink) && (
         <ArrowObliqueSVG maxHeight="1.5rem" maxWidth="1.5em" width="100%" />
       )}
       {beta &&
