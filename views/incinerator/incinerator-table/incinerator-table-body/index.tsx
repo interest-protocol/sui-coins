@@ -1,4 +1,5 @@
 import { Motion } from '@interest-protocol/ui-kit';
+import { CoinMetadata } from '@mysten/sui/dist/cjs/client';
 import { FC } from 'react';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 
@@ -11,13 +12,29 @@ const IncineratorTableBody: FC = () => {
   const { fields } = useFieldArray({ control, name: 'objects' });
   const search = useWatch({ control, name: 'search' });
 
+
   const normalizedSearch = search?.toLowerCase().trim() || '';
 
-  const filteredField = fields.filter((el) =>
-    normalizedSearch
-      ? el.display?.symbol?.toLowerCase().includes(normalizedSearch)
-      : fields
-  );
+  const filteredField = fields.filter((el) => {
+    if (!normalizedSearch) return true;
+
+    const metadata = el.display?.metadata as Omit<
+      CoinMetadata,
+      'symbol' | 'decimals'
+    >;
+
+    const metadataName = metadata?.name
+      ?.toLowerCase()
+      .includes(normalizedSearch);
+
+    return (
+      el.display?.symbol?.toLowerCase().includes(normalizedSearch) ||
+      el.type?.toLowerCase().includes(normalizedSearch) ||
+      metadataName ||
+      el.display?.type?.toLowerCase().includes(normalizedSearch) ||
+      el.objectId?.toLowerCase().includes(normalizedSearch)
+    );
+  });
 
   return (
     <Motion as="tbody">
