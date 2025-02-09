@@ -2,7 +2,7 @@ import { useCurrentWallet } from '@mysten/dapp-kit';
 import { useRouter } from 'next/router';
 import { FC, useEffect, useState } from 'react';
 
-import { INCINERATOR_EXTERNAL_LINK } from '@/constants';
+import { INCINERATOR_EXTERNAL_LINK, RoutesEnum } from '@/constants';
 import { useWeb3 } from '@/hooks/use-web3';
 
 const IncineratorInitManager: FC = () => {
@@ -17,7 +17,7 @@ const IncineratorInitManager: FC = () => {
       setHasRedirected(true);
       replace(INCINERATOR_EXTERNAL_LINK);
     } else if (hasRedirected && pathname === '/incinerator') {
-      replace('/');
+      replace(RoutesEnum.Swap);
     }
   }, [currentWallet, loading, hasRedirected, pathname, replace]);
 
