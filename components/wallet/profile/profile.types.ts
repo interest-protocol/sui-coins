@@ -1,11 +1,15 @@
 import { FC } from 'react';
 
 import { SVGProps } from '@/components/svg/svg.types';
+import { Explorer } from '@/constants';
+import { RPCEnum } from '@/constants/rpc';
 
 export interface MenuProfileProps {
   isOpen: boolean;
   handleOpenSwitch: () => void;
+  handleOpenRPC: () => void;
   handleCloseProfile: () => void;
+  handleOpenExplorer: () => void;
 }
 
 export interface ProfileMenuItemProps {
@@ -21,6 +25,16 @@ export interface MenuSwitchAccountProps {
   isOpen: boolean;
   onBack: () => void;
   handleCloseProfile: () => void;
+}
+
+export interface MenuExplorerProps extends MenuSwitchAccountProps {
+  explorer: Explorer;
+  handleExplorer: (explorer: Explorer) => void;
+}
+
+export interface MenuRPCProps extends MenuSwitchAccountProps {
+  rpc: RPCEnum;
+  handleRPC: (rpc: RPCEnum) => void;
 }
 
 export interface MenuSwitchAccountHeaderProps {

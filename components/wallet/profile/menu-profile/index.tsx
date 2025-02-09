@@ -18,8 +18,10 @@ import UserInfo from './user-info';
 
 const MenuProfile: FC<MenuProfileProps> = ({
   isOpen,
+  handleOpenRPC,
   handleOpenSwitch,
   handleCloseProfile,
+  handleOpenExplorer,
 }) => {
   const { network } = useSuiClientContext();
   const { breakpoints } = useTheme() as Theme;
@@ -35,6 +37,11 @@ const MenuProfile: FC<MenuProfileProps> = ({
       disconnect();
     },
     switchAccounts: handleOpenSwitch,
+    switchRPC: handleOpenRPC,
+    changeExplorer: () => {
+      handleOpenExplorer();
+      handleCloseProfile();
+    },
     viewInExplorer: () => {
       window.open(
         `${EXPLORER_URL[network as Network]}/account/${account}`,
