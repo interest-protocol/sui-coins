@@ -6,11 +6,13 @@ import {
   Typography,
   useTheme,
 } from '@interest-protocol/ui-kit';
+import { useCurrentWallet } from '@mysten/dapp-kit';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { v4 } from 'uuid';
 
 import { Routes, RoutesEnum } from '@/constants';
+import { ArrowObliqueSVG } from '@/svg';
 
 import { MenuItemTitleContentProps } from '../sidebar.types';
 import CollapseIcon from './collapsible-icon';
@@ -39,15 +41,21 @@ const MenuItemTitleContent: FC<MenuItemTitleContentProps> = ({
   disabled,
   isCollapsed,
   accordionList,
+  suiWalletLink,
+  isExternalLink,
 }) => {
   const { asPath, push } = useRouter();
   const { colors } = useTheme() as Theme;
+  const { currentWallet } = useCurrentWallet();
 
+  const isIcon = typeof Icon === 'function';
   const isSelected =
     path === Routes[RoutesEnum.Swap]
       ? asPath === path
       : asPath.startsWith(path!) ||
         accordionList?.some(({ path }) => path === asPath);
+
+  const isSuiWallet = !!suiWalletLink && currentWallet?.name === 'Sui Wallet';
 
   const onClick = () => {
     if (accordionList || disabled || !path) return;
@@ -76,13 +84,28 @@ const MenuItemTitleContent: FC<MenuItemTitleContentProps> = ({
     >
       {!disabled && !isSelected && <MenuItemTitleBackground />}
       <Box display="flex" alignItems="center">
-        <Box width="1.2rem" height="1.2rem" m="2xs">
-          <Icon maxHeight="1.2rem" maxWidth="1.2rem" width="100%" />
+        <Box width="1.2rem" height={isIcon ? '1.2rem' : 'unset'} m="2xs">
+          {isIcon ? (
+            <Icon maxHeight="1.2rem" maxWidth="1.2rem" width="100%" />
+          ) : (
+            <Box display="flex" alignItems="center">
+              <img
+                src={Icon}
+                width="30.25rem"
+                height="30.25rem"
+                alt="menu-icon"
+                style={{ borderRadius: '1rem', marginLeft: '-0.4rem' }}
+              />
+            </Box>
+          )}
         </Box>
         <Typography ml="l" size="large" variant="label" width="max-content">
           {name}
         </Typography>
       </Box>
+      {(isSuiWallet || isExternalLink) && (
+        <ArrowObliqueSVG maxHeight="1.5rem" maxWidth="1.5em" width="100%" />
+      )}
       {beta &&
         (isCollapsed ? (
           <Box
