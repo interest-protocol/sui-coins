@@ -33,9 +33,9 @@ export const fetchCoinMetadata: FetchCoinMetadata = async (args) => {
     if (metadatas[args.type]) return metadatas[args.type];
 
     return await fetch(
-      `https://coin-metadata-api-${
-        Network.MAINNET === args.network ? '' : 'testnet-'
-      }production.up.railway.app/api/v1/fetch-coins/${encodeURI(args.type)}`,
+      `https://api.interestlabs.io/v1/coins/${
+        Network.MAINNET === args.network ? 'mainnet' : 'testnet'
+      }/metadatas/${encodeURI(args.type)}`,
       {
         headers: {
           network: 'sui',
@@ -67,9 +67,9 @@ export const fetchCoinMetadata: FetchCoinMetadata = async (args) => {
   if (!missingTypes.length) return cachedMetadatas;
 
   const missingMetadatas = await fetch(
-    `https://coin-metadata-api-${
-      Network.MAINNET === args.network ? '' : 'testnet-'
-    }production.up.railway.app/api/v1/fetch-coins?coinTypes=${missingTypes}`,
+    `https://api.interestlabs.io/v1/coins/${
+      Network.MAINNET === args.network ? 'mainnet' : 'testnet'
+    }/metadatas?coinTypes=${missingTypes}`,
     {
       headers: {
         network: 'sui',
