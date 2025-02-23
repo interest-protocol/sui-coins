@@ -41,6 +41,8 @@ export const signAndExecute = async ({
     requestType: 'WaitForLocalExecution',
   });
 
+  const endTime = Date.now();
+
   if (txResult.timestampMs)
     return {
       ...txResult,
@@ -54,7 +56,7 @@ export const signAndExecute = async ({
 
   return {
     ...txResult,
-    time: Number(txDoubleResponse.timestampMs ?? Date.now()) - startTime,
+    time: Number(txDoubleResponse.timestampMs ?? endTime) - startTime,
   };
 };
 
