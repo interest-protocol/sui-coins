@@ -1,5 +1,6 @@
 import {
   INCINERATOR_EXTERNAL_LINK,
+  MEMEZ_GG_EXTERNAL_LINK,
   Network,
   Routes,
   RoutesEnum,
@@ -54,6 +55,15 @@ export const SIDEBAR_ITEMS: ReadonlyArray<IMenuItem> = [
     name: 'incinerator',
     path: Routes[RoutesEnum.Incinerator],
     suiWalletLink: INCINERATOR_EXTERNAL_LINK,
+    networks: [Network.MAINNET, Network.TESTNET],
+  },
+  {
+    disabled: false,
+    name: 'MEMEZ.GG',
+    isExternalLink: true,
+    Icon: '/memez-head-icon.webp',
+    path: MEMEZ_GG_EXTERNAL_LINK,
+    suiWalletLink: MEMEZ_GG_EXTERNAL_LINK,
     networks: [Network.MAINNET, Network.TESTNET],
   },
   {

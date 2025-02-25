@@ -41,9 +41,22 @@ export const signAndExecute = async ({
     requestType: 'WaitForLocalExecution',
   });
 
+  const endTime = Date.now();
+
+  if (txResult.timestampMs)
+    return {
+      ...txResult,
+      time: Number(txResult.timestampMs) - startTime,
+    };
+
+  const txDoubleResponse = await suiClient.getTransactionBlock({
+    digest: txResult.digest,
+    options: { showEffects: true },
+  });
+
   return {
     ...txResult,
-    time: Date.now() - startTime,
+    time: Number(txDoubleResponse.timestampMs ?? endTime) - startTime,
   };
 };
 
