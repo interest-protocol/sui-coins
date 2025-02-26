@@ -54,18 +54,25 @@ const SwapFormFieldSlider: FC = () => {
         disabled={!balance || balance.isZero?.() || swapping}
         onChange={(value: number) => {
           setValue('origin', 'from');
+          console.log(value, '>>>value');
           setValue(
             'from.display',
             Number(
               (
-                FixedPointMath.toNumber(balance, getValues('from.decimals')) *
+                FixedPointMath.toNumber(
+                  balance.minus(value == 100 ? 1 : 0),
+                  getValues('from.decimals')
+                ) *
                 (value / 100)
               ).toFixed(6)
             ).toPrecision()
           );
           setValue(
             'from.value',
-            balance.times(BigNumber(value)).div(BigNumber(100))
+            balance
+              .times(BigNumber(value))
+              .div(BigNumber(100))
+              .minus(value == 100 ? 1 : 0)
           );
           if (getValues('focusIn')) setValue('focusIn', false);
         }}

@@ -64,7 +64,7 @@ const Balance: FC<InputProps> = ({ label }) => {
 
     setValue(
       `${label}.value`,
-      coinsMap[type]?.balance.minus(isSui(type) ? 1_000_000_000 : 0)
+      coinsMap[type]?.balance.minus(isSui(type) ? 1_000_000_000 : 1)
     );
     setValue(`${label}.display`, String(balance - (isSui(type) ? 1 : 0)));
   };
