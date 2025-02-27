@@ -15,8 +15,8 @@ const Balance: FC<InputProps> = ({ label }) => {
   const { control, setValue, getValues } = useFormContext<SwapForm>();
 
   const type = useWatch({ control, name: `${label}.type` });
-  const decimals = useWatch({ control, name: `${label}.decimals` });
   const symbol = useWatch({ control, name: `${label}.symbol` });
+  const decimals = useWatch({ control, name: `${label}.decimals` });
 
   if (!type)
     return (
@@ -41,8 +41,10 @@ const Balance: FC<InputProps> = ({ label }) => {
       </Box>
     );
 
+  const balanceBN = coinsMap[type]?.balance ?? ZERO_BIG_NUMBER;
+
   const balance = FixedPointMath.toNumber(
-    coinsMap[type]?.balance ?? ZERO_BIG_NUMBER,
+    balanceBN,
     coinsMap[type]?.decimals ?? decimals
   );
 
@@ -64,7 +66,7 @@ const Balance: FC<InputProps> = ({ label }) => {
 
     setValue(
       `${label}.value`,
-      coinsMap[type]?.balance.minus(isSui(type) ? 1_000_000_000 : 0)
+      balanceBN.minus(isSui(type) ? 1_000_000_000 : 0)
     );
     setValue(`${label}.display`, String(balance - (isSui(type) ? 1 : 0)));
   };
@@ -89,7 +91,7 @@ const Balance: FC<InputProps> = ({ label }) => {
         />
       </Box>
       <Typography fontSize="s" size="small" variant="body">
-        {symbol ? `${balance}` : '0'}
+        {symbol ? `${+balance.toFixed(6)}` : '0'}
       </Typography>
       {symbol && (
         <Typography

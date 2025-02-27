@@ -6,15 +6,7 @@ import toFormat from 'toformat';
 
 import { parseBigNumberish } from '@/utils';
 
-import { Rounding } from '../constants';
-
 const Decimal = toFormat(_Decimal);
-
-const toSignificantRounding = {
-  [Rounding.ROUND_DOWN]: Decimal.ROUND_DOWN,
-  [Rounding.ROUND_HALF_UP]: Decimal.ROUND_HALF_UP,
-  [Rounding.ROUND_UP]: Decimal.ROUND_UP,
-};
 
 export class Fraction {
   public readonly numerator: BigNumber;
@@ -126,20 +118,21 @@ export class Fraction {
 
   public toSignificant(
     significantDigits: number,
-    format: Record<string, string> = { groupSeparator: '' },
-    rounding: Rounding = Rounding.ROUND_HALF_UP
+    format: Record<string, string> = { groupSeparator: '' }
   ): string {
     Decimal.set({
       precision: significantDigits + 1,
-      rounding: toSignificantRounding[rounding],
+      rounding: Decimal.ROUND_DOWN,
     });
 
     const quotient = new Decimal(this.numerator.toString())
       .div(this.denominator.toString())
       .toSignificantDigits(significantDigits);
+
     return quotient.toFormat(quotient.decimalPlaces(), format);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public toFixed(decimalPlaces: number, options?: Record<string, any>): string {
     const value = this.numerator.div(this.denominator).toString();
     const decimals = value.slice(value.length - decimalPlaces);
