@@ -224,7 +224,20 @@ const SwapUpdatePrice: FC = () => {
 
       const route = await getAggregatorRouter(aggregator!);
 
-      setValue('route', route!);
+      if (!route) return ZERO_BIG_NUMBER;
+
+      setValue(
+        'route',
+        origin === 'to'
+          ? route
+          : {
+              ...route,
+              coinIn: {
+                ...route!.coinIn,
+                amount: BigInt(coinInValue.toFixed(0)),
+              },
+            }
+      );
 
       return getRouterValue(route!, aggregator!);
     } catch (e) {
@@ -282,7 +295,7 @@ const SwapUpdatePrice: FC = () => {
 
       const target = origin === 'to' ? 'from' : 'to';
       const stringValue = String(
-        FixedPointMath.toNumber(value, getValues(`${target}.decimals`))
+        FixedPointMath.toNumber(value, getValues(`${target}.decimals`), 6)
       );
 
       const focusSuffix = origin === 'to' ? 'In' : 'Out';
