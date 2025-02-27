@@ -1,10 +1,8 @@
 import BigNumber from 'bignumber.js';
 
-import { MAX_NUMBER_INPUT_VALUE } from '@/constants';
 import { BigNumberish } from '@/interface';
 import {
   isBigNumberish,
-  parseBigNumberish,
   parseToPositiveStringNumber,
   ZERO_BIG_NUMBER,
 } from '@/utils';
@@ -47,47 +45,46 @@ export class FixedPointMath {
     decimals = 9,
     significant = 6
   ): BigNumber {
-    if (value == null || isNaN(+value)) return ZERO_BIG_NUMBER;
+    const safeValue =
+      typeof value === 'number' && value > Number.MAX_SAFE_INTEGER
+        ? Number.MAX_SAFE_INTEGER
+        : value;
 
-    const factor = 10 ** significant;
+    if (safeValue == null || isNaN(+safeValue)) return ZERO_BIG_NUMBER;
 
-    if (typeof value === 'number' && 0 > value * factor) return ZERO_BIG_NUMBER;
+    const factor = BigNumber(10).pow(significant);
+
+    const bnValue = BigNumber(safeValue).times(factor);
+
     if (
-      typeof value === 'string' &&
-      0 > +parseToPositiveStringNumber(value) * factor
+      (typeof safeValue === 'number' && ZERO_BIG_NUMBER.gt(bnValue)) ||
+      (typeof safeValue === 'string' &&
+        ZERO_BIG_NUMBER.gt(
+          BigNumber(parseToPositiveStringNumber(safeValue)).times(factor)
+        ))
     )
       return ZERO_BIG_NUMBER;
 
-    const x = Math.floor(+value * factor);
-
-    return parseBigNumberish(
-      x >= MAX_NUMBER_INPUT_VALUE ? MAX_NUMBER_INPUT_VALUE : x
-    ).multipliedBy(new BigNumber(10).pow(decimals - significant));
+    return bnValue.times(BigNumber(10).pow(decimals - significant));
   }
 
   public static toNumber(
     value: BigNumber,
     decimals = 9,
-    significantRounding = 4,
-    significant = 6
+    significant = 18
   ): number {
     if (value?.isZero()) return 0;
 
     const result = +Fraction.from(
       value,
       new BigNumber(10).pow(decimals)
-    ).toSignificant(significant, { groupSeparator: '' }, significantRounding);
+    ).toSignificant(significant, { groupSeparator: '' });
 
     return !decimals ? Math.floor(result) : result;
   }
 
-  public toNumber(decimals = 9, rounding = 4, significant = 6): number {
-    return FixedPointMath.toNumber(
-      this._value,
-      decimals,
-      rounding,
-      significant
-    );
+  public toNumber(decimals = 9, significant = 6): number {
+    return FixedPointMath.toNumber(this._value, decimals, significant);
   }
 
   public div(x: BigNumberish | FixedPointMath): FixedPointMath {
