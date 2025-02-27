@@ -33,7 +33,7 @@ const SendSelectObjectHeader: FC<SendFormSelectObjectProps> = ({ index }) => {
       pr="xs"
       size="large"
       variant="label"
-      maxWidth="20ch"
+      maxWidth="15ch"
       overflow="hidden"
       whiteSpace="nowrap"
       textOverflow="ellipsis"

@@ -44,6 +44,7 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
       layout
       display="flex"
       bg="onPrimary"
+      width="25rem"
       height="41rem"
       maxHeight="90vh"
       overflow="hidden"
@@ -51,8 +52,7 @@ const SelectTokenModal: FC<SelectTokenModalProps> = ({
       borderRadius="xs"
       flexDirection="column"
       boxShadow="0 0 5px #3334"
-      width={['100%', '25rem']}
-      maxWidth={['25rem', 'unset']}
+      maxWidth={['100%', '25rem']}
       transition={{ duration: 0.3 }}
     >
       <Box
