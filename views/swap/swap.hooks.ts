@@ -27,6 +27,8 @@ export const useSwap = () => {
   return async (values: SwapForm): Promise<Transaction> => {
     invariant(values.route && currentAccount, 'Something went wrong');
 
+    console.log({ route: values.route, value: values.from.value });
+
     if (!isNativeRoute(values.route)) {
       return afRouter.getTransactionForCompleteTradeRoute({
         walletAddress: currentAccount.address,
