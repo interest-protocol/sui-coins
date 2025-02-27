@@ -91,7 +91,7 @@ const Balance: FC<InputProps> = ({ label }) => {
         />
       </Box>
       <Typography fontSize="s" size="small" variant="body">
-        {symbol ? `${+balance.toFixed(2)}` : '0'}
+        {symbol ? `${+balance.toFixed(6)}` : '0'}
       </Typography>
       {symbol && (
         <Typography

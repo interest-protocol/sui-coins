@@ -295,7 +295,7 @@ const SwapUpdatePrice: FC = () => {
 
       const target = origin === 'to' ? 'from' : 'to';
       const stringValue = String(
-        FixedPointMath.toNumber(value, getValues(`${target}.decimals`))
+        FixedPointMath.toNumber(value, getValues(`${target}.decimals`), 6)
       );
 
       const focusSuffix = origin === 'to' ? 'In' : 'Out';
